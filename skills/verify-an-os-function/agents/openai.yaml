@@ -1,0 +1,13 @@
+interface:
+  display_name: "验证 OS 函数"
+  short_description: "分阶段设计并验证 CRTOS 函数的 predicate、spec 与 proof"
+  default_prompt: "使用 $verify-an-os-function 读取真实 CRTOS C 与配置，按各自条件分别审阅 predicate 和 spec，在我批准两份 revision 后运行 QCP、生成 VC、完成 Rocq proof 和完整性检查。"
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "qcp"
+      description: "对 annotated C 进行符号执行、诊断并导出证明目标"
+    - type: "mcp"
+      value: "rocq-mcp"
+      description: "编译、交互证明并验证 Rocq lemma 与 QCP VC"
