@@ -35,7 +35,7 @@ approval:
 |---|---|---|
 | 引用的 predicate revision 为 `review-passed` |  | `ready|open` |
 | 全部 return/blocking path 和 direct callees 已列出 |  | `ready|open` |
-| Formal pre/post 与 `With/Require/Ensure` 已写出 |  | `ready|open` |
+| 每个函数的正式 With/Require/Ensure 已直接写入对应 annotated C；引用的共享 Rocq state/predicate/effect 已编译。不存在手写 spec .v 或重复 pre/post 包装 |  | `ready|open` |
 | 每个 load/store 能追溯到 reviewed predicate |  | `ready|open` |
 | 适用的 Rocq compile 与 parser/typecheck 已通过 |  | `ready|open` |
 | 没有影响路径/effect/ownership/frame/dependency 的已知 `[OPEN]` |  | `ready|open` |

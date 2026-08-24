@@ -50,13 +50,13 @@ C analysis agent 读取目标函数、direct callees、相关类型、全局对�
 
 Predicate design agent 从实际访问的 C 对象确定 abstract state、owned memory、mutable fields 和 unchanged resources。隐藏不必要的实现细节；不要盲目展开大型 predicate，优先用 `which implies` 导出字段、节点、数组片段等局部 view，并保留未触达资源。
 
-AI 新建定义先放入 `libai/`，predicate 和 spec 均通过审阅并由用户批准后再移入 `lib/`。直接在 `.v` 中用 `(** ... *)` 中文文档注释解释生成的非平凡定义：用自然语言说明这个定义做什么，以及理解或使用它时真正需要知道的限制、保持关系或中间状态。不要规定固定栏目，也不要为了填注释机械罗列 ownership、参数、抽象边界和客户端；简单定义一句话即可。注释必须随 definition 一起更新，过时或误导性注释视为 blocker。Rocq 文件先放 definition，再放 lemma/theorem/proof；不得用 `Parameter`、`Axiom`、占位定义、手写 `Admitted/admit` 绕过证明。
+AI 新建的共享 Rocq semantic definitions 直接写入项目 lib/。lib/ 中的文件应按源码对象、ownership 边界、容器、协议、module invariant 或可独立复用的语义职责拆分。不得把一个 verification slice 的全部 state、container representation、critical protocol、module invariant、function effect 和 lemma 机械集中到单一 *Predicates.v 文件。直接在 `.v` 中用 `(** ... *)` 中文文档注释解释生成的非平凡定义：用自然语言说明这个定义做什么，以及理解或使用它时真正需要知道的限制、保持关系或中间状态。不要规定固定栏目，也不要为了填注释机械罗列 ownership、参数、抽象边界和客户端；简单定义一句话即可。注释必须随 definition 一起更新，过时或误导性注释视为 blocker。Rocq 文件先放 definition，再放 lemma/theorem/proof；不得用 `Parameter`、`Axiom`、占位定义、手写 `Admitted/admit` 绕过证明。
 
 Predicate review-ready 条件：目标 C/config/scope 与 context functions 已固定；每个实际访问的 C 对象和内存都能追溯到候选 owner/representation；正式 state/predicate/lemma statement 已写入 `.v`，必要中文注释与代码一致，并通过适用的 compile/typecheck；没有会影响 owner、抽象语义、lifecycle、frame 或 formal check 的已知 `[OPEN]`，也没有用假设掩盖缺口。已知 blocker 应先由作者处理，不用 review 重复发现。
 
 Predicate review-passed 条件：每个实际访问字节有且仅有一个 owner；abstract state 和每个命名 predicate 都有源码语义或复用客户端依据；container/lifecycle/critical 边界能闭合；没有重复 ownership、无依据假设或禁止的 `Parameter/Axiom/Admitted/admit`；formal checks 通过且没有 open blocker。通过后固定 reviewed revision，再进入 `write-spec`。
 
-- 必须读：已确认的验证上下文、目标 C/headers/config、已有 `lib/`/`libai/` 定义和 [predicate-lemma-design-guide.md](references/predicate-lemma-design-guide.md)。
+- 必须读：已确认的验证上下文、目标 C/headers/config、当前 trial 工作区已有的 `lib/` 定义和 [predicate-lemma-design-guide.md](references/predicate-lemma-design-guide.md)。
 - 写：项目实际使用的 Rocq `.v`，把解释放在相关 definition/statement 前；默认不创建 predicate review template。Review issue、reviewed revision 和结论只写入任务回复或最终报告，不复制 formal source。
 - 修改已批准接口时使用：[design-change-request-template.md](assets/design-change-request-template.md)。
 
@@ -69,7 +69,9 @@ Spec review-ready 条件：引用的 predicate revision 为 `review-passed`；�
 Spec review-passed 条件：每条真实路径的参数、返回值、abstract effect、old/new、ownership transfer 和 frame 都匹配；Require 足以执行但没有无依据加强，Ensure 没有弱化实现义务；critical/caller resources 在出口正确返还；callee 状态没有冒充 verified；没有无依据假设，formal checks 通过且没有 open blocker。Predicate 与 spec 分别 review-passed 后，用户确认两份明确 revision；确认前不运行 QCP、生成 VC 或开始 proof。
 
 - 必须读：已确认的验证上下文、review-passed predicate revision、目标 C 与 direct-callee specs，以及 [spec-writing-guide.md](references/spec-writing-guide.md)。
-- 写：项目 Rocq spec `.v`、`annotated_C/src` 中的 `With/Require/Ensure` 和 [spec-review-template.md](assets/spec-review-template.md)。
+- 写：只在每个函数对应的 annotated C 中编写 With/Require/Ensure，不在 `write-spec` 阶段直接新增或修改共享 Rocq semantic definitions。
+- 回退条件：若编写 spec 时发现缺少或需要修改共享 state、predicate、effect relation 或 semantic lemma，将 predicate revision 标记为 `invalidated`，退回 `slice-design`，在当前 trial 工作区的 `lib/` 中完成修改和 predicate review；新的 predicate revision 再次 `review-passed` 后恢复 `write-spec`。
+- Spec review 使用：[spec-review-template.md](assets/spec-review-template.md)。
 - 修改已批准 predicate/spec 时使用：[design-change-request-template.md](assets/design-change-request-template.md)。
 
 ### `implement`
@@ -108,20 +110,33 @@ ID | blocker/non-blocker | evidence(file:line or symbol) | mismatch
 
 ## 项目与参考路径
 
-先确认目标项目的实际目录；典型布局为：
+开始一个新的函数验证任务时，在原始 CRTOS 源码目录之外新建独立工作区，默认命名为
+`<function-name>-trial/`；若用户指定了其他名称或已有工作区，则使用用户指定的目录。
+
+在进入 C 分析前，立即创建并检查 trial 工作区的最小目录结构：
+`annotated_C/src/`、`lib/`、`VC/` 和 `.docs/Report/folded_history/`。
+已有工作区只补齐缺失目录，不覆盖或清空已有文件。创建或写入前先解析并报告工作区的
+绝对路径，并确认这些目录都位于 trial 工作区内，不得落入原始 CRTOS 源码目录。
+
+QCP 源码、教程和示例固定使用工作区外的 `../qcp-binary-democases/`，当前绝对路径为
+`/home/xinra/qcp-binary-democases/`。开始验证前确认该目录存在；不得自动创建、重命名或修改它。
+
+典型布局为：
 
 ```text
-../vrtos                              CRTOS 验证工作区
-../QualifiedCProgramming              QCP 源码、教程和示例
-../crtos                              CRTOS 原始源码
-../crtos/Ubiquitous/XiZi_IIoT_Macro   当前目标子系统
-annotated_C/src/                      待验证 C 与必要头文件的副本
-libai/                                AI 新建、尚未完成 predicate/spec 审阅与用户批准的 Rocq 定义
-lib/                                  已经完成相应审阅并由用户批准的 Rocq 定义和证明
-VC/                                   QCP 生成的 VC 与 proof 文件
+../crtos/                                  CRTOS 原始源码，只读语义依据
+../crtos/Ubiquitous/XiZi_IIoT_Macro/       当前目标子系统示例
+../qcp-binary-democases/                   固定的 QCP 源码、教程和示例
+../<function-name>-trial/                  当前函数的独立验证工作区
+├── annotated_C/src/                       待验证 C 与必要头文件的副本
+├── lib/                                   AI 新建的 Rocq 定义和证明
+├── VC/                                    QCP 生成的 VC 与 proof 文件
+└── .docs/Report/
+    └── folded_history/                    任务报告及折叠历史
 ```
 
-真实 CRTOS 源码和当前配置是 C 语义依据；`annotated_C/src` 只能增加或修改注解，不能改变可执行 C。发现可执行 C 被修改时立即报告。不得修改原始 CRTOS 或 `../QualifiedCProgramming`。
+真实 CRTOS 源码和当前配置是 C 语义依据；trial 工作区的 `annotated_C/src` 只能增加或修改注解，
+不能改变复制来的可执行 C。发现可执行 C 被修改时立即报告。不得修改原始 CRTOS 或已确认的 QCP 工具目录。
 
 写新定义、strategy 或断言前，先用 `rg` 搜索 QCP 教程、示例和项目现有 `lib/`，复用已有 predicate、tactic、assertion 与 `which implies` 写法。不要猜 QCP 语法；找到最接近的例子，最小修改后立即检查。
 
@@ -141,7 +156,7 @@ Remaining VC:
 Rocq compilation:
 ```
 
-将 Markdown 报告写入 `vrtos/.docs/Report/`，文件名使用 `YYYY-MM-DD-N-title.md`，例如 `2026-07-25-1-assertion-model-migration.md`。将昨天以前的旧报告移入 `vrtos/.docs/Report/folded_history/`。
+将 Markdown 报告写入当前 trial 工作区的 `.docs/Report/`，文件名使用 `YYYY-MM-DD-N-title.md`，例如 `2026-07-25-1-assertion-model-migration.md`。将昨天以前的旧报告移入当前 trial 工作区的 `.docs/Report/folded_history/`。
 
 始终保持以下抽象链条：
 

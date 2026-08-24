@@ -3,8 +3,7 @@
 本指南服务 `write-spec`。主 skill 已确认权威源码/config、目标模块与依赖、lock/IRQ/atomicity、abstract-command
 协议和可信边界；review-passed predicate revision
 提供总状态、module state、局部读取/更新函数、predicate、lemma、crtOS `LastSeen`、目标函数的 atomic command 和适用的
-crtOS 临界区定义；本阶段引用这些接口，把 pre/post 直接写入项目实际使用的 Rocq spec 文件，把正式 `With/Require/Ensure` 直接写入
-annotated C。Markdown 只可记录路径、symbol、C 证据、返回路径和审阅状态，不承载 spec 正文。Spec review 与 predicate review
+crtOS 临界区定义；本阶段引用 review-passed 的共享 Rocq state、predicate、effect relation 和 lemma，把函数的正式 pre/post 唯一地写入对应 annotated C 的 With/Require/Ensure。Markdown 和手写 .v 均不得复制函数 contract 正文。Markdown 只可记录路径、symbol、C 证据、返回路径和审阅状态，不承载 spec 正文。Spec review 与 predicate review
 分开；发现 predicate 缺陷时使其 review 失效并返回 `slice-design`，predicate 再次通过后只重审受影响的 spec closure。
 
 Spec 是验证前写出的正式目标，不是验证结果：它规定函数的 pre/post、返回或非终止路径、abstract effect、
@@ -46,6 +45,10 @@ Spec 是验证前写出的正式目标，不是验证结果：它规定函数的
 对调用依赖图按 leaf 到 wrapper 分别写 spec。上层 spec 可以引用下层已经冻结的 spec 接口来表达调用边界，
 但要在依赖列表中把下层标成 `spec-approved/proof-pending`；只有后续证明完成后，caller proof 才能把它作为
 已验证调用规则。没有 callee spec 时先写 callee spec，不把 callee 实现内联进 caller spec。
+
+对进入当前验证闭包的每个函数，分别建立一个 annotated C 文件。文件必须包含当前配置下的真实函数定义和完整函数体，并把 With/Require/Ensure 直接写在该定义上。对纳入验证范围的真实 C 函数，annotated C 必须保留当前配置下的完整函数定义和可执行函数体。未经用户批准为 trusted/external boundary，不得用 declaration-only、空函数或伪实现替代。
+
+宏不要求一律手工展开。影响当前配置控制流、返回路径、内存访问、锁或 IRQ 行为的宏，必须由可信预处理器精确展开，或保留宏并检查预处理结果；不得用语义较弱的手写代码替代。
 
 LOS 文件只提供函数 spec 的写法示例。可以复用的是 QCP 的通用 `critical_STS/CriticalCSL`，不是 LOS 的
 `Los_CS_C`、`Los_Verify_State` 或 transition；crtOS 使用自己的状态和允许转换。
@@ -241,8 +244,7 @@ store_task_shared sg st_aft
 每个真实 C 函数分别写一个 spec。函数的 `Require` 是 precondition，`Ensure` 是 postcondition。外层函数证明调用
 其他函数时，只使用这些函数已经写好并最终证明的 spec，不展开它们的实现。
 
-先引用 review-passed slice 的 crtOS `LastSeen`、目标函数 atomic command、read/update 和 crtOS 自己的临界区定义，再在
-module/function library 中写本函数的 pre/post assertion，并在 annotated C 中写 `With/Require/Ensure`。若这些接口
+先引用 review-passed slice 的 crtOS `LastSeen`、目标函数 atomic command、read/update 和 crtOS 自己的临界区定义，在 annotated C 的函数定义上直接写 With/Require/Ensure。Rocq library 只提供这些注解引用的共享语义组件，不保存完整函数 pre/post。若这些接口在 annotated C 中写 `With/Require/Ensure`
 不足，提交 slice change request，不在 spec 阶段另写一套。
 
 这里使用 Local/Glob 作为理解临界区 Spec 的说明性术语，不要求项目定义名为 `Local` 或 `Glob` 的 Rocq predicate、
@@ -377,7 +379,7 @@ exists (st_aft : CrtosGlobalState),
 - abstract-execution relation、rely/guarantee、opaque invariant 按项目真实定义使用，没有假设更强语义；
 - 函数 spec 引用已确认的验证上下文和 review-passed predicate revision，并记录尚未完成的后续 proof obligation；
 - 每个 direct callee 的状态明确区分 `spec-missing|spec-approved/implementation-proof-pending|spec-approved/implementation-proved`；不得把前两者写成 verified dependency；
-- Rocq spec 已编译，annotated C 的 `With/Require/Ensure` 已至少通过 parser/typecheck；
+- 每个 annotated C 文件写完后立即运行项目 parser，至少使用 symexec --no-coq-gen --no-exec-info 或等价检查。普通 cc -fsyntax-only 会忽略注解，不能作为 QCP spec 语法通过的证据。parser 失败与后续 symbolic-execution/ownership 失败必须分开记录。；
 - [spec-review-template.md](../assets/spec-review-template.md) 已用普通话说明调用条件和结果，并列出每条 C 路径、effect、frame、formal file/symbol 和实际检查；没有复制 pre/post 或 `Require/Ensure` 正文；
 - Review-ready 条件全部满足且没有影响路径/effect/ownership/frame/dependency 的已知 `[OPEN]` 后才开始 spec review；所有适用 pass 条件有证据、formal checks 通过且没有 blocker 后标为 `review-passed`；
 - Spec revision 或依赖变化影响上一结论时做 delta；源码/config/scope、reviewed predicate 或 spec 语义使审阅依据失效时做 full；非语义文字变化不 review；
