@@ -15,6 +15,7 @@ predicate definition 和 lemma statement，
 - 直接调用依赖图已经固定；
 - 每个待验证函数已有批准 spec；spec 与 proof 状态分开记录，不能把 `spec-approved/proof-pending` 当作
   已验证依赖；
+- 验证闭包内每个 approved annotated C 已在相同 revisions 上通过 QCP-MCP 整文件 symbolic 检查；不存在被延期的 memory entailment、callee precondition、GlobalStrings、With 实例化、unsupported call 或不可达性失败；
 - 没有未解决且会改变 state、ownership、函数 spec、trust 或 scope 的 `[OPEN]`。
 
 Predicate/ownership 变化按 predicate review 条件处理；API 行为、Require/Ensure、路径或 effect 变化按 spec review 条件处理。只有相关结论受影响时才使 review 失效；proof-local lemma、strategy 或 tactic 调整不重新走设计审阅。
@@ -44,7 +45,7 @@ callee spec，但 caller 的最终 proof 只能使用已经完成 implementation
 
 ## 3. 调用 QCP-MCP 完成 symbolic execution
 
-QCP-MCP 只负责 annotated C、symbolic execution 和 VC 定位/导出；manual Rocq VC 交给 Rocq-MCP。
+`write-spec` 已使用 QCP-MCP 完成不导出 proof 的首次 symbolic success。本阶段先对 approved revision 重放同一 symbolic 检查，成功后才允许用 `qcp.proof` 导出 manual VC；manual Rocq VC 交给 Rocq-MCP。
 
 对每个目标 annotated C 文件执行：
 

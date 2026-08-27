@@ -14,34 +14,27 @@ checked_by: "<reviewer-or-main-agent>"
 
 ## 1. Annotated C
 
-| 检查 | 命令或 diff | 结果 |
-|---|---|---|
-| 与权威 C 相比只增加/修改注解 |  | `pass|fail|not-run` |
-| 当前配置下可执行路径一致 |  | `pass|fail|not-run` |
+- 与权威 C 相比的注解/等价归一：`pass|fail|not-run`；证据：
+- 当前配置下可执行路径一致：`pass|fail|not-run`；证据：
 
 ## 2. QCP 与 VC
 
-| 项目 | 结果 |
-|---|---|
-| QCP symbolic execution |  |
-| Generated VC count |  |
-| Proved VC count |  |
-| Remaining VC |  |
-| Goal 完整、未删除/弱化/隐藏 | `pass|fail|not-run` |
+- QCP symbolic execution：
+- Generated / proved / remaining VC：
+- Goal 完整、未删除/弱化/隐藏：`pass|fail|not-run`；证据：
 
 ## 3. Rocq 与可信性
 
-| 检查 | 命令 | 结果 |
-|---|---|---|
-| Rocq compilation |  | `pass|fail|not-run` |
-| Assumptions/`Parameter/Axiom/Admitted/admit` scan 与分类 |  | `pass|fail|not-run` |
-| Approved statement/spec 与 proof 对应 |  | `pass|fail|not-run` |
+- Rocq compilation：`pass|fail|not-run`；命令/证据：
+- Assumptions/`Parameter/Axiom/Admitted/admit` scan 与分类：`pass|fail|not-run`；命令/证据：
+- Approved statement/spec 与 proof 对应：`pass|fail|not-run`；证据：
 
 ## 4. 失败项
 
-| ID | 证据（file:line、symbol 或命令输出） | 具体失败 | 影响 | 下一步 |
-|---|---|---|---|---|
-|  |  |  |  |  |
+- `<ID>`
+  - 证据（file:line、symbol 或命令输出）：
+  - 具体失败与影响：
+  - 下一步：
 
 ## 5. 结论
 

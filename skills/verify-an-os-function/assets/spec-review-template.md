@@ -31,55 +31,53 @@ approval:
 
 ## 2. Review-ready 条件
 
-| 条件 | 证据 | 状态 |
-|---|---|---|
-| 引用的 predicate revision 为 `review-passed` |  | `ready|open` |
-| 全部 return/blocking path 和 direct callees 已列出 |  | `ready|open` |
-| 每个函数的正式 With/Require/Ensure 已直接写入对应 annotated C；引用的共享 Rocq state/predicate/effect 已编译。不存在手写 spec .v 或重复 pre/post 包装 |  | `ready|open` |
-| 每个 load/store 能追溯到 reviewed predicate |  | `ready|open` |
-| 适用的 Rocq compile 与 parser/typecheck 已通过 |  | `ready|open` |
-| 没有影响路径/effect/ownership/frame/dependency 的已知 `[OPEN]` |  | `ready|open` |
+- Predicate revision 与状态：
+- 路径、direct callees 与 load/store ownership：
+- 一函数一文件、active body、callee API 与源码等价性：
+- Rocq、parser/typecheck、QCP-MCP symbolic 检查及范围：
+- 仍存在的 `[OPEN]`：
+- 结论：`ready|open`
 
-任一项为 `open` 时保持 `draft`，先补 spec，不启动 review。Reviewer 不负责重复报告作者已经知道的 blocker。
+任一必需项为 `open` 时保持 `draft`，先补 spec，不启动 review。Reviewer 不重复报告作者已经知道且没有新证据的 blocker。
 
 ## 3. 路径与 Effect
 
-| C 路径/源码位置 | Require 的条件和资源 | 返回值 | Concrete old/new | Abstract effect | Ensure/frame |
-|---|---|---|---|---|---|
-|  |  |  |  |  |  |
+按真实 C 路径逐项写：
+
+- 路径/源码位置：
+  - 进入条件和资源：
+  - 返回值或阻塞：
+  - Concrete old/new 与 abstract effect：
+  - Ensure/frame：
 
 ## 4. Dependencies 与 Formal Checks
 
-| Predicate/callee/formal symbol | Revision/status | 用途 | 命令 | 结果 |
-|---|---|---|---|---|
-|  |  |  |  |  |
+- Predicate/callee/formal symbol、revision/status 与用途：
+- 实际运行的命令或检查范围：
+- 结果：
 
 ## 5. Review Issues
 
-| ID | 级别 | 证据（file:line 或 symbol） | 具体不一致 | 实际后果 | 最小修改 | 通过条件 | 状态 |
-|---|---|---|---|---|---|---|---|
-|  | `blocker|non-blocker` |  |  |  |  |  | `open|fixed|passed|accepted` |
+- `<ID>` — `blocker|non-blocker` — `open|fixed|passed|accepted`
+  - 证据（file:line 或 symbol）：
+  - 具体不一致与实际后果：
+  - 最小修改与通过条件：
 
 ## 6. Review-passed 条件
 
-| 条件 | 证据 | 状态 |
-|---|---|---|
-| 所有真实路径、返回值和 abstract effect 已覆盖 |  | `pass|fail` |
-| Require 足够且没有无依据加强，Ensure 没有弱化义务 |  | `pass|fail` |
-| Old/new、ownership transfer、frame 和资源返还正确 |  | `pass|fail` |
-| Direct-callee 状态准确，没有把 pending 当 verified |  | `pass|fail` |
-| Formal checks 通过且没有 open blocker |  | `pass|fail` |
+- 路径、返回值和 abstract effect：`pass|fail`；证据：
+- Require/Ensure 强度：`pass|fail`；证据：
+- Old/new、ownership transfer、frame 与资源返还：`pass|fail`；证据：
+- Direct-callee 状态：`pass|fail`；证据：
+- Formal checks、QCP-MCP symbolic 与 blockers：`pass|fail`；证据：
 
 ## 7. Review 记录与重审判断
 
-| Review ID | Spec revision | `full|delta` | 触发原因 | 检查的 paths/symbols/dependency closure | 结果 |
-|---|---|---|---|---|---|
-|  |  |  |  |  | `needs-fix|review-passed|blocked` |
-
+- Review ID、spec revision 与 `full|affected-only`：
+- 触发原因和实际检查的 issue/paths/symbols/dependency closure：
 - Predicate revision 是否仍有效：
-- 本次修改是否影响上一结论；为什么：
-- 是否需要 delta、full 或 no-review：
-- Review-passed spec revision：
+- 结论：`needs-fix|review-passed|blocked`
+- Review-passed spec revision（通过时填写）：
 - 用户批准的 predicate/spec revisions（两者均 review-passed 后填写）：
 
-Full review 只用于首次 ready revision 或审阅依据失效；其他有实质影响的修改做 delta。不得在没有新 revision 或新证据时重复 review。AI 不得自行批准。
+Full review 只用于首次 ready revision或审阅依据失效；`needs-fix` 后只检查已报告 issue、修改处及受影响 closure。不得在没有新 revision 或新证据时重复 review。AI 不得自行批准。

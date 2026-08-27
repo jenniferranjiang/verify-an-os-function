@@ -1,6 +1,6 @@
 # 根据 C 代码设计 Predicate 和 Lemma
 
-本指南完成三件事：理解现有 C 实现、形成 Rocq predicate 草案，并按 predicate 自己的条件完成独立审阅。Spec 在后续阶段另行编写和审阅。
+本指南完成三件事：理解现有 C 实现、形成 Rocq predicate 草案，并按 predicate 自己的条件完成独立审阅。Spec 另行编写和审阅；在 predicate review 前，可以用可编译的 predicate 草案编写 spec 并运行 QCP-MCP symbolic 检查，以发现草案缺口。
 
 ## 目录
 
@@ -16,8 +16,9 @@
 
 ## 1. 确认源码与范围
 
-从用户指定的目标函数出发，读取当前配置下实际使用的实现和它直接访问的 C 对象。为了理解这些对象怎样建立和变化，
-再读取必要的初始化、查询、修改、删除和回收代码。读到的其他函数只用于理解源码，不自动加入当前验证范围。
+从用户指定的目标模块出发，确定当前配置下属于该模块的源码与函数集合，读取这些函数
+实际访问的 C 对象。为了理解这些对象怎样建立和变化，还要读取必要的初始化、查询、
+修改、删除、回收及跨模块使用代码。
 
 新增定义前，先搜索项目已有的 state、predicate、lemma 和 spec。所有设计以目标项目的 C 源码和配置为依据，
 不要只根据类型名、函数名或参考项目猜测。
@@ -187,42 +188,25 @@ Definition object_rep (addresses : ObjectAddresses)
 
 ```coq
 sg : StableGlobalState
-st : CrtosGlobalState
+st : VarGlobalState
 ```
 
 这样，函数执行前后可以直接使用同一个 `sg`：
 
 ```coq
-store_task_shared sg st_bef
-store_task_shared sg st_aft
+crtos_inv sg st_bef
+crtos_inv sg st_aft
 ```
 
 这表示固定地址和固定配置在前后使用的是同一组逻辑值，而函数只需要说明 `st_bef` 如何变成 `st_aft`。
 
 这种拆分是一种可选的代码组织方式，不是验证框架的强制要求。Skill 不应默认要求先拆成 Stable/Mutable，而应先根据实际字段和函数行为判断是否有必要拆分。
 
-也可以把两部分包装成一个总状态：
-
-```coq
-Record TaskGlobalState : Type := {
-  stable_part : StableGlobalState;
-  mutable_part : CrtosGlobalState;
-}.
-```
-
-这种写法同样可行，但必须保证每次更新总状态时，`stable_part` 仍然保持原值。可以通过状态更新函数直接保证：
-
-```coq
-Definition update_mutable
-    (new_st : CrtosGlobalState)
-    (before : TaskGlobalState) : TaskGlobalState :=
-  {|
-    stable_part := before.(stable_part);
-    mutable_part := new_st;
-  |}.
-```
-
-因为这里直接复用了 `before.(stable_part)`，所以不需要在每个函数 Spec 中重复写“更新前后的 stable 部分相等”。无论采用哪种写法，都必须保证合法的状态变化不会随意替换固定地址或固定配置。
+也可以把两部分包装成一个总状态。这样做时，总状态的更新函数必须直接复用
+更新前的 stable 部分，只替换 mutable 部分；因此不需要在每个函数 Spec 中重复写
+“更新前后的 stable 部分相等”。无论采用哪种写法，都必须保证合法的状态变化
+不会随意替换固定地址或固定配置。具体 record 和更新函数应使用目标项目实际定义，
+不要为了套用本指南另建一套 Task 风格的包装。
 
 还要特别注意，`sg` 和 `st` 都只是 Rocq 中的逻辑值，本身不拥有任何 C 内存。
 
@@ -239,45 +223,31 @@ Definition update_mutable
 例如可以采用了这种拆分方式：
 
 - `StableGlobalState` 保存 manager、task-head 和 `Done` 的地址，ID manager 的固定容量和数组地址，以及静态 `Done` 函数表的内容；
-- `CrtosGlobalState` 保存当前已经分配的 ID、哈希桶内容、任务链表内容，以及 `task_status` 这类只用于证明的控制状态。
+- `VarGlobalState` 保存当前已经分配的 ID、哈希桶内容、任务地址顺序、
+  `task_virtual_status` 和已经发布的 descriptor map。
 
 ```coq
 Definition store_task_idmanager
     (sg : StableGlobalState)
-    (st : CrtosGlobalState) : Assertion :=
+    (st : VarGlobalState) : Assertion :=
   store_idmanager
-    sg.(task_sidmanager_abs)
-    st.(task_id_manager_abs)
-    sg.(task_idmanager_addr).
+    sg.(stable_idmanager_abs)
+    st.(task_idmanager_abs)
+    sg.(task_idmanager_ptr).
 ```
 
 这里：
 
-- `sg.(task_idmanager_addr)` 给出 C 全局 manager 的地址；
-- `sg.(task_sidmanager_abs)` 给出 manager 的固定容量、bitmap 地址和哈希表地址；
-- `st.(task_id_manager_abs)` 给出当前已经分配的 ID 和各个哈希桶的内容；
+- `sg.(task_idmanager_ptr)` 给出 C 全局 manager 的地址；
+- `sg.(stable_idmanager_abs)` 给出 manager 的固定容量、bitmap 地址和哈希表地址；
+- `st.(task_idmanager_abs)` 给出当前已经分配的 ID 和各个哈希桶的内容；
 - `store_idmanager` 给出这些 C 内存的实际所有权。
 
 因此，Stable/Mutable 的拆分只是把“固定信息”和“当前内容”分别保存，并不要求把它们对应的内存所有权也分开。
 
 以创建任务时发布新任务为例：
 
-```coq
-Definition ktask_create_publish_state
-    (sg : StableGlobalState)
-    (st_lock : CrtosGlobalState)
-    (task : addr)
-    (id : Z) : CrtosGlobalState :=
-  replace_task_head
-    (ktask_create_task_node task :: st_lock.(task_head_abs))
-    (replace_id_manager
-      (idmanager_link
-        sg.(task_sidmanager_abs)
-        (idmanager_add st_lock.(task_id_manager_abs) id)
-        id
-        &(task # "TaskDescriptor" ->ₛ "id"))
-      st_lock).
-```
+当前 Task lib 使用 [task_publish_state] 组合已更新的 ID manager 和任务注册表。
 
 这个函数只构造一个新的 Rocq 逻辑值，不会直接修改 C 内存。它表示以下变化：
 
@@ -290,9 +260,16 @@ Definition ktask_create_publish_state
 实际 C 代码执行 `IdInsertObj` 和链表插入操作后，需要使用新的逻辑状态重新建立：
 
 ```coq
-store_task_shared
+crtos_inv
   sg
-  (ktask_create_publish_state sg st_lock task id)
+  (task_publish_state
+    task
+    (idmanager_link
+      sg.(stable_idmanager_abs)
+      (idmanager_add st_lock.(task_idmanager_abs) id)
+      id
+      &(task # "TaskDescriptor" ->ₛ "id"))
+    st_lock)
 ```
 
 这一步说明：修改后的 ID manager 和任务链表内存，确实与新的逻辑状态一致。
@@ -309,9 +286,9 @@ TaskStableContext sg
 TaskStableContext sg : Prop
 ```
 
-只是一个纯逻辑条件，不拥有内存，也不提供读取或写入权限。真正的内存权限仍然来自 `store_task_idmanager`、`store_task_shared` 等内存谓词。
+只是一个纯逻辑条件，不拥有内存，也不提供读取或写入权限。真正的内存权限仍然来自 `store_task_idmanager`、`store_task_dll`、`store_task_desc_map` 和 `crtos_inv` 等内存谓词。
 
-当前临界区只把 `CrtosGlobalState` 作为允许发生变化的状态，因此 `RTrans` 和 `GTrans` 只描述 `st` 前后是否符合并发规则，不描述 `sg` 的变化。同一个 `sg` 由加锁和解锁的函数 Spec 原样传递。
+当前临界区只把 `VarGlobalState` 作为允许发生变化的状态，因此 `RTrans` 和 `GTrans` 只描述 `st` 前后是否符合并发规则，不描述 `sg` 的变化。同一个 `sg` 由加锁和解锁的函数 Spec 原样传递。
 
 `RTrans` 和 `GTrans` 都只是 Rocq 中的关系，不会主动修改 C 内存。C 内存由实际 C 语句修改；验证过程需要用新的 `st` 描述修改后的内容，重新建立对应的内存谓词，并证明这次变化符合并发规则。具体的加锁、解锁和 transition 使用方式应放在函数 Spec 或并发验证部分说明。
 
@@ -374,6 +351,11 @@ Concrete State。
 根据 C 对象的实际布局和访问方式，分别定义对象、全局内存和容器 predicate，再把它们组合起来。最终 predicate
 必须覆盖目标函数的实际 load/store。不进入 Abstract State 不等于不拥有对应内存：容器 links、派生 bitmap 和
 整块操作覆盖的字节仍可能需要由 predicate 拥有。
+
+新增 representation、容器 predicate、递归结构或辅助 lemma 前，先搜索 QCP 已有库和项目已经引入的定义。
+只要已有结构能够表达目标 C 的真实布局、ownership 和所需操作，就直接复用；需要适配时优先只定义目标对象的
+element/payload predicate，不复制已有结构或手写同义 Fixpoint。只有已有库确实不能表达，并能指出具体缺口时，
+才新增项目自己的结构定义或 lemma。
 
 ### 6.1 确定每处内存是否由当前 Predicate 拥有
 
@@ -568,77 +550,16 @@ container predicate 和必要 lemma；仅凭类型名或习惯性实现不能构
 `OsSchedPriQueue.c`、`OsSchedTaskQueue.c`、`LOS_TaskCreate.c`。读取后检查 `Admitted|Axiom|Parameter`；
 未证明或依赖额外假设的内容不能当作目标项目结论。
 
-### 6.5 逐项增加模块的全局内存 Predicate
+### 6.5 组合模块 Predicate
 
-#### 从当前函数真正需要的部分开始
+模块全局 predicate 必须覆盖当前配置下该模块拥有或管理的全部内存。开发时可以按对象或容器逐步加入并编译，但要持续修改同一个正式 definition；在模块资源和生命周期尚未闭合时，它仍是 draft。每次加入资源时，检查其唯一 owner、与现有 footprint 不重叠，并追溯到使用它的真实模块函数；发现新的逻辑状态时返回第 2 节。
 
-`store_glob_task`、`store_glob_sem`、`store_glob_mux` 一类模块全局表示谓词必须从最小可验证 footprint 开始增长。
-不要先把 used map、free list、recycle list、bitmap、roots 和所有 mutable globals 全部拼好，再统一调试。
-
-每次只加入一组当前函数需要的资源，直接修改同一个正式 `.v` definition 并立即编译。下面的 `G0/G1/...`
-只是说明先后顺序，项目不需要建立这些名字或复制这段代码：
-
-```coq
-(* G0：先固定签名；开发态可以暂为 emp。 *)
-Definition store_glob_obj sg st : Assertion := emp.
-
-(* G1：只加入当前客户端首先需要的 used map。 *)
-Definition store_glob_obj sg st : Assertion :=
-  store_used_obj_map sg st.(used).
-
-(* G2：确认 G1 可用后，再加入 free list。 *)
-Definition store_glob_obj sg st : Assertion :=
-  store_used_obj_map sg st.(used) **
-  store_free_obj_list sg st.(free).
-
-(* G3：再加入 recycle list 或一个模块级 global。 *)
-Definition store_glob_obj sg st : Assertion :=
-  store_used_obj_map sg st.(used) **
-  store_free_obj_list sg st.(free) **
-  store_recycle_obj_list sg st.(recycle).
-```
-
-代码中持续修改同一个 definition，并同步更新它前面的中文解释；任务报告只记录 formal file/symbol 和检查结果，
-不复制 definition 正文。不要在主树保留一组同义的版本化
-definitions。
-
-#### 发现新的逻辑状态时返回第 2 节
-
-第 6 节只组合内存 predicate，不在这里增加 abstract state。如果分析 C 内存时发现某个新值会影响函数结果、未来行为
-或对象合法状态，停止当前 predicate 修改，返回第 2 节重新完成 2.1～2.5，再更新第 3 节受影响的状态组织。修改已有
-state type、read/update 或已批准 spec 时，按 breaking change 重新审阅受影响内容。
-
-#### 只记录本节的内存变化
-
-每次加入一组内存，只记录：新增哪些地址、由哪个 predicate 唯一拥有、与现有地址为什么不重叠，以及哪条真实
-load/store 需要它。需要的新 lemma 留到第 7 节，pure validity 和生命周期关系留到第 8 节。
-
-#### 总 Predicate 也只加入当前需要的模块
-
-不仅模块内部的 `store_glob_*` 要逐项增加，`slice_OS_inv` 也只加入目标函数和直接依赖实际使用、并且 ownership
-已经说明清楚的模块 predicate：
-
-```text
-I0 = project-approved base facts or emp
-I1 = I0 * store_glob_task
-I2 = I1 * store_glob_sched
-I3 = I2 * store_glob_sem
-...
-```
-
-只有源码和已批准的项目协议确实需要时，`I0` 才包含 critical/config facts；不要为了套这个示意图发明它们。
-
-每加入一个 module glob，重新审计它和现有 modules 是否覆盖相同 concrete 地址，尤其是 embedded links、global
-list heads、shared bitmap、cross-module pointers 和 nested subobjects。跨模块联系优先写为纯 consistency relation，
-不要通过互相嵌套 object predicate 复制 ownership。
-
-开发中的中间 invariant 只能称为 `slice_OS_inv` 或 partial invariant。只有验证边界内
-全部共享资源、critical protocol、initialization 和生命周期都闭合后，才能命名或声称为完整 `OS_inv`。
+`slice_OS_inv` 可以只组合目标函数及其依赖需要的模块 predicate，但其中每个模块 predicate 本身必须完整。组合时检查跨模块地址不重叠；跨模块联系优先使用纯 consistency relation，不复制 ownership。只有验证边界内的共享资源、critical protocol、initialization 和生命周期全部闭合后，才能声称为完整 `OS_inv`。
 
 ## 7. 根据真实 C 操作定义 Lemma
 
-Lemma 只补第 6 节 predicate 无法直接支持、且真实 C 操作当前需要的接口。先搜索项目已有的 array、map、list 和
-container lemma；能直接复用时不增加 wrapper。
+Lemma 只补第 6 节 predicate 无法直接支持、且真实 C 操作当前需要的接口。先搜索 QCP 和项目已有的 array、map、
+list、container 及其他相关 lemma；能直接复用时不增加 wrapper。
 
 常见需求包括数组元素更新、链表插入/删除、对象进出容器、module state 更新，以及第 6.2～6.4 节所述的 split/merge。
 循环不变式和 exact remainder 可以作为模块内部接口；不要为每一次字段 load/store 分别建立一套公开的
@@ -730,18 +651,18 @@ Definition update_task_id_map ids before := ...
 Definition 改变时必须同时更新相关注释。
 
 只有源码/config/scope 固定、每个实际访问对象能追溯到候选 owner/representation、formal definitions 与必要注释已落地并通过适用检查，且没有影响通过条件的已知 `[OPEN]` 时，
-才进入 predicate full review。Review 检查 representation 和 ownership，不检查尚未编写的函数 Require/Ensure。
+才进入 predicate full review。当前任务同时编写 spec 时，还要先使用该 predicate 草案完成验证闭包的全部 QCP-MCP symbolic 检查且未调用 `qcp.proof`；草案期间发现缺口就直接修改并重跑，不标记 `invalidated` 也不做中间 review。Review 检查 representation 和 ownership，不检查函数 Require/Ensure。
 修订影响上一结论时按 dependency closure 做 delta；源码/config/scope 或抽象/ownership 边界使依据失效时重新 full review；
-非语义文字变化不 review。所有适用检查通过且没有 blocker 后，将该 predicate revision 标为 `review-passed` 并交给 spec 阶段。
+非语义文字变化不 review。所有适用检查通过且没有 blocker 后，将该 predicate revision 标为 `review-passed`，spec review 必须固定这份 revision。
 
 ### 9.2 交付检查
 
 - [ ] 每个 abstract-state 分量来自可观察语义或明确 representation 关系；abstract/concrete state 高度重合时 extra components 可留在 predicate 的存在量中，差异很大时才分别组织两个逻辑状态；没有机械复制 C struct；
 - [ ] Record 中没有函数 spec、待证 entailment、lemma obligation、任意 Assertion/token 生成器或 lock/IRQ 规则；
-- [ ] 每个触达区域是 known-owned、unknown-owned 或 not-owned，且每个实际访问字节恰好一个 owner；
+- [ ] 目标模块全部函数触达的区域均已分类为 known-owned、unknown-owned 或 not-owned，且每个实际访问字节恰好一个 owner；
 - [ ] 每条路径的 load 前态、store 的 old/new 值或结构以及 write footprint 外的 frame 已明确；
 - [ ] pointer、embedded subobject、container spine/payload 和跨模块关系没有重复 ownership；
-- [ ] 每次增加资源时，同时检查 state、具体内存、地址是否重叠以及使用它的真实函数；
+- [ ] 每次增加资源时，同时检查 state、具体内存、地址是否重叠以及使用它的真实模块函数；
 - [ ] Representation 结论带目标源码位置和实际 C 操作证据，没有仅凭类型名套用；
 - [ ] 若确实新增了共享的 split/merge 接口，拆出与合回的内存精确互补；否则临时形状留在 proof 内部；
 - [ ] 每个新命名 predicate 都对应稳定 representation、语义状态、ownership 状态、循环不变式或跨函数语义阶段；共享容器拆分接口只在多客户端条件成立时增加；
@@ -752,9 +673,9 @@ Definition 改变时必须同时更新相关注释。
 - [ ] 目标代码进入、退出或依赖临界区时，已写出或复用 crtOS 自己的临界区定义及 `OutsideCritical/InsideCritical/RTrans/GTrans`；
 - [ ] `safeExec/LastSeen` 与临界区定义职责分开，内部辅助函数没有被迫重复对外公开函数的 atomic-command 条件；
 - [ ] 每个概念只有一个正式定义；
-- [ ] 未覆盖资源明确保留在范围外，partial invariant 没有冒充完整 `OS_inv`；
+- [ ] 模块 predicate 已覆盖当前配置下该模块拥有或管理的资源；函数级 `slice_OS_inv` 可排除无关模块，但不得把 partial invariant 冒充为完整 `OS_inv`；
 - [ ] formal source 已 parser/typecheck 或编译，没有重复定义，也没有把定义复制到 Markdown；
-- [ ] 非平凡或对外使用的生成定义具有与代码一致的中文注释；任务回复或最终报告给出 reviewed revision、review scope 和结论；尚未运行 QCP/VC/proof，也没有未批准假设。
+- [ ] 非平凡或对外使用的生成定义具有与代码一致的中文注释；任务回复或最终报告给出 reviewed revision、review scope 和结论；当前任务同时编写 spec 时已完成 QCP-MCP symbolic 检查且未调用 `qcp.proof`，也没有未批准假设。
 
 最后用一句话复核：
 
