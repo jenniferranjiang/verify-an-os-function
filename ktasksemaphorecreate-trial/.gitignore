@@ -1,0 +1,13 @@
+# Rocq/Coq generated files
+*.aux
+*.glob
+*.vo
+*.vok
+*.vos
+
+# Tactic caches
+.lia.cache
+.nia.cache
+
+# Temporary verification output
+.tmp/
