@@ -489,6 +489,19 @@ manager_missing_prev_cell
 6. 上层是否可以完全忽略其内部结构？
 7. 是否会因读写 C 对象的不同内容而继续派生同类谓词？若会，保持这些状态为 proof-local。
 
+特别需要注意的是，不得为了缩短函数 spec，把整个入口资源或所有出口效果包装进仅名为 `pre`、`post`、
+`*_pre`、`*_post` 或 `*_spec` 的 predicate/relation。这些名称只说明定义位于调用前或调用后，
+没有指出它对应的对象、动作或源码中的稳定语义边界。
+
+确实被多个函数复用的 helper 应满足以下条件：
+
+- 名称指出具体对象、动作或路径，例如 semaphore allocation failure、ID insertion success、
+  critical-section exit，而不是只指出它位于调用前或调用后；
+- 定义对应源码中的稳定语义边界，参数只包含表达该边界所需的值，并在定义前用中文说明它拥有的
+  资源或约束的状态变化；
+- 一次性缩写、仅转发到另一个 relation 的同义 wrapper，或必须连续展开多层才能知道函数改变了什么的
+  helper，应内联或改成按动作命名的最小关系。
+
 #### 同一件事只定义一次
 
 不要为同一个 predicate 反复增加 helper、wrapper 和新名字。重复定义不会增加语义，只会让代码难以读懂，

@@ -32,9 +32,12 @@ approval:
 ## 2. Review-ready 条件
 
 - Predicate revision 与状态：
+- 当前配置下的可达闭包与权威 C call/dispatch/macro graph 的逐项对照：
+- 用户逐名批准的 `trusted` 函数、采用的 contract/保证与批准证据：
+- Wrapper/static helper/done-table/fixed-pointer/macro target 是否全部解析：
 - 路径、direct callees 与 load/store ownership：
 - 一函数一文件、active body、callee API 与源码等价性：
-- Rocq、parser/typecheck、QCP-MCP symbolic 检查及范围：
+- Rocq predicate compile/typecheck 与 annotated C 结构、闭包和源码等价性检查：
 - 仍存在的 `[OPEN]`：
 - 结论：`ready|open`
 
@@ -50,7 +53,7 @@ approval:
   - Concrete old/new 与 abstract effect：
   - Ensure/frame：
 
-## 4. Dependencies 与 Formal Checks
+## 4. Dependencies 与设计检查
 
 - Predicate/callee/formal symbol、revision/status 与用途：
 - 实际运行的命令或检查范围：
@@ -65,11 +68,13 @@ approval:
 
 ## 6. Review-passed 条件
 
+- 验证范围（可达函数、dispatch、active bodies、caller-local contracts、trusted 函数）：`pass|fail`；证据：
+- Contract 可读性（未用含糊 `*_pre/*_post/*_spec` 隐藏资源或路径效果）：`pass|fail`；证据：
 - 路径、返回值和 abstract effect：`pass|fail`；证据：
 - Require/Ensure 强度：`pass|fail`；证据：
 - Old/new、ownership transfer、frame 与资源返还：`pass|fail`；证据：
 - Direct-callee 状态：`pass|fail`；证据：
-- Formal checks、QCP-MCP symbolic 与 blockers：`pass|fail`；证据：
+- Rocq predicate checks、annotated C 完整性与 blockers：`pass|fail`；证据：
 
 ## 7. Review 记录与重审判断
 

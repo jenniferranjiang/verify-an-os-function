@@ -135,9 +135,30 @@
    `option (list SemaphoreObject)`，不能用 `option SemaphoreObject`；一个 hash bucket
    可能因冲突包含多个对象，并且还要能用 `Some nil` 表示已初始化的空 bucket。
 
-3. 遇到数组形态时，可以先检查 QCP 已有的数组 predicate 是否能组合当前元素 predicate，
-   从而复用它的长度和元素 split/merge lemma。（在写predicate的时候都可以先查找qcp里是否已有库可以复用谓词定义）例如第 2 条中的 `store_sem_buckets_from`
-   是手写数组递归；如果 QCP 的 `store_array` 能表达该布局，可以改为：
+3. 遇到数组形态时，先分清“数组里直接放对象本体”还是“数组里放指向对象的指针”。
+   如果数组元素本身就是要描述的结构体/节点/头对象，即使这个结构体内部有指针字段，
+   也仍然是数组情形。代码按 `&array[i]`、`array + i` 或等价形式取得第 `i` 个元素
+   本体时，适合用 QCP 的 `storearray`/`store_array` 思路组合元素 predicate。
+   这样可以复用数组谓词的长度和元素 split/merge lemma，也能避免把连续数组误建模成
+   外部分散对象。
+
+   例如 semaphore 的 `DECLARE_ID_MANAGER` 会生成连续的 hash bucket 数组；其中
+   `store_sem_bucket` 描述单个 `DoubleLinklistType` bucket head，`bucket` 参数只是
+   这个数组元素的抽象状态，不是新的 C 对象。第 2 条中的 `store_sem_buckets_from`
+   是手写数组递归：
+
+   ```coq
+   Fixpoint store_sem_buckets_from
+       (base : addr) (index : Z) (buckets : list SemBucket) : Assertion :=
+     match buckets with
+     | nil => emp
+     | bucket :: rest =>
+         store_sem_bucket (base + index * sizeof("SysDoubleLinklistNode")) bucket **
+         store_sem_buckets_from base (index + 1) rest
+     end.
+   ```
+
+   如果 QCP 的数组谓词能表达该布局，可以改为：
 
    ```coq
    Definition store_sem_bucket_at
@@ -154,3 +175,11 @@
 
    这里只替换数组的组织方式；`store_sem_bucket` 仍描述单个元素，
    `semaphore_buckets_ok` 仍描述数组内容与模块 abstract state 的关系。
+
+4. 只有当 C 形态确实是“数组里放指针，指针再指向外面的对象”时，才优先考虑
+   `storemap`/`store_map` 这类地址到资源的映射谓词。例如若源码是 `T *table[N]`，
+   或者 manager 中维护的是一组不连续分配的 object/header 指针，那么数组本体只拥有
+   各个指针槽和值，真正的对象资源位于这些指针指向的地址上；此时可以用 `storearray`
+   描述指针数组，用 `storemap` 描述外部地址集合对应的对象资源。
+
+  判断用 storearray 还是 storemap，不要只看类型里有没有 *。要看真正的对象在哪里。如果对象本体连续放在数组里，就用数组谓词；如果数组里只是放指针，真正对象在外面、地址不连续，才用 map 谓词。

@@ -1,6 +1,6 @@
 ---
 name: verify-an-os-function
-description: 验证 CRTOS 等非 SMP OS 的 C 函数与模块：以整个模块为范围设计 Rocq predicate，与按函数编写的 QCP spec 在草案期共同完成 QCP-MCP symbolic 检查，稳定后分别审阅；用户批准前不导出 proof，批准后再生成 VC、完成 Rocq 证明和完整性检查。
+description: 验证 CRTOS 等非 SMP OS 的 C 函数与模块：以整个模块为范围设计 Rocq predicate 和按函数编写的 QCP spec，分别审阅并由用户确认 revision；随后运行 QCP symbolic、生成 VC、完成 Rocq 证明和完整性检查。
 ---
 
 # 验证 CRTOS 函数
@@ -13,16 +13,19 @@ Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。
 
 ```text
 确认验证上下文 -> C 分析 -> predicate 与 spec 草案迭代
-             -> QCP-MCP symbolic(last_line) 全部成功，不调用 qcp.proof
              -> predicate review-passed -> spec review-passed
              -> 用户确认两份 revision
-             -> QCP 生成 VC / Rocq proof -> final integrity check
+             -> QCP parser/symbolic -> QCP 生成 VC / Rocq proof
+             -> final integrity check
 ```
 
 ### 确认验证上下文
 
 开始 predicate 设计前，确认目标模块边界、当前配置下属于该模块的源码和函数集合、
 模块直接访问或拥有的 C 对象、初始化与生命周期路径，以及相关 critical/IRQ/atomicity 行为。
+
+`trusted` 函数由用户决定。Main agent 可以建议把复杂 callee 作为 `trusted`，但只有用户明确同意
+具体 C symbol 后才能停止递归；批准的 symbol 和采用的 contract/保证记录在当前任务上下文或报告中。
 
 优先读取用户指定或项目已有的说明。只在任务回复或最终报告中简短记录本次使用的事实和 `[OPEN]`。
 
@@ -31,9 +34,9 @@ Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。
 
 ### Review 生命周期
 
-状态使用 `draft -> review-ready -> needs-fix|review-passed -> invalidated`。草案可根据 QCP-MCP symbolic 共同修改，不做中间 review；`invalidated` 只用于已经通过的 revision 失去审阅依据。
+状态使用 `draft -> review-ready -> needs-fix|review-passed -> invalidated`。Predicate 与 spec 草案可共同修改，不做中间 review；`invalidated` 只用于已经通过的 revision 失去审阅依据。
 
-- 首个 review-ready revision 做一次 full review。`needs-fix` 后只检查已报告 issue、修改处及其 dependency closure；只有权威 C、配置、scope、可信边界或上游 breaking change 使审阅依据失效时才重新 full review。
+- 首个 review-ready revision 做一次 full review。`needs-fix` 后只检查已报告 issue、修改处及其 dependency closure；只有权威 C、配置、scope、trusted 函数列表或上游 breaking change 使审阅依据失效时才重新 full review。
 - 纯格式、报告或不影响结论的 proof-local 修改不触发 review；同一 revision 不重复 review。同一 blocker 没有新修改或证据时停止空转并报告用户。
 - Issue 必须给出级别、file/symbol 证据、mismatch、后果、最小修复和可执行通过条件。无 open blocker 且检查成功才可 `review-passed`。
 - Final integrity 首次检查完整 proof 候选；之后只重跑失败项和 dependency closure，除非权威输入、approved revision 或 goals 改变。
@@ -51,9 +54,11 @@ Predicate design agent 从目标模块全部函数实际访问的 C 对象出发
 owned memory、mutable fields、lifecycle states 和 unchanged resources。隐藏不必要的实现细节；不要盲目展开大型 predicate，优先用 `which implies` 导出字段、节点、数组片段等局部 view，并保留未触达资源。
 
 AI 新建的共享 Rocq definitions 写入项目 `lib/`。创建或命名 `.v` 文件、
-Module 和 symbol 前，可以参考当前项目、LOS Verify 及最接近的 QCP 示例，
-沿用其已有命名和目录组织；skill 不规定统一前缀、后缀或固定拆分方式。
-语义和 ownership 仍以目标 CRTOS 源码为准，LOS/QCP 只作为命名与组织参考。
+Module 和 symbol 前，参考当前项目、skill中的task-lib 及最接近的 QCP 示例，
+沿用其已有命名和目录组织，参考其文件组合命名分割方式；skill 不规定统一前缀、后缀或固定拆分方式。文件边界应按语义内聚、依赖方向和既有项目风格确定；为了快速建立可编译的
+最小 trial predicate 草案，不得把无关 predicate、abstract state、STS、规则或
+callee contract 合并到同一个 `.v` 文件中。语义和 ownership 仍以目标 CRTOS 源码为准，
+LOS/QCP 只作为命名与组织参考。
 
 直接在 `.v` 中用 `(** ... *)` 中文文档注释解释生成的非平凡定义：用自然语言说明这个定义做什么，以及理解或使用它时真正需要知道的限制、保持关系或中间状态。不要规定固定栏目，也不要为了填注释机械罗列 ownership、参数、抽象边界和客户端；简单定义一句话即可。注释必须随 definition 一起更新，过时或误导性注释视为 blocker。Rocq 文件先放 definition，再放 lemma/theorem/proof；不得用 `Parameter`、`Axiom`、占位定义、手写 `Admitted/admit` 绕过证明。
 
@@ -61,7 +66,7 @@ Predicate review-ready 条件：目标模块、当前配置、模块源码和函
 当前配置下模块全部函数实际访问的每个 C 对象和内存都能追溯到候选
 owner/representation；模块的初始化、正常运行、状态转换、删除和回收路径已经覆盖；
 正式 state/predicate/lemma statement 已写入 .v，必要中文注释与代码一致，并通过
-适用的 compile/typecheck；当前任务同时编写 spec 时，验证闭包已使用该 predicate 草案完成全部 QCP-MCP symbolic 检查且未调用 `qcp.proof`；没有会影响 owner、抽象语义、lifecycle、frame 或 formal check 的已知 [OPEN]。
+适用的 compile/typecheck；没有会影响 owner、抽象语义、lifecycle、frame 或后续验证的已知 [OPEN]。
 
 Predicate review-passed 条件：在当前配置下，对目标模块全部函数可能访问的每个字节，
 在对应的稳定生命周期状态下都有且仅有一个 owner；模块 abstract state 和每个命名
@@ -71,61 +76,90 @@ predicate 都有源码语义或复用客户端依据；模块内部 container/li
 需要参考完整的 CRTOS 项目实例时，可先阅读
 [Task lib 索引](references/task-lib/index.md) 作为参考。
 
-- 必须读：已确认的验证上下文、目标 C/headers/config、当前 trial 工作区已有的 `lib/` 定义、[predicate-lemma-design-guide.md](references/predicate-lemma-design-guide.md) 和 [predicate 设计经验](references/experience.md)。开始新写或修改 predicate 前读取经验文件，并只采用其中与当前 C 形态和控制流相符的条目。
+- 必须读：已确认的验证上下文、目标 C/headers/config、当前 trial 工作区已有的 `lib/` 定义、[predicate-lemma-design-guide.md](references/predicate-lemma-design-guide.md) 和 [Predicate 设计经验](references/predicate-experience.md)。开始新写或修改 predicate 前读取经验文件，并只采用其中与当前 C 形态和控制流相符的条目。
 - 写：项目实际使用的 Rocq `.v`，把解释放在相关 definition/statement 前；默认不创建 predicate review template。Review issue、reviewed revision 和结论只写入任务回复或最终报告，不复制 formal source。
 - 修改已批准接口时使用：[design-change-request-template.md](assets/design-change-request-template.md)。
 
 ### `write-spec`
 
-默认使用**扁平的一函数一文件切片**：用户指定的目标函数及本轮明确纳入设计的
-direct callees，各自在 `annotated_C/src/<function>.c` 中恰有一个 active 函数定义。
-文件按以下顺序组织：当前函数需要的最小类型/常量；当前函数实际调用的每个
-callee 的 declaration-only `With/Require/Ensure` API；当前函数自己的 canonical
-`With/Require/Ensure`；真实 active 函数体。更深层 helper 默认只作为本文件前部
-API，不递归复制函数体或扩成整棵源码树，除非用户明确扩大验证函数集合。
+进入本模式前必须完整阅读 [spec-writing-guide.md](references/spec-writing-guide.md)。默认使用**扁平的
+一函数一文件切片**。验证闭包从用户指定的目标函数开始，在当前配置下递归跟随
+全部直接调用、可唯一解析的 function pointer/done-table dispatch，以及 function-like 宏展开后产生的
+真实函数调用，直到函数叶子或用户批准的 `trusted` 函数。Main agent 可以建议将复杂函数排除出
+验证闭包，但不得代替用户决定。无法唯一解析的调用保持 `[OPEN]` 并阻塞 review。
+
+- 闭包中每个非 `trusted` 函数 `f` 必须且只能有一个 `annotated_C/src/f.c`，其中包含 `f` 的一个真实
+  active 定义、完整函数体和 canonical `With/Require/Ensure`；declaration-only 文件不合格。
+- `f.c` 中调用 `g` 时，只在 `f` 的定义前写 `g` 的完整 declaration-only API spec，不复制
+  `g` 的函数体。`g` 必须在闭包中有自己的 active canonical 文件，或由用户批准为 `trusted`；
+  前者的 caller-local contract 必须与 canonical spec alpha/typedef 等价。
 
 这是结构硬门禁：
 
 - API 不能只是裸 C prototype 或 `implementation-pending` 注释；每个正文 call 都
   必须在定义前有完整 `With/Require/Ensure`，并在调用点实例化需要的 `With`。
-- 正文调用的 function-like macro 必须在切片中变成具名函数 API，并在定义前写
-  完整 spec；object-like 常量、`sizeof` 和纯类型/布局宏可以保留。不得只写
-  `#define LOCK() Helper()` 后给 `Helper` 一个裸声明。
-- 当前函数体必须 active；不得放入 `#if 0`、注释、字符串或“body snapshot”，
-  也不得用 declaration-only 文件冒充 canonical 函数文件。
-- Caller 不复制 callee 函数体；callee API 必须与被纳入本轮函数集合时其自身文件
-  中的 canonical spec alpha/typedef 等价。不得集中建立模块级 `*_specs.h`。
-- 不复制整套 kernel/libc source tree 或无关 headers。切片只保留当前函数真正需要
-  的声明；若正文按字段访问 struct，声明必须保持被访问字段的真实 ABI offset，
+- Canonical `With/Require/Ensure` 使用与函数层次匹配、按对象或动作命名的 predicate/state
+  transition，直接写出各返回路径、abstract effect、ownership transfer 和 frame。表示层的裸
+  `store` 应封装在 Rocq predicate 中，只在 predicate 定义、函数体局部展开，或语义本身就是具体
+  memory shape 的底层原语中出现；不得把字段、bitmap bytes 或链表指针沿调用链逐层泄漏。
+  按模块真实状态命名的 predicate 使 callee contract 能表达清楚的状态转换，caller 可以直接组合这些
+  contract，reviewer 也能看出函数行为而不必展开全部字段。
+  也不得用含糊的整包 `*_pre/*_post/*_spec` helper 隐藏义务。细则按 spec writing guide 执行。
+- 验证闭包在 `write-spec` 中展开。若新增的可达函数需要当前 predicate 未提供的对象表示、ownership
+  view 或中间状态，暂停该 spec 并退回 `slice-design` 补充合适的 predicate，不得用更多裸 `store`
+  代替缺失抽象。Predicate 若已经 `review-passed`，修改后固定新 revision 并重新完成 predicate review，
+  再继续 spec review。
+- Function-like 宏先按当前配置展开：展开产生的真实函数调用继续加入闭包；空宏、常量和纯
+  类型/布局宏不产生函数；展开产生的可执行语句在 caller 切片中作有源码依据的等价归一，
+  不为源码中不存在的宏虚构 canonical 函数。
+- 不得集中建立模块级 `*_specs.h`。
+- 不按目录复制整套 kernel/libc source tree 或无关 headers；已进入闭包的 kernel/libc
+  函数仍按一函数一文件切片。切片只保留当前函数真正需要的声明；若正文按字段访问 struct，声明必须保持被访问字段的真实 ABI offset，
   否则把该字段操作整体抽成具名 API，不得发明错误的精简布局。
 - 从权威 C 提取单函数切片时，不改算法、路径、返回值或副作用。parser 所需的等价
-  拆句、macro-to-API 和 static-to-slice-external 归一必须逐项记录并审阅；没有用户
+  拆句、宏展开、dispatch 解析和 static-to-slice-external 归一必须逐项记录并审阅；没有用户
   批准或源码/配置依据时不得做语义替换。
 
-写完后反向扫描正文中的 calls/macros，任何裸 call、未拆的操作型宏、缺失 spec 或 inactive body 都是
-`write-spec` blocker。可以先引用可编译的 predicate 草案编写 spec 和运行
-QCP-MCP symbolic 检查，但 predicate `review-passed` 前不得进入 spec review、
-请求用户批准或导出 proof。
+结束 `write-spec` 前必须从目标函数重新扫描完整可达闭包。目标函数及每个递归可达 symbol 都必须
+恰好满足一项：由用户批准为 `trusted` 并记录 contract；或者具有唯一同名文件、active body、
+canonical spec 和一致的 caller-local contracts。
+任何缺失、裸 call、未解析 dispatch/宏调用或多重归类都是 blocker。此模式只设计和审阅 spec，
+不运行 QCP parser/symbolic、closure script，不生成 VC，也不开始 proof。Predicate `review-passed`
+前不得进入 spec review 或请求用户批准。
 
-Spec review-ready 条件：引用的 predicate revision 为 `review-passed`；目标函数全部 return/blocking path 和 direct-callee 状态已列出；正式 pre/post 与 annotated C `With/Require/Ensure` 已写出；每个 load/store 能追溯到 reviewed predicate；Rocq compile 和 annotated C parser/typecheck 已通过；验证闭包内每个 annotated C 都已经 `qcp.load_target_file(absolute_file)` 后执行 `qcp.symbolic(last_line)`，且到达文件末尾无 error。`qcp.check`/`qcp.step` 只用于诊断，不代替整文件 symbolic 成功；结束会话时调用 `qcp.close`，用户批准前不得调用 `qcp.proof`。任何 memory entailment、callee precondition、GlobalStrings、未实例化 `With`、unsupported call 或未能证明不可达的分支都属于当前 spec/predicate/annotation 的 blocker，不得延期到 `implement`。只有全部 symbolic 成功且没有影响路径、effect、ownership、frame 或依赖结论的已知 `[OPEN]`，才达到 review-ready。
+Spec review-ready 条件：引用的 predicate revision 为 `review-passed`；已按 spec writing guide 完成
+scope-faithfulness 检查；完整可达闭包及目标函数全部 return/blocking path 已列出；正式 contract 与
+annotated C `With/Require/Ensure` 已写出且直接可读；每个 load/store 能追溯到 reviewed predicate；
+Rocq predicate 文件通过 compile/typecheck，annotated C 已完成人工结构和源码等价性检查；没有影响
+路径、effect、ownership、frame 或依赖结论的已知 `[OPEN]`，才达到 review-ready。
 
-Spec review-passed 条件：每条真实路径的参数、返回值、abstract effect、old/new、ownership transfer 和 frame 都匹配；Require 足以执行但没有无依据加强，Ensure 没有弱化实现义务；critical/caller resources 在出口正确返还；callee 状态没有冒充 verified；全部 QCP-MCP symbolic 检查成功；没有无依据假设，formal checks 通过且没有 open blocker。Predicate 与 spec 分别 review-passed 后，用户确认两份明确 revision；确认前不得调用 `qcp.proof`、生成 strategy soundness goal 或开始 proof。
+Spec review-passed 条件：scope-faithfulness 检查通过；每条真实路径的参数、返回值、abstract effect、
+old/new、ownership transfer 和 frame 都匹配；Require 足以执行但没有无依据加强，Ensure 没有弱化实现义务；critical/caller resources
+在出口正确返还；callee 状态没有冒充 verified；没有无依据假设或 open blocker。Predicate 与 spec
+分别 review-passed 后，用户确认两份明确 revision；确认前不得运行 QCP、生成 VC 或开始 proof。
 
-- 必须读：已确认的验证上下文、当前 predicate 草案、目标 C 与 direct-callee specs，以及 [spec-writing-guide.md](references/spec-writing-guide.md)。Spec review 时必须固定同一份 `review-passed` predicate revision。
+- 必须读：已确认的验证上下文、当前 predicate 草案、完整可达闭包中的 C 与各 caller-local callee specs、[spec-writing-guide.md](references/spec-writing-guide.md) 和 [Spec 设计经验](references/spec-experience.md)。开始新写或修改 spec 前读取经验文件，并只采用其中与当前 C 形态、函数层次和控制流相符的条目。Spec review 时必须固定同一份 `review-passed` predicate revision。
 - 写：当前函数的 canonical spec 直接写在其唯一 active 定义上；正文中每个
-  callee/操作型宏对应的完整 declaration-only API spec 写在同一文件、当前定义
+  真实 callee 对应的完整 declaration-only API spec 写在同一文件、当前定义
   之前。不得集中建立模块级 `*_specs.h`，不得用裸prototype代替spec。
-- 草案迭代：完成一批会影响 spec 执行的 annotated C、predicate 或 callee-contract 修改后，先确定改动文件及其 transitive callers，并调用一次 `bash <skill-dir>/scripts/check-spec-closure.sh <trial-dir> --affected <changed-or-caller.c> ...`，每个受影响文件各写一个 `--affected`。机械检查成功后，再按 leaf 到 caller 小批运行这些文件的 QCP-MCP symbolic；不要按每次保存或每个小修改重跑。Symbolic 失败时用 `qcp.check`/`qcp.step` 定位；暴露 predicate 缺口时返回 `slice-design` 修正草案。predicate 文件未变化且已有成功编译结果时，不做完整 Rocq rebuild。草案修改不标记 `invalidated` 也不做中间 review，不得通过加强无依据 Require、弱化 Ensure 或声明 deferred 来取得成功。
-- 完整闭包：候选首次满足其他 review-ready 条件后，调用一次 `bash <skill-dir>/scripts/check-spec-closure.sh <trial-dir>`，不带 `--affected`；成功后再固定 revision 并开始 full review。`needs-fix` 后有语义修改时，修复完成后只调用 affected 模式并在重新 review 前固定新 revision；只有审阅依据失效、需要重新 full review 时才再次调用 full 模式。
-- 纯文档或报告修改不调用该脚本，也不产生新的设计 revision。同一批未发生变化的输入不重复调用。脚本只汇总 Rocq compile、C syntax、CLI symbolic dry-run、trust scan、revision 和 VC 文件计数；其结果不代替 QCP-MCP 的整文件 symbolic 成功证据。
+- 草案迭代：完成一批 annotated C、predicate 或 callee-contract 修改后，确定改动文件及其 transitive callers，重新检查受影响的源码路径、验证范围、callee contract 和 ownership；只编译发生变化的 Rocq 文件。草案修改不标记 `invalidated` 也不做中间 review，不得通过加强无依据 Require、弱化 Ensure 或声明 deferred 来取得通过。
+- 完整闭包：候选首次满足其他 review-ready 条件后，从目标函数重新扫描完整可达闭包并固定 revision，再开始 full review。`needs-fix` 后只重查 issue、修改处和受影响 callers；只有审阅依据失效时才重新 full review。
+- `check-spec-closure.sh`、QCP parser/symbolic 和 VC 生成全部留到用户批准后的 `implement`。纯文档或报告修改不产生新的设计 revision。
 - Spec review 使用：[spec-review-template.md](assets/spec-review-template.md)。
 - 修改已批准 predicate/spec 时使用：[design-change-request-template.md](assets/design-change-request-template.md)。
 
 ### `implement`
 
-只有用户明确要求后才能进入。进入时所有 approved annotated C 必须已经在同一 revisions 上完成 QCP-MCP symbolic 检查。Verification agent 先重放同一 symbolic 检查并检查 `coqc --version`，再允许调用 `qcp.proof`、生成 VC 与 strategy soundness goals，记录生成文件、VC 数量和生成阶段失败，随后完成 Rocq proof 与完整性检查。
+只有用户明确确认 review-passed predicate/spec revisions 后才能进入。Verification agent 先确认源码、
+配置、trusted 列表和批准 revisions 未变化，再运行一次完整
+`bash <skill-dir>/scripts/check-spec-closure.sh <trial-dir>`，并对闭包内每个 annotated C 执行 QCP
+parser 和 `qcp.symbolic(last_line)`。全部到达文件末尾后，才允许调用 `qcp.proof`、生成 VC 与 strategy
+soundness goals，随后完成 Rocq proof 与完整性检查。
 
-若 approved revision 在 implement 入口不能再次完成同一 QCP-MCP symbolic 检查，立即停止并使 spec review 失效，不把它当作 proof-local 失败。生成阶段之后的失败再分类为 VC generation、strategy soundness、logical proof 或 arithmetic。Predicate 变化按 predicate 条件重审；Require/Ensure、路径、ownership 或 abstract effect 变化按 spec 条件重审；proof-local lemma、strategy proof 或 tactic 调整且不改变已通过 symbolic 结果与审阅结论时，不触发设计 review。
+QCP parser/symbolic 若暴露 Require/Ensure、路径、ownership、predicate 或 callee contract 问题，立即停止
+implement，按 dependency closure 使受影响 review 失效并退回 `slice-design/write-spec`；不得在 proof 阶段
+悄悄修改已批准设计。只涉及局部 proof annotation、strategy 或 tactic 且不改变批准设计时，留在 implement。
+生成 VC 后的失败再分类为 VC generation、strategy soundness、logical proof 或 arithmetic。
 
 不得手工修改 `*_goal_check.v`、`*_goal.v` 或 `*_proof_auto.v`；保留后者由 QCP 生成的 `Admitted`。手工目标放在 `*_proof_manual.v`，额外定义或 lemma 放在同前缀 `*_lib.v`。C 变化产生新 manual goals 时，先把旧 manual 文件移到 `.tmp/`，重新生成后迁移可复用 proof，全部证明后再删除备份。
 
@@ -173,12 +207,13 @@ ID | blocker/non-blocker | evidence(file:line or symbol) | mismatch
 
 真实 CRTOS 源码与配置是语义依据。完整源码模式下，`annotated_C/src`只能增加或
 修改注解；默认单函数切片模式允许经过审阅的等价提取归一，例如拆开assignment/
-comma expression、把function-like macro或稳定done-table dispatch改为具名API、
+comma expression、展开function-like macro或解析稳定done-table dispatch、
 把原TU static对象声明为slice external。每项归一都必须保留路径与副作用、在报告
-中绑定源码/config证据；换算法、隐藏body或凭空简化布局仍是blocker。QCP参考目录
-固定为trial外的`/home/xinra/qcp-binary-democases/`；确认存在但不得修改。
+中绑定源码/config证据；换算法、隐藏body或凭空简化布局仍是blocker。
 
-写新定义、strategy 或断言前，先用 `rg` 搜索 QCP 教程、示例和项目现有 `lib/`，复用已有 predicate、tactic、assertion 与 `which implies` 写法。不要猜 QCP 语法；找到最接近的例子，最小修改后立即检查。
+整个验证过程中参考项目为QCP，路径固定为trial外的`/home/xinra/qcp-binary-democases/`。
+
+写新定义、strategy 或断言前，先用 `rg` 搜索 QCP目录下 教程、示例和项目现有 `lib/`，复用已有库（比如array等等）、predicate、tactic、assertion 与 `which implies` 写法。不得猜测QCP 语法，包括spec和predicate语法，都参考qcp中写法。
 
 ## 技能演进与报告
 

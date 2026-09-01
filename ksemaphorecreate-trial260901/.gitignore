@@ -1,0 +1,10 @@
+.git/
+.Makefile.d
+*.aux
+*.glob
+*.vo
+*.vok
+*.vos
+.lia.cache
+.nia.cache
+.tmp/
