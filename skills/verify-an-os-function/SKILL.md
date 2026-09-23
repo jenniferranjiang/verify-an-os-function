@@ -25,9 +25,9 @@ Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。
 模块直接访问或拥有的 C 对象、初始化与生命周期路径，以及相关 critical/IRQ/atomicity 行为。
 
 `trusted` 函数由用户决定。Main agent 可以建议把复杂 callee 作为 `trusted`，但只有用户明确同意
-具体 C symbol 后才能停止递归；批准的 symbol 和采用的 contract/保证记录在当前任务上下文或报告中。
+具体 C symbol 后才能停止递归；批准的 symbol 和采用的 contract/保证记录在对应的 predicate 设计报告或 spec review 记录中。
 
-优先读取用户指定或项目已有的说明。只在任务回复或最终报告中简短记录本次使用的事实和 `[OPEN]`。
+优先读取用户指定或项目已有的说明。只在任务回复或对应的设计/review 记录中简短记录本次使用的事实和 `[OPEN]`。
 
 上述上下文变化并影响已审阅 predicate/spec 时，按 dependency closure 将相应结论标记为 `invalidated`；与当前目标无关的
 项目事实变化不触发重审。
@@ -60,12 +60,44 @@ Module 和 symbol 前，参考当前项目、skill中的task-lib 及最接近的
 callee contract 合并到同一个 `.v` 文件中。语义和 ownership 仍以目标 CRTOS 源码为准，
 LOS/QCP 只作为命名与组织参考。
 
-直接在 `.v` 中用 `(** ... *)` 中文文档注释解释生成的非平凡定义：用自然语言说明这个定义做什么，以及理解或使用它时真正需要知道的限制、保持关系或中间状态。不要规定固定栏目，也不要为了填注释机械罗列 ownership、参数、抽象边界和客户端；简单定义一句话即可。注释必须随 definition 一起更新，过时或误导性注释视为 blocker。Rocq 文件先放 definition，再放 lemma/theorem/proof；不得用 `Parameter`、`Axiom`、占位定义、手写 `Admitted/admit` 绕过证明。
+可以按语义分文件组织：
+
+- `*Pure.v` 保存不拥有内存的逻辑内容，包括 abstract-state `Record`/`Inductive`、
+  projection、纯更新函数、validity、模块操作和 state-transition relation；不得在这一层
+  放入 `Assertion`、heap ownership、STS token 或 critical acquire-release 规则。
+- `*Rules.v` 或 `*Critical.v` 保存 STS、token、assertion carrier、
+  `OutsideCritical`/`InsideCritical`、`RTrans`/`GTrans` 以及 critical/IRQ
+  acquire-release 规则。这些 definition 即使结果类型也是 `Assertion`，仍属于协议层。
+- `*Predicates.v` 或 `*Rep.v` 保存 C 对象、字段、数组、容器和模块 heap ownership，
+  并把 Pure state 解释为具体内存 representation；模块 heap invariant 也属于这一层。
+
+若项目已有统一 OS protocol，则引用该已审阅 protocol，并把当前模块的适配规则保留在
+独立 rules/critical 文件中。
+
+直接在 `.v` 中用 `(** ... *)` 中文文档注释解释本次设计或修改涉及的
+非平凡、核心组合或对外使用的 definition/statement，不限于新建定义，使读者
+只看 `.v` 就能理解定义和 predicate 的 C 含义。每个定义只解释它在当前抽象层
+直接引入的内容：逻辑参数、record projection 或地址表达式与具体 C 对象、全局符号、
+struct 字段或容器的对应，应写在最接近且直接使用它们的定义旁。组合 predicate 只需
+简要列出直接组成项、各用一句说明职责，并说明组合后的整体状态和 ownership 关系；
+不在上层重复下层已经说明的 C 对应细节。另外说明真正需要知道的限制、保持关系或
+中间状态。不要规定固定栏目、命名或行数，也不要逐字翻译代码或机械罗列显然内容；
+简单或显然的 private helper 可以只写一句话。注释必须随 definition 一起更新，过时、
+在直接使用处缺少必要 C 对应关系或具有误导性的注释视为 blocker。Rocq 文件先放 definition，再放
+lemma/theorem/proof；不得用 `Parameter`、`Axiom`、占位定义、手写 `Admitted/admit` 绕过证明。
+
+同时在 trial `.docs/Report/` 创建并维护 predicate 设计报告，使用
+[predicate-design-report-template.md](assets/predicate-design-report-template.md)。报告解释不适合分散到单个
+definition 注释中的模块级和跨文件设计：scope/config、C 对象到抽象状态的整体映射、predicate 分层、
+ownership 与 lifecycle、对外 view/interface、关键取舍、限制和 `[OPEN]`。正式 definition、statement、
+局部逻辑项到 C 对象的对应关系仍以 `.v` 为准；报告引用 formal file、symbol 和 revision，不复制定义或
+成为第二份 formal source。如果某个 definition 离开报告就无法理解，应补充其 `.v` 注释，而不是只在报告中解释。
 
 Predicate review-ready 条件：目标模块、当前配置、模块源码和函数集合已经固定；
 当前配置下模块全部函数实际访问的每个 C 对象和内存都能追溯到候选
 owner/representation；模块的初始化、正常运行、状态转换、删除和回收路径已经覆盖；
-正式 state/predicate/lemma statement 已写入 .v，必要中文注释与代码一致，并通过
+正式 state/predicate/lemma statement 已写入 .v，必要中文注释与代码一致；predicate 设计报告已绑定
+候选 formal files/symbols/revision，并解释跨定义设计、依据、限制和 `[OPEN]`；formal sources 通过
 适用的 compile/typecheck；没有会影响 owner、抽象语义、lifecycle、frame 或后续验证的已知 [OPEN]。
 
 Predicate review-passed 条件：在当前配置下，对目标模块全部函数可能访问的每个字节，
@@ -77,7 +109,7 @@ predicate 都有源码语义或复用客户端依据；模块内部 container/li
 [Task lib 索引](references/task-lib/index.md) 作为参考。
 
 - 必须读：已确认的验证上下文、目标 C/headers/config、当前 trial 工作区已有的 `lib/` 定义、[predicate-lemma-design-guide.md](references/predicate-lemma-design-guide.md) 和 [Predicate 设计经验](references/predicate-experience.md)。开始新写或修改 predicate 前读取经验文件，并只采用其中与当前 C 形态和控制流相符的条目。
-- 写：项目实际使用的 Rocq `.v`，把解释放在相关 definition/statement 前；默认不创建 predicate review template。Review issue、reviewed revision 和结论只写入任务回复或最终报告，不复制 formal source。
+- 写：项目实际使用的 Rocq `.v`，把局部解释放在相关 definition/statement 前；同时使用 [predicate-design-report-template.md](assets/predicate-design-report-template.md) 创建或维护 predicate 设计报告，记录跨定义设计、review issue、reviewed revision 和结论，不复制 formal source。
 - 修改已批准接口时使用：[design-change-request-template.md](assets/design-change-request-template.md)。
 
 ### `write-spec`
@@ -188,11 +220,11 @@ ID | blocker/non-blocker | evidence(file:line or symbol) | mismatch
 - proof/trust：确认 VC 计数、Rocq 编译和 `Parameter/Axiom/Admitted/admit` 扫描结果。
 
 - 必须读：被审阅的正式文件、源码证据、diff/check 结果，以及该产物所属模式的 guide；proof review 读取 [implementation-and-validation-guide.md](references/implementation-and-validation-guide.md)。
-- 写：predicate 直接审阅带注释的 `.v`，把 issue、reviewed revision 和结论写入任务回复或最终报告；spec 更新 [spec-review-template.md](assets/spec-review-template.md)，实现完成后更新 [final-integrity-template.md](assets/final-integrity-template.md)。已有旧 predicate manifest 无需迁移，也不再新建。
+- 写：predicate 同时审阅带注释的 `.v` 和对应的 predicate 设计报告，并把 issue、reviewed revision 和结论更新到该报告；spec 更新 [spec-review-template.md](assets/spec-review-template.md)；实现完成后更新 [final-integrity-template.md](assets/final-integrity-template.md)，它只是完整性检查记录，不要求另写叙述性 final report。已有旧 predicate manifest 无需迁移。
 
 ## 项目与参考路径
 
-默认 trial 是 CRTOS 根 `/home/xinra/crtos/` 的直接子目录 `<function-name>-trial/`，或使用用户指定的独立目录。开始 C 分析前解析并报告绝对路径，补齐 `annotated_C/src/`、`lib/`、`VC/`、`.docs/Report/folded_history/`；不得覆盖现有内容，也不得把 trial 建在权威源码子树内。
+默认 trial 是 CRTOS 根 `/home/xinra/crtos/` 的直接子目录 `<function-name>-trial-YYMMDD-N/`，或使用用户指定的独立目录。开始 C 分析前解析并报告绝对路径，补齐 `annotated_C/src/`、`lib/`、`VC/`、`.docs/Report/folded_history/`；不得覆盖现有内容，也不得把 trial 建在权威源码子树内。
 
 创建或进入 trial 时，创建或维护该 trial 根目录自己的 `_CoqProject`。其中列出该 trial
 实际使用的外部 `-R`/`-Q` 路径，并把本地 `lib/` 映射到与 Makefile、QCP 命令及
@@ -208,18 +240,28 @@ ID | blocker/non-blocker | evidence(file:line or symbol) | mismatch
 真实 CRTOS 源码与配置是语义依据。完整源码模式下，`annotated_C/src`只能增加或
 修改注解；默认单函数切片模式允许经过审阅的等价提取归一，例如拆开assignment/
 comma expression、展开function-like macro或解析稳定done-table dispatch、
-把原TU static对象声明为slice external。每项归一都必须保留路径与副作用、在报告
+把原TU static对象声明为slice external。每项归一都必须保留路径与副作用、在 spec review 记录
 中绑定源码/config证据；换算法、隐藏body或凭空简化布局仍是blocker。
 
 整个验证过程中参考项目为QCP，路径固定为trial外的`/home/xinra/qcp-binary-democases/`。
 
 写新定义、strategy 或断言前，先用 `rg` 搜索 QCP目录下 教程、示例和项目现有 `lib/`，复用已有库（比如array等等）、predicate、tactic、assertion 与 `which implies` 写法。不得猜测QCP 语法，包括spec和predicate语法，都参考qcp中写法。
 
-## 技能演进与报告
+已有 predicate/lemma 和函数 spec 位于`/home/xinra/crtos/task-proof/lib/`和`/home/xinra/crtos/task-proof/annotated_C/`中，可作为 trusted 依赖复用。
+
+涉及跨模块调用需要复用已有模块定义代码时，应先查找并复用已有模块定义，不得重复增加新文件或在新板块中定义已有概念。复用前仍须检查其内容。若发现定义或 spec 不符合本 skill 的要求，或存在其他疑点，必须在任务回复中标记 [OPEN]，并在对应的 predicate 设计报告或 spec review 记录中写明文件、问题依据、修改方案、影响和建议。未经用户明确授权，不得修改或删除这些文件；影响当前验证正确性的问题解决前，不得将依赖该问题的产物标为 review-passed。
+
+## 技能演进与记录
 
 可复用的 skill 变化先记录到 `.docs/CandidateSkills/` 或 `.agents/skill-candidates/`，写清触发问题、方法、限制和验证证据；独立检查后由用户批准。
 
-每个任务在 trial `.docs/Report/` 保存简短的 `YYYY-MM-DD-N-title.md`，用普通段落或项目符号记录阶段与明确 revision、关键修改、检查结论、必要复现命令和剩余 blocker；没有比较关系时不写表格，不逐文件抄录成功项。implement 时补充 QCP 结果、VC/证明计数和 Rocq 编译。计时只记录脚本得到的机械检查总耗时，以及任务开始到 `review-passed` 的墙钟区间；不要估算或逐项填写 analysis/edit/review/wait。昨天以前的报告移入 `folded_history/`。
+trial `.docs/Report/` 保存以下按用途区分的记录，不再要求每个任务另写一份通用或最终叙述报告：
+
+- Predicate 设计使用 `YYYY-MM-DD-N-predicate-design.md`，基于 [predicate-design-report-template.md](assets/predicate-design-report-template.md)，随候选设计维护并绑定明确 formal revision。
+- Spec review 使用 [spec-review-template.md](assets/spec-review-template.md)。
+- Implement 完成后使用 [final-integrity-template.md](assets/final-integrity-template.md) 保存 QCP 结果、VC/证明计数、Rocq 编译和 trust scan；这是检查证据记录，不重复解释 predicate/spec 设计。
+
+各记录只写与其职责相关的关键修改、检查结论、必要复现命令和剩余 blocker；没有比较关系时不写表格，不逐文件抄录成功项。计时只记录脚本得到的机械检查总耗时，以及任务开始到 `review-passed` 的墙钟区间；不要估算或逐项填写 analysis/edit/review/wait。昨天以前且不再活动的旧记录移入 `folded_history/`，当前审阅引用的设计/review/integrity 记录保留原位。
 
 始终保持以下抽象链条：
 

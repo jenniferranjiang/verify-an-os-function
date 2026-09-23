@@ -182,4 +182,179 @@
    各个指针槽和值，真正的对象资源位于这些指针指向的地址上；此时可以用 `storearray`
    描述指针数组，用 `storemap` 描述外部地址集合对应的对象资源。
 
-  判断用 storearray 还是 storemap，不要只看类型里有没有 *。要看真正的对象在哪里。如果对象本体连续放在数组里，就用数组谓词；如果数组里只是放指针，真正对象在外面、地址不连续，才用 map 谓词。
+   判断用 storearray 还是 storemap，不要只看类型里有没有 *。要看真正的对象在哪里。如果对象本体连续放在数组里，就用数组谓词；如果数组里只是放指针，真正对象在外面、地址不连续，才用 map 谓词。
+
+5. 信号量等待队列的纯状态建议直接保存等待任务的地址，去掉只有
+   `waiter_task : addr` 一个字段的 `SemaphoreWaiter` 包装，将
+   `semaphore_waiters : list SemaphoreWaiter` 改为：
+
+   ```coq
+   (* pend_list 中等待任务的基址，按链表顺序排列 *)
+   semaphore_pending_addrs : list addr;
+   ```
+
+   字段位于信号量对象中，所属模块已由上下文说明，名称可以简化为
+   `semaphore_pending_addrs`：`pending` 表示等待关系，`address` 表示保存的是地址。
+   类型 `list addr` 表明它是地址序列；注释须明确这些地址是等待任务的基址，
+   不是信号量对象地址、链表头地址或链表节点地址。
+
+   `waiter`不能直接说明这里仅保存地址，容易让读者以为元素包含独立的等待者对象或完整任务状态。当前
+   `SemaphoreWaiter` 实际只有一个地址字段，没有额外等待者状态，因此这里选择
+   `semaphore_pending_addrs : list addr`，让名称和保存内容一致，并去掉无额外语义的包装定义。
+
+6. 信号量模块不要另行定义 `SemaphoreTaskView`。任务状态及其 predicate 应直接
+   import 并复用 task 模块中的定义，避免在 semaphore 模块中重复维护一套任务表示。
+   信号量模块只需描述等待任务与信号量之间的关系；需要任务字段或资源时，使用
+   task 模块提供的定义和接口。
+
+   原来在 `SemaphorePure.v` 中定义的任务视图如下，作为应去掉的重复定义示例：
+
+   ```coq
+   Record SemaphoreTaskView : Type := Build_SemaphoreTaskView {
+     sem_task_addr : addr;
+     sem_task_id : Z;
+     sem_task_priority : Z;
+     sem_task_name : list Z;
+     sem_task_exstatus : Z;
+   }.
+   ```
+
+   这些字段描述的是任务地址、ID、优先级、名称和扩展状态，应复用 task 模块中的
+   对应定义，不应因为 semaphore 需要查询它们就另建一个 `SemaphoreTaskView`。
+
+7. 根据对象特点和待验证操作选择 id 或 address 作为唯一索引，重点检查它在需要
+   追踪“同一个对象”的期间是否稳定。选定的索引必须唯一，并在这段期间保持不变；
+   各个状态转换都应保持这一约束，不能让同一个键对应两个不同对象。
+
+   | 要求 | 含义 |
+   | ---- | ---- |
+   | 唯一性 | 同一时刻，这个键不会对应两个不同对象 |
+   | 稳定性 | 操作前后，同一个对象仍然能用这个键识别 |
+
+   某个 ID 即使始终不重复，如果操作会修改它，也不一定适合追踪对象身份。
+   例如图搜索会修改顶点编号、但内存位置不变时，可用 address 索引，把编号作为
+   可变属性；若编号固定，则用 ID 也合适。对象会搬迁而 ID 不变时，则可选择 ID。
+
+   比如，semaphore 从分配到释放的生命周期适合用 address 追踪：分配后可能尚无有效 ID，
+   注销 ID 后仍需释放原来的内存。已登记对象的查询接口则可通过 ID manager 用 ID
+   定位。两种索引可以共存，但必须对应同一个对象，保持状态一致。
+
+   结合 map 的键、查找与更新操作以及空间谓词检查这些要求，不能只看字段名称。
+   地址和 ID 在对象删除后都可能复用，不能默认它们是跨生命周期的永久身份。
+
+8. 特别地，使用 address 作为内部索引时，底层 predicate 和证明可以显式使用地址定位内存；
+   上层抽象接口应通过存在量词隐藏具体地址（`exists address`，空间断言中写作
+   `EX p : addr, ...`），不把内部地址作为上层必须传递或依赖的参数。例如示意（示例仅供参考，真实验证中命名不必一定模仿或一定使用）：
+
+   ```coq
+   Definition object_rep (id : Z) (state : ObjectState) : Assertion :=
+     EX p : addr, store_object p id state.
+   ```
+
+   底层展开 `object_rep` 后取得地址 `p`，完成字段访问和证明，再封装回上层谓词。
+   `store_object` 必须把该地址的真实对象与上层的 ID、抽象状态关联起来；存在量词
+   只隐藏具体地址，不替代唯一性约束，也不能丢掉操作前后属于同一个对象的关系。
+
+9. QCP 能够根据 C 结构体布局自动生成 padding 资源时，手写的对象
+   predicate 中不要再重复描述 padding。
+
+   例如 `struct Semaphore` 在 `value` 前后存在 padding 时，
+   `store_semaphore_object_body` 中只需保留 `value` 和 pending-list 的表示，
+   不要加入下列断言：
+
+   ```coq
+   CharArray.full (sem + 2) 2 (repeat_Z 0 2)
+   CharArray.full (sem + 14) 2 (repeat_Z 0 2)
+   ```
+
+10. `done` 表里保存的是函数指针，而 QCP 目前不支持函数指针。处理
+    annotated C 切片时，把 `done` 指向的函数作为切片中的全局函数，直接调用
+    这个函数。这样切片不再使用 `done` 表，predicate 中也不需要定义
+    `SemaphoreDoneType` 对应的 QCP struct。所有与 `done` 相关的 formal 定义都不需要，
+    包括 stable state 中的 `done` 字段、`store_semaphore_done`、
+    `SemaphoreStableContext` 中的 `done` 约束，以及 `semaphore_outside`、
+    `semaphore_inside` 和 `store_semaphore_static_initial` 中对它的引用。
+
+    semaphore trial 中原先为 `done` 写过下面这些定义。在 annotated C
+    已改为直接调用后，这些定义都不需要：
+
+    ```coq
+    Record SemaphoreDoneAbs : Type := Build_SemaphoreDoneAbs {
+      semaphore_done_create : addr;
+      semaphore_done_delete : addr;
+      semaphore_done_obtain : addr;
+      semaphore_done_abandon : addr;
+      semaphore_done_set_value : addr
+    }.
+    ```
+
+    `SemaphoreStable` 中的下面两个字段也不需要：
+
+    ```coq
+    semaphore_done_addr : addr;
+    semaphore_done_abs : SemaphoreDoneAbs
+    ```
+
+    下面这个对 `done` 表内存的 predicate 也不需要：
+
+    ```coq
+    Definition store_semaphore_done (stable : SemaphoreStable) : Assertion :=
+      let done := stable.(semaphore_done_addr) in
+      &(done # "SemaphoreDoneType" ->ₛ
+          "SemaphoreCreate") # Ptr
+        |-> stable.(semaphore_done_abs).(semaphore_done_create) **
+      &(done # "SemaphoreDoneType" ->ₛ
+          "SemaphoreDelete") # Ptr
+        |-> stable.(semaphore_done_abs).(semaphore_done_delete) **
+      &(done # "SemaphoreDoneType" ->ₛ
+          "SemaphoreObtain") # Ptr
+        |-> stable.(semaphore_done_abs).(semaphore_done_obtain) **
+      &(done # "SemaphoreDoneType" ->ₛ
+          "SemaphoreAbandon") # Ptr
+        |-> stable.(semaphore_done_abs).(semaphore_done_abandon) **
+      &(done # "SemaphoreDoneType" ->ₛ
+          "SemaphoreSetValue") # Ptr
+        |-> stable.(semaphore_done_abs).(semaphore_done_set_value).
+    ```
+
+    例如权威 C 中的：
+
+    ```c
+    static SemaphoreDoneType done = {
+        .SemaphoreCreate = _SemaphoreCreate,
+        /* ... */
+    };
+
+    return done.SemaphoreCreate(val);
+    ```
+
+    可在验证切片中归一为：
+
+    ```c
+    return _SemaphoreCreate(val);
+    ```
+
+    `done.SemaphoreCreate = _SemaphoreCreate` 只用来说明为什么可以改成直接调用，
+    不需要写进 predicate。直接调用的函数仍按普通 callee 处理。如果 `done`
+    会在运行时改变，就不能这样处理。
+
+11. 不要为了匹配或复用已有 predicate 的参数形式，把本模块语义上不需要的
+    dependency state 直接加入本模块的 abstract state。Abstract-state 分量仍须由
+    当前模块的可观察行为、跨调用必须保存的信息或合法状态转换决定；“某个可复用
+    predicate 需要这个参数”本身不是加入 state field 的依据。
+
+    例如 semaphore 不应只因为复用
+    `store_idmanager : StableIdmanager -> VarIdmanager -> addr -> Assertion`
+    而把 `VarIdmanager` 再保存进 `SemaphoreState`：这会让对象列表和
+    `VarIdmanager.idlist/idbuckets` 成为两份权威来源，并迫使每个状态转换维护额外
+    一致性关系。
+
+    这种情况下应从最小模块状态构造 dependency state，再把构造结果传给已有
+    representation predicate，例如：
+
+    ```coq
+    Record SemaphoreState : Type := Build_SemaphoreState {
+      semaphore_objects : list SemaphoreObject
+    }.
+
+    ```

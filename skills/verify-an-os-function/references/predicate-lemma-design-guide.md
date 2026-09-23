@@ -12,7 +12,8 @@
 6. [定义具体内存 Predicate](#6-定义具体内存-predicate)
 7. [根据真实 C 操作定义 Lemma](#7-根据真实-c-操作定义-lemma)
 8. [检查 Validity、初始化与生命周期](#8-检查-validity初始化与生命周期)
-9. [检查并审阅 Predicates](#9-检查并审阅-predicates)
+9. [为正式定义编写注释](#9-为正式定义编写注释)
+10. [检查并审阅 Predicates](#10-检查并审阅-predicates)
 
 ## 1. 确认源码与范围
 
@@ -629,22 +630,14 @@ project_initialization_resource
 
 特别检查 early return 和错误路径。
 
-## 9. 检查并审阅 Predicates
+## 9. 正式定义注释与 Predicate 设计报告
 
-### 9.1 检查已有定义
-
-新增 state field、局部读取/更新函数、pure function、predicate 或 lemma 前，搜索已批准文件、项目库、
-`Extern Coq`、C annotations 和 imports。同一个逻辑概念只保留一个正式定义。
-
-| 逻辑概念 | 已有定义/位置 | 本项目使用的定义 | 使用它的函数/复用理由 | 重复项处理 |
-|---|---|---|---|---|
-|  |  |  |  | `reuse|merge|[REJECTED]` |
-
-只有表达不同抽象层、具有不同输入输出语义，且有多个真实客户端或独立 lemma 时才增加 wrapper。不要保留一次性
-同义定义，也不要在主树保留 `store_glob_obj_1`、`store_glob_obj_2` 之类开发历史副本。
-
-正式 `.v` 文件是 state、predicate、statement 和设计解释的唯一来源。默认不创建 predicate Markdown template。
-对生成的非平凡定义，在 definition/statement 前写简短的 `(** ... *)` 中文文档注释。例如：
+正式 `.v` 文件是 state、predicate、statement 及其局部语义解释的唯一来源。Predicate 设计报告解释跨定义、
+跨文件和模块级设计，但不是第二份 formal source；使用
+[predicate-design-report-template.md](../assets/predicate-design-report-template.md)，引用正式文件、symbol 和 revision，
+不得复制 Rocq 定义或用自然语言改写出另一套语义。
+对本次设计或修改涉及的非平凡、核心组合或对外使用的定义，不论是新建还是已有，
+都在 definition/statement 前写简短的 `(** ... *)` 中文文档注释。例如：
 
 ```coq
 (**
@@ -659,16 +652,49 @@ project_initialization_resource
 Definition update_task_id_map ids before := ...
 ```
 
-注释按定义本身需要解释的内容自由书写，可以说明“做什么、保持什么、何时使用、何时不能折叠”等，但不要求覆盖固定字段、
-固定行数或所谓完整 effect。不要逐字翻译代码，也不要给每个 projection 或显然的 private helper 添加重复说明。
+注释按抽象层分担解释责任。定义直接使用逻辑参数、record projection 或地址表达式时，
+在该定义的注释中说明它们对应的 C 全局符号、struct 实例、字段或容器，以及定义
+拥有或约束的内存。这些 C 对应关系写在最接近且直接使用相应逻辑项的定义旁，
+不由上层转调它的组合定义重复说明。
+
+组合 predicate 的注释简要列出它直接使用的主要子 predicate，各用一句说明其职责，
+再说明这些部分合起来表示的整体状态、ownership 分工和必要限制。例如，某组合
+定义直接使用 registry predicate 和 object-body predicate 时，可分别用一句说明前者表示
+全局容器、后者表示各对象本体；容器头地址对应哪个 C 全局符号，应写在直接使用
+该地址的 registry predicate 旁，对象基址的 C 含义则写在直接使用它的 object predicate 旁。
+这些名称只用于说明注释放置层次，不规定项目的命名或 predicate 分层。
+
+还可根据定义需要说明“做什么、保持什么、何时使用、何时不能折叠”等。不要求
+注释覆盖固定字段、固定行数或所谓完整 effect，也不要逐字翻译代码。显然的 projection 或
+private helper 不需重复说明。
 Definition 改变时必须同时更新相关注释。
+
+设计报告集中说明如果塞进单个 definition 注释就会割裂或重复的内容：验证 scope/config、模块相关 C 对象、
+abstract state 的选取理由、predicate/file 分层、ownership 边界、初始化和 lifecycle、跨模块借用或转移、
+公开 view/interface、重要替代方案及限制。报告中的判断必须链接到源码证据和 formal symbol；某个 definition
+自身的参数、地址、字段、ownership 或使用限制仍应在紧邻它的 `.v` 注释中说清楚，不能要求读者依赖报告才能
+理解该定义。跨定义设计变化时同步更新报告；只修正文句且不改变 formal semantics 时不产生新的 predicate revision。
+
+## 10. 检查并审阅 Predicates
+
+### 10.1 检查已有定义
+
+新增 state field、局部读取/更新函数、pure function、predicate 或 lemma 前，搜索已批准文件、项目库、
+`Extern Coq`、C annotations 和 imports。同一个逻辑概念只保留一个正式定义。
+
+| 逻辑概念 | 已有定义/位置 | 本项目使用的定义 | 使用它的函数/复用理由 | 重复项处理 |
+|---|---|---|---|---|
+|  |  |  |  | `reuse|merge|[REJECTED]` |
+
+只有表达不同抽象层、具有不同输入输出语义，且有多个真实客户端或独立 lemma 时才增加 wrapper。不要保留一次性
+同义定义，也不要在主树保留 `store_glob_obj_1`、`store_glob_obj_2` 之类开发历史副本。
 
 只有源码/config/scope 固定、每个实际访问对象能追溯到候选 owner/representation、formal definitions 与必要注释已落地并通过适用检查，且没有影响通过条件的已知 `[OPEN]` 时，
 才进入 predicate full review。当前任务同时编写 spec 时，还要先使用该 predicate 草案完成验证闭包的全部 QCP-MCP symbolic 检查且未调用 `qcp.proof`；草案期间发现缺口就直接修改并重跑，不标记 `invalidated` 也不做中间 review。Review 检查 representation 和 ownership，不检查函数 Require/Ensure。
 修订影响上一结论时按 dependency closure 做 delta；源码/config/scope 或抽象/ownership 边界使依据失效时重新 full review；
 非语义文字变化不 review。所有适用检查通过且没有 blocker 后，将该 predicate revision 标为 `review-passed`，spec review 必须固定这份 revision。
 
-### 9.2 交付检查
+### 10.2 交付检查
 
 - [ ] 每个 abstract-state 分量来自可观察语义或明确 representation 关系；abstract/concrete state 高度重合时 extra components 可留在 predicate 的存在量中，差异很大时才分别组织两个逻辑状态；没有机械复制 C struct；
 - [ ] Record 中没有函数 spec、待证 entailment、lemma obligation、任意 Assertion/token 生成器或 lock/IRQ 规则；
@@ -687,9 +713,5 @@ Definition 改变时必须同时更新相关注释。
 - [ ] `safeExec/LastSeen` 与临界区定义职责分开，内部辅助函数没有被迫重复对外公开函数的 atomic-command 条件；
 - [ ] 每个概念只有一个正式定义；
 - [ ] 模块 predicate 已覆盖当前配置下该模块拥有或管理的资源；函数级 `slice_OS_inv` 可排除无关模块，但不得把 partial invariant 冒充为完整 `OS_inv`；
-- [ ] formal source 已 parser/typecheck 或编译，没有重复定义，也没有把定义复制到 Markdown；
-- [ ] 非平凡或对外使用的生成定义具有与代码一致的中文注释；任务回复或最终报告给出 reviewed revision、review scope 和结论；当前任务同时编写 spec 时已完成 QCP-MCP symbolic 检查且未调用 `qcp.proof`，也没有未批准假设。
-
-最后用一句话复核：
-
-> 能否用普通话说明每个 Rocq 类型对应哪个 C 对象、为什么要记住这些值、哪个 predicate 拥有相关内存，以及每个 C 写操作怎样得到 spec 要求的新状态？如果不能，就继续简化或补充源码关系。
+- [ ] formal source 已 parser/typecheck 或编译，没有重复定义，也没有把定义复制到 Markdown；predicate 设计报告绑定了本次 formal files/symbols/revision，并记录跨定义设计、源码依据、限制和 `[OPEN]`；
+- [ ] 本次设计或修改涉及的非平凡、核心组合或对外使用定义，不论新建还是已有，都具有与代码一致的中文注释；必要的逻辑项与 C 对象/内存对应写在最接近的直接使用处，组合定义只概述直接组成项的职责和整体关系，没有递归重复下层细节；predicate 设计报告给出 reviewed revision、review scope、issues 和结论；当前任务同时编写 spec 时已完成 QCP-MCP symbolic 检查且未调用 `qcp.proof`，也没有未批准假设。
