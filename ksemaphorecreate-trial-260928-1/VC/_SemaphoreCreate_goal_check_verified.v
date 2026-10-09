@@ -1,0 +1,6 @@
+From CRTOS_Verify.VC Require Import _SemaphoreCreate_goal _SemaphoreCreate_proof_auto_verified _SemaphoreCreate_proof_manual.
+
+Module VC_Correctness_Verified : VC_Correct.
+  Include _SemaphoreCreate_proof_auto_verified.
+  Include _SemaphoreCreate_proof_manual.
+End VC_Correctness_Verified.

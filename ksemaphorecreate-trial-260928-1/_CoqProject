@@ -1,0 +1,80 @@
+-R /home/xinra/qcp-binary-democases/SeparationLogic/SeparationLogic SimpleC.SL
+-R /home/xinra/qcp-binary-democases/SeparationLogic/unifysl Logic
+-R /home/xinra/qcp-binary-democases/SeparationLogic/sets SetsClass
+-R /home/xinra/qcp-binary-democases/SeparationLogic/compcert_lib compcert.lib
+-R /home/xinra/qcp-binary-democases/SeparationLogic/auxlibs AUXLib
+-R /home/xinra/qcp-binary-democases/SeparationLogic/examples SimpleC.EE
+-R /home/xinra/qcp-binary-democases/SeparationLogic/StrategyLib SimpleC.StrategyLib
+-R /home/xinra/qcp-binary-democases/SeparationLogic/Common SimpleC.Common
+-R /home/xinra/qcp-binary-democases/SeparationLogic/fixedpoints FP
+-R /home/xinra/qcp-binary-democases/SeparationLogic/MonadLib MonadLib
+-R /home/xinra/qcp-binary-democases/SeparationLogic/listlib ListLib
+-R /home/xinra/qcp-binary-democases/SeparationLogic/MaxMinLib MaxMinLib
+-R /home/xinra/qcp-binary-democases/SeparationLogic/GraphLib GraphLib
+-R /home/xinra/crtos/task-proof/lib CRTOS_Verify.lib
+-R /home/xinra/crtos/task-proof/libai CRTOS_Verify.libai
+-R /home/xinra/crtos/ksemaphorecreate-trial-260928-1/lib CRTOS_Verify.sem
+-R /home/xinra/crtos/ksemaphorecreate-trial-260928-1/VC CRTOS_Verify.VC
+
+lib/SemaphorePure.v
+lib/CrtosOSPure.v
+lib/CrtosOSProtocol.v
+lib/SemaphoreProtocol.v
+lib/SemaphoreRep.v
+lib/CrtosOSRep.v
+lib/SemaphoreCritical.v
+VC/SemaphoreProofLocal.v
+VC/AllocId_goal.v
+VC/AllocId_proof_auto.v
+VC/AllocId_proof_manual.v
+VC/AllocId_goal_check.v
+VC/CriticalAreaLock_goal.v
+VC/CriticalAreaLock_proof_auto.v
+VC/CriticalAreaLock_proof_manual.v
+VC/CriticalAreaLock_goal_check.v
+VC/CriticalAreaUnLock_goal.v
+VC/CriticalAreaUnLock_proof_auto.v
+VC/CriticalAreaUnLock_proof_manual.v
+VC/CriticalAreaUnLock_goal_check.v
+VC/DoubleLinkListInsertNodeAfter_goal.v
+VC/DoubleLinkListInsertNodeAfter_proof_auto.v
+VC/DoubleLinkListInsertNodeAfter_proof_manual.v
+VC/DoubleLinkListInsertNodeAfter_goal_check.v
+VC/IdInsertObj_goal.v
+VC/IdInsertObj_proof_auto.v
+VC/IdInsertObj_proof_manual.v
+VC/IdInsertObj_goal_check.v
+VC/InitDoubleLinkList_goal.v
+VC/InitDoubleLinkList_proof_auto.v
+VC/InitDoubleLinkList_proof_manual.v
+VC/InitDoubleLinkList_goal_check.v
+VC/InsertObj_goal.v
+VC/InsertObj_proof_auto.v
+VC/InsertObj_proof_manual.v
+VC/InsertObj_goal_check.v
+VC/KSemaphoreCreate_goal.v
+VC/KSemaphoreCreate_proof_auto.v
+VC/KSemaphoreCreate_proof_manual.v
+VC/KSemaphoreCreate_goal_check.v
+VC/_SemaphoreCreate_goal.v
+VC/_SemaphoreCreate_proof_auto.v
+VC/_SemaphoreCreate_proof_manual.v
+VC/_SemaphoreCreate_goal_check.v
+VC/AllocId_proof_auto_verified.v
+VC/CriticalAreaLock_proof_auto_verified.v
+VC/CriticalAreaUnLock_proof_auto_verified.v
+VC/DoubleLinkListInsertNodeAfter_proof_auto_verified.v
+VC/IdInsertObj_proof_auto_verified.v
+VC/InitDoubleLinkList_proof_auto_verified.v
+VC/InsertObj_proof_auto_verified.v
+VC/KSemaphoreCreate_proof_auto_verified.v
+VC/_SemaphoreCreate_proof_auto_verified.v
+VC/AllocId_goal_check_verified.v
+VC/CriticalAreaLock_goal_check_verified.v
+VC/CriticalAreaUnLock_goal_check_verified.v
+VC/DoubleLinkListInsertNodeAfter_goal_check_verified.v
+VC/IdInsertObj_goal_check_verified.v
+VC/InitDoubleLinkList_goal_check_verified.v
+VC/InsertObj_goal_check_verified.v
+VC/KSemaphoreCreate_goal_check_verified.v
+VC/_SemaphoreCreate_goal_check_verified.v

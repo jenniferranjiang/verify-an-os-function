@@ -1,0 +1,13 @@
+interface:
+  display_name: "OS 验证 Knowledge"
+  short_description: "为通用 QCP C 验证流程加载系统专用知识"
+  default_prompt: "使用 $verify-os-function-with-qcp 为当前操作系统加载对应 knowledge，并结合 $verify-c-function-with-qcp 完成验证。"
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "qcp"
+      description: "对 annotated C 进行符号执行、诊断并导出证明目标"
+    - type: "mcp"
+      value: "rocq-mcp"
+      description: "编译、交互证明并验证 Rocq lemma 与 QCP VC"

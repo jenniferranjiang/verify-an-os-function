@@ -224,7 +224,7 @@ ID | blocker/non-blocker | evidence(file:line or symbol) | mismatch
 
 ## 项目与参考路径
 
-默认 trial 是 CRTOS 根 `/home/xinra/crtos/` 的直接子目录 `<function-name>-trial-YYMMDD-N/`，或使用用户指定的独立目录。开始 C 分析前解析并报告绝对路径，补齐 `annotated_C/src/`、`lib/`、`VC/`、`.docs/Report/folded_history/`；不得覆盖现有内容，也不得把 trial 建在权威源码子树内。
+默认 trial 是 CRTOS 根 `/home/xinra/crtos/` 的直接子目录 `<function-name>-trial-YYMMDD-N/`，或使用用户指定的独立目录。新实验按当前日期 + 当天第几次实验命名，不沿用 IDE、终端或历史上下文残留的名称。先检查 crtos 中当天已有的实验目录，自动计算下一次序号。只有 crtos 中确实存在尚未运行完成的实验目录时，才继续该实验。如果发现多个未完成实验或完成状态不明确，先向我确认，不自行猜测。
 
 创建或进入 trial 时，创建或维护该 trial 根目录自己的 `_CoqProject`。其中列出该 trial
 实际使用的外部 `-R`/`-Q` 路径，并把本地 `lib/` 映射到与 Makefile、QCP 命令及

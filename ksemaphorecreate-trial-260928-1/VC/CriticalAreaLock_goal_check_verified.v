@@ -1,0 +1,6 @@
+From CRTOS_Verify.VC Require Import CriticalAreaLock_goal CriticalAreaLock_proof_auto_verified CriticalAreaLock_proof_manual.
+
+Module VC_Correctness_Verified : VC_Correct.
+  Include CriticalAreaLock_proof_auto_verified.
+  Include CriticalAreaLock_proof_manual.
+End VC_Correctness_Verified.

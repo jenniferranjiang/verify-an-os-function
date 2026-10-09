@@ -1,0 +1,6 @@
+From CRTOS_Verify.VC Require Import DoubleLinkListInsertNodeAfter_goal DoubleLinkListInsertNodeAfter_proof_auto_verified DoubleLinkListInsertNodeAfter_proof_manual.
+
+Module VC_Correctness_Verified : VC_Correct.
+  Include DoubleLinkListInsertNodeAfter_proof_auto_verified.
+  Include DoubleLinkListInsertNodeAfter_proof_manual.
+End VC_Correctness_Verified.

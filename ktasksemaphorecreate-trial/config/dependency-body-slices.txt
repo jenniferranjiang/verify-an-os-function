@@ -1,8 +1,0 @@
-annotated_C/src/x_malloc.c
-annotated_C/src/memset.c
-annotated_C/src/critical_area_lock.c
-annotated_C/src/id_insert_obj.c
-annotated_C/src/x_free.c
-annotated_C/src/critical_area_unlock.c
-annotated_C/src/init_double_link_list.c
-annotated_C/src/double_link_list_insert_node_after.c

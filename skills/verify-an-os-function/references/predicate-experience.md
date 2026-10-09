@@ -358,3 +358,28 @@
     }.
 
     ```
+
+12. 审阅 predicate 时，不要从一个尚未补齐或尚未检查的跨模块接口，过度推出
+    “必须修改上游模块”或“存在不可消除的 blocker”。先按当前 artifact 的抽象层
+    判断问题：Pure 文件缺少后续 Rules/Rep，不等于其中的 pure definition 错误；
+    完整候选尚未闭合，则保持 draft 并记录待补 dependency，不把“尚未实现”冒充为
+    “已经证明无法实现”。
+
+    准备提出上游 breaking change 或停止实验前，至少依次检查并留下实际证据：
+
+    - 已有共享定义是否已经提供所需 owner、view、transition 或 acquire/release；
+    - 能否在当前 trial 中增加不复制上游内部状态的最小 adapter；
+    - 能否用独立 bridge/integration layer 组合两个模块的既有接口；
+    - 上述方案是否因明确的类型、assertion carrier、ownership 或源码语义冲突而失败。
+
+    只有这些更小方案具有可复现的失败结果，并且正确性确实要求改变既有接口时，
+    才把“修改上游模块”列为 required fix。否则应报告当前已知缺口和待验证方案，
+    不能把架构推测升级为 blocker。用户提供的既有候选应先固定内容或 revision、
+    实际 compile/typecheck，并基于具体 delta 审阅；不能仅因它尚未包含后续层文件就
+    丢弃候选或另起不相干设计。
+
+    例如 semaphore 调用位于线程子系统中的 `CriticalAreaLock`，只说明它复用公共
+    critical/IRQ primitive；这本身不推出 semaphore state 必须加入 Task state，
+    也不推出必须修改 Task formal files。应先检查 semaphore-local critical adapter、
+    独立 protocol 和 Task/Scheduler bridge。只有这些方案实际失败后，才能依据失败
+    证据讨论共享 Task protocol 的变更。
