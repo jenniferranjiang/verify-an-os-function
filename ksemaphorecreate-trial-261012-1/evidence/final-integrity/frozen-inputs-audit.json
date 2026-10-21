@@ -1,0 +1,55 @@
+{
+  "status": "passed",
+  "contract_checks": [
+    {
+      "function": "CriticalAreaLock",
+      "all_specs_equal_frozen_baseline_and_independent_spec_r6": true,
+      "final_check_current_binding": true
+    },
+    {
+      "function": "CriticalAreaUnLock",
+      "all_specs_equal_frozen_baseline_and_independent_spec_r6": true,
+      "final_check_current_binding": true
+    },
+    {
+      "function": "DoubleLinkListInsertNodeAfter",
+      "all_specs_equal_frozen_baseline_and_independent_spec_r6": true,
+      "final_check_current_binding": true
+    },
+    {
+      "function": "AllocId",
+      "all_specs_equal_frozen_baseline_and_independent_spec_r6": true,
+      "final_check_current_binding": true
+    },
+    {
+      "function": "InitDoubleLinkList",
+      "all_specs_equal_frozen_baseline_and_independent_spec_r6": true,
+      "final_check_current_binding": true
+    },
+    {
+      "function": "InsertObj",
+      "all_specs_equal_frozen_baseline_and_independent_spec_r6": true,
+      "final_check_current_binding": true
+    },
+    {
+      "function": "IdInsertObj",
+      "all_specs_equal_frozen_baseline_and_independent_spec_r6": true,
+      "final_check_current_binding": true
+    },
+    {
+      "function": "_SemaphoreCreate",
+      "all_specs_equal_frozen_baseline_and_independent_spec_r6": true,
+      "final_check_current_binding": true
+    },
+    {
+      "function": "KSemaphoreCreate",
+      "all_specs_equal_frozen_baseline_and_independent_spec_r6": true,
+      "final_check_current_binding": true
+    }
+  ],
+  "root_shared_source_and_object_pairs_unchanged": 18,
+  "external_framework_source_or_object_hashes_unchanged": 286,
+  "controller_upstream_files_unchanged": 30,
+  "local_adapter_manifest_matches": true,
+  "no_historical_trial_input": "All inputs came from explicit current-trial manifests and allowed root/shared or official framework paths; historical trials were neither enumerated nor read by this audit."
+}

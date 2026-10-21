@@ -1,0 +1,630 @@
+--- upstream/vc-proving/coq_tooling_common.py
++++ local/vc-proving/coq_tooling_common.py
+@@ -21,27 +21,9 @@
+ COQ_COMMAND_TIMEOUT_SECONDS = 15 * 60
+ 
+ 
+-FIXED_LOAD_PATH_MAPPINGS: tuple[tuple[str, str, str], ...] = (
+-    ("-R", "Rocq/flocq/src", "Flocq"),
+-    ("-R", "Rocq/SeparationLogic", "SimpleC.SL"),
+-    ("-R", "Rocq/unifysl", "Logic"),
+-    ("-R", "Rocq/sets", "SetsClass"),
+-    ("-R", "Rocq/compcert_lib", "compcert.lib"),
+-    ("-R", "Rocq/auxlibs", "AUXLib"),
+-    ("-R", "Rocq/examples", "SimpleC.EE"),
+-    ("-R", "Rocq/stdlib", "SimpleC.StdLib"),
+-    ("-R", "Rocq/StrategyLib", "SimpleC.StrategyLib"),
+-    ("-R", "Rocq/Common", "SimpleC.Common"),
+-    ("-R", "Rocq/fixedpoints", "FP"),
+-    ("-R", "Rocq/MonadLib", "MonadLib"),
+-    ("-R", "Rocq/listlib", "ListLib"),
+-    ("-R", "Rocq/MaxMinLib", "MaxMinLib"),
+-    ("-R", "Rocq/GraphLib", "GraphLib"),
+-    ("-R", "Rocq/SumLib", "SumLib"),
+-    ("-R", "Rocq/tracelib", "TraceLib"),
+-    ("-R", "Rocq/coq-record-update/src", "RecordUpdate"),
+-    ("-Q", "Rocq/algorithms", "Algorithms"),
+-)
++from crtos_layout import load_paths, external_source
++
++FIXED_LOAD_PATH_MAPPINGS = tuple((flag, str(key), logical) for flag, key, _, logical in load_paths())
+ 
+ 
+ TARGET_CASE_SUFFIXES = (
+@@ -497,6 +479,11 @@
+ 
+ def fixed_source(root: Path, relative: Path, *, label: str = "source") -> Path:
+     """Validate one repository file before any tool reads it."""
++    external = external_source(relative)
++    if external is not None:
++        if relative.suffix == ".v" and not external.exists():
++            external = external_source(relative.with_suffix(".vo"))
++        return _regular_file(external, label=label)
+     try:
+         path = fixed_path_under(root / relative, root, label=label)
+     except SystemExit as exc:
+--- upstream/vc-proving/coq_tooling_makefile.py
++++ local/vc-proving/coq_tooling_makefile.py
+@@ -33,6 +33,9 @@
+                  "coqdep": "COQDEP_EXE", "make": "MAKE_EXE"}
+     if tool not in overrides:
+         raise ValueError(f"unsupported Rocq build tool: {tool}")
++    if tool != "make":
++        from crtos_layout import COQ_BIN
++        return str(COQ_BIN / tool)
+     override = os.environ.get(overrides[tool], "").strip()
+     if override:
+         return override
+@@ -66,17 +69,8 @@
+ 
+ def base_load_paths(root: Path) -> list[tuple[str, Path, str]]:
+     """Return checked absolute roots; commands can make them cwd-relative."""
+-    entries = []
+-    for flag, physical, logical in common.FIXED_LOAD_PATH_MAPPINGS:
+-        directory = _fixed(root, Path(physical), "Rocq load-path root")
+-        if not directory.is_dir():
+-            raise common.CoqBuildPlanError(
+-                category="tooling", kind="load-path-plan-mismatch",
+-                message=f"Rocq load-path directory is missing: {directory}",
+-                repair="Restore the configured Rocq source directories.",
+-            )
+-        entries.append((flag, directory, logical))
+-    return entries
++    from crtos_layout import load_paths
++    return [(flag, physical, logical) for flag, _, physical, logical in load_paths()]
+ 
+ 
+ def _parse_dependencies(text: str, root: Path) -> dict[Path, tuple[Path, ...]]:
+@@ -93,24 +87,8 @@
+             if candidate.suffix not in {".v", ".vo", ".vos", ".vok"}:
+                 continue
+             candidate = candidate.with_suffix(".v")
+-            if candidate.is_absolute():
+-                try:
+-                    candidate = candidate.relative_to(root)
+-                except ValueError as exc:
+-                    raise common.CoqBuildPlanError(
+-                        category="contract", kind="dependency-path-boundary",
+-                        message=f"coqdep dependency escaped the repository: {candidate}",
+-                        repair="Repair the imported module or configured load path.",
+-                    ) from exc
+-            if ".." in candidate.parts:
+-                raise common.CoqBuildPlanError(
+-                    category="contract", kind="dependency-path-boundary",
+-                    message=f"coqdep dependency escaped the repository: {candidate}",
+-                    repair="Use repository-relative Rocq imports.",
+-                )
+-            if any(candidate.is_relative_to(Path(physical))
+-                   for _, physical, _ in common.FIXED_LOAD_PATH_MAPPINGS):
+-                result.append(candidate)
++            from crtos_layout import dependency_node
++            result.append(dependency_node(candidate, root))
+         return result
+ 
+     for line in text.replace("\\\r\n", " ").replace("\\\n", " ").splitlines():
+@@ -147,9 +125,12 @@
+ 
+ 
+ def _makefile(root: Path, graph: dict[Path, tuple[Path, ...]], family: set[Path], flags: list[str]) -> str:
+-    base = set(graph) - family
++    from crtos_layout import external_source, check_external_pin
++    check_external_pin(root, graph)
++    external = {node for node in graph if external_source(node) is not None}
++    base = set(graph) - family - external
+     for source in base:
+-        outside = set(graph[source]) - base
++        outside = set(graph[source]) - base - external
+         if outside:
+             raise common.CoqBuildPlanError(
+                 category="contract", kind="trusted-base-depends-on-current-case",
+@@ -169,7 +150,7 @@
+     compiler = [configured_program(root, "coqc"), "-q", *flags]
+     for source in sorted(base):
+         _fixed(root, source.with_suffix(".vo"), "base output")
+-        prerequisites = [source, *configurations, *(dependency.with_suffix(".vo") for dependency in graph[source])]
++        prerequisites = [source, *configurations, *(external_source(dependency.with_suffix(".vo")) or dependency.with_suffix(".vo") for dependency in graph[source])]
+         lines.append(_make_token(source.with_suffix(".vo")) + ": " + " ".join(map(_make_token, prerequisites)))
+         lines.append("\t" + _recipe([*compiler, source.as_posix()]))
+     return "\n".join(lines) + "\n"
+@@ -181,12 +162,19 @@
+     """Discover in breadth batches, then build only the exact base closure."""
+     root = root.expanduser().resolve()
+     flags = [token for flag, physical, logical in base_load_paths(root)
+-             for token in (flag, physical.relative_to(root).as_posix(), logical)]
++             for token in (flag, str(physical), logical)]
+     graph: dict[Path, tuple[Path, ...]] = {}
+     pending = set(targets)
+     with tempfile.TemporaryDirectory(prefix=".qcp-exact-make-", dir=root) as directory:
+         while pending:
+-            batch = sorted(pending)
++            from crtos_layout import external_source
++            object_only = {source for source in pending if external_source(source) is not None and not external_source(source).exists()}
++            for source in object_only:
++                common.fixed_source(root, source.with_suffix(".vo"), label="installed object-only input")
++                graph[source] = ()  # coqchk validates its compiled transitive imports below.
++            batch = sorted(pending - object_only)
++            if not batch:
++                break
+             for source in batch:
+                 common.fixed_source(root, source, label="coqdep source")
+             # coqdep resolves -f entries relative to the argument file, not cwd.
+@@ -195,7 +183,7 @@
+                 mode="w", encoding="utf-8", newline="\n", dir=root,
+                 prefix=".qcp-coqdep-", suffix=".args", delete_on_close=False,
+             ) as arguments:
+-                arguments.write(" ".join(json.dumps(token, ensure_ascii=False) for token in [*flags, *(source.as_posix() for source in batch)]) + "\n")
++                arguments.write(" ".join(json.dumps(token, ensure_ascii=False) for token in [*flags, *(str(common.fixed_source(root, source)) for source in batch)]) + "\n")
+                 arguments.close()
+                 process = common.run_tool(
+                     [configured_program(root, "coqdep"), "-f", arguments.name],
+@@ -212,6 +200,21 @@
+                 graph[source] = discovered[source]
+             pending = {dependency for source in batch for dependency in graph[source]} - graph.keys()
+         common.dependency_closure(graph, targets)
++        from crtos_layout import COQ_BIN, check_external_pin
++        check_external_pin(root, graph)
++        external_modules = [common.relative_to_logical_module(source) for source in sorted(graph) if external_source(source) is not None]
++        if external_modules:
++            from crtos_layout import external_fingerprint
++            from path_utils import write_json
++            cache = fixed_path_under(root / "evidence/controller-external-kernel-check.json", root, label="external kernel receipt")
++            selected = external_fingerprint(graph)
++            previous = json.loads(cache.read_text()) if cache.exists() else {}
++            covered = previous.get("status") == "passed" and all(previous.get("inputs", {}).get(key) == value for key, value in selected.items())
++            if not covered:
++                common.run_tool([str(COQ_BIN / "coqchk"), "-silent", *flags, *external_modules],
++                                cwd=root, deadline=deadline, label="Read-only external kernel check")
++                write_json(cache, {"status": "passed", "modules": external_modules, "inputs": selected,
++                                   "scope": "installed external base; final full proof coqchk still required"})
+         makefile = Path(directory) / "Makefile"
+         makefile.write_text(_makefile(root, graph, family, flags), encoding="utf-8", newline="\n")
+         environment = dict(os.environ)
+--- upstream/vc-proving/path_utils.py
++++ local/vc-proving/path_utils.py
+@@ -267,7 +267,8 @@
+         or ".." in target_path.parts
+         or target_path.suffix.lower() != ".c"
+         or len(target_path.parts) < 3
+-        or target_path.parts[0] != "QCP_examples"
++        or not (target_path.parts[0] == "QCP_examples" or
++                (target_path.parts[:2] == ("annotated_C", "src") and len(target_path.parts) == 3))
+     ):
+         raise ValueError(
+             "target C path must be a repository-relative "
+@@ -293,6 +294,9 @@
+         )
+     formal_dir = Path("Rocq") / "examples" / Path(*logical_parts)
+     active_case_theory = "SimpleC.EE." + ".".join(logical_parts)
++    if target_path.parts[:2] == ("annotated_C", "src"):
++        formal_dir = Path("VC")
++        active_case_theory = "CRTOS_Verify.VC"
+     return {
+         "c_file": target_path.as_posix(),
+         "formal_directory": formal_dir.as_posix(),
+@@ -533,7 +537,8 @@
+ ) -> str:
+     """Render only the current assignment; the skill owns shared proof rules."""
+     root = Path(commands["check"]["cwd"])
+-    skill = Path(__file__).resolve().parents[2] / "skills/group-worker-proving/SKILL.md"
++    from crtos_layout import SKILLS
++    skill = SKILLS / "group-worker-proving/SKILL.md"
+     witnesses = []
+     editable = []
+     protected = []
+@@ -576,6 +581,10 @@
+ - Statements, declaration order, prelude and all unassigned proof tokens remain fixed. Formatting is ignored.
+ {library}
+ 
++The current accepted predicate sources listed in `{root / 'checks/implement-frozen-inputs.json'}`
++and their formal dependencies are read-only semantic inputs. Read their definitions
++and existing lemmas as needed; do not edit them. Historical proofs are references only; check contract and dependency compatibility before reuse.
++
+ {chr(10).join(witnesses)}
+ 
+ ## Helpers
+--- upstream/vc-proving/proving.py
++++ local/vc-proving/proving.py
+@@ -120,6 +120,14 @@
+     library_model: Library | None = field(repr=False)
+ 
+ 
++def _fixed_round_name(value: object) -> bool:
++    """Accept unchanged safe slugs, including a C identifier's leading `_`."""
++    if not isinstance(value, str) or not value:
++        return False
++    tail = value.lstrip("_")
++    return bool(tail) and slug(tail) == tail
++
++
+ def load_proving_context(
+     *, main_root: Path, run_root: Path, round_id: str, group_plan_path: Path,
+     proof_manual: Path, formal_case_lib: Path, previous_round: str | None = None,
+@@ -131,7 +139,7 @@
+     run = fixed_path_under(run_root, root, label="run root")
+     if run.parent != root / "verification_runs":
+         raise ValueError("run root must be a direct child of verification_runs")
+-    if not isinstance(round_id, str) or not round_id or slug(round_id) != round_id:
++    if not _fixed_round_name(round_id):
+         raise ValueError("proving round must be a fixed directory name")
+     directory = fixed_path_under(run / round_id, run, label="proving directory")
+     reports = fixed_path_under(root / "reports" / run.name, root, label="run reports")
+@@ -140,7 +148,10 @@
+     manual_path = fixed_path_under(proof_manual, root, label="current manual")
+     library_path = fixed_path_under(formal_case_lib, root, label="current case library")
+     manual_rel, library_rel = manual_path.relative_to(root), library_path.relative_to(root)
+-    if (not manual_rel.parts or manual_rel.parts[0] != "Rocq" or not manual_rel.name.endswith("_proof_manual.v")
++    canonical_root = bool(manual_rel.parts and manual_rel.parts[0] == "Rocq") or (
++        len(manual_rel.parts) == 2 and manual_rel.parts[0] == "VC"
++        and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*_proof_manual\.v", manual_rel.name) is not None)
++    if (not canonical_root or not manual_rel.name.endswith("_proof_manual.v")
+         or library_rel != manual_rel.with_name(manual_rel.name.removesuffix("_proof_manual.v") + "_lib.v")):
+         raise ValueError("manual and library must be one canonical Rocq case family")
+     manual_bytes, library_bytes = _snapshot(manual_path, root), _snapshot(library_path, root)
+@@ -154,7 +165,7 @@
+     if library is None and any(group["helpers"] for group in groups):
+         raise ValueError("planned helpers require a current formal_case_lib")
+     if previous_round is not None and (
+-        not isinstance(previous_round, str) or not previous_round or slug(previous_round) != previous_round
++        not _fixed_round_name(previous_round)
+         or previous_round == round_id
+     ):
+         raise ValueError("previous proving round must be another fixed directory in this run")
+--- upstream/verification-orchestrator/controller_execution.py
++++ local/verification-orchestrator/controller_execution.py
+@@ -125,6 +125,9 @@
+             control_path = require_active_run(args)
+         if control_path is not None:
+             os.environ[CONTROL_SIGNAL_ENV] = str(control_path)
++        if args.command not in {"pause-run", "cancel-action", "validate-artifact"}:
++            from crtos_frozen_inputs import check_frozen_inputs
++            check_frozen_inputs(_args_main_root(args))
+         exit_code = int(args.func(args))
+         return exit_code
+     except BaseException as exc:
+--- upstream/verification-orchestrator/controller_final.py
++++ local/verification-orchestrator/controller_final.py
+@@ -297,6 +297,8 @@
+         inputs = {role: target[role] for role in ("c_file", "formal_case_lib", *GENERATED_KEYS)}
+         before = file_contents(root, inputs)
+         def unchanged_inputs():
++            from crtos_frozen_inputs import check_frozen_inputs
++            check_frozen_inputs(root)
+             if file_contents(root, inputs) != before:
+                 raise ValueError("current verification inputs changed during final-check")
+         ctx = _context(state)
+--- upstream/verification-orchestrator/controller_rounds.py
++++ local/verification-orchestrator/controller_rounds.py
+@@ -132,7 +132,8 @@
+         commands = [invocation(state, "coq-debug", "--round", task["attempt_id"])]
+         rule = ("Canonical sources are read-only. Add Show only to the debug copy. "
+                 "Follow the structural scan and split-first workflow. Plan array order defines dispatch order.")
+-    skill_path = Path(__file__).resolve().parents[2] / "skills" / skill / "SKILL.md"
++    from crtos_layout import SKILLS
++    skill_path = SKILLS / skill / "SKILL.md"
+     write_text(paths["input"], f"# {phase}\n\nRead {skill_path} and its required documents.\n\n"
+                f"{rule}\n\n```json\n{json.dumps(assignment, indent=2, ensure_ascii=True)}\n```\n\n"
+                "Use exact argv and cwd. A shell-only tool must quote arguments for its actual shell. "
+--- upstream/verification-orchestrator/controller_state.py
++++ local/verification-orchestrator/controller_state.py
+@@ -748,7 +748,7 @@
+     if not target.is_absolute():
+         target = main_root / target
+     target = fixed_path_under(target, main_root, label="target C file")
+-    qcp_examples_root = main_root / "QCP_examples"
++    qcp_examples_root = main_root / ("annotated_C/src" if target.relative_to(main_root).parts[:2] == ("annotated_C", "src") else "QCP_examples")
+     if (
+         qcp_examples_root.resolve() != qcp_examples_root.absolute()
+         or not target.is_file()
+--- upstream/verification-orchestrator/symexec_tooling.py
++++ local/verification-orchestrator/symexec_tooling.py
+@@ -383,6 +383,8 @@
+ 
+ 
+ def _driver_for_platform(main_root: Path) -> Path:
++    from crtos_layout import QCP_ROOT
++    main_root = QCP_ROOT
+     os_name, platform_name, machine = _runtime_platform()
+     normalized_machine = machine.strip().lower()
+ 
+@@ -602,6 +604,9 @@
+ ) -> tuple[list[str], list[tuple[str, str]]]:
+     """Discover include roots plus exact-strategy and collection SLP pairs."""
+ 
++    if target_rel.parts[:2] == ("annotated_C", "src"):
++        from crtos_symexec import search_paths
++        return search_paths(main_root, target_rel)
+     qcp_root = _input_path(main_root / "QCP_examples", main_root, label="QCP input root")
+     target = _input_path(main_root / target_rel, qcp_root, label="target C file")
+     try:
+@@ -720,8 +725,8 @@
+     main_root = main_root.expanduser().absolute()
+     main_root = _input_path(main_root, main_root, label="main root")
+     if (
+-        not (main_root / "QCP_examples").is_dir()
+-        or not (main_root / "Rocq").is_dir()
++        not (main_root / "annotated_C/src").is_dir()
++        or not (main_root / "VC").is_dir()
+     ):
+         raise ValueError(
+             f"main root does not look like the QCP repository: {main_root}"
+@@ -740,6 +745,7 @@
+         f"--proof-auto-file={output_root / planned_target_files['proof_auto_file']}",
+         f"--proof-manual-file={output_root / planned_target_files['proof_manual_file']}",
+     ]
++    argv.extend(("--arch=32", "--endian=little", "--no-CRules"))
+     argv.extend(f"-I{directory}" for directory in include_args)
+     for physical, logical in slp_pairs:
+         argv.extend(("-slp", physical, logical))
+@@ -847,6 +853,16 @@
+             raise
+     snapshots = _generated_artifact_snapshots(plan, output)
+     if returncode == 0:
++        failure = _generated_output_failure(plan, output, snapshots=snapshots)
++        if failure is not None:
++            return finish(failure)
++        try:
++            from auto_obligations import complete_generated_worklist
++            complete_generated_worklist(root, output, plan["target_files"])
++            snapshots = _generated_artifact_snapshots(plan, output)
++        except (OSError, ValueError) as exc:
++            return finish({"category": "generated-output", "kind": "complete-witness-worklist",
++                           "message": str(exc), "repair": "Preserve all generated witness statements in the manual proof worklist."})
+         return finish(_generated_output_failure(plan, output, snapshots=snapshots))
+     category, kind = {130: ("control", "cancelled"), 124: ("tool", "timeout")}.get(returncode, ("symbolic-execution", "symexec-error"))
+     return finish({
+--- /dev/null
++++ local/vc-proving/crtos_layout.py
+@@ -0,0 +1,101 @@
++"""Trial-local paths. External formal inputs are read-only, never build outputs.
++
++Dependency plans use virtual ``external/<n>`` nodes, resolved only by this
++allowlisted reader. Current/overlay/publication destinations retain the upstream
++fixed_path_under boundary; no symbolic links or duplicated canonical C bodies.
++"""
++from pathlib import Path
++import hashlib
++import json
++import shlex
++
++TRIAL_ROOT = Path(__file__).absolute().parents[4]
++QCP_ROOT = Path('/home/xinra/qcp-binary-democases')
++# This trial now targets the installed parameterized ARM32/little-endian framework.
++COQ_BIN = Path('/home/xinra/.opam/pv-bench-8.20.1/bin')
++SKILLS = QCP_ROOT / '.agents/skills'
++
++
++def load_paths():
++    entries = []
++    for line in (TRIAL_ROOT / '_CoqProject').read_text().splitlines():
++        tokens = shlex.split(line, comments=True)
++        if not tokens:
++            continue
++        if len(tokens) != 3 or tokens[0] not in {'-R', '-Q'}:
++            raise ValueError('adapter requires explicit three-token _CoqProject load paths')
++        flag, physical, logical = tokens
++        path = Path(physical)
++        if not path.is_absolute():
++            path = TRIAL_ROOT / path
++        allowed = (TRIAL_ROOT/'lib', TRIAL_ROOT/'VC', TRIAL_ROOT/'shared_candidates', TRIAL_ROOT/'vendor', Path('/home/xinra/crtos/lib'), Path('/home/xinra/crtos/vendor'), QCP_ROOT/'SeparationLogic', QCP_ROOT/'Rocq')
++        if not any(path == base or path.is_relative_to(base) for base in allowed):
++            raise ValueError(f'load path outside approved inputs: {path}')
++        # Check every component before any reading or resolving.
++        from path_utils import fixed_path_under
++        fixed_path_under(path, next(base for base in allowed if path == base or path.is_relative_to(base)), label='approved Rocq load path')
++        if not path.is_dir():
++            raise ValueError(f'missing approved load path: {path}')
++        key = path.relative_to(TRIAL_ROOT) if path.is_relative_to(TRIAL_ROOT) else Path('external') / str(len(entries))
++        entries.append((flag, key, path, logical))
++    return entries
++
++
++def external_source(relative):
++    relative = Path(relative)
++    if relative.is_absolute() or '..' in relative.parts:
++        raise ValueError(f'invalid external dependency node: {relative}')
++    if relative.parts[:1] != ('external',):
++        return None
++    from path_utils import fixed_path_under
++    for _, key, physical, _ in load_paths():
++        if key.parts[:1] == ('external',) and relative.is_relative_to(key):
++            return fixed_path_under(physical / relative.relative_to(key), physical, label='read-only external dependency')
++    raise ValueError(f'unknown external dependency node: {relative}')
++
++
++def dependency_node(path, root):
++    path = Path(path)
++    if not path.is_absolute():
++        path = root / path
++    # Lexical normalization needed for coqdep's ../ paths, confinement is then
++    # checked against the exact allowlist before any file is read.
++    import os
++    path = Path(os.path.abspath(path))
++    from path_utils import fixed_path_under
++    for _, key, physical, _ in load_paths():
++        if path.is_relative_to(physical):
++            fixed_path_under(path, physical, label='coqdep dependency')
++            return key / path.relative_to(physical)
++    raise ValueError(f'coqdep dependency outside approved load paths: {path}')
++
++
++def external_fingerprint(graph):
++    records = {}
++    for node in sorted(graph):
++        source = external_source(node)
++        if source is None:
++            continue
++        item = {}
++        if not source.exists():
++            item[str(source)] = None  # Installed object-only QCP module; no fabricated source.
++        for path in ((source,) if source.exists() else ()) + (external_source(node.with_suffix('.vo')),):
++            if not path.is_file():
++                raise ValueError(f'missing precompiled read-only dependency: {path}')
++            item[str(path)] = hashlib.sha256(path.read_bytes()).hexdigest()
++        records[str(node)] = item
++    return records
++
++
++def check_external_pin(root, graph):
++    """Pin source/object pairs on first encounter; reject later mutation."""
++    from path_utils import fixed_path_under, write_json
++    path = fixed_path_under(root/'evidence/controller-external-inputs.json', root, label='dependency pin')
++    current = external_fingerprint(graph)
++    old = json.loads(path.read_text()) if path.exists() else {}
++    for node, values in current.items():
++        if node in old and old[node] != values:
++            raise ValueError(f'read-only dependency changed: {node}')
++    merged = old | current
++    if merged != old:
++        write_json(path, merged)
+--- /dev/null
++++ local/verification-orchestrator/auto_obligations.py
+@@ -0,0 +1,87 @@
++"""Preserve every generated auto witness as an explicit proof-owner obligation.
++
++The bundled driver emits admissions in *_proof_auto.v. Keep that raw artifact,
++but copy its exact witness blocks into the manual proof worklist. The upstream
++stager removes auto/manual overlaps, so a compiled parent uses proved manual
++witnesses rather than the raw automatic placeholders. No goal definition changes.
++"""
++import hashlib
++import json
++import re
++from pathlib import Path
++from types import SimpleNamespace
++from path_utils import fixed_path_under, write_bytes, write_text, write_json
++from proof_manual_utils import parse_manual, lemma_proof_parts, coq_token_text
++
++
++def merged_manual(auto_text, manual_text, auto_module=None):
++    auto = parse_manual(auto_text)
++    if not auto.lemmas:
++        return manual_text, []
++    manual = parse_manual(manual_text) if manual_text is not None else None
++    manual_prelude = manual.prelude if manual else ''
++    if auto_module is not None:
++        theory, stem = auto_module
++        # The generator's manual imports auto. Keep that import in the real
++        # manual; ignore only this exact dependency when comparing environments.
++        pattern = r'^\s*(?:From '+re.escape(theory)+r' Require Import '+re.escape(stem)+r'|Require Import '+re.escape(theory+'.'+stem)+r')\.\s*$'
++        manual_prelude = re.sub(pattern, '', manual_prelude, flags=re.M)
++    if manual and coq_token_text(manual_prelude) != coq_token_text(auto.prelude):
++        raise ValueError('auto/manual proof preludes differ; cannot safely share their witness environment')
++    added=[]
++    for lemma in auto.lemmas:
++        name=lemma['name']
++        if manual and name in manual.by_name:
++            if coq_token_text(lemma_proof_parts(lemma)[0]) != coq_token_text(lemma_proof_parts(manual.by_name[name])[0]):
++                raise ValueError('auto/manual witness statements disagree: '+name)
++        else:
++            added.append(lemma)
++    result=(manual_text if manual_text is not None else auto.prelude).rstrip()+'\n\n'
++    result+='\n'.join(lemma['block'] for lemma in added)
++    parsed=parse_manual(result)
++    expected=set(auto.by_name) | (set(manual.by_name) if manual else set())
++    if set(parsed.by_name)!=expected:
++        raise ValueError('proof worklist does not exactly cover generated witnesses')
++    return result, [lemma['name'] for lemma in added]
++
++
++def complete_generated_worklist(root, output, target):
++    roles=('goal_file','proof_auto_file','proof_manual_file','goal_check_file')
++    paths={role:fixed_path_under(output/target[role],output,label='generated witness source') for role in roles}
++    raw={role:(path.read_bytes() if path.exists() else None) for role,path in paths.items()}
++    if raw['proof_auto_file'] is None:
++        raise ValueError('generator did not produce its auto witness file')
++    auto=raw['proof_auto_file'].decode('utf-8')
++    manual=raw['proof_manual_file'].decode('utf-8') if raw['proof_manual_file'] is not None else None
++    result,added=merged_manual(auto,manual,(target["active_case_theory"],Path(target["proof_auto_file"]).stem))
++    if not added:
++        return []
++    # Retain immutable original bytes before any worklist extension, including
++    # optional missing manual. The digest includes all four role boundaries.
++    digest=hashlib.sha256(json.dumps({k:(v.hex() if v is not None else None) for k,v in raw.items()},sort_keys=True).encode()).hexdigest()
++    archive=fixed_path_under(root/'evidence/qcp-raw-generated'/digest,root,label='raw generator archive')
++    archive.mkdir(parents=True,exist_ok=True)
++    for role,data in raw.items():
++        if data is None:
++            continue
++        destination=fixed_path_under(archive/(role+'.v'),archive,label='immutable raw artifact')
++        if destination.exists() and destination.read_bytes()!=data:
++            raise ValueError('immutable raw generator archive conflict')
++        if not destination.exists():write_bytes(destination,data)
++    write_json(archive/'coverage.json',{'case':target['case_name'],'added_manual_witnesses':added,
++               'raw_roles':{k:(hashlib.sha256(v).hexdigest() if v is not None else None) for k,v in raw.items()},
++               'goal_definitions_changed':False,'auto_file_changed':False})
++    write_text(paths['proof_manual_file'],result)
++    goal_check=raw['goal_check_file'].decode('utf-8')
++    manual_module=Path(target['proof_manual_file']).stem
++    if manual_module not in goal_check:
++        ending='End VC_Correctness.'
++        if goal_check.count(ending)!=1 or 'Module VC_Correctness : VC_Correct.' not in goal_check:
++            raise ValueError('unsupported goal-check wrapper; cannot add the complete witness provider safely')
++        goal_check='From '+target['active_case_theory']+' Require Import '+manual_module+'.\n'+goal_check
++        goal_check=goal_check.replace(ending,'  Include '+manual_module+'.\n'+ending)
++        write_text(paths['goal_check_file'],goal_check)
++    if paths['goal_file'].read_bytes()!=raw['goal_file'] or paths['proof_auto_file'].read_bytes()!=raw['proof_auto_file']:
++        raise ValueError('raw goal/auto bytes changed while extending the proof worklist')
++    return added
++
+--- /dev/null
++++ local/verification-orchestrator/crtos_frozen_inputs.py
+@@ -0,0 +1,17 @@
++"""Pin this implementation's shared semantic inputs without claiming review."""
++import hashlib
++import json
++from pathlib import Path
++
++from path_utils import fixed_path_under
++
++
++def check_frozen_inputs(root):
++    root = Path(root)
++    manifest = fixed_path_under(root / 'checks/implement-frozen-inputs.json', root,
++                                label='implementation input manifest')
++    data = json.loads(manifest.read_text())
++    for relative, expected in data['files'].items():
++        path = fixed_path_under(root / relative, root, label='frozen semantic input')
++        if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
++            raise ValueError('Frozen semantic input changed: ' + relative)
+--- /dev/null
++++ local/verification-orchestrator/crtos_symexec.py
+@@ -0,0 +1,39 @@
++"""Confined include traversal for canonical CRTOS slices."""
++from collections import deque
++from pathlib import Path
++from path_utils import fixed_path_under
++
++
++def search_paths(root, target):
++    from symexec_tooling import _source_includes, _input_path
++    croot = fixed_path_under(root / 'annotated_C', root, label='canonical C tree')
++    pending = deque([_input_path(root / target, croot, label='canonical C')])
++    seen = set()
++    directories = [root/'annotated_C/src', root/'annotated_C/include']
++    strategies = []
++    while pending:
++        source = pending.popleft()
++        if source in seen:
++            continue
++        seen.add(source)
++        headers, strategy_names = _source_includes(source)
++        for name in headers + strategy_names:
++            relative = Path(name)
++            if relative.is_absolute():
++                raise ValueError(f'absolute include forbidden: {name}')
++            candidate = _input_path(source.parent / relative, croot, label='local CRTOS include')
++            if not candidate.is_file():
++                matches = [_input_path(directory/relative, croot, label='CRTOS include') for directory in directories]
++                matches = list(dict.fromkeys(path for path in matches if path.is_file()))
++                if len(matches) != 1:
++                    raise ValueError(f'missing/ambiguous CRTOS include: {source}: {name}')
++                candidate = matches[0]
++            if candidate.parent not in directories:
++                directories.append(candidate.parent)
++            if name in strategy_names:
++                # Strategy outputs remain in the current logical VC directory.
++                pair = (str(candidate.parent)+'/', 'CRTOS_Verify.VC')
++                if pair not in strategies:
++                    strategies.append(pair)
++            pending.append(candidate)
++    return [str(path)+'/' for path in directories], strategies

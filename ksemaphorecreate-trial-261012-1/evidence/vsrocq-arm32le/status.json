@@ -1,0 +1,8 @@
+{
+  "load_paths_synchronized": true,
+  "cli_compiler": "/home/xinra/.opam/pv-bench-8.20.1/bin/coqc",
+  "language_server": "/home/xinra/.opam/default/bin/vsrocqtop",
+  "language_server_compatible": false,
+  "local_rebuild": "failed: cached default native dependencies mismatch modern OCaml implementation CRC",
+  "scope": "Editor server limitation, not a failure of checked CLI formal compilation. No global toolchain was modified."
+}

@@ -1,0 +1,41 @@
+{
+  "groups": [
+    {
+      "id": "return_branches",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_KSemaphoreCreate_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold KSemaphoreCreate_return_wit_1 and introduce all binders (or use LLM_pre_process). P is SemaphoreOutsideCritical sg hs before; PreH1 supplies retval = -5. Select the first of the three postcondition disjuncts with the assertion disjunction introduction rules, discharge its pure equality from PreH1, and cancel the identical outside-critical resource by entailment reflexivity. No existential, state transition, arithmetic or resource unfolding is required; the entry nest bound is unused."
+        },
+        {
+          "name": "proof_of_KSemaphoreCreate_return_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold KSemaphoreCreate_return_wit_2 and introduce binders. P owns SemaphoreOutsideCritical sg hs current_3; PreH1-PreH3 supply retval = -5, SemaphoreRely hs before current_3, and manager fullness at current_3. Select the middle postcondition disjunct and instantiate its current existential with current_3. Introduce its three pure conjuncts from those premises and cancel the identical outside-critical resource. The rely source/target is exactly before/current_3 already present in PreH2; do not identify current_3 with before or unfold the rely/representation. No additional transition or helper is needed."
+        },
+        {
+          "name": "proof_of_KSemaphoreCreate_return_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold KSemaphoreCreate_return_wit_3 and introduce binders. P owns SemaphoreOutsideCritical sg hs (semaphore_os_publish p_2 retval val_pre current_3). Select the third postcondition disjunct and instantiate current_2 := current_3 and p := p_2. Its four pure conjuncts are precisely PreH1-PreH4: nonzero pointer, rely before/current_3, minimum-free ID at current_3, and guarantee current_3/(semaphore_os_publish p_2 retval val_pre current_3). Introduce them and cancel the identical published-state resource. Preserve the existing transition unchanged; no new rely/guarantee reasoning, resource transformation or arithmetic is needed."
+        }
+      ]
+    },
+    {
+      "id": "call_preconditions",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_KSemaphoreCreate_partial_solve_wit_1_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold KSemaphoreCreate_partial_solve_wit_1_pure and introduce binders. P is the val UShort cell separated from SemaphoreOutsideCritical sg hs before. Q is only the pure entry bound scheduler_lock_nest (os_scheduler before) < 65535, exactly PreH1. Introduce the pure assertion using PreH1 (entailer! or the pure assertion right rule), which is valid for any heap. No existential or pointer observation is required, and no spatial resource must be unfolded or transformed."
+        },
+        {
+          "name": "proof_of_KSemaphoreCreate_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold KSemaphoreCreate_partial_solve_wit_1; introduce the pure-VC implication premise locally, then unfold KSemaphoreCreate_partial_solve_wit_1_aux and introduce before, hs, sg and PreH1. P is SemaphoreOutsideCritical sg hs before; Q conjoins two copies of the same entry nest bound with that identical resource. Introduce both pure conjuncts using PreH1 and close the resource entailment by reflexivity/cancellation (entailer!). The implication premise need not be used; do not import the other group or rely on any sibling proof. No transition, existential, resource splitting or helper is needed."
+        }
+      ]
+    }
+  ]
+}

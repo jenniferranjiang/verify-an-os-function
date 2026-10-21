@@ -1,0 +1,7 @@
+From CRTOS_Verify.VC Require Import SemaphoreCreate_goal SemaphoreCreate_proof_auto SemaphoreCreate_proof_manual.
+Check proof_of__SemaphoreCreate_safety_wit_11.
+Check proof_of__SemaphoreCreate_safety_wit_12.
+Check proof_of__SemaphoreCreate_safety_wit_13.
+Check proof_of__SemaphoreCreate_safety_wit_14.
+Check proof_of__SemaphoreCreate_safety_wit_15.
+Check proof_of__SemaphoreCreate_safety_wit_16.

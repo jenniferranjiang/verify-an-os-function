@@ -1,0 +1,8 @@
+menu "lvgl image display parameter settings"
+    menuconfig LVGL_WIDTH
+        int "Set the width of the image."
+        default 320
+    menuconfig LVGL_HEIGHT
+        int "set the height of the image."
+        default 320
+endmenu

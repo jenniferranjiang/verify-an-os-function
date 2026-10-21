@@ -1,0 +1,25 @@
+{
+  "status": "review-ready",
+  "spec_revision": "spec-r4-9f3ebc915b99",
+  "annotated_manifest_sha256": "9f3ebc915b995fc8655bab8014878df4648f3dca6602cef7d65b936714274c48",
+  "predicate_revision": "predicate-r5-0a139d64743c",
+  "predicate_manifest_sha256": "0a139d64743cce8000b0910d7880d6c5a0bf89147b730665aa6ebefbfb45585a",
+  "predicate_review": ".docs/Report/2026-10-12-5-predicate-review.md",
+  "source_revision": "source-r2-0c50c37013e9",
+  "source_manifest_sha256": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+  "changes": [
+    "One SemaphoreCriticalViews import and two logical terms SemaphoreCriticalFrame/CrtosOSValid",
+    "Annotation owner removed redundant where at CriticalAreaLock DisableLocalInterrupt call; no change to canonical/caller contracts or executable C"
+  ],
+  "author_checks": {
+    "source_current_hashes": 47,
+    "C_equivalence_and_scope": "passed",
+    "canonical_caller_contracts": "passed-identical",
+    "native_ILP32_syntax_layout": "passed",
+    "ARM_ABI": "reused-unchanged-source-and-layout",
+    "formal_interfaces": "35 Extern types + 12 compositions + OS carrier passed under accepted pv-bench ARM32LE config"
+  },
+  "qcp_invoked_by_spec_author": false,
+  "open_author_blockers": [],
+  "next_action": "Main agent independent spec delta review, then existing controller annotation owner continues."
+}

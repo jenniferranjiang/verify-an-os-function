@@ -1,0 +1,63 @@
+#include "ktask_set_status.h"
+
+// 只在请求读取已初始化字节时引入 raw；不展开包含它的任务或全局不变式。
+id : 0
+priority : core(1)
+left : store_task_status(?p, ?status) at 0
+right : store(p, U8, ?value) at 1
+action : left_erase(0);
+         left_exist_add(raw : Z);
+         left_add(decode_task_status(raw) == status);
+         left_add(store(p, U8, raw));
+
+// 覆写只消耗权限；不要求旧字节等于任何规范编码。
+id : 1
+priority : core(1)
+left : store_task_status(?p, ?status) at 0
+right : undef_data_at(p, U8) at 1
+action : left_erase(0);
+         right_erase(1);
+
+// 仅在目标要求语义状态时折回；不在每次读取后无条件折叠，避免开合循环。
+id : 2
+priority : core(2)
+left : store(?p, U8, ?raw) at 0
+right : store_task_status(p, ?status) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_add(decode_task_status(raw) == status);
+
+// 已知 setter 参数归一化为语义构造子。
+id : 3
+priority : post(1)
+left : store_task_status(?p, decode_task_status(0)) at 0
+action : left_erase(0);
+         left_add(store_task_status(p, TSK_INIT()));
+
+// 已知 setter 参数归一化为语义构造子。
+id : 4
+priority : post(1)
+left : store_task_status(?p, decode_task_status(1)) at 0
+action : left_erase(0);
+         left_add(store_task_status(p, TSK_READY()));
+
+// 已知 setter 参数归一化为语义构造子。
+id : 5
+priority : post(1)
+left : store_task_status(?p, decode_task_status(2)) at 0
+action : left_erase(0);
+         left_add(store_task_status(p, TSK_SUSPEND()));
+
+// 已知 setter 参数归一化为语义构造子。
+id : 6
+priority : post(1)
+left : store_task_status(?p, decode_task_status(3)) at 0
+action : left_erase(0);
+         left_add(store_task_status(p, TSK_RUNNING()));
+
+// 已知 setter 参数归一化为语义构造子。
+id : 7
+priority : post(1)
+left : store_task_status(?p, decode_task_status(4)) at 0
+action : left_erase(0);
+         left_add(store_task_status(p, TSK_CLOSE()));

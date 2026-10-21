@@ -1,0 +1,3 @@
+gcc -m32 -std=c11 -ffreestanding -fsyntax-only -I/home/xinra/crtos/ksemaphorecreate-trial-261019-1/checks/config -I/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include /home/xinra/crtos/ksemaphorecreate-trial-261019-1/checks/layout.c
+Exit status: 0
+Compiler target: gcc -m32 ILP32; natural structs contain only 16-bit scalar and 32-bit pointers. Cortex-M3 target established independently by board config.mk. No ARM cross compiler installed.

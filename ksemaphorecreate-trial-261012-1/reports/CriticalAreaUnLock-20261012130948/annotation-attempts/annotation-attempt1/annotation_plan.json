@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "CriticalAreaUnLock",
+      "meaning": "Saturating-decrement the scheduler nesting count and release the matching caller IRQ critical region, restoring the outside ownership view."
+    },
+    {
+      "name": "EnableLocalInterrupt",
+      "meaning": "Release the caller-specific critical token with its guaranteed post-state and return the outside ownership view."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

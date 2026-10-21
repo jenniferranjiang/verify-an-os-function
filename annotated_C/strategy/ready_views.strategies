@@ -1,0 +1,212 @@
+#include "ready_views_strategy.h"
+
+// Read the sentinel's prev slot and retain the entire unmodified list frame.
+id : 1
+priority : core(2)
+left : store_priority_ready_bucket(?head, ?nodes) at 0
+right : store(field_addr(?base, SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode), ?v) at 1
+check : infer(base == head);
+action : left_erase(0);
+         right_erase(1);
+         left_exist_add(tail : Z);
+         left_add(store_ready_dll_tail_frame(head, nodes, tail));
+         right_add(v == tail);
+
+// A bucket request borrows exactly one array element; scalar metadata and all
+// other buckets remain in the existing vector frame. No eager vector unfolding.
+id : 7
+priority : core(2)
+left : store_os_assign_ready_vector(?table, ?state) at 0
+right : store_priority_ready_bucket(rrr_ready_bucket_head(table, ?prio), ?nodes) at 1
+check : infer(0 <= prio);
+        infer(prio < PRIORITY_MAX());
+action : left_erase(0);
+         right_erase(1);
+         left_add(store_rrr_vector_except(table, prio, Znth{list{DL_Node{Z}}}(prio, state.orvBuckets, nil{DL_Node{Z}}), state));
+         right_add(nodes == Znth{list{DL_Node{Z}}}(prio, state.orvBuckets, nil{DL_Node{Z}}));
+
+// Reassemble only when a complete vector is requested. The changed bucket is
+// reflected in the resulting abstract value, never silently replaced by old.
+id : 8
+priority : core(2)
+left : store_rrr_vector_except(?table, ?prio, ?old, ?state) at 0
+       store_priority_ready_bucket(?head, ?nodes) at 1
+right : store_os_assign_ready_vector(?actual_table, ?after) at 2
+check : infer(actual_table == table);
+        infer(head == rrr_ready_bucket_head(table, prio));
+        infer(0 <= prio);
+        infer(old == Znth{list{DL_Node{Z}}}(prio, state.orvBuckets, nil{DL_Node{Z}}));
+action : left_erase(0);
+         left_erase(1);
+         right_erase(2);
+         right_add(after == os_assign_ready_vector_replace_bucket(state, prio, nodes));
+
+// Reading next keeps a head view for the immediately following list scan.
+// The scan invariant consumes this view; no automatic open/close cycle exists.
+id : 9
+priority : core(2)
+left : store_priority_ready_bucket(?head, ?nodes) at 0
+right : store(field_addr(?base, SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode), ?v) at 1
+check : infer(base == head);
+action : left_erase(0);
+         right_erase(1);
+         left_exist_add(first : Z);
+         left_add(store_ready_dll_head_frame(head, nodes, first));
+         right_add(v == first);
+
+// C array addressing and the abstract bucket-head function have the same
+// layout, but the symbolic arithmetic solver does not unfold Rocq functions.
+id : 5
+priority : core(3)
+left : store_priority_ready_bucket(rrr_ready_bucket_head(?table, ?prio), ?nodes) at 0
+right : store(field_addr(?base, SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode), ?v) at 1
+check : infer(base == field_addr(table, OsAssignReadyVector, priority_ready_vector) + prio * sizeof(struct SysDoubleLinklistNode));
+action : left_erase(0);
+         right_erase(1);
+         left_exist_add(tail : Z);
+         left_add(store_ready_dll_tail_frame(rrr_ready_bucket_head(table, prio), nodes, tail));
+         right_add(v == tail);
+
+id : 6
+priority : post(3)
+left : store_ready_dll_tail_frame(rrr_ready_bucket_head(?table, ?prio), ?nodes, ?tail) at 0
+       store(field_addr(?base, SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode), tail) at 1
+check : infer(base == field_addr(table, OsAssignReadyVector, priority_ready_vector) + prio * sizeof(struct SysDoubleLinklistNode));
+action : left_erase(0);
+         left_erase(1);
+         left_add(store_ready_dll_tail_view(rrr_ready_bucket_head(table, prio), nodes, tail));
+
+// The pending wrapper owns only this ready vector; published ownership facts
+// stay explicit for the caller's algorithmic state-transition proof.
+id : 4
+priority : core(2)
+left : assign_ready_pending(?sg, ?st) at 0
+right : store_os_assign_ready_vector(?ready, ?before) at 1
+check : infer(ready == assign_ready_vector_addr(sg));
+        infer(before == assignReadyVector(os_assign(st)));
+action : left_erase(0);
+         left_add(assign_ready_published(st));
+         left_add(store_os_assign_ready_vector(assign_ready_vector_addr(sg), assignReadyVector(os_assign(st))));
+
+// Only the unchanged slot can restore this view: arbitrary writes must not fold.
+id : 2
+priority : post(2)
+left : store_ready_dll_tail_frame(?head, ?nodes, ?tail) at 0
+       store(field_addr(?base, SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode), tail) at 1
+check : infer(base == head);
+action : left_erase(0);
+         left_erase(1);
+         left_add(store_ready_dll_tail_view(head, nodes, tail));
+
+id : 3
+priority : core(2)
+left : store_ready_dll_tail_view(?head, ?nodes, ?tail) at 0
+right : store(field_addr(?base, SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode), ?v) at 1
+check : infer(base == head);
+action : left_erase(0);
+         right_erase(1);
+         left_add(store_ready_dll_tail_frame(head, nodes, tail));
+         right_add(v == tail);
+
+// The C array expression supplies the bucket index for a direct tail read.
+id : 10
+priority : core(3)
+left : store_os_assign_ready_vector(?table, ?state) at 0
+right : store(field_addr(pointer_offset(field_addr(?actual_table, OsAssignReadyVector, priority_ready_vector), ?prio, struct SysDoubleLinklistNode), SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode), ?value) at 1
+check : infer(actual_table == table);
+        infer(0 <= prio);
+        infer(prio < PRIORITY_MAX());
+action : left_erase(0);
+         left_add(store_priority_ready_bucket(rrr_ready_bucket_head(table, prio), Znth{list{DL_Node{Z}}}(prio, state.orvBuckets, nil{DL_Node{Z}})));
+         left_add(store_rrr_vector_except(table, prio, Znth{list{DL_Node{Z}}}(prio, state.orvBuckets, nil{DL_Node{Z}}), state));
+
+// The pending view opens only for an owned ready-array read.
+id : 11
+priority : core(2)
+left : assign_ready_pending(?sg, ?st) at 0
+right : store(field_addr(pointer_offset(field_addr(?table, OsAssignReadyVector, priority_ready_vector), ?prio, struct SysDoubleLinklistNode), SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode), ?value) at 1
+check : infer(table == assign_ready_vector_addr(sg));
+action : left_erase(0);
+         left_add(assign_ready_published(st));
+         left_add(store_os_assign_ready_vector(assign_ready_vector_addr(sg), assignReadyVector(os_assign(st))));
+
+// Bucket-taking helpers use the same C array expression as field reads.
+id : 12
+priority : core(2)
+left : store_os_assign_ready_vector(?table, ?state) at 0
+right : store_priority_ready_bucket(pointer_offset(field_addr(?actual_table, OsAssignReadyVector, priority_ready_vector), ?prio, struct SysDoubleLinklistNode), ?nodes) at 1
+check : infer(actual_table == table);
+        infer(0 <= prio);
+        infer(prio < PRIORITY_MAX());
+action : left_erase(0); right_erase(1);
+         left_add(store_rrr_vector_except(table, prio, Znth{list{DL_Node{Z}}}(prio, state.orvBuckets, nil{DL_Node{Z}}), state));
+         right_add(nodes == Znth{list{DL_Node{Z}}}(prio, state.orvBuckets, nil{DL_Node{Z}}));
+
+// Link validity is a representation fact of the selected task's owned cells.
+id : 13
+priority : core(2)
+left : task_fields(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link) != 0 at 2
+check : infer(q == task);
+action : right_erase(2);
+
+// QCP's nested field_addr and the abstract embedded-node address coincide.
+id : 14
+priority : core(2)
+left : occupy_dll_node(?link) at 0
+right : occupy_dll_node(field_addr(field_addr(?task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link)) at 1
+check : infer(link == sched_link_of(task));
+action : left_erase(0); right_erase(1);
+         left_add(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link) == sched_link_of(task));
+
+// Direct next reads borrow the same single bucket and retain its head frame.
+id : 15
+priority : core(3)
+left : store_os_assign_ready_vector(?table, ?state) at 0
+right : store(field_addr(pointer_offset(field_addr(?actual_table, OsAssignReadyVector, priority_ready_vector), ?prio, struct SysDoubleLinklistNode), SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode), ?value) at 1
+check : infer(actual_table == table);
+        infer(0 <= prio);
+        infer(prio < PRIORITY_MAX());
+action : left_erase(0);
+         left_add(store_priority_ready_bucket(rrr_ready_bucket_head(table, prio), Znth{list{DL_Node{Z}}}(prio, state.orvBuckets, nil{DL_Node{Z}})));
+         left_add(store_rrr_vector_except(table, prio, Znth{list{DL_Node{Z}}}(prio, state.orvBuckets, nil{DL_Node{Z}}), state));
+
+id : 16
+priority : core(3)
+left : store_priority_ready_bucket(rrr_ready_bucket_head(?table, ?prio), ?nodes) at 0
+right : store(field_addr(?base, SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode), ?v) at 1
+check : infer(base == field_addr(table, OsAssignReadyVector, priority_ready_vector) + prio * sizeof(struct SysDoubleLinklistNode));
+action : left_erase(0);
+         right_erase(1);
+         left_exist_add(first : Z);
+         left_add(store_ready_dll_head_frame(rrr_ready_bucket_head(table, prio), nodes, first));
+         right_add(v == first);
+
+
+id : 17
+priority : core(2)
+left : assign_ready_pending(?sg, ?st) at 0
+right : store(field_addr(pointer_offset(field_addr(?table, OsAssignReadyVector, priority_ready_vector), ?prio, struct SysDoubleLinklistNode), SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode), ?value) at 1
+check : infer(table == assign_ready_vector_addr(sg));
+action : left_erase(0);
+         left_add(assign_ready_published(st));
+         left_add(store_os_assign_ready_vector(assign_ready_vector_addr(sg), assignReadyVector(os_assign(st))));
+
+
+// The scan cutpoint requests the entire scalar group explicitly. This rule
+// requires all six slots, so an individual C read cannot unfold the group.
+id : 18
+priority : core(2)
+left : task_fields(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : store_task_status(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), tsmStat(tdSchedMember(desc))) at 2
+        store(field_addr(field_addr(q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, advance_cnt), U8, tsmAdvanceCnt(tdSchedMember(desc))) at 3
+        store(field_addr(field_addr(q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8, tsmCurPrio(tdSchedMember(desc))) at 4
+        store(field_addr(field_addr(q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, origin_timeslice), U32, tsmOriginTimeslice(tdSchedMember(desc))) at 5
+        store(field_addr(field_addr(q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, rest_timeslice), U32, tsmRestTimeslice(tdSchedMember(desc))) at 6
+        store(field_addr(field_addr(q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, bitmap_column), U32, tsmBitmapColumn(tdSchedMember(desc))) at 7
+check : infer(q == task);
+action : left_erase(0); right_erase(2); right_erase(3); right_erase(4);
+         right_erase(5); right_erase(6); right_erase(7);
+         left_add(task_fields_except_sched(sg, st, task, desc));

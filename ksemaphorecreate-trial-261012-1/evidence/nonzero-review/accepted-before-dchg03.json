@@ -1,0 +1,30 @@
+{
+  "accepted_at_utc": "2026-10-12T06:58:00.683783+00:00",
+  "basis": "User one-time automatic acceptance of independent review-passed revisions, plus explicit DCHG-20261012-01 authorization",
+  "source_revision": "source-r2-0c50c37013e9",
+  "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+  "predicate_revision": "predicate-r5-0a139d64743c",
+  "predicate_manifest": "0a139d64743cce8000b0910d7880d6c5a0bf89147b730665aa6ebefbfb45585a",
+  "predicate_reviewer": "source_analysis",
+  "predicate_status": "review-passed",
+  "spec_revision": "spec-r4-9f3ebc915b99",
+  "spec_manifest": "9f3ebc915b995fc8655bab8014878df4648f3dca6602cef7d65b936714274c48",
+  "spec_author": "spec_author",
+  "spec_reviewer": "/root",
+  "spec_status": "review-passed",
+  "domain": "entry scheduler_lock_nest < 65535; deeper entries excluded",
+  "trusted": [
+    "x_malloc",
+    "x_free",
+    "memset",
+    "DisableLocalInterrupt",
+    "EnableLocalInterrupt",
+    "KPrintf"
+  ],
+  "implementation_verified": false,
+  "spec_review": ".docs/Report/2026-10-12-3-spec-review.md",
+  "predicate_review": ".docs/Report/2026-10-12-5-predicate-review.md",
+  "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15",
+  "compiler": "/home/xinra/.opam/pv-bench-8.20.1/bin/coqc",
+  "framework": "official Rocq Arch32 LittleEndian, explicit trial shared/framework candidates"
+}

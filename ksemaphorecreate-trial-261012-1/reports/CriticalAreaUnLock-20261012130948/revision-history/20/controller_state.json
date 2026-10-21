@@ -1,0 +1,191 @@
+{
+  "schema_version": 4,
+  "generation": 20,
+  "run_id": "CriticalAreaUnLock-20261012130948",
+  "case": "CriticalAreaUnLock",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1",
+  "run_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/CriticalAreaUnLock-20261012130948",
+  "report_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/CriticalAreaUnLock-20261012130948",
+  "target_files": {
+    "c_file": "annotated_C/src/CriticalAreaUnLock.c",
+    "formal_directory": "VC",
+    "formal_case_lib": "VC/CriticalAreaUnLock_lib.v",
+    "goal_file": "VC/CriticalAreaUnLock_goal.v",
+    "proof_auto_file": "VC/CriticalAreaUnLock_proof_auto.v",
+    "proof_manual_file": "VC/CriticalAreaUnLock_proof_manual.v",
+    "goal_check_file": "VC/CriticalAreaUnLock_goal_check.v",
+    "case_name": "CriticalAreaUnLock",
+    "active_case_theory": "CRTOS_Verify.VC"
+  },
+  "problem_context": {
+    "problem_statement": "Verify CRTOS KSemaphoreCreate under the accepted source/config and predicates/specs.\nAuthoritative accepted inputs: evidence/accepted-revisions.json.\nSource: source-r2-0c50c37013e9, Cortex-M3 Thumb ILP32, STM32F103 nano, non-SMP.\nPredicate: predicate-r3-16b6ee4a4e02, independently review-passed.\nSpec: spec-r2-6d54bb88379e, independently review-passed.\nDomain: entry scheduler_lock_nest < 65535, explicitly authorized by user.\nPreserve ordinary nested calls and exact caller IRQ/heap ownership.\n\nThe complete required non-trusted closure has nine unique canonical active bodies:\nannotated_C/src/KSemaphoreCreate.c\nannotated_C/src/_SemaphoreCreate.c\nannotated_C/src/CriticalAreaLock.c\nannotated_C/src/CriticalAreaUnLock.c\nannotated_C/src/IdInsertObj.c\nannotated_C/src/AllocId.c\nannotated_C/src/InsertObj.c\nannotated_C/src/InitDoubleLinkList.c\nannotated_C/src/DoubleLinkListInsertNodeAfter.c\nAll canonical contracts and caller-local API copies are frozen accepted inputs.\nOnly these six C symbols are trusted, with the existing reviewed contracts:\nx_malloc, x_free, memset, DisableLocalInterrupt, EnableLocalInterrupt, KPrintf.\nDeclaration contracts do not constitute verified callee bodies.\n\nAbsolutely do not read, enumerate, search, copy, import, or depend on any file in\n/home/xinra/crtos/ksemaphorecreate-trial-260928-1.\nThis includes ancestor-root searches, load paths, proof lookup and dependency closure.\nNo other historical trial is an authorized formal/proof reference.\nDo not change root shared library definitions, authoritative C/config, or any skills.\nOnly this new trial and already authorized project path configuration may be changed.\nDo not create a second active body for a canonical symbol or a central specs header.\nDo not add axioms, parameters, Admitted/admit, placeholders, weaker postconditions,\nunjustified stronger preconditions, deleted paths or omitted VCs.\n\nThe user authorizes automatic acceptance of independently reviewed, machine-checked\npredicate/spec revisions within the approved semantics. Such changes must return to\nthe appropriate independent design review and bind new manifests before resuming.\nMaterial semantic changes require explicit user authorization. No routine phase gate\nrequires another user confirmation.\n\nMain must follow only the verification-orchestrator controller actions. If the current\ncontroller does not support this CRTOS trial layout, retain its original blocker;\ndo not improvise another implementation workflow.\nCompletion additionally requires complete closure proofs, goal checks, full coqchk,\ntrust scan, C/VC/proof integrity, and a final integrity record. Historical 172 VCs is\nonly a diagnostic baseline, never a target for deleting or weakening obligations.\n\nExplicit user exception (2026-10-12): \u5141\u8bb8\u5728\u65b0 trial \u5185\u9002\u914d controller.\nThe local controller adapter may support canonical annotated_C/src and VC paths,\nread-only existing external dependencies, and the full nine-case closure. Preserve\nall original owner, symbolic, acceptance, proof and final-check actions.",
+    "target_function": "CriticalAreaUnLock"
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "CriticalAreaUnLock",
+      "EnableLocalInterrupt"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "EnableLocalInterrupt::<default>": "With (sg : CrtosOSStable) (hs : list Z) (before : CrtosOSState) (after : CrtosOSState) Require semaphore_irq_handler_ok(level) && SemaphoreGuarantee(before, after) && SemaphoreInsideCritical(sg, hs, level, before) * SemaphoreOSInvariant(sg, after) Ensure SemaphoreOutsideCritical(sg, hs, after)",
+        "CriticalAreaUnLock::<default>": "With (sg : CrtosOSStable) (hs : list Z) (before : CrtosOSState) (after : CrtosOSState) Require semaphore_irq_handler_ok(lock) && SemaphoreGuarantee(before, semaphore_nest_decrement(after)) && SemaphoreInsideCritical(sg, hs, lock, before) * SemaphoreOSInvariant(sg, after) Ensure SemaphoreOutsideCritical(sg, hs, semaphore_nest_decrement(after))"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-10-12T05:09:48.574705Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/CriticalAreaUnLock_goal_check.vo",
+    "base_artifact_count": 163,
+    "current_source_count": 4,
+    "elapsed_seconds": 38.088816,
+    "snapshot": "verification_runs/CriticalAreaUnLock-20261012130948/dependency_plan.json"
+  },
+  "attempts": {
+    "CriticalAreaUnLock-annotation-r1": {
+      "attempt_id": "CriticalAreaUnLock-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/CriticalAreaUnLock-20261012130948",
+      "claimed_action": "deliver:CriticalAreaUnLock-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T07:46:31.167012Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T07:46:46.603108Z",
+            "finished_at": "2026-10-12T10:58:59.549405Z",
+            "elapsed_seconds": 11532.946297
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T10:58:59.549378Z",
+      "finished_at": "2026-10-12T10:58:59.720660Z"
+    },
+    "CriticalAreaUnLock-vc-checking-r1": {
+      "attempt_id": "CriticalAreaUnLock-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/CriticalAreaUnLock-vc-checking-r1",
+      "claimed_action": "deliver:CriticalAreaUnLock-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T10:59:42.762906Z",
+      "source_annotation": "CriticalAreaUnLock-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T10:59:53.755175Z",
+            "finished_at": "2026-10-12T11:02:29.555497Z",
+            "elapsed_seconds": 155.800322
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T11:02:29.555470Z",
+      "finished_at": "2026-10-12T11:02:29.587105Z"
+    },
+    "CriticalAreaUnLock-vc-proving-r1": {
+      "attempt_id": "CriticalAreaUnLock-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-12T11:02:29.587131Z",
+      "source_annotation": "CriticalAreaUnLock-annotation-r1",
+      "source_vc_checking": "CriticalAreaUnLock-vc-checking-r1",
+      "groups": {
+        "nest_resources": {
+          "status": "accepted",
+          "owner": "group-worker/CriticalAreaUnLock-vc-proving-r1:nest_resources",
+          "claimed_action": "deliver:CriticalAreaUnLock-vc-proving-r1:nest_resources:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T11:02:41.176010Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T11:02:49.148527Z",
+                "finished_at": "2026-10-12T11:18:52.410206Z",
+                "elapsed_seconds": 963.261679
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T11:18:52.410113Z",
+          "finished_at": "2026-10-12T11:20:06.152787Z"
+        },
+        "safety_and_projection": {
+          "status": "accepted",
+          "owner": "group-worker/CriticalAreaUnLock-vc-proving-r1:safety_and_projection",
+          "claimed_action": "deliver:CriticalAreaUnLock-vc-proving-r1:safety_and_projection:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T11:02:41.176029Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T11:02:49.411792Z",
+                "finished_at": "2026-10-12T11:14:14.981854Z",
+                "elapsed_seconds": 685.570062
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T11:14:14.981820Z",
+          "finished_at": "2026-10-12T11:15:21.253044Z"
+        }
+      },
+      "finished_at": "2026-10-12T11:22:14.308512Z"
+    }
+  },
+  "current": {
+    "annotation": "CriticalAreaUnLock-annotation-r1",
+    "vc-checking": "CriticalAreaUnLock-vc-checking-r1",
+    "vc-proving": "CriticalAreaUnLock-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/CriticalAreaUnLock-20261012130948",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "CriticalAreaUnLock-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-10-12T11:24:29.635071Z",
+    "files": [
+      "VC/CriticalAreaUnLock_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-10-12T11:26:43.576735Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-10-12T05:09:48.574723Z",
+  "updated_at": "2026-10-12T11:26:43.593695Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-10-12T11:26:43.576708Z"
+}

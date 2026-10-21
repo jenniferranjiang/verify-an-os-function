@@ -1,0 +1,59 @@
+{
+  "controller_adaptation": "Completed: real CRTOS inputs accepted; both runs passed final-check and reached done.",
+  "run_ids": {
+    "_SemaphoreCreate": "SemaphoreCreate-20261021190017",
+    "KSemaphoreCreate": "KSemaphoreCreate-20261021190059"
+  },
+  "generated_top_level_vcs": {
+    "_SemaphoreCreate": 41,
+    "KSemaphoreCreate": 4
+  },
+  "source_audit": "checks/design-audit.json passed with exact authorized normalizations",
+  "native_build": "checks/controller-native-build-check.json",
+  "auto_coverage": "evidence/controller-auto-coverage-check.json",
+  "proof_status": "Both requested functions have complete modular implementation proofs under current contracts and the existing TrustBase.",
+  "helper_implementation_proofs": "User identifies current trial; corresponding implementation completion records not located. Current helper contracts are used; no helper reproofs requested or performed.",
+  "wrapper_group_checks": "Both groups accepted; parent compile, final-apply, and final-check passed.",
+  "semaphore_vc_check": "Round 2 accepted: all 41 top-level VCs covered by 9 groups.",
+  "editor_paths": "Root .vscode/settings.json vsrocq.args synchronized to current trial _CoqProject; previous settings saved in checks.",
+  "wrapper_status": "done; all 4 VCs proved, parent compile, publication and final independent symbolic replay passed",
+  "wrapper_final_state": "reports/KSemaphoreCreate-20261021190059/controller_state.json",
+  "semaphore_current_issue": null,
+  "semaphore_group_status": {
+    "raw_open": "accepted",
+    "publish": "accepted",
+    "list_prepare": "accepted",
+    "entry_calls": "accepted",
+    "critical_cleanup": "accepted",
+    "returns": "accepted",
+    "safety_entry": "accepted",
+    "safety_alloc": "accepted",
+    "safety_locked": "accepted"
+  },
+  "repair_candidate": "Resolved by annotation-r2; see repair_applied and checks/sizeof-constant-fold-evidence.json.",
+  "semaphore_current_round": "SemaphoreCreate-vc-proving-r2",
+  "semaphore_first_round_summary": "6 groups accepted; 3 annotation-gap reports collected; all owners stopped before retry",
+  "repair_applied": "Preserved existing allocation/DLL nonzero facts in body assertions; two sizeof arguments folded to 32 under fresh real/slice ABI checks; case-lib imports prepared for helpers.",
+  "semaphore_annotation_r2": "accepted; symbolically regenerated and native dependency build passed",
+  "semaphore_status": "done; all 41 top-level VCs covered, all 9 groups accepted, merged parent compile, final-apply and fresh symbolic final-check passed",
+  "semaphore_final_state": "reports/SemaphoreCreate-20261021190017/controller_state.json",
+  "proof_files": {
+    "_SemaphoreCreate": "VC/SemaphoreCreate_proof_manual.v",
+    "KSemaphoreCreate": "VC/KSemaphoreCreate_proof_manual.v"
+  },
+  "final_checks": {
+    "_SemaphoreCreate": {
+      "status": "passed",
+      "checked_at": "2026-10-21T13:32:13.598499Z",
+      "errors": [],
+      "cleanup_removed_count": 0
+    },
+    "KSemaphoreCreate": {
+      "status": "passed",
+      "checked_at": "2026-10-21T11:25:31.571382Z",
+      "errors": [],
+      "cleanup_removed_count": 0
+    }
+  },
+  "scope": "Only _SemaphoreCreate and KSemaphoreCreate implementation proofs were performed. Current 261019-3 helper contracts were reused. This report does not assert verification of helper C bodies without their matching proof records."
+}

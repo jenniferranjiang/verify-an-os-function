@@ -1,0 +1,34 @@
+{
+  "groups": [
+    {
+      "id": "entry_views",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_CriticalAreaLock_entail_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CriticalAreaLock_entail_wit_1_split_goal_1": "Unfold the split definition and introduce before, hs, sg, retval, current and PreH1..3. P owns InsideCritical ** OSInvariant and Q is only pure CrtosOSValid current. Obtain this pure fact directly from the second conjunct of PreH2 : SemaphoreRely hs before current (unfold SemaphoreRely in a copy of PreH2), then pure introduction/entailer. Alternatively extract it using SemaphoreOSInvariant_valid. No existential, address conversion or protocol transition is required; do not unfold or duplicate the inside token.",
+            "proof_of_CriticalAreaLock_entail_wit_1_split_goal_spatial": "Unfold the split definition and introduce quantified inputs. Frame the unchanged SemaphoreInsideCritical sg hs retval current and apply accepted SemaphoreOSInvariant_split_nest sg current to the single owned invariant. It exposes the identical global KTaskOsAssignLockNest UShort cell with current.scheduler_lock_nest plus SemaphoreCriticalFrame sg current. Drop the extra pure valid conjunct and reassociate separation with entailer. No existential or state update is needed; retain the same inside token and the exact heap frame."
+          }
+        },
+        {
+          "name": "proof_of_CriticalAreaLock_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole goal, introduce before, hs, sg and PreH1. P and Q have exactly the same SemaphoreOutsideCritical sg hs before resource; introduce the pure conjunction using the already supplied PreH1 : before.scheduler_lock_nest < 65535 and reflexive resource entailment/entailer. No allocation, existential, helper, protocol step or alteration of the domain is needed. Prove this witness independently to Qed; do not reuse the raw auto module admitted witness."
+        }
+      ]
+    },
+    {
+      "id": "return_increment",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of_CriticalAreaLock_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole definition; its two disjuncts are identical, so select one and introduce before, hs, sg, current_2, lock and PreH1..4. Preserve PreH2 intact and derive current_2.scheduler_lock_nest < 65535 using SemaphoreRely_preserves_create_domain with PreH2 and PreH3; derive the lower bound 0 <= current_2.scheduler_lock_nest from PreH4 (CrtosOSValid). Thus 0 <= n+1 < 65536, including n=65534. Normalize unsigned_last_nbits (n+1) 16 to n+1 via its exact modulo definition and Z.mod_small/int_auto. Instantiate the result existential with current_2, not the incremented state; the inside token and Rely are indexed by the pre-increment protected observation. Reintroduce the pure CrtosOSValid current_2 and use accepted SemaphoreOSInvariant_merge_increment sg current_2 under the unchanged SemaphoreInsideCritical frame. Its premise is exactly the physical UShort cell n+1 ** SemaphoreCriticalFrame sg current_2, and its conclusion is OSInvariant sg (semaphore_nest_increment current_2). Supply handler_ok/Rely from PreH1/PreH2 and finish by separation reassociation/cancellation. No new STS step occurs here: the C write changes only physical nest and the protected token remains at current_2. No new helper is allowed because formal_case_lib is absent."
+        }
+      ]
+    }
+  ]
+}

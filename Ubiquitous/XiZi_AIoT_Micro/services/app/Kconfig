@@ -1,0 +1,25 @@
+mainmenu "XiZi_AIoT Project Configuration"
+
+config BSP_DIR
+    string
+    option env="BSP_ROOT"
+    default "."
+
+config KERNEL_DIR
+    string
+    option env="KERNEL_ROOT"
+    default "../.."
+
+config BOARD_IMX6Q_SABRELITE
+    bool
+    select  ARCH_ARM
+    default y
+
+source "$KERNEL_DIR/hardkernel/arch/Kconfig"
+
+menu "imx6q sabrelite feature"
+
+endmenu
+
+
+source "$KERNEL_DIR/Kconfig"

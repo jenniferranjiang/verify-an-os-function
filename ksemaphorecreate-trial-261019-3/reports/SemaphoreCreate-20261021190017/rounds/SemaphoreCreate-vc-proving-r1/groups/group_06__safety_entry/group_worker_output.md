@@ -1,0 +1,1 @@
+Completed safety witnesses 1–5 using the required LLM_pre_process route and integer automation. No helper or semantic input changes. Forbidden lemma scan had no matches. Controller group-check exited 0 with status passed (81.803279 seconds). All writes are complete.

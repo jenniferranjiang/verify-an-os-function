@@ -1,0 +1,142 @@
+{
+  "groups": [
+    {
+      "id": "manager_open",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_InsertObj_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern H (agent_output.md). Unfold the whole disjunction and choose its second alternative. Open store_idmanager_allocated_unlinked and store_sem_id_detached under OSHeap: preserve four manager cells, allocated bitmap, old buckets, node id and exact prev/next cells. Extract min-free/idbuckets_ok and detached p/link nonzero; choose x_2=next and x=previous. Bounds 0<=id<=65535 and hoffset<=65535 follow from owned UShort cells (or bitmap idmax bounds plus min-free); positive hoffset comes from idbuckets_ok. Transport the exact cells through OSHeap, reorder/cancel all resources. No state transition, no new helper."
+        },
+        {
+          "name": "proof_of_InsertObj_entail_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Patterns H/B. Frame all manager, bitmap and detached-node cells. Set index=id mod hoffset(sm), prove 0<=index<Zlength(idbuckets before) from hoffset>0 and idbuckets_ok length. Lift store_idbuckets_split, obtaining selected bucket=Znth index old_buckets nil and store_idbuckets_except. Lift store_idbucket_cases; eliminate its spatial disjunction, choosing the corresponding target spatial alternative separately. For BSS use bucket=nil and head<>0 with exact zero cells; for initialized case instantiate the extracted hn,hp,bucket and retain idnodes_nonzero and idnodes_dllseg. Both branches obtain head<>0 from the accepted representation, never from address arithmetic or field ownership. Keep link<>0 and all existing pure facts."
+        }
+      ]
+    },
+    {
+      "id": "bucket_insert_ready",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of_InsertObj_entail_wit_3_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_InsertObj_entail_wit_3_1_split_goal_1": "Pattern E. P has only OSHeap bitmap and bucket-except resources; Q is idnodes_nonzero bucket_2. Substitute PreH13 bucket_2=nil, unfold idnodes_nonzero/idnodes_to_dll/dll_nodes_nonzero, prove Forall nil. Pure consequence needs no existential or resource transformation.",
+            "proof_of_InsertObj_entail_wit_3_1_split_goal_spatial": "Pattern E/H. Rewrite target Znth bucket with PreH3 and then PreH13=nil. Frame/cancel OSHeap bitmap and bucket-except. The new OSHeap dllseg_shift_rev store_idnode head head [] is emp with reflexive head=head; insert that empty spatial unit via the heap lift. No witness, bound or transition beyond the unchanged empty bucket."
+          }
+        },
+        {
+          "name": "proof_of_InsertObj_entail_wit_3_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_InsertObj_entail_wit_3_2_split_goal_spatial": "Pattern B/H. Rewrite target selected bucket using PreH4. Frame OSHeap bitmap and bucket-except. Convert native head.prev|->hp into the Task heap representation within the combined OSHeap; apply DLL.dllseg_to_dllseg_shift_rev with x=hn,px=head,y=head,py=hp,l=idnodes_to_dll bucket_2 after unfolding idnodes_dllseg. This consumes the old head.prev cell and ordinary dllseg, producing hn.prev|->head and shifted reverse segment. Transport the pointer cell back to the current OS carrier. Works also for an initialized empty bucket. Nonzero and abstract bucket metadata remain assumptions; no new witness/helper."
+          }
+        }
+      ]
+    },
+    {
+      "id": "final_result",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_InsertObj_return_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_InsertObj_return_wit_1_split_goal_spatial": "Patterns H/R. Let idx=id mod hoffset(sm), node=Build_IdNodeAbs id idnode_pre, new_bucket=node::bucket. Fold store_idnode for node from its exact UShort id cell, idnode_pre<>0 and reflexive link equality; normalize nested field addresses. Combine the four insertion-result pointer cells with shifted reverse old bucket by DLL.dllseg_shift_rev_contact_a, then DLL.dllseg_shift_rev_to_dllseg (x=new link,px=head,y=head) to obtain the circular segment and final head.prev cell. Its tail address is nonzero: prove the endpoint fact inside this proof by induction on the represented list, using head<>0 at nil and Forall link-nonzero at cons; new node nonzero is PreH4 and old nodes are PreH6. Fold store_idnodes head new_bucket. Apply lifted store_idbuckets_replace at idx with PreH5 and modulo nonnegativity, preserving all untouched buckets and bitmap. For the target store_idmanager pure invariant prove locally idbuckets_ok idmax hoffset (id::old_ids) (replace_Znth idx new_bucket old_buckets). Obtain in-range idx from old length and positive hoffset; min-free gives 0<=id<idmax and fresh id via id_in_ids_false_iff. Old global permutation makes id absent from every old bucket. Decompose old_buckets as prefix++bucket::suffix using bucket-except (Zlength prefix=idx); replacement becomes prefix++new_bucket::suffix. Preserve total length, all untouched Forall facts and recursive bucket indices; extend selected bucket range/NoDup/address-nonzero using freshness and idnode_pre<>0. Its hash index follows idx=id mod hoffset. Map/concat over the decomposition and move the newly prepended id across the prefix using Permutation_app/Permutation_middle, then compose old permutation to id::old_ids. Fold target idmanager_link(sm,idmanager_add(before,id),id,idnode_pre); manager fields and already allocated bitmap cancel exactly. This is the only abstract transition, with old buckets becoming their selected-bucket prepend. No helper declarations: all needed induction/transition facts must be assertions inside the assigned proof because formal_case_lib is absent."
+          }
+        }
+      ]
+    },
+    {
+      "id": "call_preconditions",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InsertObj_partial_solve_wit_1_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P. For InitDoubleLinkList, P includes local pointer cells and complete empty-bucket frame; Q is head=head and head<>0. Reflexivity and PreH2 discharge the pure goal. No spatial rewrite, witness or transition."
+        },
+        {
+          "name": "proof_of_InsertObj_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P. Introduce the pure-premise implication then unfold the aux obligation; do not rely on another assigned proof. Retain all listed pure facts from PreH1..13, add head=head and head<>0, and weaken the two exact head prev/next zero stores to typed undef stores. Reorder/cancel every manager, bitmap, node and bucket-except resource. No extra resource or existential is required."
+        },
+        {
+          "name": "proof_of_InsertObj_partial_solve_wit_2_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P. For insertion call, its three required nonzero facts are precisely PreH2 (head), PreH4 (new embedded link) and PreH3 (successor). P includes unchanged local cells and insertion-ready heap; derive the pure conjunction directly, with no address-layout inference."
+        },
+        {
+          "name": "proof_of_InsertObj_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P. Introduce the pure-premise implication and prove the aux obligation directly from PreH1..14. Target has precisely the same head.next, successor.prev, detached link undef cells, manager fields, bitmap, node id, bucket-except and shifted-reverse resources; reorder and cancel. Preserve all pure facts including link<>0 and idnodes_nonzero, without using sibling proofs."
+        }
+      ]
+    },
+    {
+      "id": "entry_safety",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_InsertObj_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S. P has local manager/idnode pointers and two OSHeap representations. Q is INT_MIN<=0<=INT_MAX, a closed Arch32 integer fact; introduce variables and discharge by integer bounds, without changing resources."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S. PreH1 manager_pre=0 contradicts PreH2 manager_pre<>0. Eliminate the inconsistent pure context to prove the False entailment; no resource inference."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S. Same unchanged entry heap as safety_1; Q is the same closed INT_MIN<=0<=INT_MAX fact, prove directly."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S. Same entry heap and closed integer-constant bounds as safety_1, prove directly."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S. PreH1 idnode_pre=0 contradicts PreH4 idnode_pre<>0; eliminate contradiction to prove False."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S. Same entry heap and closed integer-constant bounds as safety_1; no predicate unfolding required."
+        }
+      ]
+    },
+    {
+      "id": "bucket_safety",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_InsertObj_safety_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S. P retains the complete opened manager/node/bucket heap and head local. Positive hoffset in PreH8 gives hoffset<>0 and hoffset<>-1, discharging both remainder safety clauses irrespective of the INT_MIN disjunct. Pure arithmetic only."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S. Initialized bucket branch, with exact hp/hn cells and dllseg framed: Q is closed INT_MIN<=0<=INT_MAX. Prove directly."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S. BSS bucket branch, with exact zero head cells framed: Q is closed INT_MIN<=0<=INT_MAX. Prove directly."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S. PreH1 hp=0 contradicts PreH14 hp<>0 in the initialized branch. Eliminate pure contradiction to prove False; do not infer an address fact."
+        }
+      ]
+    }
+  ]
+}

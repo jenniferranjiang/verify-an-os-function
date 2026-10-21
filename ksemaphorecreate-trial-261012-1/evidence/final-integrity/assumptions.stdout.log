@@ -1,0 +1,1400 @@
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.rvalue_expr_equiv_trans :
+  forall x y z : CNotation.rvalue_expr,
+  CNotation.rvalue_expr_equiv x y ->
+  CNotation.rvalue_expr_equiv y z -> CNotation.rvalue_expr_equiv x z
+CNotation.rvalue_expr_equiv_sym :
+  forall x y : CNotation.rvalue_expr,
+  CNotation.rvalue_expr_equiv x y -> CNotation.rvalue_expr_equiv y x
+CNotation.rvalue_expr_equiv_refl :
+  forall x : CNotation.rvalue_expr, CNotation.rvalue_expr_equiv x x
+CNotation.rvalue_expr_equiv :
+  CNotation.rvalue_expr -> CNotation.rvalue_expr -> Prop
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr_congr :
+  Morphisms.Proper (Morphisms.respectful CNotation.rvalue_expr_equiv eq)
+    CNotation.eval_addr_expr
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+CrtosOSProtocol.Crtos_C_Rules.eval_addr :
+  forall (R : CNotation.rvalue_expr) (t : CNotation.front_end_type),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_const (CNotation.eval_addr_expr R) t) R
+CrtosOSProtocol.Crtos_C_Rules.addr_of_arrow_field :
+  forall (L : CNotation.lvalue_expr) (x : String.string),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_addr_of (CNotation.LE_dot_field L x))
+    (CNotation.RE_addr_of
+       (CNotation.LE_arrow_field (CNotation.RE_addr_of L) x))
+CNotation.RE_addr_of_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       CNotation.rvalue_expr_equiv) CNotation.RE_addr_of
+CNotation.LE_arrow_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.rvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_arrow_field
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+CNotation.addr_of_LE_var_not_zero :
+  forall x : String.string,
+  CNotation.eval_addr_expr (CNotation.RE_addr_of (CNotation.LE_var x)) <>
+  BinNums.Z0
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.rvalue_expr_equiv_trans :
+  forall x y z : CNotation.rvalue_expr,
+  CNotation.rvalue_expr_equiv x y ->
+  CNotation.rvalue_expr_equiv y z -> CNotation.rvalue_expr_equiv x z
+CNotation.rvalue_expr_equiv_sym :
+  forall x y : CNotation.rvalue_expr,
+  CNotation.rvalue_expr_equiv x y -> CNotation.rvalue_expr_equiv y x
+CNotation.rvalue_expr_equiv_refl :
+  forall x : CNotation.rvalue_expr, CNotation.rvalue_expr_equiv x x
+CNotation.rvalue_expr_equiv :
+  CNotation.rvalue_expr -> CNotation.rvalue_expr -> Prop
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr_congr :
+  Morphisms.Proper (Morphisms.respectful CNotation.rvalue_expr_equiv eq)
+    CNotation.eval_addr_expr
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+CrtosOSProtocol.Crtos_C_Rules.eval_addr :
+  forall (R : CNotation.rvalue_expr) (t : CNotation.front_end_type),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_const (CNotation.eval_addr_expr R) t) R
+CrtosOSProtocol.Crtos_C_Rules.addr_of_arrow_field :
+  forall (L : CNotation.lvalue_expr) (x : String.string),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_addr_of (CNotation.LE_dot_field L x))
+    (CNotation.RE_addr_of
+       (CNotation.LE_arrow_field (CNotation.RE_addr_of L) x))
+CNotation.RE_addr_of_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       CNotation.rvalue_expr_equiv) CNotation.RE_addr_of
+CNotation.LE_arrow_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.rvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_arrow_field
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr_congr :
+  Morphisms.Proper (Morphisms.respectful CNotation.rvalue_expr_equiv eq)
+    CNotation.eval_addr_expr
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+CrtosOSProtocol.Crtos_C_Rules.eval_addr :
+  forall (R : CNotation.rvalue_expr) (t : CNotation.front_end_type),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_const (CNotation.eval_addr_expr R) t) R
+CNotation.RE_addr_of_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       CNotation.rvalue_expr_equiv) CNotation.RE_addr_of
+CNotation.LE_arrow_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.rvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_arrow_field
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.rvalue_expr_equiv_trans :
+  forall x y z : CNotation.rvalue_expr,
+  CNotation.rvalue_expr_equiv x y ->
+  CNotation.rvalue_expr_equiv y z -> CNotation.rvalue_expr_equiv x z
+CNotation.rvalue_expr_equiv_sym :
+  forall x y : CNotation.rvalue_expr,
+  CNotation.rvalue_expr_equiv x y -> CNotation.rvalue_expr_equiv y x
+CNotation.rvalue_expr_equiv_refl :
+  forall x : CNotation.rvalue_expr, CNotation.rvalue_expr_equiv x x
+CNotation.rvalue_expr_equiv :
+  CNotation.rvalue_expr -> CNotation.rvalue_expr -> Prop
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr_congr :
+  Morphisms.Proper (Morphisms.respectful CNotation.rvalue_expr_equiv eq)
+    CNotation.eval_addr_expr
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+CrtosOSProtocol.Crtos_C_Rules.eval_addr :
+  forall (R : CNotation.rvalue_expr) (t : CNotation.front_end_type),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_const (CNotation.eval_addr_expr R) t) R
+CrtosOSProtocol.Crtos_C_Rules.addr_of_arrow_field :
+  forall (L : CNotation.lvalue_expr) (x : String.string),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_addr_of (CNotation.LE_dot_field L x))
+    (CNotation.RE_addr_of
+       (CNotation.LE_arrow_field (CNotation.RE_addr_of L) x))
+CNotation.RE_addr_of_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       CNotation.rvalue_expr_equiv) CNotation.RE_addr_of
+CNotation.LE_arrow_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.rvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_arrow_field
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr

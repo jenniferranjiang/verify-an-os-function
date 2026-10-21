@@ -1,0 +1,1 @@
+Adapted the previous round group_01__open_close entail_wit_2 proofs to the current entail_wit_3 statements. Freshness uses the same separated duplicate value-cell contradiction, factored into fresh_semaphore__raw_open. Added current DLL nonzero extraction and current raw NodeStorage nonzero extraction. Current group checks determine compatibility.

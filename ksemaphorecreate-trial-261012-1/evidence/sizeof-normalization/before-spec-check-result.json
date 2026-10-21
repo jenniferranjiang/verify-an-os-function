@@ -1,0 +1,147 @@
+{
+  "status": "checks-passed-awaiting-independent-spec-delta-review",
+  "predicate_revision": "predicate-nonzero-candidate-fe8c4261db5c",
+  "predicate_manifest_sha256": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+  "source_revision": "source-r2-0c50c37013e9",
+  "current_authoritative_source_hashes_checked": 47,
+  "spec_revision": "spec-r5-480669e8557a",
+  "annotated_manifest_sha256": "480669e8557a5f09a7683b69c5de2b087857f93649ef9c6729096df1c6a8b3cf",
+  "source_check_result_sha256": "798a370a8b3644afc97ff085a57766b82763966a26461c16b0dec207d159f6f8",
+  "source_equivalence": "token equality after documented normalizations against current-source preprocessing",
+  "checks": {
+    "AllocId": {
+      "source_token_equivalent": true,
+      "direct_calls": [
+        "KPrintf"
+      ],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "CriticalAreaLock": {
+      "source_token_equivalent": true,
+      "direct_calls": [
+        "DisableLocalInterrupt"
+      ],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "CriticalAreaUnLock": {
+      "source_token_equivalent": true,
+      "direct_calls": [
+        "EnableLocalInterrupt"
+      ],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "DoubleLinkListInsertNodeAfter": {
+      "source_token_equivalent": true,
+      "direct_calls": [],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "IdInsertObj": {
+      "source_token_equivalent": true,
+      "direct_calls": [
+        "AllocId",
+        "InsertObj",
+        "KPrintf"
+      ],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "InitDoubleLinkList": {
+      "source_token_equivalent": true,
+      "direct_calls": [],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "InsertObj": {
+      "source_token_equivalent": true,
+      "direct_calls": [
+        "DoubleLinkListInsertNodeAfter",
+        "InitDoubleLinkList",
+        "KPrintf"
+      ],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "KSemaphoreCreate": {
+      "source_token_equivalent": true,
+      "direct_calls": [
+        "_SemaphoreCreate"
+      ],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "_SemaphoreCreate": {
+      "source_token_equivalent": true,
+      "direct_calls": [
+        "CriticalAreaLock",
+        "CriticalAreaUnLock",
+        "DoubleLinkListInsertNodeAfter",
+        "IdInsertObj",
+        "InitDoubleLinkList",
+        "memset",
+        "x_free",
+        "x_malloc"
+      ],
+      "api_complete": true,
+      "unique_active_body": true
+    }
+  },
+  "nontrusted": [
+    "AllocId",
+    "CriticalAreaLock",
+    "CriticalAreaUnLock",
+    "DoubleLinkListInsertNodeAfter",
+    "IdInsertObj",
+    "InitDoubleLinkList",
+    "InsertObj",
+    "KSemaphoreCreate",
+    "_SemaphoreCreate"
+  ],
+  "trusted": [
+    "DisableLocalInterrupt",
+    "EnableLocalInterrupt",
+    "KPrintf",
+    "memset",
+    "x_free",
+    "x_malloc"
+  ],
+  "all_caller_contracts_identical": true,
+  "trusted_declaration_delta": {
+    "DisableLocalInterrupt": "caller-stack parameter only; semantics accepted in bound predicate revision",
+    "EnableLocalInterrupt": "caller-stack parameter only; semantics accepted in bound predicate revision",
+    "memset": "byte-identical contract",
+    "x_malloc": "byte-identical contract",
+    "x_free": "byte-identical contract",
+    "KPrintf": "byte-identical contract"
+  },
+  "current_c_syntax_and_slice_layout": "passed",
+  "current_c_compiler_target": "native ILP32 gcc -m32",
+  "current_arm_compile": false,
+  "cortex_m3_abi_evidence": "reused unchanged current-source ARM evidence; temporary ARM compiler no longer installed",
+  "source_abi_assembly_sha256": "a65cefb3ec420b8ec4c7c5c75ad53ad0cec9bfb3d8dab0c6f492069b3d18d834",
+  "command": [
+    "gcc",
+    "-m32",
+    "-std=gnu11",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-Wall",
+    "-Wextra",
+    "-fsyntax-only",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/AllocId.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/CriticalAreaLock.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/CriticalAreaUnLock.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/IdInsertObj.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/InitDoubleLinkList.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/InsertObj.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/KSemaphoreCreate.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/_SemaphoreCreate.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-layout-check.c"
+  ],
+  "qcp_started": false,
+  "elapsed_seconds": 0.3051918810015195
+}

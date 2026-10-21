@@ -1,0 +1,51 @@
+{
+    "device_id": 1,
+    "device_name": "ABB_PM5630",
+	"communication_type": 0,
+    "socket_config": {
+        "plc_ip": "192.168.250.32",
+		"local_ip": "192.168.250.58",
+        "gateway": "192.168.250.1",
+		"netmask": "255.255.255.0",
+        "port": 502
+    },
+    "protocol_type": 2,
+    "read_period": 100,
+    "read_item_list": [
+        {
+            "value_name": "MW0",
+            "value_type": 3,
+            "function_code": 3,
+            "start_address": 0,
+            "quantity": 1
+        },
+        {
+            "value_name": "MW1",
+            "value_type": 3,
+            "function_code": 3,
+            "start_address":1,
+            "quantity": 1
+        },
+        {
+            "value_name": "MW10",
+            "value_type": 3,
+            "function_code": 3,
+            "start_address": 10,
+            "quantity": 1
+        },
+		{
+            "value_name": "MD20_1",
+            "value_type": 3,
+            "function_code": 3,
+            "start_address":20,
+            "quantity": 1
+        },
+		{
+            "value_name": "MD20_2",
+            "value_type": 3,
+            "function_code": 3,
+            "start_address":21,
+            "quantity": 1
+        }
+    ]
+}

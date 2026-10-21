@@ -1,0 +1,106 @@
+# Group worker handoff
+
+Read `/home/xinra/qcp-binary-democases/.agents/skills/group-worker-proving/SKILL.md` and its required workflow documents completely. Use this assignment without relying on a parent transcript or current sibling output.
+
+- Group: `unreachable_checks`; difficulty hint: 1/5.
+- Copied manual: `/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/IdInsertObj-20261012130948/IdInsertObj-vc-proving-r1/groups/group_04__unreachable_checks/IdInsertObj_proof_manual.v`.
+- Editable proof spans: `proof_of_IdInsertObj_safety_wit_3`, `proof_of_IdInsertObj_safety_wit_6`, `proof_of_IdInsertObj_safety_wit_10`.
+- Protected LLM split blocks (keep generated Proof/Abort tokens): none.
+- Statements, declaration order, prelude and all unassigned proof tokens remain fixed. Formatting is ignored.
+No case library exists: do not create helpers, imports, or a library.
+
+The current accepted predicate sources listed in `/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/predicate-manifest.json`
+and their formal dependencies are read-only semantic inputs. Read their definitions
+and existing lemmas as needed; do not edit them. Never access historical CRTOS trials.
+
+### `proof_of_IdInsertObj_safety_wit_3` — `LLM_pre_process`
+
+Unfold the whole safety goal and introduce all binders. Q is False: PreH1 manager_pre = 0 contradicts PreH2 manager_pre <> 0. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper.
+### `proof_of_IdInsertObj_safety_wit_6` — `LLM_pre_process`
+
+Unfold the whole safety goal and introduce all binders. Q is False: PreH1 idnode_pre = 0 contradicts PreH3 idnode_pre <> 0. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper.
+### `proof_of_IdInsertObj_safety_wit_10` — `LLM_pre_process`
+
+Unfold the whole safety goal and introduce all binders. Q is False: PreH1 retval >= 0 and PreH2 retval = -1 contradict by lia. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper.
+
+## Helpers
+
+- None planned.
+
+## Historical references
+
+- Previous proving round: `none`.
+- Annotation history: `/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/IdInsertObj-20261012130948/annotation_history`; earlier canonical proofs may be in an attempt's `before` directory.
+- Optional human reuse note: `/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/IdInsertObj-20261012130948/rounds/IdInsertObj-vc-proving-r1/groups/group_04__unreachable_checks/proof_reuse.md`.
+
+Search relevant historical blocks when useful. The controller does not search, copy, or rename historical proofs. Decide whether to adapt them and recheck against current inputs.
+
+## Commands
+
+Use these exact argv/cwd objects. Shell-only tools may quote each argument for the actual shell; PowerShell uses `&` with single-quoted arguments and doubled embedded apostrophes. Follow the skill for proof modes, safety, and checks.
+
+```json
+{
+  "debug": {
+    "argv": [
+      "/usr/bin/python3.12",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/tools/qcp-controller/scripts/verification-orchestrator/controller.py",
+      "--main-root",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1",
+      "coq-debug",
+      "--run",
+      "IdInsertObj-20261012130948",
+      "--round",
+      "IdInsertObj-vc-proving-r1",
+      "--group",
+      "unreachable_checks"
+    ],
+    "cwd": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1"
+  },
+  "development": {
+    "argv": [
+      "/usr/bin/python3.12",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/tools/qcp-controller/scripts/verification-orchestrator/controller.py",
+      "--main-root",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1",
+      "coq-check",
+      "--run",
+      "IdInsertObj-20261012130948",
+      "--round",
+      "IdInsertObj-vc-proving-r1",
+      "--target-kind",
+      "group-development",
+      "--group",
+      "unreachable_checks"
+    ],
+    "cwd": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1"
+  },
+  "check": {
+    "argv": [
+      "/usr/bin/python3.12",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/tools/qcp-controller/scripts/verification-orchestrator/controller.py",
+      "--main-root",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1",
+      "coq-check",
+      "--run",
+      "IdInsertObj-20261012130948",
+      "--round",
+      "IdInsertObj-vc-proving-r1",
+      "--target-kind",
+      "group-check",
+      "--group",
+      "unreachable_checks"
+    ],
+    "cwd": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1"
+  }
+}
+```
+
+Debug script: `/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/IdInsertObj-20261012130948/_coq_builds/IdInsertObj-vc-proving-r1/group_04/src/.coq_debug/group_04_unreachable_checks.v`. Continue each live tool session until its actual exit. Successful checks require both exit zero and JSON status passed.
+
+## Delivery
+
+- Notes: `/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/IdInsertObj-20261012130948/rounds/IdInsertObj-vc-proving-r1/groups/group_04__unreachable_checks/group_worker_output.md`; annotation-gap requires a nonempty explanation.
+- Terminal report: `/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/IdInsertObj-20261012130948/rounds/IdInsertObj-vc-proving-r1/groups/group_04__unreachable_checks/group_worker_report.json`.
+
+Use the skill's exact completed/blocked report contract. Stop writing before main finalizes. The group directory contains only its copied manual and, when provided, group library. Finalization validates the current files.

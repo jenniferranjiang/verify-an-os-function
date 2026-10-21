@@ -1,0 +1,43 @@
+{
+  "target": "native gcc -m32, not fresh ARM",
+  "checks": [
+    {
+      "command": [
+        "gcc",
+        "-m32",
+        "-std=gnu11",
+        "-ffreestanding",
+        "-fno-builtin",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/sizeof-normalization/review/constant-argument-check.c"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "gcc",
+        "-m32",
+        "-std=gnu11",
+        "-ffreestanding",
+        "-fsyntax-only",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/source-abi.c",
+        "-I",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/source-config",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/arm/cortex-m3",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/tool/shell/letter-shell"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "initial_probe_path_error": "Reviewer probe include had one extra parent; corrected relative include. Initial source-header compilation succeeded."
+}

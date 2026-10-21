@@ -1,0 +1,10 @@
+{
+  "status": "committed",
+  "files": {
+    "proof_manual_file": {
+      "relative_path": "VC/InitDoubleLinkList_proof_manual.v",
+      "original_present": true,
+      "candidate_present": true
+    }
+  }
+}

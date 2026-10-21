@@ -1,0 +1,30 @@
+{
+  "status": "not-rerun",
+  "command_attempted": [
+    "/tmp/crtos-arm-toolchain/root/usr/bin/arm-none-eabi-gcc",
+    "-mcpu=cortex-m3",
+    "-mthumb",
+    "-DSOURCE_REQUIRE_ARM",
+    "-std=gnu11",
+    "-ffreestanding",
+    "-S",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/source-abi.c",
+    "-o",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-candidate/source-abi.s",
+    "-I",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/source-config",
+    "-I",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+    "-I",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/arm/cortex-m3",
+    "-I",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/tool/shell/letter-shell"
+  ],
+  "reason": "FileNotFoundError: original temporary ARM cross-compiler absent",
+  "compiler_exists": false,
+  "reused_frozen_evidence": {
+    "evidence/source-abi.c": "206bc62ad3a3231c8114b96f6413f694baf7860be16b9c71d142cf28b3ad7377",
+    "evidence/source-abi.s": "a65cefb3ec420b8ec4c7c5c75ad53ad0cec9bfb3d8dab0c6f492069b3d18d834",
+    "evidence/source-check-result.json": "798a370a8b3644afc97ff085a57766b82763966a26461c16b0dec207d159f6f8"
+  }
+}

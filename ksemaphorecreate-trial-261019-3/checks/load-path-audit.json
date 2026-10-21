@@ -1,0 +1,98 @@
+{
+  "status": "passed",
+  "paths": [
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/flocq/src",
+      "logical_prefix": "Flocq"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/SeparationLogic",
+      "logical_prefix": "SimpleC.SL"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/unifysl",
+      "logical_prefix": "Logic"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/sets",
+      "logical_prefix": "SetsClass"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/compcert_lib",
+      "logical_prefix": "compcert.lib"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/auxlibs",
+      "logical_prefix": "AUXLib"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/examples",
+      "logical_prefix": "SimpleC.EE"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/stdlib",
+      "logical_prefix": "SimpleC.StdLib"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/StrategyLib",
+      "logical_prefix": "SimpleC.StrategyLib"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/Common",
+      "logical_prefix": "SimpleC.Common"
+    },
+    {
+      "directory": "/home/xinra/crtos/vendor/fixedpoints",
+      "logical_prefix": "FP"
+    },
+    {
+      "directory": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/vendor/MonadLib",
+      "logical_prefix": "MonadLib"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/listlib",
+      "logical_prefix": "ListLib"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/MaxMinLib",
+      "logical_prefix": "MaxMinLib"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/GraphLib",
+      "logical_prefix": "GraphLib"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/SumLib",
+      "logical_prefix": "SumLib"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/tracelib",
+      "logical_prefix": "TraceLib"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/coq-record-update/src",
+      "logical_prefix": "RecordUpdate"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/algorithms",
+      "logical_prefix": "Algorithms"
+    },
+    {
+      "directory": "/home/xinra/qcp-binary-democases/Rocq/cdcllib",
+      "logical_prefix": "CDCLLib"
+    },
+    {
+      "directory": "/home/xinra/crtos/lib",
+      "logical_prefix": "CRTOS_Verify.lib"
+    },
+    {
+      "directory": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/shared_candidates",
+      "logical_prefix": "TrialShared"
+    },
+    {
+      "directory": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/lib",
+      "logical_prefix": "KSemaphoreCreateTrial"
+    }
+  ],
+  "policy": "Only current shared sources, approved external libraries and this trial; no historical trial or recursive workspace root mapping."
+}

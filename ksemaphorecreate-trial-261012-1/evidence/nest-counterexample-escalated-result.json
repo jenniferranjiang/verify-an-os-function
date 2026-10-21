@@ -1,0 +1,12 @@
+{
+  "command": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nest-counterexample",
+  "permission_mode": "require_escalated; automatically approved",
+  "exit_code": 0,
+  "stdout": "REPRODUCED: before=65535 after=0 id=0 value=3 primask=1\n",
+  "binary_sha256": "d4145a1b12480f33ea16725fbe892fcb80e34cc51830254f677240e3c06b70b3",
+  "harness_sha256": "b27b3d8773b6e5128c04489ac6255edb92dc4b8cd8b174d7fd68c88dd44af49e",
+  "balanced_caller_locks": true,
+  "typed_arena": "static struct Semaphore arena_object",
+  "scope": "ILP32 C diagnostic; concrete PRIMASK stubs are not a proof of formal IRQ token/rely contracts; fixed-board reachability unproved",
+  "prior_sandbox_attempt": "Earlier version encountered SIGSYS (-31); current version compiled using --build-only, then executed with approval."
+}

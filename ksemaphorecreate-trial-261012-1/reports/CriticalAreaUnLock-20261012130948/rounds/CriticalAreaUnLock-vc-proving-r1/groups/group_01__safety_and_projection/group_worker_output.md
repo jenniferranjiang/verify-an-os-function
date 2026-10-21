@@ -1,0 +1,3 @@
+Completed all four assigned witnesses using the LLM_pre_process whole-goal route. The safety bound, outside-critical identity, and pure projection close with explicit lia/assumption closers. The implication wrapper uses a second LLM_pre_process invocation to unfold and close the auxiliary target. No imports, helpers, statements, declarations, or unassigned spans were changed. No forbidden lemma or tactic was used in the assigned proofs.
+
+The exact controller group-check exited 0 with JSON status passed, recompiling the goal, staged auto, manual, and group wrapper against 163 reused verified base objects. The final successful check took 73.684676 seconds. The raw generated auto proof is not invoked by these proofs.

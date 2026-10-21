@@ -1,0 +1,79 @@
+Welcome to Coq 8.20.1
+[Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+[Loading ML file extraction_plugin.cmxs (using legacy method) ... done]
+store_ptr =
+fun (x : CNotation.addr) (v : Z) =>
+(“ isvalidptr x /\ valid_ptr_value v ” &&
+ match ptr_size with
+ | 4%nat => store_4byte x v
+ | 8%nat => store_8byte x v
+ | _ => “ False ”
+ end)%sac
+     : CNotation.addr -> Z -> model -> Prop
+
+Arguments store_ptr x v%Z_scope m
+undef_store_ptr =
+fun x : CNotation.addr =>
+(“ isvalidptr x ” &&
+ match ptr_size with
+ | 4%nat => store_4byte_noninit x
+ | 8%nat => store_8byte_noninit x
+ | _ => “ False ”
+ end)%sac
+     : CNotation.addr -> model -> Prop
+
+Arguments undef_store_ptr x m
+store_uint =
+fun (x : CNotation.addr) (v : Z) =>
+(“ isvalidptr_int x /\ v >= 0 /\ v <= Integers.Int.max_unsigned ” &&
+ store_4byte x v)%sac
+     : CNotation.addr -> Z -> model -> Prop
+
+Arguments store_uint x v%Z_scope m
+store_ushort =
+fun (x : CNotation.addr) (v : Z) =>
+(“ isvalidptr_short x /\ v >= 0 /\ v <= 65535 ” && store_2byte x v)%sac
+     : CNotation.addr -> Z -> model -> Prop
+
+Arguments store_ushort x v%Z_scope m
+store_4byte =
+fun (x : CNotation.addr) (v : Z) =>
+(EX z1 : Z,
+ EX z2 : Z,
+ EX z3 : Z,
+ EX z4 : Z,
+ “ merge_int z1 z2 z3 z4 v ” &&
+ store_byte x z1 **
+ (store_byte (x + 1) z2 ** (store_byte (x + 2) z3 ** store_byte (x + 3) z4)))%sac
+     : CNotation.addr -> Z -> Assertion
+
+Arguments store_4byte x v%Z_scope _
+store_2byte =
+fun (x : CNotation.addr) (v : Z) =>
+(EX z1 : Z,
+ EX z2 : Z,
+ “ merge_short z1 z2 v ” && store_byte x z1 ** store_byte (x + 1) z2)%sac
+     : CNotation.addr -> Z -> Assertion
+
+Arguments store_2byte x v%Z_scope _
+     = 4
+     : Z
+     = 4
+     : Z
+     = 4
+     : Z
+     = 4
+     : Z
+     = 2
+     : Z
+     = 258 = 258
+     : Prop
+     = 16909060 = 16909060
+     : Prop
+     = CNotation.sizeof_struct_type "Semaphore"
+     : Z
+*** [ CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr ]

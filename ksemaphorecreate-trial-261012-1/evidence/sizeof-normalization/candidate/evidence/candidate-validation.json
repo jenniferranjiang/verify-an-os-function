@@ -1,0 +1,179 @@
+{
+  "source_revision": "source-r2-0c50c37013e9",
+  "source_files_matched": 47,
+  "source_manifest_sha256": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+  "bound_arm_evidence": {
+    "source-abi.c": "206bc62ad3a3231c8114b96f6413f694baf7860be16b9c71d142cf28b3ad7377",
+    "source-abi.s": "a65cefb3ec420b8ec4c7c5c75ad53ad0cec9bfb3d8dab0c6f492069b3d18d834",
+    "source-check-result.json": "798a370a8b3644afc97ff085a57766b82763966a26461c16b0dec207d159f6f8",
+    "source-target-macros.txt": "5b63345e719bf9f9d398036442b8750e984d0ad2c91fce471fd4cc4337ed9577",
+    "source-config/xsconfig.h": "ad9135bd836e78b8ace5af15e88a1e7a34a0b3d723435f85c281a18d1bdc40db"
+  },
+  "current_arm_compiler_exists": false,
+  "arm_evidence_policy": "Reuse unchanged current-trial target compilation evidence; no new ARM compile claimed.",
+  "native_ilp32_source_and_slice_type_layout_checks": "passed",
+  "current_source_reextraction_matches_saved_bodies": [
+    "AllocId",
+    "CriticalAreaLock",
+    "CriticalAreaUnLock",
+    "DoubleLinkListInsertNodeAfter",
+    "IdInsertObj",
+    "InitDoubleLinkList",
+    "InsertObj",
+    "KSemaphoreCreate",
+    "_SemaphoreCreate"
+  ],
+  "predicate_manifest_sha256": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+  "predicate_source_files_matched": 21,
+  "changed_annotated_files": [
+    "src/_SemaphoreCreate.c"
+  ],
+  "all_contracts_and_proof_annotations_byte_identical": true,
+  "snapshot_file_count": 11,
+  "negative_checker_tests": [
+    {
+      "mutation": "malloc31",
+      "rejected": true,
+      "reason": "source token mismatch"
+    },
+    {
+      "mutation": "memset64",
+      "rejected": true,
+      "reason": "source token mismatch"
+    },
+    {
+      "mutation": "malloc_not_normalized",
+      "rejected": true,
+      "reason": "source token mismatch"
+    },
+    {
+      "mutation": "memset_not_normalized",
+      "rejected": true,
+      "reason": "source token mismatch"
+    },
+    {
+      "mutation": "other_sizeof",
+      "rejected": true,
+      "reason": "source token mismatch"
+    },
+    {
+      "mutation": "extra_sizeof",
+      "rejected": true,
+      "reason": "source token mismatch"
+    },
+    {
+      "mutation": "other_function",
+      "rejected": true,
+      "reason": "source token mismatch"
+    }
+  ],
+  "status": "author-checks-passed-awaiting-independent-review",
+  "commands": [
+    {
+      "command": [
+        "gcc",
+        "-m32",
+        "-std=gnu11",
+        "-ffreestanding",
+        "-fno-builtin",
+        "-fsyntax-only",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/sizeof-normalization/candidate/evidence/source-type-check.c",
+        "-I",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/source-config",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/arm/cortex-m3",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/tool/shell/letter-shell"
+      ],
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "gcc",
+        "-m32",
+        "-std=gnu11",
+        "-ffreestanding",
+        "-fno-builtin",
+        "-fsyntax-only",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/sizeof-normalization/candidate/evidence/slice-type-check.c"
+      ],
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "gcc",
+        "-E",
+        "-P",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c",
+        "-I",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/source-config",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/arm/cortex-m3",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/tool/shell/letter-shell"
+      ],
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "gcc",
+        "-E",
+        "-P",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c",
+        "-I",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/source-config",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/arm/cortex-m3",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/tool/shell/letter-shell"
+      ],
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "gcc",
+        "-E",
+        "-P",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c",
+        "-I",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/source-config",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/arm/cortex-m3",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/tool/shell/letter-shell"
+      ],
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "gcc",
+        "-E",
+        "-P",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/CriticalArea.c",
+        "-I",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/source-config",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/arm/cortex-m3",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/tool/shell/letter-shell"
+      ],
+      "returncode": 0,
+      "stderr": ""
+    }
+  ]
+}

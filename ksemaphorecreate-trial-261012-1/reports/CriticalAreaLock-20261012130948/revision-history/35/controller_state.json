@@ -1,0 +1,251 @@
+{
+  "schema_version": 4,
+  "generation": 35,
+  "run_id": "CriticalAreaLock-20261012130948",
+  "case": "CriticalAreaLock",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1",
+  "run_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/CriticalAreaLock-20261012130948",
+  "report_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/CriticalAreaLock-20261012130948",
+  "target_files": {
+    "c_file": "annotated_C/src/CriticalAreaLock.c",
+    "formal_directory": "VC",
+    "formal_case_lib": "VC/CriticalAreaLock_lib.v",
+    "goal_file": "VC/CriticalAreaLock_goal.v",
+    "proof_auto_file": "VC/CriticalAreaLock_proof_auto.v",
+    "proof_manual_file": "VC/CriticalAreaLock_proof_manual.v",
+    "goal_check_file": "VC/CriticalAreaLock_goal_check.v",
+    "case_name": "CriticalAreaLock",
+    "active_case_theory": "CRTOS_Verify.VC"
+  },
+  "problem_context": {
+    "problem_statement": "Verify CRTOS KSemaphoreCreate under the accepted source/config and predicates/specs.\nAuthoritative accepted inputs: evidence/accepted-revisions.json.\nSource: source-r2-0c50c37013e9, Cortex-M3 Thumb ILP32, STM32F103 nano, non-SMP.\nPredicate: predicate-r3-16b6ee4a4e02, independently review-passed.\nSpec: spec-r2-6d54bb88379e, independently review-passed.\nDomain: entry scheduler_lock_nest < 65535, explicitly authorized by user.\nPreserve ordinary nested calls and exact caller IRQ/heap ownership.\n\nThe complete required non-trusted closure has nine unique canonical active bodies:\nannotated_C/src/KSemaphoreCreate.c\nannotated_C/src/_SemaphoreCreate.c\nannotated_C/src/CriticalAreaLock.c\nannotated_C/src/CriticalAreaUnLock.c\nannotated_C/src/IdInsertObj.c\nannotated_C/src/AllocId.c\nannotated_C/src/InsertObj.c\nannotated_C/src/InitDoubleLinkList.c\nannotated_C/src/DoubleLinkListInsertNodeAfter.c\nAll canonical contracts and caller-local API copies are frozen accepted inputs.\nOnly these six C symbols are trusted, with the existing reviewed contracts:\nx_malloc, x_free, memset, DisableLocalInterrupt, EnableLocalInterrupt, KPrintf.\nDeclaration contracts do not constitute verified callee bodies.\n\nAbsolutely do not read, enumerate, search, copy, import, or depend on any file in\n/home/xinra/crtos/ksemaphorecreate-trial-260928-1.\nThis includes ancestor-root searches, load paths, proof lookup and dependency closure.\nNo other historical trial is an authorized formal/proof reference.\nDo not change root shared library definitions, authoritative C/config, or any skills.\nOnly this new trial and already authorized project path configuration may be changed.\nDo not create a second active body for a canonical symbol or a central specs header.\nDo not add axioms, parameters, Admitted/admit, placeholders, weaker postconditions,\nunjustified stronger preconditions, deleted paths or omitted VCs.\n\nThe user authorizes automatic acceptance of independently reviewed, machine-checked\npredicate/spec revisions within the approved semantics. Such changes must return to\nthe appropriate independent design review and bind new manifests before resuming.\nMaterial semantic changes require explicit user authorization. No routine phase gate\nrequires another user confirmation.\n\nMain must follow only the verification-orchestrator controller actions. If the current\ncontroller does not support this CRTOS trial layout, retain its original blocker;\ndo not improvise another implementation workflow.\nCompletion additionally requires complete closure proofs, goal checks, full coqchk,\ntrust scan, C/VC/proof integrity, and a final integrity record. Historical 172 VCs is\nonly a diagnostic baseline, never a target for deleting or weakening obligations.\n\nExplicit user exception (2026-10-12): \u5141\u8bb8\u5728\u65b0 trial \u5185\u9002\u914d controller.\nThe local controller adapter may support canonical annotated_C/src and VC paths,\nread-only existing external dependencies, and the full nine-case closure. Preserve\nall original owner, symbolic, acceptance, proof and final-check actions.",
+    "target_function": "CriticalAreaLock"
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "CriticalAreaLock",
+      "DisableLocalInterrupt"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "DisableLocalInterrupt::<default>": "With (sg : CrtosOSStable) (hs : list Z) (before : CrtosOSState) Require SemaphoreOutsideCritical(sg, hs, before) Ensure exists current, semaphore_irq_handler_ok(__return) && SemaphoreRely(hs, before, current) && SemaphoreInsideCritical(sg, hs, __return, current) * SemaphoreOSInvariant(sg, current)",
+        "CriticalAreaLock::<default>": "With (sg : CrtosOSStable) (hs : list Z) (before : CrtosOSState) Require scheduler_lock_nest(os_scheduler(before)) < 65535 && SemaphoreOutsideCritical(sg, hs, before) Ensure exists current, semaphore_irq_handler_ok(__return) && SemaphoreRely(hs, before, current) && SemaphoreInsideCritical(sg, hs, __return, current) * SemaphoreOSInvariant(sg, semaphore_nest_increment(current))"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-10-12T05:09:48.541876Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/CriticalAreaLock_goal_check.vo",
+    "base_artifact_count": 163,
+    "current_source_count": 4,
+    "elapsed_seconds": 35.617938,
+    "snapshot": "verification_runs/CriticalAreaLock-20261012130948/dependency_plan.json"
+  },
+  "attempts": {
+    "CriticalAreaLock-annotation-r1": {
+      "attempt_id": "CriticalAreaLock-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/CriticalAreaLock-20261012130948",
+      "claimed_action": "deliver:CriticalAreaLock-annotation-r1:2",
+      "repair_index": 2,
+      "created_at": "2026-10-12T05:10:21.590827Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T05:10:26.431770Z",
+            "finished_at": "2026-10-12T05:12:49.156617Z",
+            "elapsed_seconds": 142.724847
+          },
+          {
+            "started_at": "2026-10-12T05:16:35.868865Z",
+            "finished_at": "2026-10-12T05:18:39.081777Z",
+            "elapsed_seconds": 123.212912
+          },
+          {
+            "started_at": "2026-10-12T06:58:51.359281Z",
+            "finished_at": "2026-10-12T07:01:58.941253Z",
+            "elapsed_seconds": 187.581972
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T07:01:58.941220Z",
+      "finished_at": "2026-10-12T07:01:59.096577Z"
+    },
+    "CriticalAreaLock-vc-checking-r1": {
+      "attempt_id": "CriticalAreaLock-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "prepared",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-12T07:11:41.563123Z",
+      "source_annotation": "CriticalAreaLock-annotation-r1"
+    },
+    "CriticalAreaLock-annotation-r2": {
+      "attempt_id": "CriticalAreaLock-annotation-r2",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/CriticalAreaLock-20261012130948",
+      "claimed_action": "deliver:CriticalAreaLock-annotation-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T07:19:33.008910Z",
+      "feedback_sources": [
+        {
+          "phase": "annotation",
+          "attempt_id": "CriticalAreaLock-annotation-r1",
+          "evidence": [
+            "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/CriticalAreaLock-20261012130948/annotation-attempts/annotation-attempt1/agent_report.json",
+            "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/CriticalAreaLock-20261012130948/annotation-attempts/annotation-attempt1/agent_output.md"
+          ]
+        }
+      ],
+      "reason": "generated-auto-proof-obligations",
+      "failed_vcs": [],
+      "retry_reason": "generated-auto-proof-obligations",
+      "retry_previous_attempt": "CriticalAreaLock-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T07:19:39.677349Z",
+            "finished_at": "2026-10-12T07:21:04.780764Z",
+            "elapsed_seconds": 85.103415
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T07:21:04.780733Z",
+      "finished_at": "2026-10-12T07:21:04.949360Z"
+    },
+    "CriticalAreaLock-vc-checking-r2": {
+      "attempt_id": "CriticalAreaLock-vc-checking-r2",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/CriticalAreaLock-vc-checking-r2",
+      "claimed_action": "deliver:CriticalAreaLock-vc-checking-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T07:21:47.324639Z",
+      "source_annotation": "CriticalAreaLock-annotation-r2",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T07:22:03.702158Z",
+            "finished_at": "2026-10-12T07:25:37.974115Z",
+            "elapsed_seconds": 214.271957
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T07:25:37.974086Z",
+      "finished_at": "2026-10-12T07:25:38.005794Z"
+    },
+    "CriticalAreaLock-vc-proving-r1": {
+      "attempt_id": "CriticalAreaLock-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-12T07:25:38.005827Z",
+      "source_annotation": "CriticalAreaLock-annotation-r2",
+      "source_vc_checking": "CriticalAreaLock-vc-checking-r2",
+      "groups": {
+        "entry_views": {
+          "status": "accepted",
+          "owner": "group-worker/CriticalAreaLock-vc-proving-r1:entry_views",
+          "claimed_action": "deliver:CriticalAreaLock-vc-proving-r1:entry_views:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T07:27:15.780039Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T07:27:35.664546Z",
+                "finished_at": "2026-10-12T07:35:04.473091Z",
+                "elapsed_seconds": 448.808545
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T07:35:04.473054Z",
+          "finished_at": "2026-10-12T07:37:26.985758Z"
+        },
+        "return_increment": {
+          "status": "accepted",
+          "owner": "group-worker/CriticalAreaLock-vc-proving-r1:return_increment",
+          "claimed_action": "deliver:CriticalAreaLock-vc-proving-r1:return_increment:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T07:27:15.780056Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T07:27:35.905716Z",
+                "finished_at": "2026-10-12T07:38:42.052829Z",
+                "elapsed_seconds": 666.147113
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T07:38:42.052795Z",
+          "finished_at": "2026-10-12T07:39:51.390770Z"
+        }
+      },
+      "finished_at": "2026-10-12T07:41:53.539993Z"
+    }
+  },
+  "current": {
+    "annotation": "CriticalAreaLock-annotation-r2",
+    "vc-checking": "CriticalAreaLock-vc-checking-r2",
+    "vc-proving": "CriticalAreaLock-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/CriticalAreaLock-20261012130948",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "CriticalAreaLock-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-10-12T07:43:52.879989Z",
+    "files": [
+      "VC/CriticalAreaLock_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-10-12T15:45:05.980108Z",
+    "errors": [],
+    "cleanup_removed_count": 0,
+    "accepted_inputs": {
+      "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+      "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+      "spec_manifest": "480669e8557a5f09a7683b69c5de2b087857f93649ef9c6729096df1c6a8b3cf",
+      "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+    }
+  },
+  "created_at": "2026-10-12T05:09:48.541896Z",
+  "updated_at": "2026-10-12T15:45:05.989886Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-10-12T15:45:05.980087Z"
+}

@@ -1,0 +1,20 @@
+{
+  "classification": "verification-implementation-annotation-syntax",
+  "status": "implemented-awaiting-delta-review-and-controller-parser-retry",
+  "accepted_semantic_revision": "spec-r2-6d54bb88379e",
+  "spec_revision": "spec-r3-63d672204cb5",
+  "predicate_revision": "predicate-r3-16b6ee4a4e02",
+  "changed_files": [
+    "annotated_C/include/semaphore_logic.h"
+  ],
+  "before_header_sha256": "8321ff2603c96834b5c08450a623d30d5d578812bc91e2725a5ab3063e03f253",
+  "after_header_sha256": "6360f00174851821caf155df1b267fdca794ff05a261c5a3103691025d8e55af",
+  "annotated_manifest_after_sha256": "63d672204cb500a9bbbdced56ed2014b10a62efc9dd4f12d4b2696c2a831448f",
+  "same_extern_entries": true,
+  "extern_entries_count": 33,
+  "all_function_files_byte_identical": true,
+  "header_C_tokens_after_comment_removal_identical": true,
+  "formal_files_changed": false,
+  "qcp_invoked_by_spec_author": false,
+  "next_action": "Existing controller annotation owner retries its scheduled parser action after independent annotation delta review. No raw independent symexec."
+}

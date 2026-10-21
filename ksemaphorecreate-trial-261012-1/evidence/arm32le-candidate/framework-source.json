@@ -1,0 +1,10 @@
+{
+  "source": "/home/xinra/qcp-binary-democases/Rocq/SeparationLogic/NestedCriticalSTS.v",
+  "source_sha256": "c4f4859ae5f5fdb55646bf346c020b4a9fdd377500df6ace7d18ab62745112a8",
+  "candidate": "framework-candidate/NestedCriticalSTS.v",
+  "candidate_sha256": "c4f4859ae5f5fdb55646bf346c020b4a9fdd377500df6ace7d18ab62745112a8",
+  "byte_identical": true,
+  "logical_namespace": "CRTOS_Verify.framework",
+  "usage": "official nested_critical_state only; the OS STS still uses reviewed owner-aware CrtosIRQStep",
+  "interface_parameter_note": "Upstream Module Type nested_critical_STS_def contains its original nc_sts parameter; this signature is not instantiated or used as an added trusted OS assumption."
+}

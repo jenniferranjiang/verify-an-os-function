@@ -1,0 +1,7 @@
+typedef x_ubase x_size_t;
+typedef long unsigned int size_t;
+extern void *memset (void *__s, int __c, size_t __n) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
+typedef long int __blksize_t;
+typedef long int __ssize_t;
+typedef __ssize_t ssize_t;
+typedef __blksize_t blksize_t;

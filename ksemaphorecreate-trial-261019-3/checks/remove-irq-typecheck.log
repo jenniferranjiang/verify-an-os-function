@@ -1,0 +1,89 @@
+StableGlobalState : Type
+     : Type
+VarGlobalState : Type
+     : Type
+StableIdmanager : Type
+     : Type
+VarIdmanager : Type
+     : Type
+SemaphoreStable : Type
+     : Type
+SemaphoreState : Type
+     : Type
+program : Type -> Type -> Type
+     : Type -> Type -> Type
+@safeExec
+:
+forall Sigma A : Type,
+(Sigma -> Prop) -> program Sigma A -> (A -> Sigma -> Prop) -> Prop
+     : forall Sigma A : Type,
+       (Sigma -> Prop) -> program Sigma A -> (A -> Sigma -> Prop) -> Prop
+@MonadErr.ret : forall Sigma A : Type, A -> program Sigma A
+     : forall Sigma A : Type, A -> program Sigma A
+LastSeen : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+     : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+abs_semaphore_create
+:
+StableGlobalState -> Z -> program (VarGlobalState -> Prop) Z
+     : StableGlobalState -> Z -> program (VarGlobalState -> Prop) Z
+OutsideCritical : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+InsideCritical : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+Crtos_RTrans : VarGlobalState -> VarGlobalState -> Prop
+     : VarGlobalState -> VarGlobalState -> Prop
+Crtos_GTrans : VarGlobalState -> VarGlobalState -> Prop
+     : VarGlobalState -> VarGlobalState -> Prop
+os_inv : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+CriticalNest : Z -> Assertion
+     : Z -> Assertion
+os_semaphores : VarGlobalState -> SemaphoreState
+     : VarGlobalState -> SemaphoreState
+os_semaphore_stable : StableGlobalState -> SemaphoreStable
+     : StableGlobalState -> SemaphoreStable
+semaphore_manager_stable : SemaphoreStable -> StableIdmanager
+     : SemaphoreStable -> StableIdmanager
+semaphore_manager : SemaphoreState -> VarIdmanager
+     : SemaphoreState -> VarIdmanager
+semaphore_first_link : SemaphoreStable -> SemaphoreState -> Z
+     : SemaphoreStable -> SemaphoreState -> Z
+idbucket_first_link : StableIdmanager -> VarIdmanager -> Z -> Z
+     : StableIdmanager -> VarIdmanager -> Z -> Z
+semaphore_publish : Z -> Z -> Z -> SemaphoreState -> SemaphoreState
+     : Z -> Z -> Z -> SemaphoreState -> SemaphoreState
+replace_semaphores : SemaphoreState -> VarGlobalState -> VarGlobalState
+     : SemaphoreState -> VarGlobalState -> VarGlobalState
+idmax : StableIdmanager -> Z
+     : StableIdmanager -> Z
+store_idmanager : StableIdmanager -> VarIdmanager -> Z -> Assertion
+     : StableIdmanager -> VarIdmanager -> Z -> Assertion
+store_idmanager_allocated_unlinked
+:
+StableIdmanager -> VarIdmanager -> Z -> Z -> Assertion
+     : StableIdmanager -> VarIdmanager -> Z -> Z -> Assertion
+idmanager_full : StableIdmanager -> VarIdmanager -> Prop
+     : StableIdmanager -> VarIdmanager -> Prop
+idmanager_min_free_id : StableIdmanager -> VarIdmanager -> Z -> Prop
+     : StableIdmanager -> VarIdmanager -> Z -> Prop
+idmanager_add : VarIdmanager -> Z -> VarIdmanager
+     : VarIdmanager -> Z -> VarIdmanager
+idmanager_link : StableIdmanager -> VarIdmanager -> Z -> Z -> VarIdmanager
+     : StableIdmanager -> VarIdmanager -> Z -> Z -> VarIdmanager
+ZeroIdNode : Z -> Assertion
+     : Z -> Assertion
+AssignedIdNode : Z -> Z -> Assertion
+     : Z -> Z -> Assertion
+NodeStorage : Z -> Assertion
+     : Z -> Assertion
+store_node_self_linked : Z -> Assertion
+     : Z -> Assertion
+DllInsertAfterCut : Z -> Z -> Z -> Z -> Z -> Assertion
+     : Z -> Z -> Z -> Z -> Z -> Assertion
+DllInsertedCut : Z -> Z -> Z -> Assertion
+     : Z -> Z -> Z -> Assertion
+SemaphoreRaw : Z -> Assertion
+     : Z -> Assertion
+SemaphoreZero : Z -> Assertion
+     : Z -> Assertion
+PASS: final global-state source and 40 vocabulary types, including dependency consistency.

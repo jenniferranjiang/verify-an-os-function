@@ -1,0 +1,43 @@
+{
+  "case": "SemaphoreCreate",
+  "added_manual_witnesses": [
+    "proof_of__SemaphoreCreate_safety_wit_1",
+    "proof_of__SemaphoreCreate_safety_wit_2",
+    "proof_of__SemaphoreCreate_safety_wit_3",
+    "proof_of__SemaphoreCreate_safety_wit_4",
+    "proof_of__SemaphoreCreate_safety_wit_5",
+    "proof_of__SemaphoreCreate_safety_wit_6",
+    "proof_of__SemaphoreCreate_safety_wit_7",
+    "proof_of__SemaphoreCreate_safety_wit_8",
+    "proof_of__SemaphoreCreate_safety_wit_9",
+    "proof_of__SemaphoreCreate_safety_wit_10",
+    "proof_of__SemaphoreCreate_safety_wit_11",
+    "proof_of__SemaphoreCreate_safety_wit_12",
+    "proof_of__SemaphoreCreate_safety_wit_13",
+    "proof_of__SemaphoreCreate_safety_wit_14",
+    "proof_of__SemaphoreCreate_safety_wit_15",
+    "proof_of__SemaphoreCreate_safety_wit_16",
+    "proof_of__SemaphoreCreate_safety_wit_17",
+    "proof_of__SemaphoreCreate_safety_wit_18",
+    "proof_of__SemaphoreCreate_partial_solve_wit_1_pure",
+    "proof_of__SemaphoreCreate_partial_solve_wit_1",
+    "proof_of__SemaphoreCreate_partial_solve_wit_2_pure",
+    "proof_of__SemaphoreCreate_partial_solve_wit_2",
+    "proof_of__SemaphoreCreate_partial_solve_wit_3",
+    "proof_of__SemaphoreCreate_partial_solve_wit_4",
+    "proof_of__SemaphoreCreate_partial_solve_wit_5",
+    "proof_of__SemaphoreCreate_partial_solve_wit_6",
+    "proof_of__SemaphoreCreate_partial_solve_wit_7",
+    "proof_of__SemaphoreCreate_partial_solve_wit_8",
+    "proof_of__SemaphoreCreate_partial_solve_wit_9_pure",
+    "proof_of__SemaphoreCreate_partial_solve_wit_9"
+  ],
+  "raw_roles": {
+    "goal_file": "fec5eab16a3d791f5d51017b21440eae400b8928e07d9cea47afabe1554c6b37",
+    "proof_auto_file": "bd0fd8bfd13b6c7ffb0bcd4360c4fc948da6359818437ec4148c4c277cef00c5",
+    "proof_manual_file": "87746619c347022b14e04b6595f094f800f08b183a6acc08c76b32126e57967b",
+    "goal_check_file": "897c6d0c353b7bf572ddc861f1f084479d0848dddc1b19c643c2e46d2e6defa4"
+  },
+  "goal_definitions_changed": false,
+  "auto_file_changed": false
+}

@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-embedded-node-nonzero",
+    "vcs": [
+      {
+        "name": "proof_of__SemaphoreCreate_entail_wit_4_split_goal_spatial",
+        "parent": "proof_of__SemaphoreCreate_entail_wit_4",
+        "annotation_location": "annotated_C/src/_SemaphoreCreate.c:198"
+      }
+    ],
+    "message": "The antecedent owns NodeZero for sem.link and sem.pend_list and knows sem<>0, but NodeZero contains no node-base nonzero fact. The consequent DllInsertAfterCut and NodeStorage require both embedded node bases <>0. eval_addr_expr is abstract; SemaphoreLayout is only an unproved proposition and is absent from the premises, so typed field ownership supplies no bridge to those required base-address facts.",
+    "repair_boundary": "Review and expose justified embedded-node nonzero facts through the private allocation/zeroing predicate and the assertion at annotated_C/src/_SemaphoreCreate.c:198, or provide a reviewed layout/validity bridge. Frozen predicates/spec/layout inputs are outside this proof-only group."
+  }
+}

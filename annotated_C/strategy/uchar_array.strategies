@@ -1,0 +1,47 @@
+//max rule id:5
+
+id : 1
+priority : core(1)
+left : UCharArray::full(?p, ?n, ?l) at 0
+right : store(?p + (?i * sizeof(U8)), U8, ?v) at 1
+check : infer(0 <= i);
+        infer(i < n);
+action : right_erase(1);
+         left_erase(0);
+         left_add(UCharArray::missing_i(p, i, 0, n, l));
+         right_add(v == l[i]);
+
+id : 2
+priority : post(1)
+left : UCharArray::missing_i(?p, ?i, 0, ?n, ?l) at 0
+       store(p + i * sizeof(U8), U8, l[i]) at 1
+check : infer(0 <= i);
+        infer(i < n);
+action : left_erase(1);
+         left_erase(0);
+         left_add(UCharArray::full(p, n, l));
+
+id : 3
+priority : post(3)
+left : UCharArray::missing_i(?p, ?i, 0, ?n, ?l) at 0
+       store(p + i * sizeof(U8), U8, ?v) at 1
+check : infer(0 <= i);
+        infer(i < n);
+action : left_erase(1);
+         left_erase(0);
+         left_add(UCharArray::full(p, n, replace_Znth{Z}(i, v, l)));
+
+id : 4
+priority : core(1)
+left : UCharArray::full(?p, ?n, ?l1) at 0
+right : UCharArray::full(p, n, ?l2) at 1
+action : right_erase(1);
+         left_erase(0);
+         right_add(l1 == l2);
+
+id : 5
+priority : core(1)
+left : UCharArray::missing_i(?p, ?i, ?v, ?n, ?l) at 0
+right : UCharArray::missing_i(p, i, v, n, l) at 1
+action : left_erase(0);
+         right_erase(1);

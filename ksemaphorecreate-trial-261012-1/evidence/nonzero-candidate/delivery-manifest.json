@@ -1,0 +1,49 @@
+{
+  "revision": "predicate-nonzero-candidate-fe8c4261db5c",
+  "artifacts": [
+    {
+      "path": "candidate-manifest.json",
+      "sha256": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3"
+    },
+    {
+      "path": "revision.json",
+      "sha256": "0e91df22d7ae35187cd29cc0a4778bb2c642dce1440bb090e09c083f62859597"
+    },
+    {
+      "path": "design.md",
+      "sha256": "d275e8a9db35b38786b1aa1a7847cda7ae7bee0300f818401a8eca548566572d"
+    },
+    {
+      "path": "representation.diff",
+      "sha256": "a3ba45fb2fff4543135583cf3aa65bdc9dce69560d98c033e2f6de675d218fe1"
+    },
+    {
+      "path": "_CoqProject",
+      "sha256": "02f1af10e31a45f92e503a57b66e85d55d7436897cd750ce6f649768a3307207"
+    },
+    {
+      "path": "CandidateChecks.v",
+      "sha256": "1c282dca3bfc4101fd307dae54e0c935ed737d60c29307ef321164f28f245bdc"
+    },
+    {
+      "path": "compile.json",
+      "sha256": "18aba80b5dbeb10727a4a2690044db1ebe10dc595b894c65815c840534b3b232"
+    },
+    {
+      "path": "trust-scan.json",
+      "sha256": "995b6e285987e9ea84daf7e638cb2e26d5df87e7e354f4ab4fdc46859e4e7310"
+    },
+    {
+      "path": "active-unchanged.json",
+      "sha256": "43424b2c91469ed765d5b674b15540c213ef01e93ac374756533d01ab1b771e4"
+    },
+    {
+      "path": "source-abi-recheck.json",
+      "sha256": "ed3201cab76f55d555df38a47637e0f2d850f94a32dc83dfd1c8b3f334e8e81e"
+    },
+    {
+      "path": "build.py",
+      "sha256": "83db0b6d9657c4d416b07f52c3b4f3d4e3088d5361c8ad2b461167cc685cdb02"
+    }
+  ]
+}

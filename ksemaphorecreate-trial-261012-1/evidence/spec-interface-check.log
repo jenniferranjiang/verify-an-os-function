@@ -1,0 +1,343 @@
+(fun P : Assertion => P) : Assertion -> Assertion
+     : Assertion -> Assertion
+StableIdmanager : Type
+     : Type
+VarIdmanager : Type
+     : Type
+SemaphoreState : Type
+     : Type
+SemaphoreStable : Type
+     : Type
+CrtosOSState : Type
+     : Type
+SchedulerState : Type
+     : Type
+CrtosOSStable : Type
+     : Type
+Task_C_Rules.expr : Type
+     : Type
+OSHeap : Task_C_Rules.expr -> Assertion
+     : Task_C_Rules.expr -> Assertion
+store_sem_allocated : Z -> Task_C_Rules.expr
+     : Z -> Task_C_Rules.expr
+store_sem_zeroed_private : Z -> Task_C_Rules.expr
+     : Z -> Task_C_Rules.expr
+store_sem_id_detached : Z -> Z -> Z -> Z -> Task_C_Rules.expr
+     : Z -> Z -> Z -> Z -> Task_C_Rules.expr
+store_idmanager : StableIdmanager -> VarIdmanager -> Z -> Task_C_Rules.expr
+     : StableIdmanager -> VarIdmanager -> Z -> Task_C_Rules.expr
+store_idmanager_allocated_unlinked
+:
+StableIdmanager -> VarIdmanager -> Z -> Z -> Task_C_Rules.expr
+     : StableIdmanager -> VarIdmanager -> Z -> Z -> Task_C_Rules.expr
+idmanager_add : VarIdmanager -> Z -> VarIdmanager
+     : VarIdmanager -> Z -> VarIdmanager
+idmanager_link : StableIdmanager -> VarIdmanager -> Z -> Z -> VarIdmanager
+     : StableIdmanager -> VarIdmanager -> Z -> Z -> VarIdmanager
+idmanager_min_free_id : StableIdmanager -> VarIdmanager -> Z -> Prop
+     : StableIdmanager -> VarIdmanager -> Z -> Prop
+idmanager_full : StableIdmanager -> VarIdmanager -> Prop
+     : StableIdmanager -> VarIdmanager -> Prop
+os_sem_stable : CrtosOSStable -> SemaphoreStable
+     : CrtosOSStable -> SemaphoreStable
+os_semaphores : CrtosOSState -> SemaphoreState
+     : CrtosOSState -> SemaphoreState
+os_scheduler : CrtosOSState -> SchedulerState
+     : CrtosOSState -> SchedulerState
+scheduler_lock_nest : SchedulerState -> Z
+     : SchedulerState -> Z
+semaphore_manager_abs : SemaphoreStable -> StableIdmanager
+     : SemaphoreStable -> StableIdmanager
+semaphore_manager_state : SemaphoreStable -> SemaphoreState -> VarIdmanager
+     : SemaphoreStable -> SemaphoreState -> VarIdmanager
+semaphore_os_publish : Z -> Z -> Z -> CrtosOSState -> CrtosOSState
+     : Z -> Z -> Z -> CrtosOSState -> CrtosOSState
+semaphore_nest_increment : CrtosOSState -> CrtosOSState
+     : CrtosOSState -> CrtosOSState
+semaphore_nest_decrement : CrtosOSState -> CrtosOSState
+     : CrtosOSState -> CrtosOSState
+SemaphoreRely : list Z -> CrtosOSState -> CrtosOSState -> Prop
+     : list Z -> CrtosOSState -> CrtosOSState -> Prop
+SemaphoreGuarantee : CrtosOSState -> CrtosOSState -> Prop
+     : CrtosOSState -> CrtosOSState -> Prop
+semaphore_irq_handler_ok : Z -> Prop
+     : Z -> Prop
+SemaphoreOutsideCritical
+:
+CrtosOSStable -> list Z -> CrtosOSState -> Assertion
+     : CrtosOSStable -> list Z -> CrtosOSState -> Assertion
+SemaphoreInsideCritical
+:
+CrtosOSStable -> list Z -> Z -> CrtosOSState -> Assertion
+     : CrtosOSStable -> list Z -> Z -> CrtosOSState -> Assertion
+SemaphoreOSInvariant : CrtosOSStable -> CrtosOSState -> Assertion
+     : CrtosOSStable -> CrtosOSState -> Assertion
+SemaphoreCriticalFrame : CrtosOSStable -> CrtosOSState -> Assertion
+     : CrtosOSStable -> CrtosOSState -> Assertion
+CrtosOSValid : CrtosOSState -> Prop
+     : CrtosOSState -> Prop
+scheduler_lock_nest (os_scheduler before) < 65535 : Prop
+     : Prop
+idmanager_full (semaphore_manager_abs (os_sem_stable sg))
+  (semaphore_manager_state (os_sem_stable sg) (os_semaphores current))
+:
+Prop
+     : Prop
+idmanager_min_free_id (semaphore_manager_abs (os_sem_stable sg))
+  (semaphore_manager_state (os_sem_stable sg) (os_semaphores current)) id
+:
+Prop
+     : Prop
+SemaphoreGuarantee current (semaphore_os_publish p id value current) : Prop
+     : Prop
+SemaphoreOutsideCritical sg hs (semaphore_os_publish p id value current)
+:
+Assertion
+     : Assertion
+SemaphoreOSInvariant sg (semaphore_nest_increment current) : Assertion
+     : Assertion
+SemaphoreGuarantee before (semaphore_nest_decrement after) : Prop
+     : Prop
+SemaphoreOutsideCritical sg hs (semaphore_nest_decrement after) : Assertion
+     : Assertion
+semaphore_nest_increment (semaphore_os_publish p id value current)
+:
+CrtosOSState
+     : CrtosOSState
+OSHeap
+  (store_idmanager sm
+     (idmanager_link sm (idmanager_add manager_before id) id p) p)
+:
+Assertion
+     : Assertion
+OSHeap (store_idmanager_allocated_unlinked sm manager_before p id)
+:
+Assertion
+     : Assertion
+OSHeap (store_sem_id_detached p old_id previous next) : Assertion
+     : Assertion
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( INT )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( BOOL )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( CHAR )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( INT64 )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( SHORT )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( UINT )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( UCHAR )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( UINT64 )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( INT128 )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( UINT128 )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( USHORT )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( FLOAT )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( DOUBLE )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( LONGDOUBLE )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( PTR )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( struct _ )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( union _ )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "sizeof ( _ )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "emp" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ |-- _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ --||-- _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ -* _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ --> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ || _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ && _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ ** _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "“ _ ”" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "TT" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "EX _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "EX _ : _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "EX _ .. _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "ALL _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "ALL _ : _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "ALL _ .. _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Char |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Bool |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # UChar |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Short |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # UShort |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Int |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # UInt |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Int64 |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # UInt64 |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Int128 |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # UInt128 |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Float |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Double |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # LongDouble |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # FiniteFloat |-> _" was already used in scope
+sac_scope. [notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # FiniteDouble |-> _" was already used in scope
+sac_scope. [notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # FiniteLongDouble |-> _" was already used in scope
+sac_scope. [notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Ptr |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Char |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Bool |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # UChar |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Short |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # UShort |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Int |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # UInt |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Int64 |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # UInt64 |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Int128 |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # UInt128 |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Float |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Double |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # LongDouble |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # FiniteFloat |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # FiniteDouble |->_" was already used in scope
+sac_scope. [notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # FiniteLongDouble |->_" was already used in scope
+sac_scope. [notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # Ptr |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # _ |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "_ # _ |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "Padding _ _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "Padding _ _ . _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-interface-check/SpecInterfaceCheck.v", line 12, characters 0-21:
+Warning: Notation "Assertion" was already used.
+[notation-overridden,parsing,default]

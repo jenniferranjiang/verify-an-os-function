@@ -1,0 +1,22 @@
+{
+  "extern_coq": {},
+  "import_coq": {},
+  "specs": {
+    "x_malloc::<default>": "Require nbytes == 32 && emp Ensure (__return == 0 && emp) || (__return != 0 && SemaphoreRaw(__return))",
+    "memset::<default>": "Require c == 0 && n == 32 && SemaphoreRaw(dest) Ensure __return == dest && SemaphoreZero(dest)",
+    "CriticalAreaLock::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) Require OutsideCritical(sg, before) Ensure exists locked, Crtos_RTrans(before, locked) && InsideCritical(sg, locked) * os_inv(sg, locked)",
+    "IdInsertObj::<default>": "With (sidm : StableIdmanager) (before : VarIdmanager) Require manager != 0 && idnode != 0 && store_idmanager(sidm, before, manager) * ZeroIdNode(idnode) Ensure (__return == -1 && idmanager_full(sidm, before) && store_idmanager(sidm, before, manager) * ZeroIdNode(idnode)) || (0 <= __return && __return < sidm.idmax && idmanager_min_free_id(sidm, before, __return) && store_idmanager(sidm, idmanager_link(sidm, idmanager_add(before, __return), __return, idnode), manager))",
+    "x_free::<default>": "Require SemaphoreZero(ptr) Ensure emp",
+    "InitDoubleLinkList::<default>": "Require NodeStorage(linklist_head) Ensure store_node_self_linked(linklist_head)",
+    "DoubleLinkListInsertNodeAfter::<default>": "With (next : Z) (oldprev : Z) (oldnext : Z) Require DllInsertAfterCut(linklist, next, linklist_node, oldprev, oldnext) Ensure DllInsertedCut(linklist, next, linklist_node)",
+    "CriticalAreaUnLock::<default>": "With (sg : StableGlobalState) (locked : VarGlobalState) (after : VarGlobalState) Require Crtos_GTrans(locked, after) && InsideCritical(sg, locked) * os_inv(sg, after) Ensure OutsideCritical(sg, after)",
+    "KPrintf::<default>": "Require emp Ensure emp",
+    "_SemaphoreCreate::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_create(sg, val), X) && OutsideCritical(sg, before) Ensure (exists after, __return == -5 && safeExec(LastSeen(after), return(-5), X) && OutsideCritical(sg, after)) || (exists after, 0 <= __return && __return < 128 && safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after))"
+  },
+  "lib": {
+    "declarations": {},
+    "imports": {
+      "From\nCoq\nRequire\nImport\nZArith\nList\n.\nImport\nListNotations\n.\nLocal\nOpen\nScope\nZ_scope\n.": "From Coq Require Import ZArith List ."
+    }
+  }
+}

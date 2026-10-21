@@ -11,8 +11,7 @@
 -R /home/xinra/qcp-binary-democases/SeparationLogic/listlib ListLib
 -R /home/xinra/qcp-binary-democases/SeparationLogic/MaxMinLib MaxMinLib
 -R /home/xinra/qcp-binary-democases/SeparationLogic/GraphLib GraphLib
--R /home/xinra/crtos/task-proof/lib CRTOS_Verify.lib
--R /home/xinra/crtos/task-proof/libai CRTOS_Verify.libai
+-R /home/xinra/crtos/lib CRTOS_Verify.lib
 -R /home/xinra/crtos/ksemaphorecreate-trial-260928-1/lib CRTOS_Verify.sem
 -R /home/xinra/crtos/ksemaphorecreate-trial-260928-1/VC CRTOS_Verify.VC
 

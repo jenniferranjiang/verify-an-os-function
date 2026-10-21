@@ -1,0 +1,128 @@
+[
+  {
+    "source": "/home/xinra/crtos/lib/KTaskPure.v",
+    "source_sha256": "c1a158838005371f2e5886aa026b006d01c264a6552af88032b6af299ee4f47b",
+    "candidate": "shared-candidate/arm32le/KTaskPure.v",
+    "candidate_sha256": "94861592d49e19ca0939e76e6aaefcf7d4d62dc73825bf7895275282d48f8f20",
+    "diff": "--- /home/xinra/crtos/lib/KTaskPure.v\n+++ shared-candidate/arm32le/KTaskPure.v\n@@ -2,7 +2,11 @@\n Require Import Coq.Lists.List.\n Require Import Coq.Strings.String.\n From compcert.lib Require Import Integers.\n-From SimpleC.SL Require Import Mem IntLib CNotation.\n+From SimpleC.SL Require Import Mem IntLib CNotation CArch.\n+\n+(** 候选适配：新版sizeof语法由明确32位CNotation实例提供；纯定义保持原文。 *)\n+Module KTaskCNotation := CNotationSig Arch32.\n+Import KTaskCNotation.\n \n Local Open Scope Z_scope.\n Local Open Scope string.\n"
+  },
+  {
+    "source": "/home/xinra/crtos/lib/dll_abs.v",
+    "source_sha256": "844f770c865704b68281c07224e99e8366f7886b4650848038de273250496d6f",
+    "candidate": "shared-candidate/arm32le/dll_abs.v",
+    "candidate_sha256": "844f770c865704b68281c07224e99e8366f7886b4650848038de273250496d6f",
+    "diff": ""
+  },
+  {
+    "source": "/home/xinra/crtos/lib/idnode_abs.v",
+    "source_sha256": "0c93b588560bf72bfd352dd5129b578148f5a01264679ea1ddc3ad3ec222467a",
+    "candidate": "shared-candidate/arm32le/idnode_abs.v",
+    "candidate_sha256": "0c93b588560bf72bfd352dd5129b578148f5a01264679ea1ddc3ad3ec222467a",
+    "diff": ""
+  },
+  {
+    "source": "/home/xinra/crtos/lib/CrtosGlobState.v",
+    "source_sha256": "ae8d05137b1db9f4f51d88c3608ee63ddf1065a73129652135e0b33afd55aeed",
+    "candidate": "shared-candidate/arm32le/CrtosGlobState.v",
+    "candidate_sha256": "ae8d05137b1db9f4f51d88c3608ee63ddf1065a73129652135e0b33afd55aeed",
+    "diff": ""
+  },
+  {
+    "source": "/home/xinra/crtos/lib/TaskProtocolSTS.v",
+    "source_sha256": "04ac5f561cb407a6479f08ac9ce8f911e568a6b1ae95474244e682cfda440f77",
+    "candidate": "shared-candidate/arm32le/TaskProtocolSTS.v",
+    "candidate_sha256": "04ac5f561cb407a6479f08ac9ce8f911e568a6b1ae95474244e682cfda440f77",
+    "diff": ""
+  },
+  {
+    "source": "/home/xinra/crtos/lib/CrtosRules.v",
+    "source_sha256": "0511780ac40c58e470a5f9f6aba89840d9809730f2649e9e917c1245b95726c3",
+    "candidate": "shared-candidate/arm32le/CrtosRules.v",
+    "candidate_sha256": "22e78a2a6544aa1b653a617d29bccb9785a6458df7947ced64c3ec65e73dd17b",
+    "diff": "--- /home/xinra/crtos/lib/CrtosRules.v\n+++ shared-candidate/arm32le/CrtosRules.v\n@@ -36,11 +36,11 @@\n Module Task_C_Rules.\n   Include C_STS_Task.\n   Include ConAssertion.CSL.\n-  Include DerivedPredSig.\n-  Include StoreLibSig.\n-  Include ArrayLibSig.\n-  Include MapLibSig.\n-  Include StringLibSig.\n+  Include DerivedPredSig Arch32 LittleEndian.\n+  Include StoreLibSig Arch32 LittleEndian.\n+  Include ArrayLibSig Arch32 LittleEndian.\n+  Include MapLibSig Arch32 LittleEndian.\n+  Include StringLibSig Arch32 LittleEndian.\n End Task_C_Rules.\n \n Export Task_C_Rules.\n"
+  },
+  {
+    "source": "/home/xinra/crtos/lib/dll.v",
+    "source_sha256": "63e4b4fd6457a9a8f815f3ba347918bdd43172a5ebdd0754c4c5a8853a1268ca",
+    "candidate": "shared-candidate/arm32le/dll.v",
+    "candidate_sha256": "63e4b4fd6457a9a8f815f3ba347918bdd43172a5ebdd0754c4c5a8853a1268ca",
+    "diff": ""
+  },
+  {
+    "source": "/home/xinra/crtos/lib/idnode.v",
+    "source_sha256": "3b2b579226c7ca00890c80fbc3a7b9804e89428bd18f434446c9e1d50244757a",
+    "candidate": "shared-candidate/arm32le/idnode.v",
+    "candidate_sha256": "07bf9aafcc2513851047468a84fbd5099ce46748ac80e961b2806998f0b53ffe",
+    "diff": "--- /home/xinra/crtos/lib/idnode.v\n+++ shared-candidate/arm32le/idnode.v\n@@ -771,7 +771,11 @@\n   rewrite replace_Znth_app_r by lia.\n   rewrite replace_Znth_nothing by lia.\n   replace (index - Zlength prefix) with 0 by lia.\n-  simpl.\n+  (* 新版simpl展开sizeof的alias层；显式change只恢复相同的证明项形状。 *)\n+  change (store_idbucket_list htable 0 prefix **\n+    (store_idbucket_list htable (index + 1) suffix **\n+      store_idnodes (htable + index * sizeof(\"SysDoubleLinklistNode\")) new_bucket)\n+    |-- store_idbucket_list htable 0 (prefix ++ new_bucket :: suffix)).\n   sep_apply (store_idbucket_list_bucket_dll htable index\n     new_bucket suffix).\n   replace index with (0 + Zlength prefix) by lia.\n"
+  },
+  {
+    "source": "/home/xinra/crtos/lib/KTaskSchedMember.v",
+    "source_sha256": "731129e7150d854ba1233b94a257921e0672a9ff38b53eed72932d15d02460ae",
+    "candidate": "shared-candidate/arm32le/KTaskSchedMember.v",
+    "candidate_sha256": "731129e7150d854ba1233b94a257921e0672a9ff38b53eed72932d15d02460ae",
+    "diff": ""
+  },
+  {
+    "source": "evidence/arm32le-candidate/pre-migration/lib/SemaphorePure.v",
+    "source_sha256": "a4d77870dee54f06362f77d08aa32e9720fda512874ac6eed0467b989871337e",
+    "candidate": "lib/SemaphorePure.v",
+    "candidate_sha256": "a4d77870dee54f06362f77d08aa32e9720fda512874ac6eed0467b989871337e",
+    "diff": ""
+  },
+  {
+    "source": "evidence/arm32le-candidate/pre-migration/lib/CrtosOSPure.v",
+    "source_sha256": "e1b2ebe9b5160f923ac29962c69fbf812ada63edd0e639aac1fa464ae8ef8060",
+    "candidate": "lib/CrtosOSPure.v",
+    "candidate_sha256": "e1b2ebe9b5160f923ac29962c69fbf812ada63edd0e639aac1fa464ae8ef8060",
+    "diff": ""
+  },
+  {
+    "source": "evidence/arm32le-candidate/pre-migration/lib/CrtosHeapBridge.v",
+    "source_sha256": "fba2b2d72e26da91d37a42821e6df64cfe53ca9fc82cacb9c4a1edd518af39fe",
+    "candidate": "lib/CrtosHeapBridge.v",
+    "candidate_sha256": "fba2b2d72e26da91d37a42821e6df64cfe53ca9fc82cacb9c4a1edd518af39fe",
+    "diff": ""
+  },
+  {
+    "source": "evidence/arm32le-candidate/pre-migration/lib/CrtosNestedState.v",
+    "source_sha256": "00d56f085dc9497d43b00d6a024816a5870fef74a481eeb1132864d4342765d2",
+    "candidate": "lib/CrtosNestedState.v",
+    "candidate_sha256": "3368f556f5a37c3808b670289e7eee9a75ef6cd2d145685702d42c9a2af2257d",
+    "diff": "--- pre-migration/lib/CrtosNestedState.v\n+++ lib/CrtosNestedState.v\n@@ -1,11 +1,12 @@\n Require Import Coq.ZArith.ZArith Coq.Lists.List.\n Require Import SL.CriticalSTS.\n \n-(** QCP框架版本兼容adapter：本record逐字复用官方\n+(** QCP框架状态adapter：本record逐字复用官方\n     Rocq/SeparationLogic/NestedCriticalSTS.v的nested_critical_state。\n-    当前已安装NestedCriticalSTS.vo依赖的ArrayLib摘要不兼容；官方新源码\n-    的架构functor参数又不同于已安装接口。这里仅取用所需状态类型，\n-    不复制无关ModuleType，也不采用允许空环境token嵌套进入的旧transition。\n+    初版因当时选用旧框架的二进制接口不兼容而引入此最小状态类型；\n+    现已将两个heap载体重编为官方Arch32 LittleEndian，仍保留同一record，\n+    使已审阅owner-sensitive协议定义不变。这里不复制无关ModuleType，\n+    也不采用允许空环境token嵌套进入的旧transition。\n     来源hash和原文对应由evidence/nested-state-adapter.json记录。\n     nat是框架原有token类型；没有新建token Record或任何逻辑假设。 *)\n Record nested_critical_state {C: critical_STS}: Type :=\n"
+  },
+  {
+    "source": "evidence/arm32le-candidate/pre-migration/lib/CrtosOSProtocol.v",
+    "source_sha256": "0543f2edc10c8343776026f96f1ab667ff074e00969c7ae0fbdeb63e629ca8c3",
+    "candidate": "lib/CrtosOSProtocol.v",
+    "candidate_sha256": "4f02a26b81cb23fbd8bc9f202bede2b2a3a262de4f3a61a366357c4d1df57cae",
+    "diff": "--- pre-migration/lib/CrtosOSProtocol.v\n+++ lib/CrtosOSProtocol.v\n@@ -66,11 +66,11 @@\n Module Crtos_C_Rules.\n   Include Crtos_STS.\n   Include ConAssertion.CSL.\n-  Include DerivedPredSig.\n-  Include StoreLibSig.\n-  Include ArrayLibSig.\n-  Include MapLibSig.\n-  Include StringLibSig.\n+  Include DerivedPredSig Arch32 LittleEndian.\n+  Include StoreLibSig Arch32 LittleEndian.\n+  Include ArrayLibSig Arch32 LittleEndian.\n+  Include MapLibSig Arch32 LittleEndian.\n+  Include StringLibSig Arch32 LittleEndian.\n End Crtos_C_Rules.\n \n (** 共享heap的精确carrier迁移不生成或复制任何IRQ token。 *)\n"
+  },
+  {
+    "source": "evidence/arm32le-candidate/pre-migration/lib/CrtosOSProtocolProof.v",
+    "source_sha256": "32fb590793b50a5522f2cc0f920e6d3c8190c26bda8e97fe8a21d2efe50c7fcf",
+    "candidate": "lib/CrtosOSProtocolProof.v",
+    "candidate_sha256": "32fb590793b50a5522f2cc0f920e6d3c8190c26bda8e97fe8a21d2efe50c7fcf",
+    "diff": ""
+  },
+  {
+    "source": "evidence/arm32le-candidate/pre-migration/lib/SemaphoreRep.v",
+    "source_sha256": "b696b18114fda220ccb6c8d74e32d86b62dbb9b23a303b23b14b861ff1050331",
+    "candidate": "lib/SemaphoreRep.v",
+    "candidate_sha256": "b696b18114fda220ccb6c8d74e32d86b62dbb9b23a303b23b14b861ff1050331",
+    "diff": ""
+  },
+  {
+    "source": "evidence/arm32le-candidate/pre-migration/lib/CrtosOSInv.v",
+    "source_sha256": "912089fdd047fb6bce46232c9bb250b6de1a95c243f10717efc30aca46f856f0",
+    "candidate": "lib/CrtosOSInv.v",
+    "candidate_sha256": "912089fdd047fb6bce46232c9bb250b6de1a95c243f10717efc30aca46f856f0",
+    "diff": ""
+  },
+  {
+    "source": "evidence/arm32le-candidate/pre-migration/lib/SemaphoreCritical.v",
+    "source_sha256": "1defb0f8508e648520db3cfa4c30a7bb06ec87d79dbdca1f9a26f2770624320f",
+    "candidate": "lib/SemaphoreCritical.v",
+    "candidate_sha256": "1defb0f8508e648520db3cfa4c30a7bb06ec87d79dbdca1f9a26f2770624320f",
+    "diff": ""
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "KSemaphoreCreate": [
+    "_SemaphoreCreate"
+  ],
+  "_SemaphoreCreate": [
+    "x_malloc",
+    "memset",
+    "CriticalAreaLock",
+    "IdInsertObj",
+    "x_free",
+    "InitDoubleLinkList",
+    "DoubleLinkListInsertNodeAfter",
+    "CriticalAreaUnLock",
+    "KPrintf"
+  ],
+  "IdInsertObj": [
+    "KPrintf",
+    "AllocId",
+    "InsertObj"
+  ],
+  "AllocId": [
+    "KPrintf"
+  ],
+  "InsertObj": [
+    "KPrintf",
+    "InitDoubleLinkList",
+    "DoubleLinkListInsertNodeAfter"
+  ],
+  "InitDoubleLinkList": [],
+  "DoubleLinkListInsertNodeAfter": []
+}

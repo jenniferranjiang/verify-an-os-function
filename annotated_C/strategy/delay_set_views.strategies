@@ -1,0 +1,77 @@
+#include "delay_set_views.h"
+
+// The one-cell tick invariant normalizes to the read resource used throughout this slice.
+id : 1
+priority : core(1)
+left : tick_inv(?sg, ?st) at 0
+action : left_erase(0);
+         left_add(0 <= os_tick(st));
+         left_add(os_tick(st) <= 65536 * 65536 - 1);
+         left_add(store(os_tick_ptr(sg), U32, os_tick(st)));
+
+// Zeroed allocation becomes a canonical initialized, unlinked Delay object.
+id : 2
+priority : core(1)
+left : CharArray::full(?delay, sizeof(struct Delay), repeat_Z{Z}(0, sizeof(struct Delay))) at 0
+check : infer(delay != 0);
+        infer(addr_aligned(delay, ALIGN_SIZE()));
+action : left_erase(0);
+         left_add(store_delay_unlinked_info(delay, mkTaskDelayAbs(0, 0, 0)));
+
+// Extract the inactive object, retaining all other Delay ownership in a frame.
+id : 3
+priority : core(1)
+left : delay_inv(?sg, ?st) at 0
+       delay_inactive_map(os_delays(st), ?delay) != None{TaskDelayAbs}() at 1
+right : store(field_addr(?base, Delay, status), U8, ?value) at 2
+check : infer(base == delay);
+        infer(delay != 0);
+action : left_erase(0);
+         left_exist_add(old_task : Z);
+         left_exist_add(old_ticks : Z);
+         left_add(store_delay_unlinked_info(delay, mkTaskDelayAbs(old_task, old_ticks, 0)));
+         left_add(addr_aligned(delay, ALIGN_SIZE()));
+         left_add(tdStatus(mkTaskDelayAbs(old_task, old_ticks, 0)) == 0);
+         left_add(delay_set_frame(st, delay, delay));
+         left_add(store_dll{TaskDelayAbs}(store_delay_info(), delay_head_ptr(sg), delay_active_nodes(os_delays(st))));
+
+id : 4
+priority : core(1)
+left : store_delay_unlinked_info(?delay, ?info) at 0
+right : store(field_addr(?base, Delay, status), U8, ?value) at 1
+check : infer(base == delay);
+action : left_erase(0);
+         left_add(store_delay_info(field_addr(delay, Delay, link), info));
+         left_add(occupy_dll_node(field_addr(delay, Delay, link)));
+
+// A demanded unlinked view is reconstructed through the payload's existing rules.
+id : 5
+priority : core(1)
+right : store_delay_unlinked_info(?delay, ?info) at 0
+action : right_erase(0);
+         right_add(store_delay_info(field_addr(delay, Delay, link), info));
+         right_add(occupy_dll_node(field_addr(delay, Delay, link)));
+
+// Freshness follows from concrete separation, not an allocator assumption.
+id : 6
+priority : core(1)
+left : delay_inv(?sg, ?st) at 0
+       store_delay_unlinked_info(?delay, ?info) at 1
+right : delay_set_frame(st, 0, delay) at 2
+action : left_erase(0);
+         left_erase(1);
+         left_add(delay_set_frame(st, 0, delay));
+         left_add(store_dll{TaskDelayAbs}(store_delay_info(), delay_head_ptr(sg), delay_active_nodes(os_delays(st))));
+         left_add(store_delay_unlinked_info(delay, info));
+
+// Read the current node's next pointer without expanding either list segment.
+id : 7
+priority : core(1)
+left : store_delay_dll_frame(?head, ?prefix, Build_DL_Node{TaskDelayAbs}(?info, ?link), ?suffix) at 0
+right : store(field_addr(?base, SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode), ?value) at 1
+check : infer(base == link);
+action : left_erase(0);
+         right_erase(1);
+         left_exist_add(next : Z);
+         left_add(store_delay_dll_next_frame(head, prefix, Build_DL_Node{TaskDelayAbs}(info, link), suffix, next));
+         right_add(value == next);

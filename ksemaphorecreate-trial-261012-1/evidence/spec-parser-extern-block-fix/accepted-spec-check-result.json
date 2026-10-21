@@ -1,0 +1,140 @@
+{
+  "status": "candidate-checks-passed-predicate-review-pending",
+  "spec_revision": "spec-r2-6d54bb88379e",
+  "annotated_manifest_sha256": "6d54bb88379e3c791407f6c1eb19190cc66680164505922ba8a0f18f4a5ece11",
+  "source_check_result_sha256": "798a370a8b3644afc97ff085a57766b82763966a26461c16b0dec207d159f6f8",
+  "source_equivalence": "token equality after documented normalizations against current-source preprocessing",
+  "checks": {
+    "AllocId": {
+      "source_token_equivalent": true,
+      "direct_calls": [
+        "KPrintf"
+      ],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "CriticalAreaLock": {
+      "source_token_equivalent": true,
+      "direct_calls": [
+        "DisableLocalInterrupt"
+      ],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "CriticalAreaUnLock": {
+      "source_token_equivalent": true,
+      "direct_calls": [
+        "EnableLocalInterrupt"
+      ],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "DoubleLinkListInsertNodeAfter": {
+      "source_token_equivalent": true,
+      "direct_calls": [],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "IdInsertObj": {
+      "source_token_equivalent": true,
+      "direct_calls": [
+        "AllocId",
+        "InsertObj",
+        "KPrintf"
+      ],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "InitDoubleLinkList": {
+      "source_token_equivalent": true,
+      "direct_calls": [],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "InsertObj": {
+      "source_token_equivalent": true,
+      "direct_calls": [
+        "DoubleLinkListInsertNodeAfter",
+        "InitDoubleLinkList",
+        "KPrintf"
+      ],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "KSemaphoreCreate": {
+      "source_token_equivalent": true,
+      "direct_calls": [
+        "_SemaphoreCreate"
+      ],
+      "api_complete": true,
+      "unique_active_body": true
+    },
+    "_SemaphoreCreate": {
+      "source_token_equivalent": true,
+      "direct_calls": [
+        "CriticalAreaLock",
+        "CriticalAreaUnLock",
+        "DoubleLinkListInsertNodeAfter",
+        "IdInsertObj",
+        "InitDoubleLinkList",
+        "memset",
+        "x_free",
+        "x_malloc"
+      ],
+      "api_complete": true,
+      "unique_active_body": true
+    }
+  },
+  "nontrusted": [
+    "AllocId",
+    "CriticalAreaLock",
+    "CriticalAreaUnLock",
+    "DoubleLinkListInsertNodeAfter",
+    "IdInsertObj",
+    "InitDoubleLinkList",
+    "InsertObj",
+    "KSemaphoreCreate",
+    "_SemaphoreCreate"
+  ],
+  "trusted": [
+    "DisableLocalInterrupt",
+    "EnableLocalInterrupt",
+    "KPrintf",
+    "memset",
+    "x_free",
+    "x_malloc"
+  ],
+  "all_caller_contracts_identical": true,
+  "trusted_declaration_delta": {
+    "memset": "byte-identical contract",
+    "KPrintf": "byte-identical contract",
+    "EnableLocalInterrupt": "caller-stack parameter only; semantic review pending",
+    "x_free": "byte-identical contract",
+    "x_malloc": "byte-identical contract",
+    "DisableLocalInterrupt": "caller-stack parameter only; semantic review pending"
+  },
+  "cortex_m3_c_syntax_and_slice_layout": "passed",
+  "command": [
+    "/tmp/crtos-arm-toolchain/root/usr/bin/arm-none-eabi-gcc",
+    "-mcpu=cortex-m3",
+    "-mthumb",
+    "-std=gnu11",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-Wall",
+    "-Wextra",
+    "-fsyntax-only",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/AllocId.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/CriticalAreaLock.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/CriticalAreaUnLock.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/IdInsertObj.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/InitDoubleLinkList.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/InsertObj.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/KSemaphoreCreate.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/_SemaphoreCreate.c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-layout-check.c"
+  ],
+  "qcp_started": false,
+  "elapsed_seconds": 0.19503132100362564
+}

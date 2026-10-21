@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "x_malloc",
+      "meaning": "Allocate a private 32-byte semaphore object or return null without resources."
+    },
+    {
+      "name": "memset",
+      "meaning": "Zero all fields of the private semaphore object."
+    },
+    {
+      "name": "CriticalAreaLock",
+      "meaning": "Enter a critical section after an allowed environment transition and expose its invariant."
+    },
+    {
+      "name": "IdInsertObj",
+      "meaning": "Preserve a full ID manager on failure, or allocate and link its minimum free ID."
+    },
+    {
+      "name": "x_free",
+      "meaning": "Release the private zeroed semaphore allocation."
+    },
+    {
+      "name": "InitDoubleLinkList",
+      "meaning": "Initialize the supplied node as a self-linked empty list."
+    },
+    {
+      "name": "DoubleLinkListInsertNodeAfter",
+      "meaning": "Insert the supplied node at a valid cut after the list node."
+    },
+    {
+      "name": "CriticalAreaUnLock",
+      "meaning": "Exit the critical section with a restored invariant and an allowed global transition."
+    },
+    {
+      "name": "_SemaphoreCreate",
+      "meaning": "Refine abs_semaphore_create: return -5 for allocation or capacity failure, otherwise publish an initialized semaphore with the minimum free ID, preserving the outside-critical protocol."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

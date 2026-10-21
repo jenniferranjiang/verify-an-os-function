@@ -1,0 +1,65 @@
+{
+    "device_id": 1,
+    "device_name": "PANASONIC_FPXH_TCP",
+    "communication_type": 0,
+    "socket_config": {
+        "plc_ip": "192.168.250.51",
+        "local_ip": "192.168.250.233",
+        "gateway": "192.168.250.1",
+        "netmask": "255.255.254.0",
+        "port": 502
+    },
+    "protocol_type": 2,
+    "read_period": 1000,
+    "read_item_list": [
+        {
+            "value_name": "Y0",
+            "value_type": 1,
+            "function_code": 1,
+            "start_address": 0,
+            "quantity": 1
+        },
+        {
+            "value_name": "R0",
+            "value_type": 1,
+            "function_code": 1,
+            "start_address":2048,
+            "quantity": 1
+        },
+        {
+            "value_name": "R100",
+            "value_type": 1,
+            "function_code": 1,
+            "start_address": 2208,
+            "quantity": 1
+        },
+       {
+            "value_name": "R101",
+            "value_type": 1,
+            "function_code": 1,
+            "start_address": 2209,
+            "quantity": 1
+        },
+        {
+            "value_name": "DT0",
+            "value_type": 3,
+            "function_code": 3,
+            "start_address": 0,
+            "quantity": 1
+        },
+        {
+            "value_name": "DT1",
+            "value_type": 3,
+            "function_code": 3,
+            "start_address": 1,
+            "quantity": 1
+        },
+        {
+            "value_name": "DT200",
+            "value_type": 3,
+            "function_code": 3,
+            "start_address": 200,
+            "quantity": 1
+        }    
+    ]
+}

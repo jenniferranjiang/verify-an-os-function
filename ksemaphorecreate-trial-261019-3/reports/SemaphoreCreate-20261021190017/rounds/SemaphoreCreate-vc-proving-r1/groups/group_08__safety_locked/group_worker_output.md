@@ -1,0 +1,1 @@
+Completed assigned safety witnesses 11–16 using LLM_pre_process with explicit lia/int_auto closers. No helpers, semantic inputs, declarations, or unassigned proof tokens changed. Forbidden lemma/tactic scan returned no matches. Controller group-check finished with exit code 0 and JSON status passed.

@@ -1,0 +1,3 @@
+menuconfig BSP_USING_SPI0_FLASH
+    bool "Enable SPI0 FLASH"
+    default y

@@ -1,0 +1,27 @@
+{
+  "case": "InsertObj",
+  "added_manual_witnesses": [
+    "proof_of_InsertObj_safety_wit_1",
+    "proof_of_InsertObj_safety_wit_2",
+    "proof_of_InsertObj_safety_wit_3",
+    "proof_of_InsertObj_safety_wit_4",
+    "proof_of_InsertObj_safety_wit_5",
+    "proof_of_InsertObj_safety_wit_6",
+    "proof_of_InsertObj_safety_wit_7",
+    "proof_of_InsertObj_safety_wit_8",
+    "proof_of_InsertObj_safety_wit_9",
+    "proof_of_InsertObj_safety_wit_10",
+    "proof_of_InsertObj_partial_solve_wit_1_pure",
+    "proof_of_InsertObj_partial_solve_wit_1",
+    "proof_of_InsertObj_partial_solve_wit_2_pure",
+    "proof_of_InsertObj_partial_solve_wit_2"
+  ],
+  "raw_roles": {
+    "goal_file": "a26277cd0fbe33d94a5c50bff40f1d523a9a4f62a9f93b1b429b2b4a7ed6c2c5",
+    "proof_auto_file": "49557cf2826f837f9786251b77908a26f1cb31899424524e270ea9fffdc4db7f",
+    "proof_manual_file": "d994f50eb3a9195201754e501c0a570eb723ea074335270ae54ba3e714e7dcaf",
+    "goal_check_file": "eecfa6c715e044c134d137ec7cc1fa526e56123c140e8f69a343927200f18776"
+  },
+  "goal_definitions_changed": false,
+  "auto_file_changed": false
+}

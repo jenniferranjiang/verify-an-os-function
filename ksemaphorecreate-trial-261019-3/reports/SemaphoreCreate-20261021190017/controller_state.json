@@ -1,0 +1,751 @@
+{
+  "schema_version": 4,
+  "generation": 81,
+  "run_id": "SemaphoreCreate-20261021190017",
+  "case": "SemaphoreCreate",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3",
+  "run_root": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/verification_runs/SemaphoreCreate-20261021190017",
+  "report_root": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/reports/SemaphoreCreate-20261021190017",
+  "target_files": {
+    "c_file": "annotated_C/src/_SemaphoreCreate.c",
+    "formal_directory": "VC",
+    "formal_case_lib": "VC/SemaphoreCreate_lib.v",
+    "goal_file": "VC/SemaphoreCreate_goal.v",
+    "proof_auto_file": "VC/SemaphoreCreate_proof_auto.v",
+    "proof_manual_file": "VC/SemaphoreCreate_proof_manual.v",
+    "goal_check_file": "VC/SemaphoreCreate_goal_check.v",
+    "case_name": "SemaphoreCreate",
+    "active_case_theory": "CRTOS_Verify.VC"
+  },
+  "problem_context": {
+    "problem_statement": "Prove the current _SemaphoreCreate implementation against its frozen spec. The user requests implementation proof only for _SemaphoreCreate and KSemaphoreCreate and says helpers are already proved; reuse matching contracts without re-proving helpers. Trust boundary: /home/xinra/TrustBase.md. Shared semantic sources are frozen in checks/implement-frozen-inputs.json. Do not change predicate or contract semantics. The local controller adapts the CRTOS layout and uses Coq 8.20.1 with ARM32 little-endian QCP. Existing historical reviews predate current authorized changes and are not claimed current; report any actual semantic issue explicitly.",
+    "target_function": "_SemaphoreCreate"
+  },
+  "formal_case_lib_policy": "create",
+  "spec_freeze": {
+    "functions": [
+      "CriticalAreaLock",
+      "CriticalAreaUnLock",
+      "DoubleLinkListInsertNodeAfter",
+      "IdInsertObj",
+      "InitDoubleLinkList",
+      "KPrintf",
+      "_SemaphoreCreate",
+      "memset",
+      "x_free",
+      "x_malloc"
+    ],
+    "baseline": {
+      "extern_coq": {
+        "DL_Node": ": * => *",
+        "option": ": * => *",
+        "TaskState": ": *",
+        "TaskDescriptorAbs": ": *",
+        "RoleSlotAbs": ": *",
+        "ZombieQueueAbs": ": *",
+        "MutexStable": ": *",
+        "MutexState": ": *",
+        "MsgQueueStable": ": *",
+        "MsgQueueState": ": *",
+        "EventStable": ": *",
+        "EventState": ": *",
+        "IsrStable": ": *",
+        "IsrAbs": ": *",
+        "map": "{A} {B} -> (A -> B) -> list A -> list B",
+        "In": "{A} -> A -> list A -> Prop",
+        "addr_aligned": "Z -> Z -> Prop",
+        "os_world_wf": "StableGlobalState -> VarGlobalState -> Prop",
+        "semaphore_context": "SemaphoreStable -> Prop",
+        "os_tasks": "VarGlobalState -> TaskState",
+        "task_desc_map": "TaskState -> Z -> option TaskDescriptorAbs",
+        "pure_suspend_sched_link": "(Z -> option TaskDescriptorAbs) -> Z -> Z -> Assertion",
+        "os_zombie_head": "StableGlobalState -> Z",
+        "zombie_queue": "VarGlobalState -> ZombieQueueAbs",
+        "os_recycler_slot": "StableGlobalState -> Z",
+        "os_recycle": "VarGlobalState -> RoleSlotAbs",
+        "role_id": "RoleSlotAbs -> Z",
+        "os_idle_array": "StableGlobalState -> Z",
+        "os_idle": "VarGlobalState -> list RoleSlotAbs",
+        "CORE_COUNT": "Z",
+        "os_mutex_stable": "StableGlobalState -> MutexStable",
+        "os_mutexes": "VarGlobalState -> MutexState",
+        "os_msgqueue_stable": "StableGlobalState -> MsgQueueStable",
+        "os_msgqueues": "VarGlobalState -> MsgQueueState",
+        "os_event_stable": "StableGlobalState -> EventStable",
+        "os_events": "VarGlobalState -> EventState",
+        "os_isr_stable": "StableGlobalState -> IsrStable",
+        "os_isr": "VarGlobalState -> IsrAbs",
+        "store_prio_lookup_table": "Assertion",
+        "store_zombie_queue": "(Z -> option TaskDescriptorAbs) -> Z -> ZombieQueueAbs -> Assertion",
+        "mutex_inv": "(Z -> Z -> Assertion) -> MutexStable -> MutexState -> Assertion",
+        "msgqueue_inv": "(Z -> Z -> Assertion) -> MsgQueueStable -> MsgQueueState -> Assertion",
+        "event_inv": "(Z -> Z -> Assertion) -> EventStable -> EventState -> Assertion",
+        "isrmanager_inv": "IsrStable -> IsrAbs -> Assertion",
+        "NodeZero": "Z -> Assertion",
+        "SemaphorePadding": "Z -> Assertion",
+        "semaphore_addr": "SemaphoreAbs -> Z",
+        "semaphore_link_node": "SemaphoreAbs -> DL_Node SemaphoreAbs",
+        "store_semaphore": "(Z -> Z -> Assertion) -> Z -> SemaphoreAbs -> Assertion",
+        "store_dll": "{A} -> (Z -> A -> Assertion) -> Z -> list(DL_Node A) -> Assertion",
+        "dllseg_shift_rev": "{A} -> (Z -> A -> Assertion) -> Z -> Z -> list(DL_Node A) -> Assertion",
+        "task_inv": "StableGlobalState -> VarGlobalState -> Assertion",
+        "tick_inv": "StableGlobalState -> VarGlobalState -> Assertion",
+        "delay_inv": "StableGlobalState -> VarGlobalState -> Assertion",
+        "assign_inv": "StableGlobalState -> VarGlobalState -> Assertion",
+        "exstatus_inv": "StableGlobalState -> VarGlobalState -> Assertion"
+      },
+      "import_coq": {},
+      "specs": {
+        "x_malloc::<default>": "Require nbytes == 32 && emp Ensure (__return == 0 && emp) || (__return != 0 && SemaphoreRaw(__return))",
+        "memset::<default>": "Require c == 0 && n == 32 && SemaphoreRaw(dest) Ensure __return == dest && SemaphoreZero(dest)",
+        "CriticalAreaLock::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) Require OutsideCritical(sg, before) Ensure exists locked, Crtos_RTrans(before, locked) && InsideCritical(sg, locked) * os_inv(sg, locked)",
+        "IdInsertObj::<default>": "With (sidm : StableIdmanager) (before : VarIdmanager) Require manager != 0 && idnode != 0 && store_idmanager(sidm, before, manager) * ZeroIdNode(idnode) Ensure (__return == -1 && idmanager_full(sidm, before) && store_idmanager(sidm, before, manager) * ZeroIdNode(idnode)) || (0 <= __return && __return < sidm.idmax && idmanager_min_free_id(sidm, before, __return) && store_idmanager(sidm, idmanager_link(sidm, idmanager_add(before, __return), __return, idnode), manager))",
+        "x_free::<default>": "Require SemaphoreZero(ptr) Ensure emp",
+        "InitDoubleLinkList::<default>": "Require NodeStorage(linklist_head) Ensure store_node_self_linked(linklist_head)",
+        "DoubleLinkListInsertNodeAfter::<default>": "With (next : Z) (oldprev : Z) (oldnext : Z) Require DllInsertAfterCut(linklist, next, linklist_node, oldprev, oldnext) Ensure DllInsertedCut(linklist, next, linklist_node)",
+        "CriticalAreaUnLock::<default>": "With (sg : StableGlobalState) (locked : VarGlobalState) (after : VarGlobalState) Require Crtos_GTrans(locked, after) && InsideCritical(sg, locked) * os_inv(sg, after) Ensure OutsideCritical(sg, after)",
+        "_SemaphoreCreate::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_create(sg, val), X) && OutsideCritical(sg, before) Ensure (exists after, __return == -5 && safeExec(LastSeen(after), return(-5), X) && OutsideCritical(sg, after)) || (exists after, 0 <= __return && __return < 128 && safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after))"
+      },
+      "lib": {
+        "declarations": {},
+        "imports": {
+          "From\nCoq\nRequire\nImport\nZArith\nList\n.\nImport\nListNotations\n.\nLocal\nOpen\nScope\nZ_scope\n.": "From Coq Require Import ZArith List ."
+        }
+      }
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-10-21T11:00:17.831668Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/SemaphoreCreate_goal_check.vo",
+    "base_artifact_count": 189,
+    "current_source_count": 5,
+    "elapsed_seconds": 47.834581,
+    "snapshot": "verification_runs/SemaphoreCreate-20261021190017/dependency_plan.json"
+  },
+  "attempts": {
+    "SemaphoreCreate-annotation-r1": {
+      "attempt_id": "SemaphoreCreate-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/SemaphoreCreate-20261021190017",
+      "claimed_action": "deliver:SemaphoreCreate-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-21T11:00:25.092604Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-21T11:00:40.468806Z",
+            "finished_at": "2026-10-21T11:15:23.798819Z",
+            "elapsed_seconds": 883.330013
+          }
+        ]
+      },
+      "returned_at": "2026-10-21T11:15:23.798789Z",
+      "finished_at": "2026-10-21T11:15:24.942824Z"
+    },
+    "SemaphoreCreate-vc-checking-r1": {
+      "attempt_id": "SemaphoreCreate-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/SemaphoreCreate-vc-checking-r1",
+      "claimed_action": "deliver:SemaphoreCreate-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-21T11:16:41.905769Z",
+      "source_annotation": "SemaphoreCreate-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-21T11:17:00.685310Z",
+            "finished_at": "2026-10-21T11:21:47.577573Z",
+            "elapsed_seconds": 286.892263
+          }
+        ]
+      },
+      "returned_at": "2026-10-21T11:21:47.577543Z",
+      "finished_at": "2026-10-21T11:21:47.626953Z"
+    },
+    "SemaphoreCreate-vc-proving-r1": {
+      "attempt_id": "SemaphoreCreate-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "running",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-21T11:21:47.626976Z",
+      "source_annotation": "SemaphoreCreate-annotation-r1",
+      "source_vc_checking": "SemaphoreCreate-vc-checking-r1",
+      "groups": {
+        "publish": {
+          "status": "blocked",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r1:publish",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r1:publish:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T11:21:58.781560Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T11:22:07.616744Z",
+                "finished_at": "2026-10-21T11:29:57.526251Z",
+                "elapsed_seconds": 469.909507
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T11:29:57.526222Z",
+          "blocker": {
+            "failure_class": "annotation-gap",
+            "kind": "missing-nonzero-facts-at-publication",
+            "vcs": [
+              {
+                "name": "proof_of__SemaphoreCreate_entail_wit_5_split_goal_spatial",
+                "parent": "proof_of__SemaphoreCreate_entail_wit_5",
+                "annotation_location": "annotated_C/src/_SemaphoreCreate.c:226"
+              }
+            ],
+            "message": "The publication premise contains store_node_self_linked for sem.pend_list, DllInsertedCut for sem.link and dllseg_shift_rev for the old management list, but none retains the respective pending-head nonzero, new-link nonzero or old dll_nodes_nonzero facts required by store_dll in the target os_inv. sem <> 0 and alignment do not establish separately addressed subobject nonzero; SemaphoreLayout is not a premise, and isvalidptr permits zero. These facts were available or required before the helper calls but are absent from their current postconditions and the exposed tail.",
+            "repair_boundary": "Review the private zeroed-object/layout contract and C:198 assertion, preserve sem.pend_list <> 0 and sem.link <> 0 across C:221-224 helper calls, and retain old management dll_nodes_nonzero when exposing dllseg_shift_rev so that C:226 can reconstruct store_dll. Accepted predicates/specs/annotations require a reviewed revision; this worker made no such edits."
+          },
+          "finished_at": "2026-10-21T11:29:57.590251Z"
+        },
+        "open_close": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r1:open_close",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r1:open_close:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T11:21:58.781580Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T11:22:07.854649Z",
+                "finished_at": "2026-10-21T11:36:03.223286Z",
+                "elapsed_seconds": 835.368637
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T11:36:03.223258Z",
+          "finished_at": "2026-10-21T11:37:48.413009Z"
+        },
+        "list_prepare": {
+          "status": "blocked",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r1:list_prepare",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r1:list_prepare:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T11:21:58.781585Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T11:22:08.091589Z",
+                "finished_at": "2026-10-21T11:27:48.465215Z",
+                "elapsed_seconds": 340.373626
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T11:27:48.465179Z",
+          "blocker": {
+            "failure_class": "annotation-gap",
+            "kind": "missing-embedded-node-nonzero",
+            "vcs": [
+              {
+                "name": "proof_of__SemaphoreCreate_entail_wit_4_split_goal_spatial",
+                "parent": "proof_of__SemaphoreCreate_entail_wit_4",
+                "annotation_location": "annotated_C/src/_SemaphoreCreate.c:198"
+              }
+            ],
+            "message": "The antecedent owns NodeZero for sem.link and sem.pend_list and knows sem<>0, but NodeZero contains no node-base nonzero fact. The consequent DllInsertAfterCut and NodeStorage require both embedded node bases <>0. eval_addr_expr is abstract; SemaphoreLayout is only an unproved proposition and is absent from the premises, so typed field ownership supplies no bridge to those required base-address facts.",
+            "repair_boundary": "Review and expose justified embedded-node nonzero facts through the private allocation/zeroing predicate and the assertion at annotated_C/src/_SemaphoreCreate.c:198, or provide a reviewed layout/validity bridge. Frozen predicates/spec/layout inputs are outside this proof-only group."
+          },
+          "finished_at": "2026-10-21T11:27:48.556323Z"
+        },
+        "return_refinement": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r1:return_refinement",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r1:return_refinement:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T11:21:58.781587Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T11:28:03.655331Z",
+                "finished_at": "2026-10-21T11:34:14.142726Z",
+                "elapsed_seconds": 370.487395
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T11:34:14.142696Z",
+          "finished_at": "2026-10-21T11:35:21.700922Z"
+        },
+        "entry_calls": {
+          "status": "blocked",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r1:entry_calls",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r1:entry_calls:1",
+          "repair_index": 1,
+          "created_at": "2026-10-21T11:21:58.781590Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T11:30:13.283468Z",
+                "finished_at": "2026-10-21T11:32:27.078137Z",
+                "elapsed_seconds": 133.794669
+              },
+              {
+                "started_at": "2026-10-21T11:32:37.188088Z",
+                "finished_at": "2026-10-21T11:33:33.788979Z",
+                "elapsed_seconds": 56.600891
+              }
+            ]
+          },
+          "feedback": "entry_calls: witness `proof_of__SemaphoreCreate_entail_wit_1` contains Admitted/Abort\nentry_calls: witness `proof_of__SemaphoreCreate_partial_solve_wit_1_pure` contains Admitted/Abort\nentry_calls: witness `proof_of__SemaphoreCreate_partial_solve_wit_1` contains Admitted/Abort\nentry_calls: witness `proof_of__SemaphoreCreate_partial_solve_wit_2_pure` contains Admitted/Abort\nentry_calls: witness `proof_of__SemaphoreCreate_partial_solve_wit_2` contains Admitted/Abort\nentry_calls: witness `proof_of__SemaphoreCreate_partial_solve_wit_3` contains Admitted/Abort",
+          "returned_at": "2026-10-21T11:33:33.788887Z",
+          "blocker": {
+            "failure_class": "annotation-gap",
+            "kind": "missing-layout-fact",
+            "vcs": [
+              {
+                "name": "proof_of__SemaphoreCreate_partial_solve_wit_1_pure",
+                "parent": null,
+                "annotation_location": "annotated_C/src/_SemaphoreCreate.c:150"
+              },
+              {
+                "name": "proof_of__SemaphoreCreate_partial_solve_wit_1",
+                "parent": null,
+                "annotation_location": "annotated_C/src/_SemaphoreCreate.c:150"
+              },
+              {
+                "name": "proof_of__SemaphoreCreate_partial_solve_wit_2_pure",
+                "parent": null,
+                "annotation_location": "annotated_C/src/_SemaphoreCreate.c:153"
+              },
+              {
+                "name": "proof_of__SemaphoreCreate_partial_solve_wit_2",
+                "parent": null,
+                "annotation_location": "annotated_C/src/_SemaphoreCreate.c:153"
+              }
+            ],
+            "message": "Current premises supply safeExec, value bounds, OutsideCritical and (for memset) SemaphoreRaw, but no premise or imported proved fact establishes sizeof(\"Semaphore\") = 32. SemaphoreLayout is only an unproved Prop definition. Named sizes remain abstract in CNotation, so the required allocation/zero-fill size equality does not follow.",
+            "repair_boundary": "Annotation/frontend layout translation for the sizeof(struct Semaphore) call arguments and matching x_malloc/memset contracts in annotated_C/src/_SemaphoreCreate.c; preserve accepted predicates and do not change generated goal statements or add an unsupported axiom."
+          },
+          "finished_at": "2026-10-21T11:33:33.850335Z"
+        },
+        "call_guards": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r1:call_guards",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r1:call_guards:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T11:21:58.781592Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T11:33:43.710858Z",
+                "finished_at": "2026-10-21T11:46:26.804299Z",
+                "elapsed_seconds": 763.093441
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T11:46:26.804270Z",
+          "finished_at": "2026-10-21T11:47:43.593817Z"
+        },
+        "safety_entry": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r1:safety_entry",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r1:safety_entry:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T11:21:58.781595Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T11:35:51.776502Z",
+                "finished_at": "2026-10-21T11:39:00.354834Z",
+                "elapsed_seconds": 188.578332
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T11:39:00.354804Z",
+          "finished_at": "2026-10-21T11:40:04.468336Z"
+        },
+        "safety_alloc": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r1:safety_alloc",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r1:safety_alloc:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T11:21:58.781597Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T11:38:49.873974Z",
+                "finished_at": "2026-10-21T11:42:02.766035Z",
+                "elapsed_seconds": 192.892061
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T11:42:02.766007Z",
+          "finished_at": "2026-10-21T11:42:59.320403Z"
+        },
+        "safety_locked": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r1:safety_locked",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r1:safety_locked:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T11:21:58.781599Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T11:40:13.825765Z",
+                "finished_at": "2026-10-21T11:43:22.329786Z",
+                "elapsed_seconds": 188.504021
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T11:43:22.329715Z",
+          "finished_at": "2026-10-21T11:44:21.337265Z"
+        }
+      }
+    },
+    "SemaphoreCreate-annotation-r2": {
+      "attempt_id": "SemaphoreCreate-annotation-r2",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/SemaphoreCreate-20261021190017",
+      "claimed_action": "deliver:SemaphoreCreate-annotation-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-10-21T11:48:19.084649Z",
+      "feedback_sources": [
+        {
+          "phase": "group",
+          "attempt_id": "SemaphoreCreate-vc-proving-r1:publish",
+          "evidence": [
+            "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/reports/SemaphoreCreate-20261021190017/rounds/SemaphoreCreate-vc-proving-r1/groups/group_00__publish/group_worker_report.json",
+            "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/reports/SemaphoreCreate-20261021190017/rounds/SemaphoreCreate-vc-proving-r1/groups/group_00__publish/group_worker_output.md"
+          ]
+        },
+        {
+          "phase": "group",
+          "attempt_id": "SemaphoreCreate-vc-proving-r1:list_prepare",
+          "evidence": [
+            "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/reports/SemaphoreCreate-20261021190017/rounds/SemaphoreCreate-vc-proving-r1/groups/group_02__list_prepare/group_worker_report.json",
+            "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/reports/SemaphoreCreate-20261021190017/rounds/SemaphoreCreate-vc-proving-r1/groups/group_02__list_prepare/group_worker_output.md"
+          ]
+        },
+        {
+          "phase": "group",
+          "attempt_id": "SemaphoreCreate-vc-proving-r1:entry_calls",
+          "evidence": [
+            "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/reports/SemaphoreCreate-20261021190017/rounds/SemaphoreCreate-vc-proving-r1/groups/group_04__entry_calls/group_worker_report.json",
+            "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/reports/SemaphoreCreate-20261021190017/rounds/SemaphoreCreate-vc-proving-r1/groups/group_04__entry_calls/group_worker_output.md"
+          ]
+        }
+      ],
+      "reason": "group-worker-annotation-gaps",
+      "failed_vcs": [
+        {
+          "source_attempt": "SemaphoreCreate-vc-proving-r1:publish",
+          "manual": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/verification_runs/SemaphoreCreate-20261021190017/SemaphoreCreate-vc-proving-r1/groups/group_00__publish/SemaphoreCreate_proof_manual.v",
+          "message": "The publication premise contains store_node_self_linked for sem.pend_list, DllInsertedCut for sem.link and dllseg_shift_rev for the old management list, but none retains the respective pending-head nonzero, new-link nonzero or old dll_nodes_nonzero facts required by store_dll in the target os_inv. sem <> 0 and alignment do not establish separately addressed subobject nonzero; SemaphoreLayout is not a premise, and isvalidptr permits zero. These facts were available or required before the helper calls but are absent from their current postconditions and the exposed tail.",
+          "name": "proof_of__SemaphoreCreate_entail_wit_5_split_goal_spatial",
+          "parent": "proof_of__SemaphoreCreate_entail_wit_5",
+          "annotation_location": "annotated_C/src/_SemaphoreCreate.c:226"
+        },
+        {
+          "source_attempt": "SemaphoreCreate-vc-proving-r1:list_prepare",
+          "manual": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/verification_runs/SemaphoreCreate-20261021190017/SemaphoreCreate-vc-proving-r1/groups/group_02__list_prepare/SemaphoreCreate_proof_manual.v",
+          "message": "The antecedent owns NodeZero for sem.link and sem.pend_list and knows sem<>0, but NodeZero contains no node-base nonzero fact. The consequent DllInsertAfterCut and NodeStorage require both embedded node bases <>0. eval_addr_expr is abstract; SemaphoreLayout is only an unproved proposition and is absent from the premises, so typed field ownership supplies no bridge to those required base-address facts.",
+          "name": "proof_of__SemaphoreCreate_entail_wit_4_split_goal_spatial",
+          "parent": "proof_of__SemaphoreCreate_entail_wit_4",
+          "annotation_location": "annotated_C/src/_SemaphoreCreate.c:198"
+        },
+        {
+          "source_attempt": "SemaphoreCreate-vc-proving-r1:entry_calls",
+          "manual": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/verification_runs/SemaphoreCreate-20261021190017/SemaphoreCreate-vc-proving-r1/groups/group_04__entry_calls/SemaphoreCreate_proof_manual.v",
+          "message": "Current premises supply safeExec, value bounds, OutsideCritical and (for memset) SemaphoreRaw, but no premise or imported proved fact establishes sizeof(\"Semaphore\") = 32. SemaphoreLayout is only an unproved Prop definition. Named sizes remain abstract in CNotation, so the required allocation/zero-fill size equality does not follow.",
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_1_pure",
+          "parent": null,
+          "annotation_location": "annotated_C/src/_SemaphoreCreate.c:150"
+        },
+        {
+          "source_attempt": "SemaphoreCreate-vc-proving-r1:entry_calls",
+          "manual": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/verification_runs/SemaphoreCreate-20261021190017/SemaphoreCreate-vc-proving-r1/groups/group_04__entry_calls/SemaphoreCreate_proof_manual.v",
+          "message": "Current premises supply safeExec, value bounds, OutsideCritical and (for memset) SemaphoreRaw, but no premise or imported proved fact establishes sizeof(\"Semaphore\") = 32. SemaphoreLayout is only an unproved Prop definition. Named sizes remain abstract in CNotation, so the required allocation/zero-fill size equality does not follow.",
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_1",
+          "parent": null,
+          "annotation_location": "annotated_C/src/_SemaphoreCreate.c:150"
+        },
+        {
+          "source_attempt": "SemaphoreCreate-vc-proving-r1:entry_calls",
+          "manual": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/verification_runs/SemaphoreCreate-20261021190017/SemaphoreCreate-vc-proving-r1/groups/group_04__entry_calls/SemaphoreCreate_proof_manual.v",
+          "message": "Current premises supply safeExec, value bounds, OutsideCritical and (for memset) SemaphoreRaw, but no premise or imported proved fact establishes sizeof(\"Semaphore\") = 32. SemaphoreLayout is only an unproved Prop definition. Named sizes remain abstract in CNotation, so the required allocation/zero-fill size equality does not follow.",
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_2_pure",
+          "parent": null,
+          "annotation_location": "annotated_C/src/_SemaphoreCreate.c:153"
+        },
+        {
+          "source_attempt": "SemaphoreCreate-vc-proving-r1:entry_calls",
+          "manual": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/verification_runs/SemaphoreCreate-20261021190017/SemaphoreCreate-vc-proving-r1/groups/group_04__entry_calls/SemaphoreCreate_proof_manual.v",
+          "message": "Current premises supply safeExec, value bounds, OutsideCritical and (for memset) SemaphoreRaw, but no premise or imported proved fact establishes sizeof(\"Semaphore\") = 32. SemaphoreLayout is only an unproved Prop definition. Named sizes remain abstract in CNotation, so the required allocation/zero-fill size equality does not follow.",
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_2",
+          "parent": null,
+          "annotation_location": "annotated_C/src/_SemaphoreCreate.c:153"
+        }
+      ],
+      "retry_reason": "group-worker-annotation-gaps",
+      "retry_previous_attempt": "SemaphoreCreate-vc-proving-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-21T11:48:27.560251Z",
+            "finished_at": "2026-10-21T11:53:13.605269Z",
+            "elapsed_seconds": 286.045018
+          }
+        ]
+      },
+      "returned_at": "2026-10-21T11:53:13.605242Z",
+      "finished_at": "2026-10-21T11:54:03.245494Z"
+    },
+    "SemaphoreCreate-vc-checking-r2": {
+      "attempt_id": "SemaphoreCreate-vc-checking-r2",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/SemaphoreCreate-vc-checking-r2",
+      "claimed_action": "deliver:SemaphoreCreate-vc-checking-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-10-21T11:55:40.066553Z",
+      "source_annotation": "SemaphoreCreate-annotation-r2",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-21T11:56:05.833046Z",
+            "finished_at": "2026-10-21T12:30:43.465872Z",
+            "elapsed_seconds": 2077.632826
+          }
+        ]
+      },
+      "returned_at": "2026-10-21T12:30:43.465843Z",
+      "finished_at": "2026-10-21T12:30:43.519399Z"
+    },
+    "SemaphoreCreate-vc-proving-r2": {
+      "attempt_id": "SemaphoreCreate-vc-proving-r2",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-21T12:30:43.519424Z",
+      "source_annotation": "SemaphoreCreate-annotation-r2",
+      "source_vc_checking": "SemaphoreCreate-vc-checking-r2",
+      "groups": {
+        "raw_open": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r2:raw_open",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r2:raw_open:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T12:30:59.596887Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T12:31:15.439155Z",
+                "finished_at": "2026-10-21T12:38:48.064031Z",
+                "elapsed_seconds": 452.624876
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T12:38:48.063986Z",
+          "finished_at": "2026-10-21T12:40:35.664167Z"
+        },
+        "publish": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r2:publish",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r2:publish:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T12:30:59.596918Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T12:31:15.771396Z",
+                "finished_at": "2026-10-21T13:07:15.246838Z",
+                "elapsed_seconds": 2159.475442
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T13:07:15.246764Z",
+          "finished_at": "2026-10-21T13:09:57.414061Z"
+        },
+        "list_prepare": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r2:list_prepare",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r2:list_prepare:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T12:30:59.596925Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T12:31:16.080057Z",
+                "finished_at": "2026-10-21T12:42:26.141517Z",
+                "elapsed_seconds": 670.06146
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T12:42:26.141490Z",
+          "finished_at": "2026-10-21T12:44:27.239009Z"
+        },
+        "entry_calls": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r2:entry_calls",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r2:entry_calls:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T12:30:59.596928Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T12:41:05.585640Z",
+                "finished_at": "2026-10-21T12:46:40.528281Z",
+                "elapsed_seconds": 334.942641
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T12:46:40.528251Z",
+          "finished_at": "2026-10-21T12:47:48.724678Z"
+        },
+        "critical_cleanup": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r2:critical_cleanup",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r2:critical_cleanup:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T12:30:59.596931Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T13:10:10.362263Z",
+                "finished_at": "2026-10-21T13:15:06.219588Z",
+                "elapsed_seconds": 295.857325
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T13:15:06.219556Z",
+          "finished_at": "2026-10-21T13:16:59.583325Z"
+        },
+        "returns": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r2:returns",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r2:returns:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T12:30:59.596933Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T13:10:10.617215Z",
+                "finished_at": "2026-10-21T13:13:29.044687Z",
+                "elapsed_seconds": 198.427472
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T13:13:29.044649Z",
+          "finished_at": "2026-10-21T13:14:50.860104Z"
+        },
+        "safety_entry": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r2:safety_entry",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r2:safety_entry:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T12:30:59.596935Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T13:10:10.873943Z",
+                "finished_at": "2026-10-21T13:17:20.600375Z",
+                "elapsed_seconds": 429.726432
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T13:17:20.600341Z",
+          "finished_at": "2026-10-21T13:18:42.705119Z"
+        },
+        "safety_alloc": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r2:safety_alloc",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r2:safety_alloc:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T12:30:59.596936Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T13:14:55.116999Z",
+                "finished_at": "2026-10-21T13:18:47.168171Z",
+                "elapsed_seconds": 232.051172
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T13:18:47.168142Z",
+          "finished_at": "2026-10-21T13:20:01.622129Z"
+        },
+        "safety_locked": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreCreate-vc-proving-r2:safety_locked",
+          "claimed_action": "deliver:SemaphoreCreate-vc-proving-r2:safety_locked:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T12:30:59.596938Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T13:17:07.931318Z",
+                "finished_at": "2026-10-21T13:20:06.576521Z",
+                "elapsed_seconds": 178.645203
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T13:20:06.576495Z",
+          "finished_at": "2026-10-21T13:21:13.709080Z"
+        }
+      },
+      "finished_at": "2026-10-21T13:24:04.676532Z"
+    }
+  },
+  "current": {
+    "annotation": "SemaphoreCreate-annotation-r2",
+    "vc-checking": "SemaphoreCreate-vc-checking-r2",
+    "vc-proving": "SemaphoreCreate-vc-proving-r2"
+  },
+  "annotation_owner": "annotation/SemaphoreCreate-20261021190017",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "SemaphoreCreate-vc-proving-r2"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-10-21T13:26:53.696955Z",
+    "files": [
+      "VC/SemaphoreCreate_proof_manual.v",
+      "VC/SemaphoreCreate_lib.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-10-21T13:32:13.598499Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-10-21T11:00:17.831697Z",
+  "updated_at": "2026-10-21T13:32:13.611050Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file",
+      "formal_case_lib"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-10-21T13:32:13.598472Z"
+}

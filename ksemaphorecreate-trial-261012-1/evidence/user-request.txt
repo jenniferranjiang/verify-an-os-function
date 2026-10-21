@@ -1,0 +1,593 @@
+请使用 verify-an-os-function，从零重新验证 CRTOS 的 KSemaphoreCreate，并把本任务作为一个持续目标执行。
+
+如果当前客户端支持 Goals，请为本任务创建并启动一个 active Goal。目标是：在不读取旧 trial、
+不降低任何审阅或机器检查标准的前提下，完成新的 predicate、spec、QCP proof 和 final integrity。
+除非达到本文明确列出的 blocker，否则不要在阶段边界停下等待用户回复。
+
+不要修改 verify-an-os-function 或其他 skill。本 prompt 只是本次实验的一次性授权，不形成长期规则。
+
+# 一、隔离并保留旧 trial
+
+旧 trial：
+
+/home/xinra/crtos/ksemaphorecreate-trial-260928-1
+
+已经完成，现作为历史档案保留。用户明确要求本次实验不得读取、搜索、解析、复制、修改、删除、
+导入或依赖该目录中的任何文件。
+
+不要通过检查旧 trial 来判断其状态。直接依据用户声明，将它视为已经完成、不是当前未完成实验。
+它的存在不是 blocker，也不得因此要求用户确认是否继续旧实验。
+
+允许在枚举 CRTOS 根目录时看到该目录的名称，以便计算新实验的日期和序号，但不得递归进入其内容。
+
+所有递归搜索、文件枚举、hash、构建、Rocq load path、QCP 输入和 dependency closure 必须排除：
+
+ksemaphorecreate-trial-260928-1/**
+
+例如，从 CRTOS 根目录执行 rg 时必须使用等价排除条件：
+
+--glob '!ksemaphorecreate-trial-260928-1/**'
+
+不得把旧 trial 加入：
+
+- rg/find 的递归搜索范围；
+- _CoqProject；
+- Makefile 输入；
+- Rocq 的 -R/-Q load path；
+- VsRocq 的活动 trial 映射；
+- QCP 输入目录；
+- predicate/spec/VC/proof 的证据集合；
+- dependency closure；
+- 编译、coqchk 或 trust scan 的目标集合。
+
+不得使用旧 trial 获取命名、设计、lemma、strategy、contract、proof 或修复提示。
+
+按照 verify-an-os-function 的新实验命名规则，检查当前日期已有的新实验目录并自动计算序号，
+创建：
+
+ksemaphorecreate-trial-<当前日期>-<当天序号>
+
+不得复用旧名称。旧 trial 的存在不参与“未完成实验”判断。
+
+切换 VsRocq 映射时，可以读取和修改项目的 .vscode/settings.json，将活动 trial 映射指向新 trial；
+不得把旧 trial 作为活动 load path。
+
+# 二、目标与权威输入
+
+目标函数：
+
+- 对外目标：KSemaphoreCreate
+- 按当前配置重新展开完整递归验证闭包
+- done.SemaphoreCreate 在本配置下解析为唯一实现 _SemaphoreCreate
+
+本次允许使用的权威来源只有：
+
+1. 当前 CRTOS 权威 C 源码、headers 和配置；
+2. /home/xinra/crtos/lib/index.md 及其指向的正式根共享 Rocq 定义；
+3. /home/xinra/qcp-binary-democases/ 中的正式 QCP 教程、语法和示例；
+4. verify-an-os-function 指定的 guides 与 experience 文件；
+5. 本 prompt 明确给出的配置、trusted contracts、语义目标、正规化和流程授权。
+
+不得用旧 trial 作为参考来源。
+
+# 三、固定配置与 ABI
+
+本次固定使用：
+
+- board/stm32f103-nano/config
+- Cortex-M3
+- 32 位 ILP32
+- 非 SMP
+- 不采用仓库默认的 kd233/RV64/SMP 配置
+
+必须从当前权威源码和配置重新确认：
+
+- struct Semaphore 的大小；
+- 所有被访问字段的真实 ABI offset；
+- 指针和整数宽度；
+- x_size_t 的 ILP32 表示；
+- critical/IRQ 的非 SMP 实现分支；
+- 宏展开与条件编译结果。
+
+当前目标 ABI 下预期：
+
+sizeof(struct Semaphore) == 32
+
+历史 source 身份为：
+
+source-s2-2adc70fc1afc
+
+该标识由用户提供，只作为历史身份和目标配置提示。由于旧 trial 禁止读取，不能仅凭该标签声称当前源码
+与历史实验字节相同。必须从当前权威源码和配置重新生成并记录本次 source/config manifest。
+
+若当前权威源码或配置与上述目标发生实质变化，停止并报告具体文件、symbol、配置项和影响。
+
+# 四、本次明确批准的 trusted 边界
+
+本次批准且仅批准以下 6 个 trusted C symbols：
+
+- x_malloc
+- x_free
+- memset
+- DisableLocalInterrupt
+- EnableLocalInterrupt
+- KPrintf
+
+它们的函数体不进入递归验证闭包。
+
+新 trial 必须在实际 caller 文件中重新建立完整的 declaration-only With/Require/Ensure contract，
+并由 spec reviewer 检查。允许使用本次新设计且 review-passed 的 predicate 对 contract 做
+alpha-equivalent 或语义等价表达，但不得：
+
+- 加强 Require；
+- 弱化 Ensure；
+- 改变 ownership transfer；
+- 改变 IRQ 状态转换；
+- 引入未批准假设。
+
+## x_malloc
+
+只批准 size == 32 的本次调用。
+
+Require：
+
+- size == 32；
+- emp。
+
+Ensure 二选一：
+
+- 返回 NULL/0，并保持 emp；
+- 返回非零地址，并交出完整的 32-byte 未初始化 semaphore 对象 ownership，
+  对应 store_sem_allocated 的语义。
+
+## x_free
+
+Require：
+
+- 消费一个完整、已清零、尚未发布的 semaphore 私有对象，
+  对应 store_sem_zeroed_private 的语义。
+
+Ensure：
+
+- emp，表示该对象 ownership 已被释放操作消费。
+
+## memset
+
+只批准 value == 0 且 size == 32 的本次调用。
+
+Require：
+
+- value == 0；
+- size == 32；
+- 持有 dest 对应的完整未初始化 semaphore 对象 ownership。
+
+Ensure：
+
+- 返回 dest；
+- 将 store_sem_allocated(dest) 转换成
+  store_sem_zeroed_private(dest)。
+
+## DisableLocalInterrupt
+
+使用真实关中断原子边界的 irq_enter contract。
+
+Require：
+
+- SemaphoreOutsideCritical(stable, before)，或新 predicate revision 中语义等价的 outside 状态。
+
+Ensure 存在 handler 和 current，使：
+
+- 返回值等于 handler；
+- handler 满足 semaphore_irq_handler_ok；
+- 环境按照 SemaphoreRely 从 before 推进到 current；
+- 获得 current 对应的 inside-critical token；
+- 获得 current 对应的 CRTOS/semaphore OS invariant。
+
+其协议转换为：
+
+outside(before)
+→ inside(handler, current) + OS invariant(current)
+
+## EnableLocalInterrupt
+
+使用真实恢复中断边界的 irq_exit contract。
+
+Require：
+
+- level/handler 满足 semaphore_irq_handler_ok；
+- before 到 after 满足 SemaphoreGuarantee；
+- 持有 before 对应的 inside-critical token；
+- 持有 after 对应的 CRTOS/semaphore OS invariant。
+
+Ensure：
+
+- 获得 after 对应的 SemaphoreOutsideCritical。
+
+其协议转换为：
+
+inside(handler, before) + OS invariant(after)
+→ outside(after)
+
+## KPrintf
+
+在本验证模型中：
+
+- Require emp；
+- Ensure emp。
+
+它不拥有或改变受验证 heap、task、scheduler、semaphore 或 OS 状态。
+
+为适配 QCP parser，允许把本次真实 variadic KPrintf 调用归一为实际使用的四参数声明：
+
+void KPrintf(
+    const char *fmt,
+    const char *function,
+    int line,
+    const char *parameter
+);
+
+该归一不得改变真实调用参数、路径、副作用或 Cortex-M3 ABI 行为。
+
+如果完整闭包分析发现需要第 7 个 trusted symbol，或者上述 contract 必须发生实质变化，
+立即停止并报告，不得自行扩展 trusted 集合。
+
+# 五、用户已经批准的 predicate 语义目标
+
+历史审阅身份：
+
+- predicate-r23-1845f34ef435
+- manifest:
+  1845f34ef4351d7cb9e97b241d242c8e5295323530c1428066c2f1f273852bfc
+
+因为旧 trial 被禁止读取，该 revision 和 manifest 只能作为用户在本 prompt 中提供的历史审阅身份，
+不能作为当前 formal source，也不能声称新 revision 与它字节相同。
+
+用户提前确认并批准本次新 predicate 必须表达以下语义：
+
+- semaphore abstract state 的含义；
+- semaphore 对象的分配、清零、私有、发布和释放生命周期；
+- ID manager、bitmap、bucket、registry、ID node、link 和 pending list 的 ownership；
+- task、scheduler、semaphore 使用同一个 CRTOS OS carrier；
+- 未触及的 task/scheduler 分量保持；
+- critical STS；
+- outside/inside critical token；
+- SemaphoreRely；
+- SemaphoreGuarantee；
+- semaphore create transition；
+- Cortex-M3 ILP32 下 32-byte struct Semaphore 的布局解释；
+- 初始化、正常创建、ID 满失败、释放和退出临界区路径的 ownership 闭合；
+- 每个稳定生命周期状态中的每个受访问字节有且仅有一个 owner；
+- 跨模块资源的 owner、借用和转移边界明确；
+- 不把其他模块的内部资源错误并入 semaphore 模块 ownership。
+
+必须从当前权威源码、配置、根 lib 和 QCP 资料重新建立正式 predicate revision。
+
+Predicate 必须：
+
+- 具有必要的中文 definition/statement 注释；
+- 建立 predicate 设计记录；
+- 绑定新 formal revision 和 manifest；
+- 通过适用的 Rocq compile/typecheck；
+- 由独立 predicate reviewer 审阅；
+- 满足 verify-an-os-function 的全部 predicate review-ready 和 review-passed 条件；
+- 不存在影响 ownership、abstract semantics、lifecycle、frame 或后续验证的 open blocker。
+
+历史 hash 不能代替本次 review。
+
+# 六、用户已经批准的函数 spec 语义目标
+
+历史审阅身份：
+
+- spec-r25-4ac7a52f6b42
+- annotated manifest:
+  4ac7a52f6b420f037e1925005bbeac89eec07731388cfe5754d8228d7ec8c781
+
+因为旧 trial 被禁止读取，该 revision 和 manifest 同样只能作为历史审阅身份，不能作为当前 annotated C。
+
+用户提前确认并批准 KSemaphoreCreate 的功能目标：
+
+- malloc 失败时返回 -5；
+- ID 满或 ID 分配失败时：
+  - 不发布 semaphore；
+  - 恢复可释放的私有对象 ownership；
+  - 调用 x_free 释放对象；
+  - 正确退出临界区；
+  - 返回 -5；
+- 成功时取得当前 semaphore 状态中的首个空闲 ID；
+- 创建的 semaphore：
+  - value 等于输入值；
+  - pending list 为空；
+  - ID manager、bitmap、bucket 和 registry 正确更新；
+  - 对象从私有生命周期转入正式发布状态；
+- task 和 scheduler 分量保持；
+- 所有有限返回路径最终恢复 outside-critical；
+- 当前 ABI 下 sizeof(struct Semaphore) == 32；
+- 每条真实路径的返回值、abstract effect、old/new、ownership transfer 和 frame 都明确；
+- Require 足以执行但没有无依据加强；
+- Ensure 不弱化实现义务；
+- callee contract 不冒充已经验证的 callee body；
+- 不隐藏失败路径或无限路径。
+
+必须按完整递归闭包重新建立 canonical annotated C：
+
+- 每个非 trusted 函数恰好有一个 active-body 文件；
+- 每个 caller 中的真实 callee 都有完整 declaration-only contract；
+- caller-local contract 与 canonical contract alpha/typedef 等价；
+- 不建立集中式模块级 *_specs.h；
+- 不复制无关源码树或无关 headers；
+- 被直接字段访问的 struct 保持真实 ABI offset。
+
+完成源码等价性检查、scope-faithfulness 检查、闭包重扫、predicate compile/typecheck
+和独立 spec review 后，才能标记 spec review-passed。
+
+# 七、用户批准的切片正规化
+
+本次批准以下且仅以下正规化，但每项仍须重新进行源码/config 等价性审阅：
+
+- 将 done.SemaphoreCreate 解析为当前配置下唯一的 _SemaphoreCreate；
+- 将 source-static _SemaphoreCreate 在单函数切片中 externalize；
+- 删除当前配置下展开为空的 debug macro；
+- 删除 if (KDBG_IPC) 的配置常量死分支；
+- 将 IRQ macros 解析为 DisableLocalInterrupt 和 EnableLocalInterrupt；
+- 将 variadic KPrintf 按本次真实四参数调用归一为 parser 可接受的固定声明；
+- 按 Cortex-M3 ILP32 对 x_size_t 做等价正规化；
+- skill 已允许且有源码/config 依据的必要拆句、宏展开和 static-to-slice-external 处理。
+
+所有正规化必须保留：
+
+- 真实控制流；
+- 返回值；
+- 调用参数；
+- memory reads/writes；
+- observable side effects；
+- blocking/infinite paths。
+
+每项正规化必须在 spec review 记录中绑定权威源码和配置证据。
+
+不得：
+
+- 替换算法；
+- 删除当前配置下可达的路径；
+- 隐藏 callee body；
+- 发明错误 struct layout；
+- 把未唯一解析的 dispatch 当作已经解析；
+- 添加没有源码依据的语义替换。
+
+# 八、本次一次性流程授权
+
+这是用户仅针对本次新实验给出的明确一次性授权，不修改 skill，也不适用于以后实验。
+
+用户已经在本 prompt 中固定：
+
+- 目标函数和模块边界；
+- source/config/ABI；
+- 6 个 trusted symbols 及其 contracts；
+- predicate 语义目标；
+-函数 spec 语义目标；
+- 允许的切片正规化；
+- 完成条件和停止条件。
+
+因此，本次对 verify-an-os-function 中 predicate/spec revision 确认门做如下单次例外：
+
+1. Predicate author 和 predicate reviewer 必须分开。
+2. Predicate 达到独立 review-passed、绑定新 formal revision、通过 compile/typecheck、
+   没有 open blocker，并且与第五节批准的语义目标一致后：
+   - 记录新 predicate revision 和 manifest；
+   - 视为已获得用户对该新 revision 的确认；
+   - 不再等待用户回复；
+   - 继续 spec 工作。
+3. Spec author 和 spec reviewer 必须分开。
+4. Spec 达到独立 review-passed、绑定新 annotated manifest、完整闭包检查通过、
+   没有 open blocker，并且与第六节批准的功能目标一致后：
+   - 记录新 spec revision 和 manifest；
+   - 视为已获得用户对该新 revision 的确认；
+   - 不再等待用户回复。
+5. Predicate 和 spec 都满足上述条件后，立即进入 implement。
+6. 不得因为通常的 predicate/spec revision 确认门而暂停。
+
+进入 implement 后：
+
+1. 读取 /home/xinra/qcp-binary-democases/AGENTS.md。
+2. 启动其中指定的 verification-orchestrator。
+3. 把本次已接受的 predicate/spec revisions 作为冻结输入。
+4. Main agent 只执行 controller 返回的 action。
+5. 持续执行到 controller 返回 done 或真正 blocker。
+6. 不另行维护第二套 symbolic、VC 或 proof 顺序。
+
+如果 proof、symbolic 或 VC 暴露 predicate/spec 问题：
+
+- 允许回退到对应设计阶段修复；
+- 修复必须保持在第五、第六节已经批准的语义目标内；
+- 修复后固定新 revision；
+- 重新进行受影响的独立 review；
+- 再次达到 review-passed 后自动接受并恢复 verification-orchestrator；
+- 不需要再次等待用户。
+
+如果修复必须实质改变已批准的 predicate/spec 语义，则停止并请求用户明确 unfreeze。
+
+本授权不降低任何：
+
+- review-ready 条件；
+- review-passed 条件；
+- C/source 等价性检查；
+- Rocq compile/typecheck；
+- VC 完整性；
+- proof 完整性；
+- coqchk；
+- trust scan；
+- final integrity 条件。
+
+本授权也不扩大操作系统、文件系统、网络或命令执行权限。系统权限仍由当前 sandbox、
+approval policy 和自动 reviewer 决定。
+
+# 九、共享库边界
+
+开始 predicate 设计前读取：
+
+/home/xinra/crtos/lib/index.md
+
+并读取索引指向的正式共享文件。
+
+规则：
+
+- 已有且职责匹配的根共享定义必须复用；
+- 不得因为不知道旧 trial 的设计而重新定义根 lib 中已经存在的概念；
+- 当前实验需要的新 module-local 内容写入新 trial；
+- 当前实验需要的新 CRTOS-global 内容可以在新 trial 中建立 candidate；
+- candidate 必须按 skill 要求编译、记录和审阅；
+- 本次无人值守执行不得自动把 candidate 晋升到 /home/xinra/crtos/lib/；
+- 不得自动修改已经批准的根共享 definition；
+- 新实验应通过隔离且无冲突的 trial load path 使用本地 candidate 完成验证；
+- 如果不修改或晋升根共享 lib 就确实无法继续，停止并报告 target、理由和影响范围。
+
+除新 trial 内容以及 skill 明确要求的项目路径配置外，不修改无关文件。
+
+绝对不得修改或清理旧 trial。
+
+# 十、阶段与持续执行要求
+
+按以下顺序持续推进：
+
+1. 确认 source/config/ABI 和目标模块边界。
+2. 建立并记录本次 source/config manifest。
+3. 扫描 KSemaphoreCreate 的完整递归闭包。
+4. 设计 predicate、abstract state、ownership、STS 和必要 lemma statements。
+5. 编译并修复 predicate formal sources。
+6. 完成独立 predicate full review。
+7. 修复 review issues，并按 dependency closure 重审，直到 review-passed 或真正 blocker。
+8. 自动记录并接受本次 predicate revision。
+9. 建立全部 canonical annotated C 和 caller-local callee contracts。
+10. 从 KSemaphoreCreate 重新扫描完整闭包。
+11. 完成独立 spec full review。
+12. 修复 review issues，并重审修改处及 transitive callers，直到 review-passed 或真正 blocker。
+13. 自动记录并接受本次 spec revision。
+14. 启动 verification-orchestrator。
+15. 按 controller action 完成 closure、symbolic、VC、proof 和重试。
+16. 完成 final integrity。
+
+一次 compile、typecheck、parser、symbolic、VC、proof、goal-check 或 coqchk 失败不是停止理由。
+
+发生失败时：
+
+- 读取具体诊断；
+- 确定属于 source、predicate、spec、proof、tool 还是环境问题；
+- 实施当前授权范围内最小且有依据的修复；
+- 重跑失败项及其 dependency closure；
+- 继续下一阶段。
+
+不得通过以下方式取得表面成功：
+
+- 加强无依据 Require；
+- 弱化 Ensure；
+- 删除或隐藏 VC；
+- 删除真实路径；
+- 用 Parameter、Axiom、Admitted、admit 或占位定义绕过证明；
+- 把 tool failure 写成设计通过；
+- 把 trusted callee 状态冒充 verified；
+- 依赖未验证 generated-auto placeholder。
+
+不要对同一 blocker 空转。如果没有新修改或新证据，不得重复执行同一失败步骤。
+
+# 十一、完成条件
+
+只有以下条件全部满足才能宣布完成：
+
+- 当前 source/config/ABI 已明确记录；
+- 新 trial 不读取、不导入、不依赖旧 trial；
+- 完整递归闭包中的每个 symbol 恰好属于：
+  - 具有唯一 active body 和 canonical spec；或
+  - 本 prompt 批准的 6 个 trusted symbols；
+- Predicate 独立 review-passed；
+- Spec 独立 review-passed；
+- 两者的新 formal revisions 和 manifests 已记录；
+- 所有本次实际生成的正式 VC 都有完整证明；
+- 所有 Rocq proof 文件编译成功；
+- 所有适用 goal-check 成功；
+- 对最终 proof closure 执行完整 coqchk；
+- trust scan 不存在本实验新增的手写 Admitted、admit、Axiom、Parameter 或占位定义；
+- manual/verified proof 不依赖未验证 generated-auto placeholder；
+- C integrity 通过；
+- VC integrity 通过；
+- proof/trust integrity 通过；
+- 建立 final integrity 记录。
+
+Final integrity 必须明确记录：
+
+- 本次 source/config manifest；
+- 新 predicate revision 和 manifest；
+- 新 spec revision 和 manifest；
+- 6 个 trusted symbols 及采用的 contracts；
+- 正规化清单；
+- 实际 VC 总数及证明分类；
+- Rocq compile/typecheck 结果；
+- goal-check 结果；
+- coqchk 结果；
+- trust scan 结果；
+- 与历史诊断基线的差异及原因；
+- 是否存在剩余 blocker 或不确定性；
+- 已确认新 trial 没有依赖旧 trial的证据。
+
+# 十二、历史诊断基线
+
+旧实验的用户提供基线为：
+
+- 172/172 个正式 VC；
+- 124 个 verified-auto Qed；
+- 48 个 direct manual obligations；
+- 九个 verified goal-check；
+- 全量 Rocq 编译；
+- 全量 coqchk；
+- trust scan 无本实验新增的不可信公理；
+- manual/verified proof 不依赖原 generated-auto placeholders。
+
+这些数字只作为诊断基线。
+
+必须以本次实际生成的 goals 和 dependency closure 为准。如果数量不同，必须定位并解释原因；
+不得为了匹配历史数字而删除、合并、隐藏或弱化 VC。
+
+不得读取旧 trial 来比较这些数字或寻找历史 proof。
+
+# 十三、框架 trust base
+
+允许使用当前 QCP/Rocq 工程正常依赖的既有框架 trust base，例如：
+
+- sizeof_front_end_type；
+- eval_addr_expr；
+- Rocq/Coq 标准库所需的经典逻辑或外延性；
+- QCP 已有 parser、symbolic executor 和验证框架接口。
+
+这些不是本实验新增的用户公理。
+
+不得把本次新建的 Parameter、Axiom、Admitted、admit 或占位 definition
+伪装成框架既有 trust base。
+
+# 十四、唯一允许暂停的条件
+
+只有以下情况才停止并请求用户输入：
+
+- 当前权威源码或配置与第三节固定目标实质不一致；
+- 完整闭包需要新增或替换 trusted symbol；
+- 必须实质改变第五节批准的 predicate 语义目标；
+- 必须实质改变第六节批准的函数行为目标；
+- 发现权威 C 缺陷，且完成证明必须修改真实 C 行为；
+- dispatch、宏、类型布局或 ABI 无法从权威源码/config 唯一确定；
+- 必须修改或晋升根共享 lib；
+- verification-orchestrator 返回无法在当前授权范围内解决的明确 blocker；
+- 必需文件、工具或执行权限不可用，并且安全的范围内替代方案已经耗尽；
+- Goal 被用户暂停、系统中断或达到系统预算限制。
+
+阶段完成、生成新 revision、一次失败、夜间无人值守或通常的 predicate/spec 确认门，
+都不是暂停理由。
+
+停止时必须留下可恢复状态，并报告：
+
+- 已完成阶段；
+- 当前 source/predicate/spec revisions；
+- 精确 blocker；
+- file/symbol/command 证据；
+- 已尝试路径；
+- 为什么不能在当前授权范围内继续；
+- 恢复所需的最小用户输入；
+- 下一条应执行的具体命令或 controller action。
+
+除上述情况外，持续执行，直到 final integrity 完成并有机器检查证据支持。

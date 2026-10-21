@@ -1,0 +1,14 @@
+{
+  "case": "CriticalAreaLock",
+  "added_manual_witnesses": [
+    "proof_of_CriticalAreaLock_partial_solve_wit_1"
+  ],
+  "raw_roles": {
+    "goal_file": "08e659c3fe3037623527f41daa11f71f306301267fc6490ead6ec2f4466b3943",
+    "proof_auto_file": "5c0b33677a1bec2d29abd258644e5ec24f510da8b18ddc79a477394ab3ad92f2",
+    "proof_manual_file": "01dfaa88fad543f6aca7cdc489e963fde8ce09788b0f570db3eca93b6513fb51",
+    "goal_check_file": "9219b5de70efcf2369f15609439643188fa6b228a92babd2ec97b10e2b52f5d2"
+  },
+  "goal_definitions_changed": false,
+  "auto_file_changed": false
+}

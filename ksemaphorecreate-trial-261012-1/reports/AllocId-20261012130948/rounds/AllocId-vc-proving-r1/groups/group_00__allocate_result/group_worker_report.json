@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "infrastructure",
+    "kind": "generated-rocq-syntax",
+    "vcs": [
+      {
+        "name": "proof_of_AllocId_return_wit_1",
+        "parent": "AllocId_return_wit_1",
+        "annotation_location": "annotated_C/src/AllocId.c:30-34,108"
+      }
+    ],
+    "message": "Dependency VC/AllocId_goal.v fails at line 104 characters 89-92: generated binder (end: Z) uses the reserved Rocq keyword end. coq-debug and group-development both exited 1 with status failed before the assigned proof was loaded. This is not an annotation semantic gap.",
+    "repair_boundary": "main/controller generation recovery; regenerate legal Rocq identifiers from the C local end, without worker edits to generated goal statements or accepted predicates"
+  }
+}

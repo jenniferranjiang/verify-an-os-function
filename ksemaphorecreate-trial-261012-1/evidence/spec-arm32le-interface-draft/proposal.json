@@ -1,0 +1,18 @@
+{
+  "status": "draft-not-active-awaiting-predicate-review-passed",
+  "active_header_unchanged": true,
+  "active_header_sha256": "6360f00174851821caf155df1b267fdca794ff05a261c5a3103691025d8e55af",
+  "helper_draft_path": "evidence/arm32le-candidate/nest-view-draft/SemaphoreCriticalViews.v",
+  "helper_draft_sha256": "5fa90ac10868ed67f1d77b8b5c84cac7ea4ee4c9bd06b894aeca7cf3ee1f1dc6",
+  "proposed_import": "CRTOS_Verify.sem.SemaphoreCriticalViews",
+  "added_terms": {
+    "SemaphoreCriticalFrame": "CrtosOSStable -> CrtosOSState -> Assertion",
+    "CrtosOSValid": "CrtosOSState -> Prop"
+  },
+  "canonical_contracts_changed": false,
+  "function_files_touched_by_spec_author": false,
+  "new_types": [],
+  "qcp_invoked": false,
+  "formal_interface_check_run": false,
+  "blocked_on": "Await parent notification of exact independently accepted ARM32 LittleEndian predicate revision and config."
+}

@@ -1,0 +1,2 @@
+From CRTOS_Verify.VC Require Import DoubleLinkListInsertNodeAfter_goal DoubleLinkListInsertNodeAfter_proof_auto DoubleLinkListInsertNodeAfter_proof_manual.
+Check proof_of_DoubleLinkListInsertNodeAfter_return_wit_1.

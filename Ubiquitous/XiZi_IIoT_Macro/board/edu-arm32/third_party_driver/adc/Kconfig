@@ -1,0 +1,13 @@
+if BSP_USING_ADC
+    config ADC1_BUS_NAME
+        string "adc 1 bus name"
+        default "adc1"
+
+    config ADC1_DRIVER_NAME
+        string "adc 1 driver name"
+        default "adc1_drv"
+
+    config ADC1_DEVICE_NAME
+        string "adc 1 bus device name"
+        default "adc1_dev"
+endif

@@ -1,0 +1,48 @@
+{
+  "status": "review-passed",
+  "scope": "Independent spec/source delta only: two fixed sizeof argument normalizations, canonical contracts, source/ABI/extraction/checker; not body-annotation implementation completion",
+  "spec_revision": "spec-r6-ae22a04e2c95",
+  "annotated_manifest_canonical_digest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+  "delivery_manifest_sha256": "4e7a946348b00ad00bd14b3fd54d36889f3f8748c536095b180ebae2bd5d89ad",
+  "predicate_revision": "predicate-nonzero-candidate-fe8c4261db5c",
+  "predicate_manifest_sha256": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+  "source_revision": "source-r2-0c50c37013e9",
+  "spec_blockers": [],
+  "body_interface_checks_passed": false,
+  "implementation_pending": [
+    {
+      "issue": "IMPL-20261016-BODY-01",
+      "owner": "original _SemaphoreCreate annotation owner",
+      "required": "Resolve Basics import composition-notation conflict and regenerate/typecheck under controller"
+    },
+    {
+      "issue": "IMPL-20261016-BODY-02",
+      "owner": "original _SemaphoreCreate annotation owner",
+      "required": "Use real getData/getPtr projections and regenerate/typecheck under controller"
+    },
+    {
+      "issue": "original_sizeof_VCs",
+      "required": "Regenerate and independently recheck actual pure size obligations; no deletion or proof claim yet"
+    }
+  ],
+  "review_record": ".docs/Report/2026-10-16-1-spec-review.md",
+  "review_record_sha256": "11f7fc588b693cf0e1373dc0c2d3052c952beeaa1ab745240f00906266ec1604",
+  "candidate_script_sha256": "4552ac330b87264a5cc32851b9d7bbc7600e42eb0d9e00cb33867ff4605d139b",
+  "candidate_extraction_sha256": "cee093ce8f9b66d4342d054cd79fee0915ae890d45fcd186bb8e9c54355ee5ea",
+  "evidence_sha256": {
+    "source-authorization-audit.md": "d541a9718c25866154ccf950cd6131dd87137b81ea1060712e177b55930d31fe",
+    "source-audit.json": "0af2c93d1bb68ee284806cf638cc4478ef8d490c72f9edba7d56bec5b377b0dd",
+    "native-constant-checks.json": "2ddeda0664e4781e8a1bb3264b142ef44bb6555141b2d20e6fa29993cbf91233",
+    "check-candidate.py": "4785b6ca2cb6ef336f9e8ad7fd7d557e3343eea6d036421bedc1b870195190bc",
+    "independent-candidate-checks.json": "8055b104003eeb68105013c7758299dea664cedbc2ea72cf2f7d5fddb23451f7",
+    "body-interface-issues.md": "419cc88eac52cad0bbc1977a5274000a380a9fac16b22ca95c78a518d9d5d532",
+    "body-extern-check.json": "c654dc6b5196a7c30ec525759172510e4de63f5f976f5a767a19711d0d272e83",
+    "exact-preamble-check.json": "abb8ea7e7c1ebdf87b9a513a97b7104a8c26b26c7be3c0d66bcd9d5b418d4442",
+    "body-interface-diagnosis.json": "767e00a067e981bdab11adf047033394a09461c0e57b7b988283cec085aba18e",
+    "BodyInterfaceDiagnosis.v": "88140d23e917223fac1d754e554d2307e4a918d6d70f8894405e02f1f6ac5cad"
+  },
+  "candidate_unchanged": true,
+  "active_annotated_unchanged": true,
+  "qcp_or_controller_invoked": false,
+  "formal_edited": false
+}

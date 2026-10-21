@@ -1,0 +1,427 @@
+{
+  "schema_version": 4,
+  "generation": 49,
+  "run_id": "SemaphoreCreate-20261012131015",
+  "case": "_SemaphoreCreate",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1",
+  "run_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/SemaphoreCreate-20261012131015",
+  "report_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/SemaphoreCreate-20261012131015",
+  "target_files": {
+    "c_file": "annotated_C/src/_SemaphoreCreate.c",
+    "formal_directory": "VC",
+    "formal_case_lib": "VC/_SemaphoreCreate_lib.v",
+    "goal_file": "VC/_SemaphoreCreate_goal.v",
+    "proof_auto_file": "VC/_SemaphoreCreate_proof_auto.v",
+    "proof_manual_file": "VC/_SemaphoreCreate_proof_manual.v",
+    "goal_check_file": "VC/_SemaphoreCreate_goal_check.v",
+    "case_name": "_SemaphoreCreate",
+    "active_case_theory": "CRTOS_Verify.VC"
+  },
+  "problem_context": {
+    "problem_statement": "Verify CRTOS KSemaphoreCreate under the accepted source/config and predicates/specs.\nAuthoritative accepted inputs: evidence/accepted-revisions.json.\nSource: source-r2-0c50c37013e9, Cortex-M3 Thumb ILP32, STM32F103 nano, non-SMP.\nPredicate: predicate-r3-16b6ee4a4e02, independently review-passed.\nSpec: spec-r2-6d54bb88379e, independently review-passed.\nDomain: entry scheduler_lock_nest < 65535, explicitly authorized by user.\nPreserve ordinary nested calls and exact caller IRQ/heap ownership.\n\nThe complete required non-trusted closure has nine unique canonical active bodies:\nannotated_C/src/KSemaphoreCreate.c\nannotated_C/src/_SemaphoreCreate.c\nannotated_C/src/CriticalAreaLock.c\nannotated_C/src/CriticalAreaUnLock.c\nannotated_C/src/IdInsertObj.c\nannotated_C/src/AllocId.c\nannotated_C/src/InsertObj.c\nannotated_C/src/InitDoubleLinkList.c\nannotated_C/src/DoubleLinkListInsertNodeAfter.c\nAll canonical contracts and caller-local API copies are frozen accepted inputs.\nOnly these six C symbols are trusted, with the existing reviewed contracts:\nx_malloc, x_free, memset, DisableLocalInterrupt, EnableLocalInterrupt, KPrintf.\nDeclaration contracts do not constitute verified callee bodies.\n\nAbsolutely do not read, enumerate, search, copy, import, or depend on any file in\n/home/xinra/crtos/ksemaphorecreate-trial-260928-1.\nThis includes ancestor-root searches, load paths, proof lookup and dependency closure.\nNo other historical trial is an authorized formal/proof reference.\nDo not change root shared library definitions, authoritative C/config, or any skills.\nOnly this new trial and already authorized project path configuration may be changed.\nDo not create a second active body for a canonical symbol or a central specs header.\nDo not add axioms, parameters, Admitted/admit, placeholders, weaker postconditions,\nunjustified stronger preconditions, deleted paths or omitted VCs.\n\nThe user authorizes automatic acceptance of independently reviewed, machine-checked\npredicate/spec revisions within the approved semantics. Such changes must return to\nthe appropriate independent design review and bind new manifests before resuming.\nMaterial semantic changes require explicit user authorization. No routine phase gate\nrequires another user confirmation.\n\nMain must follow only the verification-orchestrator controller actions. If the current\ncontroller does not support this CRTOS trial layout, retain its original blocker;\ndo not improvise another implementation workflow.\nCompletion additionally requires complete closure proofs, goal checks, full coqchk,\ntrust scan, C/VC/proof integrity, and a final integrity record. Historical 172 VCs is\nonly a diagnostic baseline, never a target for deleting or weakening obligations.\n\nExplicit user exception (2026-10-12): \u5141\u8bb8\u5728\u65b0 trial \u5185\u9002\u914d controller.\nThe local controller adapter may support canonical annotated_C/src and VC paths,\nread-only existing external dependencies, and the full nine-case closure. Preserve\nall original owner, symbolic, acceptance, proof and final-check actions.",
+    "target_function": "_SemaphoreCreate"
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "CriticalAreaLock",
+      "CriticalAreaUnLock",
+      "DoubleLinkListInsertNodeAfter",
+      "IdInsertObj",
+      "InitDoubleLinkList",
+      "_SemaphoreCreate",
+      "memset",
+      "x_free",
+      "x_malloc"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "x_malloc::<default>": "Require size == 32 && emp Ensure (__return == 0 && emp) || (__return != 0 && OSHeap(store_sem_allocated(__return)))",
+        "memset::<default>": "Require value == 0 && size == 32 && OSHeap(store_sem_allocated(dest)) Ensure __return == dest && OSHeap(store_sem_zeroed_private(dest))",
+        "CriticalAreaLock::<default>": "With (sg : CrtosOSStable) (hs : list Z) (before : CrtosOSState) Require scheduler_lock_nest(os_scheduler(before)) < 65535 && SemaphoreOutsideCritical(sg, hs, before) Ensure exists current, semaphore_irq_handler_ok(__return) && SemaphoreRely(hs, before, current) && SemaphoreInsideCritical(sg, hs, __return, current) * SemaphoreOSInvariant(sg, semaphore_nest_increment(current))",
+        "IdInsertObj::<default>": "With (sm : StableIdmanager) (before : VarIdmanager) (old_id : Z) (previous : Z) (next : Z) Require manager != 0 && idnode != 0 && OSHeap(store_idmanager(sm, before, manager)) * OSHeap(store_sem_id_detached(idnode, old_id, previous, next)) Ensure (__return == -1 && idmanager_full(sm, before) && OSHeap(store_idmanager(sm, before, manager)) * OSHeap(store_sem_id_detached(idnode, old_id, previous, next))) || (idmanager_min_free_id(sm, before, __return) && OSHeap(store_idmanager(sm, idmanager_link(sm, idmanager_add(before, __return), __return, idnode), manager)))",
+        "x_free::<default>": "Require OSHeap(store_sem_zeroed_private(ptr)) Ensure emp",
+        "CriticalAreaUnLock::<default>": "With (sg : CrtosOSStable) (hs : list Z) (before : CrtosOSState) (after : CrtosOSState) Require semaphore_irq_handler_ok(lock) && SemaphoreGuarantee(before, semaphore_nest_decrement(after)) && SemaphoreInsideCritical(sg, hs, lock, before) * SemaphoreOSInvariant(sg, after) Ensure SemaphoreOutsideCritical(sg, hs, semaphore_nest_decrement(after))",
+        "InitDoubleLinkList::<default>": "With (head : Z) Require linklist_head == head && head != 0 && undef_data_at(&(linklist_head->node_next), struct SysDoubleLinklistNode *) * undef_data_at(&(linklist_head->node_prev), struct SysDoubleLinklistNode *) Ensure store(&(linklist_head->node_next), struct SysDoubleLinklistNode *, head) * store(&(linklist_head->node_prev), struct SysDoubleLinklistNode *, head)",
+        "DoubleLinkListInsertNodeAfter::<default>": "With (successor : Z) (previous : Z) Require linklist != 0 && linklist_node != 0 && successor != 0 && store(&(linklist->node_next), struct SysDoubleLinklistNode *, successor) * store(&(((struct SysDoubleLinklistNode *)successor)->node_prev), struct SysDoubleLinklistNode *, previous) * undef_data_at(&(linklist_node->node_next), struct SysDoubleLinklistNode *) * undef_data_at(&(linklist_node->node_prev), struct SysDoubleLinklistNode *) Ensure store(&(linklist->node_next), struct SysDoubleLinklistNode *, linklist_node) * store(&(((struct SysDoubleLinklistNode *)successor)->node_prev), struct SysDoubleLinklistNode *, linklist_node) * store(&(linklist_node->node_next), struct SysDoubleLinklistNode *, successor) * store(&(linklist_node->node_prev), struct SysDoubleLinklistNode *, linklist)",
+        "_SemaphoreCreate::<default>": "With (sg : CrtosOSStable) (hs : list Z) (before : CrtosOSState) Require scheduler_lock_nest(os_scheduler(before)) < 65535 && SemaphoreOutsideCritical(sg, hs, before) Ensure (__return == -5 && SemaphoreOutsideCritical(sg, hs, before)) || (exists current, __return == -5 && SemaphoreRely(hs, before, current) && idmanager_full(semaphore_manager_abs(os_sem_stable(sg)), semaphore_manager_state(os_sem_stable(sg), os_semaphores(current))) && SemaphoreOutsideCritical(sg, hs, current)) || (exists current p, p != 0 && SemaphoreRely(hs, before, current) && idmanager_min_free_id(semaphore_manager_abs(os_sem_stable(sg)), semaphore_manager_state(os_sem_stable(sg), os_semaphores(current)), __return) && SemaphoreGuarantee(current, semaphore_os_publish(p, __return, val, current)) && SemaphoreOutsideCritical(sg, hs, semaphore_os_publish(p, __return, val, current)))"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-10-12T05:10:15.334378Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/_SemaphoreCreate_goal_check.vo",
+    "base_artifact_count": 163,
+    "current_source_count": 4,
+    "elapsed_seconds": 40.498164,
+    "snapshot": "verification_runs/SemaphoreCreate-20261012131015/dependency_plan.json"
+  },
+  "attempts": {
+    "_SemaphoreCreate-annotation-r1": {
+      "attempt_id": "_SemaphoreCreate-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/SemaphoreCreate-20261012131015",
+      "claimed_action": "deliver:_SemaphoreCreate-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-15T15:42:56.951643Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-15T15:43:03.987533Z",
+            "finished_at": "2026-10-15T15:53:34.798545Z",
+            "elapsed_seconds": 630.811012
+          }
+        ]
+      },
+      "returned_at": "2026-10-15T15:53:34.798369Z",
+      "finished_at": "2026-10-15T15:53:35.404046Z"
+    },
+    "_SemaphoreCreate-vc-checking-r1": {
+      "attempt_id": "_SemaphoreCreate-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "blocked",
+      "owner": "vc-checking/_SemaphoreCreate-vc-checking-r1",
+      "claimed_action": "deliver:_SemaphoreCreate-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-15T15:54:24.807070Z",
+      "source_annotation": "_SemaphoreCreate-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-15T15:55:05.195722Z",
+            "finished_at": "2026-10-15T16:00:29.133781Z",
+            "elapsed_seconds": 323.938059
+          }
+        ]
+      },
+      "returned_at": "2026-10-15T16:00:29.133756Z",
+      "blocker": {
+        "failure_class": "dependency-gap",
+        "kind": "missing_formal_sizeof_layout_bridge",
+        "vcs": [
+          {
+            "name": "proof_of__SemaphoreCreate_partial_solve_wit_1_pure",
+            "parent": null,
+            "annotation_location": "annotated_C/src/_SemaphoreCreate.c:121 (x_malloc Require at line 31)"
+          },
+          {
+            "name": "proof_of__SemaphoreCreate_partial_solve_wit_2_pure",
+            "parent": null,
+            "annotation_location": "annotated_C/src/_SemaphoreCreate.c:125 (memset Require at line 37)"
+          }
+        ],
+        "message": "Both non-split pure top-level goals require sizeof(\"Semaphore\") = 32. Official CNotation interprets this as the unconstrained Parameter sizeof_alias_type \"Semaphore\"; no current premise or imported layout fact fixes it to 32. Interpret that Parameter as 64 while retaining valid disjoint scalar locals, an empty-stack OutsideCritical state at nest zero, and (for witness 2) the independently literal 32-byte allocated block. Each antecedent can hold while its consequent is false. The unsuffixed pure -> aux goals are not classified as false by this argument.",
+        "repair_boundary": "Return to annotation/spec/source-extraction owner for an authorized, independently checked source-to-formal layout repair or exact compile-time constant normalization, with any changed semantic input revision rebound. Preserve frozen contracts and real three-path/critical/IRQ/task/scheduler behavior. Do not add an unproved layout axiom or Require premise, edit canonical generated goals, or ask a group worker to prove these false raw obligations."
+      },
+      "finished_at": "2026-10-15T16:00:29.155091Z"
+    },
+    "_SemaphoreCreate-annotation-r2": {
+      "attempt_id": "_SemaphoreCreate-annotation-r2",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/SemaphoreCreate-20261012131015",
+      "claimed_action": "deliver:_SemaphoreCreate-annotation-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-10-15T16:01:06.664928Z",
+      "feedback_sources": [
+        {
+          "phase": "vc-checking",
+          "attempt_id": "_SemaphoreCreate-vc-checking-r1",
+          "evidence": [
+            "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/SemaphoreCreate-20261012131015/rounds/_SemaphoreCreate-vc-checking-r1/agent_report.json",
+            "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/SemaphoreCreate-20261012131015/rounds/_SemaphoreCreate-vc-checking-r1/agent_output.md"
+          ]
+        }
+      ],
+      "reason": "vc-checking-annotation-gap",
+      "failed_vcs": [
+        {
+          "source_attempt": "_SemaphoreCreate-vc-checking-r1",
+          "manual": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/SemaphoreCreate-20261012131015/annotation_history/annotation-attempt1/after/VC/_SemaphoreCreate_proof_manual.v",
+          "message": "Both non-split pure top-level goals require sizeof(\"Semaphore\") = 32. Official CNotation interprets this as the unconstrained Parameter sizeof_alias_type \"Semaphore\"; no current premise or imported layout fact fixes it to 32. Interpret that Parameter as 64 while retaining valid disjoint scalar locals, an empty-stack OutsideCritical state at nest zero, and (for witness 2) the independently literal 32-byte allocated block. Each antecedent can hold while its consequent is false. The unsuffixed pure -> aux goals are not classified as false by this argument.",
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_1_pure",
+          "parent": null,
+          "annotation_location": "annotated_C/src/_SemaphoreCreate.c:121 (x_malloc Require at line 31)"
+        },
+        {
+          "source_attempt": "_SemaphoreCreate-vc-checking-r1",
+          "manual": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/SemaphoreCreate-20261012131015/annotation_history/annotation-attempt1/after/VC/_SemaphoreCreate_proof_manual.v",
+          "message": "Both non-split pure top-level goals require sizeof(\"Semaphore\") = 32. Official CNotation interprets this as the unconstrained Parameter sizeof_alias_type \"Semaphore\"; no current premise or imported layout fact fixes it to 32. Interpret that Parameter as 64 while retaining valid disjoint scalar locals, an empty-stack OutsideCritical state at nest zero, and (for witness 2) the independently literal 32-byte allocated block. Each antecedent can hold while its consequent is false. The unsuffixed pure -> aux goals are not classified as false by this argument.",
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_2_pure",
+          "parent": null,
+          "annotation_location": "annotated_C/src/_SemaphoreCreate.c:125 (memset Require at line 37)"
+        }
+      ],
+      "retry_reason": "vc-checking-annotation-gap",
+      "retry_previous_attempt": "_SemaphoreCreate-vc-checking-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-15T16:23:11.201143Z",
+            "finished_at": "2026-10-15T16:34:15.876027Z",
+            "elapsed_seconds": 664.674884
+          }
+        ]
+      },
+      "returned_at": "2026-10-15T16:34:15.876003Z",
+      "finished_at": "2026-10-15T16:34:16.338972Z"
+    },
+    "_SemaphoreCreate-vc-checking-r2": {
+      "attempt_id": "_SemaphoreCreate-vc-checking-r2",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/_SemaphoreCreate-vc-checking-r2",
+      "claimed_action": "deliver:_SemaphoreCreate-vc-checking-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-10-15T16:35:08.725178Z",
+      "source_annotation": "_SemaphoreCreate-annotation-r2",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-15T16:36:28.360295Z",
+            "finished_at": "2026-10-15T16:48:32.898216Z",
+            "elapsed_seconds": 724.537921
+          }
+        ]
+      },
+      "returned_at": "2026-10-15T16:48:32.898185Z",
+      "finished_at": "2026-10-15T16:48:32.945499Z"
+    },
+    "_SemaphoreCreate-vc-proving-r1": {
+      "attempt_id": "_SemaphoreCreate-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-15T16:48:32.945519Z",
+      "source_annotation": "_SemaphoreCreate-annotation-r2",
+      "source_vc_checking": "_SemaphoreCreate-vc-checking-r2",
+      "groups": {
+        "normalized_calls": {
+          "status": "accepted",
+          "owner": "group-worker/_SemaphoreCreate-vc-proving-r1:normalized_calls",
+          "claimed_action": "deliver:_SemaphoreCreate-vc-proving-r1:normalized_calls:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T16:50:13.304897Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T16:50:24.503344Z",
+                "finished_at": "2026-10-15T16:56:28.093437Z",
+                "elapsed_seconds": 363.590093
+              }
+            ]
+          },
+          "returned_at": "2026-10-15T16:56:28.093395Z",
+          "finished_at": "2026-10-15T16:57:23.156172Z"
+        },
+        "publish_transition": {
+          "status": "accepted",
+          "owner": "group-worker/_SemaphoreCreate-vc-proving-r1:publish_transition",
+          "claimed_action": "deliver:_SemaphoreCreate-vc-proving-r1:publish_transition:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T16:50:13.304914Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T16:57:31.542392Z",
+                "finished_at": "2026-10-16T05:36:40.393776Z",
+                "elapsed_seconds": 45548.851384
+              }
+            ]
+          },
+          "returned_at": "2026-10-16T05:36:40.393750Z",
+          "finished_at": "2026-10-16T05:38:37.332736Z"
+        },
+        "registry_preparation": {
+          "status": "accepted",
+          "owner": "group-worker/_SemaphoreCreate-vc-proving-r1:registry_preparation",
+          "claimed_action": "deliver:_SemaphoreCreate-vc-proving-r1:registry_preparation:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T16:50:13.304918Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T16:57:31.757919Z",
+                "finished_at": "2026-10-16T05:26:05.712156Z",
+                "elapsed_seconds": 44913.954237
+              }
+            ]
+          },
+          "returned_at": "2026-10-16T05:26:05.711909Z",
+          "finished_at": "2026-10-16T05:27:58.023715Z"
+        },
+        "critical_decomposition": {
+          "status": "accepted",
+          "owner": "group-worker/_SemaphoreCreate-vc-proving-r1:critical_decomposition",
+          "claimed_action": "deliver:_SemaphoreCreate-vc-proving-r1:critical_decomposition:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T16:50:13.304921Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T16:57:32.081526Z",
+                "finished_at": "2026-10-15T17:14:21.670608Z",
+                "elapsed_seconds": 1009.589082
+              }
+            ]
+          },
+          "returned_at": "2026-10-15T17:14:21.670572Z",
+          "finished_at": "2026-10-15T20:14:45.951609Z"
+        },
+        "manager_failure": {
+          "status": "accepted",
+          "owner": "group-worker/_SemaphoreCreate-vc-proving-r1:manager_failure",
+          "claimed_action": "deliver:_SemaphoreCreate-vc-proving-r1:manager_failure:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T16:50:13.304923Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-16T04:55:39.961004Z",
+                "finished_at": "2026-10-16T05:06:30.561119Z",
+                "elapsed_seconds": 650.600115
+              }
+            ]
+          },
+          "returned_at": "2026-10-16T05:06:30.561089Z",
+          "finished_at": "2026-10-16T05:07:26.934288Z"
+        },
+        "returns_and_unlock": {
+          "status": "accepted",
+          "owner": "group-worker/_SemaphoreCreate-vc-proving-r1:returns_and_unlock",
+          "claimed_action": "deliver:_SemaphoreCreate-vc-proving-r1:returns_and_unlock:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T16:50:13.304925Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-16T05:07:33.645070Z",
+                "finished_at": "2026-10-16T05:12:38.919004Z",
+                "elapsed_seconds": 305.273934
+              }
+            ]
+          },
+          "returned_at": "2026-10-16T05:12:38.918963Z",
+          "finished_at": "2026-10-16T05:14:05.168345Z"
+        },
+        "entry_and_lock": {
+          "status": "accepted",
+          "owner": "group-worker/_SemaphoreCreate-vc-proving-r1:entry_and_lock",
+          "claimed_action": "deliver:_SemaphoreCreate-vc-proving-r1:entry_and_lock:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T16:50:13.304927Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-16T05:14:24.649296Z",
+                "finished_at": "2026-10-16T05:18:48.438900Z",
+                "elapsed_seconds": 263.789604
+              }
+            ]
+          },
+          "returned_at": "2026-10-16T05:18:48.438858Z",
+          "finished_at": "2026-10-16T05:20:17.390386Z"
+        },
+        "allocation_safety": {
+          "status": "accepted",
+          "owner": "group-worker/_SemaphoreCreate-vc-proving-r1:allocation_safety",
+          "claimed_action": "deliver:_SemaphoreCreate-vc-proving-r1:allocation_safety:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T16:50:13.304928Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-16T05:20:40.714524Z",
+                "finished_at": "2026-10-16T05:23:29.101507Z",
+                "elapsed_seconds": 168.386983
+              }
+            ]
+          },
+          "returned_at": "2026-10-16T05:23:29.101468Z",
+          "finished_at": "2026-10-16T05:24:48.764645Z"
+        },
+        "manager_and_exit_safety": {
+          "status": "accepted",
+          "owner": "group-worker/_SemaphoreCreate-vc-proving-r1:manager_and_exit_safety",
+          "claimed_action": "deliver:_SemaphoreCreate-vc-proving-r1:manager_and_exit_safety:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T16:50:13.304930Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-16T05:25:01.956848Z",
+                "finished_at": "2026-10-16T05:28:58.780258Z",
+                "elapsed_seconds": 236.82341
+              }
+            ]
+          },
+          "returned_at": "2026-10-16T05:28:58.780230Z",
+          "finished_at": "2026-10-16T05:29:51.980398Z"
+        }
+      },
+      "finished_at": "2026-10-16T05:42:12.714500Z"
+    }
+  },
+  "current": {
+    "annotation": "_SemaphoreCreate-annotation-r2",
+    "vc-checking": "_SemaphoreCreate-vc-checking-r2",
+    "vc-proving": "_SemaphoreCreate-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/SemaphoreCreate-20261012131015",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "_SemaphoreCreate-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-10-16T05:45:52.517024Z",
+    "files": [
+      "VC/_SemaphoreCreate_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-10-16T05:50:00.795173Z",
+    "errors": [],
+    "cleanup_removed_count": 0,
+    "accepted_inputs": {
+      "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+      "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+      "spec_manifest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+      "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+    }
+  },
+  "created_at": "2026-10-12T05:10:15.334397Z",
+  "updated_at": "2026-10-16T05:50:00.811708Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-10-16T05:50:00.795150Z"
+}

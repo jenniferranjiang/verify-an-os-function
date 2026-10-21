@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-nonzero-bucket-head",
+    "vcs": [
+      {
+        "name": "proof_of_InsertObj_entail_wit_2",
+        "parent": null,
+        "annotation_location": "annotated_C/src/InsertObj.c:103 (head != 0)"
+      }
+    ],
+    "message": "The uninitialized empty-bucket alternative owns two zero-valued pointer cells but supplies no nonzero-head fact. The actual isvalidptr definition permits address zero, as does mstore. With hoffset=1, id=0, htable=0, idmax=1, idlist=[], and idbuckets=[[]], the premises can hold while the computed head is zero; neither target disjunct can satisfy its head<>0 conclusion.",
+    "repair_boundary": "Annotation/spec/predicate design outside assigned proof spans: justify and propagate nonzero selected bucket addresses to the assertion at annotated_C/src/InsertObj.c:101-125 and the InsertObj contract or accepted bucket representation; accepted predicate sources remain unchanged."
+  }
+}

@@ -1,0 +1,50 @@
+COQDEP VFILES
+COQC vendor/fixedpoints/PartialOrder_Setoid.v
+COQC lib/KTaskPure.v
+COQC lib/KTaskDelay.v
+COQC vendor/fixedpoints/BourbakiWitt.v
+COQC lib/TaskState.v
+COQC vendor/MonadLib/MonadErr/MonadErrBasic.v
+COQC lib/AssignState.v
+COQC lib/DelayState.v
+COQC lib/CrtosGlobState.v
+COQC lib/CrtosRules.v
+COQC lib/dll.v
+COQC lib/Bitmap.v
+COQC lib/KTaskStackSetup.v
+COQC lib/TaskStatusMemory.v
+COQC lib/KTaskDelayMem.v
+COQC lib/TickInv.v
+COQC lib/ExstatusInv.v
+File "./lib/TickInv.v", line 12, characters 27-35:
+Error: The reference UINT_MAX was not found in the current environment.
+
+make[1]: *** [Makefile.coq:818: lib/TickInv.vo] Error 1
+make[1]: *** [lib/TickInv.vo] Deleting file 'lib/TickInv.glob'
+make[1]: *** Waiting for unfinished jobs....
+File "./lib/ExstatusInv.v", line 13, characters 6-13:
+Error: The reference INT_MIN was not found in the current environment.
+
+make[1]: *** [Makefile.coq:818: lib/ExstatusInv.vo] Error 1
+make[1]: *** [lib/ExstatusInv.vo] Deleting file 'lib/ExstatusInv.glob'
+make: *** [Makefile.coq:417: all] Error 2
+COQDEP VFILES
+COQC lib/KTaskSchedMember.v
+COQC lib/NodeSelfLinked.v
+COQC lib/TickInv.v
+COQC lib/ExstatusInv.v
+COQC lib/KTaskStackSetupProofAux.v
+COQC lib/KTaskOsAssign.v
+COQC lib/idnode.v
+COQC lib/AssignInv.v
+COQC lib/TaskInv.v
+COQC lib/DelayInv.v
+COQC lib/MutexInv.v
+COQC lib/EventInv.v
+COQC lib/MsgQueueInv.v
+COQC lib/IsrManagerInv.v
+COQC lib/OsAssignReadyVector.v
+COQC lib/CrtosInv.v
+COQC lib/KTaskParseInfo.v
+COQC lib/KTaskDescriptor.v
+COQDEP VFILES

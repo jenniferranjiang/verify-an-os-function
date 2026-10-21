@@ -1,0 +1,19 @@
+-R /home/xinra/qcp-binary-democases/SeparationLogic/SeparationLogic SimpleC.SL
+-R /home/xinra/qcp-binary-democases/SeparationLogic/unifysl Logic
+-R /home/xinra/qcp-binary-democases/SeparationLogic/sets SetsClass
+-R /home/xinra/qcp-binary-democases/SeparationLogic/compcert_lib compcert.lib
+-R /home/xinra/qcp-binary-democases/SeparationLogic/auxlibs AUXLib
+-R /home/xinra/qcp-binary-democases/SeparationLogic/examples SimpleC.EE
+-R /home/xinra/qcp-binary-democases/SeparationLogic/StrategyLib SimpleC.StrategyLib
+-R /home/xinra/qcp-binary-democases/SeparationLogic/Common SimpleC.Common
+-R /home/xinra/qcp-binary-democases/SeparationLogic/fixedpoints FP
+-R /home/xinra/qcp-binary-democases/SeparationLogic/MonadLib MonadLib
+-R /home/xinra/qcp-binary-democases/SeparationLogic/listlib ListLib
+-R /home/xinra/qcp-binary-democases/SeparationLogic/MaxMinLib MaxMinLib
+-R /home/xinra/qcp-binary-democases/SeparationLogic/GraphLib GraphLib
+-R /home/xinra/crtos/kmutexcreate-trial-260928-2/lib CRTOS_Verify.mutex
+
+lib/MutexPure.v
+lib/MutexProtocol.v
+lib/MutexRep.v
+lib/MutexCritical.v

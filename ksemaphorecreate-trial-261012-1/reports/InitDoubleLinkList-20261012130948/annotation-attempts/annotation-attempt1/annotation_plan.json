@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "InitDoubleLinkList",
+      "meaning": "初始化双向链表头，使 node_next 和 node_prev 均指向 head，并归还两个字段的独占 ownership。"
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

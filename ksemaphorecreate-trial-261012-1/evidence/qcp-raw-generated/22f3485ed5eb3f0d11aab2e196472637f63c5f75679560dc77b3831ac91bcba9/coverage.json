@@ -1,0 +1,17 @@
+{
+  "case": "CriticalAreaUnLock",
+  "added_manual_witnesses": [
+    "proof_of_CriticalAreaUnLock_safety_wit_1",
+    "proof_of_CriticalAreaUnLock_return_wit_1",
+    "proof_of_CriticalAreaUnLock_partial_solve_wit_1_pure",
+    "proof_of_CriticalAreaUnLock_partial_solve_wit_1"
+  ],
+  "raw_roles": {
+    "goal_file": "c9de3e7a38e999daa8c4f0a48c01bdac977a043020dd4b76f1463a3a39813faa",
+    "proof_auto_file": "10b7eeb3e8560c83c05ae4973bb301243955e578ab2079235c87420104de6f7a",
+    "proof_manual_file": "4c1cbb2404eff93457cf81621d56b8cb44737b812e7be17ded49fa789ce4dc49",
+    "goal_check_file": "553b3e28de99a8f912219661928c4623f8080ddf1a007c64259a87c3838b07f1"
+  },
+  "goal_definitions_changed": false,
+  "auto_file_changed": false
+}

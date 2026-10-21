@@ -1,0 +1,74 @@
+{
+  "entry": "KSemaphoreCreate",
+  "nontrusted": [
+    "AllocId",
+    "CriticalAreaLock",
+    "CriticalAreaUnLock",
+    "DoubleLinkListInsertNodeAfter",
+    "IdInsertObj",
+    "InitDoubleLinkList",
+    "InsertObj",
+    "KSemaphoreCreate",
+    "_SemaphoreCreate"
+  ],
+  "trusted": [
+    "x_malloc",
+    "x_free",
+    "memset",
+    "DisableLocalInterrupt",
+    "EnableLocalInterrupt",
+    "KPrintf"
+  ],
+  "direct_calls": {
+    "KSemaphoreCreate": [
+      "_SemaphoreCreate"
+    ],
+    "_SemaphoreCreate": [
+      "CriticalAreaLock",
+      "CriticalAreaUnLock",
+      "DoubleLinkListInsertNodeAfter",
+      "IdInsertObj",
+      "InitDoubleLinkList",
+      "KPrintf",
+      "memset",
+      "x_free",
+      "x_malloc"
+    ],
+    "DoubleLinkListInsertNodeAfter": [],
+    "CriticalAreaUnLock": [
+      "EnableLocalInterrupt"
+    ],
+    "CriticalAreaLock": [
+      "DisableLocalInterrupt"
+    ],
+    "IdInsertObj": [
+      "AllocId",
+      "InsertObj",
+      "KPrintf"
+    ],
+    "InsertObj": [
+      "DoubleLinkListInsertNodeAfter",
+      "InitDoubleLinkList",
+      "KPrintf"
+    ],
+    "InitDoubleLinkList": [],
+    "AllocId": [
+      "KPrintf"
+    ]
+  },
+  "origins": {
+    "KSemaphoreCreate": "kernel/thread/semaphore.c",
+    "_SemaphoreCreate": "kernel/thread/semaphore.c",
+    "DoubleLinkListInsertNodeAfter": "kernel/thread/double_link.c",
+    "CriticalAreaUnLock": "kernel/thread/CriticalArea.c",
+    "CriticalAreaLock": "kernel/thread/CriticalArea.c",
+    "IdInsertObj": "kernel/thread/id.c",
+    "InsertObj": "kernel/thread/id.c",
+    "InitDoubleLinkList": "kernel/thread/double_link.c",
+    "AllocId": "kernel/thread/id.c"
+  },
+  "dispatch": {
+    "done.SemaphoreCreate": "_SemaphoreCreate"
+  },
+  "note": "Includes KPrintf in constant-false log branches as well as reachable NULL_PARAM_CHECK. Nontrusted closure unchanged by approved deletion of KDBG_IPC=0 logging."
+}

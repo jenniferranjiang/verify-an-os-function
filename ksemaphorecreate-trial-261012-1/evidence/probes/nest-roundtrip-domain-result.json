@@ -1,0 +1,11 @@
+{
+  "command": [
+    "/home/xinra/.opam/default/bin/coqc",
+    "ksemaphorecreate-trial-261012-1/evidence/probes/NestRoundtripDomain.v"
+  ],
+  "exit_code": 0,
+  "stdout": "Closed under the global context\n",
+  "stderr": "",
+  "source_sha256": "9de60e24dcc8ea883d75883d4a057fc043b1095682cdcc7fd9857c8e6f21c3e7",
+  "status": "arithmetic diagnostic only; no source reachability claim or accepted precondition change"
+}

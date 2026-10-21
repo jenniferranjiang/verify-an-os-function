@@ -1,0 +1,31 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-layout-fact",
+    "vcs": [
+      {
+        "name": "proof_of__SemaphoreCreate_partial_solve_wit_1_pure",
+        "parent": null,
+        "annotation_location": "annotated_C/src/_SemaphoreCreate.c:150"
+      },
+      {
+        "name": "proof_of__SemaphoreCreate_partial_solve_wit_1",
+        "parent": null,
+        "annotation_location": "annotated_C/src/_SemaphoreCreate.c:150"
+      },
+      {
+        "name": "proof_of__SemaphoreCreate_partial_solve_wit_2_pure",
+        "parent": null,
+        "annotation_location": "annotated_C/src/_SemaphoreCreate.c:153"
+      },
+      {
+        "name": "proof_of__SemaphoreCreate_partial_solve_wit_2",
+        "parent": null,
+        "annotation_location": "annotated_C/src/_SemaphoreCreate.c:153"
+      }
+    ],
+    "message": "Current premises supply safeExec, value bounds, OutsideCritical and (for memset) SemaphoreRaw, but no premise or imported proved fact establishes sizeof(\"Semaphore\") = 32. SemaphoreLayout is only an unproved Prop definition. Named sizes remain abstract in CNotation, so the required allocation/zero-fill size equality does not follow.",
+    "repair_boundary": "Annotation/frontend layout translation for the sizeof(struct Semaphore) call arguments and matching x_malloc/memset contracts in annotated_C/src/_SemaphoreCreate.c; preserve accepted predicates and do not change generated goal statements or add an unsupported axiom."
+  }
+}

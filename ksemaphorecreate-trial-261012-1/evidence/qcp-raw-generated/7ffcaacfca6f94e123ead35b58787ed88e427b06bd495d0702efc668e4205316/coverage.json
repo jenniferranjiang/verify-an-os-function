@@ -1,0 +1,14 @@
+{
+  "case": "InitDoubleLinkList",
+  "added_manual_witnesses": [
+    "proof_of_InitDoubleLinkList_return_wit_1"
+  ],
+  "raw_roles": {
+    "goal_file": "91c373a78b8de3ce2c57a57fc5df4374517bcf507c3d09af0b747b63b17af5b8",
+    "proof_auto_file": "de3fbe42df7be4e2914e0a956c47ab2d584bf6571741f883ab81466caad19206",
+    "proof_manual_file": "614c9621b32284d89ae1b80589491552e0380fd7b6ab166c345bd19dc641f1bf",
+    "goal_check_file": "1b51b2ea19e1af97fcf3b49a949abff30c3c6da392aaa03d8db7e3789e8a6910"
+  },
+  "goal_definitions_changed": false,
+  "auto_file_changed": false
+}

@@ -114,7 +114,7 @@ review:
 
 ## 5. 关键设计选择
 
-- 未直接复用 `task-proof/lib/idnode.v`/`dll.v` 的空间谓词：它们已实例化在旧 Task carrier，不能与统一 carrier 做空间合取；`CrtosOSRep.v` 复用同一 `StableIdmanager`/`VarIdmanager`/`IdNodeAbs` 纯状态，并仅重建 carrier-local heap interpretation。没有复制 Task abstract state。
+- 未直接复用 `lib/idnode.v`/`dll.v` 的空间谓词：它们已实例化在旧 Task carrier，不能与统一 carrier 做空间合取；`CrtosOSRep.v` 复用同一 `StableIdmanager`/`VarIdmanager`/`IdNodeAbs` 纯状态，并仅重建 carrier-local heap interpretation。没有复制 Task abstract state。
 - 不定义 `SemaphoreTaskView`；pending 只保存 task address，跨模块状态由 bridge/interface 提供。
 - 不为 `done` 建 state/predicate；direct-call normalization 保留在 spec extraction 记录。
 - 当前 QCP 的 `struct_padding` 不自动产生 ownership；`Semaphore` 的 offset 2..3 与 14..15 两段 padding 由 `CharArray` 显式拥有，并由 `semaphore_layout_32_ok` 绑定批准的 32-bit ABI。所有 allocate/zero/published/detached 生命周期 view 合计覆盖完整 32 bytes。

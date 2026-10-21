@@ -1,0 +1,32 @@
+
+Coq < Toplevel input, characters 31-48:
+> From SimpleC.SL Require Import NestedCriticalSTS.
+>                                ^^^^^^^^^^^^^^^^^
+Error: Cannot find a physical path bound to logical path
+NestedCriticalSTS with prefix SimpleC.SL.
+
+Coq < Toplevel input, characters 7-46:
+> Check @NestedCriticalSTS.nested_critical_state.
+>        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error: The reference NestedCriticalSTS.nested_critical_state was not found
+in the current environment.
+
+Coq < Toplevel input, characters 7-52:
+> Check @NestedCriticalSTS.Build_nested_critical_state.
+>        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error: The reference NestedCriticalSTS.Build_nested_critical_state
+was not found in the current environment.
+
+Coq < Toplevel input, characters 7-40:
+> Check @NestedCriticalSTS.handlers_of_NCS.
+>        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error: The reference NestedCriticalSTS.handlers_of_NCS was not found
+in the current environment.
+
+Coq < Toplevel input, characters 7-37:
+> Check @NestedCriticalSTS.state_of_NCS.
+>        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error: The reference NestedCriticalSTS.state_of_NCS was not found
+in the current environment.
+
+Coq < 

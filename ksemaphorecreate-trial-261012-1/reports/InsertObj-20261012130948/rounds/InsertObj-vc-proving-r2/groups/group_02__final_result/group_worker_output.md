@@ -1,0 +1,3 @@
+Completed proof_of_InsertObj_return_wit_1_split_goal_spatial and proof_of_InsertObj_return_wit_1. The split proof establishes fresh-ID bucket invariants and permutation, folds the new node and circular DLL, proves the tail nonzero locally, replaces the selected bucket, and folds the linked manager state. Only the two assigned proof spans changed; no helper declarations, imports, predicate edits, or statement edits were made.
+
+Validation: forbidden-lemma/tactic scan had no matches. The handoff group-check command exited 0 with JSON status passed (102.829937 seconds), compiling the current goal, auto, manual, and group wrapper.

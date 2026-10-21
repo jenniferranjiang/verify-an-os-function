@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {"name": "_SemaphoreCreate", "meaning": "保留已接受的调用接口：失败返回 -5 并归还原状态或满足 rely 的满管理器状态；成功返回最小空闲 ID，发布初值 val 的新信号量并归还调用者资源。"},
+    {"name": "KSemaphoreCreate", "meaning": "在入口 scheduler_lock_nest < 65535 的域内提供同一信号量创建关系，保留失败分支、最小空闲 ID、rely/guarantee 和完整调用者资源。"}
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

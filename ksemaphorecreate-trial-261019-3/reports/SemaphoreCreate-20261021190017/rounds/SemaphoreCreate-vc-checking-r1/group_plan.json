@@ -1,0 +1,292 @@
+{
+  "groups": [
+    {
+      "id": "publish",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_entail_wit_5",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreCreate_entail_wit_5_split_goal_1": "P contains DllInsertedCut, self-linked empty pend_list, linked ID manager, old DLL tail, payload and every non-semaphore OS component. The pure target is Crtos_GTrans locked (replace_semaphores (semaphore_publish sem id val_pre (os_semaphores locked)) locked). Unfold Crtos_GTrans and the instantiated CriticalSTS transition (True); discharge the guarantee closure without changing any memory. All id/value/freshness assumptions are already explicit; no new axiom or assumed transition is allowed.",
+            "proof_of__SemaphoreCreate_entail_wit_5_split_goal_spatial": "Preserve InsideCritical sg locked. Set newstate := replace_semaphores (semaphore_publish sem id val_pre (os_semaphores locked)) locked. Build os_inv sg newstate: use publish_world_wf__publish for its pure world invariant; task map, roles, scheduling and all non-semaphore fields reduce to the locked state. Combine DllInsertedCut with dllseg_shift_rev to reconstruct the management DLL with semaphore_created sem id val_pre at its head; construct the new store_semaphore payload from the value cell, SemaphorePadding and self-linked empty pending list. Use publish_manager_store__publish to identify the ID allocation/link manager representation with semaphore_manager of the cons state. Fold semaphore_inv using explicit semaphore_context; frame/cancel remaining OS components. No resources may be duplicated or discarded to bypass the manager or list bridge."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_9_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce quantifiers and use explicit PreH11 Crtos_GTrans for the pure consequent under the arbitrary unchanged heap. This target establishes no additional transition."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce quantified values and hypotheses, unfold the named whole VC (and auxiliary definition if present), introduce its pure-witness implication without importing any admitted theorem. Establish the consequent pure conjuncts from the explicit PreH hypotheses; use sep_apply/entailer and cancellation to reorder the identical spatial resources. No existential or abstract state change is needed. The consequent transition is already PreH11, and the identical InsideCritical locked plus os_inv newstate are preserved."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "publish_world_wf__publish",
+          "visibility": "local",
+          "strategy": "Prove forall sg st p id val, os_world_wf sg st -> os_world_wf sg (replace_semaphores (semaphore_publish p id val (os_semaphores st)) st). Destruct the old world record; all fields except semaphore state are definitionally preserved. For sched coverage unfold os_sched_owners/semaphore_waiters: the new semaphore contributes an empty pending list, so owners are unchanged. role_slot_wf depends on unchanged task map/role fields. Use at entail_wit_5 spatial split; sole premise is its explicit PreH12."
+        },
+        {
+          "name": "publish_manager_store__publish",
+          "visibility": "local",
+          "strategy": "Prove the spatial manager representation bridge: semaphore_context ss -> idmanager_min_free_id (semaphore_manager_stable ss) (semaphore_manager sems) id -> 0 <= id < 128 -> store_idmanager (semaphore_manager_stable ss) (idmanager_link (semaphore_manager_stable ss) (idmanager_add (semaphore_manager sems) id) id (&(p # \"Semaphore\" ->ₛ \"id\"))) manager |-- store_idmanager (semaphore_manager_stable ss) (semaphore_manager (semaphore_publish p id val sems)) manager. Expand the cons map/filter descriptions of semaphore_manager; context fixes hash count 16. Show the selected bucket is updated by cons and others unchanged, with modulo bounds from id range. Relate idlist_add to the cons representation, using existing ID-map extensional/permutation facts if needed rather than demanding unjustified syntactic equality. All premises come from entail_wit_5 explicit context/min-free/range facts; preserve the same bytes and ID-node resources."
+        }
+      ]
+    },
+    {
+      "id": "open_close",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_entail_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreCreate_entail_wit_2_split_goal_1": "Use semaphore_zero_fresh__open_close on os_inv sg locked ** SemaphoreZero retval, framing InsideCritical. Assuming an existing semaphore has address retval would give overlapping value-field ownership; extract that payload from the management DLL and contradict separation. Return the pure freshness fact, not a fresh-address axiom.",
+            "proof_of__SemaphoreCreate_entail_wit_2_split_goal_2": "Unfold os_inv then semaphore_inv; extract semaphore_context from the latter pure conjunction under the whole heap, keeping all frame resources available.",
+            "proof_of__SemaphoreCreate_entail_wit_2_split_goal_3": "Unfold os_inv and extract its os_world_wf pure conjunct; no relation between before and locked beyond explicit assumptions is required.",
+            "proof_of__SemaphoreCreate_entail_wit_2_split_goal_4": "Unfold SemaphoreZero and extract addr_aligned retval 4 from its existing pure conjunct.",
+            "proof_of__SemaphoreCreate_entail_wit_2_split_goal_spatial": "Unfold os_inv, semaphore_inv, SemaphoreZero. Use semaphore_context to rewrite semaphore manager/list global addresses to k_sem_id_manager and k_sem_list. Cancel InsideCritical and every component; payload decomposition is exactly ZeroIdNode, value zero, two NodeZero assertions and padding. No existential new address is introduced."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_entail_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreCreate_entail_wit_3_split_goal_spatial": "Reverse the invariant decomposition: fold SemaphoreZero sem from ZeroIdNode, value zero, two NodeZero predicates, padding, and explicit nonzero/alignment. Fold semaphore_inv from unchanged manager and full DLL using explicit semaphore_context. Fold os_inv with explicit os_world_wf, and frame InsideCritical. retval=-1/full are failure-branch facts; the shared state remains locked."
+          }
+        }
+      ],
+      "helpers": [
+        {
+          "name": "semaphore_zero_fresh__open_close",
+          "visibility": "local",
+          "strategy": "Prove forall sg st p, os_inv sg st ** SemaphoreZero p |-- pure (~ In p (map semaphore_addr (os_semaphores st))). Unfold os_inv/semaphore_inv and extract a management DLL member under an assumed map membership, by induction on the semaphore list or a DLL member-extraction lemma. store_semaphore for that member owns its value UShort field; SemaphoreZero p owns the identical field. Separation excludes duplicate ownership, giving contradiction. The argument must handle empty and nonempty circular DLL cases and arbitrary surrounding frame; no external allocation-freshness premise is available or necessary."
+        }
+      ]
+    },
+    {
+      "id": "list_prepare",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_entail_wit_4",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreCreate_entail_wit_4_split_goal_1": "Unfold explicit semaphore_context to obtain idmax=128, rewrite the allocator postcondition retval<idmax, and conclude retval<128. Spatial resources can be framed while proving this pure inequality.",
+            "proof_of__SemaphoreCreate_entail_wit_4_split_goal_spatial": "Frame manager and non-semaphore OS resources. Split store_dll at its first edge into dllseg_shift_rev and the head.next/first.prev cut, with next=semaphore_first_link. Handle empty list by next=head (distinct fields, not distinct nodes), and nonempty list by its first node. Combine cut with NodeZero of sem.link into DllInsertAfterCut head next sem.link 0 0; weaken NodeZero sem.pend_list to NodeStorage. Derive required nonzero node addresses from typed field ownership/layout, and head/next nonzero from DLL ownership. Preserve padding; frame resources removed by the generated split stay outside the target."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce quantified values and hypotheses, unfold the named whole VC (and auxiliary definition if present), introduce its pure-witness implication without importing any admitted theorem. Establish the consequent pure conjuncts from the explicit PreH hypotheses; use sep_apply/entailer and cancellation to reorder the identical spatial resources. No existential or abstract state change is needed. Move NodeStorage sem.pend_list to the call-front position, preserving the linked manager, DLL cut/tail, value, padding, and OS frame."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce quantified values and hypotheses, unfold the named whole VC (and auxiliary definition if present), introduce its pure-witness implication without importing any admitted theorem. Establish the consequent pure conjuncts from the explicit PreH hypotheses; use sep_apply/entailer and cancellation to reorder the identical spatial resources. No existential or abstract state change is needed. Move DllInsertAfterCut to the call-front position; retain store_node_self_linked sem.pend_list and every remaining resource."
+        }
+      ]
+    },
+    {
+      "id": "return_refinement",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_return_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreCreate_return_wit_1_split_goal_1": "Pure refinement only: start with safeExec (LastSeen before) (abs_semaphore_create sg val_pre) X. Use the atomic branch of choice, instantiate its observed prestate with locked via Crtos_RTrans before locked, and its poststate with replace_semaphores (semaphore_publish sem id val_pre (os_semaphores locked)) locked. Establish the success nrm alternative of abs_semaphore_create_locked using witness sem and the explicit nonzero, alignment, freshness, min-free-ID facts. The target LastSeen is precisely the rely closure of that poststate; use safeExec normal-transition/return rule. X is unchanged and no OS ownership is needed by this split."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_return_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreCreate_return_wit_2_split_goal_1": "Pure refinement of the full-ID failure: use safeExec choice atomic branch and instantiate observed state locked using Crtos_RTrans before locked. Establish abs_semaphore_create_locked nrm locked (-5) locked with explicit idmanager_full; state is unchanged. Conclude safeExec (LastSeen locked) (ret (-5)) X via the normal transition rule. id=-1 is implementation bookkeeping, not the abstract result."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_return_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreCreate_return_wit_3_split_goal_1": "Pure refinement of malloc failure: project safeExec for abs_semaphore_create to its immediate ret (-5) choice branch. LastSeen before is unchanged; use the choice/normal-transition rules. No lock observation or hypothetical ID-full premise is needed."
+          }
+        }
+      ]
+    },
+    {
+      "id": "entry_calls",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Select the original full-resource disjunct. From the UShort points-to at local val extract 0 <= val_pre <= 65535 using the typed-store range fact. Rebuild all pure conjuncts (safeExec is PreH1) and cancel the unchanged val cell plus OutsideCritical. The two generated pure splits erased the cell and are not formal targets; safeExec alone imposes no numeric range."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_1_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure sizeof Semaphore=32 follows from the current registered ILP32 layout facts imported by the goal. Introduce quantifiers and establish the layout equality under the heap, without adding an axiom. Retain the allocation-call frame conceptually."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce quantified values and hypotheses, unfold the named whole VC (and auxiliary definition if present), introduce its pure-witness implication without importing any admitted theorem. Establish the consequent pure conjuncts from the explicit PreH hypotheses; use sep_apply/entailer and cancellation to reorder the identical spatial resources. No existential or abstract state change is needed. Establish sizeof Semaphore=32 from the same current layout fact independently of any unavailable local cells; preserve OutsideCritical."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_2_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Prove 0=0 and sizeof Semaphore=32 by reflexivity/current layout facts under the SemaphoreRaw plus local/OutsideCritical heap; no change to raw bytes."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce quantified values and hypotheses, unfold the named whole VC (and auxiliary definition if present), introduce its pure-witness implication without importing any admitted theorem. Establish the consequent pure conjuncts from the explicit PreH hypotheses; use sep_apply/entailer and cancellation to reorder the identical spatial resources. No existential or abstract state change is needed. Prove the zero-fill size and value facts from layout/reflexivity, retain SemaphoreRaw retval and OutsideCritical; retval equalities/nonzero come directly from PreH."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce quantified values and hypotheses, unfold the named whole VC (and auxiliary definition if present), introduce its pure-witness implication without importing any admitted theorem. Establish the consequent pure conjuncts from the explicit PreH hypotheses; use sep_apply/entailer and cancellation to reorder the identical spatial resources. No existential or abstract state change is needed. Only swap SemaphoreZero retval and OutsideCritical; retval_2=retval is explicitly supplied by memset postcondition."
+        }
+      ]
+    },
+    {
+      "id": "call_guards",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_4_pure",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreCreate_partial_solve_wit_4_pure_split_goal_1": "Expose the manager first field from store_idmanager and use valid typed ownership to derive the base manager address nonzero (id_max offset zero in the current layout). Frame every OS and semaphore resource; do not assume globals are nonzero without the existing ownership/layout evidence.",
+            "proof_of__SemaphoreCreate_partial_solve_wit_4_pure_split_goal_2": "Unfold ZeroIdNode and extract its explicit base-nonzero pure fact, giving sem.id<>0; frame remaining resources."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce quantified values and hypotheses, unfold the named whole VC (and auxiliary definition if present), introduce its pure-witness implication without importing any admitted theorem. Establish the consequent pure conjuncts from the explicit PreH hypotheses; use sep_apply/entailer and cancellation to reorder the identical spatial resources. No existential or abstract state change is needed. Derive sem.id<>0 from ZeroIdNode and manager<>0 from its owned first field, so the auxiliary goal can be proved without trying to synthesize removed local stack cells. Move manager/ZeroIdNode to the front."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce quantified values and hypotheses, unfold the named whole VC (and auxiliary definition if present), introduce its pure-witness implication without importing any admitted theorem. Establish the consequent pure conjuncts from the explicit PreH hypotheses; use sep_apply/entailer and cancellation to reorder the identical spatial resources. No existential or abstract state change is needed. Move SemaphoreZero sem to the free-call front; keep InsideCritical locked and os_inv locked."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_6_pure",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreCreate_partial_solve_wit_6_pure_split_goal_1": "Prove Crtos_GTrans locked locked by reflexive guarantee closure (unfold Crtos_GTrans if needed); the failed ID allocation has not changed OS state. The target is pure and all spatial resources remain framed."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce quantified values and hypotheses, unfold the named whole VC (and auxiliary definition if present), introduce its pure-witness implication without importing any admitted theorem. Establish the consequent pure conjuncts from the explicit PreH hypotheses; use sep_apply/entailer and cancellation to reorder the identical spatial resources. No existential or abstract state change is needed. Establish Crtos_GTrans locked locked by reflexivity independently of the removed local cells; preserve InsideCritical and os_inv locked."
+        }
+      ]
+    },
+    {
+      "id": "safety_entry",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pure target bounds constant 0 between INT_MIN and INT_MAX. Reduce current machine constants and use integer arithmetic under the unchanged spatial frame. No state transition or existential witness occurs."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pure target bounds constant 0 between INT_MIN and INT_MAX. Reduce current machine constants and use integer arithmetic under the unchanged spatial frame. No state transition or existential witness occurs."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pure target bounds constant 0 between INT_MIN and INT_MAX. Reduce current machine constants and use integer arithmetic under the unchanged spatial frame. No state transition or existential witness occurs."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pure target bounds constant 0 between INT_MIN and INT_MAX. Reduce current machine constants and use integer arithmetic under the unchanged spatial frame. No state transition or existential witness occurs."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pure target bounds constant 0 between INT_MIN and INT_MAX. Reduce current machine constants and use integer arithmetic under the unchanged spatial frame. No state transition or existential witness occurs."
+        }
+      ]
+    },
+    {
+      "id": "safety_alloc",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pure guard hypotheses contain retval=0 and retval<>0. Derive contradiction directly; eliminate False under the arbitrary spatial frame."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pure guard hypotheses contain retval=0 and retval<>0. Derive contradiction directly; eliminate False under the arbitrary spatial frame."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pure target is 5<>INT_MIN. Reduce current machine integer constants and close by integer arithmetic; the spatial frame is arbitrary and requires no changes."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pure target bounds constant 5 between INT_MIN and INT_MAX. Reduce current machine constants and use integer arithmetic under the unchanged spatial frame. No state transition or existential witness occurs."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pure target bounds constant 0 between INT_MIN and INT_MAX. Reduce current machine constants and use integer arithmetic under the unchanged spatial frame. No state transition or existential witness occurs."
+        }
+      ]
+    },
+    {
+      "id": "safety_locked",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pure target bounds constant 0 between INT_MIN and INT_MAX. Reduce current machine constants and use integer arithmetic under the unchanged spatial frame. No state transition or existential witness occurs."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_12",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pure target bounds constant 0 between INT_MIN and INT_MAX. Reduce current machine constants and use integer arithmetic under the unchanged spatial frame. No state transition or existential witness occurs."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The guard retval>=0 contradicts explicit retval=-1. Use integer arithmetic to derive False under the unchanged OS/semaphore heap."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The guard retval<0 contradicts explicit 0<=retval. Use integer arithmetic to derive False under the unchanged OS/semaphore heap."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_15",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pure target is 5<>INT_MIN. Reduce current machine integer constants and close by integer arithmetic; the spatial frame is arbitrary and requires no changes."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_16",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pure target bounds constant 5 between INT_MIN and INT_MAX. Reduce current machine constants and use integer arithmetic under the unchanged spatial frame. No state transition or existential witness occurs."
+        }
+      ]
+    }
+  ]
+}

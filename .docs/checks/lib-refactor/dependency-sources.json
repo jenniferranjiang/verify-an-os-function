@@ -1,0 +1,57 @@
+[
+  {
+    "source": "/home/xinra/qcp-binary-democases/Rocq/fixedpoints/LiftConstructors.v",
+    "destination": "vendor/fixedpoints/LiftConstructors.v",
+    "sha256": "d0c00a4a349b24df816e440a3e1ddb3e055bb7527990004fb11afd9b5882b199"
+  },
+  {
+    "source": "/home/xinra/qcp-binary-democases/Rocq/fixedpoints/PartialOrder_Setoid.v",
+    "destination": "vendor/fixedpoints/PartialOrder_Setoid.v",
+    "sha256": "6fb45af29eb06babaeac7c095a78e64e659130e67162bce39aaf81cb324ce03b"
+  },
+  {
+    "source": "/home/xinra/qcp-binary-democases/Rocq/fixedpoints/BourbakiWitt.v",
+    "destination": "vendor/fixedpoints/BourbakiWitt.v",
+    "sha256": "960a7158463492dc1d8db90a5f098695d8699209abd742d7af18bd3da7b87a0a"
+  },
+  {
+    "source": "/home/xinra/qcp-binary-democases/Rocq/MonadLib/Monad.v",
+    "destination": "vendor/MonadLib/Monad.v",
+    "sha256": "39d18b8b0d8dfcb2ca072d128dc3dc51df1d9310304fb5524b6e2d6a6891dfaf"
+  },
+  {
+    "source": "/home/xinra/qcp-binary-democases/Rocq/MonadLib/MonadErr/MonadErrBasic.v",
+    "destination": "vendor/MonadLib/MonadErr/MonadErrBasic.v",
+    "sha256": "3052b34d48a4e30455fd69868421ba124ac546690a0755b9f40cec5a107f16b0"
+  },
+  {
+    "source": "/home/xinra/vrtos/libai/TaskStatus.v",
+    "destination": "lib/TaskStatus.v",
+    "source_sha256": "b84910f5f53473f616f62f9e3f58f700aba052cd8ad018aad024f08ce38b218e",
+    "adaptation": "CRTOS_Verify.libai imports -> CRTOS_Verify.lib; proofs retained"
+  },
+  {
+    "source": "/home/xinra/vrtos/libai/TaskStatusMemory.v",
+    "destination": "lib/TaskStatusMemory.v",
+    "source_sha256": "19d73de02952a698f4c97b65b9f79ba95ea3e10b9d7120986ae3759561cfebb4",
+    "adaptation": "CRTOS_Verify.libai imports -> CRTOS_Verify.lib; proofs retained"
+  },
+  {
+    "source": "/home/xinra/vrtos/libai/TickOrder.v",
+    "destination": "lib/TickOrder.v",
+    "source_sha256": "cbd54120b6b5c476b450ca368bdb17641d2c83e61a3d0c11e8e59dac8258e285",
+    "adaptation": "CRTOS_Verify.libai imports -> CRTOS_Verify.lib; proofs retained"
+  },
+  {
+    "source": "/home/xinra/vrtos/libai/NodeSelfLinked.v",
+    "destination": "lib/NodeSelfLinked.v",
+    "source_sha256": "415bd82e6562701d102ef22c87b72f20a6352539873cacec0edfe081e638f14a",
+    "adaptation": "CRTOS_Verify.libai imports -> CRTOS_Verify.lib; proofs retained"
+  },
+  {
+    "source": "/home/xinra/vrtos/libai/Bitmap.v",
+    "destination": "lib/Bitmap.v",
+    "source_sha256": "9c957cb09c5965ce68b585a83ec9b2a9c6abc9394acc8bc54bae978b524857ec",
+    "adaptation": "CRTOS_Verify.libai imports -> CRTOS_Verify.lib; proofs retained"
+  }
+]

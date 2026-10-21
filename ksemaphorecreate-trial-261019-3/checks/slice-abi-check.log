@@ -1,0 +1,2 @@
+Slice declarations: gcc -m32 -std=c11 -Wall -Werror -fsyntax-only
+exit=0

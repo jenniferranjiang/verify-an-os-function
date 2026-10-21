@@ -1,0 +1,14 @@
+{
+  "revision": "predicate-r5-0a139d64743c",
+  "manifest_sha256": "0a139d64743cce8000b0910d7880d6c5a0bf89147b730665aa6ebefbfb45585a",
+  "result": "passed",
+  "status": "passed",
+  "compiler": "/home/xinra/.opam/pv-bench-8.20.1/bin/coqc",
+  "config_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15",
+  "source_build_records": [
+    "evidence/arm32le-candidate/frozen-r5/build.json",
+    "evidence/arm32le-candidate/frozen-r5-format/build.json"
+  ],
+  "independent_review": ".docs/Report/2026-10-12-5-predicate-review.md",
+  "scope": "20 active formal files; r4 unaffected proofs reused, changed closure and final helper independently compiled"
+}

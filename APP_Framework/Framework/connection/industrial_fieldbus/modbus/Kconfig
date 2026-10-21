@@ -1,0 +1,214 @@
+choice
+        prompt "choose ModBus type"
+        default CONNECTION_MODBUS_USING_RTU
+
+        config CONNECTION_MODBUS_USING_RTU
+                bool "select ModBus_RTU function"
+
+        config CONNECTION_MODBUS_USING_TCP
+                bool "select ModBus_TCP function"
+endchoice
+
+if CONNECTION_MODBUS_USING_RTU
+        choice
+                prompt "choose ModBus_RTU work mode"
+                default CONNECTION_MODBUS_USING_RTU_MASTER
+
+                config CONNECTION_MODBUS_USING_RTU_MASTER
+                        bool "select ModBus_RTU master mode"
+
+                config CONNECTION_MODBUS_USING_RTU_SLAVE
+                        bool "select ModBus_RTU slave mode"
+        endchoice
+        
+        if CONNECTION_MODBUS_USING_RTU_MASTER
+                menu "ModBus_RTU Master Register Configure"
+                        config X_M_DISCRETE_INPUT_START
+                                int "master discrete input start address"
+                                default 0
+
+                        config X_M_DISCRETE_INPUT_NDISCRETES
+                                int "master discrete input discretes numbers"
+                                default 16
+
+                        config X_M_COIL_START
+                                int "master coil start address"
+                                default 0
+
+                        config X_M_COIL_NCOILS
+                                int "master coil numbers"
+                                default 64
+
+                        config X_M_REG_INPUT_START
+                                int "master input start address"
+                                default 0
+
+                        config X_M_REG_INPUT_NREGS
+                                int "master input regs numbers"
+                                default 100
+
+                        config X_M_REG_HOLDING_START
+                                int "master holding start address"
+                                default 0
+
+                        config X_M_REG_HOLDING_NREGS
+                                int "master holding regs numbers"
+                                default 100
+
+                        config X_M_HD_RESERVE
+                                int "master holding reserve numbers"
+                                default 0
+
+                        config X_M_IN_RESERVE
+                                int "master input reserve numbers"
+                                default 0
+
+                        config X_M_CO_RESERVE
+                                int "master coil reserve numbers"
+                                default 0
+
+                        config X_M_DI_RESERVE
+                                int "master discrete reserve numbers"
+                                default 0
+                endmenu
+        endif
+
+        if CONNECTION_MODBUS_USING_RTU_SLAVE
+                menu "ModBus_RTU Slave Register Configure"
+                        config X_S_DISCRETE_INPUT_START
+                                int "slave discrete input start address"
+                                default 0
+
+                        config X_S_DISCRETE_INPUT_NDISCRETES
+                                int "slave discrete input discretes numbers"
+                                default 16
+
+                        config X_S_COIL_START
+                                int "slave coil start address"
+                                default 0
+
+                        config X_S_COIL_NCOILS
+                                int "slave coil numbers"
+                                default 64
+
+                        config X_S_REG_INPUT_START
+                                int "slave input start address"
+                                default 0
+
+                        config X_S_REG_INPUT_NREGS
+                                int "slave input regs numbers"
+                                default 100
+
+                        config X_S_REG_HOLDING_START
+                                int "slave holding start address"
+                                default 0
+
+                        config X_S_REG_HOLDING_NREGS
+                                int "slave holding regs numbers"
+                                default 100
+
+                        config X_S_HD_RESERVE
+                                int "slave holding reserve numbers"
+                                default 0
+
+                        config X_S_IN_RESERVE
+                                int "slave input reserve numbers"
+                                default 0
+
+                        config X_S_CO_RESERVE
+                                int "slave coil reserve numbers"
+                                default 0
+
+                        config X_S_DI_RESERVE
+                                int "slave discrete reserve numbers"
+                                default 0
+                endmenu
+        endif
+
+        config CONNECTION_MODBUS_RTU_UART_485_DIR
+                int "serial 485 direction pin number"
+                default "67"
+
+        config CONNECTION_MODBUS_RTU_PIN_DEV
+                string "device pin dev path for serial 485 DIR"
+                default "/dev/pin_dev"             
+
+        config CONNECTION_MODBUS_RTU_EXTUART
+                bool "Using extra uart to support serial 485"
+                default n
+
+        config CONNECTION_MODBUS_RTU_UART_DEV
+                string "device uart dev path for serial 485"
+                default "/dev/usart4_dev4"
+                depends on !CONTROL_FRAMEWORK_DRIVER_EXTUART
+
+        if CONTROL_FRAMEWORK_DRIVER_EXTUART                    
+                config CONNECTION_MODBUS_RTU_UART_DEV
+                        string "device extra uart dev path for serial 485"
+                        default "/dev/extuart_dev0"
+
+                config CONNECTION_MODBUS_RTU_UART_DEV_EXT_PORT
+                        int "if device using extuart, choose port"
+                        default "0"
+        endif
+endif
+
+if CONNECTION_MODBUS_USING_TCP
+        config CONNECTION_MODBUS_USING_TCP_SLAVE
+                bool "select ModBus_TCP slave mode"
+                default y
+
+        if CONNECTION_MODBUS_USING_TCP_SLAVE
+                menu "ModBus_TCP Slave Register Configure"
+                        config X_S_DISCRETE_INPUT_START
+                                int "slave discrete input start address"
+                                default 0
+
+                        config X_S_DISCRETE_INPUT_NDISCRETES
+                                int "slave discrete input discretes numbers"
+                                default 16
+
+                        config X_S_COIL_START
+                                int "slave coil start address"
+                                default 0
+
+                        config X_S_COIL_NCOILS
+                                int "slave coil numbers"
+                                default 64
+
+                        config X_S_REG_INPUT_START
+                                int "slave input start address"
+                                default 0
+
+                        config X_S_REG_INPUT_NREGS
+                                int "slave input regs numbers"
+                                default 100
+
+                        config X_S_REG_HOLDING_START
+                                int "slave holding start address"
+                                default 0
+
+                        config X_S_REG_HOLDING_NREGS
+                                int "slave holding regs numbers"
+                                default 100
+
+                        config X_S_HD_RESERVE
+                                int "slave holding reserve numbers"
+                                default 0
+
+                        config X_S_IN_RESERVE
+                                int "slave input reserve numbers"
+                                default 0
+
+                        config X_S_CO_RESERVE
+                                int "slave coil reserve numbers"
+                                default 0
+
+                        config X_S_DI_RESERVE
+                                int "slave discrete reserve numbers"
+                                default 0
+                endmenu
+        endif
+endif
+
+

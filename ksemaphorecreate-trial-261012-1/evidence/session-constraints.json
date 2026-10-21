@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-12",
+  "trial": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1",
+  "forbidden_directory": "/home/xinra/crtos/ksemaphorecreate-trial-260928-1",
+  "trusted_symbols": [
+    "x_malloc",
+    "x_free",
+    "memset",
+    "DisableLocalInterrupt",
+    "EnableLocalInterrupt",
+    "KPrintf"
+  ],
+  "predicate_acceptance": "independent review-passed + compile/typecheck + manifest + approved semantics",
+  "spec_acceptance": "independent review-passed + closure/equivalence checks + manifest + approved semantics",
+  "root_lib_mutation": false,
+  "initial_audit_deviation": "Initial rg --files AGENTS.md search lacked explicit old-trial exclusion. No old-trial filename returned or file content read. Cannot claim the initial enumeration excluded the directory.",
+  "resume_audit_deviation": "Resume used git status --short at repository root; it displayed the old trial directory name as an untracked root entry. No file inside the old trial was opened or returned. Subsequent scope is the explicit new trial and approved inputs."
+}

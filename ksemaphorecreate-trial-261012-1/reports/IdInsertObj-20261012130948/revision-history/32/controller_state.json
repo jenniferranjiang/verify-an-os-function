@@ -1,0 +1,273 @@
+{
+  "schema_version": 4,
+  "generation": 32,
+  "run_id": "IdInsertObj-20261012130948",
+  "case": "IdInsertObj",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1",
+  "run_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/IdInsertObj-20261012130948",
+  "report_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/IdInsertObj-20261012130948",
+  "target_files": {
+    "c_file": "annotated_C/src/IdInsertObj.c",
+    "formal_directory": "VC",
+    "formal_case_lib": "VC/IdInsertObj_lib.v",
+    "goal_file": "VC/IdInsertObj_goal.v",
+    "proof_auto_file": "VC/IdInsertObj_proof_auto.v",
+    "proof_manual_file": "VC/IdInsertObj_proof_manual.v",
+    "goal_check_file": "VC/IdInsertObj_goal_check.v",
+    "case_name": "IdInsertObj",
+    "active_case_theory": "CRTOS_Verify.VC"
+  },
+  "problem_context": {
+    "problem_statement": "Verify CRTOS KSemaphoreCreate under the accepted source/config and predicates/specs.\nAuthoritative accepted inputs: evidence/accepted-revisions.json.\nSource: source-r2-0c50c37013e9, Cortex-M3 Thumb ILP32, STM32F103 nano, non-SMP.\nPredicate: predicate-r3-16b6ee4a4e02, independently review-passed.\nSpec: spec-r2-6d54bb88379e, independently review-passed.\nDomain: entry scheduler_lock_nest < 65535, explicitly authorized by user.\nPreserve ordinary nested calls and exact caller IRQ/heap ownership.\n\nThe complete required non-trusted closure has nine unique canonical active bodies:\nannotated_C/src/KSemaphoreCreate.c\nannotated_C/src/_SemaphoreCreate.c\nannotated_C/src/CriticalAreaLock.c\nannotated_C/src/CriticalAreaUnLock.c\nannotated_C/src/IdInsertObj.c\nannotated_C/src/AllocId.c\nannotated_C/src/InsertObj.c\nannotated_C/src/InitDoubleLinkList.c\nannotated_C/src/DoubleLinkListInsertNodeAfter.c\nAll canonical contracts and caller-local API copies are frozen accepted inputs.\nOnly these six C symbols are trusted, with the existing reviewed contracts:\nx_malloc, x_free, memset, DisableLocalInterrupt, EnableLocalInterrupt, KPrintf.\nDeclaration contracts do not constitute verified callee bodies.\n\nAbsolutely do not read, enumerate, search, copy, import, or depend on any file in\n/home/xinra/crtos/ksemaphorecreate-trial-260928-1.\nThis includes ancestor-root searches, load paths, proof lookup and dependency closure.\nNo other historical trial is an authorized formal/proof reference.\nDo not change root shared library definitions, authoritative C/config, or any skills.\nOnly this new trial and already authorized project path configuration may be changed.\nDo not create a second active body for a canonical symbol or a central specs header.\nDo not add axioms, parameters, Admitted/admit, placeholders, weaker postconditions,\nunjustified stronger preconditions, deleted paths or omitted VCs.\n\nThe user authorizes automatic acceptance of independently reviewed, machine-checked\npredicate/spec revisions within the approved semantics. Such changes must return to\nthe appropriate independent design review and bind new manifests before resuming.\nMaterial semantic changes require explicit user authorization. No routine phase gate\nrequires another user confirmation.\n\nMain must follow only the verification-orchestrator controller actions. If the current\ncontroller does not support this CRTOS trial layout, retain its original blocker;\ndo not improvise another implementation workflow.\nCompletion additionally requires complete closure proofs, goal checks, full coqchk,\ntrust scan, C/VC/proof integrity, and a final integrity record. Historical 172 VCs is\nonly a diagnostic baseline, never a target for deleting or weakening obligations.\n\nExplicit user exception (2026-10-12): \u5141\u8bb8\u5728\u65b0 trial \u5185\u9002\u914d controller.\nThe local controller adapter may support canonical annotated_C/src and VC paths,\nread-only existing external dependencies, and the full nine-case closure. Preserve\nall original owner, symbolic, acceptance, proof and final-check actions.",
+    "target_function": "IdInsertObj"
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "AllocId",
+      "IdInsertObj",
+      "InsertObj",
+      "KPrintf"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "AllocId::<default>": "With (sm : StableIdmanager) (before : VarIdmanager) Require manager != 0 && OSHeap(store_idmanager(sm, before, manager)) Ensure (__return == -1 && idmanager_full(sm, before) && OSHeap(store_idmanager(sm, before, manager))) || (idmanager_min_free_id(sm, before, __return) && OSHeap(store_idmanager_allocated_unlinked(sm, before, manager, __return)))",
+        "InsertObj::<default>": "With (sm : StableIdmanager) (before : VarIdmanager) (id : Z) (previous : Z) (next : Z) Require manager != 0 && idnode != 0 && OSHeap(store_idmanager_allocated_unlinked(sm, before, manager, id)) * OSHeap(store_sem_id_detached(idnode, id, previous, next)) Ensure OSHeap(store_idmanager(sm, idmanager_link(sm, idmanager_add(before, id), id, idnode), manager))",
+        "KPrintf::<default>": "Require emp Ensure emp",
+        "IdInsertObj::<default>": "With (sm : StableIdmanager) (before : VarIdmanager) (old_id : Z) (previous : Z) (next : Z) Require manager != 0 && idnode != 0 && OSHeap(store_idmanager(sm, before, manager)) * OSHeap(store_sem_id_detached(idnode, old_id, previous, next)) Ensure (__return == -1 && idmanager_full(sm, before) && OSHeap(store_idmanager(sm, before, manager)) * OSHeap(store_sem_id_detached(idnode, old_id, previous, next))) || (idmanager_min_free_id(sm, before, __return) && OSHeap(store_idmanager(sm, idmanager_link(sm, idmanager_add(before, __return), __return, idnode), manager)))"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-10-12T05:09:48.688845Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/IdInsertObj_goal_check.vo",
+    "base_artifact_count": 163,
+    "current_source_count": 4,
+    "elapsed_seconds": 38.813926,
+    "snapshot": "verification_runs/IdInsertObj-20261012130948/dependency_plan.json"
+  },
+  "attempts": {
+    "IdInsertObj-annotation-r1": {
+      "attempt_id": "IdInsertObj-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/IdInsertObj-20261012130948",
+      "claimed_action": "deliver:IdInsertObj-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-15T15:12:02.978387Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-15T15:12:10.137352Z",
+            "finished_at": "2026-10-15T15:15:40.061358Z",
+            "elapsed_seconds": 209.924006
+          }
+        ]
+      },
+      "returned_at": "2026-10-15T15:15:40.061332Z",
+      "finished_at": "2026-10-15T15:15:40.363841Z"
+    },
+    "IdInsertObj-vc-checking-r1": {
+      "attempt_id": "IdInsertObj-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/IdInsertObj-vc-checking-r1",
+      "claimed_action": "deliver:IdInsertObj-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-15T15:16:32.445541Z",
+      "source_annotation": "IdInsertObj-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-15T15:16:44.090769Z",
+            "finished_at": "2026-10-15T15:22:41.719943Z",
+            "elapsed_seconds": 357.629174
+          }
+        ]
+      },
+      "returned_at": "2026-10-15T15:22:41.719905Z",
+      "finished_at": "2026-10-15T15:22:41.773427Z"
+    },
+    "IdInsertObj-vc-proving-r1": {
+      "attempt_id": "IdInsertObj-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-15T15:22:41.773462Z",
+      "source_annotation": "IdInsertObj-annotation-r1",
+      "source_vc_checking": "IdInsertObj-vc-checking-r1",
+      "groups": {
+        "node_representation": {
+          "status": "accepted",
+          "owner": "group-worker/IdInsertObj-vc-proving-r1:node_representation",
+          "claimed_action": "deliver:IdInsertObj-vc-proving-r1:node_representation:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T15:22:54.996286Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T15:23:10.070109Z",
+                "finished_at": "2026-10-15T15:31:45.058948Z",
+                "elapsed_seconds": 514.988839
+              }
+            ]
+          },
+          "returned_at": "2026-10-15T15:31:45.058921Z",
+          "finished_at": "2026-10-15T15:32:37.855916Z"
+        },
+        "return_results": {
+          "status": "accepted",
+          "owner": "group-worker/IdInsertObj-vc-proving-r1:return_results",
+          "claimed_action": "deliver:IdInsertObj-vc-proving-r1:return_results:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T15:22:54.996321Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T15:23:10.302813Z",
+                "finished_at": "2026-10-15T15:25:51.660429Z",
+                "elapsed_seconds": 161.357616
+              }
+            ]
+          },
+          "returned_at": "2026-10-15T15:25:51.660409Z",
+          "finished_at": "2026-10-15T15:26:38.764920Z"
+        },
+        "invariants_and_calls": {
+          "status": "accepted",
+          "owner": "group-worker/IdInsertObj-vc-proving-r1:invariants_and_calls",
+          "claimed_action": "deliver:IdInsertObj-vc-proving-r1:invariants_and_calls:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T15:22:54.996328Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T15:23:10.544557Z",
+                "finished_at": "2026-10-15T15:27:49.918254Z",
+                "elapsed_seconds": 279.373697
+              }
+            ]
+          },
+          "returned_at": "2026-10-15T15:27:49.918226Z",
+          "finished_at": "2026-10-15T15:28:38.511767Z"
+        },
+        "initial_constant_safety": {
+          "status": "accepted",
+          "owner": "group-worker/IdInsertObj-vc-proving-r1:initial_constant_safety",
+          "claimed_action": "deliver:IdInsertObj-vc-proving-r1:initial_constant_safety:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T15:22:54.996332Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T15:27:21.244296Z",
+                "finished_at": "2026-10-15T15:35:09.692674Z",
+                "elapsed_seconds": 468.448378
+              }
+            ]
+          },
+          "returned_at": "2026-10-15T15:35:09.692560Z",
+          "finished_at": "2026-10-15T15:35:58.257328Z"
+        },
+        "unreachable_checks": {
+          "status": "accepted",
+          "owner": "group-worker/IdInsertObj-vc-proving-r1:unreachable_checks",
+          "claimed_action": "deliver:IdInsertObj-vc-proving-r1:unreachable_checks:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T15:22:54.996336Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T15:29:32.366964Z",
+                "finished_at": "2026-10-15T15:33:56.081706Z",
+                "elapsed_seconds": 263.714742
+              }
+            ]
+          },
+          "returned_at": "2026-10-15T15:33:56.081660Z",
+          "finished_at": "2026-10-15T15:34:51.065591Z"
+        },
+        "allocation_constant_safety": {
+          "status": "accepted",
+          "owner": "group-worker/IdInsertObj-vc-proving-r1:allocation_constant_safety",
+          "claimed_action": "deliver:IdInsertObj-vc-proving-r1:allocation_constant_safety:0",
+          "repair_index": 0,
+          "created_at": "2026-10-15T15:22:54.996338Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T15:33:27.011535Z",
+                "finished_at": "2026-10-15T15:36:36.626221Z",
+                "elapsed_seconds": 189.614686
+              }
+            ]
+          },
+          "returned_at": "2026-10-15T15:36:36.626195Z",
+          "finished_at": "2026-10-15T15:37:29.534640Z"
+        }
+      },
+      "finished_at": "2026-10-15T15:39:03.186718Z"
+    }
+  },
+  "current": {
+    "annotation": "IdInsertObj-annotation-r1",
+    "vc-checking": "IdInsertObj-vc-checking-r1",
+    "vc-proving": "IdInsertObj-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/IdInsertObj-20261012130948",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "IdInsertObj-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-10-15T15:41:04.836174Z",
+    "files": [
+      "VC/IdInsertObj_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-10-15T15:42:28.033822Z",
+    "errors": [],
+    "cleanup_removed_count": 0,
+    "accepted_inputs": {
+      "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+      "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+      "spec_manifest": "480669e8557a5f09a7683b69c5de2b087857f93649ef9c6729096df1c6a8b3cf",
+      "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+    }
+  },
+  "created_at": "2026-10-12T05:09:48.688858Z",
+  "updated_at": "2026-10-15T15:42:28.040909Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-10-15T15:42:28.033802Z"
+}

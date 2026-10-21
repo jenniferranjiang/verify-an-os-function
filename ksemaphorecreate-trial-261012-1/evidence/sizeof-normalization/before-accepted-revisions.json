@@ -1,0 +1,31 @@
+{
+  "accepted_at_utc": "2026-10-12T15:43:16.469941+00:00",
+  "basis": "User one-time automatic acceptance of independent review-passed revisions, plus explicit DCHG-20261012-01 authorization",
+  "source_revision": "source-r2-0c50c37013e9",
+  "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+  "predicate_revision": "predicate-nonzero-candidate-fe8c4261db5c",
+  "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+  "predicate_reviewer": "/root/nonzero_source_review",
+  "predicate_status": "review-passed",
+  "spec_revision": "spec-r5-480669e8557a",
+  "spec_manifest": "480669e8557a5f09a7683b69c5de2b087857f93649ef9c6729096df1c6a8b3cf",
+  "spec_author": "spec_author",
+  "spec_reviewer": "/root/nonzero_source_review",
+  "spec_status": "review-passed",
+  "domain": "entry scheduler_lock_nest < 65535; deeper entries excluded",
+  "trusted": [
+    "x_malloc",
+    "x_free",
+    "memset",
+    "DisableLocalInterrupt",
+    "EnableLocalInterrupt",
+    "KPrintf"
+  ],
+  "implementation_verified": false,
+  "spec_review": ".docs/Report/2026-10-12-4-spec-review.md",
+  "predicate_review": ".docs/Report/2026-10-12-6-predicate-review.md",
+  "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15",
+  "compiler": "/home/xinra/.opam/pv-bench-8.20.1/bin/coqc",
+  "framework": "official Rocq Arch32 LittleEndian, explicit trial shared/framework candidates",
+  "design_change": ".docs/Report/design-changes/2026-10-12-3-object-address-validity.md"
+}

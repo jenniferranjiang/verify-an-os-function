@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "elapsed_seconds": 0.20827312499932304,
+  "probe_only_change": "absolute include of exact active frozen layout header",
+  "accepted_semantic_revision": "spec-r6-ae22a04e2c95",
+  "note": "Final mechanical audit of body annotations, not a new semantic spec revision or review."
+}

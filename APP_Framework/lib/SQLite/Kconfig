@@ -1,0 +1,21 @@
+menu "lib using SQLite"
+
+    menuconfig LIB_USING_SQLITE
+        bool "Using SQLite lib"
+        default n
+        
+    if LIB_USING_SQLITE
+        config LIB_SQLITE_EXAMPLE
+            bool "Enable SQLite example"
+            default y
+
+        config LIB_SQLITE_SQL_MAX_LEN
+            int "Set SQL statements max length"
+            default 1024
+
+        config LIB_SQLITE_DB_NAME_MAX_LEN
+            int "Set SQL database filename fullpath max length"
+            default 64
+    endif
+
+endmenu

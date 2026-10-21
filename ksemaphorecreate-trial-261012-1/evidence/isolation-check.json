@@ -1,0 +1,26 @@
+{
+  "active_load_paths": [
+    "/home/xinra/qcp-binary-democases/SeparationLogic/SeparationLogic",
+    "/home/xinra/qcp-binary-democases/SeparationLogic/unifysl",
+    "/home/xinra/qcp-binary-democases/SeparationLogic/sets",
+    "/home/xinra/qcp-binary-democases/SeparationLogic/compcert_lib",
+    "/home/xinra/qcp-binary-democases/SeparationLogic/auxlibs",
+    "/home/xinra/qcp-binary-democases/SeparationLogic/examples",
+    "/home/xinra/qcp-binary-democases/SeparationLogic/StrategyLib",
+    "/home/xinra/qcp-binary-democases/SeparationLogic/Common",
+    "/home/xinra/qcp-binary-democases/SeparationLogic/fixedpoints",
+    "/home/xinra/qcp-binary-democases/SeparationLogic/MonadLib",
+    "/home/xinra/qcp-binary-democases/SeparationLogic/listlib",
+    "/home/xinra/qcp-binary-democases/SeparationLogic/MaxMinLib",
+    "/home/xinra/qcp-binary-democases/SeparationLogic/GraphLib",
+    "/home/xinra/crtos/lib",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/VC"
+  ],
+  "formal_source_count": 25,
+  "old_trial_active_reference": false,
+  "symlink_target_check": "passed",
+  "vsrocq_matches_trial": true,
+  "scope": "root formal source files and current trial formal sources + active project paths only",
+  "audit_limitation": "Initial AGENTS filename enumeration lacked explicit old-trial exclusion; recorded in session-constraints.json. This check does not erase that deviation."
+}

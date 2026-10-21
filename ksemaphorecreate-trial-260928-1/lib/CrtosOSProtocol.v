@@ -8,7 +8,7 @@ Import SetsNotation.
 
 From SimpleC.SL Require Import Mem SeparationLogic ConAssertion.
 Require Import Logic.LogicGenerator.demo932.Interface.
-Require Import CRTOS_Verify.libai.TaskProtocolSTS.
+Require Import CRTOS_Verify.lib.TaskProtocolSTS.
 Require Import CRTOS_Verify.sem.CrtosOSPure.
 
 Import ListNotations.

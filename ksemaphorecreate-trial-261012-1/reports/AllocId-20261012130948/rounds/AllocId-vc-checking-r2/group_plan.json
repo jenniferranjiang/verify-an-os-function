@@ -1,0 +1,302 @@
+{
+  "groups": [
+    {
+      "id": "entry_scan",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_entail_wit_5",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_entail_wit_5_split_goal_1": "Pure goal. Choose offset = 0 in allocid_entry_scan_inv, normalize index*8-index*8 and shiftr by zero. Obtain the byte range from id_map_bytes_ok_Znth_range using index bounds and end equality. The scanned-bit prefix is empty; all conjuncts follow."
+          }
+        },
+        {
+          "name": "proof_of_AllocId_entail_wit_6",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_entail_wit_6_split_goal_1": "Pure scan transition. Unfold allocid_entry_scan_inv and retain its offset witness. From byte range and the prefix of true low bits, offset = 8 would imply byte = 255 by byte_eq_255_of_low_bits, contradicting the guard; hence offset < 8. Choose offset+1. Z.land entry 1 <> 0 establishes testbit entry 0 = true; shiftr testbit transfers this to the original byte at offset. Preserve earlier bits and compose shiftr by offset then by 1. entry in [0,255] makes shiftr entry 1 lie in [0,127], so unsigned_last_nbits at 8 is unchanged. Discharge new id and offset bounds arithmetically. No spatial resources or semantic-state change."
+          }
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_22",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_safety_wit_22_split_goal_1": "Destruct id_map_bytes_ok for 0 <= idmax <= 65535. Rewrite quot to div using nonnegative idmax+7, and use division bounds to get 0 <= end <= 8192; index < end and 0 <= index give index <= 8191. Unfold entry-scan invariant for id <= index*8+8, hence id+1 <= 65537 < INT_MAX. Antecedent resources remain context; conclude only the requested pure upper bound.",
+            "proof_of_AllocId_safety_wit_22_split_goal_2": "Unfold entry-scan invariant for index*8 <= id; index >= 0 implies id+1 >= 1 >= INT_MIN. Heap resources are context; no witnesses."
+          }
+        }
+      ]
+    },
+    {
+      "id": "allocation_result",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the success disjunct. Unfold entry/index scan invariants; use byte range, byte <> 255 and byte_eq_255_of_low_bits to establish offset < 8. Then id/8=index and id mod 8=offset. The land-zero exit guard gives original byte testbit offset=false; query_eq proves id is free. For any smaller nonnegative id, its byte precedes index (use index invariant and Ztestbit_255_low) or its offset precedes the scan offset (use entry invariant), establishing minimality. Normalize both unsigned_last_nbits operands using byte range and 0 <= id mod 8 < 8. Instantiate the store_id_map existential with the actual replace_Znth array. Prove id_map_bytes_ok for id::old_ids: preserve length, bounded bytes and old-id range; freeness gives NoDup; use Znth replacement and lor/shiftl testbit equations, distinguishing the updated index and bit from all other bits. The selected bit becomes true and all other queried bits remain unchanged, matching id_in_ids_add_neq. Fold store_idmanager_allocated_unlinked with the unchanged old bucket invariant. Convert quot to div by nonnegative idmax+7 and recombine OSHeap through crtos_heap_lift_sep/definitions; manager fields and bucket heap cancel. No new helper declarations: keep intermediate assertions inside this witness."
+        }
+      ]
+    },
+    {
+      "id": "full_results",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_return_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the failure disjunct with returned -1. Establish idmanager_full by taking any 0 <= j < idmax and rewriting its query with id_map_bytes_ok_query_eq. Repack store_idmanager using the existing bytes as the existential witness and existing idbuckets_ok. Rewrite quot to div from idmax >= 0, and combine identical fields/array/bucket resources through OSHeap heap-lift definitions and crtos_heap_lift_sep; no heap update. Here idmax <= id. If j/8 < index use the index prefix and Ztestbit_255_low; otherwise prove j/8=index and j mod 8 < offset from j<id and the entry invariant, so its scanned bit is true. The byte <> 255 guard rules out offset=8, using byte_eq_255_of_low_bits."
+        },
+        {
+          "name": "proof_of_AllocId_return_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the failure disjunct with returned -1. Establish idmanager_full by taking any 0 <= j < idmax and rewriting its query with id_map_bytes_ok_query_eq. Repack store_idmanager using the existing bytes as the existential witness and existing idbuckets_ok. Rewrite quot to div from idmax >= 0, and combine identical fields/array/bucket resources through OSHeap heap-lift definitions and crtos_heap_lift_sep; no heap update. Here index=end; id_div8_lt_quot_ceil8 gives j/8<index. The index-scan invariant makes that byte 255, and Ztestbit_255_low gives the desired bit."
+        }
+      ]
+    },
+    {
+      "id": "outer_scan",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_entail_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the first identical disjunct. Unfold store_idmanager, store_id_map, store_uchar_array and OSHeap. Decompose heap lift over separating conjunction/existential/pure assertions using crtos_heap_lift_sep and the definitions. Reuse its byte existential; extract id_map_bytes_ok and idbuckets_ok; rewrite the array length div to quot from idmax >= 0. Reassemble the exact four manager fields, full array and OSHeap bucket frame; pure manager/local equalities are explicit premises. No footprint or abstract state changes."
+        },
+        {
+          "name": "proof_of_AllocId_entail_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_entail_wit_3_split_goal_1": "Unfold allocid_index_scan_inv. At index 0 nonnegativity is trivial and its universally quantified earlier-index range is empty. Pure goal, no heap or existential.",
+            "proof_of_AllocId_entail_wit_3_split_goal_2": "From id_map_bytes_ok obtain idmax >= 0. Then (idmax+7) quot 8 >= 0 by nonnegative quotient. Pure goal, no resource or witness."
+          }
+        },
+        {
+          "name": "proof_of_AllocId_entail_wit_4",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_entail_wit_4_split_goal_1": "Unfold the index-scan invariant. For 0 <= i < index+1, split i<index or i=index; use the old prefix or the Znth index bytes 0=255 guard. Nonnegativity follows from index>=0. Pure goal, no resource transition."
+          }
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_9",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_safety_wit_9_split_goal_1": "Extract idmax<=65535 from id_map_bytes_ok. Then idmax+7<=65542<INT_MAX. Heap is context; pure conclusion only.",
+            "proof_of_AllocId_safety_wit_9_split_goal_2": "Extract idmax>=0 from id_map_bytes_ok, hence INT_MIN<=idmax+7. Heap is context; pure conclusion only."
+          }
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Destruct id_map_bytes_ok for 0 <= idmax <= 65535. Rewrite quot to div using nonnegative idmax+7, and use division bounds to get 0 <= end <= 8192; index < end and 0 <= index give index <= 8191. Therefore index+1 is between 1 and 8192; prove both INT bounds. Array and manager resources are context; no existential."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_19",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_safety_wit_19_split_goal_1": "Destruct id_map_bytes_ok for 0 <= idmax <= 65535. Rewrite quot to div using nonnegative idmax+7, and use division bounds to get 0 <= end <= 8192; index < end and 0 <= index give index <= 8191. Therefore index*8 <= 65528 < INT_MAX. Conclude the pure upper bound, with unchanged heap context.",
+            "proof_of_AllocId_safety_wit_19_split_goal_2": "index>=0 implies 0<=index*8, hence INT_MIN<=index*8. Pure lower bound; heap context needs no transformation."
+          }
+        }
+      ]
+    },
+    {
+      "id": "array_access",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The precondition owns the manager fields, full UCharArray and OSHeap bucket frame. Preserve all pure premises and frame all manager/bucket resources. Use index >= 0, index < end and end = (idmax+7) quot 8 to split the full array at index, producing the Znth byte and missing_i; no existential state transition is needed. Keep the known byte value unchanged."
+        },
+        {
+          "name": "proof_of_AllocId_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The precondition owns the manager fields, full UCharArray and OSHeap bucket frame. Preserve all pure premises and frame all manager/bucket resources. Use index >= 0, index < end and end = (idmax+7) quot 8 to split the full array at index, producing the Znth byte and missing_i; no existential state transition is needed. Keep the known byte value unchanged."
+        },
+        {
+          "name": "proof_of_AllocId_partial_solve_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The precondition owns the manager fields, full UCharArray and OSHeap bucket frame. Preserve all pure premises and frame all manager/bucket resources. Use index >= 0, index < end and end = (idmax+7) quot 8 to split the full array at index, producing the Znth byte and missing_i; no existential state transition is needed. Keep the known byte value unchanged."
+        },
+        {
+          "name": "proof_of_AllocId_partial_solve_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The precondition owns the manager fields, full UCharArray and OSHeap bucket frame. Preserve all pure premises and frame all manager/bucket resources. Use index >= 0, index < end and end = (idmax+7) quot 8 to split the full array at index, producing the Znth byte and missing_i; no existential state transition is needed. Weaken the known byte cell to its undef form after splitting."
+        }
+      ]
+    },
+    {
+      "id": "initial_values",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Keep OSHeap(store_idmanager sm before manager_pre) by reflexive framing and introduce the five pure conjuncts: manager_pre<>0 is explicit, and the four zero equalities are reflexive. No witness or transition."
+        }
+      ]
+    },
+    {
+      "id": "outer_literals",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_safety_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The denominator is the literal 8. Choose the right branch 8<>-1 in the overflow disjunction and prove 8<>0 by arithmetic. Antecedent heap is context; no state or witness changes."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_12",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        }
+      ]
+    },
+    {
+      "id": "control_paths",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_safety_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Explicit premises manager_pre=0 and manager_pre<>0 contradict, so derive the requested pure False. Heap need not be unfolded."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_15",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use index>=end and index<=end to infer equality, contradicting index<>end; derive pure False independently of heap."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_16",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The premises index=end and index<end contradict; derive pure False independently of heap."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_17",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_18",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        }
+      ]
+    },
+    {
+      "id": "inner_literals",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_safety_wit_20",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_21",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_23",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Conclude the pure shift-count bounds 1<=7 and 0<=1 by arithmetic. Heap is context; no witness or transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_24",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_25",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_26",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        }
+      ]
+    },
+    {
+      "id": "mask_safety",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_safety_wit_27",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_safety_wit_27_split_goal_1": "Use the standard signed_last_nbits range at width 32 to prove its upper INT_MAX bound, or enumerate the eight possible id remainder values and compute. All heap resources are context.",
+            "proof_of_AllocId_safety_wit_27_split_goal_2": "Use the standard signed_last_nbits range at width 32 to prove its lower INT_MIN bound, or enumerate remainder values 0 through 7 and compute. All heap resources are context.",
+            "proof_of_AllocId_safety_wit_27_split_goal_3": "For C remainder %, obtain id>=0 from index>=0 and entry-scan lower bound. Rewrite rem to mod and use modulus 8 positivity to obtain remainder<8<=32. No resource transition.",
+            "proof_of_AllocId_safety_wit_27_split_goal_4": "Obtain id>=0 from index>=0 and the entry-scan lower bound; nonnegative remainder by positive 8 proves the requested bound. No resource transition."
+          }
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_28",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose literal 8<>-1 for the overflow disjunction, and prove 8<>0. Heap is context; no state change."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_29",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_30",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the generated parameters and premises; the antecedent heap is only context. Introduce the pure consequent and discharge its literal integer bounds by unfolding INT_MIN/INT_MAX and arithmetic. No resource transfer, existential or abstract-state transition is required."
+        }
+      ]
+    }
+  ]
+}

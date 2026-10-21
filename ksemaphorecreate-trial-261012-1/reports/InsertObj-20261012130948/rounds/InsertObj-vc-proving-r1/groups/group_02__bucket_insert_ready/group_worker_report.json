@@ -1,0 +1,21 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-link-nonzero-premise",
+    "vcs": [
+      {
+        "name": "proof_of_InsertObj_entail_wit_3_1",
+        "parent": null,
+        "annotation_location": "annotated_C/src/InsertObj.c:130 (&(idnode->link)!=0)"
+      },
+      {
+        "name": "proof_of_InsertObj_entail_wit_3_2",
+        "parent": null,
+        "annotation_location": "annotated_C/src/InsertObj.c:130 (&(idnode->link)!=0)"
+      }
+    ],
+    "message": "Both whole-goal premises retain idnode nonzero and its three field resources, but not the embedded link address nonzero. valid_store_ushort proves only that the abstract id-field address is nonnegative. eval_addr_expr is an uninterpreted Parameter in the current formal notation, and no accepted layout equality connects the id and link addresses; therefore this does not imply the required link-address nonzero conclusion. The accepted store_sem_id_detached predicate also lacks that pure fact.",
+    "repair_boundary": "Repair upstream annotation/spec or accepted representation to provide and preserve the embedded link nonzero fact, or supply a separately justified formal layout bridge; do not change generated VC statements or add assumptions in a worker proof. See group_worker_output.md for exact premises, diagnostic, and annotation locations."
+  }
+}

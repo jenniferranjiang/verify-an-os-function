@@ -1,0 +1,29 @@
+{
+  "revision": "spec-r1-7f4d155c90f7",
+  "status": "review-passed",
+  "predicate_revision": "predicate-r1-8a944cddeb13",
+  "files": {
+    "annotated_C/src/AllocId.c": "3f06a47e78618add867311a4c19d936539dd5f77657cd60115f133fad0be2288",
+    "annotated_C/src/CriticalAreaLock.c": "a2605fec0b78dcea3895f6511bef3e207e5d3aecf897d1871100e281065717ea",
+    "annotated_C/src/CriticalAreaUnLock.c": "e6977f7291027aa9eb349bfe7abadc66362aefc8128c41001b7c985c385b9ab4",
+    "annotated_C/src/DoubleLinkListInsertNodeAfter.c": "39ca5671d82e7fe72687707128b475f5d19c022750dbd0d635bc627d271d2841",
+    "annotated_C/src/IdInsertObj.c": "b402c71a7c1741b0e27b5af390f3fc5ee142835097612a2e2f1a276ff17f6b99",
+    "annotated_C/src/InitDoubleLinkList.c": "7d5753a0bff344f5de6321a085280fcb9c9ed763ef757a49a8ea186637c38175",
+    "annotated_C/src/InsertObj.c": "8251e404f260b1aa957d995c117047d7346a506a344dfcffd7fb24bb353e9f33",
+    "annotated_C/src/KSemaphoreCreate.c": "1aef74ad67589ae3e289663de44cc1534e977dd51aa7c19766d824a0bebe673f",
+    "annotated_C/src/_SemaphoreCreate.c": "fa2a3e9dc0303041821dad12ca9e372493597230275f2afd833f09f9dd16a45c",
+    "annotated_C/logic.h": "917b00f8b1e588812091c5164e2f2ee0007c56bc953b46e3edfe6c6655e3d464",
+    "annotated_C/slice_types.h": "66f5b7ffab645234754bd4d2aca315e761db402db609bf8a33950b702b53cf08"
+  },
+  "aggregate_sha256": "7f4d155c90f7d5b8219a0b52b7221443b19a9de69dff7591f3c81b1de634a224",
+  "checks": [
+    "checks/design-audit.json",
+    "checks/spec-vocabulary.log",
+    "checks/spec-c-syntax.log",
+    "checks/slice-abi-check.log",
+    "checks/abi-check.log",
+    "checks/load-path-audit.json",
+    "checks/source-manifest.json"
+  ],
+  "review": ".docs/Report/spec-review.md"
+}

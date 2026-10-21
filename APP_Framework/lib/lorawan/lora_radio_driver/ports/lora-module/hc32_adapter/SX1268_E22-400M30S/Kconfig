@@ -1,0 +1,49 @@
+choice
+    prompt "choose board for lora radio driver"
+    default LORA_RADIO_DRIVER_USING_XISHUTONG_ARM32
+
+    config LORA_RADIO_DRIVER_USING_EDU_ARM32
+        bool "board select edu-arm32 bsp"
+
+    config LORA_RADIO_DRIVER_USING_XISHUTONG_ARM32
+        bool "board select xishutong-arm32 bsp"
+endchoice
+
+if LORA_RADIO_DRIVER_USING_EDU_ARM32
+        config LORA_SPI_DEV_NAME
+                string "lora device pin driver path"
+                default "/dev/spi1_dev0"
+
+        config LORA_RADIO_RESET_PIN
+                int "hc32 board lora chip reset pin[PI02]"
+                default "133"
+
+        config LORA_RADIO_BUSY_PIN
+                int "hc32 board lora chip busy pin[PE03]"
+                default "2"
+endif
+
+if LORA_RADIO_DRIVER_USING_XISHUTONG_ARM32
+        config LORA_SPI_DEV_NAME
+                string "lora device pin driver path"
+                default "/dev/spi2_dev0"
+
+        config LORA_RADIO_BUSY_PIN
+                int "xishutong-arm32 board lora chip busy pin[PC12]"
+                default "141"
+
+        config LORA_RADIO_RESET_PIN
+                int "xishutong-arm32 board lora chip reset pin[PD02]"
+                default "144"
+endif
+
+config LORA_RADIO_DRIVER_USING_LORA_CHIP_SX126X
+        bool "hc32 board using lora chip sx126x"
+        default y
+
+if LORA_RADIO_DRIVER_USING_LORA_CHIP_SX126X
+        config LORA_RADIO_DRIVER_USING_LORA_CHIP_SX1268
+                bool "hc32 board using lora chip sx1268"
+                default y
+endif
+        

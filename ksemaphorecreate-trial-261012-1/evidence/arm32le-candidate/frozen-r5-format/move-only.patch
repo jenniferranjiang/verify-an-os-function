@@ -1,0 +1,32 @@
+--- frozen-r5/lib/SemaphoreCriticalViews.v
++++ r5-format/lib/SemaphoreCriticalViews.v
+@@ -49,6 +49,14 @@
+ Local Set Warnings "notation-overridden".
+ Local Open Scope sac.
+ 
++(** Lock/UnLock读写nest期间共同保留的精确余项：task借用视图、Assign全部
++    资源及完整semaphore模块。纯CrtosOSValid单独暴露，允许对新nest重建。
++    此内部拆分不改变函数对外spec，也不持有nest单元或任何IRQ token。 *)
++Definition SemaphoreCriticalFrame (sg : CrtosOSStable) (s : CrtosOSState) : Assertion :=
++  OSHeap (CrtosBorrowedRep.store_task_semaphore_views s.(os_tasks)) **
++  OSHeap (CrtosSchedulerViews.store_scheduler_assign s.(os_scheduler)) **
++  OSHeap (store_semaphore sg.(os_sem_stable) s.(os_semaphores)).
++
+ (** heap bridge只搬移真实heap断言；以下局部等式把已证分离保持用于单元访问。
+     字节解释保留同一内存、空token和全集协议状态，因此不会转换IRQ权限。 *)
+ Local Lemma OSHeap_sep_eq : forall P Q,
+@@ -114,14 +122,6 @@
+   reflexivity.
+ Qed.
+ 
+-(** Lock/UnLock读写nest期间共同保留的精确余项：task借用视图、Assign全部
+-    资源及完整semaphore模块。纯CrtosOSValid单独暴露，允许对新nest重建。
+-    此内部拆分不改变函数对外spec，也不持有nest单元或任何IRQ token。 *)
+-Definition SemaphoreCriticalFrame (sg : CrtosOSStable) (s : CrtosOSState) : Assertion :=
+-  OSHeap (CrtosBorrowedRep.store_task_semaphore_views s.(os_tasks)) **
+-  OSHeap (CrtosSchedulerViews.store_scheduler_assign s.(os_scheduler)) **
+-  OSHeap (store_semaphore sg.(os_sem_stable) s.(os_semaphores)).
+-
+ Lemma SemaphoreOSInvariant_split_nest : forall sg s,
+   SemaphoreOSInvariant sg s |--
+   “ CrtosOSValid s ” &&

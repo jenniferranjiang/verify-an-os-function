@@ -1,0 +1,1 @@
+Previous round safety_alloc witnesses 7–10 and safety_locked witnesses 11–12 use the whole-goal arithmetic closer. Current witnesses retain the contradiction/constant-bound conclusions, with additional raw resource facts and the checked size constant 32. Reused the proof pattern only, subject to the current group check. No helpers added.

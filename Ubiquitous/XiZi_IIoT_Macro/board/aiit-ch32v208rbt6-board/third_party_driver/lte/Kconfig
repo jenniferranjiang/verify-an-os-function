@@ -1,0 +1,14 @@
+menuconfig BSP_USING_LTE
+    bool "Enable LTE"
+    default y
+    if BSP_USING_LTE
+        config LTE_BUS_NAME
+            string "lte bus name"
+            default "lte"
+        config LTE_DRV_NAME
+            string "lte bus driver name"
+            default "lte_drv"
+        config LTE_DEVICE_NAME_1
+                string "lte bus device 1 name"
+                default "lte_dev1"
+    endif

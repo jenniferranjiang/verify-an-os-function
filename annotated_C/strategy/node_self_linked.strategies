@@ -1,0 +1,75 @@
+#include "m_double_linklist.h"
+
+// 自环节点只拥有两个指针槽；core 按实际读/写需求消费一个槽。
+id : 1
+priority : core(1)
+left : store_node_self_linked(?p) at 0
+right : store(field_addr(?q, SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode), ?v) at 1
+check : infer(q == p);
+action : left_erase(0);
+         right_erase(1);
+         left_add(store(field_addr(p, SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode), p));
+         right_add(v == p);
+
+id : 2
+priority : core(1)
+left : store_node_self_linked(?p) at 0
+right : store(field_addr(?q, SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode), ?v) at 1
+check : infer(q == p);
+action : left_erase(0);
+         right_erase(1);
+         left_add(store(field_addr(p, SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode), p));
+         right_add(v == p);
+
+id : 3
+priority : core(1)
+left : store_node_self_linked(?p) at 0
+right : undef_data_at(field_addr(?q, SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode)) at 1
+check : infer(q == p);
+action : left_erase(0);
+         right_erase(1);
+         left_add(store(field_addr(p, SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode), p));
+
+id : 4
+priority : core(1)
+left : store_node_self_linked(?p) at 0
+right : undef_data_at(field_addr(?q, SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode)) at 1
+check : infer(q == p);
+action : left_erase(0);
+         right_erase(1);
+         left_add(store(field_addr(p, SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode), p));
+
+// 仅两个槽都恢复自环时折叠；等价的 C 别名由 infer 单独验证。
+id : 5
+priority : post(1)
+left : store(field_addr(?p, SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode), ?x) at 0
+       store(field_addr(?q, SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode), ?y) at 1
+check : infer(q == p);
+        infer(x == p);
+        infer(y == p);
+action : left_erase(0);
+         left_erase(1);
+         left_add(store_node_self_linked(p));
+
+// 原始槽的快速读写路径不保证运行 post；按接口目标完成同一个折叠。
+id : 6
+priority : core(2)
+left : store(field_addr(?p, SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode), ?x) at 0
+       store(field_addr(?q, SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode), ?y) at 1
+right : store_node_self_linked(?r) at 2
+check : infer(p == r);
+        infer(q == r);
+        infer(x == r);
+        infer(y == r);
+action : left_erase(0);
+         left_erase(1);
+         right_erase(2);
+
+// 折叠后的节点也允许通过已证明相等的 C 别名满足接口。
+id : 7
+priority : core(1)
+left : store_node_self_linked(?p) at 0
+right : store_node_self_linked(?q) at 1
+check : infer(q == p);
+action : left_erase(0);
+         right_erase(1);

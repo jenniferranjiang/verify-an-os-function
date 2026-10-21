@@ -1,0 +1,20 @@
+#include "startup_views_strategy.h"
+
+// Targeted address bridges retain the same two-slot self-linked ownership.
+id : 1
+priority : core(2)
+left : store_node_self_linked(sched_link_of(?task)) at 0
+right : store_node_self_linked(?node) at 1
+check : infer(node == field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link));
+action : left_erase(0);
+         right_erase(1);
+         left_add(sched_link_of(task) == node);
+
+id : 2
+priority : core(2)
+left : store_node_self_linked(?node) at 0
+right : store_node_self_linked(sched_link_of(?task)) at 1
+check : infer(node == field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link));
+action : left_erase(0);
+         right_erase(1);
+         left_add(sched_link_of(task) == node);

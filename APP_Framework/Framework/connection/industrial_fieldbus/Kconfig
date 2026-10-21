@@ -1,0 +1,10 @@
+config CONNECTION_MODBUS
+        bool "Using industrial fieldbus ModBus"
+        default n
+
+if CONNECTION_MODBUS
+    source "$APP_DIR/Framework/connection/industrial_fieldbus/modbus/Kconfig"
+endif
+
+
+

@@ -1,0 +1,223 @@
+{
+  "run": {
+    "status": "completed",
+    "phase": "done",
+    "created_at": "2026-10-12T05:10:15.334397Z",
+    "finished_at": "2026-10-16T05:50:00.795150Z",
+    "elapsed_seconds": 347985.460753
+  },
+  "commands": [
+    {
+      "phase": "annotation",
+      "command": "coq-check",
+      "calls": 7,
+      "elapsed_seconds": 0.096002
+    },
+    {
+      "phase": "annotation",
+      "command": "symexec",
+      "calls": 7,
+      "elapsed_seconds": 2.718243
+    },
+    {
+      "phase": "annotation",
+      "command": "finalize-delivery",
+      "calls": 2,
+      "elapsed_seconds": 1.17071
+    },
+    {
+      "phase": "vc-checking",
+      "command": "dune-build",
+      "calls": 2,
+      "elapsed_seconds": 84.316206
+    },
+    {
+      "phase": "vc-checking",
+      "command": "finalize-delivery",
+      "calls": 2,
+      "elapsed_seconds": 0.126859
+    },
+    {
+      "phase": "vc-checking",
+      "command": "coq-debug",
+      "calls": 1,
+      "elapsed_seconds": 57.115707
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-preparing",
+      "calls": 3,
+      "elapsed_seconds": 0.216777
+    },
+    {
+      "phase": "vc-proving",
+      "command": "finalize-delivery",
+      "calls": 9,
+      "elapsed_seconds": 812.050016
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-verify",
+      "calls": 1,
+      "elapsed_seconds": 189.763306
+    },
+    {
+      "phase": "final-check",
+      "command": "final-apply",
+      "calls": 1,
+      "elapsed_seconds": 179.742172
+    },
+    {
+      "phase": "done",
+      "command": "final-check",
+      "calls": 1,
+      "elapsed_seconds": 188.606352
+    }
+  ],
+  "annotation_attempts": [
+    {
+      "attempt_id": "_SemaphoreCreate-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-10-15T15:44:21.276167Z",
+          "calls": 6,
+          "finished_at": "2026-10-15T15:51:29.707747Z",
+          "elapsed_seconds": 0.077441
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-10-15T15:53:34.763340Z",
+          "finished_at": "2026-10-15T15:53:35.444329Z",
+          "elapsed_seconds": 0.669027
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-10-15T15:43:03.987533Z",
+          "finished_at": "2026-10-15T15:53:34.798545Z",
+          "elapsed_seconds": 630.811012
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-10-15T15:44:26.673836Z",
+          "calls": 6,
+          "finished_at": "2026-10-15T15:51:30.606227Z",
+          "elapsed_seconds": 2.099416
+        }
+      ]
+    },
+    {
+      "attempt_id": "_SemaphoreCreate-annotation-r2",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-10-15T16:24:28.854115Z",
+          "finished_at": "2026-10-15T16:24:28.880559Z",
+          "elapsed_seconds": 0.018561
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-10-15T16:34:15.863168Z",
+          "finished_at": "2026-10-15T16:34:16.373557Z",
+          "elapsed_seconds": 0.501683
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-10-15T16:23:11.201143Z",
+          "finished_at": "2026-10-15T16:34:15.876027Z",
+          "elapsed_seconds": 664.674884
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-10-15T16:24:29.038918Z",
+          "finished_at": "2026-10-15T16:24:29.666126Z",
+          "elapsed_seconds": 0.618828
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "attempt_id": "_SemaphoreCreate-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "blocked",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-10-15T16:00:29.123782Z",
+          "finished_at": "2026-10-15T16:00:29.178828Z",
+          "elapsed_seconds": 0.044722
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-10-15T15:55:05.195722Z",
+          "finished_at": "2026-10-15T16:00:29.133781Z",
+          "elapsed_seconds": 323.938059
+        }
+      ]
+    },
+    {
+      "attempt_id": "_SemaphoreCreate-vc-checking-r2",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-debug",
+          "started_at": "2026-10-15T16:37:48.487840Z",
+          "finished_at": "2026-10-15T16:38:43.403623Z",
+          "elapsed_seconds": 57.115707
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-10-15T16:48:32.879672Z",
+          "finished_at": "2026-10-15T16:48:32.970667Z",
+          "elapsed_seconds": 0.082137
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-10-15T16:36:28.360295Z",
+          "finished_at": "2026-10-15T16:48:32.898216Z",
+          "elapsed_seconds": 724.537921
+        }
+      ]
+    },
+    {
+      "attempt_id": "_SemaphoreCreate-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-10-15T16:56:28.076696Z",
+          "calls": 9,
+          "finished_at": "2026-10-16T05:38:37.375470Z",
+          "elapsed_seconds": 812.050016
+        },
+        {
+          "name": "group-work",
+          "started_at": "2026-10-15T16:50:24.503344Z",
+          "calls": 9,
+          "finished_at": "2026-10-16T05:36:40.393776Z",
+          "elapsed_seconds": 93460.858842
+        },
+        {
+          "name": "vc-proving-preparing",
+          "started_at": "2026-10-15T16:48:39.565682Z",
+          "calls": 3,
+          "finished_at": "2026-10-15T16:50:13.346491Z",
+          "elapsed_seconds": 0.216778
+        },
+        {
+          "name": "vc-proving-verify",
+          "started_at": "2026-10-16T05:39:16.481516Z",
+          "finished_at": "2026-10-16T05:42:12.745100Z",
+          "elapsed_seconds": 189.763306
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+Reused the LLM_pre_process arithmetic proof pattern from the r1 safety_entry witnesses 1–5 and safety_alloc witness 6. Current VC 4 now proves bounds for the checked literal 32; all six current statements are validated by the current group-check. No helper or semantic input changes.

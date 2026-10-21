@@ -1,0 +1,1 @@
+Reused and adapted the minimum-free-ID argument from the previous round allocation-result witness. The current proof specifies the byte index explicitly, beta-reduces the testbit projection, and adds the complete bitmap update and OSHeap reconstruction arguments. The previous partial ending was not reused; the current full witness passed group-check.

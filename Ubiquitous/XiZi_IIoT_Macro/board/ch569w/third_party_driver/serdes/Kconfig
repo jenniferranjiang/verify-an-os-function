@@ -1,0 +1,7 @@
+config SERDES_TRANS
+        bool "Config serdes transmit mode."
+        default y
+
+config SERIAL_RECEI
+        bool "Config serdes receive mode."
+        default y

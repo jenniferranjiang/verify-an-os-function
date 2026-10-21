@@ -1,0 +1,17 @@
+{
+  "status": "review-passed",
+  "kind": "spec-delta-review",
+  "spec_revision": "spec-r5-480669e8557a",
+  "annotated_manifest_sha256": "480669e8557a5f09a7683b69c5de2b087857f93649ef9c6729096df1c6a8b3cf",
+  "predicate_revision": "predicate-nonzero-candidate-fe8c4261db5c",
+  "predicate_manifest_sha256": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+  "review_record": ".docs/Report/2026-10-12-4-spec-review.md",
+  "review_record_sha256": "e32c060b4a127c9b5386cd5939cbfbd932eb19b910b8538f965ee6b99a399f71",
+  "interface_check_sha256": "7e9ec20ec58d3394a0042119b079dcce5c01a41d4e31de28de733d0af9d67587",
+  "open_spec_blockers": [],
+  "implementation_pending": [
+    "InsertObj annotation owner must propagate new nonzero metadata and reprove actual failed VCs",
+    "Affected proofs, goal-checks and final integrity must bind new revisions"
+  ],
+  "qcp_invoked": false
+}

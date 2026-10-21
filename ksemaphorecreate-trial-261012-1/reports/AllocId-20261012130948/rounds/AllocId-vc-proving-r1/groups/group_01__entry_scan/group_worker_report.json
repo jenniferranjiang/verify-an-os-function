@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "infrastructure",
+    "kind": "generated-goal-syntax",
+    "vcs": [],
+    "message": "The exact coq-debug command exited 1 with JSON status failed before manual proof compilation: VC/AllocId_goal.v:104:89-92 contains reserved binder (end: Z), causing Syntax error: [name] expected after ( in closed_binder. Current assigned proof bodies are unvalidated drafts.",
+    "repair_boundary": "Main/controller must repair generated identifier normalization or regenerated canonical goal inputs. This worker cannot modify goal statements or controller sources; resume this owner afterwards to adapt and validate assigned proofs."
+  }
+}

@@ -1,0 +1,5 @@
+From CRTOS_Verify.VC Require Import InsertObj_goal InsertObj_proof_auto InsertObj_proof_manual.
+Check proof_of_InsertObj_safety_wit_7.
+Check proof_of_InsertObj_safety_wit_8.
+Check proof_of_InsertObj_safety_wit_9.
+Check proof_of_InsertObj_safety_wit_10.

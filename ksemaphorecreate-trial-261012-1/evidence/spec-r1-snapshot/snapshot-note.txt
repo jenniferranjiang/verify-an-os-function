@@ -1,0 +1,1 @@
+Snapshot of this new trial spec-r1-9c6b3806e173 before nested critical revision. Inactive evidence only; never included in QCP inputs or active C scope. Predicate PR01 requires replacement; no prior spec review-passed claim.

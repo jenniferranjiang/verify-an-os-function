@@ -1,0 +1,121 @@
+#include "ready_cache_strategy.h"
+
+id : 1
+priority : core(2)
+left : store_os_assign_ready_vector(?p, ?state) at 0
+right : store(field_addr(?q, OsAssignReadyVector, highest_prio), U32, ?value) at 1
+check : infer(q == p);
+action : left_erase(0); right_erase(1);
+         left_add(store_ready_except_highest(p, state));
+         right_add(value == orvHighestPrio(state));
+
+id : 2
+priority : core(2)
+left : store_os_assign_ready_vector(?p, ?state) at 0
+right : undef_data_at(field_addr(?q, OsAssignReadyVector, highest_prio), U32) at 1
+check : infer(q == p);
+action : left_erase(0); right_erase(1);
+         left_add(store_ready_except_highest(p, state));
+
+id : 3
+priority : post(2)
+left : store_ready_except_highest(?p, ?state) at 0
+       store(field_addr(?q, OsAssignReadyVector, highest_prio), U32, ?value) at 1
+check : infer(q == p); infer(value == orvHighestPrio(state));
+action : left_erase(0); left_erase(1);
+         left_add(store_os_assign_ready_vector(p, state));
+
+id : 4
+priority : core(2)
+left : store_ready_except_highest(?p, ?state) at 0
+       store(field_addr(?q, OsAssignReadyVector, highest_prio), U32, ?value) at 1
+right : store_os_assign_ready_vector(?r, ?after) at 2
+check : infer(q == p); infer(r == p);
+action : left_erase(0); left_erase(1); right_erase(2);
+         right_add(after == mkOsAssignReadyVectorAbs(orvBuckets(state), orvReadyGroup(state), value));
+
+id : 5
+priority : core(2)
+left : store_os_assign_ready_vector(?p, ?state) at 0
+right : store(field_addr(?q, OsAssignReadyVector, priority_ready_group), U32, ?value) at 1
+check : infer(q == p);
+action : left_erase(0); right_erase(1);
+         left_add(store_ready_except_group(p, state));
+         right_add(value == orvReadyGroup(state));
+
+id : 6
+priority : core(2)
+left : store_os_assign_ready_vector(?p, ?state) at 0
+right : undef_data_at(field_addr(?q, OsAssignReadyVector, priority_ready_group), U32) at 1
+check : infer(q == p);
+action : left_erase(0); right_erase(1);
+         left_add(store_ready_except_group(p, state));
+
+id : 7
+priority : post(2)
+left : store_ready_except_group(?p, ?state) at 0
+       store(field_addr(?q, OsAssignReadyVector, priority_ready_group), U32, ?value) at 1
+check : infer(q == p); infer(value == orvReadyGroup(state));
+action : left_erase(0); left_erase(1);
+         left_add(store_os_assign_ready_vector(p, state));
+
+id : 8
+priority : core(2)
+left : store_ready_except_group(?p, ?state) at 0
+       store(field_addr(?q, OsAssignReadyVector, priority_ready_group), U32, ?value) at 1
+right : store_os_assign_ready_vector(?r, ?after) at 2
+check : infer(q == p); infer(r == p);
+action : left_erase(0); left_erase(1); right_erase(2);
+         right_add(after == mkOsAssignReadyVectorAbs(orvBuckets(state), value, orvHighestPrio(state)));
+
+// 桶已借出时只再借缓存，仍保留既有数组补集。
+id : 9
+priority : core(2)
+left : store_rrr_vector_except(?p, ?prio, ?old, ?state) at 0
+right : store(field_addr(?q, OsAssignReadyVector, priority_ready_group), U32, ?value) at 1
+check : infer(q == p);
+action : left_erase(0); right_erase(1);
+         left_add(store_priority_ready_vector_except(p, prio, old, orvBuckets(state)));
+         left_add(store(field_addr(p, OsAssignReadyVector, highest_prio), U32, orvHighestPrio(state)));
+         right_add(value == orvReadyGroup(state));
+
+// 桶已借出时只再借缓存，仍保留既有数组补集。
+id : 10
+priority : core(2)
+left : store_rrr_vector_except(?p, ?prio, ?old, ?state) at 0
+right : undef_data_at(field_addr(?q, OsAssignReadyVector, priority_ready_group), U32) at 1
+check : infer(q == p);
+action : left_erase(0); right_erase(1);
+         left_add(store_priority_ready_vector_except(p, prio, old, orvBuckets(state)));
+         left_add(store(field_addr(p, OsAssignReadyVector, highest_prio), U32, orvHighestPrio(state)));
+
+// 算法边界沿用既有组合 frame；按需把两个独立借出视图合并。
+id : 11
+priority : core(3)
+left : task_fields_except_sched(?sg, ?st, ?task, ?desc) at 0
+       store_task_sched_except_cur_prio(task, tdSchedMember(desc)) at 1
+       store_ready_except_highest(?p, ?state) at 2
+right : store_assign_policy_insert_frame(sg, st, ?q, task, desc, ?before, ?bucket) at 3
+check : infer(q == p);
+        infer(state == os_assign_ready_vector_replace_bucket(before, tsmCurPrio(tdSchedMember(desc)), bucket));
+action : left_erase(0); left_erase(1); left_erase(2); right_erase(3);
+
+id : 12
+priority : core(3)
+left : task_fields_except_sched(?sg, ?st, ?task, ?desc) at 0
+       store_task_sched_except_bitmap_column(task, tdSchedMember(desc)) at 1
+       store_ready_except_group(?p, ?state) at 2
+right : store_assign_insert_group_frame(sg, st, ?q, task, desc, ?before, ?bucket) at 3
+check : infer(q == p);
+        infer(state == assign_policy_insert_ready_vector(before, tdSchedMember(desc), bucket));
+action : left_erase(0); left_erase(1); left_erase(2); right_erase(3);
+
+// pending 的对象只含 ready-vector；保持 published 事实供算法状态转移。
+id : 13
+priority : core(3)
+left : assign_ready_pending(?sg, replace_global_ready_vector(?ready, ?st)) at 0
+right : store(field_addr(?p, OsAssignReadyVector, highest_prio), U32, ?value) at 1
+check : infer(p == assign_ready_vector_addr(sg));
+action : left_erase(0);
+         left_add(assign_ready_published(replace_global_ready_vector(ready, st)));
+         left_add(store_os_assign_ready_vector(assign_ready_vector_addr(sg), ready));

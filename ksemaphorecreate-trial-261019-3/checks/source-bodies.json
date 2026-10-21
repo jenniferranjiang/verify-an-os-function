@@ -1,0 +1,110 @@
+{
+  "KSemaphoreCreate": {
+    "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c",
+    "line": 246,
+    "source_sha256": "d5b41c3bde69e0416431d2425c61e35453778ae4b1569747f2c2258f3dfe16ec",
+    "raw": "int32 KSemaphoreCreate(uint16 val)\n{\n    KDEBUG_NOT_IN_INTERRUPT;\n\n    return done.SemaphoreCreate(val);\n}",
+    "preprocessed": "int32 KSemaphoreCreate(uint16 val)\n{\n    ;\n    return done.SemaphoreCreate(val);\n}",
+    "normalized": "int32 KSemaphoreCreate(uint16 val)\n{\n    ;\n    return _SemaphoreCreate(val);\n}",
+    "normalizations": [
+      "static-to-external when applicable",
+      "done.SemaphoreCreate resolved to _SemaphoreCreate only for KSemaphoreCreate; table local static and never assigned after initialization"
+    ]
+  },
+  "_SemaphoreCreate": {
+    "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c",
+    "line": 33,
+    "source_sha256": "d5b41c3bde69e0416431d2425c61e35453778ae4b1569747f2c2258f3dfe16ec",
+    "raw": "static int32 _SemaphoreCreate(uint16 val)\n{\n    int32 id = 0;\n    x_base lock = 0;\n    struct Semaphore *sem = NONE;\n\n    sem = (struct Semaphore *)x_malloc(sizeof(struct Semaphore));\n    if (sem == NONE)\n        return -ENOMEMORY;\n\n    memset(sem, 0, sizeof(struct Semaphore));\n    lock = CriticalAreaLock();\n    id = IdInsertObj(&k_sem_id_manager, &sem->id);\n    if (id < 0) {\n        x_free(sem);\n        CriticalAreaUnLock(lock);\n        return -ENOMEMORY;\n    }\n\n    sem->value = val;\n    InitDoubleLinkList(&sem->pend_list);\n\n    \n    DoubleLinkListInsertNodeAfter(&k_sem_list, &sem->link);\n    CriticalAreaUnLock(lock);\n\n    SYS_KDEBUG_LOG(KDBG_IPC, (\"created semaphore: id %d, value %d\\n\", id, (int)val));\n\n    return id;\n}",
+    "preprocessed": "static int32 _SemaphoreCreate(uint16 val)\n{\n    int32 id = 0;\n    x_base lock = 0;\n    struct Semaphore *sem = (0);\n    sem = (struct Semaphore *)x_malloc(sizeof(struct Semaphore));\n    if (sem == (0))\n        return -5;\n    memset(sem, 0, sizeof(struct Semaphore));\n    lock = CriticalAreaLock();\n    id = IdInsertObj(&k_sem_id_manager, &sem->id);\n    if (id < 0) {\n        x_free(sem);\n        CriticalAreaUnLock(lock);\n        return -5;\n    }\n    sem->value = val;\n    InitDoubleLinkList(&sem->pend_list);\n    DoubleLinkListInsertNodeAfter(&k_sem_list, &sem->link);\n    CriticalAreaUnLock(lock);\n    do { if (0) { KPrintf(\"[%s:%d] \", __func__, 59); KPrintf (\"created semaphore: id %d, value %d\\n\", id, (int)val); } } while (0);\n    return id;\n}",
+    "normalized": "int32 _SemaphoreCreate(uint16 val)\n{\n    int32 id = 0;\n    x_base lock = 0;\n    struct Semaphore *sem = (0);\n    sem = (struct Semaphore *)x_malloc(sizeof(struct Semaphore));\n    if (sem == (0))\n        return -5;\n    memset(sem, 0, sizeof(struct Semaphore));\n    lock = CriticalAreaLock();\n    id = IdInsertObj(&k_sem_id_manager, &sem->id);\n    if (id < 0) {\n        x_free(sem);\n        CriticalAreaUnLock(lock);\n        return -5;\n    }\n    sem->value = val;\n    InitDoubleLinkList(&sem->pend_list);\n    DoubleLinkListInsertNodeAfter(&k_sem_list, &sem->link);\n    CriticalAreaUnLock(lock);\n    do { if (0) { KPrintf(\"[%s:%d] \", __func__, 59); KPrintf (\"created semaphore: id %d, value %d\\n\", id, (int)val); } } while (0);\n    return id;\n}",
+    "normalizations": [
+      "static-to-external when applicable",
+      "done.SemaphoreCreate resolved to _SemaphoreCreate only for KSemaphoreCreate; table local static and never assigned after initialization"
+    ]
+  },
+  "CriticalAreaLock": {
+    "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/CriticalArea.c",
+    "line": 117,
+    "source_sha256": "946b214eb678c1202c96dc6fd5272fd2c8d2dd245736888a0ea4114fdd6f113a",
+    "raw": "x_base CriticalAreaLock(void) {\n    x_base lock;\n\n    lock = DISABLE_INTERRUPT();\n\n    KTaskOsAssignLockNest ++;\n\n    return lock;\n}",
+    "preprocessed": "x_base CriticalAreaLock(void) {\n    x_base lock;\n    lock = DisableLocalInterrupt();\n    KTaskOsAssignLockNest ++;\n    return lock;\n}",
+    "normalized": "x_base CriticalAreaLock(void) {\n    x_base lock;\n    lock = DisableLocalInterrupt();\n    KTaskOsAssignLockNest ++;\n    return lock;\n}",
+    "normalizations": [
+      "static-to-external when applicable",
+      "done.SemaphoreCreate resolved to _SemaphoreCreate only for KSemaphoreCreate; table local static and never assigned after initialization"
+    ]
+  },
+  "CriticalAreaUnLock": {
+    "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/CriticalArea.c",
+    "line": 132,
+    "source_sha256": "946b214eb678c1202c96dc6fd5272fd2c8d2dd245736888a0ea4114fdd6f113a",
+    "raw": "void CriticalAreaUnLock(x_base lock) {\n    if (KTaskOsAssignLockNest >= 1) {\n        KTaskOsAssignLockNest --;\n    }\n\n    ENABLE_INTERRUPT(lock);\n}",
+    "preprocessed": "void CriticalAreaUnLock(x_base lock) {\n    if (KTaskOsAssignLockNest >= 1) {\n        KTaskOsAssignLockNest --;\n    }\n    EnableLocalInterrupt(lock);\n}",
+    "normalized": "void CriticalAreaUnLock(x_base lock) {\n    if (KTaskOsAssignLockNest >= 1) {\n        KTaskOsAssignLockNest --;\n    }\n    EnableLocalInterrupt(lock);\n}",
+    "normalizations": [
+      "static-to-external when applicable",
+      "done.SemaphoreCreate resolved to _SemaphoreCreate only for KSemaphoreCreate; table local static and never assigned after initialization"
+    ]
+  },
+  "IdInsertObj": {
+    "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c",
+    "line": 106,
+    "source_sha256": "189a94e7dc17d6c9da6f7992a232e4422c9dc11dea539b40452b0041546a9fca",
+    "raw": "int IdInsertObj(struct IdManager *manager, struct IdNode *idnode)\n{\n    int id = 0;\n\n    NULL_PARAM_CHECK(manager);\n    NULL_PARAM_CHECK(idnode);\n\n    if ((id = AllocId(manager)) < 0)\n        return -1;\n\n    idnode->id = id;\n    InsertObj(manager, idnode);\n\n    return id;\n}",
+    "preprocessed": "int IdInsertObj(struct IdManager *manager, struct IdNode *idnode)\n{\n    int id = 0;\n    do { if (manager == (0)) { KPrintf(\"PARAM CHECK FAILED ...%s %d %s is NULL.\\n\", __FUNCTION__, 110, \"manager\"); while (1) ; } } while (0);\n    do { if (idnode == (0)) { KPrintf(\"PARAM CHECK FAILED ...%s %d %s is NULL.\\n\", __FUNCTION__, 111, \"idnode\"); while (1) ; } } while (0);\n    if ((id = AllocId(manager)) < 0)\n        return -1;\n    idnode->id = id;\n    InsertObj(manager, idnode);\n    return id;\n}",
+    "normalized": "int IdInsertObj(struct IdManager *manager, struct IdNode *idnode)\n{\n    int id = 0;\n    do { if (manager == (0)) { KPrintf(\"PARAM CHECK FAILED ...%s %d %s is NULL.\\n\", __FUNCTION__, 110, \"manager\"); while (1) ; } } while (0);\n    do { if (idnode == (0)) { KPrintf(\"PARAM CHECK FAILED ...%s %d %s is NULL.\\n\", __FUNCTION__, 111, \"idnode\"); while (1) ; } } while (0);\n    if ((id = AllocId(manager)) < 0)\n        return -1;\n    idnode->id = id;\n    InsertObj(manager, idnode);\n    return id;\n}",
+    "normalizations": [
+      "static-to-external when applicable",
+      "done.SemaphoreCreate resolved to _SemaphoreCreate only for KSemaphoreCreate; table local static and never assigned after initialization"
+    ]
+  },
+  "AllocId": {
+    "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c",
+    "line": 24,
+    "source_sha256": "189a94e7dc17d6c9da6f7992a232e4422c9dc11dea539b40452b0041546a9fca",
+    "raw": "static int AllocId(struct IdManager *manager)\n{\n    int index = 0;\n    int end = 0;\n    int id = 0;\n    uint8 entry = 0;\n\n    NULL_PARAM_CHECK(manager);\n\n    end = (manager->id_max + 7) / 8;\n\n    for (index = 0; index < end; index++)\n        if (manager->id_map[index] != 0xff)\n            break;\n    if (index == end)\n        return -1;\n\n    id = index * 8;\n    entry = manager->id_map[index];\n    while (entry & 0x1) {\n        id++;\n        entry >>= 1;\n    }\n    if (id >= manager->id_max)\n        return -1;\n\n    manager->id_map[index] |= (0x1 << (id % 8));\n\n    return id;\n}",
+    "preprocessed": "static int AllocId(struct IdManager *manager)\n{\n    int index = 0;\n    int end = 0;\n    int id = 0;\n    uint8 entry = 0;\n    do { if (manager == (0)) { KPrintf(\"PARAM CHECK FAILED ...%s %d %s is NULL.\\n\", __FUNCTION__, 31, \"manager\"); while (1) ; } } while (0);\n    end = (manager->id_max + 7) / 8;\n    for (index = 0; index < end; index++)\n        if (manager->id_map[index] != 0xff)\n            break;\n    if (index == end)\n        return -1;\n    id = index * 8;\n    entry = manager->id_map[index];\n    while (entry & 0x1) {\n        id++;\n        entry >>= 1;\n    }\n    if (id >= manager->id_max)\n        return -1;\n    manager->id_map[index] |= (0x1 << (id % 8));\n    return id;\n}",
+    "normalized": "int AllocId(struct IdManager *manager)\n{\n    int index = 0;\n    int end = 0;\n    int id = 0;\n    uint8 entry = 0;\n    do { if (manager == (0)) { KPrintf(\"PARAM CHECK FAILED ...%s %d %s is NULL.\\n\", __FUNCTION__, 31, \"manager\"); while (1) ; } } while (0);\n    end = (manager->id_max + 7) / 8;\n    for (index = 0; index < end; index++)\n        if (manager->id_map[index] != 0xff)\n            break;\n    if (index == end)\n        return -1;\n    id = index * 8;\n    entry = manager->id_map[index];\n    while (entry & 0x1) {\n        id++;\n        entry >>= 1;\n    }\n    if (id >= manager->id_max)\n        return -1;\n    manager->id_map[index] |= (0x1 << (id % 8));\n    return id;\n}",
+    "normalizations": [
+      "static-to-external when applicable",
+      "done.SemaphoreCreate resolved to _SemaphoreCreate only for KSemaphoreCreate; table local static and never assigned after initialization"
+    ]
+  },
+  "InsertObj": {
+    "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c",
+    "line": 62,
+    "source_sha256": "189a94e7dc17d6c9da6f7992a232e4422c9dc11dea539b40452b0041546a9fca",
+    "raw": "static void InsertObj(struct IdManager *manager, struct IdNode *idnode)\n{\n    NULL_PARAM_CHECK(manager);\n    NULL_PARAM_CHECK(idnode);\n\n    DoubleLinklistType *head = &manager->htable[idnode->id % manager->hoffset];\n\n    if (head->node_prev == NONE)\n        InitDoubleLinkList(head);\n\n    DoubleLinkListInsertNodeAfter(head, &idnode->link);\n}",
+    "preprocessed": "static void InsertObj(struct IdManager *manager, struct IdNode *idnode)\n{\n    do { if (manager == (0)) { KPrintf(\"PARAM CHECK FAILED ...%s %d %s is NULL.\\n\", __FUNCTION__, 64, \"manager\"); while (1) ; } } while (0);\n    do { if (idnode == (0)) { KPrintf(\"PARAM CHECK FAILED ...%s %d %s is NULL.\\n\", __FUNCTION__, 65, \"idnode\"); while (1) ; } } while (0);\n    DoubleLinklistType *head = &manager->htable[idnode->id % manager->hoffset];\n    if (head->node_prev == (0))\n        InitDoubleLinkList(head);\n    DoubleLinkListInsertNodeAfter(head, &idnode->link);\n}",
+    "normalized": "void InsertObj(struct IdManager *manager, struct IdNode *idnode)\n{\n    do { if (manager == (0)) { KPrintf(\"PARAM CHECK FAILED ...%s %d %s is NULL.\\n\", __FUNCTION__, 64, \"manager\"); while (1) ; } } while (0);\n    do { if (idnode == (0)) { KPrintf(\"PARAM CHECK FAILED ...%s %d %s is NULL.\\n\", __FUNCTION__, 65, \"idnode\"); while (1) ; } } while (0);\n    DoubleLinklistType *head = &manager->htable[idnode->id % manager->hoffset];\n    if (head->node_prev == (0))\n        InitDoubleLinkList(head);\n    DoubleLinkListInsertNodeAfter(head, &idnode->link);\n}",
+    "normalizations": [
+      "static-to-external when applicable",
+      "done.SemaphoreCreate resolved to _SemaphoreCreate only for KSemaphoreCreate; table local static and never assigned after initialization"
+    ]
+  },
+  "InitDoubleLinkList": {
+    "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c",
+    "line": 30,
+    "source_sha256": "fb114fe11fed1eb2dd717c81e95a1fb8675277b65f1d1009349e56b473846352",
+    "raw": "void InitDoubleLinkList(DoubleLinklistType *linklist_head)\n{\n    linklist_head->node_next = linklist_head;\n    linklist_head->node_prev = linklist_head;\n}",
+    "preprocessed": "void InitDoubleLinkList(DoubleLinklistType *linklist_head)\n{\n    linklist_head->node_next = linklist_head;\n    linklist_head->node_prev = linklist_head;\n}",
+    "normalized": "void InitDoubleLinkList(DoubleLinklistType *linklist_head)\n{\n    linklist_head->node_next = linklist_head;\n    linklist_head->node_prev = linklist_head;\n}",
+    "normalizations": [
+      "static-to-external when applicable",
+      "done.SemaphoreCreate resolved to _SemaphoreCreate only for KSemaphoreCreate; table local static and never assigned after initialization"
+    ]
+  },
+  "DoubleLinkListInsertNodeAfter": {
+    "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c",
+    "line": 42,
+    "source_sha256": "fb114fe11fed1eb2dd717c81e95a1fb8675277b65f1d1009349e56b473846352",
+    "raw": "void DoubleLinkListInsertNodeAfter(DoubleLinklistType *linklist, DoubleLinklistType *linklist_node)\n{\n    linklist->node_next->node_prev = linklist_node;\n    linklist_node->node_next = linklist->node_next;\n\n    linklist->node_next = linklist_node;\n    linklist_node->node_prev = linklist;\n}",
+    "preprocessed": "void DoubleLinkListInsertNodeAfter(DoubleLinklistType *linklist, DoubleLinklistType *linklist_node)\n{\n    linklist->node_next->node_prev = linklist_node;\n    linklist_node->node_next = linklist->node_next;\n    linklist->node_next = linklist_node;\n    linklist_node->node_prev = linklist;\n}",
+    "normalized": "void DoubleLinkListInsertNodeAfter(DoubleLinklistType *linklist, DoubleLinklistType *linklist_node)\n{\n    linklist->node_next->node_prev = linklist_node;\n    linklist_node->node_next = linklist->node_next;\n    linklist->node_next = linklist_node;\n    linklist_node->node_prev = linklist;\n}",
+    "normalizations": [
+      "static-to-external when applicable",
+      "done.SemaphoreCreate resolved to _SemaphoreCreate only for KSemaphoreCreate; table local static and never assigned after initialization"
+    ]
+  }
+}

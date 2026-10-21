@@ -1,0 +1,26 @@
+{
+  "accepted_at_utc": "2026-10-12T05:16:06.604917+00:00",
+  "basis": "User one-time automatic acceptance of independent review-passed revisions, plus explicit DCHG-20261012-01 authorization",
+  "source_revision": "source-r2-0c50c37013e9",
+  "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+  "predicate_revision": "predicate-r3-16b6ee4a4e02",
+  "predicate_manifest": "16b6ee4a4e02383dcb7128da0c57212af2e672ccd15b15633142778e8d2d629f",
+  "predicate_reviewer": "source_analysis",
+  "predicate_status": "review-passed",
+  "spec_revision": "spec-r3-63d672204cb5",
+  "spec_manifest": "63d672204cb500a9bbbdced56ed2014b10a62efc9dd4f12d4b2696c2a831448f",
+  "spec_author": "spec_author",
+  "spec_reviewer": "/root",
+  "spec_status": "review-passed",
+  "domain": "entry scheduler_lock_nest < 65535; deeper entries excluded",
+  "trusted": [
+    "x_malloc",
+    "x_free",
+    "memset",
+    "DisableLocalInterrupt",
+    "EnableLocalInterrupt",
+    "KPrintf"
+  ],
+  "implementation_verified": false,
+  "spec_review": ".docs/Report/2026-10-12-2-spec-review.md"
+}

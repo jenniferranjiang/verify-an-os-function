@@ -1,0 +1,15 @@
+{
+  "groups": [
+    {
+      "id": "self_link_result",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDoubleLinkList_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold InitDoubleLinkList_return_wit_1 and introduce linklist_head_pre, head, PreH1 and PreH2. The antecedent owns node_next and node_prev at the linklist_head_pre structure, each storing linklist_head_pre; the consequent owns exactly those same fields, each storing head. Rewrite or substitute with PreH1 : linklist_head_pre = head, then close the identical separating conjunction entailment by reflexivity (or ordinary separation cancellation). There are no existential witnesses, list transformations, arithmetic obligations, frame changes or refinement transitions. PreH2 : head <> 0 is available but unnecessary. No helper is needed or permitted under the absent formal_case_lib policy."
+        }
+      ]
+    }
+  ]
+}

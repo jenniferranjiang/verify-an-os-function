@@ -1,0 +1,1 @@
+Completed assigned safety witnesses 6–10 using `LLM_pre_process ltac:(lia || int_auto)`. Witnesses 6–7 follow from contradictory allocation-return guards; witnesses 8–10 establish constant machine-integer bounds. No helpers or semantic inputs changed. Forbidden-lemma scan found no matches. Exact group-check exited 0 with JSON status `passed` (68.161867 seconds).

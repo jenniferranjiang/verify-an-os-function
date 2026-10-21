@@ -1,0 +1,32 @@
+Welcome to Coq 8.20.1
+[Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+[Loading ML file extraction_plugin.cmxs (using legacy method) ... done]
+Fetching opaque proofs from disk for NestedCarrierProbe
+Fetching opaque proofs from disk for CRTOS_Verify.sem.CrtosHeapBridge
+Fetching opaque proofs from disk for Coq.Logic.FunctionalExtensionality
+Fetching opaque proofs from disk for Coq.Init.Logic
+Axioms:
+CNotation.sizeof_front_end_type : CNotation.front_end_type -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Closed under the global context
+Closed under the global context
+
+Warning:
+/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/probes/framework
+was previously bound to framework; it is remapped to CrtosProbeFramework
+[overriding-logical-loadpath,filesystem,default]
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 

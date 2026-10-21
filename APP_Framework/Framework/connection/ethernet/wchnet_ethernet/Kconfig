@@ -1,0 +1,3 @@
+config ADAPTER_ETHERNET_WCHNET
+        string "WCHNET ETHERNET adapter name"
+        default "wchnet_ethernet"

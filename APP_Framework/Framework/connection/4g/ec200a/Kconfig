@@ -1,0 +1,104 @@
+config ADAPTER_4G_EC200A
+        string "EC200A adapter name"
+        default "ec200a"
+
+if ADD_XIZI_FEATURES
+        config ADAPTER_EC200A_USING_PWRKEY
+                bool "EC200A using PWRKEY pin number"
+                default n
+
+        if ADAPTER_EC200A_USING_PWRKEY
+                config ADAPTER_EC200A_PWRKEY
+                        int "EC200A PWRKEY pin number"
+                        default "144"
+
+                config ADAPTER_EC200A_PIN_DRIVER
+                        string "EC200A device pin driver path"
+                        default "/dev/pin_dev"
+        endif
+
+        config ADAPTER_EC200A_DRIVER_EXTUART
+                bool "Using extra uart to support 4G"
+                default n
+
+        config ADAPTER_EC200A_DRIVER
+                string "EC200A device uart driver path"
+                default "/dev/usart6_dev6"
+                depends on !ADAPTER_EC200A_DRIVER_EXTUART
+
+        if ADAPTER_EC200A_DRIVER_EXTUART                    
+                config ADAPTER_EC200A_DRIVER
+                        string "EC200A device extra uart driver path"
+                        default "/dev/extuart_dev5"
+
+                config ADAPTER_EC200A_DRIVER_EXT_PORT
+                        int "if EC200A device using extuart, choose port"
+                        default "5"
+        endif
+endif
+
+if ADD_NUTTX_FEATURES
+        config ADAPTER_EC200A_USING_PWRKEY
+                bool "EC200A using PWRKEY pin number"
+                default n
+
+        if ADAPTER_EC200A_USING_PWRKEY
+                config ADAPTER_EC200A_PWRKEY
+                        int "EC200A PWRKEY pin number"
+                        default "144"
+
+                config ADAPTER_EC200A_PIN_DRIVER
+                        string "EC200A device pin driver path"
+                        default "/dev/gpio3"
+        endif
+
+        config ADAPTER_EC200A_DRIVER_EXTUART
+                bool "Using extra uart to support 4G"
+                default n
+
+        config ADAPTER_EC200A_DRIVER
+                string "EC200A device uart driver path"
+                default "/dev/ttyS8"
+                depends on !ADAPTER_EC200A_DRIVER_EXTUART
+
+        if ADAPTER_EC200A_DRIVER_EXTUART                    
+                config ADAPTER_EC200A_DRIVER
+                        string "EC200A device extra uart driver path"
+                        default "/dev/extuart_dev5"
+
+                config ADAPTER_EC200A_DRIVER_EXT_PORT
+                        int "if EC200A device using extuart, choose port"
+                        default "5"
+        endif
+endif
+
+if ADD_RTTHREAD_FEATURES
+        config ADAPTER_EC200A_PWRKEY
+                int "EC200A PWRKEY pin number"
+                default "144"
+        
+        config ADAPTER_EC200A_PIN_DRIVER
+                string "EC200A device pin driver path"
+                default "/dev/pin_dev"
+
+        config ADAPTER_EC200A_DRIVER_EXTUART
+                bool "Using extra uart to support 4G"
+                default n
+
+        config ADAPTER_EC200A_DRIVER
+                string "EC200A device uart driver path"
+                default "/dev/usart8"
+                depends on !ADAPTER_EC200A_DRIVER_EXTUART
+
+        if ADAPTER_EC200A_DRIVER_EXTUART                    
+                config ADAPTER_EC200A_DRIVER
+                        string "EC200A device extra uart driver path"
+                        default "/dev/extuart_dev5"
+
+                config ADAPTER_EC200A_DRIVER_EXT_PORT
+                        int "if EC200A device using extuart, choose port"
+                        default "5"
+        endif
+
+
+endif

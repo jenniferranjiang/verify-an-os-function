@@ -1,0 +1,5 @@
+lib/semaphore.v EXIT 0
+
+lib/CrtosInv.v EXIT 0
+
+lib/KSemaphoreCreate.v EXIT 0

@@ -1,0 +1,7 @@
+{
+  "kind": "parser-type-alias-registration",
+  "formal_definition": "shared_candidates/SemaphoreState.v:17",
+  "before_sha256": "8696ac07c9514009dec5e581b78094ef9fef5e4c136f3b0d22be40a658cf46c8",
+  "after_sha256": "14f698d5852612a74f47d5449486744afde56353e4e33db6ad2e45eec580b7d2",
+  "meaning": "Replace opaque SemaphoreState registration with its actual definition list SemaphoreAbs; no Coq definition or function-contract changes."
+}

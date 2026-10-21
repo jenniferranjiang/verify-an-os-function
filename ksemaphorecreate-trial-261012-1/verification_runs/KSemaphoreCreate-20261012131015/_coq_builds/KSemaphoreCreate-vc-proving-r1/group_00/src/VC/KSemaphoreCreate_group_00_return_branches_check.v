@@ -1,0 +1,4 @@
+From CRTOS_Verify.VC Require Import KSemaphoreCreate_goal KSemaphoreCreate_proof_auto KSemaphoreCreate_proof_manual.
+Check proof_of_KSemaphoreCreate_return_wit_1.
+Check proof_of_KSemaphoreCreate_return_wit_2.
+Check proof_of_KSemaphoreCreate_return_wit_3.

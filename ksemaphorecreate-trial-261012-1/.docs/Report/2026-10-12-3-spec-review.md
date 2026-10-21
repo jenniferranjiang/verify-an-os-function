@@ -1,0 +1,13 @@
+当前状态：**invalidated**。InsertObj 实际 VC 暴露地址有效性前提缺项，见 [DCHG-20261012-03](design-changes/2026-10-12-3-object-address-validity.md)。以下保留原 revision 审阅记录，不作为当前设计已闭合的声明。
+
+本次 spec delta review 为 **review-passed**，按用户既有授权接受 `spec-r4-9f3ebc915b99`，可恢复原 controller annotation owner。源码、predicate与spec设计条件已闭合；实际C symbolic/VC/proof仍须继续，不在此宣布verified。
+
+作者为 `spec_author`，审阅者为 `/root`；CriticalAreaLock的proof-local where删除来自该函数原annotation owner。新manifest为 `9f3ebc915b995fc8655bab8014878df4648f3dca6602cef7d65b936714274c48`。绑定predicate `predicate-r5-0a139d64743c`，其manifest为 `0a139d64743cce8000b0910d7880d6c5a0bf89147b730665aa6ebefbfb45585a`；source仍为 `source-r2-0c50c37013e9`。
+
+独立核对当前11文件manifest与snapshot，实际变化恰为两个文件。逻辑header仅增加SemaphoreCriticalViews的import及SemaphoreCriticalFrame、CrtosOSValid两个已审阅term；既有33项声明保持。CriticalAreaLock相对controller保存的原始before副本仅删除调用处冗余where。所有canonical/caller-local With/Require/Ensure和真实C tokens不变，没有新增trusted或源路径归一。
+
+独立重新执行source/spec检查：47份权威输入hash匹配，9个body经原批准归一后逐token对应，闭包仍为9+6，所有实际callee的完整契约及canonical副本一致。现有gcc -m32语法/layout检查成功。临时ARM compiler已不存在；因物理layout header、权威输入和C tokens均与原实际ARM检查一致，沿用其明确绑定的ABI证据，保留原source-abi.s及命令记录，不把本次native检查称为新的ARM编译。
+
+接口检查使用接受的现代compiler及唯一的小端候选路径；检查结果、实际header、predicate manifest及 `_CoqProject` hash绑定一致，35个Extern、12个复合项和OS carrier类型检查exit0。新两项接口分别为精确线性frame和纯有效性，不生成资源，不改变对外contract；拆合与更新的含义已由r5独立predicate review及Qed证明覆盖。原完整spec review中的控制流、返回值、首个空闲ID、私有/发布/释放路径与caller IRQ归还分析继续适用。
+
+未发现新增语义或scope blocker。`nest<65535`域、内部65535状态及0时不递减路径保留。后续controller仍须用显式32位小端、header自定义carrier及现代Rocq路径重新执行，核对实际生成的sizeof/offset/long结果，并完成全部C/VC/proof/trust检查。

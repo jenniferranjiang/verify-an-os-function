@@ -1,0 +1,31 @@
+menuconfig BSP_USING_USB
+    bool "Enable USB Device"
+    default y
+
+if BSP_USING_USB
+    source "$BSP_DIR/third_party_driver/usb/Kconfig"
+endif
+
+menuconfig BSP_USING_UART
+    bool "Enable UART Device"
+    default y
+
+if BSP_USING_UART
+    source "$BSP_DIR/third_party_driver/uart/Kconfig"
+endif
+
+menuconfig BSP_USING_CAN
+    bool "Enable CAN Device"
+    default y
+
+if BSP_USING_CAN
+    source "$BSP_DIR/third_party_driver/can/Kconfig"
+endif
+
+menuconfig BSP_USING_SPI
+    bool "Enable SPI Device"
+    default y
+
+if BSP_USING_SPI
+    source "$BSP_DIR/third_party_driver/spi/Kconfig"
+endif

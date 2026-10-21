@@ -1,0 +1,31 @@
+config ADAPTER_EC801E
+        bool "Using 4G adapter device EC801E"
+        default n
+
+if ADAPTER_EC801E
+    source "$APP_DIR/Framework/connection/4g/ec801e/Kconfig"
+endif
+
+config ADAPTER_EC200T
+        bool "Using 4G adapter device EC200T"
+        default n
+
+if ADAPTER_EC200T
+    source "$APP_DIR/Framework/connection/4g/ec200t/Kconfig"
+endif
+
+config ADAPTER_EC200A
+        bool "Using 4G adapter device EC200A"
+        default n
+
+if ADAPTER_EC200A
+    source "$APP_DIR/Framework/connection/4g/ec200a/Kconfig"
+endif
+
+config ADAPTER_GM800TF
+		bool "Using 4G adapter device GM800TF"
+        default n
+
+if ADAPTER_GM800TF
+    source "$APP_DIR/Framework/connection/4g/gm800tf/Kconfig"
+endif

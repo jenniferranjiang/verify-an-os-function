@@ -1,0 +1,70 @@
+#include "ready_init_strategy.h"
+
+// 循环入口只规范化到尚未初始化任何桶的 frontier。
+id : 1
+priority : core(2)
+left : has_permission_os_assign_ready_vector(?p) at 0
+right : store_os_assign_ready_vector_init_frontier(?q, ?i) at 1
+check : infer(q == p); infer(i == 0);
+action : left_erase(0); right_erase(1);
+
+// 仅当前数组元素的两个写槽；其他桶和缓存保持封装。
+id : 2
+priority : core(2)
+left : store_os_assign_ready_vector_init_frontier(?p, ?i) at 0
+right : undef_data_at(field_addr(?q, SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode)) at 1
+        undef_data_at(field_addr(q, SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode)) at 2
+check : infer(p != 0); infer(i < 32);
+        infer(q == field_addr(p, OsAssignReadyVector, priority_ready_vector) + i * sizeof(struct SysDoubleLinklistNode));
+action : left_erase(0); right_erase(1); right_erase(2);
+         left_add(store_os_assign_ready_vector_init_frame(p, i));
+
+// helper 已建立非零自环，恢复前缀长度增加一的唯一 canonical frontier。
+id : 3
+priority : post(2)
+left : store_os_assign_ready_vector_init_frame(?p, ?i) at 0
+       store_node_self_linked(?q) at 1
+check : infer(q != 0);
+        infer(q == field_addr(p, OsAssignReadyVector, priority_ready_vector) + i * sizeof(struct SysDoubleLinklistNode));
+action : left_erase(0); left_erase(1);
+         left_add(p != 0);
+         left_add(store_os_assign_ready_vector_init_frontier(p, i + 1));
+
+id : 4
+priority : core(2)
+left : store_os_assign_ready_vector_init_frame(?p, ?i) at 0
+       store_node_self_linked(?q) at 1
+right : store_os_assign_ready_vector_init_frontier(?r, ?j) at 2
+check : infer(q != 0); infer(r == p); infer(j == i + 1);
+        infer(q == field_addr(p, OsAssignReadyVector, priority_ready_vector) + i * sizeof(struct SysDoubleLinklistNode));
+action : left_erase(0); left_erase(1); right_erase(2);
+         left_add(p != 0);
+
+// 退出循环后仅在缓存写入需求下打开完成态 frontier。
+id : 5
+priority : core(2)
+left : store_os_assign_ready_vector_init_frontier(?p, ?i) at 0
+right : undef_data_at(field_addr(?q, OsAssignReadyVector, highest_prio), U32) at 1
+check : infer(q == p); infer(p != 0); infer(32 <= i);
+action : left_erase(0); right_erase(1);
+         left_add(i == 32);
+         left_add(store_empty_priority_ready_buckets(p));
+         left_add(undef_data_at(field_addr(p, OsAssignReadyVector, priority_ready_group), U32));
+
+id : 6
+priority : post(2)
+left : store_empty_priority_ready_buckets(?p) at 0
+       store(field_addr(?q, OsAssignReadyVector, highest_prio), U32, 0) at 1
+       store(field_addr(?r, OsAssignReadyVector, priority_ready_group), U32, 0) at 2
+check : infer(q == p); infer(r == p);
+action : left_erase(0); left_erase(1); left_erase(2);
+         left_add(store_os_assign_ready_vector(p, empty_os_assign_ready_vector()));
+
+id : 7
+priority : core(2)
+left : store_empty_priority_ready_buckets(?p) at 0
+       store(field_addr(?q, OsAssignReadyVector, highest_prio), U32, 0) at 1
+       store(field_addr(?r, OsAssignReadyVector, priority_ready_group), U32, 0) at 2
+right : store_os_assign_ready_vector(?s, empty_os_assign_ready_vector()) at 3
+check : infer(q == p); infer(r == p); infer(s == p);
+action : left_erase(0); left_erase(1); left_erase(2); right_erase(3);

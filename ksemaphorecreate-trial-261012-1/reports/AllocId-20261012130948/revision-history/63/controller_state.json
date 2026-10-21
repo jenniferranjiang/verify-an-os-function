@@ -1,0 +1,556 @@
+{
+  "schema_version": 4,
+  "generation": 63,
+  "run_id": "AllocId-20261012130948",
+  "case": "AllocId",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1",
+  "run_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/AllocId-20261012130948",
+  "report_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/AllocId-20261012130948",
+  "target_files": {
+    "c_file": "annotated_C/src/AllocId.c",
+    "formal_directory": "VC",
+    "formal_case_lib": "VC/AllocId_lib.v",
+    "goal_file": "VC/AllocId_goal.v",
+    "proof_auto_file": "VC/AllocId_proof_auto.v",
+    "proof_manual_file": "VC/AllocId_proof_manual.v",
+    "goal_check_file": "VC/AllocId_goal_check.v",
+    "case_name": "AllocId",
+    "active_case_theory": "CRTOS_Verify.VC"
+  },
+  "problem_context": {
+    "problem_statement": "Verify CRTOS KSemaphoreCreate under the accepted source/config and predicates/specs.\nAuthoritative accepted inputs: evidence/accepted-revisions.json.\nSource: source-r2-0c50c37013e9, Cortex-M3 Thumb ILP32, STM32F103 nano, non-SMP.\nPredicate: predicate-r3-16b6ee4a4e02, independently review-passed.\nSpec: spec-r2-6d54bb88379e, independently review-passed.\nDomain: entry scheduler_lock_nest < 65535, explicitly authorized by user.\nPreserve ordinary nested calls and exact caller IRQ/heap ownership.\n\nThe complete required non-trusted closure has nine unique canonical active bodies:\nannotated_C/src/KSemaphoreCreate.c\nannotated_C/src/_SemaphoreCreate.c\nannotated_C/src/CriticalAreaLock.c\nannotated_C/src/CriticalAreaUnLock.c\nannotated_C/src/IdInsertObj.c\nannotated_C/src/AllocId.c\nannotated_C/src/InsertObj.c\nannotated_C/src/InitDoubleLinkList.c\nannotated_C/src/DoubleLinkListInsertNodeAfter.c\nAll canonical contracts and caller-local API copies are frozen accepted inputs.\nOnly these six C symbols are trusted, with the existing reviewed contracts:\nx_malloc, x_free, memset, DisableLocalInterrupt, EnableLocalInterrupt, KPrintf.\nDeclaration contracts do not constitute verified callee bodies.\n\nAbsolutely do not read, enumerate, search, copy, import, or depend on any file in\n/home/xinra/crtos/ksemaphorecreate-trial-260928-1.\nThis includes ancestor-root searches, load paths, proof lookup and dependency closure.\nNo other historical trial is an authorized formal/proof reference.\nDo not change root shared library definitions, authoritative C/config, or any skills.\nOnly this new trial and already authorized project path configuration may be changed.\nDo not create a second active body for a canonical symbol or a central specs header.\nDo not add axioms, parameters, Admitted/admit, placeholders, weaker postconditions,\nunjustified stronger preconditions, deleted paths or omitted VCs.\n\nThe user authorizes automatic acceptance of independently reviewed, machine-checked\npredicate/spec revisions within the approved semantics. Such changes must return to\nthe appropriate independent design review and bind new manifests before resuming.\nMaterial semantic changes require explicit user authorization. No routine phase gate\nrequires another user confirmation.\n\nMain must follow only the verification-orchestrator controller actions. If the current\ncontroller does not support this CRTOS trial layout, retain its original blocker;\ndo not improvise another implementation workflow.\nCompletion additionally requires complete closure proofs, goal checks, full coqchk,\ntrust scan, C/VC/proof integrity, and a final integrity record. Historical 172 VCs is\nonly a diagnostic baseline, never a target for deleting or weakening obligations.\n\nExplicit user exception (2026-10-12): \u5141\u8bb8\u5728\u65b0 trial \u5185\u9002\u914d controller.\nThe local controller adapter may support canonical annotated_C/src and VC paths,\nread-only existing external dependencies, and the full nine-case closure. Preserve\nall original owner, symbolic, acceptance, proof and final-check actions.",
+    "target_function": "AllocId"
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "AllocId",
+      "KPrintf"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "KPrintf::<default>": "Require emp Ensure emp",
+        "AllocId::<default>": "With (sm : StableIdmanager) (before : VarIdmanager) Require manager != 0 && OSHeap(store_idmanager(sm, before, manager)) Ensure (__return == -1 && idmanager_full(sm, before) && OSHeap(store_idmanager(sm, before, manager))) || (idmanager_min_free_id(sm, before, __return) && OSHeap(store_idmanager_allocated_unlinked(sm, before, manager, __return)))"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-10-12T05:09:48.623938Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/AllocId_goal_check.vo",
+    "base_artifact_count": 163,
+    "current_source_count": 4,
+    "elapsed_seconds": 53.516847,
+    "snapshot": "verification_runs/AllocId-20261012130948/dependency_plan.json"
+  },
+  "attempts": {
+    "AllocId-annotation-r1": {
+      "attempt_id": "AllocId-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/AllocId-20261012130948",
+      "claimed_action": "deliver:AllocId-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T11:41:20.130035Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T11:41:32.192725Z",
+            "finished_at": "2026-10-12T11:44:51.858058Z",
+            "elapsed_seconds": 199.665333
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T11:44:51.858024Z",
+      "finished_at": "2026-10-12T11:44:52.617601Z"
+    },
+    "AllocId-vc-checking-r1": {
+      "attempt_id": "AllocId-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/AllocId-vc-checking-r1",
+      "claimed_action": "deliver:AllocId-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T11:46:07.282924Z",
+      "source_annotation": "AllocId-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T11:47:00.232239Z",
+            "finished_at": "2026-10-12T11:51:27.165466Z",
+            "elapsed_seconds": 266.933227
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T11:51:27.165330Z",
+      "finished_at": "2026-10-12T11:51:27.231946Z"
+    },
+    "AllocId-vc-proving-r1": {
+      "attempt_id": "AllocId-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "running",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-12T11:51:27.232002Z",
+      "source_annotation": "AllocId-annotation-r1",
+      "source_vc_checking": "AllocId-vc-checking-r1",
+      "groups": {
+        "allocate_result": {
+          "status": "blocked",
+          "owner": "group-worker/AllocId-vc-proving-r1:allocate_result",
+          "claimed_action": "deliver:AllocId-vc-proving-r1:allocate_result:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T11:51:36.859319Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T11:51:45.736977Z",
+                "finished_at": "2026-10-12T11:57:52.578686Z",
+                "elapsed_seconds": 366.841709
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T11:57:52.578648Z",
+          "blocker": {
+            "failure_class": "infrastructure",
+            "kind": "generated-rocq-syntax",
+            "vcs": [
+              {
+                "name": "proof_of_AllocId_return_wit_1",
+                "parent": "AllocId_return_wit_1",
+                "annotation_location": "annotated_C/src/AllocId.c:30-34,108"
+              }
+            ],
+            "message": "Dependency VC/AllocId_goal.v fails at line 104 characters 89-92: generated binder (end: Z) uses the reserved Rocq keyword end. coq-debug and group-development both exited 1 with status failed before the assigned proof was loaded. This is not an annotation semantic gap.",
+            "repair_boundary": "main/controller generation recovery; regenerate legal Rocq identifiers from the C local end, without worker edits to generated goal statements or accepted predicates"
+          },
+          "finished_at": "2026-10-12T11:57:52.684572Z"
+        },
+        "entry_scan": {
+          "status": "blocked",
+          "owner": "group-worker/AllocId-vc-proving-r1:entry_scan",
+          "claimed_action": "deliver:AllocId-vc-proving-r1:entry_scan:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T11:51:36.859347Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T11:51:46.186920Z",
+                "finished_at": "2026-10-12T11:57:07.861499Z",
+                "elapsed_seconds": 321.674579
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T11:57:07.861469Z",
+          "blocker": {
+            "failure_class": "infrastructure",
+            "kind": "generated-goal-syntax",
+            "vcs": [],
+            "message": "The exact coq-debug command exited 1 with JSON status failed before manual proof compilation: VC/AllocId_goal.v:104:89-92 contains reserved binder (end: Z), causing Syntax error: [name] expected after ( in closed_binder. Current assigned proof bodies are unvalidated drafts.",
+            "repair_boundary": "Main/controller must repair generated identifier normalization or regenerated canonical goal inputs. This worker cannot modify goal statements or controller sources; resume this owner afterwards to adapt and validate assigned proofs."
+          },
+          "finished_at": "2026-10-12T11:57:07.911447Z"
+        },
+        "full_results": {
+          "status": "blocked",
+          "owner": "group-worker/AllocId-vc-proving-r1:full_results",
+          "claimed_action": "deliver:AllocId-vc-proving-r1:full_results:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T11:51:36.859352Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T11:51:46.597735Z",
+                "finished_at": "2026-10-12T11:57:08.196696Z",
+                "elapsed_seconds": 321.598961
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T11:57:08.196663Z",
+          "blocker": {
+            "failure_class": "infrastructure",
+            "kind": "generated-goal-syntax-error",
+            "vcs": [],
+            "message": "coq-debug exited 1 with JSON status failed before assigned proof checking: generated VC/AllocId_goal.v line 104 characters 89\u201392 contains reserved binder `(end: Z)` and Coq reports Syntax error: [name] expected after opening parenthesis (in closed_binder).",
+            "repair_boundary": "Repair generated identifier handling or annotation at main/orchestrator boundary, regenerate valid Rocq goal inputs, then resume this group. Worker may not edit generated goals or annotations."
+          },
+          "finished_at": "2026-10-12T11:57:08.256591Z"
+        },
+        "manager_transport": {
+          "status": "prepared",
+          "owner": null,
+          "claimed_action": null,
+          "repair_index": 0,
+          "created_at": "2026-10-12T11:51:36.859356Z"
+        },
+        "index_scan": {
+          "status": "prepared",
+          "owner": null,
+          "claimed_action": null,
+          "repair_index": 0,
+          "created_at": "2026-10-12T11:51:36.859358Z"
+        },
+        "array_access": {
+          "status": "prepared",
+          "owner": null,
+          "claimed_action": null,
+          "repair_index": 0,
+          "created_at": "2026-10-12T11:51:36.859362Z"
+        },
+        "mask_safety": {
+          "status": "prepared",
+          "owner": null,
+          "claimed_action": null,
+          "repair_index": 0,
+          "created_at": "2026-10-12T11:51:36.859364Z"
+        },
+        "initial_constants": {
+          "status": "prepared",
+          "owner": null,
+          "claimed_action": null,
+          "repair_index": 0,
+          "created_at": "2026-10-12T11:51:36.859366Z"
+        },
+        "outer_constants": {
+          "status": "prepared",
+          "owner": null,
+          "claimed_action": null,
+          "repair_index": 0,
+          "created_at": "2026-10-12T11:51:36.859369Z"
+        },
+        "exit_constants": {
+          "status": "prepared",
+          "owner": null,
+          "claimed_action": null,
+          "repair_index": 0,
+          "created_at": "2026-10-12T11:51:36.859371Z"
+        },
+        "inner_constants": {
+          "status": "prepared",
+          "owner": null,
+          "claimed_action": null,
+          "repair_index": 0,
+          "created_at": "2026-10-12T11:51:36.859373Z"
+        }
+      }
+    },
+    "AllocId-annotation-r2": {
+      "attempt_id": "AllocId-annotation-r2",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/AllocId-20261012130948",
+      "claimed_action": "deliver:AllocId-annotation-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T12:03:23.040018Z",
+      "feedback_sources": [
+        {
+          "phase": "group",
+          "attempt_id": "AllocId-vc-proving-r1:allocate_result",
+          "evidence": [
+            "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/AllocId-20261012130948/rounds/AllocId-vc-proving-r1/groups/group_00__allocate_result/group_worker_report.json",
+            "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/AllocId-20261012130948/rounds/AllocId-vc-proving-r1/groups/group_00__allocate_result/group_worker_output.md"
+          ]
+        },
+        {
+          "phase": "group",
+          "attempt_id": "AllocId-vc-proving-r1:entry_scan",
+          "evidence": [
+            "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/AllocId-20261012130948/rounds/AllocId-vc-proving-r1/groups/group_01__entry_scan/group_worker_report.json",
+            "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/AllocId-20261012130948/rounds/AllocId-vc-proving-r1/groups/group_01__entry_scan/group_worker_output.md"
+          ]
+        },
+        {
+          "phase": "group",
+          "attempt_id": "AllocId-vc-proving-r1:full_results",
+          "evidence": [
+            "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/AllocId-20261012130948/rounds/AllocId-vc-proving-r1/groups/group_02__full_results/group_worker_report.json",
+            "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/AllocId-20261012130948/rounds/AllocId-vc-proving-r1/groups/group_02__full_results/group_worker_output.md"
+          ]
+        }
+      ],
+      "reason": "generated-reserved-binder",
+      "failed_vcs": [],
+      "retry_reason": "generated-reserved-binder",
+      "retry_previous_attempt": "AllocId-vc-proving-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T12:03:36.606467Z",
+            "finished_at": "2026-10-12T12:05:50.171246Z",
+            "elapsed_seconds": 133.564779
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T12:05:50.171211Z",
+      "finished_at": "2026-10-12T12:05:51.118727Z"
+    },
+    "AllocId-vc-checking-r2": {
+      "attempt_id": "AllocId-vc-checking-r2",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/AllocId-vc-checking-r2",
+      "claimed_action": "deliver:AllocId-vc-checking-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T12:07:15.188877Z",
+      "source_annotation": "AllocId-annotation-r2",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T12:07:25.744588Z",
+            "finished_at": "2026-10-12T12:12:41.096859Z",
+            "elapsed_seconds": 315.352271
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T12:12:41.096787Z",
+      "finished_at": "2026-10-12T12:12:41.153036Z"
+    },
+    "AllocId-vc-proving-r2": {
+      "attempt_id": "AllocId-vc-proving-r2",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-12T12:12:41.153068Z",
+      "source_annotation": "AllocId-annotation-r2",
+      "source_vc_checking": "AllocId-vc-checking-r2",
+      "groups": {
+        "entry_scan": {
+          "status": "accepted",
+          "owner": "group-worker/AllocId-vc-proving-r2:entry_scan",
+          "claimed_action": "deliver:AllocId-vc-proving-r2:entry_scan:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T12:12:56.012321Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T12:13:13.100517Z",
+                "finished_at": "2026-10-12T12:26:46.631480Z",
+                "elapsed_seconds": 813.530963
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T12:26:46.631446Z",
+          "finished_at": "2026-10-12T12:35:39.030996Z"
+        },
+        "allocation_result": {
+          "status": "accepted",
+          "owner": "group-worker/AllocId-vc-proving-r2:allocation_result",
+          "claimed_action": "deliver:AllocId-vc-proving-r2:allocation_result:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T12:12:56.012341Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T12:13:13.378655Z",
+                "finished_at": "2026-10-12T12:58:09.233063Z",
+                "elapsed_seconds": 2695.854408
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T12:58:09.233032Z",
+          "finished_at": "2026-10-12T12:59:41.318532Z"
+        },
+        "full_results": {
+          "status": "accepted",
+          "owner": "group-worker/AllocId-vc-proving-r2:full_results",
+          "claimed_action": "deliver:AllocId-vc-proving-r2:full_results:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T12:12:56.012346Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T12:13:13.659521Z",
+                "finished_at": "2026-10-12T12:49:06.155673Z",
+                "elapsed_seconds": 2152.496152
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T12:49:06.155465Z",
+          "finished_at": "2026-10-12T12:50:51.545935Z"
+        },
+        "outer_scan": {
+          "status": "accepted",
+          "owner": "group-worker/AllocId-vc-proving-r2:outer_scan",
+          "claimed_action": "deliver:AllocId-vc-proving-r2:outer_scan:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T12:12:56.012349Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T12:36:15.820299Z",
+                "finished_at": "2026-10-12T13:01:13.105728Z",
+                "elapsed_seconds": 1497.285429
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T13:01:13.105700Z",
+          "finished_at": "2026-10-12T13:02:17.293965Z"
+        },
+        "array_access": {
+          "status": "accepted",
+          "owner": "group-worker/AllocId-vc-proving-r2:array_access",
+          "claimed_action": "deliver:AllocId-vc-proving-r2:array_access:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T12:12:56.012351Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T12:51:55.724596Z",
+                "finished_at": "2026-10-12T12:55:45.165012Z",
+                "elapsed_seconds": 229.440416
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T12:55:45.164984Z",
+          "finished_at": "2026-10-12T12:57:07.352208Z"
+        },
+        "initial_values": {
+          "status": "accepted",
+          "owner": "group-worker/AllocId-vc-proving-r2:initial_values",
+          "claimed_action": "deliver:AllocId-vc-proving-r2:initial_values:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T12:12:56.012353Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T12:57:29.450125Z",
+                "finished_at": "2026-10-12T13:03:25.483733Z",
+                "elapsed_seconds": 356.033608
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T13:03:25.483703Z",
+          "finished_at": "2026-10-12T13:04:23.401026Z"
+        },
+        "outer_literals": {
+          "status": "accepted",
+          "owner": "group-worker/AllocId-vc-proving-r2:outer_literals",
+          "claimed_action": "deliver:AllocId-vc-proving-r2:outer_literals:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T12:12:56.012355Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T13:00:34.944865Z",
+                "finished_at": "2026-10-12T13:06:08.993329Z",
+                "elapsed_seconds": 334.048464
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T13:06:08.993288Z",
+          "finished_at": "2026-10-12T13:07:38.441722Z"
+        },
+        "control_paths": {
+          "status": "accepted",
+          "owner": "group-worker/AllocId-vc-proving-r2:control_paths",
+          "claimed_action": "deliver:AllocId-vc-proving-r2:control_paths:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T12:12:56.012357Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T13:02:49.350429Z",
+                "finished_at": "2026-10-12T13:11:38.418793Z",
+                "elapsed_seconds": 529.068364
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T13:11:38.418757Z",
+          "finished_at": "2026-10-12T13:13:08.886971Z"
+        },
+        "inner_literals": {
+          "status": "accepted",
+          "owner": "group-worker/AllocId-vc-proving-r2:inner_literals",
+          "claimed_action": "deliver:AllocId-vc-proving-r2:inner_literals:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T12:12:56.012359Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T13:05:30.207895Z",
+                "finished_at": "2026-10-12T13:14:25.356170Z",
+                "elapsed_seconds": 535.148275
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T13:14:25.356134Z",
+          "finished_at": "2026-10-12T13:16:38.553310Z"
+        },
+        "mask_safety": {
+          "status": "accepted",
+          "owner": "group-worker/AllocId-vc-proving-r2:mask_safety",
+          "claimed_action": "deliver:AllocId-vc-proving-r2:mask_safety:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T12:12:56.012360Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T13:10:50.054810Z",
+                "finished_at": "2026-10-12T13:18:31.950573Z",
+                "elapsed_seconds": 461.895763
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T13:18:31.950531Z",
+          "finished_at": "2026-10-12T13:20:15.249373Z"
+        }
+      },
+      "finished_at": "2026-10-12T13:23:03.209990Z"
+    }
+  },
+  "current": {
+    "annotation": "AllocId-annotation-r2",
+    "vc-checking": "AllocId-vc-checking-r2",
+    "vc-proving": "AllocId-vc-proving-r2"
+  },
+  "annotation_owner": "annotation/AllocId-20261012130948",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "AllocId-vc-proving-r2"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-10-12T13:25:18.248362Z",
+    "files": [
+      "VC/AllocId_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-10-12T13:28:06.492330Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-10-12T05:09:48.623956Z",
+  "updated_at": "2026-10-12T13:28:06.508235Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-10-12T13:28:06.492302Z"
+}

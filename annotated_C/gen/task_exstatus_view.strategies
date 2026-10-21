@@ -1,0 +1,22 @@
+#include "task_exstatus_view.h"
+
+// 写权限按已发布 map cell 定位，仅交出 exstatus 槽。
+id : 1
+priority : core(3)
+left : task_fields(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : undef_data_at(field_addr(?q, TaskDescriptor, exstatus), I32) at 2
+check : infer(q == task);
+action : left_erase(0);
+         left_add(task_fields_exstatus_frame(sg, st, task, desc));
+         left_add(store(field_addr(task, TaskDescriptor, exstatus), I32, tdExstatus(desc)));
+
+// 写后以同一 cell 的新值恢复 task_fields；不重新展开全局不变量。
+id : 2
+priority : post(3)
+left : task_fields_exstatus_frame(?sg, ?st, ?task, ?desc) at 0
+       store(field_addr(?q, TaskDescriptor, exstatus), I32, ?value) at 1
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(desc) at 2
+check : infer(q == task);
+action : left_erase(0); left_erase(1);
+         left_add(task_fields(sg, replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(value, desc), task_desc_map(os_tasks(st))), st)));

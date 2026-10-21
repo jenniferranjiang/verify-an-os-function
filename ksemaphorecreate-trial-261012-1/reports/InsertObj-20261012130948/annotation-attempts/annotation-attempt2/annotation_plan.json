@@ -1,0 +1,82 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "InsertObj",
+      "meaning": "把已分配但尚未链接的 id 节点插入所属桶，归还 idmanager_link(sm, idmanager_add(before, id), id, idnode) 的完整 manager ownership。"
+    },
+    {
+      "name": "InitDoubleLinkList",
+      "meaning": "将私有双链表头初始化为自环，返回两个指针字段 ownership。"
+    },
+    {
+      "name": "DoubleLinkListInsertNodeAfter",
+      "meaning": "在给定节点后插入 detached 节点并更新四个链接字段。"
+    },
+    {
+      "name": "KPrintf",
+      "meaning": "受信任输出调用保持受验证 heap 的 emp。"
+    }
+  ],
+  "loop_invariants": [
+    {
+      "location": "InsertObj: manager parameter-check do while (0)",
+      "progress": "单次参数检查不修改资源；QCP 将常量零 do-while 展开为单次块并拒绝其前的 Inv Assert。"
+    },
+    {
+      "location": "InsertObj: manager-null while (1)",
+      "progress": "由入口 manager 非零可知该无限循环不可达，以 false invariant 保留其真实控制流。"
+    },
+    {
+      "location": "InsertObj: idnode parameter-check do while (0)",
+      "progress": "单次参数检查不修改资源；QCP 将常量零 do-while 展开为单次块并拒绝其前的 Inv Assert。"
+    },
+    {
+      "location": "InsertObj: idnode-null while (1)",
+      "progress": "由入口 idnode 非零可知该无限循环不可达，以 false invariant 保留其真实控制流。"
+    }
+  ],
+  "new_predicates": [],
+  "vc_comparisons": [
+    {
+      "source": {
+        "attempt": "InsertObj-vc-proving-r1:manager_open",
+        "name": "proof_of_InsertObj_entail_wit_2",
+        "annotation_location": "annotated_C/src/InsertObj.c:103 (head != 0)"
+      },
+      "current": [
+        "proof_of_InsertObj_entail_wit_2"
+      ],
+      "old_gap": "The BSS bucket representation does not entail a nonzero selected bucket head; typed cell validity permits address zero.",
+      "change": "Accepted predicate-nonzero-candidate-fe8c4261db5c supplies head nonzero in store_uninit_idbucket and both branches of store_idbucket_cases. Current whole VC preserves the same selected bucket, manager/bitmap and frame resources and both target shapes; the missing BSS-head fact now follows from its store_idbuckets premise via existing split/cases lemmas.",
+      "result": "resolved"
+    },
+    {
+      "source": {
+        "attempt": "InsertObj-vc-proving-r1:bucket_insert_ready",
+        "name": "proof_of_InsertObj_entail_wit_3_1",
+        "annotation_location": "annotated_C/src/InsertObj.c:130 (&(idnode->link)!=0)"
+      },
+      "current": [
+        "proof_of_InsertObj_entail_wit_3_1"
+      ],
+      "old_gap": "Detached ID-node ownership and idnode nonzero do not entail the abstract embedded link address nonzero; the empty-bucket branch has no accepted concrete offset bridge.",
+      "change": "Propagated accepted store_sem_id_detached link-nonzero metadata through the first two Assert points. The current empty-bucket whole VC retains the original conclusion/resources/witnesses and now has the exact link-nonzero fact as PreH6 in both alternatives; no unsupported layout implication is required.",
+      "result": "resolved"
+    },
+    {
+      "source": {
+        "attempt": "InsertObj-vc-proving-r1:bucket_insert_ready",
+        "name": "proof_of_InsertObj_entail_wit_3_2",
+        "annotation_location": "annotated_C/src/InsertObj.c:130 (&(idnode->link)!=0)"
+      },
+      "current": [
+        "proof_of_InsertObj_entail_wit_3_2"
+      ],
+      "old_gap": "Detached ID-node ownership and idnode nonzero do not entail the abstract embedded link address nonzero; initialized bucket links provide no fact about the new node's link address.",
+      "change": "Propagated accepted store_sem_id_detached link-nonzero metadata through the first two Assert points. The current initialized-bucket whole VC retains the original conclusion/resources/witnesses and now has the exact link-nonzero fact as PreH7 in both alternatives; existing DLL spatial conversion remains required.",
+      "result": "resolved"
+    }
+  ]
+}

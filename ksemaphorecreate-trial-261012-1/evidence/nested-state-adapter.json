@@ -1,0 +1,13 @@
+{
+  "official_source": "/home/xinra/qcp-binary-democases/Rocq/SeparationLogic/NestedCriticalSTS.v",
+  "official_sha256": "c4f4859ae5f5fdb55646bf346c020b4a9fdd377500df6ace7d18ab62745112a8",
+  "exact_reused_source": "Record nested_critical_state {C: critical_STS}: Type :=\n  {\n    handlers_of_NCS: list Z;\n    state_of_NCS: critical_STS_state\n  }.",
+  "destination": "lib/CrtosNestedState.v",
+  "record_body_unchanged": true,
+  "reason": "Installed NestedCriticalSTS.vo has inconsistent ArrayLib assumptions; official source functor interface also differs from installed architecture-specialized API. Reuse only required record; no changes to root/shared/QCP files; no copied signatures or new Parameter/Axiom.",
+  "tool_failure_and_probe_evidence": [
+    "probes/framework/provenance.json",
+    "probes/framework/adapter-provenance.json",
+    "probes/nested-carrier-note.md"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "checks": [
+    "target rejects /tmp/X.c",
+    "target rejects annotated_C/src/../X.c",
+    "target rejects annotated_C/other/X.c",
+    "target rejects annotated_C/src/sub/X.c",
+    "unknown external key",
+    "external traversal",
+    "symlink write boundary",
+    "nine canonical symbolic plans (driver not executed)",
+    "actual reviewed predicate dependency discovery and native build"
+  ],
+  "closure_order": [
+    "CriticalAreaLock",
+    "CriticalAreaUnLock",
+    "DoubleLinkListInsertNodeAfter",
+    "AllocId",
+    "InitDoubleLinkList",
+    "InsertObj",
+    "IdInsertObj",
+    "_SemaphoreCreate",
+    "KSemaphoreCreate"
+  ],
+  "dependency_nodes": 34,
+  "elapsed_seconds": 128.373,
+  "c_vcs_generated": false,
+  "scope_note": "These checks covered the initial legacy dependency path adapter. The predicate ABI conclusion was later invalidated by DCHG-20261012-02; they do not establish ARM little-endian correctness."
+}

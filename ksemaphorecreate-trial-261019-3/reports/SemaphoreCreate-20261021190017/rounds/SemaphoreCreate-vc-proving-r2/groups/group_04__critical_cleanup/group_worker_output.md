@@ -1,0 +1,3 @@
+Completed all 6 assigned top-level VCs and 4 aggressive split goals. Refolded SemaphoreZero and os_inv on the ID-allocation failure branch; discharged call guards, cleanup frame rearrangement and the stuttering transition under current definitions. Reused compatible r1 open_close/call_guards proof bodies and adapted the entailment index. No helper or semantic source changes. Global manager nonzero uses the existing foundational addr_of_LE_var_not_zero; no new assumption was introduced.
+
+The exact controller group-check exited 0 with status passed (140.928418 seconds), compiling the current manual, library, goal, auto file and group wrapper. Forbidden-lemma/tactic scan was clear. Current files are ready for main finalization; writing has stopped.

@@ -1,0 +1,48 @@
+{
+  "scope": "No helper implementation re-proofs performed",
+  "records": [
+    {
+      "symbol": "InitDoubleLinkList",
+      "previous_state": "done",
+      "previous_state_file": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/InitDoubleLinkList-20261012130948/controller_state.json",
+      "contract_token_identical": false,
+      "current_reuse_status": "needs-compatibility-evidence",
+      "observation": "Current named resource predicates and previous explicit-store/OSHeap contracts need a checked correspondence; text comparison alone does not establish or refute logical equivalence."
+    },
+    {
+      "symbol": "DoubleLinkListInsertNodeAfter",
+      "previous_state": "done",
+      "previous_state_file": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/DoubleLinkListInsertNodeAfter-20261012130948/controller_state.json",
+      "contract_token_identical": false,
+      "current_reuse_status": "needs-compatibility-evidence",
+      "observation": "Current named resource predicates and previous explicit-store/OSHeap contracts need a checked correspondence; text comparison alone does not establish or refute logical equivalence."
+    },
+    {
+      "symbol": "IdInsertObj",
+      "previous_state": "done",
+      "previous_state_file": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/IdInsertObj-20261012130948/controller_state.json",
+      "contract_token_identical": false,
+      "current_reuse_status": "needs-compatibility-evidence",
+      "observation": "Current named resource predicates and previous explicit-store/OSHeap contracts need a checked correspondence; text comparison alone does not establish or refute logical equivalence."
+    },
+    {
+      "symbol": "AllocId",
+      "previous_state": "done",
+      "previous_state_file": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/AllocId-20261012130948/controller_state.json",
+      "contract_token_identical": false,
+      "current_reuse_status": "needs-compatibility-evidence",
+      "observation": "Current named resource predicates and previous explicit-store/OSHeap contracts need a checked correspondence; text comparison alone does not establish or refute logical equivalence."
+    },
+    {
+      "symbol": "InsertObj",
+      "previous_state": "done",
+      "previous_state_file": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/InsertObj-20261012130948/controller_state.json",
+      "contract_token_identical": false,
+      "current_reuse_status": "needs-compatibility-evidence",
+      "observation": "Current named resource predicates and previous explicit-store/OSHeap contracts need a checked correspondence; text comparison alone does not establish or refute logical equivalence."
+    }
+  ],
+  "user_clarification": "User explicitly identified 261019-3, not 261012-1, as the intended source of already-proved helpers.",
+  "previous_trial_records": "The earlier 261012-1 search is not the requested proof source; not used as proof evidence.",
+  "current_trial_search": "Current trial contains helper annotated C and compiled representation libraries; no helper implementation VC/goal_check completion records located yet."
+}

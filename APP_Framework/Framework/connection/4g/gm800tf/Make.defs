@@ -1,0 +1,6 @@
+############################################################################
+# APP_Framework/Framework/connection/4g/gm800tf/Make.defs
+############################################################################
+ifneq ($(CONFIG_ADAPTER_4G_GM800TF),)
+CONFIGURED_APPS += $(APPDIR)/../../../APP_Framework/Framework/connection/4g/gm800tf
+endif

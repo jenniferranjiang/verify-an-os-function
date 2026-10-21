@@ -1,0 +1,151 @@
+{
+  "status": "canonical-contracts-complete-candidate-checks-passed",
+  "functions": [
+    {
+      "symbol": "KSemaphoreCreate",
+      "source": "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c",
+      "source_sha256": "d5b41c3bde69e0416431d2425c61e35453778ae4b1569747f2c2258f3dfe16ec",
+      "line_start": 246,
+      "line_end": 251,
+      "original_function_sha256": "89cef74e3d8a554eef92e13913bb27b6a41fce0cf7a08ec86b40a94fca5083ff",
+      "normalized_function_sha256": "539c16c22f1aac55362779c7ac6f32dd026c0ef29d7df6817840338108d5b1cf",
+      "normalizations": [
+        "empty local KDEBUG_NOT_IN_INTERRUPT removed",
+        "unique done.SemaphoreCreate resolved"
+      ],
+      "direct_callees": [
+        "_SemaphoreCreate"
+      ]
+    },
+    {
+      "symbol": "_SemaphoreCreate",
+      "source": "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c",
+      "source_sha256": "d5b41c3bde69e0416431d2425c61e35453778ae4b1569747f2c2258f3dfe16ec",
+      "line_start": 33,
+      "line_end": 62,
+      "original_function_sha256": "251fe19cabd710476a34c71227115899339700728a4f5bcbc19fcde74303b991",
+      "normalized_function_sha256": "599d345ef1c251fffb8a8c16b5f01f63ae33e30051f617bc756cd807e6c3badf",
+      "normalizations": [
+        "source-static function externalized",
+        "KDBG_IPC == 0 unreachable logging branch removed"
+      ],
+      "direct_callees": [
+        "x_malloc",
+        "memset",
+        "CriticalAreaLock",
+        "IdInsertObj",
+        "x_free",
+        "CriticalAreaUnLock",
+        "InitDoubleLinkList",
+        "DoubleLinkListInsertNodeAfter"
+      ]
+    },
+    {
+      "symbol": "IdInsertObj",
+      "source": "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c",
+      "source_sha256": "189a94e7dc17d6c9da6f7992a232e4422c9dc11dea539b40452b0041546a9fca",
+      "line_start": 106,
+      "line_end": 120,
+      "original_function_sha256": "4119e7f428eb58a097fc472cf12bb166f7e792650393c97988cf817c5ebd0b7a",
+      "normalized_function_sha256": "b418980d0d194f22b93e25b56f2b7b82575534e5ecb33d0d2bb18b328a31a576",
+      "normalizations": [
+        "NULL_PARAM_CHECK expanded with source function, source line, parameter string, infinite loop retained",
+        "assignment condition split preserving call and comparison"
+      ],
+      "direct_callees": [
+        "AllocId",
+        "InsertObj",
+        "KPrintf"
+      ]
+    },
+    {
+      "symbol": "AllocId",
+      "source": "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c",
+      "source_sha256": "189a94e7dc17d6c9da6f7992a232e4422c9dc11dea539b40452b0041546a9fca",
+      "line_start": 24,
+      "line_end": 53,
+      "original_function_sha256": "35daa872dc2d23ff4171d32cb5758d55861995e75581f82d6e4799115945da90",
+      "normalized_function_sha256": "0bce51110ddff419c1ab632cdfc9ae1458dd21fff7c67619a88ae9bc2b12487d",
+      "normalizations": [
+        "source-static function externalized",
+        "NULL_PARAM_CHECK expanded with source function, source line, parameter string, infinite loop retained"
+      ],
+      "direct_callees": [
+        "KPrintf"
+      ]
+    },
+    {
+      "symbol": "InsertObj",
+      "source": "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c",
+      "source_sha256": "189a94e7dc17d6c9da6f7992a232e4422c9dc11dea539b40452b0041546a9fca",
+      "line_start": 62,
+      "line_end": 73,
+      "original_function_sha256": "46b70058cdc0c32e80013e71f0a5655afb75616b861f62e00b83c9c1592a9f95",
+      "normalized_function_sha256": "cb3bc2808fbf908bce66782ad875818f2c6b655db45e1cedeeea66e055741e8e",
+      "normalizations": [
+        "source-static function externalized",
+        "NULL_PARAM_CHECK expanded with source function, source line, parameter string, infinite loop retained"
+      ],
+      "direct_callees": [
+        "InitDoubleLinkList",
+        "DoubleLinkListInsertNodeAfter",
+        "KPrintf"
+      ]
+    },
+    {
+      "symbol": "InitDoubleLinkList",
+      "source": "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c",
+      "source_sha256": "fb114fe11fed1eb2dd717c81e95a1fb8675277b65f1d1009349e56b473846352",
+      "line_start": 30,
+      "line_end": 34,
+      "original_function_sha256": "7699888f60e4369bce1149cded457fa44c267d0eaf2dae6f36b2a37f21655fd5",
+      "normalized_function_sha256": "7699888f60e4369bce1149cded457fa44c267d0eaf2dae6f36b2a37f21655fd5",
+      "normalizations": [],
+      "direct_callees": []
+    },
+    {
+      "symbol": "DoubleLinkListInsertNodeAfter",
+      "source": "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c",
+      "source_sha256": "fb114fe11fed1eb2dd717c81e95a1fb8675277b65f1d1009349e56b473846352",
+      "line_start": 42,
+      "line_end": 49,
+      "original_function_sha256": "419be681b05b780e2e267854115ca3543423dfb56867a745504038874d8d7cd6",
+      "normalized_function_sha256": "419be681b05b780e2e267854115ca3543423dfb56867a745504038874d8d7cd6",
+      "normalizations": [],
+      "direct_callees": []
+    },
+    {
+      "symbol": "CriticalAreaLock",
+      "source": "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/CriticalArea.c",
+      "source_sha256": "946b214eb678c1202c96dc6fd5272fd2c8d2dd245736888a0ea4114fdd6f113a",
+      "line_start": 117,
+      "line_end": 125,
+      "original_function_sha256": "32b9d94eb799dea700cd9e09769843c744b3e15a04cbb18d861b4d8ee399c9fe",
+      "normalized_function_sha256": "2168d987206ed84df7b955c5d18d615312d42f7ff3f0f1c1d947cda916483805",
+      "normalizations": [
+        "non-SMP DISABLE_INTERRUPT resolved",
+        "source-static KTaskOsAssignLockNest external declaration"
+      ],
+      "direct_callees": [
+        "DisableLocalInterrupt"
+      ]
+    },
+    {
+      "symbol": "CriticalAreaUnLock",
+      "source": "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/CriticalArea.c",
+      "source_sha256": "946b214eb678c1202c96dc6fd5272fd2c8d2dd245736888a0ea4114fdd6f113a",
+      "line_start": 132,
+      "line_end": 138,
+      "original_function_sha256": "7d8323d31c3743679d45a64ebf1af2066745554fb557b213a0c6035c214304ec",
+      "normalized_function_sha256": "6d6ce878f791cbb3c8d394242d64ccf4a0724ab5a1bfd1007694433b3407fb5e",
+      "normalizations": [
+        "non-SMP ENABLE_INTERRUPT resolved",
+        "source-static KTaskOsAssignLockNest external declaration"
+      ],
+      "direct_callees": [
+        "EnableLocalInterrupt"
+      ]
+    }
+  ],
+  "body_hash_note": "Extraction-time body hashes precede proof annotations; current executable token equivalence is checked in spec-check-result.json."
+}

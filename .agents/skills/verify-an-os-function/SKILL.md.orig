@@ -1,0 +1,277 @@
+---
+name: verify-an-os-function
+description: 验证 CRTOS 等非 SMP OS 的 C 函数与模块：以整个模块为范围设计 Rocq predicate 和按函数编写的 QCP spec，分别审阅并由用户确认 revision；随后运行 QCP symbolic、生成 VC、完成 Rocq 证明和完整性检查。
+---
+
+# 验证 CRTOS 函数
+
+使用 QCP、Rocq/Coq、分离逻辑、符号执行和 VC，为 CRTOS 内核 C 代码逐步建立可机器检查的功能正确性证明。默认处理当前配置实际编译的非 SMP 代码。
+
+## 模式与总流程
+
+Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。作者与 reviewer 应分开；predicate review 和 spec review 的对象、条件和记录也必须分开。Review 次数不预设，由产物 revision、修改影响和通过条件决定。没有独立检查能力时，由 main agent 按相同条件自检并注明。
+
+```text
+确认验证上下文 -> C 分析 -> predicate 与 spec 草案迭代
+             -> predicate review-passed -> spec review-passed
+             -> 用户确认两份 revision
+             -> QCP parser/symbolic -> QCP 生成 VC / Rocq proof
+             -> final integrity check
+```
+
+### 确认验证上下文
+
+开始 predicate 设计前，确认目标模块边界、当前配置下属于该模块的源码和函数集合、
+模块直接访问或拥有的 C 对象、初始化与生命周期路径，以及相关 critical/IRQ/atomicity 行为。
+
+`trusted` 函数由用户决定。Main agent 可以建议把复杂 callee 作为 `trusted`，但只有用户明确同意
+具体 C symbol 后才能停止递归；批准的 symbol 和采用的 contract/保证记录在对应的 predicate 设计报告或 spec review 记录中。
+
+优先读取用户指定或项目已有的说明。只在任务回复或对应的设计/review 记录中简短记录本次使用的事实和 `[OPEN]`。
+
+上述上下文变化并影响已审阅 predicate/spec 时，按 dependency closure 将相应结论标记为 `invalidated`；与当前目标无关的
+项目事实变化不触发重审。
+
+### Review 生命周期
+
+状态使用 `draft -> review-ready -> needs-fix|review-passed -> invalidated`。Predicate 与 spec 草案可共同修改，不做中间 review；`invalidated` 只用于已经通过的 revision 失去审阅依据。
+
+- 首个 review-ready revision 做一次 full review。`needs-fix` 后只检查已报告 issue、修改处及其 dependency closure；只有权威 C、配置、scope、trusted 函数列表或上游 breaking change 使审阅依据失效时才重新 full review。
+- 纯格式、报告或不影响结论的 proof-local 修改不触发 review；同一 revision 不重复 review。同一 blocker 没有新修改或证据时停止空转并报告用户。
+- Issue 必须给出级别、file/symbol 证据、mismatch、后果、最小修复和可执行通过条件。无 open blocker 且检查成功才可 `review-passed`。
+- Final integrity 首次检查完整 proof 候选；之后只重跑失败项和 dependency closure，除非权威输入、approved revision 或 goals 改变。
+
+### `slice-design`
+
+C analysis agent 读取当前配置下目标模块的全部实现函数，以及模块相关类型、全局对象、
+初始化/销毁路径和条件编译。对模块中的函数分别记录控制流、返回路径、memory reads/writes、
+访问的指针与字段、calls、side effects、loop invariant 和必要假设。
+
+为了理解模块资源的跨模块使用，还应读取必要的外部调用者或被调用者；这些上下文函数
+不因此归入目标模块，也不要求目标模块 predicate 拥有其他模块的内部资源。
+
+Predicate design agent 从目标模块全部函数实际访问的 C 对象出发，确定模块的 abstract state、
+owned memory、mutable fields、lifecycle states 和 unchanged resources。隐藏不必要的实现细节；不要盲目展开大型 predicate，优先用 `which implies` 导出字段、节点、数组片段等局部 view，并保留未触达资源。
+
+AI 新建的共享 Rocq definitions 写入项目 `lib/`。创建或命名 `.v` 文件、
+Module 和 symbol 前，参考当前项目、skill中的task-lib 及最接近的 QCP 示例，
+沿用其已有命名和目录组织，参考其文件组合命名分割方式；skill 不规定统一前缀、后缀或固定拆分方式。文件边界应按语义内聚、依赖方向和既有项目风格确定；为了快速建立可编译的
+最小 trial predicate 草案，不得把无关 predicate、abstract state、STS、规则或
+callee contract 合并到同一个 `.v` 文件中。语义和 ownership 仍以目标 CRTOS 源码为准，
+LOS/QCP 只作为命名与组织参考。
+
+可以按语义分文件组织：
+
+- `*Pure.v` 保存不拥有内存的逻辑内容，包括 abstract-state `Record`/`Inductive`、
+  projection、纯更新函数、validity、模块操作和 state-transition relation；不得在这一层
+  放入 `Assertion`、heap ownership、STS token 或 critical acquire-release 规则。
+- `*Rules.v` 或 `*Critical.v` 保存 STS、token、assertion carrier、
+  `OutsideCritical`/`InsideCritical`、`RTrans`/`GTrans` 以及 critical/IRQ
+  acquire-release 规则。这些 definition 即使结果类型也是 `Assertion`，仍属于协议层。
+- `*Predicates.v` 或 `*Rep.v` 保存 C 对象、字段、数组、容器和模块 heap ownership，
+  并把 Pure state 解释为具体内存 representation；模块 heap invariant 也属于这一层。
+
+若项目已有统一 OS protocol，则引用该已审阅 protocol，并把当前模块的适配规则保留在
+独立 rules/critical 文件中。
+
+直接在 `.v` 中用 `(** ... *)` 中文文档注释解释本次设计或修改涉及的
+非平凡、核心组合或对外使用的 definition/statement，不限于新建定义，使读者
+只看 `.v` 就能理解定义和 predicate 的 C 含义。每个定义只解释它在当前抽象层
+直接引入的内容：逻辑参数、record projection 或地址表达式与具体 C 对象、全局符号、
+struct 字段或容器的对应，应写在最接近且直接使用它们的定义旁。组合 predicate 只需
+简要列出直接组成项、各用一句说明职责，并说明组合后的整体状态和 ownership 关系；
+不在上层重复下层已经说明的 C 对应细节。另外说明真正需要知道的限制、保持关系或
+中间状态。不要规定固定栏目、命名或行数，也不要逐字翻译代码或机械罗列显然内容；
+简单或显然的 private helper 可以只写一句话。注释必须随 definition 一起更新，过时、
+在直接使用处缺少必要 C 对应关系或具有误导性的注释视为 blocker。Rocq 文件先放 definition，再放
+lemma/theorem/proof；不得用 `Parameter`、`Axiom`、占位定义、手写 `Admitted/admit` 绕过证明。
+
+同时在 trial `.docs/Report/` 创建并维护 predicate 设计报告，使用
+[predicate-design-report-template.md](assets/predicate-design-report-template.md)。报告解释不适合分散到单个
+definition 注释中的模块级和跨文件设计：scope/config、C 对象到抽象状态的整体映射、predicate 分层、
+ownership 与 lifecycle、对外 view/interface、关键取舍、限制和 `[OPEN]`。正式 definition、statement、
+局部逻辑项到 C 对象的对应关系仍以 `.v` 为准；报告引用 formal file、symbol 和 revision，不复制定义或
+成为第二份 formal source。如果某个 definition 离开报告就无法理解，应补充其 `.v` 注释，而不是只在报告中解释。
+
+Predicate review-ready 条件：目标模块、当前配置、模块源码和函数集合已经固定；
+当前配置下模块全部函数实际访问的每个 C 对象和内存都能追溯到候选
+owner/representation；模块的初始化、正常运行、状态转换、删除和回收路径已经覆盖；
+正式 state/predicate/lemma statement 已写入 .v，必要中文注释与代码一致；predicate 设计报告已绑定
+候选 formal files/symbols/revision，并解释跨定义设计、依据、限制和 `[OPEN]`；formal sources 通过
+适用的 compile/typecheck；没有会影响 owner、抽象语义、lifecycle、frame 或后续验证的已知 [OPEN]。
+
+Predicate review-passed 条件：在当前配置下，对目标模块全部函数可能访问的每个字节，
+在对应的稳定生命周期状态下都有且仅有一个 owner；模块 abstract state 和每个命名
+predicate 都有源码语义或复用客户端依据；模块内部 container/lifecycle/critical 边界
+闭合；跨模块资源的 owner 与借用/转移接口明确；formal checks 通过且没有 open blocker。
+
+需要参考完整的 CRTOS 项目实例时，可先阅读
+[Task lib 索引](references/task-lib/index.md) 作为参考。
+
+- 必须读：已确认的验证上下文、目标 C/headers/config、当前 trial 工作区已有的 `lib/` 定义、[predicate-lemma-design-guide.md](references/predicate-lemma-design-guide.md) 和 [Predicate 设计经验](references/predicate-experience.md)。开始新写或修改 predicate 前读取经验文件，并只采用其中与当前 C 形态和控制流相符的条目。
+- 写：项目实际使用的 Rocq `.v`，把局部解释放在相关 definition/statement 前；同时使用 [predicate-design-report-template.md](assets/predicate-design-report-template.md) 创建或维护 predicate 设计报告，记录跨定义设计、review issue、reviewed revision 和结论，不复制 formal source。
+- 修改已批准接口时使用：[design-change-request-template.md](assets/design-change-request-template.md)。
+
+### `write-spec`
+
+进入本模式前必须完整阅读 [spec-writing-guide.md](references/spec-writing-guide.md)。默认使用**扁平的
+一函数一文件切片**。验证闭包从用户指定的目标函数开始，在当前配置下递归跟随
+全部直接调用、可唯一解析的 function pointer/done-table dispatch，以及 function-like 宏展开后产生的
+真实函数调用，直到函数叶子或用户批准的 `trusted` 函数。Main agent 可以建议将复杂函数排除出
+验证闭包，但不得代替用户决定。无法唯一解析的调用保持 `[OPEN]` 并阻塞 review。
+
+- 闭包中每个非 `trusted` 函数 `f` 必须且只能有一个 `annotated_C/src/f.c`，其中包含 `f` 的一个真实
+  active 定义、完整函数体和 canonical `With/Require/Ensure`；declaration-only 文件不合格。
+- `f.c` 中调用 `g` 时，只在 `f` 的定义前写 `g` 的完整 declaration-only API spec，不复制
+  `g` 的函数体。`g` 必须在闭包中有自己的 active canonical 文件，或由用户批准为 `trusted`；
+  前者的 caller-local contract 必须与 canonical spec alpha/typedef 等价。
+
+这是结构硬门禁：
+
+- API 不能只是裸 C prototype 或 `implementation-pending` 注释；每个正文 call 都
+  必须在定义前有完整 `With/Require/Ensure`，并在调用点实例化需要的 `With`。
+- Canonical `With/Require/Ensure` 使用与函数层次匹配、按对象或动作命名的 predicate/state
+  transition，直接写出各返回路径、abstract effect、ownership transfer 和 frame。表示层的裸
+  `store` 应封装在 Rocq predicate 中，只在 predicate 定义、函数体局部展开，或语义本身就是具体
+  memory shape 的底层原语中出现；不得把字段、bitmap bytes 或链表指针沿调用链逐层泄漏。
+  按模块真实状态命名的 predicate 使 callee contract 能表达清楚的状态转换，caller 可以直接组合这些
+  contract，reviewer 也能看出函数行为而不必展开全部字段。
+  也不得用含糊的整包 `*_pre/*_post/*_spec` helper 隐藏义务。细则按 spec writing guide 执行。
+- 验证闭包在 `write-spec` 中展开。若新增的可达函数需要当前 predicate 未提供的对象表示、ownership
+  view 或中间状态，暂停该 spec 并退回 `slice-design` 补充合适的 predicate，不得用更多裸 `store`
+  代替缺失抽象。Predicate 若已经 `review-passed`，修改后固定新 revision 并重新完成 predicate review，
+  再继续 spec review。
+- Function-like 宏先按当前配置展开：展开产生的真实函数调用继续加入闭包；空宏、常量和纯
+  类型/布局宏不产生函数；展开产生的可执行语句在 caller 切片中作有源码依据的等价归一，
+  不为源码中不存在的宏虚构 canonical 函数。
+- 不得集中建立模块级 `*_specs.h`。
+- 不按目录复制整套 kernel/libc source tree 或无关 headers；已进入闭包的 kernel/libc
+  函数仍按一函数一文件切片。切片只保留当前函数真正需要的声明；若正文按字段访问 struct，声明必须保持被访问字段的真实 ABI offset，
+  否则把该字段操作整体抽成具名 API，不得发明错误的精简布局。
+- 从权威 C 提取单函数切片时，不改算法、路径、返回值或副作用。parser 所需的等价
+  拆句、宏展开、dispatch 解析和 static-to-slice-external 归一必须逐项记录并审阅；没有用户
+  批准或源码/配置依据时不得做语义替换。
+
+结束 `write-spec` 前必须从目标函数重新扫描完整可达闭包。目标函数及每个递归可达 symbol 都必须
+恰好满足一项：由用户批准为 `trusted` 并记录 contract；或者具有唯一同名文件、active body、
+canonical spec 和一致的 caller-local contracts。
+任何缺失、裸 call、未解析 dispatch/宏调用或多重归类都是 blocker。此模式只设计和审阅 spec，
+不运行 QCP parser/symbolic、closure script，不生成 VC，也不开始 proof。Predicate `review-passed`
+前不得进入 spec review 或请求用户批准。
+
+Spec review-ready 条件：引用的 predicate revision 为 `review-passed`；已按 spec writing guide 完成
+scope-faithfulness 检查；完整可达闭包及目标函数全部 return/blocking path 已列出；正式 contract 与
+annotated C `With/Require/Ensure` 已写出且直接可读；每个 load/store 能追溯到 reviewed predicate；
+Rocq predicate 文件通过 compile/typecheck，annotated C 已完成人工结构和源码等价性检查；没有影响
+路径、effect、ownership、frame 或依赖结论的已知 `[OPEN]`，才达到 review-ready。
+
+Spec review-passed 条件：scope-faithfulness 检查通过；每条真实路径的参数、返回值、abstract effect、
+old/new、ownership transfer 和 frame 都匹配；Require 足以执行但没有无依据加强，Ensure 没有弱化实现义务；critical/caller resources
+在出口正确返还；callee 状态没有冒充 verified；没有无依据假设或 open blocker。Predicate 与 spec
+分别 review-passed 后，用户确认两份明确 revision；确认前不得运行 QCP、生成 VC 或开始 proof。
+
+- 必须读：已确认的验证上下文、当前 predicate 草案、完整可达闭包中的 C 与各 caller-local callee specs、[spec-writing-guide.md](references/spec-writing-guide.md) 和 [Spec 设计经验](references/spec-experience.md)。开始新写或修改 spec 前读取经验文件，并只采用其中与当前 C 形态、函数层次和控制流相符的条目。Spec review 时必须固定同一份 `review-passed` predicate revision。
+- 写：当前函数的 canonical spec 直接写在其唯一 active 定义上；正文中每个
+  真实 callee 对应的完整 declaration-only API spec 写在同一文件、当前定义
+  之前。不得集中建立模块级 `*_specs.h`，不得用裸prototype代替spec。
+- 草案迭代：完成一批 annotated C、predicate 或 callee-contract 修改后，确定改动文件及其 transitive callers，重新检查受影响的源码路径、验证范围、callee contract 和 ownership；只编译发生变化的 Rocq 文件。草案修改不标记 `invalidated` 也不做中间 review，不得通过加强无依据 Require、弱化 Ensure 或声明 deferred 来取得通过。
+- 完整闭包：候选首次满足其他 review-ready 条件后，从目标函数重新扫描完整可达闭包并固定 revision，再开始 full review。`needs-fix` 后只重查 issue、修改处和受影响 callers；只有审阅依据失效时才重新 full review。
+- `check-spec-closure.sh`、QCP parser/symbolic 和 VC 生成全部留到用户批准后的 `implement`。纯文档或报告修改不产生新的设计 revision。
+- Spec review 使用：[spec-review-template.md](assets/spec-review-template.md)。
+- 修改已批准 predicate/spec 时使用：[design-change-request-template.md](assets/design-change-request-template.md)。
+
+### `implement`
+
+只有用户明确确认 review-passed predicate/spec revisions 后才能进入。Verification agent 先确认源码、
+配置、trusted 列表和批准 revisions 未变化，再运行一次完整
+`bash <skill-dir>/scripts/check-spec-closure.sh <trial-dir>`，并对闭包内每个 annotated C 执行 QCP
+parser 和 `qcp.symbolic(last_line)`。全部到达文件末尾后，才允许调用 `qcp.proof`、生成 VC 与 strategy
+soundness goals，随后完成 Rocq proof 与完整性检查。
+
+QCP parser/symbolic 若暴露 Require/Ensure、路径、ownership、predicate 或 callee contract 问题，立即停止
+implement，按 dependency closure 使受影响 review 失效并退回 `slice-design/write-spec`；不得在 proof 阶段
+悄悄修改已批准设计。只涉及局部 proof annotation、strategy 或 tactic 且不改变批准设计时，留在 implement。
+生成 VC 后的失败再分类为 VC generation、strategy soundness、logical proof 或 arithmetic。
+
+不得手工修改 `*_goal_check.v`、`*_goal.v` 或 `*_proof_auto.v`；保留后者由 QCP 生成的 `Admitted`。手工目标放在 `*_proof_manual.v`，额外定义或 lemma 放在同前缀 `*_lib.v`。C 变化产生新 manual goals 时，先把旧 manual 文件移到 `.tmp/`，重新生成后迁移可复用 proof，全部证明后再删除备份。
+
+沿调用依赖自底向上证明，先 leaf 再 caller。所有 proof 文件必须编译；不得删除、弱化或隐藏 goal，也不得在未实际运行 QCP 和 Rocq 时声称验证成功。
+
+- 必须读：已确认的验证上下文、predicate slice、spec、annotated C、已有 strategy/proof，以及 [implementation-and-validation-guide.md](references/implementation-and-validation-guide.md)。
+- 写：QCP strategy、loop annotations、`*_proof_manual.v`、同前缀 `*_lib.v` 和必要的人工证明；QCP 生成文件只能由工具写。
+- Template：本模式不新建设计 template；若实现迫使已批准设计变化，使用 [design-change-request-template.md](assets/design-change-request-template.md) 并退回对应模式。
+
+### `review`
+
+默认只读，只检查用户指定的 artifact 和 revision；除非用户同时要求修改，不实施修复或自行批准。Predicate 和 spec 必须分别给出结论，不得用一个综合结论替代。是否继续 review 按 review 生命周期和 artifact 变化判断，不按预设次数。
+
+设计 issue 使用以下固定字段：
+
+```text
+ID | blocker/non-blocker | evidence(file:line or symbol) | mismatch
+   | concrete consequence | required fix | pass condition | status
+```
+
+最终检查至少覆盖：
+
+- C integrity：完整源码模式确认只改注解；单函数切片模式确认每项可执行归一都在
+  extraction/normalization记录中、有权威源码/config依据，并保持路径与副作用；
+- VC integrity：确认生成 goal 完整、未删除、未弱化、未隐藏；
+- proof/trust：确认 VC 计数、Rocq 编译和 `Parameter/Axiom/Admitted/admit` 扫描结果。
+
+- 必须读：被审阅的正式文件、源码证据、diff/check 结果，以及该产物所属模式的 guide；proof review 读取 [implementation-and-validation-guide.md](references/implementation-and-validation-guide.md)。
+- 写：predicate 同时审阅带注释的 `.v` 和对应的 predicate 设计报告，并把 issue、reviewed revision 和结论更新到该报告；spec 更新 [spec-review-template.md](assets/spec-review-template.md)；实现完成后更新 [final-integrity-template.md](assets/final-integrity-template.md)，它只是完整性检查记录，不要求另写叙述性 final report。已有旧 predicate manifest 无需迁移。
+
+## 项目与参考路径
+
+默认 trial 是 CRTOS 根 `/home/xinra/crtos/` 的直接子目录 `<function-name>-trial-YYMMDD-N/`，或使用用户指定的独立目录。Trial 选择与命名是开始任何 C 分析或写入前的硬门禁：
+
+- 先以本机当前日期计算 `YYMMDD`，并扫描 CRTOS 根的直接子目录。新 trial 的 `N` 必须是当天所有匹配 `*-trial-YYMMDD-N/` 目录中已有最大序号加一；序号在整个 CRTOS 根内按天全局计数，不按函数名分别计数，也不因目录删除而复用。`function-name` 只能来自用户本次指定的当前验证目标。
+- 只有 CRTOS 根下已存在与本次目标一致、且有明确证据表明尚未完成的 trial 目录时，才继续该目录而不新建。未完成证据必须来自该 trial 内的设计、review 或 integrity 记录及实际产物；仅有目录存在、最近修改时间、当前工作目录或 IDE 映射均不足以证明它是待续跑 trial。候选不唯一或状态有歧义时，在写入前请用户确认。
+- 不得从 `.vscode/settings.json`、VsRocq load path、IDE 打开的文件/工作区名、旧对话、旧终端环境或上一次 trial 名称推断本次 trial。这些状态只能在 trial 已按上述规则选定后被同步，不能作为选择输入。
+
+开始 C 分析前，报告用于计算的当前日期、当天已有最大序号、本次是新建还是续跑及其依据，并报告解析后的 trial 绝对路径。对新 trial 补齐 `annotated_C/src/`、`lib/`、`VC/`、`.docs/Report/folded_history/`；不得覆盖现有内容，也不得把 trial 建在权威源码子树内。
+
+创建或进入 trial 时，创建或维护该 trial 根目录自己的 `_CoqProject`。其中列出该 trial
+实际使用的外部 `-R`/`-Q` 路径，并把本地 `lib/` 映射到与 Makefile、QCP 命令及
+`Require` 完全一致的逻辑路径；任何一处逻辑路径变化时同步更新其余各处并重新编译
+受影响的 `.vo`。当前 Coq 8.18--8.20 的 VsRocq 进程不能为每个文档应用局部
+`_CoqProject` 的 load path；在这些版本下，还要把当前活动 trial 的外部路径和
+`lib/` 映射同步到 CRTOS 根 `.vscode/settings.json` 的 `vsrocq.args`，并确保
+`"*.v": "rocq"`。当前 VsRocq 扩展不会替 `vsrocq.args` 展开
+`${workspaceFolder}`，这里必须写已经解析并确认存在的绝对路径。切换活动 trial 时替换
+旧 trial 专属映射，不累积映射到同一逻辑路径的多个 `lib/`；Coq/VsRocq 升级后也要
+先实测局部项目和路径变量是否生效，不能只假定支持。
+
+真实 CRTOS 源码与配置是语义依据。完整源码模式下，`annotated_C/src`只能增加或
+修改注解；默认单函数切片模式允许经过审阅的等价提取归一，例如拆开assignment/
+comma expression、展开function-like macro或解析稳定done-table dispatch、
+把原TU static对象声明为slice external。每项归一都必须保留路径与副作用、在 spec review 记录
+中绑定源码/config证据；换算法、隐藏body或凭空简化布局仍是blocker。
+
+整个验证过程中参考项目为QCP，路径固定为trial外的`/home/xinra/qcp-binary-democases/`。
+
+写新定义、strategy 或断言前，先用 `rg` 搜索 QCP目录下 教程、示例和项目现有 `lib/`，复用已有库（比如array等等）、predicate、tactic、assertion 与 `which implies` 写法。不得猜测QCP 语法，包括spec和predicate语法，都参考qcp中写法。
+
+已有 predicate/lemma 和函数 spec 位于`/home/xinra/crtos/task-proof/lib/`和`/home/xinra/crtos/task-proof/annotated_C/`中，可作为 trusted 依赖复用。
+
+涉及跨模块调用需要复用已有模块定义代码时，应先查找并复用已有模块定义，不得重复增加新文件或在新板块中定义已有概念。复用前仍须检查其内容。若发现定义或 spec 不符合本 skill 的要求，或存在其他疑点，必须在任务回复中标记 [OPEN]，并在对应的 predicate 设计报告或 spec review 记录中写明文件、问题依据、修改方案、影响和建议。未经用户明确授权，不得修改或删除这些文件；影响当前验证正确性的问题解决前，不得将依赖该问题的产物标为 review-passed。
+
+## 技能演进与记录
+
+可复用的 skill 变化先记录到 `.docs/CandidateSkills/` 或 `.agents/skill-candidates/`，写清触发问题、方法、限制和验证证据；独立检查后由用户批准。
+
+trial `.docs/Report/` 保存以下按用途区分的记录，不再要求每个任务另写一份通用或最终叙述报告：
+
+- Predicate 设计使用 `YYYY-MM-DD-N-predicate-design.md`，基于 [predicate-design-report-template.md](assets/predicate-design-report-template.md)，随候选设计维护并绑定明确 formal revision。
+- Spec review 使用 [spec-review-template.md](assets/spec-review-template.md)。
+- Implement 完成后使用 [final-integrity-template.md](assets/final-integrity-template.md) 保存 QCP 结果、VC/证明计数、Rocq 编译和 trust scan；这是检查证据记录，不重复解释 predicate/spec 设计。
+
+各记录只写与其职责相关的关键修改、检查结论、必要复现命令和剩余 blocker；没有比较关系时不写表格，不逐文件抄录成功项。计时只记录脚本得到的机械检查总耗时，以及任务开始到 `review-passed` 的墙钟区间；不要估算或逐项填写 analysis/edit/review/wait。昨天以前且不再活动的旧记录移入 `folded_history/`，当前审阅引用的设计/review/integrity 记录保留原位。
+
+始终保持以下抽象链条：
+
+```text
+CRTOS C -> Rocq predicates -> QCP spec -> local symbolic resources
+        -> generated VC -> machine-checked Rocq proof
+```

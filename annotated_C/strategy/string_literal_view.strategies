@@ -1,0 +1,27 @@
+#include "string_literal_view.h"
+
+// 已借出的字面量只在 libc 实际索取 store_string 时转换。
+id : 1
+priority : core(1)
+left : store_stringLit(?p, ?s) at 0
+right : store_string(?q, ?text) at 1
+check : infer(q == p);
+action : left_erase(0); right_erase(1);
+         right_add(text == StringToList(s, StringLength(s)));
+
+// 嵌套表达式可能已保存字面量指针，而前一调用已归还池；按该指针再次借用。
+id : 2
+priority : core(2)
+left : GlobalStrings(?LitMap) at 0
+right : store_string(LitMap(?s), ?text) at 1
+action : left_erase(0); right_erase(1);
+         left_add(GlobalStrings_missing(LitMap, cons{<String>}(s, nil{<String>})));
+         right_add(text == StringToList(s, StringLength(s)));
+
+// 只归还实际借出的同一文本；不复制或丢弃常量区所有权。
+id : 3
+priority : post(2)
+left : GlobalStrings_missing(?LitMap, cons{<String>}(?s, nil{<String>})) at 0
+       store_string(?p, ?text) at 1
+check : infer(p == LitMap(s)); infer(text == StringToList(s, StringLength(s)));
+action : left_erase(0); left_erase(1); left_add(GlobalStrings(LitMap));

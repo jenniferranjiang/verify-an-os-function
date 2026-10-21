@@ -1,0 +1,166 @@
+{
+  "revision": "predicate-r5-0a139d64743c",
+  "manifest_sha256": "0a139d64743cce8000b0910d7880d6c5a0bf89147b730665aa6ebefbfb45585a",
+  "move_only": true,
+  "moved_block_sha256": "1ed26ec646144a9de552a1fe0fcd426040805bfb40158c295c5741b45772addb",
+  "other_19_sources_unchanged": true,
+  "reused_independent_objects": [
+    {
+      "file": "framework-candidate/NestedCriticalSTS.v",
+      "vo_sha256": "73085292a738d94380379404197554329de4c6b4422815b411dcceefd9fb9ed8"
+    },
+    {
+      "file": "shared-candidate/arm32le/KTaskPure.v",
+      "vo_sha256": "7e9be8ea18e613491df06fd75779591ec2a920806494095ea23400c21802a370"
+    },
+    {
+      "file": "shared-candidate/arm32le/dll_abs.v",
+      "vo_sha256": "539c97a6270adc74557dc8c7d9082edb147f983f1c15ffadc14eeccf08ee4c21"
+    },
+    {
+      "file": "shared-candidate/arm32le/idnode_abs.v",
+      "vo_sha256": "3ccd6949922ccec1e27951b564c1a7d3930a380a4824f24840489732f2b5a96d"
+    },
+    {
+      "file": "shared-candidate/arm32le/CrtosGlobState.v",
+      "vo_sha256": "67d3f494734d1653eb0316f3c5b418602e40b9e0936a2ae66f544554e538651c"
+    },
+    {
+      "file": "shared-candidate/arm32le/TaskProtocolSTS.v",
+      "vo_sha256": "6e6eaec7f122626bc8e94cfd9f7fc90cca5e9d8dd0a954f368ead4c43a1fe2fa"
+    },
+    {
+      "file": "shared-candidate/arm32le/CrtosRules.v",
+      "vo_sha256": "01d6b339a536f39876e8cdef90eb6eaedbda810816e1a05c8fcf62b9ea4c5fdd"
+    },
+    {
+      "file": "shared-candidate/arm32le/dll.v",
+      "vo_sha256": "f563ea12ad1a046150527c967a1d0b155c1430b682d35c6133f67fa233a7bad9"
+    },
+    {
+      "file": "shared-candidate/arm32le/idnode.v",
+      "vo_sha256": "748d3394e9402a5800e5a696e933e4da7318b2b70c0c5cb1664504e654c06e0d"
+    },
+    {
+      "file": "shared-candidate/arm32le/KTaskSchedMember.v",
+      "vo_sha256": "ad3bed7029648fd0fe58b87c70e2bc62eaded94ce55584ac7deb66020250132c"
+    },
+    {
+      "file": "lib/SemaphorePure.v",
+      "vo_sha256": "6493cf7d9ca6c90af3ebd44e547f2525042d96f86215e6be3ca44732176d6497"
+    },
+    {
+      "file": "lib/CrtosOSPure.v",
+      "vo_sha256": "22d8de59c81f7300e300e2d5af1deb4538d319a31dcb1a9e7fc4dfdec3d20753"
+    },
+    {
+      "file": "lib/CrtosHeapBridge.v",
+      "vo_sha256": "1c69b6ea95f5c7368b7a49a61c348c13d340410361e88426de2c356ac7f96423"
+    },
+    {
+      "file": "lib/CrtosNestedState.v",
+      "vo_sha256": "3bf01a831506363cafec36023130b409601d314c3076205f67bd068454bd8dda"
+    },
+    {
+      "file": "lib/CrtosOSProtocol.v",
+      "vo_sha256": "ae483a3eb4da52e2bfbdf294476025b0e6709ad8fc4789c0550c01a3eada7750"
+    },
+    {
+      "file": "lib/CrtosOSProtocolProof.v",
+      "vo_sha256": "a1017a34ba65160246188056dc48764c244aac088133b0d16143716c5a94d98d"
+    },
+    {
+      "file": "lib/SemaphoreRep.v",
+      "vo_sha256": "548bd9fd26e8d6f313d30fc7bf4ec3c5f8839433b9ff68085ee0eb9ace15171f"
+    },
+    {
+      "file": "lib/CrtosOSInv.v",
+      "vo_sha256": "d2f12024392460f151579f92afa94ab24fcbd5789e06d8a0cb3e3e388a23e946"
+    },
+    {
+      "file": "lib/SemaphoreCritical.v",
+      "vo_sha256": "051e533e1ef1fda7c1d030f0839df688669ddb09ca55f41e6f7167de6dc9f25b"
+    }
+  ],
+  "command": [
+    "/home/xinra/.opam/pv-bench-8.20.1/bin/coqc",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/flocq/src",
+    "Flocq",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/SeparationLogic",
+    "SimpleC.SL",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/unifysl",
+    "Logic",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/sets",
+    "SetsClass",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/compcert_lib",
+    "compcert.lib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/auxlibs",
+    "AUXLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/examples",
+    "SimpleC.EE",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/stdlib",
+    "SimpleC.StdLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/StrategyLib",
+    "SimpleC.StrategyLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/Common",
+    "SimpleC.Common",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/cdcllib",
+    "CDCLLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/fixedpoints",
+    "FP",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/MonadLib",
+    "MonadLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/listlib",
+    "ListLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/MaxMinLib",
+    "MaxMinLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/GraphLib",
+    "GraphLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/SumLib",
+    "SumLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/tracelib",
+    "TraceLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/coq-record-update/src",
+    "RecordUpdate",
+    "-Q",
+    "/home/xinra/qcp-binary-democases/Rocq/algorithms",
+    "Algorithms",
+    "-R",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/predicate-review-r5-format-build/shared-candidate/arm32le",
+    "CRTOS_Verify.lib",
+    "-R",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/predicate-review-r5-format-build/lib",
+    "CRTOS_Verify.sem",
+    "-R",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/VC",
+    "CRTOS_Verify.VC",
+    "-R",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/predicate-review-r5-format-build/framework-candidate",
+    "CRTOS_Verify.framework",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/predicate-review-r5-format-build/lib/SemaphoreCriticalViews.v"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "elapsed_seconds": 7.350637735999953,
+  "result": "pure-reordering-delta-passed"
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "run": "CriticalAreaLock-20261012130948",
+    "attempt": "CriticalAreaLock-annotation-r1",
+    "blocker_kind": "shared-interface-parser-error",
+    "status": "review-passed",
+    "author": "spec_author",
+    "reviewer": "/root",
+    "review": ".docs/Report/2026-10-12-2-spec-review.md",
+    "review_sha256": "2a156524dedae69d9cf45cbe34da3154f3caf1c75b1f99560a9067c3fd2dd20e",
+    "accepted_spec_manifest": "63d672204cb500a9bbbdced56ed2014b10a62efc9dd4f12d4b2696c2a831448f",
+    "accepted_predicate_manifest": "16b6ee4a4e02383dcb7128da0c57212af2e672ccd15b15633142778e8d2d629f",
+    "summary": "Separate kind and term Extern Coq blocks; all declarations/contracts/C bodies unchanged. Actual parser retry still required.",
+    "repair_index": 0
+  }
+]

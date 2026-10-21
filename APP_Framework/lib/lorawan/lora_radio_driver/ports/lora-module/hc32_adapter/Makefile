@@ -1,0 +1,11 @@
+ifeq ($(CONFIG_LORA_RADIO_DRIVER_USING_SX1268_E22400M30S),y)
+	SRC_DIR := SX1268_E22-400M30S
+endif
+
+ifeq ($(CONFIG_LORA_RADIO_DRIVER_USING_SX1278_RA01),y)
+	SRC_DIR := SX1278_Ra-01
+endif
+
+SRC_FILES := lora-spi-board.c
+
+include $(KERNEL_ROOT)/compiler.mk

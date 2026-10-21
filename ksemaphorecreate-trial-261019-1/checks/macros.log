@@ -1,0 +1,9 @@
+#define ID_HTABLE_SIZE 16
+#define SYS_KDEBUG_LOG(section,information) do { if (section) { KPrintf("[%s:%d] ", __func__, __LINE__); KPrintf information; } } while (0)
+#define KDEBUG_NOT_IN_INTERRUPT do { x_base level; level = DISABLE_INTERRUPT(); if (isrManager.done->getCounter() != 0) { KPrintf("Function[%s] is not supported in ISR\n", __FUNCTION__); CHECK(0); } ENABLE_INTERRUPT(level); } while (0)
+#define ID_NUM_MAX 128
+#define ARCH_ARM 
+#define KERNEL_SEMAPHORE 
+#define KDBG_IPC 0
+#define KERNEL_DEBUG 
+#define NULL_PARAM_CHECK(param) do { if (param == NONE) { KPrintf("PARAM CHECK FAILED ...%s %d %s is NULL.\n", __FUNCTION__, __LINE__, #param); while (RET_TRUE) ; } } while (0)

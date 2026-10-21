@@ -1,0 +1,20 @@
+{
+  "evidence/final-integrity/closure-audit.json": "a7e800a5c96b7f0bf993454019be3747428a2493c00f9fe7663e7a048c7e79ce",
+  "evidence/final-integrity/frozen-inputs-audit.json": "854546a8414bb9856929f1c6b46452f4601a38122b9319b8a71b02eb6495eec5",
+  "evidence/final-integrity/coqchk-command.json": "1199f4b5a5501c58c962b32c2236eaf53a634e480e704010839dfcd0ed538ef8",
+  "evidence/final-integrity/coqchk-result.json": "3e7b5d1d53a2681052759d08f8fcec4b7740c92145ac47a7d6a63d047e45fd29",
+  "evidence/final-integrity/coqchk.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "evidence/final-integrity/coqchk.stderr.log": "28b83cf49c8557ec63c6df3e60a03232282aa21cb523fadd207aa10185803080",
+  "evidence/final-integrity/assumptions-result.json": "947caf2e275059cb521b6f2d4b4096ebdbcd00ff63f8cb426eaec37c8476c7ac",
+  "evidence/final-integrity/assumptions.stdout.log": "4b87d1e901a8ffd112e354427d7660966ce4c5042f7abac31e1d542239bda514",
+  "evidence/final-integrity/assumptions.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "evidence/final-integrity/c-source/spec-check-result.json": "f694d4a2059608b685cdcbf77606bc3559fa6be4b0119d570709e4db70af76a6",
+  "evidence/final-integrity/c-source/spec-annotated-manifest.json": "c75709591f50cbe9b5325ca73cc548c5a28ad3c7c67349e72f8e23e7d2e74272",
+  "evidence/final-integrity/c-source/invocation.json": "15488b504dc212602cf398bebffdfbde28569e89be589e014d5ad83624f4fd3b",
+  "evidence/final-integrity/checkpoint.json": "a6573e9dc84c0ae1b727040de7c94cf281925f9924a10bbdf56a12ad87f1beae",
+  "evidence/final-integrity/audit-parser-note.json": "d5006289463f3f6562ced723c0e2e1f2dbc90dbdc97da15c6b62dd49f59b095f",
+  "tools/final-integrity.py": "cd6e4205932c7e94afc1859b66ea08a9b56dba76888953ecae71f79084632b66",
+  "tools/final-inputs-audit.py": "43d6c187f8e20ee51838dca1e1100d08b46642d1cb34152b0fc8d9d7fd1b894b",
+  "tools/final-assumptions-audit.py": "776a9ee814b2af22477d7deeb7f667fddad104bf1cfe03dc931710fc32de2476",
+  ".docs/Report/2026-10-16-1-final-integrity.md": "b0c423adfdf098e590b34e3e59a01ac5b6b67379623cdb76600dacfc68fcabe2"
+}

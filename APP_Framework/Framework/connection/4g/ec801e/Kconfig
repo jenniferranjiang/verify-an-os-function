@@ -1,0 +1,24 @@
+config ADAPTER_4G_EC801E
+        string "EC801E adapter name"
+        default "ec801e"
+
+if ADD_XIZI_FEATURES
+        config ADAPTER_EC801E_DRIVER_EXTUART
+                bool "Using extra uart to support 4G"
+                default n
+
+        config ADAPTER_EC801E_DRIVER
+                string "EC801E device uart driver path"
+                default "/dev/usart6_dev6"
+                depends on !ADAPTER_EC801E_DRIVER_EXTUART
+
+        if ADAPTER_EC801E_DRIVER_EXTUART
+                config ADAPTER_EC801E_DRIVER
+                        string "EC801E device extra uart driver path"
+                        default "/dev/extuart_dev5"
+
+                config ADAPTER_EC801E_DRIVER_EXT_PORT
+                        int "if EC801E device using extuart, choose port"
+                        default "5"
+        endif
+endif

@@ -1,0 +1,3 @@
+Completed all seven assigned proof spans for entry_scan using the mandated aggressive top-level and LLM split routes. Initialization selects offset zero; the transition advances the offset, preserves the scanned prefix, and proves the unsigned shift cast unchanged. Safety witnesses derive the 32-bit bounds from idmax <= 65535 and end < 8193. Adapted relevant r1 proofs, with the detailed changes in proof_reuse.md.
+
+The exact handoff group-check command completed with exit code 0 and JSON status passed (177.228934 seconds). The forbidden lemma/tactic scan found no matches. No additional helpers or imports were introduced; semantic inputs and unassigned proof tokens were left unchanged.

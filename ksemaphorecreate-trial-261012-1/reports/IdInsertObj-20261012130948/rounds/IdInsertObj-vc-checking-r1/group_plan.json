@@ -1,0 +1,171 @@
+{
+  "groups": [
+    {
+      "id": "node_representation",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of_IdInsertObj_entail_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_IdInsertObj_entail_wit_3_split_goal_1": "P has OSHeap allocated-unlinked manager and detached node; Q is only retval <= 65535. Unfold idmanager_min_free_id to obtain 0 <= retval < idmax sm. In the manager heap unfold store_idmanager_allocated_unlinked and OSHeap/crtos_heap_lift far enough to expose the id_max UShort cell; its value range gives idmax sm <= 65535, so lia closes the pure conclusion. Use crtos_heap_lift_sep to expose cells if useful and the existing public OSHeap_ushort_eq; other manager and node resources only frame the pure projection. No existential output, abstract transition, or new helper.",
+            "proof_of_IdInsertObj_entail_wit_3_split_goal_2": "P has allocated-unlinked manager plus OSHeap(store_sem_id_detached idnode_pre old_id previous next); Q asks embedded link address nonzero. Unfold store_sem_id_detached and OSHeap/crtos_heap_lift to extract exactly the stored conjunction idnode_pre <> 0 /\\ link_address <> 0. Project its second conjunct through the separating frame; do not infer link address nonzero from pointer arithmetic or field validity. No existential output or state transition; preserve the original source parameters.",
+            "proof_of_IdInsertObj_entail_wit_3_split_goal_spatial": "P has the allocated-unlinked manager and lifted detached node; Q has the identical manager and the id UShort, previous Ptr and next Ptr cells at the identical field expressions. Frame/cancel the manager. Unfold detached and drop only its pure metadata, transport its separating conjunction with crtos_heap_lift_sep, and show scalar heap-cell transport inline by unfolding OSHeap/crtos_heap_lift and scalar byte stores (public OSHeap_ushort_eq handles UShort). Pointer byte witnesses and memory joins are reused unchanged; tokens remain empty and STS sets full. This is representation exposure only, before the write; no list update, abstract transition, or new helper."
+          }
+        },
+        {
+          "name": "proof_of_IdInsertObj_entail_wit_4",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_IdInsertObj_entail_wit_4_split_goal_spatial": "P has allocated-unlinked manager and three explicit node cells with new id; Q folds those same cells into OSHeap(store_sem_id_detached idnode_pre id previous next). Frame/cancel manager. Rebuild the detached metadata from PreH2 idnode_pre <> 0 and PreH3 link address <> 0, then fold the exact UShort id and Ptr previous/next cells through crtos_heap_lift_sep and inline scalar heap-cell transport; public OSHeap_ushort_eq handles UShort. Reuse byte witnesses and joins unchanged. The prior C store changes only old_id to id; no bucket/list mutation occurs in this VC. No new helper."
+          }
+        }
+      ]
+    },
+    {
+      "id": "return_results",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_IdInsertObj_return_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole goal and idmanager_min_free_id in PreH2. Its 0 <= retval contradicts PreH1 retval < 0; close by ex falso/lia before attempting either postcondition branch. P contains allocated-unlinked manager and unchanged detached node but is unreachable; no resource conversion, existential, or abstract transition is required."
+        },
+        {
+          "name": "proof_of_IdInsertObj_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "P is exactly the linked manager at idmanager_link sm (idmanager_add before id) id idnode_pre, and PreH3 is its required minimum-free-id fact. Choose the right disjunct of Q, inject PreH3, and cancel the identical manager heap. InsertObj already established the add-then-link state; this VC performs only postcondition injection. No detached-node resource is required by that branch and no existential or helper is needed."
+        },
+        {
+          "name": "proof_of_IdInsertObj_return_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the left disjunct of Q. P contains unchanged store_idmanager sm before manager_pre and detached node with old_id/previous/next. Use reflexivity for -1 = -1 and PreH3 idmanager_full; cancel both unchanged heaps. The allocation-failure transition leaves before unchanged; no existential output or helper."
+        }
+      ]
+    },
+    {
+      "id": "invariants_and_calls",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_IdInsertObj_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "P and Q have identical manager-before and detached-old-node heaps. Conjoin manager_pre <> 0 and idnode_pre <> 0 from PreH1/PreH3 and 0 = 0 by reflexivity, then cancel both heaps. The first check loop preserves parameters and state; no existential or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_entail_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "P and Q have identical manager-before and detached-old-node heaps. Conjoin manager_pre <> 0, idnode_pre <> 0, and id = 0 from PreH2/PreH3/PreH4; cancel the identical spatial frame. The second check loop preserves entry addresses; no existential or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_partial_solve_wit_1_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Q is manager_pre <> 0, exactly PreH1. Introduce whole-goal binders and discharge the pure entailment while leaving stack slots, manager-before and detached-old-node as the antecedent frame. No existential, heap update or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold partial_solve_wit_1, introduce its pure-obligation implication premise, and unfold partial_solve_wit_1_aux. P and Q share manager-before and detached-old-node heaps; build duplicate manager nonzero, node nonzero and id = 0 from PreH1-3, then cancel. The implication premise need not be applied because these facts already occur in the aux binders. This packages AllocId call inputs without a state transition or existential."
+        },
+        {
+          "name": "proof_of_IdInsertObj_partial_solve_wit_2_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Q is the conjunction manager_pre <> 0 and idnode_pre <> 0 from PreH1/PreH2. P frames stack slots, allocated-unlinked manager and detached node carrying the new id; prove pure projection directly. No existential, transition or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole implication, introduce its pure-obligation premise and unfold partial_solve_wit_2_aux. P and Q have the same allocated-unlinked manager and detached node carrying id. Reproduce duplicated nonzero facts from PreH1/PreH2 and min-free-id from PreH3, then cancel the heaps. This packages InsertObj inputs; its future add-then-link transition is handled by its accepted contract, not reconstructed here. No existential or helper."
+        }
+      ]
+    },
+    {
+      "id": "initial_constant_safety",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_IdInsertObj_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole safety goal and introduce all binders. Prove 0 <= INT_MAX and INT_MIN <= 0 by unfolding the fixed integer bounds and arithmetic. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole safety goal and introduce all binders. Prove 0 <= INT_MAX and INT_MIN <= 0 by unfolding the fixed integer bounds and arithmetic. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_safety_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole safety goal and introduce all binders. Prove 0 <= INT_MAX and INT_MIN <= 0 by unfolding the fixed integer bounds and arithmetic. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_safety_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole safety goal and introduce all binders. Prove 0 <= INT_MAX and INT_MIN <= 0 by unfolding the fixed integer bounds and arithmetic. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_safety_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole safety goal and introduce all binders. Prove 0 <= INT_MAX and INT_MIN <= 0 by unfolding the fixed integer bounds and arithmetic. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper."
+        }
+      ]
+    },
+    {
+      "id": "unreachable_checks",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_IdInsertObj_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole safety goal and introduce all binders. Q is False: PreH1 manager_pre = 0 contradicts PreH2 manager_pre <> 0. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_safety_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole safety goal and introduce all binders. Q is False: PreH1 idnode_pre = 0 contradicts PreH3 idnode_pre <> 0. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_safety_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole safety goal and introduce all binders. Q is False: PreH1 retval >= 0 and PreH2 retval = -1 contradict by lia. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper."
+        }
+      ]
+    },
+    {
+      "id": "allocation_constant_safety",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_IdInsertObj_safety_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole safety goal and introduce all binders. Prove 0 <= INT_MAX and INT_MIN <= 0 from fixed integer constants. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_safety_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole safety goal and introduce all binders. Prove 0 <= INT_MAX and INT_MIN <= 0 from fixed integer constants. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_safety_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole safety goal and introduce all binders. Prove 1 <> INT_MIN from fixed integer constants. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_safety_wit_12",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole safety goal and introduce all binders. Prove 1 <> INT_MIN from fixed integer constants. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_safety_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole safety goal and introduce all binders. Prove 1 <= INT_MAX and INT_MIN <= 1 from fixed integer constants. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper."
+        },
+        {
+          "name": "proof_of_IdInsertObj_safety_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the whole safety goal and introduce all binders. Prove 1 <= INT_MAX and INT_MIN <= 1 from fixed integer constants. Q is pure, so the existing stack slots and manager/detached-node heap are only the antecedent frame; there is no existential output, memory transformation, abstract transition or helper."
+        }
+      ]
+    }
+  ]
+}

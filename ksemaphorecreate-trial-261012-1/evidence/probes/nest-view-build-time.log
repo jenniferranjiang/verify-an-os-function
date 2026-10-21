@@ -1,0 +1,198 @@
+Chars 0 - 51 [From~SimpleC.SL~Require~Import...] 7.476 secs (1.564u,5.908s)
+Chars 52 - 119 [Require~Import~Coq.ZArith.ZAri...] 0.1 secs (0.087u,0.013s)
+Chars 120 - 199 [Require~Import~Coq.Logic.Funct...] 0.01 secs (0.007u,0.003s)
+Chars 200 - 253 [Require~Import~Coq.micromega.L...] 0.016 secs (0.013u,0.002s)
+Chars 254 - 297 [Require~Import~CRTOS_Verify.li...] 0.185 secs (0.165u,0.02s)
+Chars 298 - 373 [Require~Import~CRTOS_Verify.se...] 0.015 secs (0.015u,0.s)
+Chars 374 - 455 [Require~Import~CRTOS_Verify.se...] 0.213 secs (0.18u,0.026s)
+Chars 456 - 529 [Require~Import~CRTOS_Verify.se...] 0.001 secs (0.u,0.s)
+Chars 530 - 550 [Import~SetsNotation.] 0. secs (0.u,0.s)
+Chars 551 - 576 [#[local]~Open~Scope~Z_scope.] 0. secs (0.u,0.s)
+Chars 577 - 607 [#[local]~Open~Scope~string_scope.] 0. secs (0.u,0.s)
+Chars 609 - 636 [Module~CrtosSchedulerViews.] 0. secs (0.u,0.s)
+Chars 637 - 674 [Import~Task_C_Rules~CrtosBorro...] 0.032 secs (0.027u,0.004s)
+Chars 675 - 696 [#[local]~Open~Scope~sac.] 0. secs (0.u,0.s)
+Chars 984 - 1831 [Definition~store_scheduler_ass...] 0.063 secs (0.063u,0.s)
+Chars 1833 - 2003 [Lemma~store_scheduler_split_ne...] 0.001 secs (0.001u,0.s)
+Chars 2004 - 2010 [Proof.] 0. secs (0.u,0.s)
+Chars 2011 - 2108 [(intros;~unfold~store_schedule...] 6.177 secs (5.942u,0.204s)
+Chars 2109 - 2113 [Qed.] 0.089 secs (0.088u,0.s)
+Chars 2115 - 2283 [Lemma~store_scheduler_merge_ne...] 0.005 secs (0.005u,0.s)
+Chars 2284 - 2290 [Proof.] 0.001 secs (0.001u,0.s)
+Chars 2291 - 2388 [(intros;~unfold~store_schedule...] 3.654 secs (3.63u,0.s)
+Chars 2389 - 2393 [Qed.] 0.132 secs (0.131u,0.s)
+Chars 2394 - 2418 [End~CrtosSchedulerViews.] 0.01 secs (0.01u,0.s)
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "emp" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ |-- _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ --||-- _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ -* _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ --> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ || _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ && _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ ** _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "“ _ ”" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "TT" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "EX _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "EX _ : _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "EX _ .. _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "ALL _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "ALL _ : _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "ALL _ .. _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # Char |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # UChar |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # Short |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # UShort |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # Int |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # UInt |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # Int64 |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # UInt64 |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # Ptr |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # Char |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # UChar |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # Short |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # UShort |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # Int |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # UInt |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # Int64 |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # UInt64 |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # Ptr |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # _ |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "_ # _ |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "Padding _ _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "Padding _ _ . _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 47, characters 0-21:
+Warning: Notation "Assertion" was already used.
+[notation-overridden,parsing,default]
+Chars 2420 - 2441 [Import~Crtos_C_Rules.] 0.023 secs (0.022u,0.s)
+Chars 2442 - 2463 [#[local]~Open~Scope~sac.] 0. secs (0.u,0.s)
+Chars 2672 - 2770 [#[local]~Lemma~OSHeap_sep_eq~:...] 0. secs (0.u,0.s)
+Chars 2771 - 2777 [Proof.] 0. secs (0.u,0.s)
+Chars 2780 - 2829 [(intros;~apply~functional_exte...] 0. secs (0.u,0.s)
+Chars 2832 - 2894 [(apply~propositional_extension...] 0. secs (0.u,0.s)
+Chars 2895 - 2899 [Qed.] 0. secs (0.u,0.s)
+Chars 2901 - 3027 [#[local]~Lemma~OSHeap_pure_and...] 0.001 secs (0.001u,0.s)
+Chars 3028 - 3034 [Proof.] 0.009 secs (0.009u,0.s)
+Chars 3037 - 3086 [(intros;~apply~functional_exte...] 0. secs (0.u,0.s)
+Chars 3089 - 3124 [(apply~propositional_extension...] 0. secs (0.u,0.s)
+Chars 3127 - 3227 [(unfold~OSHeap,~crtos_heap_lif...] 0.017 secs (0.017u,0.s)
+Chars 3228 - 3232 [Qed.] 0.014 secs (0.013u,0.s)
+Chars 3234 - 3356 [#[local]~Lemma~OSHeap_exp_eq~:...] 0. secs (0.u,0.s)
+Chars 3357 - 3363 [Proof.] 0. secs (0.u,0.s)
+Chars 3366 - 3415 [(intros;~apply~functional_exte...] 0. secs (0.u,0.s)
+Chars 3418 - 3453 [(apply~propositional_extension...] 0. secs (0.u,0.s)
+Chars 3456 - 3510 [(unfold~OSHeap,~crtos_heap_lif...] 0. secs (0.u,0.s)
+Chars 3513 - 3519 [split.] 0. secs (0.u,0.s)
+Chars 3522 - 3523 [-] 0. secs (0.u,0.s)
+Chars 3524 - 3548 [(intros~[Ht~[Hs~[x~HP]]]).] 0. secs (0.u,0.s)
+Chars 3549 - 3565 [(exists~x;~tauto).] 0.012 secs (0.012u,0.s)
+Chars 3568 - 3569 [-] 0. secs (0.u,0.s)
+Chars 3570 - 3594 [(intros~[x~[Ht~[Hs~HP]]]).] 0. secs (0.u,0.s)
+Chars 3595 - 3614 [(split;~[~exact~Ht~|~~]).] 0. secs (0.u,0.s)
+Chars 3615 - 3634 [(split;~[~exact~Hs~|~~]).] 0. secs (0.u,0.s)
+Chars 3639 - 3658 [(exists~x;~exact~HP).] 0. secs (0.u,0.s)
+Chars 3659 - 3663 [Qed.] 0.014 secs (0.014u,0.s)
+Chars 3665 - 3762 [#[local]~Lemma~OSHeap_byte_eq~...] 0. secs (0.u,0.s)
+Chars 3763 - 3769 [Proof.] 0. secs (0.u,0.s)
+Chars 3772 - 3821 [(intros;~apply~functional_exte...] 0. secs (0.u,0.s)
+Chars 3824 - 3859 [(apply~propositional_extension...] 0. secs (0.u,0.s)
+Chars 3862 - 3988 [(unfold~OSHeap,~crtos_heap_lif...] 0.011 secs (0.011u,0.s)
+Chars 3991 - 3997 [split.] 0. secs (0.u,0.s)
+Chars 4000 - 4001 [-] 0. secs (0.u,0.s)
+Chars 4002 - 4035 [(intros~[Ht~[Hs~[w~[Hv~[Hm~_]]...] 0. secs (0.u,0.s)
+Chars 4036 - 4052 [(exists~w;~tauto).] 0.002 secs (0.002u,0.s)
+Chars 4055 - 4056 [-] 0. secs (0.u,0.s)
+Chars 4057 - 4086 [(intros~[w~[Hv~[Hm~[Hs~Ht]]]]).] 0.011 secs (0.011u,0.s)
+Chars 4087 - 4106 [(split;~[~exact~Ht~|~~]).] 0. secs (0.u,0.s)
+Chars 4107 - 4126 [(split;~[~exact~Hs~|~~]).] 0. secs (0.u,0.s)
+Chars 4131 - 4160 [(exists~w;~split;~[~exact~Hv~|...] 0. secs (0.u,0.s)
+Chars 4161 - 4180 [(split;~[~exact~Hm~|~~]).] 0. secs (0.u,0.s)
+Chars 4185 - 4213 [(split;~intro~x;~reflexivity).] 0.001 secs (0.001u,0.s)
+Chars 4214 - 4218 [Qed.] 0.029 secs (0.029u,0.s)
+Chars 4411 - 4508 [Lemma~OSHeap_ushort_eq~:~~~for...] 0. secs (0.u,0.s)
+Chars 4509 - 4515 [Proof.] 0. secs (0.u,0.s)
+Chars 4518 - 4573 [(intros;~unfold~Task_C_Rules.s...] 0. secs (0.u,0.s)
+Chars 4576 - 4603 [(rewrite~OSHeap_pure_and_eq).] 0. secs (0.u,0.s)
+Chars 4606 - 4651 [(unfold~Task_C_Rules.store_2by...] 0. secs (0.u,0.s)
+Chars 4654 - 4685 [(rewrite~OSHeap_exp_eq;~f_equal).] 0.024 secs (0.024u,0.s)
+Chars 4688 - 4730 [(apply~functional_extensionali...] 0. secs (0.u,0.s)
+Chars 4733 - 4764 [(rewrite~OSHeap_exp_eq;~f_equal).] 0.001 secs (0.001u,0.s)
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v", line 104, characters 2-23:
+Error: Found no subterm matching "OSHeap (Task_C_Rules.exp ?M3026)"
+in the current goal.
+

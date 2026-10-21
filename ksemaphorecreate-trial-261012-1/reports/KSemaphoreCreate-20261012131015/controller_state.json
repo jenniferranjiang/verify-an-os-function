@@ -1,0 +1,197 @@
+{
+  "schema_version": 4,
+  "generation": 20,
+  "run_id": "KSemaphoreCreate-20261012131015",
+  "case": "KSemaphoreCreate",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1",
+  "run_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/KSemaphoreCreate-20261012131015",
+  "report_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/KSemaphoreCreate-20261012131015",
+  "target_files": {
+    "c_file": "annotated_C/src/KSemaphoreCreate.c",
+    "formal_directory": "VC",
+    "formal_case_lib": "VC/KSemaphoreCreate_lib.v",
+    "goal_file": "VC/KSemaphoreCreate_goal.v",
+    "proof_auto_file": "VC/KSemaphoreCreate_proof_auto.v",
+    "proof_manual_file": "VC/KSemaphoreCreate_proof_manual.v",
+    "goal_check_file": "VC/KSemaphoreCreate_goal_check.v",
+    "case_name": "KSemaphoreCreate",
+    "active_case_theory": "CRTOS_Verify.VC"
+  },
+  "problem_context": {
+    "problem_statement": "Verify CRTOS KSemaphoreCreate under the accepted source/config and predicates/specs.\nAuthoritative accepted inputs: evidence/accepted-revisions.json.\nSource: source-r2-0c50c37013e9, Cortex-M3 Thumb ILP32, STM32F103 nano, non-SMP.\nPredicate: predicate-r3-16b6ee4a4e02, independently review-passed.\nSpec: spec-r2-6d54bb88379e, independently review-passed.\nDomain: entry scheduler_lock_nest < 65535, explicitly authorized by user.\nPreserve ordinary nested calls and exact caller IRQ/heap ownership.\n\nThe complete required non-trusted closure has nine unique canonical active bodies:\nannotated_C/src/KSemaphoreCreate.c\nannotated_C/src/_SemaphoreCreate.c\nannotated_C/src/CriticalAreaLock.c\nannotated_C/src/CriticalAreaUnLock.c\nannotated_C/src/IdInsertObj.c\nannotated_C/src/AllocId.c\nannotated_C/src/InsertObj.c\nannotated_C/src/InitDoubleLinkList.c\nannotated_C/src/DoubleLinkListInsertNodeAfter.c\nAll canonical contracts and caller-local API copies are frozen accepted inputs.\nOnly these six C symbols are trusted, with the existing reviewed contracts:\nx_malloc, x_free, memset, DisableLocalInterrupt, EnableLocalInterrupt, KPrintf.\nDeclaration contracts do not constitute verified callee bodies.\n\nAbsolutely do not read, enumerate, search, copy, import, or depend on any file in\n/home/xinra/crtos/ksemaphorecreate-trial-260928-1.\nThis includes ancestor-root searches, load paths, proof lookup and dependency closure.\nNo other historical trial is an authorized formal/proof reference.\nDo not change root shared library definitions, authoritative C/config, or any skills.\nOnly this new trial and already authorized project path configuration may be changed.\nDo not create a second active body for a canonical symbol or a central specs header.\nDo not add axioms, parameters, Admitted/admit, placeholders, weaker postconditions,\nunjustified stronger preconditions, deleted paths or omitted VCs.\n\nThe user authorizes automatic acceptance of independently reviewed, machine-checked\npredicate/spec revisions within the approved semantics. Such changes must return to\nthe appropriate independent design review and bind new manifests before resuming.\nMaterial semantic changes require explicit user authorization. No routine phase gate\nrequires another user confirmation.\n\nMain must follow only the verification-orchestrator controller actions. If the current\ncontroller does not support this CRTOS trial layout, retain its original blocker;\ndo not improvise another implementation workflow.\nCompletion additionally requires complete closure proofs, goal checks, full coqchk,\ntrust scan, C/VC/proof integrity, and a final integrity record. Historical 172 VCs is\nonly a diagnostic baseline, never a target for deleting or weakening obligations.\n\nExplicit user exception (2026-10-12): \u5141\u8bb8\u5728\u65b0 trial \u5185\u9002\u914d controller.\nThe local controller adapter may support canonical annotated_C/src and VC paths,\nread-only existing external dependencies, and the full nine-case closure. Preserve\nall original owner, symbolic, acceptance, proof and final-check actions.",
+    "target_function": "KSemaphoreCreate"
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "KSemaphoreCreate",
+      "_SemaphoreCreate"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "_SemaphoreCreate::<default>": "With (sg : CrtosOSStable) (hs : list Z) (before : CrtosOSState) Require scheduler_lock_nest(os_scheduler(before)) < 65535 && SemaphoreOutsideCritical(sg, hs, before) Ensure (__return == -5 && SemaphoreOutsideCritical(sg, hs, before)) || (exists current, __return == -5 && SemaphoreRely(hs, before, current) && idmanager_full(semaphore_manager_abs(os_sem_stable(sg)), semaphore_manager_state(os_sem_stable(sg), os_semaphores(current))) && SemaphoreOutsideCritical(sg, hs, current)) || (exists current p, p != 0 && SemaphoreRely(hs, before, current) && idmanager_min_free_id(semaphore_manager_abs(os_sem_stable(sg)), semaphore_manager_state(os_sem_stable(sg), os_semaphores(current)), __return) && SemaphoreGuarantee(current, semaphore_os_publish(p, __return, val, current)) && SemaphoreOutsideCritical(sg, hs, semaphore_os_publish(p, __return, val, current)))",
+        "KSemaphoreCreate::<default>": "With (sg : CrtosOSStable) (hs : list Z) (before : CrtosOSState) Require scheduler_lock_nest(os_scheduler(before)) < 65535 && SemaphoreOutsideCritical(sg, hs, before) Ensure (__return == -5 && SemaphoreOutsideCritical(sg, hs, before)) || (exists current, __return == -5 && SemaphoreRely(hs, before, current) && idmanager_full(semaphore_manager_abs(os_sem_stable(sg)), semaphore_manager_state(os_sem_stable(sg), os_semaphores(current))) && SemaphoreOutsideCritical(sg, hs, current)) || (exists current p, p != 0 && SemaphoreRely(hs, before, current) && idmanager_min_free_id(semaphore_manager_abs(os_sem_stable(sg)), semaphore_manager_state(os_sem_stable(sg), os_semaphores(current)), __return) && SemaphoreGuarantee(current, semaphore_os_publish(p, __return, val, current)) && SemaphoreOutsideCritical(sg, hs, semaphore_os_publish(p, __return, val, current)))"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-10-12T05:10:15.363494Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/KSemaphoreCreate_goal_check.vo",
+    "base_artifact_count": 163,
+    "current_source_count": 4,
+    "elapsed_seconds": 39.937972,
+    "snapshot": "verification_runs/KSemaphoreCreate-20261012131015/dependency_plan.json"
+  },
+  "attempts": {
+    "KSemaphoreCreate-annotation-r1": {
+      "attempt_id": "KSemaphoreCreate-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/KSemaphoreCreate-20261012131015",
+      "claimed_action": "deliver:KSemaphoreCreate-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-16T05:50:55.937508Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-16T05:51:02.190321Z",
+            "finished_at": "2026-10-16T05:52:58.941071Z",
+            "elapsed_seconds": 116.75075
+          }
+        ]
+      },
+      "returned_at": "2026-10-16T05:52:58.941042Z",
+      "finished_at": "2026-10-16T05:52:59.144507Z"
+    },
+    "KSemaphoreCreate-vc-checking-r1": {
+      "attempt_id": "KSemaphoreCreate-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/KSemaphoreCreate-vc-checking-r1",
+      "claimed_action": "deliver:KSemaphoreCreate-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-16T05:53:43.381419Z",
+      "source_annotation": "KSemaphoreCreate-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-16T05:54:29.023605Z",
+            "finished_at": "2026-10-16T05:57:28.582583Z",
+            "elapsed_seconds": 179.558978
+          }
+        ]
+      },
+      "returned_at": "2026-10-16T05:57:28.582559Z",
+      "finished_at": "2026-10-16T05:57:28.623447Z"
+    },
+    "KSemaphoreCreate-vc-proving-r1": {
+      "attempt_id": "KSemaphoreCreate-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-16T05:57:28.623469Z",
+      "source_annotation": "KSemaphoreCreate-annotation-r1",
+      "source_vc_checking": "KSemaphoreCreate-vc-checking-r1",
+      "groups": {
+        "return_branches": {
+          "status": "accepted",
+          "owner": "group-worker/KSemaphoreCreate-vc-proving-r1:return_branches",
+          "claimed_action": "deliver:KSemaphoreCreate-vc-proving-r1:return_branches:0",
+          "repair_index": 0,
+          "created_at": "2026-10-16T05:57:37.922980Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-16T05:57:52.956575Z",
+                "finished_at": "2026-10-16T06:00:14.993355Z",
+                "elapsed_seconds": 142.03678
+              }
+            ]
+          },
+          "returned_at": "2026-10-16T06:00:14.993324Z",
+          "finished_at": "2026-10-16T06:01:05.374198Z"
+        },
+        "call_preconditions": {
+          "status": "accepted",
+          "owner": "group-worker/KSemaphoreCreate-vc-proving-r1:call_preconditions",
+          "claimed_action": "deliver:KSemaphoreCreate-vc-proving-r1:call_preconditions:0",
+          "repair_index": 0,
+          "created_at": "2026-10-16T05:57:37.922999Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-16T05:57:53.207160Z",
+                "finished_at": "2026-10-16T06:01:20.266758Z",
+                "elapsed_seconds": 207.059598
+              }
+            ]
+          },
+          "returned_at": "2026-10-16T06:01:20.266729Z",
+          "finished_at": "2026-10-16T06:02:12.514127Z"
+        }
+      },
+      "finished_at": "2026-10-16T06:03:31.870163Z"
+    }
+  },
+  "current": {
+    "annotation": "KSemaphoreCreate-annotation-r1",
+    "vc-checking": "KSemaphoreCreate-vc-checking-r1",
+    "vc-proving": "KSemaphoreCreate-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/KSemaphoreCreate-20261012131015",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "KSemaphoreCreate-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-10-16T06:08:45.825721Z",
+    "files": [
+      "VC/KSemaphoreCreate_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-10-16T06:10:16.666796Z",
+    "errors": [],
+    "cleanup_removed_count": 0,
+    "accepted_inputs": {
+      "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+      "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+      "spec_manifest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+      "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+    }
+  },
+  "created_at": "2026-10-12T05:10:15.363515Z",
+  "updated_at": "2026-10-16T06:10:16.676246Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-10-16T06:10:16.666771Z"
+}

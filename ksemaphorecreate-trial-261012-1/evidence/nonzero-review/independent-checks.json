@@ -1,0 +1,336 @@
+{
+  "revision": "predicate-nonzero-candidate-fe8c4261db5c",
+  "formal_count": 21,
+  "hash_mismatches": [],
+  "changed_vs_active": [
+    "shared-candidate/arm32le/idnode.v",
+    "lib/SemaphoreRep.v",
+    "lib/SemaphoreInitialization.v"
+  ],
+  "introduced_forbidden_tokens": [],
+  "imports": {
+    "framework-candidate/NestedCriticalSTS.v": [
+      "Require Import Coq.ZArith.ZArith.",
+      "Require Import Coq.Bool.Bool.",
+      "Require Import Coq.Lists.List.",
+      "Require Import Coq.Classes.RelationClasses.",
+      "Require Import Coq.Classes.Morphisms.",
+      "Require Import Coq.micromega.Psatz.",
+      "Require Import String.",
+      "Require Import Permutation.",
+      "From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.",
+      "Require Import SetsClass.SetsClass. Import SetsNotation.",
+      "From compcert.lib Require Import Integers.",
+      "From SimpleC.SL Require Import Mem.",
+      "From SimpleC.SL Require Export IntLib ArrayLib.",
+      "From AUXLib Require Export ListLib.",
+      "From SimpleC.SL Require Export CommonAssertion.",
+      "From SimpleC.SL Require Assertion ConAssertion.",
+      "From SimpleC.SL Require Import CriticalSTS.",
+      "Require Import Logic.LogicGenerator.demo932.Interface."
+    ],
+    "shared-candidate/arm32le/KTaskPure.v": [
+      "Require Import Coq.ZArith.ZArith.",
+      "Require Import Coq.Lists.List.",
+      "Require Import Coq.Strings.String.",
+      "From compcert.lib Require Import Integers.",
+      "From SimpleC.SL Require Import Mem IntLib CNotation CArch."
+    ],
+    "shared-candidate/arm32le/dll_abs.v": [
+      "From SimpleC.SL Require Import SeparationLogic."
+    ],
+    "shared-candidate/arm32le/idnode_abs.v": [
+      "Require Import Coq.ZArith.ZArith.",
+      "From SimpleC.SL Require Import SeparationLogic."
+    ],
+    "shared-candidate/arm32le/CrtosGlobState.v": [
+      "Require Import Coq.ZArith.ZArith.",
+      "Require Import Coq.Lists.List.",
+      "Require Import Coq.Sorting.Permutation.",
+      "Require Import Coq.Strings.String.",
+      "From SimpleC.SL Require Import Mem CNotation.",
+      "Require Import CRTOS_Verify.lib.dll_abs.",
+      "Require Import CRTOS_Verify.lib.idnode_abs.",
+      "Require Import CRTOS_Verify.lib.KTaskPure."
+    ],
+    "shared-candidate/arm32le/TaskProtocolSTS.v": [
+      "Require Import Coq.ZArith.ZArith.",
+      "Require Import Coq.Lists.List.",
+      "Require Import Coq.Strings.String.",
+      "Require Import Coq.Relations.Relation_Operators.",
+      "Require Import Coq.Program.Equality.",
+      "Require Import SetsClass.SetsClass.",
+      "From SimpleC.SL Require Import Mem SeparationLogic ConAssertion.",
+      "Require Import Logic.LogicGenerator.demo932.Interface.",
+      "Require Import CRTOS_Verify.lib.dll_abs.",
+      "Require Import CRTOS_Verify.lib.idnode_abs.",
+      "Require Import CRTOS_Verify.lib.CrtosGlobState."
+    ],
+    "shared-candidate/arm32le/CrtosRules.v": [
+      "Require Import Coq.ZArith.ZArith.",
+      "Require Import Coq.Lists.List.",
+      "Require Import Coq.Strings.String.",
+      "Require Import Coq.Relations.Relation_Operators.",
+      "Require Import SetsClass.SetsClass.",
+      "From SimpleC.SL Require Import Mem SeparationLogic.",
+      "Require Import Logic.LogicGenerator.demo932.Interface.",
+      "Require Import SL.ConAssertion.",
+      "Require Export CRTOS_Verify.lib.idnode_abs.",
+      "Require Export CRTOS_Verify.lib.CrtosGlobState.",
+      "Require Export CRTOS_Verify.lib.TaskProtocolSTS."
+    ],
+    "shared-candidate/arm32le/dll.v": [
+      "Require Import Coq.ZArith.ZArith.",
+      "Require Import Coq.Bool.Bool.",
+      "Require Import Coq.Strings.String.",
+      "Require Import Coq.Lists.List.",
+      "Require Import Coq.Classes.RelationClasses.",
+      "Require Import Coq.Classes.Morphisms.",
+      "Require Import Coq.micromega.Psatz.",
+      "Require Import Coq.Sorting.Permutation.",
+      "From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.",
+      "Require Import SetsClass.SetsClass. ",
+      "From SimpleC.SL Require Import Mem SeparationLogic MapLib.",
+      "Require Import Logic.LogicGenerator.demo932.Interface.",
+      "Require Export CRTOS_Verify.lib.dll_abs.",
+      "Require Import CRTOS_Verify.lib.CrtosRules."
+    ],
+    "shared-candidate/arm32le/idnode.v": [
+      "Require Import Coq.ZArith.ZArith.",
+      "Require Import Coq.Bool.Bool.",
+      "Require Import Coq.Strings.String.",
+      "Require Import Coq.Lists.List.",
+      "Require Import Coq.Classes.RelationClasses.",
+      "Require Import Coq.Classes.Morphisms.",
+      "Require Import Coq.micromega.Psatz.",
+      "Require Import Coq.Sorting.Permutation.",
+      "From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.",
+      "Require Import SetsClass.SetsClass.",
+      "From SimpleC.SL Require Import Mem SeparationLogic MapLib.",
+      "Require Import Logic.LogicGenerator.demo932.Interface.",
+      "Require Export CRTOS_Verify.lib.dll_abs.",
+      "Require Export CRTOS_Verify.lib.idnode_abs.",
+      "Require Export CRTOS_Verify.lib.dll.",
+      "Require Export CRTOS_Verify.lib.CrtosRules."
+    ],
+    "shared-candidate/arm32le/KTaskSchedMember.v": [
+      "Require Import Coq.ZArith.ZArith.",
+      "Require Import Coq.Strings.String.",
+      "From SimpleC.SL Require Import Mem SeparationLogic MapLib.",
+      "Require Import Logic.LogicGenerator.demo932.Interface.",
+      "Require Import CRTOS_Verify.lib.CrtosRules.",
+      "Require Export CRTOS_Verify.lib.KTaskPure."
+    ],
+    "lib/SemaphorePure.v": [
+      "From SimpleC.SL Require Import Mem SeparationLogic.",
+      "Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.",
+      "Require Import CRTOS_Verify.lib.idnode CRTOS_Verify.lib.CrtosGlobState."
+    ],
+    "lib/CrtosOSPure.v": [
+      "From SimpleC.SL Require Import Mem SeparationLogic.",
+      "Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Relations.Relation_Operators Coq.micromega.Lia.",
+      "Require Import CRTOS_Verify.lib.CrtosGlobState CRTOS_Verify.lib.TaskProtocolSTS.",
+      "Require Import CRTOS_Verify.lib.KTaskPure.",
+      "Require Import CRTOS_Verify.sem.SemaphorePure."
+    ],
+    "lib/CrtosHeapBridge.v": [
+      "Require Import Coq.Logic.FunctionalExtensionality.",
+      "Require Import Coq.Logic.PropExtensionality.",
+      "Require Import SetsClass.SetsClass.",
+      "Require Import SL.ConAssertion.",
+      "Require Import CRTOS_Verify.lib.CrtosRules."
+    ],
+    "lib/CrtosNestedState.v": [
+      "Require Import SL.CriticalSTS.",
+      "Require Export CRTOS_Verify.framework.NestedCriticalSTS."
+    ],
+    "lib/CrtosOSProtocol.v": [
+      "Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.micromega.Lia.",
+      "Require Import Coq.Relations.Relation_Operators.",
+      "From SimpleC.SL Require Import Mem SeparationLogic.",
+      "Require Import SL.ConAssertion SL.CriticalSTS.",
+      "Require Import SetsClass.SetsClass Logic.LogicGenerator.demo932.Interface.",
+      "Require Import CRTOS_Verify.sem.CrtosOSPure CRTOS_Verify.sem.CrtosHeapBridge.",
+      "Require Import CRTOS_Verify.sem.CrtosNestedState."
+    ],
+    "lib/CrtosOSProtocolProof.v": [
+      "Require Import Coq.Lists.List Coq.micromega.Lia.",
+      "Require Import SetsClass.SetsClass SL.ConAssertion.",
+      "Require Import CRTOS_Verify.sem.CrtosOSProtocol."
+    ],
+    "lib/SemaphoreRep.v": [
+      "From SimpleC.SL Require Import Mem SeparationLogic.",
+      "Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.",
+      "Require Import CRTOS_Verify.lib.idnode CRTOS_Verify.lib.dll.",
+      "Require Import CRTOS_Verify.sem.SemaphorePure."
+    ],
+    "lib/CrtosOSInv.v": [
+      "Require Import CRTOS_Verify.lib.idnode_abs CRTOS_Verify.sem.SemaphorePure CRTOS_Verify.sem.CrtosOSPure.",
+      "From SimpleC.SL Require Import Mem SeparationLogic.",
+      "Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.",
+      "Require Import CRTOS_Verify.lib.KTaskSchedMember.",
+      "Require Import CRTOS_Verify.lib.CrtosGlobState CRTOS_Verify.lib.dll.",
+      "Require Import CRTOS_Verify.sem.CrtosOSPure CRTOS_Verify.sem.SemaphoreRep.",
+      "Require Import CRTOS_Verify.sem.CrtosOSProtocol."
+    ],
+    "lib/SemaphoreCritical.v": [
+      "Require Import CRTOS_Verify.lib.idnode_abs CRTOS_Verify.sem.SemaphorePure CRTOS_Verify.sem.CrtosOSPure.",
+      "From SimpleC.SL Require Import Mem SeparationLogic.",
+      "Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.",
+      "Require Import CRTOS_Verify.sem.CrtosOSProtocol CRTOS_Verify.sem.CrtosOSInv CRTOS_Verify.sem.CrtosNestedState.",
+      "Require Import CRTOS_Verify.sem.CrtosOSProtocolProof.",
+      "Require Import SetsClass.SetsClass."
+    ],
+    "lib/SemaphoreCriticalViews.v": [
+      "From SimpleC.SL Require Import Mem SeparationLogic.",
+      "Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.",
+      "Require Import Coq.Logic.FunctionalExtensionality Coq.Logic.PropExtensionality.",
+      "Require Import Coq.micromega.Lia SetsClass.SetsClass.",
+      "Require Import CRTOS_Verify.lib.CrtosRules.",
+      "Require Import CRTOS_Verify.sem.SemaphorePure CRTOS_Verify.sem.CrtosOSPure.",
+      "Require Import CRTOS_Verify.sem.CrtosHeapBridge CRTOS_Verify.sem.CrtosOSProtocol.",
+      "Require Import CRTOS_Verify.sem.SemaphoreRep CRTOS_Verify.sem.CrtosOSInv."
+    ],
+    "lib/SemaphoreInitialization.v": [
+      "From SimpleC.SL Require Import Mem SeparationLogic.",
+      "Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String Coq.micromega.Lia.",
+      "Require Import CRTOS_Verify.lib.idnode CRTOS_Verify.sem.SemaphorePure CRTOS_Verify.sem.SemaphoreRep."
+    ]
+  },
+  "delivery_mismatches": [],
+  "compile": [
+    {
+      "file": "framework-candidate/NestedCriticalSTS.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "shared-candidate/arm32le/KTaskPure.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "shared-candidate/arm32le/dll_abs.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "shared-candidate/arm32le/idnode_abs.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "shared-candidate/arm32le/CrtosGlobState.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "shared-candidate/arm32le/TaskProtocolSTS.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "shared-candidate/arm32le/CrtosRules.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "shared-candidate/arm32le/dll.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "shared-candidate/arm32le/idnode.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "shared-candidate/arm32le/KTaskSchedMember.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "lib/SemaphorePure.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "lib/CrtosOSPure.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "lib/CrtosHeapBridge.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "lib/CrtosNestedState.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "lib/CrtosOSProtocol.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "lib/CrtosOSProtocolProof.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "lib/SemaphoreRep.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "lib/CrtosOSInv.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "lib/SemaphoreCritical.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "lib/SemaphoreCriticalViews.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "lib/SemaphoreInitialization.v",
+      "returncode": 0,
+      "stdout": "Axioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\nPropExtensionality.propositional_extensionality :\n  forall P Q : Prop, P <-> Q -> P = Q\nFunctionalExtensionality.functional_extensionality_dep :\n  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),\n  (forall x : A, f x = g x) -> f = g\neval_addr_expr : rvalue_expr -> addr\n",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    },
+    {
+      "file": "CandidateChecks.v",
+      "returncode": 0,
+      "stdout": "Axioms:\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\nFunctionalExtensionality.functional_extensionality_dep :\n  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),\n  (forall x : A, f x = g x) -> f = g\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\nFunctionalExtensionality.functional_extensionality_dep :\n  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),\n  (forall x : A, f x = g x) -> f = g\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\nFunctionalExtensionality.functional_extensionality_dep :\n  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),\n  (forall x : A, f x = g x) -> f = g\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\nFunctionalExtensionality.functional_extensionality_dep :\n  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),\n  (forall x : A, f x = g x) -> f = g\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\nFunctionalExtensionality.functional_extensionality_dep :\n  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),\n  (forall x : A, f x = g x) -> f = g\neval_addr_expr : rvalue_expr -> addr\n",
+      "stderr": "Warning:\nCannot open /home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nonzero-review/independent-build/VC\n[cannot-open-path,filesystem,default]\n"
+    }
+  ],
+  "elapsed_seconds": 118.63536062200001
+}

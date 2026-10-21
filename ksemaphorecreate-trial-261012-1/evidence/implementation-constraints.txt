@@ -1,0 +1,57 @@
+Verify CRTOS KSemaphoreCreate under the accepted source/config and predicates/specs.
+Authoritative accepted inputs: evidence/accepted-revisions.json.
+Source: source-r2-0c50c37013e9, Cortex-M3 Thumb ILP32, STM32F103 nano, non-SMP.
+Predicate: predicate-r3-16b6ee4a4e02, independently review-passed.
+Spec: spec-r2-6d54bb88379e, independently review-passed.
+Domain: entry scheduler_lock_nest < 65535, explicitly authorized by user.
+Preserve ordinary nested calls and exact caller IRQ/heap ownership.
+
+The complete required non-trusted closure has nine unique canonical active bodies:
+annotated_C/src/KSemaphoreCreate.c
+annotated_C/src/_SemaphoreCreate.c
+annotated_C/src/CriticalAreaLock.c
+annotated_C/src/CriticalAreaUnLock.c
+annotated_C/src/IdInsertObj.c
+annotated_C/src/AllocId.c
+annotated_C/src/InsertObj.c
+annotated_C/src/InitDoubleLinkList.c
+annotated_C/src/DoubleLinkListInsertNodeAfter.c
+All canonical contracts and caller-local API copies are frozen accepted inputs.
+Only these six C symbols are trusted, with the existing reviewed contracts:
+x_malloc, x_free, memset, DisableLocalInterrupt, EnableLocalInterrupt, KPrintf.
+Declaration contracts do not constitute verified callee bodies.
+
+Absolutely do not read, enumerate, search, copy, import, or depend on any file in
+/home/xinra/crtos/ksemaphorecreate-trial-260928-1.
+This includes ancestor-root searches, load paths, proof lookup and dependency closure.
+No other historical trial is an authorized formal/proof reference.
+Do not change root shared library definitions, authoritative C/config, or any skills.
+Only this new trial and already authorized project path configuration may be changed.
+Do not create a second active body for a canonical symbol or a central specs header.
+Do not add axioms, parameters, Admitted/admit, placeholders, weaker postconditions,
+unjustified stronger preconditions, deleted paths or omitted VCs.
+
+The user authorizes automatic acceptance of independently reviewed, machine-checked
+predicate/spec revisions within the approved semantics. Such changes must return to
+the appropriate independent design review and bind new manifests before resuming.
+Material semantic changes require explicit user authorization. No routine phase gate
+requires another user confirmation.
+
+Main must follow only the verification-orchestrator controller actions. If the current
+controller does not support this CRTOS trial layout, retain its original blocker;
+do not improvise another implementation workflow.
+Completion additionally requires complete closure proofs, goal checks, full coqchk,
+trust scan, C/VC/proof integrity, and a final integrity record. Historical 172 VCs is
+only a diagnostic baseline, never a target for deleting or weakening obligations.
+
+Explicit user exception (2026-10-12): 允许在新 trial 内适配 controller.
+The local controller adapter may support canonical annotated_C/src and VC paths,
+read-only existing external dependencies, and the full nine-case closure. Preserve
+all original owner, symbolic, acceptance, proof and final-check actions.
+
+Accepted annotation syntax revision after independent delta review: spec-r3-63d672204cb5.
+Only Extern kind/term block separation; semantic contracts unchanged.
+
+Current accepted ABI repair supersedes earlier backend/revision labels: predicate-r5-0a139d64743c, spec-r4-9f3ebc915b99.
+Use active _CoqProject and pv-bench-8.20.1 Coq with official Arch32 LittleEndian; controller explicitly passes --arch=32 --endian=little --no-CRules and header imports Crtos_C_Rules.
+The precise nest-cell view is now available via SemaphoreCriticalViews; original contracts and semantic goals remain frozen.

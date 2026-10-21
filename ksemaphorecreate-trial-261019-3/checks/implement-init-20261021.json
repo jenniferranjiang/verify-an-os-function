@@ -1,0 +1,40 @@
+{
+  "status": "not-verified",
+  "date": "2026-10-21",
+  "workspace": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3",
+  "requested_targets": [
+    "_SemaphoreCreate",
+    "KSemaphoreCreate"
+  ],
+  "scope": "Only the two requested functions; other function implementations were not reproved.",
+  "trust_base": "/home/xinra/TrustBase.md",
+  "failure_class": "infrastructure",
+  "blocker": "Current verification-orchestrator init-run requires C files under main-root/QCP_examples; current CRTOS trial uses annotated_C/src.",
+  "attempts": [
+    {
+      "cmd": "python3.12 /home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py --main-root /home/xinra/crtos/ksemaphorecreate-trial-261019-3 init-run --case SemaphoreCreate --target-c-file annotated_C/src/_SemaphoreCreate.c --freeze-spec _SemaphoreCreate --target-function _SemaphoreCreate --problem-statement 'Prove only _SemaphoreCreate using its current frozen spec and existing proved callee contracts. Trust boundary: /home/xinra/TrustBase.md. Do not reprove helpers or change predicate/spec semantics.' --max-parallel-group-workers 3",
+      "chunk_id": "7b43c3",
+      "wall_time_seconds": 0.090070236,
+      "exit_code": 1,
+      "original_token_count": 35,
+      "output": "target C file must exist under main-root/QCP_examples: /home/xinra/crtos/ksemaphorecreate-trial-261019-3/annotated_C/src/_SemaphoreCreate.c\n"
+    },
+    {
+      "cmd": "python3.12 /home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py --main-root /home/xinra/crtos/ksemaphorecreate-trial-261019-3 init-run --case KSemaphoreCreate --target-c-file annotated_C/src/KSemaphoreCreate.c --freeze-spec KSemaphoreCreate --freeze-spec _SemaphoreCreate --target-function KSemaphoreCreate --problem-statement 'Prove only KSemaphoreCreate using its current frozen spec and the _SemaphoreCreate contract. Trust boundary: /home/xinra/TrustBase.md. Do not reprove other helpers or change predicate/spec semantics.' --max-parallel-group-workers 3",
+      "chunk_id": "b98ea9",
+      "wall_time_seconds": 0.041491815,
+      "exit_code": 1,
+      "original_token_count": 35,
+      "output": "target C file must exist under main-root/QCP_examples: /home/xinra/crtos/ksemaphorecreate-trial-261019-3/annotated_C/src/KSemaphoreCreate.c\n"
+    }
+  ],
+  "symbolic_execution": "not-started",
+  "vc_generation": "not-started",
+  "implementation_proof": "not-started",
+  "callee_proof_compatibility": "not-established in this attempt",
+  "formal_files_modified": false,
+  "workflow_rule": ".agents/skills/verify-an-os-function/references/implementation-and-validation-guide.md:9-10",
+  "next_step": "Resolve the controller/CRTOS trial layout integration, then rerun implement with current contracts frozen. No conclusion about C correctness follows from this initialization failure.",
+  "superseded_by": "checks/controller-implementation-status.json",
+  "layout_blocker_resolution": "Resolved by current-trial controller adapter; both requested targets initialized and their annotations were accepted. Original initialization failure evidence retained."
+}

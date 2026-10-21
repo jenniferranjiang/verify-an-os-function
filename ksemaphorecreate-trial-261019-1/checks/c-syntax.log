@@ -1,0 +1,10 @@
+gcc -m32 -std=c11 -ffreestanding -fsyntax-only -Wall -Wextra -Werror=implicit-function-declaration ksemaphorecreate-trial-261019-1/annotated_C/src/AllocId.c
+gcc -m32 -std=c11 -ffreestanding -fsyntax-only -Wall -Wextra -Werror=implicit-function-declaration ksemaphorecreate-trial-261019-1/annotated_C/src/CriticalAreaLock.c
+gcc -m32 -std=c11 -ffreestanding -fsyntax-only -Wall -Wextra -Werror=implicit-function-declaration ksemaphorecreate-trial-261019-1/annotated_C/src/CriticalAreaUnLock.c
+gcc -m32 -std=c11 -ffreestanding -fsyntax-only -Wall -Wextra -Werror=implicit-function-declaration ksemaphorecreate-trial-261019-1/annotated_C/src/DoubleLinkListInsertNodeAfter.c
+gcc -m32 -std=c11 -ffreestanding -fsyntax-only -Wall -Wextra -Werror=implicit-function-declaration ksemaphorecreate-trial-261019-1/annotated_C/src/IdInsertObj.c
+gcc -m32 -std=c11 -ffreestanding -fsyntax-only -Wall -Wextra -Werror=implicit-function-declaration ksemaphorecreate-trial-261019-1/annotated_C/src/InitDoubleLinkList.c
+gcc -m32 -std=c11 -ffreestanding -fsyntax-only -Wall -Wextra -Werror=implicit-function-declaration ksemaphorecreate-trial-261019-1/annotated_C/src/InsertObj.c
+gcc -m32 -std=c11 -ffreestanding -fsyntax-only -Wall -Wextra -Werror=implicit-function-declaration ksemaphorecreate-trial-261019-1/annotated_C/src/KSemaphoreCreate.c
+gcc -m32 -std=c11 -ffreestanding -fsyntax-only -Wall -Wextra -Werror=implicit-function-declaration ksemaphorecreate-trial-261019-1/annotated_C/src/_SemaphoreCreate.c
+PASS: all nine active slices passed ILP32 C syntax/type checking.

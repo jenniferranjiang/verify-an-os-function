@@ -1,0 +1,223 @@
+#include "task_base_info_strategy.h"
+
+// 单字段读借用与 post 归还。初始化权限只在首次 stack_start 写入时打开。
+
+id : 1
+priority : core(2)
+left : store_task_base_info(?task, ?b) at 0
+right : store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, func_entry), PTR(void), ?v) at 1
+action : left_erase(0);
+         right_erase(1);
+         left_add(store_task_base_info_except(task, b, 0));
+         right_add(v == b.tbFuncEntry);
+
+id : 2
+priority : post(1)
+left : store_task_base_info_except(?task, ?b, 0) at 0
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, func_entry), PTR(void), b.tbFuncEntry) at 1
+action : left_erase(0);
+         left_erase(1);
+         left_add(store_task_base_info(task, b));
+
+id : 3
+priority : core(2)
+left : store_task_base_info(?task, ?b) at 0
+right : store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, func_param), PTR(void), ?v) at 1
+action : left_erase(0);
+         right_erase(1);
+         left_add(store_task_base_info_except(task, b, 1));
+         right_add(v == b.tbFuncParam);
+
+id : 4
+priority : post(1)
+left : store_task_base_info_except(?task, ?b, 1) at 0
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, func_param), PTR(void), b.tbFuncParam) at 1
+action : left_erase(0);
+         left_erase(1);
+         left_add(store_task_base_info(task, b));
+
+id : 5
+priority : core(2)
+left : store_task_base_info(?task, ?b) at 0
+right : store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, origin_prio), U8, ?v) at 1
+action : left_erase(0);
+         right_erase(1);
+         left_add(store_task_base_info_except(task, b, 2));
+         right_add(v == b.tbOriginPrio);
+
+id : 6
+priority : post(1)
+left : store_task_base_info_except(?task, ?b, 2) at 0
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, origin_prio), U8, b.tbOriginPrio) at 1
+action : left_erase(0);
+         left_erase(1);
+         left_add(store_task_base_info(task, b));
+
+id : 7
+priority : core(2)
+left : store_task_base_info(?task, ?b) at 0
+right : store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, stack_depth), U32, ?v) at 1
+action : left_erase(0);
+         right_erase(1);
+         left_add(store_task_base_info_except(task, b, 3));
+         right_add(v == b.tbStackDepth);
+
+id : 8
+priority : post(1)
+left : store_task_base_info_except(?task, ?b, 3) at 0
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, stack_depth), U32, b.tbStackDepth) at 1
+action : left_erase(0);
+         left_erase(1);
+         left_add(store_task_base_info(task, b));
+
+id : 9
+priority : core(2)
+left : store_task_base_info(?task, ?b) at 0
+right : store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, stack_start), PTR(void), ?v) at 1
+action : left_erase(0);
+         right_erase(1);
+         left_add(store_task_base_info_except(task, b, 4));
+         right_add(v == b.tbStackStart);
+
+id : 10
+priority : post(1)
+left : store_task_base_info_except(?task, ?b, 4) at 0
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, stack_start), PTR(void), b.tbStackStart) at 1
+action : left_erase(0);
+         left_erase(1);
+         left_add(store_task_base_info(task, b));
+
+id : 11
+priority : core(2)
+left : has_permission_ktask_base_info(?task) at 0
+right : undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, stack_start), PTR(void)) at 1
+action : left_erase(0);
+         right_erase(1);
+         left_add(CharArray::undef_full(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, name), NAME_MAX_SIZE()));
+         left_add(undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, func_entry), PTR(void)));
+         left_add(undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, func_param), PTR(void)));
+         left_add(undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, origin_prio), U8));
+         left_add(undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, stack_depth), U32));
+
+id : 13
+priority : post(2)
+left : store_string_n(field_addr(field_addr(?task, TaskDescriptor, task_base_info), TaskBaseInfo, name), 32, ?name) at 0
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, func_entry), PTR(void), ?v1) at 1
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, func_param), PTR(void), ?v2) at 2
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, origin_prio), U8, ?v3) at 3
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, stack_depth), U32, ?v4) at 4
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, stack_start), PTR(void), ?v5) at 5
+action : left_erase(0);
+         left_erase(1);
+         left_erase(2);
+         left_erase(3);
+         left_erase(4);
+         left_erase(5);
+         left_add(store_task_base_info(task, mkTaskBaseInfoAbs(name, v1, v2, v3, v4, v5)));
+
+// 失败视图仅在返回点的目标断言要求时折叠，避免隐藏随后的判空读取。
+id : 14
+priority : core(3)
+left : CharArray::undef_full(field_addr(field_addr(?task, TaskDescriptor, task_base_info), TaskBaseInfo, name), 32) at 0
+       undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, func_entry), PTR(void)) at 1
+       undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, func_param), PTR(void)) at 2
+       undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, origin_prio), U8) at 3
+       undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, stack_depth), U32) at 4
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, stack_start), PTR(void), ?zero) at 5
+right : has_permission_ktask_base_info_start0(task) at 6
+check : infer(zero == 0);
+action : left_erase(0);
+         left_erase(1);
+         left_erase(2);
+         left_erase(3);
+         left_erase(4);
+         left_erase(5);
+         right_erase(6);
+
+id : 15
+priority : core(3)
+left : store_string_n(field_addr(field_addr(?task, TaskDescriptor, task_base_info), TaskBaseInfo, name), 32, ?name) at 0
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, func_entry), PTR(void), ?v1) at 1
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, func_param), PTR(void), ?v2) at 2
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, origin_prio), U8, ?v3) at 3
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, stack_depth), U32, ?v4) at 4
+       store(field_addr(field_addr(task, TaskDescriptor, task_base_info), TaskBaseInfo, stack_start), PTR(void), ?v5) at 5
+right : store_task_base_info(task, ?b) at 6
+action : left_erase(0);
+         left_erase(1);
+         left_erase(2);
+         left_erase(3);
+         left_erase(4);
+         left_erase(5);
+         right_erase(6);
+         right_add(b == mkTaskBaseInfoAbs(name, v1, v2, v3, v4, v5));
+
+// strncpy 的零偏移数组首地址与字段首地址相同；只向较短地址表达式归一化。
+id : 16
+priority : core(1)
+left : store_string_n(pointer_offset(?p, 0, I8), ?n, ?name) at 0
+action : left_erase(0);
+         left_add(store_string_n(p, n, name));
+
+// memset('#') 的字节表示桥接只在目标需要无符号字节数组时触发。
+id : 17
+priority : core(2)
+left : CharArray::full(?p, ?n, repeat_Z{Z}(35, n)) at 0
+right : UCharArray::full(?q, ?m, ?l) at 1
+check : infer(p == q);
+        infer(n == m);
+action : left_erase(0);
+         right_erase(1);
+         right_add(l == repeat_Z{Z}(CHAR_SHARP(), n));
+
+// 数组传参的零偏移只在右侧消去，避免与内建地址展开相互往返。
+id : 18
+priority : core(1)
+right : CharArray::undef_full(pointer_offset(?p, 0, I8), ?n) at 0
+action : right_erase(0);
+         right_add(CharArray::undef_full(p, n));
+
+// 目标数组中的具体构造子投影向原始地址/容量归一化；不向状态反复追加等式。
+id : 19
+priority : core(1)
+right : UCharArray::full(tbStackStart(mkTaskBaseInfoAbs(?name, ?entry, ?param, ?prio, ?depth, ?start)), tbStackDepth(mkTaskBaseInfoAbs(name, entry, param, prio, depth, start)), ?l) at 0
+action : right_erase(0);
+         right_add(UCharArray::full(start, depth, l));
+
+// Rocq 的固定名称容量统一为 C 接口使用的数值，不改变数组所有权。
+id : 20
+priority : core(1)
+left : CharArray::undef_full(?p, NAME_MAX_SIZE()) at 0
+action : left_erase(0);
+         left_add(CharArray::undef_full(p, 32));
+
+// strncpy 的定长结果加上末尾显式零，才折叠为有终止符的规范字符串。
+// strncpy 返回有效前缀的纯事实；不展开已封装的名字。
+id : 21
+priority : core(1)
+left : CharArray::full(?p, ?n, app{Z}(?name, repeat_Z{Z}(0, n - string_length(name)))) at 0
+       store(pointer_offset(p, n, I8), I8, 0) at 1
+       crtos_valid_string(name) at 2
+check : infer(n == 31);
+action : left_erase(0);
+         left_erase(1);
+         left_erase(2);
+         left_add(store_string_n(p, 32, name));
+
+// 给前缀复制借出容量减一的数组，并保留最后一字节的写权限。
+id : 22
+priority : core(2)
+left : CharArray::undef_full(?p, ?capacity) at 0
+right : CharArray::undef_full(p, ?n) at 1
+check : infer(0 <= n);
+        infer(capacity == n + 1);
+action : left_erase(0);
+         right_erase(1);
+         left_add(undef_data_at(pointer_offset(p, n, I8), I8));
+
+// strncpy 的原始数组结果先去掉零偏移，方便与显式末字节写入匹配。
+id : 23
+priority : post(0)
+left : CharArray::full(pointer_offset(?p, 0, I8), ?n, ?bytes) at 0
+action : left_erase(0);
+         left_add(CharArray::full(p, n, bytes));

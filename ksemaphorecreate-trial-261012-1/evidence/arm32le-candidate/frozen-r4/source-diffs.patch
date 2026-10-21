@@ -1,0 +1,87 @@
+--- /home/xinra/crtos/lib/KTaskPure.v
++++ shared-candidate/arm32le/KTaskPure.v
+@@ -2,7 +2,11 @@
+ Require Import Coq.Lists.List.
+ Require Import Coq.Strings.String.
+ From compcert.lib Require Import Integers.
+-From SimpleC.SL Require Import Mem IntLib CNotation.
++From SimpleC.SL Require Import Mem IntLib CNotation CArch.
++
++(** 候选适配：新版sizeof语法由明确32位CNotation实例提供；纯定义保持原文。 *)
++Module KTaskCNotation := CNotationSig Arch32.
++Import KTaskCNotation.
+ 
+ Local Open Scope Z_scope.
+ Local Open Scope string.
+--- /home/xinra/crtos/lib/CrtosRules.v
++++ shared-candidate/arm32le/CrtosRules.v
+@@ -36,11 +36,11 @@
+ Module Task_C_Rules.
+   Include C_STS_Task.
+   Include ConAssertion.CSL.
+-  Include DerivedPredSig.
+-  Include StoreLibSig.
+-  Include ArrayLibSig.
+-  Include MapLibSig.
+-  Include StringLibSig.
++  Include DerivedPredSig Arch32 LittleEndian.
++  Include StoreLibSig Arch32 LittleEndian.
++  Include ArrayLibSig Arch32 LittleEndian.
++  Include MapLibSig Arch32 LittleEndian.
++  Include StringLibSig Arch32 LittleEndian.
+ End Task_C_Rules.
+ 
+ Export Task_C_Rules.
+--- /home/xinra/crtos/lib/idnode.v
++++ shared-candidate/arm32le/idnode.v
+@@ -771,7 +771,11 @@
+   rewrite replace_Znth_app_r by lia.
+   rewrite replace_Znth_nothing by lia.
+   replace (index - Zlength prefix) with 0 by lia.
+-  simpl.
++  (* 新版simpl展开sizeof的alias层；显式change只恢复相同的证明项形状。 *)
++  change (store_idbucket_list htable 0 prefix **
++    (store_idbucket_list htable (index + 1) suffix **
++      store_idnodes (htable + index * sizeof("SysDoubleLinklistNode")) new_bucket)
++    |-- store_idbucket_list htable 0 (prefix ++ new_bucket :: suffix)).
+   sep_apply (store_idbucket_list_bucket_dll htable index
+     new_bucket suffix).
+   replace index with (0 + Zlength prefix) by lia.
+--- pre-migration/lib/CrtosNestedState.v
++++ lib/CrtosNestedState.v
+@@ -1,11 +1,12 @@
+ Require Import Coq.ZArith.ZArith Coq.Lists.List.
+ Require Import SL.CriticalSTS.
+ 
+-(** QCP框架版本兼容adapter：本record逐字复用官方
++(** QCP框架状态adapter：本record逐字复用官方
+     Rocq/SeparationLogic/NestedCriticalSTS.v的nested_critical_state。
+-    当前已安装NestedCriticalSTS.vo依赖的ArrayLib摘要不兼容；官方新源码
+-    的架构functor参数又不同于已安装接口。这里仅取用所需状态类型，
+-    不复制无关ModuleType，也不采用允许空环境token嵌套进入的旧transition。
++    初版因当时选用旧框架的二进制接口不兼容而引入此最小状态类型；
++    现已将两个heap载体重编为官方Arch32 LittleEndian，仍保留同一record，
++    使已审阅owner-sensitive协议定义不变。这里不复制无关ModuleType，
++    也不采用允许空环境token嵌套进入的旧transition。
+     来源hash和原文对应由evidence/nested-state-adapter.json记录。
+     nat是框架原有token类型；没有新建token Record或任何逻辑假设。 *)
+ Record nested_critical_state {C: critical_STS}: Type :=
+--- pre-migration/lib/CrtosOSProtocol.v
++++ lib/CrtosOSProtocol.v
+@@ -66,11 +66,11 @@
+ Module Crtos_C_Rules.
+   Include Crtos_STS.
+   Include ConAssertion.CSL.
+-  Include DerivedPredSig.
+-  Include StoreLibSig.
+-  Include ArrayLibSig.
+-  Include MapLibSig.
+-  Include StringLibSig.
++  Include DerivedPredSig Arch32 LittleEndian.
++  Include StoreLibSig Arch32 LittleEndian.
++  Include ArrayLibSig Arch32 LittleEndian.
++  Include MapLibSig Arch32 LittleEndian.
++  Include StringLibSig Arch32 LittleEndian.
+ End Crtos_C_Rules.
+ 
+ (** 共享heap的精确carrier迁移不生成或复制任何IRQ token。 *)

@@ -1,0 +1,11 @@
+{
+  "active_manifest_count": 20,
+  "active_changed": [],
+  "check_file_sha256": "1c282dca3bfc4101fd307dae54e0c935ed737d60c29307ef321164f28f245bdc",
+  "check_forbidden": [],
+  "formal_delta_files": [
+    "shared-candidate/arm32le/idnode.v",
+    "lib/SemaphoreRep.v",
+    "lib/SemaphoreInitialization.v"
+  ]
+}

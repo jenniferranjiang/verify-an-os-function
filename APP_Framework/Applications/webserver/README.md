@@ -1,0 +1,1 @@
+mongoose.a基于工具链arm-none-eabi-gcc (15:6.3.1+svn253039-1build1) 6.3.1 20170620编译而来，若使用的arm工具链版本存在差异或使用的是RISC-V工具链，则需重新编译mongoose.a，避免遇到异常问题。

@@ -1,0 +1,11 @@
+{
+  "kernel/thread/ktask.c": "dbf27468d0e386cc54c9aeb28219662aa6248bfd8292120423b4d2fa4f8bf3d1",
+  "kernel/thread/ktask_stat.c": "445b75b62bfc2bf8c26ff4f7c61eca776ab51a2dd48f2ec2cb9a8d5011682dc1",
+  "kernel/thread/linklist.c": "d64d3275b6d936f46352bc4625fc11efc9e0b113ca838f60a98eabaa09a7342c",
+  "kernel/thread/delay.c": "96bae0517d57db4dd5b960a0bc88fa1b096b15eca5d0c69224d6b93f309e0961",
+  "kernel/thread/assign.c": "418f58833c6e8a9198daf6f8ce0364ee5646a0483cc3750052127f8a7f435ada",
+  "kernel/thread/assignstat.c": "422eb74d2990fa7a2af43399f01061c4a700f30edb2ddac336cd982cba564407",
+  "kernel/thread/assign_roundrobinremain.c": "a1ba241d8282953fa735ad4186c60a9d986df01a0fc6e931be0e3cff6a76603c",
+  "kernel/thread/zombierecycle.c": "d77ccf983e4ba78082122ccba88cdc9e28e12295acdccfc24b2236951dfeca4f",
+  "kernel/include/xs_ktask.h": "22ac5492376ed2df9d6b86a518f8d8c8f88ff0cd1a7bbb615e70fd4cb92ddf20"
+}

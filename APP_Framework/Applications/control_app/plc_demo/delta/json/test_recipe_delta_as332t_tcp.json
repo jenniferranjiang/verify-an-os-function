@@ -1,0 +1,79 @@
+{
+    "device_id": 1,
+    "device_name": "DELTA_AS332T_TCP",
+    "communication_type": 0,
+    "socket_config": {
+        "plc_ip": "192.168.250.5",
+        "local_ip": "192.168.250.233",
+        "gateway": "192.168.250.1",
+        "netmask": "255.255.254.0",
+        "port": 502
+    },
+    "protocol_type": 2,
+    "read_period": 1000,
+  "read_item_list": [
+    {
+      "value_name": "M16",
+      "value_type": 1,
+      "function_code": 1,
+      "start_address": 16,
+      "quantity": 1
+    },
+    {
+      "value_name": "M17",
+      "value_type": 1,
+      "function_code": 1,
+      "start_address": 17,
+      "quantity": 1
+    },
+    {
+      "value_name": "M18",
+      "value_type": 1,
+      "function_code": 1,
+      "start_address": 30,
+      "quantity": 1
+    },
+    {
+      "value_name": "D300",
+      "value_type": 3,
+      "function_code": 3,
+      "start_address": 300,
+      "quantity": 1
+    },
+    {
+      "value_name": "D301",
+      "value_type": 3,
+      "function_code": 3,
+      "start_address": 302,
+      "quantity": 1
+    },
+    {
+      "value_name": "D302",
+      "value_type": 4,
+      "function_code": 3,
+      "start_address": 302,
+      "quantity": 2
+    },
+    {
+      "value_name": "D304",
+      "value_type": 9,
+      "function_code": 3,
+      "start_address": 304,
+      "quantity": 2
+    },
+    {
+      "value_name": "Y1.0",
+      "value_type": 1,
+      "function_code": 1,
+      "start_address": 40976,
+      "quantity": 1
+    },
+    {
+      "value_name": "Y10",
+      "value_type": 3,
+      "function_code": 3,
+      "start_address": 40970,
+      "quantity": 1
+    }
+  ]
+}

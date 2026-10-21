@@ -1,0 +1,5 @@
+{
+  "status": "passed",
+  "whole_closure_source_trust_binding": true,
+  "complete_recursive_coqchk": true
+}

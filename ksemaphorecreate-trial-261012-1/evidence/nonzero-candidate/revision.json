@@ -1,0 +1,15 @@
+{
+  "revision": "predicate-nonzero-candidate-fe8c4261db5c",
+  "status": "review-ready",
+  "baseline": "predicate-r5-0a139d64743c",
+  "manifest_sha256": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+  "coqproject_sha256": "02f1af10e31a45f92e503a57b66e85d55d7436897cd750ce6f649768a3307207",
+  "checks_sha256": "1c282dca3bfc4101fd307dae54e0c935ed737d60c29307ef321164f28f245bdc",
+  "author": "/root/nonzero_predicate_author",
+  "reviewer": null,
+  "trusted_symbol_delta": [],
+  "source_abi_recheck": "not rerun: original temporary ARM compiler absent; accepted source-r2 evidence reused",
+  "final_compile_files": 22,
+  "final_compile_seconds": 119.96420418600246,
+  "frozen_at_utc": "2026-10-12T15:28:22.747804+00:00"
+}

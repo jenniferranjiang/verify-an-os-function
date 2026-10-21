@@ -1,0 +1,3 @@
+Completed all six assigned normalized_calls witnesses using the required LLM_pre_process whole-goal route. The pure and safety witnesses close directly with lia/int_auto; partial_solve_wit_1 and partial_solve_wit_2 explicitly unfold their auxiliary VC and run LLM_pre_process again to discharge pure premises and cancel unchanged resources. No helper, import, predicate, annotation, statement, or unassigned proof was changed.
+
+Validation: exact authorized group-check completed with exit code 0 and JSON status passed (elapsed_seconds 55.881523). The check compiled the current goal, auto, manual, and group wrapper. Final forbidden-lemma/tactic scan found no matches. Earlier attempts exposed an unexpanded auxiliary VC and were repaired in the assigned proof spans.

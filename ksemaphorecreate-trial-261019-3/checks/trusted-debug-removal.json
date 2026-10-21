@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "authorization": "/home/xinra/TrustBase.md Trust 1 explicitly permits commenting KPrintf declaration and uses. User requested implement and tool adaptation.",
+  "spec_delta": [
+    {
+      "section": "specs",
+      "entry": "KPrintf::<default>",
+      "kind": "removed"
+    }
+  ],
+  "all_other_frozen_contracts_unchanged": true,
+  "ordinary_behavior": "Only dead if(0) debug calls removed; no executable non-debug operation changed."
+}

@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "infrastructure",
+    "kind": "generated-goal-syntax-error",
+    "vcs": [],
+    "message": "coq-debug exited 1 with JSON status failed before assigned proof checking: generated VC/AllocId_goal.v line 104 characters 89\u201392 contains reserved binder `(end: Z)` and Coq reports Syntax error: [name] expected after opening parenthesis (in closed_binder).",
+    "repair_boundary": "Repair generated identifier handling or annotation at main/orchestrator boundary, regenerate valid Rocq goal inputs, then resume this group. Worker may not edit generated goals or annotations."
+  }
+}

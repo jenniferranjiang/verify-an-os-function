@@ -1,0 +1,26 @@
+{
+  "review": ".docs/Report/2026-10-16-1-spec-review.md",
+  "spec_revision": "spec-r6-ae22a04e2c95",
+  "activated_files": [
+    "annotated_C/src/_SemaphoreCreate.c",
+    "evidence/spec-check.py",
+    "evidence/spec-extraction.json"
+  ],
+  "implementation_pending": [
+    {
+      "issue": "IMPL-20261016-BODY-01",
+      "owner": "original _SemaphoreCreate annotation owner",
+      "required": "Resolve Basics import composition-notation conflict and regenerate/typecheck under controller"
+    },
+    {
+      "issue": "IMPL-20261016-BODY-02",
+      "owner": "original _SemaphoreCreate annotation owner",
+      "required": "Use real getData/getPtr projections and regenerate/typecheck under controller"
+    },
+    {
+      "issue": "original_sizeof_VCs",
+      "required": "Regenerate and independently recheck actual pure size obligations; no deletion or proof claim yet"
+    }
+  ],
+  "at_utc": "2026-10-15T16:22:13.817639+00:00"
+}

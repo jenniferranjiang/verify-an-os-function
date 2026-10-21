@@ -1,0 +1,13 @@
+# CriticalAreaLock annotation attempt 2
+
+Read the complete refreshed handoff and prior annotation report/output. This retry addresses controller infrastructure coverage of `proof_of_CriticalAreaLock_partial_solve_wit_1`, not a contract or semantic annotation gap. No C annotation, frozen contract, shared input, or proof was edited by this owner.
+
+Signature remains `x_base CriticalAreaLock(void)`. Its precondition owns the approved outside-critical resource and entry nesting below 65535; its output returns the valid saved IRQ handler, permitted rely state, inside-critical resource, and full invariant with that state's nesting incremented. The accepted mathematical predicates and C Ensure express the same relation. The necessary pre-increment Assert remains unchanged, preserving the exact nest cell, frame, validity and IRQ ownership. No new predicate or loop exists.
+
+Ran both exact handoff commands in the stated cwd. The design check exited 0 with `status: passed` (absent case-lib policy, skipped). The controller symexec exited 0 with `status: passed` and publication committed. All four canonical generated files are present.
+
+Read the historical attempt1 manual and the current manual directly. The historical manual had entail/return parents and two aborted entail split helpers, while the partial-solve witness appeared only in generated auto. The controller now also places the exact raw `proof_of_CriticalAreaLock_partial_solve_wit_1 : CriticalAreaLock_partial_solve_wit_1` obligation in the manual worklist. Its statement is unchanged: from the original outside-critical resource and supplied entry bound, preserve that resource and expose the bound. There is no change to pure premises, spatial resources, quantifiers, conclusions or existential witnesses of any original VC.
+
+The entire goal file is byte-identical to the previous accepted symbolic output (SHA-256 `08e659c3fe3037623527f41daa11f71f306301267fc6490ead6ec2f4466b3943`); generated auto is also byte-identical (`5c0b33677a1bec2d29abd258644e5ec24f510da8b18ddc79a477394ab3ad92f2`). Current manual SHA-256 is `35c099602b88a4065fc48bd56981287f6708a9427f7989d0593955ec758e9f39`. Regeneration preserves all three original parent obligations and adds explicit manual coverage of the previously uncovered one. Generated skeleton proofs remain pending; neither the unchanged auto placeholder nor the new manual placeholder is claimed proved. Their final closure belongs to controller proving and integrity actions.
+
+The handoff has an empty failed_vcs list, so plan vc_comparisons remains empty; the infrastructure comparison is documented above. Plan is ready. Terminal completed report is written last; stop writing for main-owned finalize-delivery.

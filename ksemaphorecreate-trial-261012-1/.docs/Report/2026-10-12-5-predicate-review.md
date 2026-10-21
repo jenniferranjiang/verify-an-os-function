@@ -1,0 +1,23 @@
+当前状态：**invalidated**。InsertObj 实际 VC 暴露地址有效性前提缺项，见 [DCHG-20261012-03](design-changes/2026-10-12-3-object-address-validity.md)。以下保留原 revision 审阅记录，不作为当前设计已闭合的声明。
+
+本轮结论为 **review-passed**。官方状态类型的重复声明已移除，新增临界计数 view 与原不变量精确等价；边界计数、资源返还和两个小端 carrier 的检查均通过。没有未闭合的 predicate blocker，也不需要用户新增语义或 trusted 授权。本结论允许主 agent 按已有授权接受本 revision，尚不代表 C 实现及全部 VC 已证明。
+
+最终对象为 **predicate-r5-0a139d64743c**，20 文件 manifest SHA-256 为 **0a139d64743cce8000b0910d7880d6c5a0bf89147b730665aa6ebefbfb45585a**，冻结于 `evidence/arm32le-candidate/frozen-r5-format/`。它是本轮初始候选 predicate-r5-6227128b789d 的纯组织修订；初始 20 文件 manifest 6227128b789d2843de342612ae57f48888905772f9fc1eff72400363fa25f697 仍原样保留于 `frozen-r5/`。两轮当前文件、冻结文件及 manifest 都逐一核对。纳入审阅的设计记录为 `2026-10-12-5-predicate-design.md`。权威依据仍为 source-r2-0c50c37013e9、Cortex-M3 ILP32 非 SMP 配置，调用域仍为用户批准的入口 nest<65535，六个 trusted 符号不变。没有读取或依赖任何其他 trial。
+
+本轮是对 r4 的 delta review：仅正式官方 framework 副本、CrtosNestedState adapter 和 SemaphoreCriticalViews 三个文件新增或变化；其余 17 文件 hash 相同。沿用 [r4 review](2026-10-12-4-predicate-review.md) 已闭合的生命周期、字节 owner、ABI 和根候选差异结论，重新检查类型替换的传递依赖及新增 helper 全文，不重开未变模块的 full review。
+
+**R4-REUSE-01 已关闭。** `framework-candidate/NestedCriticalSTS.v` 与当前官方源逐字相同，SHA-256 为 c4f4859ae5f5fdb55646bf346c020b4a9fdd377500df6ace7d18ab62745112a8，以独立 `CRTOS_Verify.framework` 命名空间加载，不遮盖 SimpleC.SL。CrtosNestedState 只转出模块及保留透明 projection alias；没有第二份 Record、constructor 或 token 类型。独立编译中的 reflexivity 检查确认 CrtosProtocolState 就是官方参数化 record 的实例，而非另一个同构类型。原 owner-aware CrtosIRQStep 的 statement 与实现均保持；没有切换成官方较宽的 transition 或 Critical view。
+
+新 view 中 `store_scheduler_assign` 恰好是原 `store_scheduler_view` 去掉唯一全局 UShort nest 单元后的资源，包括原 Assign 字段、32 个 ready heads、done 指针的存在量化和尾 padding。双向 entailment 保留相同地址和值，没有遗失或复制字节。`SemaphoreCriticalFrame` 组合原 task 借用视图、该 Assign 余项及完整 semaphore representation，既不持有 nest 单元，也不产生 IRQ token。它对仅修改 nest 的状态定义等价；此前跨模块 ownership、私有/已发布对象状态、容器责任及 pending/ready 约束没有改变。
+
+`OSHeap_ushort_eq` 在两个实际 Arch32 LittleEndian carrier 上证明同一两字节内存断言相等，保留原地址有效性、数值范围与字节关系。它通过 heap lift 的分离、纯事实、存在量化及 byte 等式取得，不是另加的字节编码假设。原 invariant 与“原有效性纯事实、实际 nest 单元、精确 frame”两方向均有 Qed，frame 不被当作可复制的纯事实。
+
+计数更新 lemma 要求调用者已经持有写后值对应的真实 UShort 单元和原 frame，不能从状态参数生成内存。旧 CrtosOSValid 的其余约束保持，新有效性只替换 uint16 计数范围。递增沿用已批准的入口上界，允许 65534 写入内部 65535；递减覆盖 nest=0 不写和正值减一。独立附加三个 heap-view 端点 Qed 分别检查 0 返回原状态、65534→65535 以及内部 65535→65534。普通嵌套调用及 Rely/current 范围另由 r3 七个回归 Qed 通过，未恢复零层限制，也未将保存的 IRQ handler 栈当作计数。
+
+独立构建使用现代 pv-bench Coq 8.20.1 / OCaml 4.14.2，并将所有本地逻辑路径替换为 reviewer 的隔离快照。重编受影响的 7 个正式文件全部 exit 0；未变的根 9 文件及另外 4 个独立模块，复用 reviewer 自己在 r4 构建的 .vo，逐一记录文件和 hash，没有混装旧框架或作者未检查的二进制。另编译 carrier/record/helper 检查、PR-02 四个正反例和 r3 七个边界回归。复现脚本为 `evidence/predicate-review-r5-check.py`，结果为 `predicate-review-r5-check.json`，本批机械检查耗时 34.980 秒。三个追加端点及三个协议 meta 定理的 assumptions 检查结果见 `predicate-review-r5-boundaries.json`，成功检查耗时 5.656 秒；相应 reviewer probe 在 `predicate-review-r5-build/R5ViewBoundaryCheck.v`。
+
+新增 helper 的 15 个 Qed、10 个公开接口及三个协议 meta 定理均通过编译/assumptions 检查。依赖仅含既有官方 CNotation 的 layout/address 参数和标准函数/命题外延性；未增加用户公理。完整官方原文含 Module Type 的 nc_sts 参数，这是源文件已有框架签名，不是本实验引入的 OS 假设，其未被实例化为新的 trusted contract。除这份逐字绑定来源的 framework 文件外，全部手写正式源去注释扫描无 Axiom、Parameter、Admitted 或 admit。根原始 9 源文件 hash 仍保持。
+
+最终纯组织修订已将 SemaphoreCriticalFrame 的完整注释和 definition 块移到外层 bridge lemma 前，符合定义先于证明的约定。独立检查证明移动块逐字不变、去掉该块后的全文逐字不变，其他 19 份正式源 hash 不变。最终 helper SHA-256 为 fc9e6dd89e89839a21865fda06dc8c08124ed54a1b96ff07f2e910203032189a。仅该 helper 在新的 reviewer 隔离快照重编，复用前一批独立构建的其他 19 个对象；命令、对象 hash、耗时及 exit 0 记录在 `evidence/predicate-review-r5-format-check.json`，复现脚本为同名 .py。该调整没有改变 owner、接口、statement 或证明依赖，前述语义及端点检查继续有效。Reviewer 未修改任何正式 .v。
+
+ABI-01 的小端修复现在随可接受的 r5 闭合；旧 r3 的历史 invalidated 结论不撤销。后续 active 配置必须使用本 revision 的隔离候选和现代工具链，controller 使用已确定的 `--arch=32 --endian=little --no-CRules` 及显式自定义 carrier 导入。实际前端产物中的 Semaphore 32 字节、字段 offset 和 long/x_base 映射仍应在原 controller 的 VC 中核对。本审阅没有执行额外 symbolic 流程，没有审阅尚未固定的 spec 修改，也不能替代最终 C/VC/proof integrity 检查。

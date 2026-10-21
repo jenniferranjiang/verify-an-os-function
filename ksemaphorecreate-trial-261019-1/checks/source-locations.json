@@ -1,0 +1,47 @@
+{
+  "KSemaphoreCreate": {
+    "file": "kernel/thread/semaphore.c",
+    "line": 246,
+    "source_sha256": "d5b41c3bde69e0416431d2425c61e35453778ae4b1569747f2c2258f3dfe16ec"
+  },
+  "_SemaphoreCreate": {
+    "file": "kernel/thread/semaphore.c",
+    "line": 33,
+    "source_sha256": "d5b41c3bde69e0416431d2425c61e35453778ae4b1569747f2c2258f3dfe16ec"
+  },
+  "IdInsertObj": {
+    "file": "kernel/thread/id.c",
+    "line": 106,
+    "source_sha256": "189a94e7dc17d6c9da6f7992a232e4422c9dc11dea539b40452b0041546a9fca"
+  },
+  "AllocId": {
+    "file": "kernel/thread/id.c",
+    "line": 24,
+    "source_sha256": "189a94e7dc17d6c9da6f7992a232e4422c9dc11dea539b40452b0041546a9fca"
+  },
+  "InsertObj": {
+    "file": "kernel/thread/id.c",
+    "line": 62,
+    "source_sha256": "189a94e7dc17d6c9da6f7992a232e4422c9dc11dea539b40452b0041546a9fca"
+  },
+  "InitDoubleLinkList": {
+    "file": "kernel/thread/double_link.c",
+    "line": 30,
+    "source_sha256": "fb114fe11fed1eb2dd717c81e95a1fb8675277b65f1d1009349e56b473846352"
+  },
+  "DoubleLinkListInsertNodeAfter": {
+    "file": "kernel/thread/double_link.c",
+    "line": 42,
+    "source_sha256": "fb114fe11fed1eb2dd717c81e95a1fb8675277b65f1d1009349e56b473846352"
+  },
+  "CriticalAreaLock": {
+    "file": "kernel/thread/CriticalArea.c",
+    "line": 117,
+    "source_sha256": "946b214eb678c1202c96dc6fd5272fd2c8d2dd245736888a0ea4114fdd6f113a"
+  },
+  "CriticalAreaUnLock": {
+    "file": "kernel/thread/CriticalArea.c",
+    "line": 132,
+    "source_sha256": "946b214eb678c1202c96dc6fd5272fd2c8d2dd245736888a0ea4114fdd6f113a"
+  }
+}

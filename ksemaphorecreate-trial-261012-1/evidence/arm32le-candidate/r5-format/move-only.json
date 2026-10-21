@@ -1,0 +1,9 @@
+{
+  "file": "lib/SemaphoreCriticalViews.v",
+  "original_sha256": "5fa90ac10868ed67f1d77b8b5c84cac7ea4ee4c9bd06b894aeca7cf3ee1f1dc6",
+  "new_sha256": "fc9e6dd89e89839a21865fda06dc8c08124ed54a1b96ff07f2e910203032189a",
+  "moved_block_sha256": "1ed26ec646144a9de552a1fe0fcd426040805bfb40158c295c5741b45772addb",
+  "block_byte_identical": true,
+  "remainder_byte_identical": true,
+  "change": "move complete Chinese comment and SemaphoreCriticalFrame definition before outer local lemmas; no statements or proofs changed"
+}

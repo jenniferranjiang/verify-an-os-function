@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "actual_case": "KSemaphoreCreate",
+  "original_goal_and_auto_bytes_preserved": true,
+  "manual_statements_exact_union": true,
+  "manual_parents": 4,
+  "added_manual": [
+    "proof_of_KSemaphoreCreate_return_wit_1",
+    "proof_of_KSemaphoreCreate_return_wit_2",
+    "proof_of_KSemaphoreCreate_partial_solve_wit_1_pure",
+    "proof_of_KSemaphoreCreate_partial_solve_wit_1"
+  ],
+  "normalized_auto_has_no_admissions": true,
+  "duplicate_conflict_rejected": true,
+  "no_canonical_generated_file_modified": true,
+  "no_C_proof_claim": true
+}

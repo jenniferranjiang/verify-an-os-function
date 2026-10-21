@@ -1,0 +1,12 @@
+config BSP_USING_EXTSDRAM
+    bool "config extern sdram"
+    default y
+    select MEM_EXTERN_SRAM
+    if BSP_USING_EXTSDRAM
+        config EXTSRAM_MAX_NUM
+            int
+            default 1
+        config EXTSRAM_TEST
+            bool "extern sdram write/read test"
+            default n
+    endif

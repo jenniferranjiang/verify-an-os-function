@@ -1,0 +1,657 @@
+Module Type
+ NonemptyCSL =
+ Funsig (S:ConAssertion.STS_def)
+   Sig
+     Module Base
+     Definition inhabited : ConAssertion.Lstate -> Prop.
+     Definition model : Type.
+     Definition raw : model -> ConAssertion.Lstate.
+     Definition expr : Type.
+     Definition join : model -> model -> model -> Prop.
+     Definition is_unit : model -> Prop.
+     Definition sepcon : (model -> Prop) -> (model -> Prop) -> model -> Prop.
+     Definition wand : (model -> Prop) -> (model -> Prop) -> model -> Prop.
+     Definition orp : (model -> Prop) -> (model -> Prop) -> model -> Prop.
+     Definition andp : (model -> Prop) -> (model -> Prop) -> model -> Prop.
+     Definition impp : (model -> Prop) -> (model -> Prop) -> model -> Prop.
+     Definition exp : forall A : Type, (A -> model -> Prop) -> model -> Prop.
+     Definition allp :
+       forall A : Type, (A -> model -> Prop) -> model -> Prop.
+     Definition emp : model -> Prop.
+     Definition coq_prop : Prop -> model -> Prop.
+     Definition truep : model -> Prop.
+     Definition multi_imp : list expr -> expr -> model -> Prop.
+     Definition iter_sepcon : list expr -> model -> Prop.
+     Definition iffp : expr -> expr -> model -> Prop.
+     Definition derivable1 : (model -> Prop) -> (model -> Prop) -> Prop.
+     Definition provable : expr -> Prop.
+     Definition logic_equiv : expr -> expr -> Prop.
+     Parameter unit_join :
+       forall n : model, exists u : model, is_unit u /\ join n u n.
+     Parameter unit_spec :
+       forall n m u : model, is_unit u -> join n u m -> n = m.
+     Parameter join_comm : forall x y z : model, join x y z -> join y x z.
+     Parameter join_assoc :
+       forall x y z xy xyz : model,
+       join x y xy ->
+       join xy z xyz -> exists yz : model, join y z yz /\ join x yz xyz.
+     Definition M : Base.Model.
+     Definition L : Base.Language.
+     Definition J : SeparationAlgebra.Join model.
+     Definition U : SeparationAlgebra.Unit model.
+     Definition sepconL : Syntax.SepconLanguage L.
+     Definition wandL : Syntax.WandLanguage L.
+     Definition orpL : Syntax.OrLanguage L.
+     Definition andpL : Syntax.AndLanguage L.
+     Definition minL : Syntax.MinimumLanguage L.
+     Definition expL : Syntax.ShallowExistsLanguage L.
+     Definition allpL : Syntax.ShallowForallLanguage L.
+     Definition empL : Syntax.EmpLanguage L.
+     Definition coq_prop_L : Syntax.CoqPropLanguage L.
+     Definition truepL : Syntax.TrueLanguage L.
+     Definition iter_sepcon_L : Syntax.IterSepconLanguage L.
+     Definition iffpL : Syntax.IffLanguage L.
+     Definition GammaD1 : Base.Derivable1 L.
+     Definition GammaP : Base.Provable L.
+     Definition GammaE : Base.LogicEquiv L.
+     Definition J_SA : SeparationAlgebra.SeparationAlgebra model.
+     Definition UJR : SeparationAlgebra.UnitJoinRelation model.
+     Definition sepconDef_join :
+       ModelLanguageSeparationLogic.SepconDefinition_Join
+         ModelLanguageSeparationLogic.Join2Sepcon.
+     Definition wandDef_join :
+       ModelLanguageSeparationLogic.WandDefinition_Join
+         ModelLanguageSeparationLogic.Join2Wand.
+     Definition orpDef_model :
+       ModelLanguagePropositionalLogic.OrpDefinition_Model orpL.
+     Definition andpDef_model :
+       ModelLanguagePropositionalLogic.AndpDefinition_Model andpL.
+     Definition imppDef_model :
+       ModelLanguageMinimumLogic.ImppDefinition_Model minL.
+     Definition expDef_model : ModelConstrEX.ExpDefinition_Model expL.
+     Definition allpDef_model : ModelConstrALL.AllpDefinition_Model allpL.
+     Definition empDef_unit :
+       ModelLanguageSeparationLogic.EmpDefinition_Unit
+         ModelLanguageSeparationLogic.Unit2Emp.
+     Definition coqpropDef_model :
+       ModelLanguageMetaLogic.CoqPropDefinition_Model coq_prop_L.
+     Definition truepDef_model :
+       ModelLanguagePropositionalLogic.TrueDefinition_Model truepL.
+     Definition iter_sepcon_DL : IterSepcon.IterSepconDefinition_left L.
+     Definition iffpDef :
+       TheoryOfPropositionalConnectives.IffDefinition_And_Imp L.
+     Definition derivable1Def_model :
+       ModelLanguage.Derivable1Definition_Model GammaD1.
+     Definition GammaPD1 : Minimum.ProvableFromDerivable1 L GammaP GammaD1.
+     Definition GammaED1 : BasicLogicEquiv.EquivDerivable1 L GammaD1 GammaE.
+     Definition sepconD : SeparationLogic.SepconDeduction L GammaD1.
+     Definition wandD : SeparationLogic.WandDeduction L GammaD1.
+     Definition adjD : Intuitionistic.ImpAndAdjointDeduction L GammaD1.
+     Definition andpD : Intuitionistic.AndDeduction L GammaD1.
+     Definition expD : ProofTheory.ShallowExistsDeduction L GammaD1.
+     Definition allpD : ProofTheory.ShallowForallDeduction L GammaD1.
+     Definition bD : BasicDeduction.BasicDeduction L GammaD1.
+     Definition exp_andpD : ProofTheory.deduction_exp_and.
+     Definition iter_sepcon_D1L :
+       IterSepcon.IterSepconDeduction_left L GammaD1.
+     Definition exp_sepconD : ProofTheory.deduction_exp_sepcon.
+     Definition minD : Minimum.MinimumDeduction L GammaD1.
+     Definition empD : SeparationLogic.EmpDeduction L GammaD1.
+     Definition iter_sepcon_f : ProofTheory.IterSepconFlatten.
+     Definition coq_prop_D : ProofRules.CoqPropDeduction L GammaD1.
+     Definition truepD : Intuitionistic.TrueDeduction L GammaD1.
+     Definition sap : ProofTheory.sepcon_andp_prop.
+     Definition sap_ext : ProofTheory.sepcon_andp_prop_ext.
+     Definition isap : ProofTheory.Iter_sepcon_andp_prop.
+     Definition bE : BasicLogicEquiv.BasicLogicEquiv L GammaE.
+     Definition orpD : Intuitionistic.OrDeduction L GammaD1.
+     Definition iffpD : Intuitionistic.IffDeduction L GammaD1.
+     Definition sepcon_orp_D : SeparationLogic.SepconOrDeduction L GammaD1.
+     Definition andpE : Intuitionistic.AndLogicEquiv L GammaE.
+     Definition orpE : Intuitionistic.OrLogicEquiv L GammaE.
+     Definition sepconE : Deduction.SepconLogicEquiv_weak_iffp L GammaE.
+     Definition truepandpE : Intuitionistic.TrueAndLogicEquiv L GammaE.
+     Definition empE : Deduction.EmpLogicEquiv_iffp L GammaE.
+     Definition GammaD1P : Minimum.Derivable1FromProvable L GammaP GammaD1.
+     Definition minAX : Minimum.MinimumAxiomatization L GammaP.
+     Definition iter_sepcon_AXL :
+       IterSepcon.IterSepconAxiomatization_left L GammaP.
+     Definition andpAX : Intuitionistic.AndAxiomatization L GammaP.
+     Definition iffpAX : Intuitionistic.IffAxiomatization L GammaP.
+     Definition orpAX : Intuitionistic.OrAxiomatization L GammaP.
+     Definition sepconAX : SeparationLogic.SepconAxiomatization L GammaP.
+     Definition coq_prop_AX : ProofRules.CoqPropAxiomatization L GammaP.
+     Definition tree_pos : Type.
+     Definition derivable1s_coq_prop_r :
+       forall (P : Prop) (x : expr), P -> derivable1 x (coq_prop P).
+     Definition derivable1s_coq_prop_l :
+       forall (P : Prop) (x : expr),
+       (P -> derivable1 truep x) -> derivable1 (coq_prop P) x.
+     Definition derivable1_iter_sepcon_l :
+       forall xs : list expr,
+       derivable1 (iter_sepcon xs) (List.fold_left sepcon xs emp).
+     Definition derivable1_iter_sepcon_r :
+       forall xs : list expr,
+       derivable1 (List.fold_left sepcon xs emp) (iter_sepcon xs).
+     Definition derivable1s_allp_r :
+       forall (A : Type) (P : expr) (Q : A -> expr),
+       (forall x : A, derivable1 P (Q x)) -> derivable1 P (allp A Q).
+     Definition derivable1s_allp_l :
+       forall (A : Type) (P : A -> expr) (Q : expr) (x : A),
+       derivable1 (P x) Q -> derivable1 (allp A P) Q.
+     Definition derivable1s_exp_r :
+       forall (A : Type) (P : expr) (Q : A -> expr) (x : A),
+       derivable1 P (Q x) -> derivable1 P (exp A Q).
+     Definition derivable1s_exp_l :
+       forall (A : Type) (P : A -> expr) (Q : expr),
+       (forall x : A, derivable1 (P x) Q) -> derivable1 (exp A P) Q.
+     Definition __derivable1_provable :
+       forall x y : expr, derivable1 x y <-> provable (impp x y).
+     Definition logic_equiv_sepcon_emp :
+       forall x : expr, logic_equiv (sepcon x emp) x.
+     Definition logic_equiv_andp_truep :
+       forall x : expr, logic_equiv (andp x truep) x.
+     Definition logic_equiv_truep_andp :
+       forall x : expr, logic_equiv (andp truep x) x.
+     Definition logic_equiv_sepcon_comm :
+       forall x y : expr, logic_equiv (sepcon x y) (sepcon y x).
+     Definition logic_equiv_sepcon_assoc :
+       forall x y z : expr,
+       logic_equiv (sepcon x (sepcon y z)) (sepcon (sepcon x y) z).
+     Definition logic_equiv_orp_congr :
+       forall x1 x2 y1 y2 : expr,
+       logic_equiv x1 x2 ->
+       logic_equiv y1 y2 -> logic_equiv (orp x1 y1) (orp x2 y2).
+     Definition logic_equiv_orp_comm :
+       forall x y : expr, logic_equiv (orp x y) (orp y x).
+     Definition logic_equiv_orp_assoc :
+       forall x y z : expr, logic_equiv (orp (orp x y) z) (orp x (orp y z)).
+     Definition logic_equiv_andp_congr :
+       forall x1 x2 y1 y2 : expr,
+       logic_equiv x1 x2 ->
+       logic_equiv y1 y2 -> logic_equiv (andp x1 y1) (andp x2 y2).
+     Definition logic_equiv_andp_comm :
+       forall x y : expr, logic_equiv (andp x y) (andp y x).
+     Definition logic_equiv_andp_assoc :
+       forall x y z : expr,
+       logic_equiv (andp (andp x y) z) (andp x (andp y z)).
+     Definition logic_equiv_refl : forall x : expr, logic_equiv x x.
+     Definition logic_equiv_symm :
+       forall x y : expr, logic_equiv x y -> logic_equiv y x.
+     Definition logic_equiv_trans :
+       forall x y z : expr,
+       logic_equiv x y -> logic_equiv y z -> logic_equiv x z.
+     Definition derivable1_orp_sepcon_l :
+       forall x y z : expr,
+       derivable1 (sepcon (orp x y) z) (orp (sepcon x z) (sepcon y z)).
+     Definition derivable1_sepcon_emp_l :
+       forall x : expr, derivable1 (sepcon x emp) x.
+     Definition derivable1_sepcon_emp_r :
+       forall x : expr, derivable1 x (sepcon x emp).
+     Definition derivable1s_wand_sepcon_adjoint :
+       forall x y z : expr,
+       derivable1 (sepcon x y) z <-> derivable1 x (wand y z).
+     Definition derivable1_sepcon_comm :
+       forall x y : expr, derivable1 (sepcon x y) (sepcon y x).
+     Definition derivable1_sepcon_assoc1 :
+       forall x y z : expr,
+       derivable1 (sepcon x (sepcon y z)) (sepcon (sepcon x y) z).
+     Definition derivable1_sepcon_mono :
+       forall x1 x2 y1 y2 : expr,
+       derivable1 x1 x2 ->
+       derivable1 y1 y2 -> derivable1 (sepcon x1 y1) (sepcon x2 y2).
+     Definition derivable1_iffp_intros :
+       forall x y : expr, derivable1 (impp x y) (impp (impp y x) (iffp x y)).
+     Definition derivable1_iffp_elim1 :
+       forall x y : expr, derivable1 (iffp x y) (impp x y).
+     Definition derivable1_iffp_elim2 :
+       forall x y : expr, derivable1 (iffp x y) (impp y x).
+     Definition derivable1_truep_intros :
+       forall x : expr, derivable1 x truep.
+     Definition derivable1_orp_intros1 :
+       forall x y : expr, derivable1 x (orp x y).
+     Definition derivable1_orp_intros2 :
+       forall x y : expr, derivable1 y (orp x y).
+     Definition derivable1_orp_elim :
+       forall x y z : expr,
+       derivable1 x z -> derivable1 y z -> derivable1 (orp x y) z.
+     Definition derivable1s_truep_intros :
+       forall x y z : expr,
+       derivable1 x y -> derivable1 x z -> derivable1 x (andp y z).
+     Definition derivable1_andp_elim1 :
+       forall x y : expr, derivable1 (andp x y) x.
+     Definition derivable1_andp_elim2 :
+       forall x y : expr, derivable1 (andp x y) y.
+     Definition derivable1s_impp_andp_adjoint :
+       forall x y z : expr,
+       derivable1 x (impp y z) <-> derivable1 (andp x y) z.
+     Definition derivable1s_modus_ponens :
+       forall x y z : expr,
+       derivable1 x (impp y z) -> derivable1 x y -> derivable1 x z.
+     Definition derivable1s_impp_intros :
+       forall x y z : expr,
+       derivable1 (impp x y) z -> derivable1 x (impp y z).
+     Definition derivable1_impp_refl :
+       forall x y : expr, derivable1 x (impp y y).
+     Definition derivable1_axiom1 :
+       forall x y : expr, derivable1 x (impp y x).
+     Definition derivable1_axiom2 :
+       forall x y z : expr,
+       derivable1 (impp x (impp y z)) (impp (impp x y) (impp x z)).
+     Definition derivable1_refl : forall x : expr, derivable1 x x.
+     Definition derivable1_trans :
+       forall x y z : expr,
+       derivable1 x y -> derivable1 y z -> derivable1 x z.
+     Definition provable_iter_sepcon_derives :
+       forall xs : list expr,
+       provable (impp (iter_sepcon xs) (List.fold_left sepcon xs emp)).
+     Definition provable_derives_iter_sepcon :
+       forall xs : list expr,
+       provable (impp (List.fold_left sepcon xs emp) (iter_sepcon xs)).
+     Definition provable_sepcon_comm_impp :
+       forall x y : expr, provable (impp (sepcon x y) (sepcon y x)).
+     Definition provable_sepcon_assoc1 :
+       forall x y z : expr,
+       provable (impp (sepcon x (sepcon y z)) (sepcon (sepcon x y) z)).
+     Definition provable_sepcon_mono :
+       forall x1 x2 y1 y2 : expr,
+       provable (impp x1 x2) ->
+       provable (impp y1 y2) -> provable (impp (sepcon x1 y1) (sepcon x2 y2)).
+     Definition provables_coq_prop_intros :
+       forall P : Prop, P -> provable (coq_prop P).
+     Definition provables_coq_prop_elim :
+       forall (P : Prop) (x : expr),
+       (P -> provable x) -> provable (impp (coq_prop P) x).
+     Definition provable_iffp_intros :
+       forall x y : expr,
+       provable (impp (impp x y) (impp (impp y x) (iffp x y))).
+     Definition provable_iffp_elim1 :
+       forall x y : expr, provable (impp (iffp x y) (impp x y)).
+     Definition provable_iffp_elim2 :
+       forall x y : expr, provable (impp (iffp x y) (impp y x)).
+     Definition provable_orp_intros1 :
+       forall x y : expr, provable (impp x (orp x y)).
+     Definition provable_orp_intros2 :
+       forall x y : expr, provable (impp y (orp x y)).
+     Definition provable_orp_elim :
+       forall x y z : expr,
+       provable (impp (impp x z) (impp (impp y z) (impp (orp x y) z))).
+     Definition provable_andp_intros :
+       forall x y : expr, provable (impp x (impp y (andp x y))).
+     Definition provable_andp_elim1 :
+       forall x y : expr, provable (impp (andp x y) x).
+     Definition provable_andp_elim2 :
+       forall x y : expr, provable (impp (andp x y) y).
+     Definition provables_modus_ponens :
+       forall x y : expr, provable (impp x y) -> provable x -> provable y.
+     Definition provable_axiom1 :
+       forall x y : expr, provable (impp x (impp y x)).
+     Definition provable_axiom2 :
+       forall x y z : expr,
+       provable (impp (impp x (impp y z)) (impp (impp x y) (impp x z))).
+     Definition provable_impp_refl : forall x : expr, provable (impp x x).
+     Definition provable_impp_refl' :
+       forall x y : expr, x = y -> provable (impp x y).
+     Definition provable_impp_arg_switch :
+       forall x y z : expr,
+       provable (impp (impp x (impp y z)) (impp y (impp x z))).
+     Definition provable_impp_trans :
+       forall x y z : expr,
+       provable (impp (impp x y) (impp (impp y z) (impp x z))).
+     Definition provable_multi_imp_shrink :
+       forall (xs : list expr) (x y : expr),
+       provable
+         (impp (impp x (multi_imp xs (impp x y))) (multi_imp xs (impp x y))).
+     Definition provable_multi_imp_arg_switch1 :
+       forall (xs : list expr) (x y : expr),
+       provable (impp (impp x (multi_imp xs y)) (multi_imp xs (impp x y))).
+     Definition provable_multi_imp_arg_switch2 :
+       forall (xs : list expr) (x y : expr),
+       provable (impp (multi_imp xs (impp x y)) (impp x (multi_imp xs y))).
+     Definition provable_add_multi_imp_left_head :
+       forall (xs1 xs2 : list expr) (y : expr),
+       provable (impp (multi_imp xs2 y) (multi_imp (xs1 ++ xs2)%list y)).
+     Definition provable_add_multi_imp_left_tail :
+       forall (xs1 xs2 : list expr) (y : expr),
+       provable (impp (multi_imp xs1 y) (multi_imp (xs1 ++ xs2)%list y)).
+     Definition provable_multi_imp_modus_ponens :
+       forall (xs : list expr) (y z : expr),
+       provable
+         (impp (multi_imp xs y)
+            (impp (multi_imp xs (impp y z)) (multi_imp xs z))).
+     Definition provable_multi_imp_weaken :
+       forall (xs : list expr) (x y : expr),
+       provable (impp x y) ->
+       provable (impp (multi_imp xs x) (multi_imp xs y)).
+     Definition provable_impp_refl_instance :
+       RelationClasses.Reflexive (fun x y : expr => provable (impp x y)).
+     Definition provable_proper_impp :
+       Morphisms.Proper
+         (Morphisms.respectful (fun x y : expr => provable (impp x y))
+            Basics.impl) provable.
+     Definition provables_impp_proper_impp :
+       Morphisms.Proper
+         (Morphisms.respectful
+            (Basics.flip (fun x y : expr => provable (impp x y)))
+            (Morphisms.respectful (fun x y : expr => provable (impp x y))
+               (fun x y : expr => provable (impp x y)))) impp.
+     Definition provable_andp_comm :
+       forall x y : expr, provable (iffp (andp x y) (andp y x)).
+     Definition provable_andp_assoc :
+       forall x y z : expr,
+       provable (iffp (andp (andp x y) z) (andp x (andp y z))).
+     Definition provable_orp_comm :
+       forall x y : expr, provable (iffp (orp x y) (orp y x)).
+     Definition provable_orp_dup :
+       forall x : expr, provable (iffp (orp x x) x).
+     Definition provable_impp_curry :
+       forall x y z : expr,
+       provable (impp (impp x (impp y z)) (impp (andp x y) z)).
+     Definition provable_impp_uncurry :
+       forall x y z : expr,
+       provable (impp (impp (andp x y) z) (impp x (impp y z))).
+     Definition provables_impp_trans :
+       forall x y z : expr,
+       provable (impp x y) -> provable (impp y z) -> provable (impp x z).
+     Definition provables_andp_proper_impp :
+       Morphisms.Proper
+         (Morphisms.respectful (fun x y : expr => provable (impp x y))
+            (Morphisms.respectful (fun x y : expr => provable (impp x y))
+               (fun x y : expr => provable (impp x y)))) andp.
+     Definition provables_orp_proper_impp :
+       Morphisms.Proper
+         (Morphisms.respectful (fun x y : expr => provable (impp x y))
+            (Morphisms.respectful (fun x y : expr => provable (impp x y))
+               (fun x y : expr => provable (impp x y)))) orp.
+     Definition provable_iffp_equiv :
+       RelationClasses.Equivalence (fun x y : expr => provable (iffp x y)).
+     Definition provable_proper_iffp :
+       Morphisms.Proper
+         (Morphisms.respectful (fun x y : expr => provable (iffp x y)) iff)
+         provable.
+     Definition provables_impp_proper_iffp :
+       Morphisms.Proper
+         (Morphisms.respectful (fun x y : expr => provable (iffp x y))
+            (Morphisms.respectful (fun x y : expr => provable (iffp x y))
+               (fun x y : expr => provable (iffp x y)))) impp.
+     Definition provables_andp_proper_iffp :
+       Morphisms.Proper
+         (Morphisms.respectful (fun x y : expr => provable (iffp x y))
+            (Morphisms.respectful (fun x y : expr => provable (iffp x y))
+               (fun x y : expr => provable (iffp x y)))) andp.
+     Definition provables_orp_proper_iffp :
+       Morphisms.Proper
+         (Morphisms.respectful (fun x y : expr => provable (iffp x y))
+            (Morphisms.respectful (fun x y : expr => provable (iffp x y))
+               (fun x y : expr => provable (iffp x y)))) orp.
+     Definition provables_iffp_proper_iffp :
+       Morphisms.Proper
+         (Morphisms.respectful (fun x y : expr => provable (iffp x y))
+            (Morphisms.respectful (fun x y : expr => provable (iffp x y))
+               (fun x y : expr => provable (iffp x y)))) iffp.
+     Definition provables_coq_prop_andp_derives :
+       forall (P : Prop) (Q R : expr),
+       (P -> provable (impp Q R)) -> provable (impp (andp (coq_prop P) Q) R).
+     Definition provables_andp_coq_prop_derives :
+       forall (P : Prop) (Q R : expr),
+       (P -> provable (impp Q R)) -> provable (impp (andp Q (coq_prop P)) R).
+     Definition provables_impp_coq_prop :
+       forall (P : Prop) (Q : expr), P -> provable (impp Q (coq_prop P)).
+     Definition provable_coq_prop_or :
+       forall P Q : Prop,
+       provable (iffp (coq_prop (P \/ Q)) (orp (coq_prop P) (coq_prop Q))).
+     Definition logic_equiv_sepcon_orp_distr :
+       forall x y z : expr,
+       logic_equiv (sepcon x (orp y z)) (orp (sepcon x y) (sepcon x z)).
+     Definition logic_equiv_orp_sepcon_distr :
+       forall x y z : expr,
+       logic_equiv (sepcon (orp x y) z) (orp (sepcon x z) (sepcon y z)).
+     Definition provables_sepcon_impp_unfold :
+       forall u x y z : expr,
+       provable (impp (sepcon x y) z) ->
+       provable (impp (sepcon (sepcon u x) y) (sepcon u z)).
+     Definition provables_sepcon_sepcon_unfold :
+       forall x y z w v : expr,
+       provable (impp (sepcon x (sepcon y z)) (sepcon w v)) ->
+       provable (impp (sepcon (sepcon y x) z) (sepcon w v)).
+     Definition provables_sepcon_assoc :
+       forall x y z w : expr,
+       provable (impp (sepcon (sepcon y x) z) w) ->
+       provable (impp (sepcon x (sepcon y z)) w).
+     Definition provables_sepcon_proper_impp :
+       Morphisms.Proper
+         (Morphisms.respectful (fun x y : expr => provable (impp x y))
+            (Morphisms.respectful (fun x y : expr => provable (impp x y))
+               (fun x y : expr => provable (impp x y)))) sepcon.
+     Definition provables_sepcon_proper_iffp :
+       Morphisms.Proper
+         (Morphisms.respectful (fun x y : expr => provable (iffp x y))
+            (Morphisms.respectful (fun x y : expr => provable (iffp x y))
+               (fun x y : expr => provable (iffp x y)))) sepcon.
+     Definition logic_equiv_sepcon_proper :
+       Morphisms.Proper
+         (Morphisms.respectful logic_equiv
+            (Morphisms.respectful logic_equiv logic_equiv)) sepcon.
+     Definition logic_equiv_refl_instance :
+       RelationClasses.Reflexive logic_equiv.
+     Definition logic_equiv_symm_instance :
+       RelationClasses.Symmetric logic_equiv.
+     Definition logic_equiv_trans_instance :
+       RelationClasses.Transitive logic_equiv.
+     Definition provable_sepcon_emp_logic_equiv :
+       forall x : expr, logic_equiv (sepcon x emp) x.
+     Definition derivable1_exp_andp_l :
+       forall (A : Type) (P : A -> expr) (Q : expr),
+       derivable1 (andp (exp A P) Q) (exp A (fun x : A => andp (P x) Q)).
+     Definition derivable1_andp_exp_l :
+       forall (A : Type) (P : expr) (Q : A -> expr),
+       derivable1 (andp P (exp A Q)) (exp A (fun x : A => andp P (Q x))).
+     Definition derivable1_exp_sepcon_l :
+       forall (A : Type) (P : A -> expr) (Q : expr),
+       derivable1 (sepcon (exp A P) Q) (exp A (fun x : A => sepcon (P x) Q)).
+     Definition derivable1_sepcon_exp_l :
+       forall (A : Type) (P : expr) (Q : A -> expr),
+       derivable1 (sepcon P (exp A Q)) (exp A (fun x : A => sepcon P (Q x))).
+     Definition derivable1_iter_sepcon_flatten :
+       forall xs1 xs2 xs3 : list expr,
+       derivable1 (iter_sepcon (xs1 ++ iter_sepcon xs2 :: xs3)%list)
+         (iter_sepcon (xs1 ++ xs2 ++ xs3)%list).
+     Definition derivable1_sepcon_coq_prop_andp_l :
+       forall (P : expr) (Q : Prop) (R : expr),
+       derivable1 (sepcon P (andp (coq_prop Q) R))
+         (andp (coq_prop Q) (sepcon P R)).
+     Definition derivable1_sepcon_coq_prop_andp_r :
+       forall (P : expr) (Q : Prop) (R : expr),
+       derivable1 (andp (coq_prop Q) (sepcon P R))
+         (sepcon P (andp (coq_prop Q) R)).
+     Definition derivable1_sepcon_andp_coq_prop_l :
+       forall (P Q : expr) (R : Prop),
+       derivable1 (sepcon P (andp Q (coq_prop R)))
+         (andp (coq_prop R) (sepcon P Q)).
+     Definition derivable1_sepcon_andp_coq_prop_r :
+       forall (P Q : expr) (R : Prop),
+       derivable1 (andp (coq_prop R) (sepcon P Q))
+         (sepcon P (andp Q (coq_prop R))).
+     Definition derivable1_coq_prop_andp_sepcon_l :
+       forall (P : Prop) (Q R : expr),
+       derivable1 (sepcon (andp (coq_prop P) Q) R)
+         (andp (coq_prop P) (sepcon Q R)).
+     Definition derivable1_coq_prop_andp_sepcon_r :
+       forall (P : Prop) (Q R : expr),
+       derivable1 (andp (coq_prop P) (sepcon Q R))
+         (sepcon (andp (coq_prop P) Q) R).
+     Definition derivable1_andp_coq_prop_sepcon_l :
+       forall (P : expr) (Q : Prop) (R : expr),
+       derivable1 (sepcon (andp P (coq_prop Q)) R)
+         (andp (coq_prop Q) (sepcon P R)).
+     Definition derivable1_andp_coq_prop_sepcon_r :
+       forall (P : expr) (Q : Prop) (R : expr),
+       derivable1 (andp (coq_prop Q) (sepcon P R))
+         (sepcon (andp P (coq_prop Q)) R).
+     Definition derivable1_iter_sepcon_coq_prop_andp_l :
+       forall (xs1 : list expr) (P : Prop) (x2 : expr) (xs3 : list expr),
+       derivable1 (iter_sepcon (xs1 ++ andp (coq_prop P) x2 :: xs3)%list)
+         (andp (coq_prop P) (iter_sepcon (xs1 ++ x2 :: xs3)%list)).
+     Definition derivable1_proper_derivable1 :
+       Morphisms.Proper
+         (Morphisms.respectful (Basics.flip derivable1)
+            (Morphisms.respectful derivable1 Basics.impl)) derivable1.
+     Definition logic_equiv_proper_logic_equiv :
+       Morphisms.Proper
+         (Morphisms.respectful logic_equiv
+            (Morphisms.respectful logic_equiv Basics.impl)) logic_equiv.
+     Definition logic_equiv_proper_derivable1 :
+       Morphisms.Proper
+         (Morphisms.respectful logic_equiv
+            (Morphisms.respectful logic_equiv Basics.impl)) derivable1.
+     Definition derivable1s_andp_proper :
+       Morphisms.Proper
+         (Morphisms.respectful derivable1
+            (Morphisms.respectful derivable1 derivable1)) andp.
+     Definition derivable1s_orp_proper :
+       Morphisms.Proper
+         (Morphisms.respectful derivable1
+            (Morphisms.respectful derivable1 derivable1)) orp.
+     Definition derivable1s_sepcon_proper :
+       Morphisms.Proper
+         (Morphisms.respectful derivable1
+            (Morphisms.respectful derivable1 derivable1)) sepcon.
+     Definition logic_equiv_wand_proper :
+       Morphisms.Proper
+         (Morphisms.respectful logic_equiv
+            (Morphisms.respectful logic_equiv logic_equiv)) wand.
+     Definition derivable1s_wand_proper :
+       Morphisms.Proper
+         (Morphisms.respectful (Basics.flip derivable1)
+            (Morphisms.respectful derivable1 derivable1)) wand.
+     Definition logic_equiv_coq_prop_or :
+       forall P Q : Prop,
+       logic_equiv (coq_prop (P \/ Q)) (orp (coq_prop P) (coq_prop Q)).
+     Definition logic_equiv_coq_prop_and :
+       forall P Q : Prop,
+       logic_equiv (coq_prop (P /\ Q)) (andp (coq_prop P) (coq_prop Q)).
+     Definition derivable1s_coq_prop_andp_l :
+       forall (P : Prop) (Q R : expr),
+       (P -> derivable1 Q R) -> derivable1 (andp (coq_prop P) Q) R.
+     Definition derivable1s_coq_prop_andp_r :
+       forall (P : Prop) (Q R : expr),
+       derivable1 R Q -> P -> derivable1 R (andp (coq_prop P) Q).
+     Definition logic_equiv_coq_prop_andp2 :
+       forall (P : Prop) (Q : expr), P -> logic_equiv (andp (coq_prop P) Q) Q.
+     Definition derivables_coq_prop_imply :
+       forall P Q : Prop, (P -> Q) -> derivable1 (coq_prop P) (coq_prop Q).
+     Definition derivables_false_coq_prop :
+       forall (P : Prop) (Q : expr),
+       (P -> False) -> derivable1 (coq_prop P) Q.
+     Definition derivable1_sepcon_orp_l :
+       forall x y z : expr,
+       derivable1 (sepcon z (orp x y)) (orp (sepcon z x) (sepcon z y)).
+     Definition derivable1_orp_sepcon_r :
+       forall x y z : expr,
+       derivable1 (orp (sepcon x z) (sepcon y z)) (sepcon (orp x y) z).
+     Definition derivable1_sepcon_orp_r :
+       forall x y z : expr,
+       derivable1 (orp (sepcon z x) (sepcon z y)) (sepcon z (orp x y)).
+     Definition logic_equiv_orp_sepcon :
+       forall x y z : expr,
+       logic_equiv (sepcon (orp x y) z) (orp (sepcon x z) (sepcon y z)).
+     Definition logic_equiv_sepcon_orp :
+       forall x y z : expr,
+       logic_equiv (sepcon z (orp x y)) (orp (sepcon z x) (sepcon z y)).
+     Definition logic_equiv_andp_swap :
+       forall x y z : expr,
+       logic_equiv (andp x (andp y z)) (andp y (andp x z)).
+     Definition derivable1s_andp_mono :
+       forall x1 x2 y1 y2 : expr,
+       derivable1 x1 x2 ->
+       derivable1 y1 y2 -> derivable1 (andp x1 y1) (andp x2 y2).
+     Definition logic_equiv_sepcon_swap :
+       forall x y z : expr,
+       logic_equiv (sepcon x (sepcon y z)) (sepcon y (sepcon x z)).
+     Definition logic_equiv_coq_prop_andp1 :
+       forall (P : expr) (Q : Prop),
+       derivable1 P (coq_prop Q) -> logic_equiv P (andp (coq_prop Q) P).
+     Definition derivable1s_emp_l_unfold :
+       forall x y : expr, derivable1 emp y -> derivable1 x (sepcon x y).
+     Definition derivable1s_emp_sepcon_unfold :
+       forall x y z : expr,
+       derivable1 x z -> derivable1 emp y -> derivable1 x (sepcon z y).
+     Definition logic_equiv_sepcon_coq_prop_andp :
+       forall (P : expr) (Q : Prop) (R : expr),
+       logic_equiv (sepcon P (andp (coq_prop Q) R))
+         (sepcon (andp (coq_prop Q) P) R).
+     Definition logic_equiv_coq_prop_andp_sepcon :
+       forall (P : Prop) (Q R : expr),
+       logic_equiv (sepcon (andp (coq_prop P) Q) R)
+         (andp (coq_prop P) (sepcon Q R)).
+     Definition logic_equiv_coq_prop_andp_sepcon_truep :
+       forall (P : expr) (Q : Prop),
+       logic_equiv (sepcon P (coq_prop Q))
+         (sepcon (andp (coq_prop Q) P) truep).
+     Definition derivable1s_ex_l_unfold :
+       forall (A : Type) (P : A -> expr) (Q : expr),
+       (exists x : A, derivable1 (P x) Q) -> derivable1 (allp A P) Q.
+     Definition derivable1_exp_allp_swap :
+       forall (A B : Type) (P : A -> B -> expr),
+       derivable1 (exp A (fun x : A => allp B (fun y : B => P x y)))
+         (allp B (fun y : B => exp A (fun x : A => P x y))).
+     Definition derivable1_allp_allp_swap :
+       forall (A B : Type) (P : A -> B -> expr),
+       derivable1 (allp A (fun x : A => allp B (fun y : B => P x y)))
+         (allp B (fun y : B => allp A (fun x : A => P x y))).
+     Definition logic_equiv_exp_andp :
+       forall (A : Type) (P : A -> expr) (Q : expr),
+       logic_equiv (andp (exp A P) Q) (exp A (fun x : A => andp (P x) Q)).
+     Definition logic_equiv_exp_sepcon :
+       forall (A : Type) (P : A -> expr) (Q : expr),
+       logic_equiv (sepcon (exp A P) Q) (exp A (fun x : A => sepcon (P x) Q)).
+     Definition logic_equiv_wand :
+       forall x y x' y' : expr,
+       logic_equiv x x' ->
+       logic_equiv y y' -> logic_equiv (wand x y) (wand x' y').
+     Definition derivable1_wand_elim1 :
+       forall x y : expr, derivable1 (sepcon (wand x y) x) y.
+     Definition derivable1_wand_elim2 :
+       forall x y : expr, derivable1 (sepcon x (wand x y)) y.
+     Definition logic_equiv_orp_proper :
+       Morphisms.Proper
+         (Morphisms.respectful logic_equiv
+            (Morphisms.respectful logic_equiv logic_equiv)) orp.
+     Definition logic_equiv_andp_proper :
+       Morphisms.Proper
+         (Morphisms.respectful logic_equiv
+            (Morphisms.respectful logic_equiv logic_equiv)) andp.
+     Definition provable_iffp_rewrite :
+       RelationClasses.RewriteRelation
+         (fun x y : expr => provable (iffp x y)).
+     Definition derivable1s_impp_proper :
+       Morphisms.Proper
+         (Morphisms.respectful (Basics.flip derivable1)
+            (Morphisms.respectful derivable1 derivable1)) impp.
+     Definition Derivable_impp_rewrite :
+       RelationClasses.RewriteRelation derivable1.
+     Definition derivable1_refl_instance :
+       RelationClasses.Reflexive derivable1.
+     Definition derivable1_trans_instance :
+       RelationClasses.Transitive derivable1.
+     Definition derivable1_sepcon_iter_sepcon1 :
+       forall xs ys : list expr,
+       derivable1 (sepcon (iter_sepcon xs) (iter_sepcon ys))
+         (iter_sepcon (xs ++ ys)%list).
+     Definition derivable1_sepcon_iter_sepcon2 :
+       forall xs ys : list expr,
+       derivable1 (iter_sepcon (xs ++ ys)%list)
+         (sepcon (iter_sepcon xs) (iter_sepcon ys)).
+     Definition mstore : CNotation.addr -> BinNums.Z -> expr.
+     Definition mstore_noninit : CNotation.addr -> expr.
+     Parameter mstore_mstore_noninit :
+       forall (p : CNotation.addr) (v : BinNums.Z) (m : model),
+       mstore p v m -> mstore_noninit p m.
+     Parameter mstore_eqm :
+       forall (p : CNotation.addr) (v v' : BinNums.Z),
+       Integers.Byte.eqm v v' -> derivable1 (mstore p v) (mstore p v').
+     Parameter dup_mstore_noninit :
+       forall p : CNotation.addr,
+       derivable1 (sepcon (mstore_noninit p) (mstore_noninit p))
+         (coq_prop False).
+   End

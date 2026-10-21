@@ -1,0 +1,14 @@
+{
+  "context": "Read-only live Rocq MCP compatibility probe prompted by user on 2026-10-16; not a C VC check.",
+  "result": {
+    "success": false,
+    "reason": "tactic_failed",
+    "error": "Coq: Error when parsing .vo (from file /home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreRep.vo) for library CRTOS_Verify.sem.SemaphoreRep: The file /home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreRep.vo was compiled with OCaml\n4.14.2 while this instance of Coq was compiled with OCaml 4.14.1.\nCoq object files need to be compiled with the same OCaml toolchain to be compatible.",
+    "failed_command": "Require Import CRTOS_Verify.sem.SemaphoreRep.",
+    "command_index": 0,
+    "commands_run": 0,
+    "last_valid_state_id": 1,
+    "goals_at_failure": null,
+    "hint": "Use rocq_check(body='...', from_state=1) or rocq_step_multi(tactics=[...], from_state=1)."
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "files_scanned": 22,
+  "tokens": [
+    "Axiom",
+    "Parameter",
+    "Admitted",
+    "admit",
+    "Abort"
+  ],
+  "findings": [
+    {
+      "file": "framework-candidate/NestedCriticalSTS.v",
+      "line": 57,
+      "token": "Parameter",
+      "classification": "Unchanged baseline Module Type field nested_critical_STS_def.nc_sts; concretely instantiated by existing protocol, not a new axiom",
+      "new_in_candidate": false
+    }
+  ],
+  "assumption_basis": "Print Assumptions output in compile.json; source-to-model metadata is explicitly reviewed separately in design.md",
+  "introduced_forbidden_tokens": [],
+  "introduced_axiom_or_unproved_lemma": false
+}

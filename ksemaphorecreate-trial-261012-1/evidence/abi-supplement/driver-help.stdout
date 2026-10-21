@@ -1,0 +1,68 @@
+Usage: /home/xinra/qcp-binary-democases/linux-binary/symexec [options] [input-file]
+
+Run symbolic execution and generate verification conditions.
+
+General:
+  -h, --help                     Show this help message
+  @<file>                        Read additional command line arguments from file
+  --args-file <file>             Read additional command line arguments from file
+
+Input:
+  --input-file <file>            Read program input from a file
+  <input-file>                   Read program input from a file
+  --compile-commands <file>      Read include paths from compile_commands.json
+  -I<path>                       Add a header search path
+  --input-file-name <name>       Override the displayed input file name
+
+Output:
+  --gen-and-backup               Backup generated files before overwriting
+  --coq-output-dir <dir>         Derive generated Coq file paths from an output folder
+  --lean-output-dir <dir>        Enable Lean generation and derive generated Lean file paths from an output folder
+  --goal-file <file>             Write generated proof goals to a file
+  --proof-auto-file <file>       Write the auto proof script to a file
+  --proof-manual-file <file>     Write the manual proof script to a file
+  --no-coq-gen                   Disable all Coq file generation
+  --no-lean-gen                  Disable all Lean file generation
+  --program-path <file>          Write the generated Coq program to a file
+  --Json-output                  Enable JSON output
+  --soundness-proof              Generate soundness proof artifacts
+
+Logic:
+  -slp <folder> <logic-path>     Map a strategy folder to a Coq logic path
+  --coq-logic-path <path>        Set the Coq logical path for generated files
+  --lean-logic-path <path>       Set the Lean import prefix for generated files
+  --CRules <module>              Import the given CRules module
+  --arch <32|64>                 Select target C architecture width (default: 32)
+  --endian <big|little>          Select target byte order (default: big)
+  --no-CRules                    Do not import the default CRules module
+  --no-logic-path                Do not assign a Coq logical path
+
+Strategy:
+  --strategy-file <file>         Load strategy configuration from a file
+  --no-strategy-gen              Skip strategy soundness goal generation
+  --strategy-application-limit <count> Stop a solver run after this many successful strategy applications (default: 4096)
+  --no-record-strategies         Disable builtin record strategies
+  --strategy-application-limit <count> Stop a solver run after this many successful strategy applications (default: 4096)
+  --no-record-strategies         Disable builtin record strategies
+  --export-record-strategy-dir <dir> Export generated record strategies to a directory
+
+Execution:
+  -s <mode>                      Select execution mode: 0=normal symbolic execution, 1=print parser partial-program output and stop after type checking, 2=print elaborated partial statements, 3=print the completed PSTree, 4=legacy StateMachineTest-compatible normal execution, 5=legacy reserved normal execution
+  --conassertion                 Use conassertion mode
+  --debug-preprocessor           Print macro expansions during preprocessing
+  --no-exec-info                 Suppress execution progress output
+  --full-auto                    Enable fully automatic proof mode
+  --float-finite-vc              Generate finite safety VCs for floating-point operations
+  --no-float-finite-vc           Do not generate finite safety VCs for floating-point operations
+
+Diagnostics:
+  --dump-smt-vc-file <file>      Dump generated SMT verification conditions
+  --Auto-VC-Checking <file>      Print strategies' Exists instantiations and intermediate props during VC proving
+  --disable-solver-info          Suppress solver-related output
+
+Assertion format:
+  --basic-assertion              Use the basic separation logic assertion format
+  --primary-assertion            Use the primary assertion format
+  --inner-assertion              Use the PROP LOCAL SEP assertion format
+  --user-assertion               Use the user-facing assertion format
+

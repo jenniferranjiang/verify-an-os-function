@@ -1,0 +1,11 @@
+{
+  "status": "review-ready",
+  "spec_revision": "spec-r6-ae22a04e2c95",
+  "annotated_manifest_sha256": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+  "source_revision": "source-r2-0c50c37013e9",
+  "predicate_revision": "predicate-nonzero-candidate-fe8c4261db5c",
+  "predicate_manifest_sha256": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+  "review_scope": "two exact fixed-size argument normalizations, checker/extraction delta and affected _SemaphoreCreate/KSemaphoreCreate closure",
+  "qcp_started": false,
+  "active_files_edited": false
+}

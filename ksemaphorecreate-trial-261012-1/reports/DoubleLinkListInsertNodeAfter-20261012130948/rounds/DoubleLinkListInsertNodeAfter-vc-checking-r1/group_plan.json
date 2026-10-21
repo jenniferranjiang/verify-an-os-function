@@ -1,0 +1,15 @@
+{
+  "groups": [
+    {
+      "id": "return_identity",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_DoubleLinkListInsertNodeAfter_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold DoubleLinkListInsertNodeAfter_return_wit_1 and introduce linklist_node_pre, linklist_pre, successor and their three nonzero premises. The antecedent and consequent are syntactically identical separating conjunctions of four Ptr cells: linklist.node_next maps to linklist_node, successor.node_prev maps to linklist_node, linklist_node.node_next maps to successor, and linklist_node.node_prev maps to linklist. Close by entailment reflexivity (or cancel all four cells). There are no existential witnesses, array/list transformations, arithmetic bounds, abstract-state refinements or extra premises. No helper is needed. Use only the whole top-level obligation under LLM_pre_process."
+        }
+      ]
+    }
+  ]
+}

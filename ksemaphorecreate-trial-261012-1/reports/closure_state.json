@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "entry": "KSemaphoreCreate",
+  "closure_sha256": "90e338fb28be459c7d250a839df7c54e1bb236f3de93c44e4a1615e82484fdb0",
+  "order": [
+    "CriticalAreaLock",
+    "CriticalAreaUnLock",
+    "DoubleLinkListInsertNodeAfter",
+    "AllocId",
+    "InitDoubleLinkList",
+    "InsertObj",
+    "IdInsertObj",
+    "_SemaphoreCreate",
+    "KSemaphoreCreate"
+  ],
+  "trusted": [
+    "x_malloc",
+    "x_free",
+    "memset",
+    "DisableLocalInterrupt",
+    "EnableLocalInterrupt",
+    "KPrintf"
+  ],
+  "runs": {
+    "CriticalAreaLock": "CriticalAreaLock-20261012130948",
+    "CriticalAreaUnLock": "CriticalAreaUnLock-20261012130948",
+    "DoubleLinkListInsertNodeAfter": "DoubleLinkListInsertNodeAfter-20261012130948",
+    "AllocId": "AllocId-20261012130948",
+    "InitDoubleLinkList": "InitDoubleLinkList-20261012130948",
+    "InsertObj": "InsertObj-20261012130948",
+    "IdInsertObj": "IdInsertObj-20261012130948",
+    "_SemaphoreCreate": "SemaphoreCreate-20261012131015",
+    "KSemaphoreCreate": "KSemaphoreCreate-20261012131015"
+  }
+}

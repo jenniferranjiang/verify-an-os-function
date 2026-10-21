@@ -1,0 +1,33 @@
+{
+  "status": "draft-interface-checked-predicate-review-pending",
+  "previous_revision": "spec-r1-9c6b3806e173",
+  "previous_snapshot": "evidence/spec-r1-snapshot",
+  "planned_revision_number": 2,
+  "authorization": "允许 nest<65535，明确排除更深调用",
+  "affected_nontrusted": [
+    "KSemaphoreCreate",
+    "_SemaphoreCreate",
+    "CriticalAreaLock",
+    "CriticalAreaUnLock"
+  ],
+  "affected_trusted_declarations": [
+    "DisableLocalInterrupt",
+    "EnableLocalInterrupt"
+  ],
+  "retained_trusted_symbols": [
+    "x_malloc",
+    "x_free",
+    "memset",
+    "DisableLocalInterrupt",
+    "EnableLocalInterrupt",
+    "KPrintf"
+  ],
+  "constraint": "No QCP execution; no spec review-ready before predicate independent review-passed. No extra handler==1/current==before trusted guarantee without reviewed derivation.",
+  "pending": "Independent predicate review-passed; then bind acceptance and arrange independent spec review.",
+  "spec_revision": "spec-r2-6d54bb88379e",
+  "annotated_manifest_sha256": "6d54bb88379e3c791407f6c1eb19190cc66680164505922ba8a0f18f4a5ece11",
+  "predicate_revision": "predicate-r3-16b6ee4a4e02",
+  "predicate_manifest_sha256": "16b6ee4a4e02383dcb7128da0c57212af2e672ccd15b15633142778e8d2d629f",
+  "source_revision": "source-r2-0c50c37013e9",
+  "interface_check": "evidence/spec-interface-check.json"
+}

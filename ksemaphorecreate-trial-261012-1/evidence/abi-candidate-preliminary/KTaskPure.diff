@@ -1,0 +1,15 @@
+--- /home/xinra/crtos/lib/KTaskPure.v
++++ /home/xinra/crtos/ksemaphorecreate-trial-261012-1/shared-candidate/arm32le/KTaskPure.v
+@@ -2,7 +2,11 @@
+ Require Import Coq.Lists.List.
+ Require Import Coq.Strings.String.
+ From compcert.lib Require Import Integers.
+-From SimpleC.SL Require Import Mem IntLib CNotation.
++From SimpleC.SL Require Import Mem IntLib CNotation CArch.
++
++(** 候选适配：新版sizeof语法由明确32位CNotation实例提供；纯定义保持原文。 *)
++Module KTaskCNotation := CNotationSig Arch32.
++Import KTaskCNotation.
+ 
+ Local Open Scope Z_scope.
+ Local Open Scope string.

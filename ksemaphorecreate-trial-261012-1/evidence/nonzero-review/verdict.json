@@ -1,0 +1,11 @@
+{
+  "status": "review-passed",
+  "kind": "predicate-delta-review",
+  "revision": "predicate-nonzero-candidate-fe8c4261db5c",
+  "manifest_sha256": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+  "open_blockers": [],
+  "review_record": ".docs/Report/2026-10-12-6-predicate-review.md",
+  "review_record_sha256": "2a398f53327e2baf3f8c8dbb74dfc109783f2896c82f405bcac26ba928948608",
+  "spec_review_performed": false,
+  "candidate_activation_performed": false
+}

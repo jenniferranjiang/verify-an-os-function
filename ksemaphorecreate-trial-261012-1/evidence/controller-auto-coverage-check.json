@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "actual_case": "CriticalAreaLock",
+  "original_goal_and_auto_bytes_preserved": true,
+  "manual_statements_exact_union": true,
+  "manual_parents": 3,
+  "added_manual": [
+    "proof_of_CriticalAreaLock_partial_solve_wit_1"
+  ],
+  "normalized_auto_has_no_admissions": true,
+  "duplicate_conflict_rejected": true,
+  "no_canonical_generated_file_modified": true,
+  "no_C_proof_claim": true
+}

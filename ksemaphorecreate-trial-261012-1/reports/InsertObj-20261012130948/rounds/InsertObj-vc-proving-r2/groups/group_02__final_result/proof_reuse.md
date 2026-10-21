@@ -1,0 +1,1 @@
+Reused the two assigned return-result proof blocks from this trial’s InsertObj-vc-proving-r1/groups/group_00__insertion_result/InsertObj_proof_manual.v. The current split goal retains the required premises, and the copied proof passed the current group-check. No historical modules were imported.

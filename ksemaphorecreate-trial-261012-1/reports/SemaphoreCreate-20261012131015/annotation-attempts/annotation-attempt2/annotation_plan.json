@@ -1,0 +1,72 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "x_malloc",
+      "meaning": "Trusted allocation: return null with no resource or a complete private 32-byte semaphore allocation."
+    },
+    {
+      "name": "memset",
+      "meaning": "Trusted zeroing: preserve the complete allocation as a zeroed private semaphore."
+    },
+    {
+      "name": "CriticalAreaLock",
+      "meaning": "Preserve caller IRQ prefix, obtain an allowed current OS state, and increment its physical scheduler nesting."
+    },
+    {
+      "name": "IdInsertObj",
+      "meaning": "Return full-manager failure with the detached ID unchanged, or register the minimum free ID and transfer its node ownership."
+    },
+    {
+      "name": "x_free",
+      "meaning": "Trusted release of the complete zeroed unpublished semaphore."
+    },
+    {
+      "name": "CriticalAreaUnLock",
+      "meaning": "Commit the caller guarantee, decrement physical scheduler nesting, and return the same caller IRQ prefix."
+    },
+    {
+      "name": "InitDoubleLinkList",
+      "meaning": "Initialize the two owned pointer slots as an empty self-linked list."
+    },
+    {
+      "name": "DoubleLinkListInsertNodeAfter",
+      "meaning": "Insert the detached node by updating exactly the four owned link slots."
+    },
+    {
+      "name": "_SemaphoreCreate",
+      "meaning": "Return -5 for allocation or ID exhaustion, otherwise publish a fresh semaphore with the minimum free ID, requested value, empty wait queue, and preserved caller task/scheduler/IRQ state."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": [
+    {
+      "source": {
+        "attempt": "_SemaphoreCreate-vc-checking-r1",
+        "name": "proof_of__SemaphoreCreate_partial_solve_wit_1_pure",
+        "annotation_location": "annotated_C/src/_SemaphoreCreate.c:121 (x_malloc Require at line 31)"
+      },
+      "current": [
+        "proof_of__SemaphoreCreate_partial_solve_wit_1_pure"
+      ],
+      "old_gap": "The unconstrained formal sizeof_alias_type \"Semaphore\" had no premise equating it to 32.",
+      "change": "Main activated independently reviewed spec-r6-ae22a04e2c95, normalizing only this fixed-size call argument to (x_size_t)32; this owner regenerated through the controller without changing any Require/Ensure. The complete old and new pure definitions are identical except that sizeof(\"Semaphore\") is now the literal 32, so the unchanged caller footprint entails 32 = 32.",
+      "result": "resolved"
+    },
+    {
+      "source": {
+        "attempt": "_SemaphoreCreate-vc-checking-r1",
+        "name": "proof_of__SemaphoreCreate_partial_solve_wit_2_pure",
+        "annotation_location": "annotated_C/src/_SemaphoreCreate.c:125 (memset Require at line 37)"
+      },
+      "current": [
+        "proof_of__SemaphoreCreate_partial_solve_wit_2_pure"
+      ],
+      "old_gap": "The unconstrained formal sizeof_alias_type \"Semaphore\" had no premise equating it to 32.",
+      "change": "Main activated independently reviewed spec-r6-ae22a04e2c95, normalizing only this fixed-size call argument to (x_size_t)32; this owner regenerated through the controller without changing any Require/Ensure. The complete old and new pure definitions are identical except that sizeof(\"Semaphore\") is now the literal 32; allocated ownership and all pure premises remain identical, and the conclusion is 0 = 0 and 32 = 32.",
+      "result": "resolved"
+    }
+  ]
+}

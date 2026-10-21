@@ -1,0 +1,76 @@
+Welcome to Coq 8.20.1
+[Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+[Loading ML file extraction_plugin.cmxs (using legacy method) ... done]
+CrtosCritical.OutsideCritical =
+fun s : CriticalSTS.critical_STS_state =>
+Crtos_C_Rules.exp
+  (fun s' : CriticalSTS.critical_STS_state =>
+   Crtos_C_Rules.andp
+     (Crtos_C_Rules.coq_prop (CriticalSTS.critical_STS_transition s s'))
+     (Crtos_C_Rules.at_states
+        (fun cs : ConAssertion.STS_state =>
+         exists s'' : CriticalSTS.critical_STS_state,
+           cs = CriticalSTS.outside_state s'' /\
+           CriticalSTS.critical_STS_transition s' s'')))
+     : CriticalSTS.critical_STS_state -> Crtos_C_Rules.expr
+
+Arguments CrtosCritical.OutsideCritical s _
+CrtosCritical.InsideCritical =
+fun s : CriticalSTS.critical_STS_state =>
+Crtos_C_Rules.sepcon
+  (Crtos_C_Rules.at_states
+     (SetsDomain.Sets.singleton (CriticalSTS.inside_state s)))
+  (Crtos_C_Rules.has_tokens SetsDomain.Sets.full)
+     : CriticalSTS.critical_STS_state -> Crtos_C_Rules.expr
+
+Arguments CrtosCritical.InsideCritical s _
+Crtos_C_STS.c_sts =
+{|
+  CriticalSTS.critical_STS_state := CrtosOSPure.CrtosOSState;
+  CriticalSTS.critical_STS_transition := CrtosOSPure.CrtosOSTransition
+|}
+     : CriticalSTS.critical_STS
+Crtos_C_Rules.struct_padding =
+fun (_ : CNotation.lvalue_expr) (_ : String.string) => Crtos_C_Rules.emp
+     : CNotation.lvalue_expr -> String.string -> Crtos_C_Rules.expr
+
+Arguments Crtos_C_Rules.struct_padding x struct_name%string_scope _
+Fetching opaque proofs from disk for CRTOS_Verify.sem.CrtosHeapBridge
+Fetching opaque proofs from disk for Coq.Logic.FunctionalExtensionality
+Fetching opaque proofs from disk for Coq.Init.Logic
+Axioms:
+CNotation.sizeof_front_end_type : CNotation.front_end_type -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Fetching opaque proofs from disk for CRTOS_Verify.sem.SemaphoreCritical
+Fetching opaque proofs from disk for Coq.Classes.Morphisms
+Fetching opaque proofs from disk for Logic.GeneralLogic.ProofTheory.BasicLogicEquiv
+Fetching opaque proofs from disk for Logic.GeneralLogic.ProofTheory.BasicDeduction
+Fetching opaque proofs from disk for Logic.PropositionalLogic.ShallowEmbedded.ModelLanguagePropositionalLogic
+Fetching opaque proofs from disk for Coq.Classes.RelationClasses
+Fetching opaque proofs from disk for Logic.PropositionalLogic.ProofTheory.RewriteClass
+Fetching opaque proofs from disk for Logic.PropositionalLogic.ProofTheory.Intuitionistic
+Fetching opaque proofs from disk for Logic.lib.Ensembles_ext
+Fetching opaque proofs from disk for SimpleC.SL.CommonAssertion
+Fetching opaque proofs from disk for Logic.ShallowQuantifierLogic.ModelConstrEX
+Axioms:
+CNotation.sizeof_front_end_type : CNotation.front_end_type -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+
+
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 
+Coq < 

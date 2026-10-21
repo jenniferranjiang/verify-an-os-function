@@ -1,0 +1,10 @@
+from building import *
+import os
+
+cwd = GetCurrentDir()
+src = []
+if GetDepend(['ADAPTER_GM800TF']):
+    src += ['gm800tf.c']
+group = DefineGroup('connection 4g gm800tf', src, depend = [], CPPPATH = [cwd])
+
+Return('group')

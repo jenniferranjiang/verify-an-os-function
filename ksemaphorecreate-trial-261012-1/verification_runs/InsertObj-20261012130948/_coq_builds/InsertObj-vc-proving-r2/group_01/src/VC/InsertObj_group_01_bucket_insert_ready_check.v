@@ -1,0 +1,6 @@
+From CRTOS_Verify.VC Require Import InsertObj_goal InsertObj_proof_auto InsertObj_proof_manual.
+Check proof_of_InsertObj_entail_wit_3_1.
+Check proof_of_InsertObj_entail_wit_3_2.
+Check proof_of_InsertObj_entail_wit_3_1_split_goal_1.
+Check proof_of_InsertObj_entail_wit_3_1_split_goal_spatial.
+Check proof_of_InsertObj_entail_wit_3_2_split_goal_spatial.

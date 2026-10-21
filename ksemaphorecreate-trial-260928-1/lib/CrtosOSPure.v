@@ -10,7 +10,7 @@ From SimpleC.SL Require Import Mem.
 
 Require Import CRTOS_Verify.lib.CrtosGlobState.
 Require Import CRTOS_Verify.lib.KTaskPure.
-Require Import CRTOS_Verify.libai.TaskProtocolSTS.
+Require Import CRTOS_Verify.lib.TaskProtocolSTS.
 Require Import CRTOS_Verify.sem.SemaphorePure.
 
 Import ListNotations.

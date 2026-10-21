@@ -1,0 +1,6 @@
+{
+  "revision": "predicate-nonzero-candidate-fe8c4261db5c",
+  "manifest_sha256": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+  "config_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15",
+  "compiler": "/home/xinra/.opam/pv-bench-8.20.1/bin/coqc"
+}

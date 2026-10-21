@@ -1,0 +1,732 @@
+--- /home/xinra/crtos/lib/KTaskPure.v
++++ /home/xinra/crtos/ksemaphorecreate-trial-261019-1/lib/KTaskPure.v
+@@ -3,7 +3,7 @@
+ Require Import Coq.Strings.String.
+ From compcert.lib Require Import Integers.
+ From SimpleC.SL Require Import Mem IntLib CArch CNotation.
+-Require Export CRTOS_Verify.libai.TaskStatus.
++Require Export CRTOS_Verify.lib.TaskStatus.
+ Require Export CRTOS_Verify.lib.StructFieldOffsetAxiom.
+ Module Import KTaskCNotation := CNotationSig Arch32.
+ 
+--- /home/xinra/crtos/lib/KTaskDelay.v
++++ /home/xinra/crtos/ksemaphorecreate-trial-261019-1/lib/KTaskDelay.v
+@@ -5,7 +5,7 @@
+ From SimpleC.SL Require Import Mem CNotation.
+ 
+ Require Import CRTOS_Verify.lib.dll_abs.
+-Require Export CRTOS_Verify.libai.TickOrder.
++Require Export CRTOS_Verify.lib.TickOrder.
+ 
+ Import ListNotations.
+ 
+--- /home/xinra/crtos/lib/StructFieldOffsetAxiom.v
++++ /home/xinra/crtos/ksemaphorecreate-trial-261019-1/lib/StructFieldOffsetAxiom.v
+@@ -11,21 +11,11 @@
+ Local Open Scope Z_scope.
+ Local Open Scope string.
+ 
+-(**
+-  本文件集中保存 CRTOS 当前 32 位验证配置中，由目标 C ABI 决定、
+-  但 Rocq/QCP 内存模型本身不会推导的结构体布局事实。
+-
+-  这些事实属于验证的显式可信基。所有 [*_ok] 都是纯命题，不拥有任何
+-  C 内存。字段偏移与结构体大小分层表达：[*_field_offset_ok] 只描述字段
+-  地址，独立的 [*_size_axiom] 只描述 [sizeof]，避免 Spec 和证明重复携带
+-  同一个大小事实。
+-
+-  特别地，本文件中的 [TaskDescriptor] 布局对应 QCP 当前使用的
+-  [annotated_C/src/headers/m_ktask.h]：原 C 声明中的 29/3 位事件位域在
+-  该验证头中被规范化为两个普通 [uint32] 字段。因此这里的 120 字节
+-  布局是 QCP 验证模型的 ABI 假设，不宣称等同于仍保留共享位域存储单元
+-  的 [annotated_C/src/include/xs_ktask.h] 原始声明。
+-*)
++(** 本候选仅复用根库的纯布局命题、常量和Task公共定义依赖。
++    原文件末尾全部ABI Axiom已移除，本次没有把旧布局结论当作新实验事实。
++    Semaphore/IdManager/DLL的当前32位布局由checks/layout.c重新确认；
++    QCP字段地址表达式属于前端符号接口，后续证明仍须接入实际布局解释。
++    其余模块的常量不构成本次C实现验证或ABI认可。 *)
+ 
+ (**
+   [ALIGN_SIZE] 是当前验证目标的结构体和寄存器地址对齐粒度（字节）。
+@@ -385,113 +375,3 @@
+   不是 allocator 返回值，不应让每个函数重复携带局部对齐假设；其布局
+   由无条件全局公理统一提供。所有 [*_ok] 仍是纯命题，不拥有内存。
+ *)
+-Axiom task_descriptor_size_axiom :
+-  sizeof("TaskDescriptor") = TASK_MEM_SIZE.
+-
+-Axiom task_descriptor_field_offset_axiom :
+-  forall p, addr_aligned p ALIGN_SIZE ->
+-    ktask_descriptor_field_offset_ok p.
+-
+-Axiom stack_register_context_size_axiom :
+-  sizeof("StackRegisterContext") = STACK_REGISTER_CONTEXT_SIZE.
+-
+-Axiom stack_register_context_field_offset_axiom :
+-  forall p, addr_aligned p ALIGN_SIZE ->
+-    ktask_stack_context_field_offsets_ok p.
+-
+-Axiom delay_size_axiom :
+-  sizeof("Delay") = DELAY_MEM_SIZE.
+-
+-Axiom delay_field_offset_axiom :
+-  forall p, addr_aligned p ALIGN_SIZE ->
+-    delay_field_offset_ok p.
+-
+-(**
+-  [OsAssignReadyVector] 的数组地址推理还依赖数组元素
+-  [SysDoubleLinklistNode] 的大小，因此该辅助大小事实也在此统一声明。
+-*)
+-Axiom os_assign_ready_node_size_axiom :
+-  sizeof("SysDoubleLinklistNode") = OS_ASSIGN_READY_NODE_SIZE.
+-
+-Axiom os_assign_ready_vector_size_axiom :
+-  sizeof("OsAssignReadyVector") = OS_ASSIGN_READY_VECTOR_SIZE.
+-
+-(**
+-  项目实例是全局 [Assign.os_assign_ready_vector]。该公理把字段偏移视为
+-  当前 QCP 32 位数据模型中对基址平移不变的类型布局事实，因此按设计对
+-  任意 [p] 提供，而不要求调用者在 Spec 或全局不变量中重复保存对齐条件。
+-*)
+-Axiom os_assign_ready_vector_field_offset_axiom :
+-  forall p, os_assign_ready_vector_field_offset_ok p.
+-
+-(** 其余 ABI 事实由 32 位验证头的 sizeof/offsetof 编译断言核对。
+-    动态 IPC 对象沿用 TaskDescriptor 的基址对齐前提；静态函数表、
+-    ISR 内嵌数组与 Assign 沿用全局 ready-vector 的无条件字段布局形式。
+-    这些公理只描述类型布局，不授予任何内存或对象存活权限。 *)
+-Axiom id_node_size_axiom : sizeof("IdNode") = ID_NODE_MEM_SIZE.
+-
+-Axiom semaphore_size_axiom : sizeof("Semaphore") = SEMAPHORE_MEM_SIZE.
+-
+-Axiom semaphore_field_offset_axiom :
+-  forall p, addr_aligned p ALIGN_SIZE ->
+-    semaphore_field_offset_ok p.
+-
+-Axiom mutex_size_axiom : sizeof("Mutex") = MUTEX_MEM_SIZE.
+-
+-Axiom mutex_field_offset_axiom :
+-  forall p, addr_aligned p ALIGN_SIZE ->
+-    mutex_field_offset_ok p.
+-
+-Axiom event_size_axiom : sizeof("Event") = EVENT_MEM_SIZE.
+-
+-Axiom event_field_offset_axiom :
+-  forall p, addr_aligned p ALIGN_SIZE ->
+-    event_field_offset_ok p.
+-
+-Axiom msgqueue_size_axiom : sizeof("MsgQueue") = MSGQUEUE_MEM_SIZE.
+-
+-Axiom msgqueue_field_offset_axiom :
+-  forall p, addr_aligned p ALIGN_SIZE ->
+-    msgqueue_field_offset_ok p.
+-
+-Axiom msgqueue_done_size_axiom : sizeof("MsgQueueDone") = MSGQUEUE_DONE_SIZE.
+-
+-Axiom msgqueue_done_field_offset_axiom :
+-  forall p, msgqueue_done_field_offset_ok p.
+-
+-Axiom irq_desc_size_axiom : sizeof("IrqDesc") = IRQ_DESC_SIZE.
+-
+-Axiom irq_desc_field_offset_axiom :
+-  forall p, irq_desc_field_offset_ok p.
+-
+-Axiom isr_done_size_axiom : sizeof("IsrDone") = ISR_DONE_SIZE.
+-
+-Axiom isr_done_field_offset_axiom :
+-  forall p, isr_done_field_offset_ok p.
+-
+-Axiom isr_manager_size_axiom : sizeof("InterruptServiceRoutines") = ISR_MANAGER_SIZE.
+-
+-Axiom isr_manager_field_offset_axiom :
+-  forall p, isr_manager_field_offset_ok p.
+-
+-Axiom assign_size_axiom : sizeof("Assign") = ASSIGN_MEM_SIZE.
+-
+-Axiom assign_field_offset_axiom :
+-  forall p, assign_field_offset_ok p.
+-
+-Definition REG_COUNT : Z := 32.
+-
+-(**
+-  以下三个纯命题记录当前 ABI 的上下文大小、槽数量和组合布局要求。
+-  本文件不声明这些命题成立的公理；具体布局证据仍留在验证该 C 结构体的
+-  模块中。
+-*)
+-Definition ktask_stack_context_size_ok : Prop :=
+-  sizeof("StackRegisterContext") = REG_COUNT * sizeof(UINT).
+-
+-Definition ktask_stack_context_count_ok : Prop :=
+-  REG_COUNT = 32 /\ 0 <= REG_COUNT <= INT_MAX.
+-
+-Definition ktask_stack_context_layout_ok : Prop :=
+-  ktask_stack_context_size_ok /\
+-  ktask_stack_context_count_ok.
+--- /home/xinra/crtos/lib/CrtosGlobState.v
++++ /home/xinra/crtos/ksemaphorecreate-trial-261019-1/lib/CrtosGlobState.v
+@@ -113,46 +113,20 @@
+     desc.(tdExstatus)
+     desc.(tdDone).
+ 
+-(**
+-  Semaphore 稳定登记阶段的模型，依据 xs_sem.h / semaphore.c。
+-  本状态不把创建过程中尚未入链、删除后等待
+-  x_free 的对象伪装为已登记对象；那些过渡阶段需要具体 Spec 转交资源。
+-
+-  与 task_inv 相同，对象 map、全局 DLL、ID manager 共用纯地址关系：
+-  map cell 拥有 value、padding 和 pend_list；ID manager 拥有 id.id 与
+-  id.link；全局 DLL 拥有 Semaphore.link。等待 payload 由总文件传入，
+-  必须查询同一个任务 map；这里不引入另一份任务描述符或 Delay 所有权。
+-*)
++(** 每个已登记对象以分配地址为身份；id 是创建后固定的属性，pending 只保存任务基址。 *)
+ Record SemaphoreAbs : Type := {
++  sem_id : Z;
+   sem_value : Z;
+-  sem_pending : list (DL_Node addr)
+-}.
+-
+-(** 本模块独立 static done 对象的五个回调值，不附带回调规格。 *)
+-Record SemaphoreDoneAbs : Type := {
+-  sem_done_create : addr;
+-  sem_done_delete : addr;
+-  sem_done_obtain : addr;
+-  sem_done_abandon : addr;
+-  sem_done_set_value : addr
+-}.
+-
+-(**
+-  保存 k_sem_list、k_sem_id_manager 和本翻译单元 static done 的稳定地址。
+-  sem_done_ptr 由具体接入上下文绑定，不能把多个源文件的同名 done
+-  统一解析为一个逻辑全局符号。ID bitmap / bucket 地址在 StableIdmanager 中。
+-*)
++  sem_pending_addrs : list addr
++}.
++(** 对应 k_sem_id_manager、k_sem_list 与由宏生成的数组；静态 done 已唯一解析，不进入模型。 *)
+ Record SemaphoreStable : Type := {
+   sem_idmanager_ptr : addr;
+   sem_idmanager_stable : StableIdmanager;
+-  sem_list_head : addr;
+-  sem_done_ptr : addr;
+-  sem_done_abs : SemaphoreDoneAbs
+-}.
+-
+-(** ptr_list 保存实际管理链顺序；obj_map 是所有已登记 Semaphore 的唯一 map。 *)
++  sem_list_head : addr
++}.
++(** 管理链顺序与对象map关联。ID manager状态由这两项推导，避免两份权威ID记录。 *)
+ Record SemaphoreState : Type := {
+-  sem_idmanager_abs : VarIdmanager;
+   sem_ptr_list : list addr;
+   sem_obj_map : addr -> option SemaphoreAbs
+ }.
+@@ -446,19 +420,14 @@
+   (sg.(ready_vector_done_abs)).(prvdInsert) = &("KTaskInsertToReadyVector") /\
+   (sg.(ready_vector_done_abs)).(prvdRemove) = &("KTaskOsAssignRemoveKTask").
+ 
+-(** 固定配置和具名 C 全局对象；static done 的独立地址由外围上下文提供。 *)
++(** 本次配置的Semaphore具名全局；dispatch已归一直呼，无done字段。 *)
+ Definition semaphore_context (sg : SemaphoreStable) : Prop :=
+   sg.(sem_idmanager_ptr) = &("k_sem_id_manager") /\
+   sg.(sem_list_head) = &("k_sem_list") /\
+   sg.(sem_idmanager_stable).(idmax) = ID_MAX_NUM /\
+   sg.(sem_idmanager_stable).(hoffset) = BUCKET_NUM /\
+   sg.(sem_idmanager_stable).(id_map) = &("__id_map_k_sem_id_manager") /\
+-  sg.(sem_idmanager_stable).(htable) = &("__htable_k_sem_id_manager") /\
+-  sg.(sem_done_abs).(sem_done_create) = &("_SemaphoreCreate") /\
+-  sg.(sem_done_abs).(sem_done_delete) = &("_SemaphoreDelete") /\
+-  sg.(sem_done_abs).(sem_done_obtain) = &("_SemaphoreObtain") /\
+-  sg.(sem_done_abs).(sem_done_abandon) = &("_SemaphoreAbandon") /\
+-  sg.(sem_done_abs).(sem_done_set_value) = &("_SemaphoreSetValue").
++  sg.(sem_idmanager_stable).(htable) = &("__htable_k_sem_id_manager").
+ 
+ (** 绑定具名全局、当前128 ID/16桶配置与四个回调值。 *)
+ Definition mutex_context (sg : MutexStable) : Prop :=
+--- /home/xinra/crtos/lib/CrtosRules.v
++++ /home/xinra/crtos/ksemaphorecreate-trial-261019-1/lib/CrtosRules.v
+@@ -1,118 +1,91 @@
+-Require Import Coq.ZArith.ZArith.
+-Require Import Coq.Lists.List.
+-Require Import Coq.Strings.String.
++Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.
+ Require Import SetsClass.SetsClass.
+-From MonadLib.MonadErr Require Import MonadErrBasic.
+-Import SetsNotation.
+-From SimpleC.SL Require Import Mem SeparationLogic.
++From MonadLib.MonadErr Require Export MonadErrBasic monadesafe_lib.
++From SimpleC.SL Require Import Mem SeparationLogic ConAssertion CriticalSTS.
+ Require Import Logic.LogicGenerator.demo932.Interface.
+-Require Import SL.ConAssertion SL.CriticalSTS.
+-Require Export CRTOS_Verify.lib.idnode_abs.
+ Require Export CRTOS_Verify.lib.CrtosGlobState.
+-
+-Import ListNotations.
+-
++Import SetsNotation ListNotations.
+ Local Open Scope Z_scope.
+-
+ Local Open Scope sets.
+ Local Open Scope string.
+ 
+-(** 扩展后的全局状态统一实例化到 QCP CriticalSTS；纯上下文先于空间不变量。 *)
++(** 同一 CRTOS 全局协议的锁token和处理器PRIMASK权限；没有信号量专属STS。
++    IRQ不是内存映射寄存器，故其权限在STS里表示，绝不伪造C全局地址。 *)
++Inductive CrtosToken := GlobalCriticalToken | ProcessorIRQToken.
++Definition critical_tokens : CrtosToken -> Prop := fun t => t = GlobalCriticalToken.
++Definition irq_tokens : CrtosToken -> Prop := fun t => t = ProcessorIRQToken.
++Definition both_tokens : CrtosToken -> Prop := fun _ => True.
++Definition no_tokens : CrtosToken -> Prop := fun _ => False.
++Definition irq_bit (q : Z) : Prop := q = 0 \/ q = 1.
++Definition Crtos_CS : critical_STS := {|
++ critical_STS_state := VarGlobalState;
++ critical_STS_transition := fun _ _ => True |}.
++Definition CrtosMachineState := (@critical_state Crtos_CS * Z)%type.
+ 
+-(**
+-  [Crtos_CS] 恢复原有的 CriticalSTS 模型：STS 只保存受临界区保护的
+-  [VarGlobalState]，使用 QCP 提供的唯一 [unit] 锁 token。
++(** token流与实际cpsid/msr步骤同步。KTaskOsAssignLockNest只是C计数，
++    可能溢出，不用它表示锁token的持有层数。环境只能在outside改变共享状态，
++    并保持调用者持有的PRIMASK。进入/退出需要同时消费IRQ权限。 *)
++Inductive CrtosTransition :
++ (CrtosMachineState * (CrtosToken -> Prop)) ->
++ (CrtosMachineState * (CrtosToken -> Prop)) -> Prop :=
++| crtos_enter : forall st q, irq_bit q -> CrtosTransition
++   ((outside_state st,q),irq_tokens) ((inside_state st,1),both_tokens)
++| crtos_exit : forall before after q, irq_bit q -> CrtosTransition
++   ((inside_state before,1),both_tokens) ((outside_state after,q),irq_tokens)
++| crtos_nested : forall st, CrtosTransition
++   ((inside_state st,1),both_tokens) ((inside_state st,1),both_tokens)
++| crtos_locked_update : forall before after, CrtosTransition
++   ((inside_state before,1),both_tokens) ((inside_state after,1),both_tokens)
++| crtos_environment : forall before after, CrtosTransition
++   ((outside_state before,0),no_tokens) ((outside_state after,0),no_tokens).
+ 
+-  与 liteos-legacy 的抽象临界区模型一致，rely 和 guarantee 共用
+-  [True] 关系，不再携带任务创建 reservation 或 owner 权限。
+-  稳定地址、固定配置和函数表由外围 [sg] 原样传递；共享内存仍由
+-  [os_inv] 在进入时交给调用者，并在退出时收回。
+-*)
+-Definition Crtos_CS : critical_STS := {|
+-  critical_STS_state := VarGlobalState;
+-  critical_STS_transition := fun _ _ => True
+-|}.
+-
+-Module Crtos_STS <: critical_STS_def.
+-  Definition c_sts : critical_STS := Crtos_CS.
++Module Crtos_STS <: STS_def.
++ Definition sts : STS := {|
++  token := CrtosToken; STS_state := CrtosMachineState;
++  Transition := CrtosTransition;
++  InvownedToken := fun s => match fst s with
++      | inside_state _ => no_tokens | outside_state _ => critical_tokens end |}.
+ End Crtos_STS.
+-
+-(** 本项目的内存谓词统一实例化到这个 CriticalSTS 断言模型。 *)
+ Module Crtos_C_Rules.
+-  Include Crtos_STS.
+-  Include critical_STS_to_STS_def.
+-  Include ConAssertion.CSL.
+-  Include DerivedPredSig Arch32 BigEndian.
+-  Include StoreLibSig Arch32 BigEndian.
+-  Include ArrayLibSig Arch32 BigEndian.
+-  Include Array2LibSig Arch32 BigEndian.
+-  Include PtrArray2LibSig Arch32 BigEndian.
+-  Include MapLibSig Arch32 BigEndian.
+-  Include StringLibSig Arch32 BigEndian.
+-  Include CriticalCSL.
++ Include Crtos_STS.
++ Include ConAssertion.CSL.
++ Include DerivedPredSig Arch32 LittleEndian.
++ Include StoreLibSig Arch32 LittleEndian.
++ Include ArrayLibSig Arch32 LittleEndian.
++ Include Array2LibSig Arch32 LittleEndian.
++ Include PtrArray2LibSig Arch32 LittleEndian.
++ Include MapLibSig Arch32 LittleEndian.
++ Include StringLibSig Arch32 LittleEndian.
+ End Crtos_C_Rules.
+-
+ Export Crtos_C_Rules.
+-
+ Local Open Scope sac.
+ 
+-(**
+-  [InsideCritical sg st] 表示当前线程持有临界区锁 token，进入时观察
+-  到状态 [st]。这里只保留纯 os_global_context 与 QCP 锁状态；
+-  所有共享内存（包括 done 表）由 os_inv 中对应模块的不变量提供。
+-*)
+-Definition InsideCritical
+-    (sg : StableGlobalState) (st : VarGlobalState) : Assertion :=
+-  “ os_global_context sg ” && Crtos_C_Rules.InsideCritical st.
++(** QCP has_tokens 的s_STS是empty，与state_join的交集组合会抹掉观察。
++    这里在同一载体上使用full作为token断言的中性观察，保留IRQ精确状态。 *)
++Definition owns_tokens (T : CrtosToken -> Prop) : Assertion :=
++ fun s => s.(s_mem) = empty_mem /\ s.(s_STS) == Sets.full /\ T == s.(s_token).
+ 
+-(** 临界区外只保留环境可能推进的状态观察，不持有临界区锁 token。 *)
+-Definition OutsideCritical
+-    (sg : StableGlobalState) (st : VarGlobalState) : Assertion :=
+-  “ os_global_context sg ” && Crtos_C_Rules.OutsideCritical st.
+-
+-(** 加锁和解锁分别使用同一 CriticalSTS 关系的 rely/guarantee 接口。 *)
+-Definition Crtos_RTrans (before after : VarGlobalState) : Prop :=
+-  Crtos_C_Rules.RTrans before after.
+-
+-Definition Crtos_GTrans (before after : VarGlobalState) : Prop :=
+-  Crtos_C_Rules.GTrans before after.
+-
+-Lemma Crtos_RTrans_refl : forall st, Crtos_RTrans st st.
+-Proof.
+-  intros st. exact I.
+-Qed.
+-
+-(**
+-  [task_atomic_cmd cmd] 对应 LOS_Verify/Los_Rules_lib.v 的 [atomic_cmd]：
+-  把单个 [VarGlobalState] 上的原子关系提升为状态集合上的抽象程序。
+-  从前态集合选取实际加锁观察 [before]，执行 [cmd.(nrm)] 得到返回值和 [after]，
+-  解锁后的隐藏状态集合固定为 [Crtos_RTrans after]。
+-
+-  唯一显式参数 [cmd] 描述临界区内的功能关系。环境 rely 由项目的临界区
+-  协议统一确定，不由调用者或返回值选择。这里只提升整个全局状态；若以后
+-  引入子状态提升，须像 LiteOS 的 [atomic_tsk_cmd] 一样保持其余全局分量。
+-
+-  输入集合中任一可选观察发生 cmd.err，原子程序即可能出错；不能只保留正常关系。
+-  该定义只描述纯抽象程序，不拥有 C 内存；具体共享内存仍由
+-  [os_inv] 在 CriticalArea Specs 中提供。多段临界区使用 bind 组合
+-  多个提升后的命令；无加锁的提前返回保留为 ret，不凭空增加原子观察。
+-*)
+-Definition task_atomic_cmd {A : Type}
+-    (cmd : program VarGlobalState A)
+-    : program (VarGlobalState -> Prop) A :=
+-  {| MonadErr.nrm := fun states_before result states_after =>
+-       exists before after,
+-         states_before before /\
+-         cmd.(MonadErr.nrm) before result after /\
+-         states_after == Crtos_RTrans after;
+-     MonadErr.err := fun states_before =>
+-       exists before, states_before before /\ cmd.(MonadErr.err) before |}.
+-
+-(**
+-  用户指定的空临界区调度模型：观察允许的 rely 前态，原样归还共享状态，
+-  返回 tt，并留下新的 rely 闭包。它不读取或修改共享字段，也不需要额外
+-  调用者内存；锁协议资源仍由 OutsideCritical/InsideCritical 维护。
+-  此处不区分主动让出与普通抢占，不承诺调度公平性、下一任务或终止。
+-*)
+-Definition abs_ktask_assign : program (VarGlobalState -> Prop) unit :=
+-  task_atomic_cmd (MonadErr.ret tt).
++(** InsideCritical只持唯一全局锁权限，PRIMASK权限另由IRQMask持有。
++    inside状态总是屏蔽IRQ；共享内存由slice_OS_inv在取得/归还时交接。 *)
++Definition InsideCritical (sg : StableGlobalState) (st : VarGlobalState) : Assertion :=
++ “ os_global_context sg ” &&
++ at_states (fun s => fst s = @inside_state Crtos_CS st /\ snd s = 1) **
++ owns_tokens critical_tokens.
++(** 与原全局rely一致，outside观察允许环境推进，不声称入口快照不变。 *)
++Definition OutsideCritical (sg : StableGlobalState) (st : VarGlobalState) : Assertion :=
++ “ os_global_context sg ” &&
++ at_states (fun s => exists current, fst s = @outside_state Crtos_CS current /\ irq_bit (snd s)).
++(** q是实际Cortex-M3 PRIMASK位；唯一IRQ token防止复制或凭纯命题捏造硬件状态。 *)
++Definition IRQMask (q : Z) : Assertion :=
++ “ irq_bit q ” && at_states (fun s => snd s = q) ** owns_tokens irq_tokens.
++Definition Crtos_RTrans (_ _ : VarGlobalState) : Prop := True.
++Definition Crtos_GTrans (_ _ : VarGlobalState) : Prop := True.
++Definition LastSeen (st : VarGlobalState) : (VarGlobalState -> Prop) -> Prop :=
++ fun P => P == Crtos_RTrans st.
++Definition ExactSeen (st : VarGlobalState) : VarGlobalState -> Prop := fun current => current = st.
++(** 沿用全局atomic提升：先取环境可达观察，操作后回到同一rely闭包。 *)
++Definition task_atomic_cmd {A : Type} (cmd : program VarGlobalState A)
++ : program (VarGlobalState -> Prop) A :=
++ {| MonadErr.nrm := fun P r Q => exists before after,
++       P before /\ cmd.(MonadErr.nrm) before r after /\ Q == Crtos_RTrans after;
++    MonadErr.err := fun P => exists before, P before /\ cmd.(MonadErr.err) before |}.
+--- /home/xinra/crtos/lib/dll.v
++++ /home/xinra/crtos/ksemaphorecreate-trial-261019-1/lib/dll.v
+@@ -12,7 +12,7 @@
+ From SimpleC.SL Require Import Mem SeparationLogic MapLib.
+ Require Import Logic.LogicGenerator.demo932.Interface.
+ 
+-Require Import SL.ConAssertion SL.CriticalSTS SL.NestedCriticalSTS.
++From SimpleC.SL Require Import ConAssertion CriticalSTS.
+ Require Export CRTOS_Verify.lib.dll_abs.
+ Require Import CRTOS_Verify.lib.CrtosRules.
+ 
+--- /home/xinra/crtos/lib/idnode.v
++++ /home/xinra/crtos/ksemaphorecreate-trial-261019-1/lib/idnode.v
+@@ -13,7 +13,7 @@
+ Require Import Logic.LogicGenerator.demo932.Interface.
+ 
+ 
+-Require Import SL.ConAssertion SL.CriticalSTS SL.NestedCriticalSTS.
++From SimpleC.SL Require Import ConAssertion CriticalSTS.
+ 
+ Require Export CRTOS_Verify.lib.dll_abs.
+ Require Export CRTOS_Verify.lib.idnode_abs.
+@@ -21,7 +21,7 @@
+ (* Require Export CRTOS_Verify.lib.bitmap. *)
+ 
+ Require Export CRTOS_Verify.lib.CrtosRules.
+-Require Import CRTOS_Verify.libai.NodeSelfLinked.
++
+ 
+ Import DLL.
+ 
+@@ -32,6 +32,12 @@
+ Local Open Scope sac.
+ 
+ Module IDNode.
++
++(** 公共自环节点接口；原根库的 libai 依赖缺失，本候选直接由 DLL 两字段定义。 *)
++Definition store_node_self_linked (p : addr) : Assertion :=
++ &(p # "SysDoubleLinklistNode" ->ₛ "node_prev") # Ptr |-> p **
++ &(p # "SysDoubleLinklistNode" ->ₛ "node_next") # Ptr |-> p.
++
+ 
+ Include IDNodePure.
+ 
+--- /home/xinra/crtos/lib/SemaphoreInv.v
++++ /home/xinra/crtos/ksemaphorecreate-trial-261019-1/lib/SemaphoreInv.v
+@@ -1,141 +1,116 @@
+-Require Import Coq.ZArith.ZArith.
+-Require Import Coq.Lists.List.
++Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.
+ Require Import Coq.Sorting.Permutation.
+-Require Import Coq.Strings.String.
+-Require Import SetsClass.SetsClass.
+-Import SetsNotation.
+ From SimpleC.SL Require Import Mem SeparationLogic MapLib.
+ Require Import Logic.LogicGenerator.demo932.Interface.
+-Require Export CRTOS_Verify.lib.CrtosRules.
+-Require Import CRTOS_Verify.lib.dll CRTOS_Verify.lib.idnode.
+-
++Require Export CRTOS_Verify.lib.CrtosRules CRTOS_Verify.lib.idnode.
+ Import ListNotations DLL IDNode.
+ Local Open Scope Z_scope.
+ Local Open Scope string.
+ Local Open Scope sac.
+ 
+-Definition semaphore_link_node (sem : addr) : DL_Node addr :=
+-  Build_DL_Node sem (&(sem # "Semaphore" ->ₛ "link")).
++(** IdInsertObj失败时保留的原始字段精确值；padding由外层对象持有。 *)
++Definition idnode_private (p : addr) (id prev next : Z) : Assertion :=
++ &(p # "IdNode" ->ₛ "id") # UShort |-> id **
++ &(p # "IdNode" ->ₛ "link" .ₛ "node_prev") # Ptr |-> prev **
++ &(p # "IdNode" ->ₛ "link" .ₛ "node_next") # Ptr |-> next.
++(** 私有DLL节点的两个原值；初始化和插入覆盖它们，失败保留精确值。 *)
++Definition dll_private (p prev next : addr) : Assertion :=
++ &(p # "SysDoubleLinklistNode" ->ₛ "node_prev") # Ptr |-> prev **
++ &(p # "SysDoubleLinklistNode" ->ₛ "node_next") # Ptr |-> next.
++(** QCP当前struct_padding=emp，本次完整32字节ownership需要显式保存这4字节。
++    根库同一处理适用，不能与另一份自动padding重复；后续字段写入不修改它们。 *)
++Definition sem_padding (p : addr) : Assertion :=
++ UCharArray.full (p + 2) 2 [0;0] ** UCharArray.full (p + 14) 2 [0;0].
++(** x_malloc成功交出整个32字节未初始化对象；不把未初始化字节假设成某个整数值。 *)
++Definition sem_allocated (p : addr) : Assertion :=
++ “ p <> 0 /\ addr_aligned p 4 ” && UCharArray.undef_full p 32.
++(** memset完成整对象清零后、尚未登记的完整私有对象。失败x_free只消费此形态。
++    共2+2+8+2+2+8+8=32字节，没有全局表/等待任务ownership。 *)
++Definition sem_zero (p : addr) : Assertion :=
++ “ p <> 0 /\ addr_aligned p 4 ” &&
++ idnode_private &(p # "Semaphore" ->ₛ "id") 0 0 0 **
++ &(p # "Semaphore" ->ₛ "value") # UShort |-> 0 **
++ dll_private &(p # "Semaphore" ->ₛ "pend_list") 0 0 **
++ dll_private &(p # "Semaphore" ->ₛ "link") 0 0 ** sem_padding p.
+ 
+-Definition semaphore_link_nodes (sems : list addr) : list (DL_Node addr) :=
+-  map semaphore_link_node sems.
++(** IdInsertObj成功后，id字段与id.link已交给manager；其余22字节仍归创建者。
++    参数保留value和两个独立DLL节点的精确值；padding始终是零。 *)
++Definition sem_private_remainder (p value pend_prev pend_next link_prev link_next : Z) : Assertion :=
++ &(p # "Semaphore" ->ₛ "value") # UShort |-> value **
++ dll_private &(p # "Semaphore" ->ₛ "pend_list") pend_prev pend_next **
++ dll_private &(p # "Semaphore" ->ₛ "link") link_prev link_next ** sem_padding p.
++(** ID已登记、value尚为零，其余两个DLL节点仍未初始化。 *)
++Definition sem_id_registered (p : addr) : Assertion :=
++ sem_private_remainder p 0 0 0 0 0.
++(** value已赋值且pend_list自环，管理link尚未头插；最后一次DLL插入消费该节点。 *)
++Definition sem_ready_to_publish (p value : Z) : Assertion :=
++ sem_private_remainder p value &(p # "Semaphore" ->ₛ "pend_list")
++   &(p # "Semaphore" ->ₛ "pend_list") 0 0.
+ 
+-(**
+-  按真实对象链及各 pend_list 的实际顺序汇总等待任务基址。顺序不被永久
+-  假定为按当前优先级排序；优先级变化后的排列须由具体函数证明处理。
+-  缺失 map cell 的分支只使纯函数全定义，semaphore_world_wf 排除登记缺失。
+-*)
+-Definition semaphore_waiters (st : SemaphoreState) : list addr :=
+-  List.concat
+-    (map (fun sem =>
+-      match st.(sem_obj_map) sem with
+-      | Some obj => map getData obj.(sem_pending)
+-      | None => nil
+-      end) st.(sem_ptr_list)).
++(** 等待节点属于任务的sched_link；复用任务模块类型和权威task_desc_map，
++    不另建任务视图，也不重复拥有任务标量或Delay。 *)
++Definition sched_link_of (task : addr) : addr :=
++ &(task # "TaskDescriptor" ->ₛ "task_dync_sched_member" .ₛ "sched_link").
++Definition pure_suspend_sched_link (T : addr -> option TaskDescriptorAbs)
++ (link task : addr) : Assertion :=
++ EX desc : TaskDescriptorAbs,
++ “ T task = Some desc /\ link = sched_link_of task /\
++   desc.(tdSchedMember).(tsmStat) = TSK_SUSPEND ” && emp.
++Definition semaphore_pending_nodes (pending : list addr) : list (DL_Node addr) :=
++ map (fun task => Build_DL_Node task (sched_link_of task)) pending.
++Definition semaphore_link_nodes (ptrs : list addr) : list (DL_Node addr) :=
++ map (fun p => Build_DL_Node p &(p # "Semaphore" ->ₛ "link")) ptrs.
++Definition pure_semaphore_link_member (link p : addr) : Assertion :=
++ “ link = &(p # "Semaphore" ->ₛ "link") ” && emp.
+ 
+-(** IdNode 的 [2,4) 及 value 后 [14,16) 两段 padding：创建时 memset 清零，后续字段写入保留。
+-    QCP 的 struct_padding 当前为 emp，不能替代这些实际字节权限。
+-    布局公理集中在 StructFieldOffsetAxiom；不拥有 id 或 DLL 字段。 *)
+-Definition store_semaphore_padding (sem : addr) : Assertion :=
+-  CharArray.full (sem + 2) 2 (repeat_Z 0 2) **
+-  CharArray.full (sem + 14) 2 (repeat_Z 0 2).
++(** 对象表是ID和值的唯一权威来源；缺失分支仅令函数全定义，wf排除登记缺失。 *)
++Definition semaphore_id_nodes (st : SemaphoreState) : list IdNodeAbs :=
++ map (fun p => Build_IdNodeAbs
++   (match st.(sem_obj_map) p with Some obj => obj.(sem_id) | None => 0 end)
++   &(p # "Semaphore" ->ₛ "id")) st.(sem_ptr_list).
++(** 桶顺序由管理链创建顺序过滤；InsertObj与全局链均头插，删除均保持余项顺序。
++    空桶的零指针/已初始化自环具体区别由store_idbucket存在分支保留。 *)
++Definition semaphore_idmanager (sg : SemaphoreStable) (st : SemaphoreState) : VarIdmanager :=
++ let nodes := semaphore_id_nodes st in
++ Build_VarIdmanager (map idnode_id nodes)
++ (map (fun index => filter (fun node => Z.eqb (node.(idnode_id) mod sg.(sem_idmanager_stable).(hoffset)) index) nodes)
++      (map Z.of_nat (seq 0 (Z.to_nat sg.(sem_idmanager_stable).(hoffset))))).
++Definition semaphore_world_wf (st : SemaphoreState) : Prop :=
++ forall p, In p st.(sem_ptr_list) <-> exists obj, st.(sem_obj_map) p = Some obj.
++(** 已登记对象本体只拥有value、padding、pend_list及等待sched_link。
++    id与id.link归IDmanager，管理link归全局DLL，三部分不重叠。 *)
++Definition store_semaphore (wait : addr -> addr -> Assertion)
++ (p : addr) (obj : SemaphoreAbs) : Assertion :=
++ “ p <> 0 /\ addr_aligned p 4 ” &&
++ &(p # "Semaphore" ->ₛ "value") # UShort |-> obj.(sem_value) **
++ store_dll wait &(p # "Semaphore" ->ₛ "pend_list")
++   (semaphore_pending_nodes obj.(sem_pending_addrs)) ** sem_padding p.
++(** 模块完整内存：manager12字节、bitmap16字节、16个连续8字节桶，
++    全局哨兵、全部登记对象与等待链。静态done唯一dispatch已归一直呼，不进入资源模型。 *)
++Definition semaphore_inv (wait : addr -> addr -> Assertion)
++ (sg : SemaphoreStable) (st : SemaphoreState) : Assertion :=
++ “ semaphore_context sg /\ semaphore_world_wf st ” &&
++ store_idmanager sg.(sem_idmanager_stable) (semaphore_idmanager sg st) sg.(sem_idmanager_ptr) **
++ store_dll pure_semaphore_link_member sg.(sem_list_head) (semaphore_link_nodes st.(sem_ptr_list)) **
++ store_map (store_semaphore wait) st.(sem_obj_map).
++(** 只暴露本次slice所需模块；不是宣称整个OS内存已经被重新验证。
++    n是实际uint16 KTaskOsAssignLockNest，独立于逻辑锁token，不排除65535。 *)
++Definition slice_OS_inv (sg : StableGlobalState) (st : VarGlobalState) (n : Z) : Assertion :=
++ semaphore_inv (pure_suspend_sched_link st.(os_tasks).(task_desc_map))
++   sg.(os_semaphore_stable) st.(os_semaphores) **
++ &("KTaskOsAssignLockNest") # UShort |-> n.
+ 
+-(**
+-  pend_list 的哨兵及等待 sched_link 均由 store_dll 拥有；store_wait_T
+-  只表达等待任务与权威 map、sched_link 及 SUSPEND 状态的纯关联，
+-  不拥有六个 sched 标量；标量在所有状态下由 task_inv 统一拥有。
+-*)
+-Definition store_semaphore
+-    (store_wait_T : addr -> addr -> Assertion)
+-    (sem : addr) (obj : SemaphoreAbs) : Assertion :=
+-  “ sem <> 0 /\ addr_aligned sem ALIGN_SIZE ” &&
+-  &(sem # "Semaphore" ->ₛ "value") # UShort |-> obj.(sem_value) **
+-  store_dll store_wait_T &(sem # "Semaphore" ->ₛ "pend_list") obj.(sem_pending) **
+-  store_semaphore_padding sem.
+-
+-Definition pure_semaphore_link_member (link sem : addr) : Assertion :=
+-  “ link = &(sem # "Semaphore" ->ₛ "link") ” && emp.
+-
+-(**
+-  SemaphoreDoneType 是匿名 typedef，当前尚未经 QCP 注册匿名结构体 tag。
+-  按本项目 Arch32 指针宽度，五个声明顺序相邻的函数指针分别位于
+-  [0,4,8,12,16]；这里直接保存各 Ptr 槽，不捏造 struct SemaphoreDoneType。
+-  具体前端接入须确认 typedef 布局及本文件 static done 的地址对应关系。
+-  对象没有 Done 指针字段；整张静态表仅由 semaphore_inv 拥有一次。
+-*)
+-Definition store_semaphore_done (p : addr) (done : SemaphoreDoneAbs) : Assertion :=
+-  p # Ptr |-> done.(sem_done_create) **
+-  (p + 4) # Ptr |-> done.(sem_done_delete) **
+-  (p + 8) # Ptr |-> done.(sem_done_obtain) **
+-  (p + 12) # Ptr |-> done.(sem_done_abandon) **
+-  (p + 16) # Ptr |-> done.(sem_done_set_value).
+-
+-(**
+-  双向 map/list 覆盖和嵌入 ID 地址的多重集合对应，复用 task_world_wf 模式。
+-  数值范围由 UShort 单元给出；不凭借抽象设计添加 value 与等待人数关系。
+-*)
+-Record semaphore_world_wf (st : SemaphoreState) : Prop := {
+-  semaphore_wf_map_list :
+-    (forall sem, In sem st.(sem_ptr_list) <->
+-      exists obj, st.(sem_obj_map) sem = Some obj);
+-  semaphore_wf_id_nodes :
+-    Permutation
+-      (map idnode_addr (List.concat st.(sem_idmanager_abs).(idbuckets)))
+-      (map (fun sem => &(sem # "Semaphore" ->ₛ "id")) st.(sem_ptr_list))
+-}.
+-
+-(**
+-  稳定登记视图，仅在创建已完成入链、删除已完成摘链等提交边界使用。
+-  每个资源仅有一个 owner；等待任务与核心 task_inv 的关系由总组合约束。
+-*)
+-Definition semaphore_inv (store_wait_T : addr -> addr -> Assertion)
+-    (sg : SemaphoreStable) (st : SemaphoreState) : Assertion :=
+-  “ semaphore_context sg /\ semaphore_world_wf st ” &&
+-  store_idmanager sg.(sem_idmanager_stable) st.(sem_idmanager_abs)
+-    sg.(sem_idmanager_ptr) **
+-  store_dll pure_semaphore_link_member sg.(sem_list_head)
+-    (semaphore_link_nodes st.(sem_ptr_list)) **
+-  store_map (store_semaphore store_wait_T) st.(sem_obj_map) **
+-  store_semaphore_done sg.(sem_done_ptr) sg.(sem_done_abs).
+-
+-(**
+-  局部 map cell 提取后保留的完整 frame；全局链、ID 登记和回调表始终保留，
+-  无需展开 ID manager 或其他对象。状态更改后须另证新的 wf 才能合回。
+-*)
+-Definition semaphore_inv_except (store_wait_T : addr -> addr -> Assertion)
+-    (sg : SemaphoreStable) (st : SemaphoreState) (sem : addr) : Assertion :=
+-  “ semaphore_context sg /\ semaphore_world_wf st ” &&
+-  store_idmanager sg.(sem_idmanager_stable) st.(sem_idmanager_abs)
+-    sg.(sem_idmanager_ptr) **
+-  store_dll pure_semaphore_link_member sg.(sem_list_head)
+-    (semaphore_link_nodes st.(sem_ptr_list)) **
+-  store_map_missing_i (store_semaphore store_wait_T) st.(sem_obj_map) sem **
+-  store_semaphore_done sg.(sem_done_ptr) sg.(sem_done_abs).
+-
+-(** 用 QCP 既有 map 拆分接口形成可供 which implies 使用的局部视图。 *)
+-Lemma semaphore_inv_open : forall store_wait_T sg st sem obj,
+-  st.(sem_obj_map) sem = Some obj ->
+-  semaphore_inv store_wait_T sg st |--
+-  semaphore_inv_except store_wait_T sg st sem **
+-  store_semaphore store_wait_T sem obj.
+-Proof.
+-  intros store_wait_T sg st sem obj Hlookup.
+-  unfold semaphore_inv, semaphore_inv_except.
+-  Intros.
+-  sep_apply (store_map_split (store_semaphore store_wait_T) sem obj
+-    st.(sem_obj_map) Hlookup).
+-  entailer!.
+-Qed.
+-
+-Lemma semaphore_inv_close : forall store_wait_T sg st sem obj,
+-  st.(sem_obj_map) sem = Some obj ->
+-  semaphore_inv_except store_wait_T sg st sem **
+-  store_semaphore store_wait_T sem obj |-- semaphore_inv store_wait_T sg st.
+-Proof.
+-  intros store_wait_T sg st sem obj Hlookup.
+-  unfold semaphore_inv, semaphore_inv_except.
+-  Intros.
+-  sep_apply (store_map_merge (store_semaphore store_wait_T) sem obj
+-    st.(sem_obj_map) Hlookup).
+-  entailer!.
+-Qed.
++(** 对象注册之前的完整源静态资源：ID数组为零、链哨兵已由初始化器自环。
++    无额外初始化token；进入全局协议时转交这些现有链接器所有权。 *)
++Definition semaphore_initial_state : SemaphoreState :=
++ {| sem_ptr_list := []; sem_obj_map := fun _ => None |}.
++Definition store_sem_static_initial (sg : SemaphoreStable) : Assertion :=
++ let m := sg.(sem_idmanager_ptr) in let sid := sg.(sem_idmanager_stable) in
++ “ semaphore_context sg ” &&
++ &(m # "IdManager" ->ₛ "id_max") # UShort |-> 128 **
++ &(m # "IdManager" ->ₛ "hoffset") # UShort |-> 16 **
++ &(m # "IdManager" ->ₛ "id_map") # Ptr |-> sid.(id_map) **
++ &(m # "IdManager" ->ₛ "htable") # Ptr |-> sid.(htable) **
++ UCharArray.full sid.(id_map) 16 (repeat 0 16) **
++ store_array (fun base index (_ : unit) => store_uninit_idbucket (base + index * sizeof("SysDoubleLinklistNode"))) sid.(htable) 16 (repeat tt 16) **
++ dll_private sg.(sem_list_head) sg.(sem_list_head) sg.(sem_list_head).

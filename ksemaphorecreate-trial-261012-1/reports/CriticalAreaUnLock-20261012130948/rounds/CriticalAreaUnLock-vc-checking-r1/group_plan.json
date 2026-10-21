@@ -1,0 +1,58 @@
+{
+  "groups": [
+    {
+      "id": "nest_resources",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of_CriticalAreaUnLock_entail_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CriticalAreaUnLock_entail_wit_1_split_goal_1": "Introduce the quantified parameters and retained IRQ/guarantee hypotheses. Apply SemaphoreOSInvariant_split_nest to the invariant while framing SemaphoreInsideCritical. Its pure CrtosOSValid after component implies the pure conclusion; no fresh state or token is required.",
+            "proof_of_CriticalAreaUnLock_entail_wit_1_split_goal_spatial": "Introduce parameters; apply SemaphoreOSInvariant_split_nest to SemaphoreOSInvariant sg after, frame the unchanged SemaphoreInsideCritical sg hs lock_pre before, and discharge the resulting pure validity by projection. The precise UShort cell is at the same KTaskOsAssignLockNest address and the remaining resource is exactly SemaphoreCriticalFrame sg after. Reassociate/cancel these three resources."
+          }
+        },
+        {
+          "name": "proof_of_CriticalAreaUnLock_entail_wit_2_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CriticalAreaUnLock_entail_wit_2_1_split_goal_spatial": "Let n = scheduler_lock_nest (os_scheduler after). Extract 0 <= n <= 65535 from the given CrtosOSValid after; the branch guard gives n >= 1. Thus 0 <= n-1 < 65536. Unfold unsigned_last_nbits and normalize its 16-bit modulus with Z.mod_small, then rewrite Z.max 0 (n-1) = n-1. Use SemaphoreOSInvariant_merge_decrement with the explicit validity hypothesis, the updated UShort cell, and SemaphoreCriticalFrame sg after. Frame and cancel the unchanged SemaphoreInsideCritical. This proves the exact decrement target; no guarantee or IRQ transition is synthesized."
+          }
+        },
+        {
+          "name": "proof_of_CriticalAreaUnLock_entail_wit_2_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CriticalAreaUnLock_entail_wit_2_2_split_goal_spatial": "Let n = scheduler_lock_nest (os_scheduler after). CrtosOSValid after gives 0 <= n and the false-guard branch gives n < 1, hence n = 0. Rewrite the unchanged UShort value as Z.max 0 (n-1), which is also zero. Apply SemaphoreOSInvariant_merge_decrement with the given validity and SemaphoreCriticalFrame sg after, framing SemaphoreInsideCritical. This covers the source no-write branch without assuming positive nesting."
+          }
+        }
+      ]
+    },
+    {
+      "id": "safety_and_projection",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_CriticalAreaUnLock_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce all parameters and pure hypotheses. The conclusion contains only 1 <= INT_MAX and INT_MIN <= 1 for Arch32 Int. Unfold the signed-int constants if required and discharge by arithmetic; the lock local cell, InsideCritical, nest UShort, and CriticalFrame are unchanged antecedent resources and no existential or protocol transition is needed."
+        },
+        {
+          "name": "proof_of_CriticalAreaUnLock_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce all parameters and IRQ/guarantee assumptions. Both sides are exactly SemaphoreOutsideCritical sg hs (semaphore_nest_decrement after); close by derivable1 reflexivity. Do not unfold or alter the outside-critical protocol."
+        },
+        {
+          "name": "proof_of_CriticalAreaUnLock_partial_solve_wit_1_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the quantified values and the two explicit assumptions semaphore_irq_handler_ok lock_pre and SemaphoreGuarantee before (semaphore_nest_decrement after). Inject those same propositions into the pure conjunction conclusion. The local lock cell, InsideCritical, and decremented invariant remain antecedent resources; no additional premise or transition is needed."
+        },
+        {
+          "name": "proof_of_CriticalAreaUnLock_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the implication wrapper and introduce its pure-witness premise, then unfold the auxiliary goal. Introduce quantified parameters and the explicit IRQ/guarantee assumptions. Establish the four pure conjuncts by repeating the two assumptions; cancel the identical InsideCritical and decremented SemaphoreOSInvariant resources. The pure-witness premise need not provide any extra fact, and the proof must not depend on an admitted auto witness."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+Welcome to Coq 8.20.1
+[Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+[Loading ML file extraction_plugin.cmxs (using legacy method) ... done]
+Snaive_C_Rules.store_ptr =
+fun (x : addr) (v : Z) =>
+Snaive_C_Rules.andp
+  (Snaive_C_Rules.coq_prop
+     (Snaive_C_Rules.isvalidptr x /\ Snaive_C_Rules.valid_ptr_value v))
+  match Snaive_C_Rules.ptr_size with
+  | 4%nat => Snaive_C_Rules.store_4byte x v
+  | 8%nat => Snaive_C_Rules.store_8byte x v
+  | _ => Snaive_C_Rules.coq_prop False
+  end
+     : addr -> Z -> Snaive_C_Rules.model -> Prop
+
+Arguments Snaive_C_Rules.store_ptr x v%Z_scope m
+Snaive_C_Rules.store_ushort =
+fun (x : addr) (v : Z) =>
+Snaive_C_Rules.andp
+  (Snaive_C_Rules.coq_prop
+     (Snaive_C_Rules.isvalidptr_short x /\ v >= 0 /\ v <= 65535))
+  (Snaive_C_Rules.store_2byte x v)
+     : addr -> Z -> Snaive_C_Rules.model -> Prop
+
+Arguments Snaive_C_Rules.store_ushort x v%Z_scope m
+     = 4
+     : Z
+     = 1 = 1
+     : Prop

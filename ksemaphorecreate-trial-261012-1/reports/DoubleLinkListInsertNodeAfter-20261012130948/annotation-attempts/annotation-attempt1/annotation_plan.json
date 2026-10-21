@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "DoubleLinkListInsertNodeAfter",
+      "meaning": "Insert linklist_node between linklist and its old successor, returning ownership of all four updated link fields."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

@@ -1,0 +1,1751 @@
+/*
+ * Copyright (c) 2020 AIIT XUOS Lab
+ * XiUOS is licensed under Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ *        http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+ * EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ */
+/*
+* Copyright (c) 2020 AIIT XUOS Lab
+* XiUOS is licensed under Mulan PSL v2.
+* You can use this software according to the terms and conditions of the Mulan PSL v2.
+* You may obtain a copy of Mulan PSL v2 at:
+*        http://license.coscl.org.cn/MulanPSL2
+* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+* See the Mulan PSL v2 for more details.
+*/
+/**
+* @file:    xs_klist.h
+* @brief:   function declaration and structure defintion of linklist
+* @version: 1.0
+* @author:  AIIT XUOS Lab
+* @date:    2020/3/2
+*
+*/
+/*
+* Copyright (c) 2020 AIIT XUOS Lab
+* XiUOS is licensed under Mulan PSL v2.
+* You can use this software according to the terms and conditions of the Mulan PSL v2.
+* You may obtain a copy of Mulan PSL v2 at:
+*        http://license.coscl.org.cn/MulanPSL2
+* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+* See the Mulan PSL v2 for more details.
+*/
+/**
+* @file:    xs_base.h
+* @brief:   basic data type defintions 
+* @version: 1.0
+* @author:  AIIT XUOS Lab
+* @date:    2020/3/10
+*
+*/
+/*  import  board special configuration */
+/*  Automatically generated file; DO NOT EDIT. */
+/*  XiZi_IIoT Project Configuration */
+// #define ARCH_CPU_64BIT
+// #define ARCH_RISCV64
+/*  kd233 feature */
+/*  config default board resources */
+/*  config board app name */
+/*  config board service table */
+/*  config board peripheral */
+/*  Hardware feature */
+/*  Kernel feature */
+/*  separate compile(choose none for compile once) */
+/*  Memory Management */
+/*  Using small memory allocator */
+/*  Task feature */
+/*  Inter-Task communication */
+/*  Kernel Console */
+/*  Kernel Hook */
+/*  Command shell */
+/*  Set shell user control */
+/*  Set shell config param */
+/*  Kernel data structure Manage */
+/*  Kernel components init */
+/*  hash table config */
+/*  Kernel Lib */
+/*  C++ features */
+/*  File system */
+/*  Tool feature */
+/*  OTA function */
+/*  APP_Framework */
+/*  Framework */
+/*  Security */
+/*  Applications */
+/*  config stack size and priority of main task */
+/*  test app */
+/*  connection app */
+/*  control app */
+/*  knowing app */
+/*  sensor app */
+/*  app lib */
+/*  lib using cJSON */
+/*  lib using queue */
+/*  lib using LVGL */
+/*  lvgl image display parameter settings */
+/*  lib using embedded_database */
+/*  lib using LoRaWan */
+/*  lib using MQTT */
+/*  lib using JerryScript */
+/*  lib using SQLite */
+/*  lib using PikaPython */
+typedef signed char int8;
+typedef signed short int16;
+typedef signed int int32;
+typedef unsigned char uint8;
+typedef unsigned short uint16;
+typedef unsigned int uint32;
+typedef signed long long int64;
+typedef unsigned long long uint64;
+typedef int x_bool;
+typedef long x_base;
+typedef unsigned long x_ubase;
+typedef x_base x_err_t;
+typedef uint32 x_time_t;
+typedef uint32 x_ticks_t;
+typedef x_base x_flag_t;
+typedef x_ubase x_size_t;
+typedef x_ubase x_dev_t;
+typedef x_base x_OffPos;
+/* the type of components*/
+/* the type of error */
+// void KPrintf(const char *fmt, ...);
+typedef struct SysDoubleLinklistNode
+{
+    struct SysDoubleLinklistNode *node_next;
+    struct SysDoubleLinklistNode *node_prev;
+} DoubleLinklistType;
+/*
+ * 双向链表类型及验证接口集中维护于此。下列通用和调度专用规格均从
+ * 既有验证头文件/切片迁移。就绪桶只保存 task/sched_link 的纯地址等式，
+ * 不查询 descriptor map；DLL 只接管节点，六个调度标量留在 task_inv。
+ * 任务登记由全局调度不变量提供，插入接口显式保留 owner 非空事实。
+ * remove_sched_self 是额外携带调用者字段 frame 的兼容接口，不表示稳定
+ * 节点谓词拥有标量；新调度调用优先使用纯节点的 remove_self。
+ * xs_klist.h 继续提供原有列表宏及单链表声明，并转导入本头文件。
+ */
+/*@ Import Coq Require Import CRTOS_Verify.lib.dll */
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskOsAssign */
+/*@ Import Coq Require Import CRTOS_Verify.libai.DoubleLinkListSpec */
+/*@ Import Coq Require Import CRTOS_Verify.libai.NodeSelfLinked */
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskSchedMember */
+/*@ Import Coq Require Import CRTOS_Verify.lib.OsAssignReadyVector */
+/*@ Import Coq Require Import CRTOS_Verify.libai.RRR_ReadyInsert */
+/*@ Import Coq Import DLL */
+/*@ Extern Coq addr := Z */
+/*@ Extern Coq
+      (DL_Node :: * => *)
+      (option :: * => *)
+      (TaskDescriptorAbs :: *)
+      (TaskSchedMemberAbs :: *)
+ */
+/*@ Extern Coq
+      (Build_DL_Node : {A} -> A -> Z -> DL_Node A)
+      (store_dll :
+        {A} -> (Z -> A -> Assertion) ->
+        Z -> list(DL_Node A) -> Assertion)
+      (nil : {A} -> list A)
+      (cons : {A} -> A -> list A -> list A)
+      (app : {A} -> list A -> list A -> list A)
+      (occupy_dll_node : Z -> Assertion)
+      (store_node_self_linked : Z -> Assertion)
+      (dll_insert_anchor :
+        {A} -> Z -> list(DL_Node A) -> Z -> Prop)
+      (dll_insert_before_dispatch :
+        {A} -> Z -> list(DL_Node A) -> Z -> DL_Node A ->
+        list(DL_Node A))
+      (dll_insert_after_dispatch :
+        {A} -> Z -> list(DL_Node A) -> Z -> DL_Node A ->
+        list(DL_Node A))
+      (store_task_sched_member :
+        Z -> TaskSchedMemberAbs -> Assertion)
+      (sched_link_of : Z -> Z)
+      (ready_task_node : Z -> DL_Node Z)
+      (store_priority_ready_bucket : Z -> list(DL_Node Z) -> Assertion)
+      (store_ready_dll_tail_view :
+        Z -> list(DL_Node Z) -> Z -> Assertion)
+ */
+void InitDoubleLinkList(DoubleLinklistType *linklist_head)
+/*@ Require
+      undef_data_at(&(linklist_head->node_prev)) *
+      undef_data_at(&(linklist_head->node_next))
+    Ensure
+      linklist_head != 0 && store_node_self_linked(linklist_head)
+ */;
+void DoubleLinkListInsertNodeBefore(
+  DoubleLinklistType *linklist, DoubleLinklistType *linklist_node)
+/*@ rrr_ready_insert_before
+    With (head: Z) (prefix: list(DL_Node Z))
+         (current_task current_link task_ptr: Z) (suffix: list(DL_Node Z))
+         (nodes: list(DL_Node Z)) (ready_table_guard: Z)
+    Require ready_table_guard != 0 &&
+            task_ptr != 0 &&
+            linklist == current_link &&
+            linklist_node != 0 &&
+            linklist_node == sched_link_of(task_ptr) &&
+            nodes == app(prefix,
+              cons(Build_DL_Node(current_task, current_link), suffix)) &&
+            store_priority_ready_bucket(head, nodes) *
+            occupy_dll_node(linklist_node)
+    Ensure task_ptr != 0 && ready_table_guard != 0 &&
+           store_priority_ready_bucket(
+             head,
+             app(prefix,
+               cons(Build_DL_Node(task_ptr, linklist_node),
+                 cons(Build_DL_Node(current_task, current_link), suffix))))
+ */
+;
+/*
+  Legacy local insertion contract derived from an older crtosverify version.
+  Current reviewed Xizi Specs are polymorphic and differ from this interface.
+  Keep this historical caller dependency explicit; the startup Stage-1 audit
+  records the carrier/predicate migration needed to use the reviewed cases.
+*/
+void DoubleLinkListInsertNodeBefore(DoubleLinklistType *linklist,
+                                    DoubleLinklistType *linklist_node)
+/*@ dispatch_case
+    With {A} (storeA: Z -> A -> Assertion)
+             (head: Z) (nodes: list(DL_Node A)) (inserted_data: A)
+    Require dll_insert_anchor(head, nodes, linklist) &&
+            linklist_node != 0 &&
+            store_dll(storeA, head, nodes) *
+            storeA(linklist_node, inserted_data) *
+            occupy_dll_node(linklist_node)
+    Ensure store_dll(
+             storeA, head,
+             dll_insert_before_dispatch(
+               head, nodes, linklist,
+               Build_DL_Node(inserted_data, linklist_node)))
+*/;
+void DoubleLinkListInsertNodeAfter(
+  DoubleLinklistType *linklist, DoubleLinklistType *linklist_node)
+/*@ rrr_ready_insert_after
+    With (head: Z) (nodes: list(DL_Node Z))
+         (task_ptr ready_table_guard: Z)
+    Require ready_table_guard != 0 &&
+            task_ptr != 0 &&
+            linklist_node != 0 &&
+            linklist_node == sched_link_of(task_ptr) &&
+            store_ready_dll_tail_view(head, nodes, linklist) *
+            occupy_dll_node(linklist_node)
+    Ensure task_ptr != 0 && ready_table_guard != 0 &&
+           store_priority_ready_bucket(
+             head,
+             app(nodes, cons(Build_DL_Node(task_ptr, linklist_node), nil)))
+ */
+;
+void DoubleLinkListInsertNodeAfter(DoubleLinklistType *linklist,
+                                   DoubleLinklistType *linklist_node)
+/*@ dispatch_case
+    With {A} (storeA: addr -> A -> Assertion)
+             (nodes: list(DL_Node A)) (a: A) (head: addr)
+    Require dll_insert_anchor(head, nodes, linklist) &&
+            linklist_node != 0 &&
+            store_dll(storeA, head, nodes) *
+            storeA(linklist_node, a) *
+            occupy_dll_node(linklist_node)
+    Ensure store_dll(
+             storeA, head,
+             dll_insert_after_dispatch(
+               head, nodes, linklist,
+               Build_DL_Node(a, linklist_node)))
+*/;
+/* Ready-vector specialization of the verified member-removal contract. */
+void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
+/*@ remove_ready_member
+    With (task head : Z)
+         (prefix suffix : list(DL_Node Z))
+    Require
+      linklist_node == sched_link_of(task) &&
+      store_priority_ready_bucket(
+        head,
+        app(prefix, cons(ready_task_node(task), suffix)))
+    Ensure
+      linklist_node == sched_link_of(task) &&
+      store_priority_ready_bucket(head, app(prefix, suffix)) *
+      store_node_self_linked(linklist_node)
+ */
+;
+/* Self-linked behavior; verified separately from the original helper body. */
+void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
+/*@ remove_sched_self
+    With (task : Z) (sched : TaskSchedMemberAbs)
+    Require
+      linklist_node == sched_link_of(task) &&
+      linklist_node != 0 &&
+      store_task_sched_member(sched_link_of(task), sched) *
+      store_node_self_linked(sched_link_of(task))
+    Ensure
+      store_task_sched_member(sched_link_of(task), sched) *
+      store_node_self_linked(sched_link_of(task))
+ */
+;
+void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
+/*@ remove_self
+    With (node : Z)
+    Require
+      linklist_node == node &&
+      node != 0 &&
+      store_node_self_linked(node)
+    Ensure
+      store_node_self_linked(node)
+ */;
+void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
+/*@ remove_member
+    With {A} (storeA: addr -> A -> Assertion)
+             (head: addr)  (a: A)
+             (prefix: list(DL_Node A))
+             (suffix: list(DL_Node A))
+    Require store_dll(storeA, head,
+              app(prefix, cons(Build_DL_Node(a, linklist_node), suffix)))
+    Ensure store_dll(storeA, head, app(prefix, suffix)) *
+           storeA(linklist_node, a) *
+           store_node_self_linked(linklist_node)
+*/
+;
+void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
+/*@ remove_from_head
+    With {A} (storeA: addr -> A -> Assertion)
+             (head: addr) (a: A)
+             (suffix: list(DL_Node A))
+    Require linklist_node != 0 && 
+            store_dll(storeA, head,
+              cons(Build_DL_Node(a, linklist_node), suffix))
+    Ensure store_dll(storeA, head, suffix) *
+           storeA(linklist_node, a) *
+           store_node_self_linked(linklist_node)
+*/
+;
+/* Ready-vector specialization of the verified payload-preserving contract. */
+int IsDoubleLinkListEmpty(const DoubleLinklistType *linklist)
+/*@ ready_dll
+    With (nodes : list(DL_Node Z))
+    Require
+      store_priority_ready_bucket(linklist, nodes)
+    Ensure
+      ((__return == 1 && nodes == nil) ||
+       (__return == 0 && nodes != nil)) &&
+      store_priority_ready_bucket(linklist, nodes)
+ */
+;
+/* Exact, payload-preserving semantic contract of double_link.c. */
+int IsDoubleLinkListEmpty(const DoubleLinklistType *linklist)
+/*@ dll
+    With {A} (storeA : Z -> A -> Assertion)
+             (nodes : list(DL_Node A))
+    Require
+      store_dll(storeA, linklist, nodes)
+    Ensure
+      ((__return == 1 && nodes == nil) ||
+       (__return == 0 && nodes != nil)) &&
+      store_dll(storeA, linklist, nodes)
+ */
+;
+struct SysDoubleLinklistNode *DoubleLinkListGetHead(const DoubleLinklistType *linklist);
+struct SysDoubleLinklistNode *DoubleLinkListGetNext(const DoubleLinklistType *linklist,
+        const struct SysDoubleLinklistNode *linklist_node);
+unsigned int DoubleLinkListLenGet(const DoubleLinklistType *linklist);
+// #include <libc.h>
+// Single List 
+typedef struct SingleLinklistNode
+{
+    struct SingleLinklistNode *node_next;
+} SysSingleLinklistType;
+void InitSingleLinkList(SysSingleLinklistType *linklist);
+void AppendSingleLinkList(SysSingleLinklistType *linklist, SysSingleLinklistType *linklist_node);
+void SingleLinkListNodeInsert(SysSingleLinklistType *linklist, SysSingleLinklistType *linklist_node);
+unsigned int SingleLinkListGetLen(const SysSingleLinklistType *linklist);
+SysSingleLinklistType *SingleLinkListRmNode(SysSingleLinklistType *linklist, SysSingleLinklistType *linklist_node);
+SysSingleLinklistType *SingleLinkListGetFirstNode(SysSingleLinklistType *linklist);
+SysSingleLinklistType *SingleLinkListGetTailNode(SysSingleLinklistType *linklist);
+SysSingleLinklistType *SingleLinkListGetNextNode(SysSingleLinklistType *linklist_node);
+int IsSingleLinkListEmpty(SysSingleLinklistType *linklist);
+struct IdNode
+{
+    uint16 id;
+    DoubleLinklistType link;
+};
+struct IdManager
+{
+    uint16 id_max;
+    uint16 hoffset;
+    uint8 *id_map;
+    DoubleLinklistType *htable;
+};
+/*@ Import Coq Require Import CRTOS_Verify.lib.idnode */
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskOsAssign */
+/*@ Import Coq Import IDNode */
+/*@ Extern Coq (unit :: *) */
+/*@ Extern Coq (tt : unit) */
+/*@ Extern Coq (true: bool)
+               (false: bool) */
+/*@ Extern Coq Record IdNodeAbs {
+  idnode_id: Z;
+  idnode_addr: addr;
+} */
+/*@ Extern Coq
+  (Build_IdNodeAbs: Z -> addr -> IdNodeAbs)
+*/
+/*@ Extern Coq Record StableIdmanager {
+  idmax: Z;
+  hoffset: Z;
+  id_map: addr;
+  htable: addr;
+} */
+/*@ Extern Coq Record VarIdmanager {
+  idlist: list(Z);
+  idbuckets: list(list(IdNodeAbs));
+} */
+/*@ Extern Coq
+  (idmanager_add : VarIdmanager -> Z -> VarIdmanager)
+  (idmanager_link : StableIdmanager -> VarIdmanager -> Z -> addr -> VarIdmanager)
+  (idmanager_min_free_id : StableIdmanager -> VarIdmanager -> Z -> Prop)
+  (idmanager_first_free_id : StableIdmanager -> VarIdmanager -> option Z)
+  (idmanager_query : VarIdmanager -> Z -> bool)
+  (idbuckets_ok :
+    Z -> Z -> list(Z) -> list(list(IdNodeAbs)) -> Prop)
+  (store_idnode_insert_ready : addr -> Assertion)
+  (store_idmanager : StableIdmanager -> VarIdmanager -> addr -> Assertion)
+  (store_idmanager_allocated_unlinked :
+    StableIdmanager -> VarIdmanager -> addr -> Z -> Assertion)
+  (store_idnode_unlinked: addr -> IdNodeAbs -> Assertion)
+  (store_idnodes: addr -> list IdNodeAbs -> Assertion)
+*/
+int AllocId(struct IdManager *manager)
+/*@ With (sidm: StableIdmanager) (idm: VarIdmanager)
+    Require store_idmanager(sidm, idm, manager)
+    Ensure (idmanager_first_free_id(sidm, idm) == Some(__return) &&
+            __return < 65536 &&
+            store_idmanager_allocated_unlinked(sidm, idm, manager, __return))
+           ||
+           (idmanager_first_free_id(sidm, idm) == None &&
+            __return == -1 &&
+            store_idmanager(sidm, idm, manager))
+*/;
+void InsertObj(struct IdManager *manager, struct IdNode *idnode)
+/*@ With (sidm: StableIdmanager) (idm: VarIdmanager) (id: Z)
+    Require store_idmanager_allocated_unlinked(sidm, idm, manager, id) *
+            store_idnode_unlinked(&(idnode->link), Build_IdNodeAbs(id, idnode))
+    Ensure store_idmanager(sidm,
+             idmanager_link(sidm, idmanager_add(idm, id), id, idnode), manager)
+*/;
+int IdInsertObj(struct IdManager *manager, struct IdNode *idnode)
+/*@ With (sidm: StableIdmanager) (idm: VarIdmanager)
+    Require store_idmanager(sidm, idm, manager) *
+            store_idnode_insert_ready(idnode)
+    Ensure (__return == -1 &&
+            idmanager_first_free_id(sidm, idm) == None &&
+            store_idmanager(sidm, idm, manager) *
+            store_idnode_insert_ready(idnode))
+           ||
+           (idmanager_min_free_id(sidm, idm, __return) &&
+            store_idmanager(sidm,
+              idmanager_link(sidm, idmanager_add(idm, __return), __return, idnode),
+              manager))
+*/
+;
+/*@ Extern Coq
+  (store_idmanager_found :
+    StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion)
+*/
+struct IdNode *GetObj(struct IdManager *manager, uint16 id)
+/*@ With (sidm: StableIdmanager) (idm: VarIdmanager)
+    Require 0 <= id && id < sidm.idmax && store_idmanager(sidm, idm, manager)
+    Ensure (__return == 0 &&
+            idmanager_query(idm, id) == false &&
+            store_idmanager(sidm, idm, manager))
+           ||
+           (__return != 0 &&
+            idmanager_query(idm, id) == true &&
+            store_idmanager_found(sidm, idm, manager, __return, id))
+*/
+;
+struct IdNode *IdGetObj(struct IdManager *manager, uint16 id)
+/*@ With (sidm: StableIdmanager) (idm: VarIdmanager)
+    Require 0 <= id && id < 65536 && store_idmanager(sidm, idm, manager)
+    Ensure (manager == 0 &&
+            __return == 0 &&
+            store_idmanager(sidm, idm, manager))
+           ||
+           (manager != 0 &&
+            __return == 0 &&
+            idmanager_query(idm, id) == false &&
+            store_idmanager(sidm, idm, manager))
+           ||
+           (manager != 0 &&
+            __return != 0 &&
+            idmanager_query(idm, id) == true &&
+            store_idmanager_found(sidm, idm, manager, __return, id))
+*/
+;
+/*@ Extern Coq
+  (idmanager_remove : StableIdmanager -> VarIdmanager -> Z -> VarIdmanager)
+  (store_idmanager_remove_ready :
+    StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion)
+  (store_idmanager_removeobj_post :
+    StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion)
+  (UCharArray::full : Z -> Z -> list Z -> Assertion)
+*/
+void RemoveObj(struct IdManager *manager, struct IdNode *idnode)
+/*@ With (sidm: StableIdmanager) (idm: VarIdmanager) (id: Z)
+    Require store_idmanager_remove_ready(sidm, idm, manager, idnode, id)
+    Ensure store_idmanager_removeobj_post(sidm, idm, manager, idnode, id)
+*/
+;
+void IdRemoveObj(struct IdManager *manager, uint16 id)
+/*@ known_node
+    With (sidm: StableIdmanager) (idm: VarIdmanager) (idnode: addr)
+    Require manager != 0 &&
+            0 <= id && id < 65536 &&
+            idmanager_query(
+              idmanager_link(sidm, idmanager_add(idm, id), id, idnode), id)
+              == true &&
+            store_idmanager(sidm,
+              idmanager_link(sidm, idmanager_add(idm, id), id, idnode),
+              manager)
+    Ensure idnode != 0 &&
+           &(idnode->link) != 0 &&
+           store_idmanager(sidm,
+             idmanager_remove(sidm,
+               idmanager_link(sidm, idmanager_add(idm, id), id, idnode), id),
+             manager) *
+           (idnode->id == 65535) *
+           store_node_self_linked(&(idnode->link))
+*/
+/*@ current_node
+    With (sidm: StableIdmanager) (idm: VarIdmanager) (idnode: addr)
+    Require manager != 0 &&
+            0 <= id && id < 65536 &&
+            store_idmanager_remove_ready(sidm, idm, manager, idnode, id)
+    Ensure idnode != 0 &&
+           &(idnode->link) != 0 &&
+           store_idmanager_removeobj_post(sidm, idm, manager, idnode, id)
+*/
+;
+/*@ Extern Coq
+  (store_idnode : addr -> IdNodeAbs -> Assertion)
+*/
+typedef unsigned long size_t;
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskPure */
+/*@ Import Coq Require Import CRTOS_Verify.lib.StructFieldOffsetAxiom */
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskStackSetup */
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskStackSetupProofAux */
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskParseInfo */
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskDescriptor */
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskSchedMember */
+/*@ Import Coq Require Import CRTOS_Verify.lib.CrtosInv */
+/*@ Import Coq Require Import CRTOS_Verify.libai.AssignReadyPending */
+/*@ Extern Coq (TaskStatus :: *) */
+/*@ Extern Coq
+               (TSK_INIT : TaskStatus) (TSK_READY : TaskStatus)
+               (TSK_RUNNING : TaskStatus) (TSK_SUSPEND : TaskStatus)
+               (TSK_CLOSE : TaskStatus) (TSK_INVALID : TaskStatus)
+               (decode_task_status : Z -> TaskStatus)
+               (task_status_matches : TaskStatus -> Z -> Prop)
+               (store_task_status : Z -> TaskStatus -> Assertion) */
+/*@ Extern Coq (StableGlobalState :: *)
+               (VarGlobalState :: *)
+               (TaskStable :: *)
+               (TaskState :: *)
+               (AssignStable :: *)
+               (DelayState :: *)
+               (TaskDescriptorAbs :: *)
+               (TaskSchedMemberAbs :: *)
+               (TaskBaseInfoAbs :: *)
+               (OsAssignReadyVectorAbs :: *)
+               (VarAssignAbs :: *) */
+/*@ Extern Coq
+      (InsideCritical :
+        StableGlobalState -> VarGlobalState -> Assertion)
+      (OutsideCritical :
+        StableGlobalState -> VarGlobalState -> Assertion)
+      (Crtos_RTrans : VarGlobalState -> VarGlobalState -> Prop)
+      (Crtos_GTrans : VarGlobalState -> VarGlobalState -> Prop)
+      (os_inv :
+        StableGlobalState -> VarGlobalState -> Assertion)
+ */
+/*
+ * Stage-1 nested 接口对应当前非 SMP、RISC-V 配置下已关闭中断的调用者。
+ * k210/interrupt.c 的 DisableLocalInterrupt 保存 mstatus 并清除 bit 3；
+ * EnableLocalInterrupt 恢复保存值。因此 nested 返回值必须满足 MIE=0，
+ * nested 解锁也必须检查该保存值，不能对任意 lock 承诺继续持锁。
+ * 这些是新增的待审核 primitive Specs；汇编和锁计数器仍在既有临界区
+ * primitive 的验证边界内，本次没有声称已经验证其 C/汇编实现。
+ * ordinary/stable 使用原始 CriticalSTS 的进入/退出规则；nested 规格保持原文。
+ */
+x_base CriticalAreaLock(void)
+/*@ ordinary
+    With (sg : StableGlobalState) (st1 : VarGlobalState)
+    Require
+      OutsideCritical(sg, st1)
+    Ensure
+      exists st_lock,
+        Crtos_RTrans(st1, st_lock) &&
+        InsideCritical(sg, st_lock) *
+        os_inv(sg, st_lock)
+ */
+/*@ nested
+    With (sg : StableGlobalState) (st : VarGlobalState)
+    Require InsideCritical(sg, st)
+    Ensure (__return & 8) == 0 && InsideCritical(sg, st)
+ */
+;
+void CriticalAreaUnLock(x_base lock)
+/*@ stable
+    With (sg : StableGlobalState) (st1 st2 : VarGlobalState)
+    Require
+      Crtos_GTrans(st1, st2) &&
+      InsideCritical(sg, st1) *
+      os_inv(sg, st2)
+    Ensure
+      OutsideCritical(sg, st2)
+ */
+/*@ nested
+    With (sg : StableGlobalState) (st : VarGlobalState)
+    Require (lock & 8) == 0 && InsideCritical(sg, st)
+    Ensure InsideCritical(sg, st)
+ */
+;
+struct TaskDescriptor;
+struct Delay
+{
+ struct TaskDescriptor *task;
+ x_ticks_t ticks;
+ uint8 status;
+ DoubleLinklistType link;
+};
+typedef struct Delay *DelayType;
+/*@ Import Coq Require Import CRTOS_Verify.libai.KTaskSetDelay */
+/*@ Import Coq Require Import CRTOS_Verify.libai.KTaskSetDelayState */
+/*@ Import Coq Import DLL */
+/*@ Extern Coq (DL_Node :: * => *)
+               (option :: * => *)
+*/
+/*@ Extern Coq Record TaskDelayAbs {
+      tdTaskPtr: Z;
+      tdTicks: Z;
+      tdStatus: Z;
+    }
+*/
+/* QCP 的 Record 声明只登记此切片需要的逻辑投影；不改变 Rocq record。 */
+/*@ Extern Coq Record TaskSchedMemberAbs {
+      tsmStat: TaskStatus;
+      tsmAdvanceCnt: Z;
+      tsmCurPrio: Z;
+      tsmOriginTimeslice: Z;
+      tsmRestTimeslice: Z;
+      tsmBitmapColumn: Z;
+    }
+*/
+/*@ Extern Coq Record TaskBaseInfoAbs {
+      tbName: list(Z);
+      tbFuncEntry: Z;
+      tbFuncParam: Z;
+      tbOriginPrio: Z;
+      tbStackDepth: Z;
+      tbStackStart: Z;
+    }
+*/
+/*@ Extern Coq Record OsAssignReadyVectorAbs {
+      orvBuckets: list(list(DL_Node Z));
+      orvReadyGroup: Z;
+      orvHighestPrio: Z;
+    }
+*/
+/*@ Extern Coq Record VarAssignAbs {
+      assignReadyVector: OsAssignReadyVectorAbs;
+      assignRunningTask: Z;
+      assignCurrentPriority: Z;
+    }
+*/
+/*@ Extern Coq Record TaskStable {
+      task_stable_ids: StableIdmanager;
+      task_idmanager_ptr: Z;
+      task_list_head: Z;
+    }
+*/
+/*@ Extern Coq Record TaskState {
+      task_desc_map: Z -> option TaskDescriptorAbs;
+      task_idmanager_abs: VarIdmanager;
+      task_ptr_list: list(Z);
+      sched_owned_tasks: list(Z);
+    }
+*/
+/*@ Extern Coq Record AssignStable {
+      assign_ptr: Z;
+    }
+*/
+/*@ Extern Coq Record DelayState {
+      delay_inactive_map: Z -> option TaskDelayAbs;
+      delay_active_nodes: list(DL_Node TaskDelayAbs);
+    }
+*/
+/*@ Extern Coq Record StableGlobalState {
+      os_task_stable: TaskStable;
+      os_assign_stable: AssignStable;
+      os_tick_ptr: Z;
+      delay_head_ptr: Z;
+    }
+*/
+/*@ Extern Coq Record VarGlobalState {
+      os_tasks: TaskState;
+      os_delays: DelayState;
+      os_assign: VarAssignAbs;
+      os_tick: Z;
+    }
+*/
+/*@ Extern Coq Record TaskDescriptorAbs {
+      tdBaseInfo: TaskBaseInfoAbs;
+      tdSchedMember: TaskSchedMemberAbs;
+      tdStackPoint: Z;
+      tdDelay: Z;
+      tdEventIdTrigger: Z;
+      tdEventMode: Z;
+      tdExstatus: Z;
+      tdDone: Z;
+    }
+*/
+/*@ Extern Coq
+      (NOMEMORY : Z)
+      (KOK : Z)
+      (Some : {A} -> A -> option A)
+      (os_global_context : StableGlobalState -> Prop)
+      (task_inv : StableGlobalState -> VarGlobalState -> Assertion)
+      (task_fields : StableGlobalState -> VarGlobalState -> Assertion)
+      (assign_ready_vector_addr : StableGlobalState -> Z)
+      (assign_ready_published : VarGlobalState -> Prop)
+      (assign_ready_pending : StableGlobalState -> VarGlobalState -> Assertion)
+      (replace_global_ready_vector :
+        OsAssignReadyVectorAbs -> VarGlobalState -> VarGlobalState)
+      (replace_task_desc_map :
+        (Z -> option TaskDescriptorAbs) -> VarGlobalState -> VarGlobalState)
+      (delay_inv : StableGlobalState -> VarGlobalState -> Assertion)
+      (tick_inv : StableGlobalState -> VarGlobalState -> Assertion)
+      (task_delay_pointer_addr : Z -> Z)
+      (task_delay_head_addr : Z)
+      (ktask_set_delay_success : Z -> Z -> Prop)
+      (ktask_set_delay_step :
+        Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> Z ->
+        VarGlobalState -> Prop)
+      (store_delay_info : Z -> TaskDelayAbs -> Assertion)
+      (store_task_delay_opt :
+        Z -> Z -> list(DL_Node TaskDelayAbs) -> Assertion)
+      (store_delay_unlinked_info :
+        Z -> TaskDelayAbs -> Assertion)
+      (store_delay_dll_focus :
+        Z -> list(DL_Node TaskDelayAbs) -> DL_Node TaskDelayAbs ->
+        list(DL_Node TaskDelayAbs) -> Assertion)
+      (store_delay_dll_frame :
+        Z -> list(DL_Node TaskDelayAbs) -> DL_Node TaskDelayAbs ->
+        list(DL_Node TaskDelayAbs) -> Assertion)
+      (store_delay_dll_head_frame :
+        Z -> list(DL_Node TaskDelayAbs) -> Z -> Assertion)
+      (store_delay_dll_next_frame :
+        Z -> list(DL_Node TaskDelayAbs) -> DL_Node TaskDelayAbs ->
+        list(DL_Node TaskDelayAbs) -> Z -> Assertion)
+      (store_delay_scan :
+        Z -> Z -> list(DL_Node TaskDelayAbs) ->
+        list(DL_Node TaskDelayAbs) -> Assertion)
+      (delay_prefix_scanned :
+        Z -> list(DL_Node TaskDelayAbs) -> Prop)
+      (delay_nodes_wf : list(DL_Node TaskDelayAbs) -> Prop)
+      (mkTaskDelayAbs : Z -> Z -> Z -> TaskDelayAbs)
+      (delay_remove_old :
+        Z -> list(DL_Node TaskDelayAbs) ->
+        list(DL_Node TaskDelayAbs))
+      (delay_insert_by_ticks :
+        DL_Node TaskDelayAbs -> list(DL_Node TaskDelayAbs) ->
+        list(DL_Node TaskDelayAbs))
+      (TASK_DELAY_INACTIVE_VALUE : Z)
+      (TASK_DELAY_ACTIVE_VALUE : Z)
+      (heartbeat_ticks_addr : Z)
+*/
+x_err_t KTaskSetDelay(struct TaskDescriptor *task, x_ticks_t ticks)
+/*@ inside_global <= local_resources
+    With (sg : StableGlobalState) (st_before : VarGlobalState)
+         (desc_before : TaskDescriptorAbs)
+    Require task != 0 &&
+            st_before.os_tasks.task_desc_map(task) == Some(desc_before) &&
+            os_global_context(sg) &&
+            task_fields(sg, st_before) *
+            delay_inv(sg, st_before) *
+            tick_inv(sg, st_before)
+    Ensure exists st_after,
+             ktask_set_delay_step(
+               task, ticks, desc_before,
+               st_before, __return, st_after) &&
+             task_fields(sg, st_after) *
+             delay_inv(sg, st_after) *
+             tick_inv(sg, st_after)
+ */
+/*@ local_resources
+    With (delay_nodes : list(DL_Node TaskDelayAbs))
+         (os_tick delay_before : Z)
+    Require task != 0 &&
+            delay_nodes_wf(delay_nodes) &&
+            store_dll(
+              store_delay_info, task_delay_head_addr, delay_nodes) *
+            store_uint(heartbeat_ticks_addr, os_tick) *
+            store_task_delay_opt(task, delay_before, delay_nodes)
+    Ensure store_uint(heartbeat_ticks_addr, os_tick) *
+           (
+             (__return == -NOMEMORY &&
+              delay_before == 0 &&
+              delay_nodes_wf(delay_nodes) &&
+              store_dll(
+                store_delay_info, task_delay_head_addr, delay_nodes) *
+              store_task_delay_opt(task, delay_before, delay_nodes))
+             ||
+             (__return == KOK &&
+              exists delay_after delay_nodes_after,
+                delay_after != 0 &&
+                ktask_set_delay_success(delay_before, delay_after) &&
+                delay_nodes_after ==
+                  delay_insert_by_ticks(
+                    Build_DL_Node(
+                      mkTaskDelayAbs(
+                        task,
+                        unsigned_last_nbits(os_tick + ticks, 32),
+                        TASK_DELAY_ACTIVE_VALUE),
+                      field_addr(delay_after, struct Delay, link)),
+                    delay_remove_old(delay_before, delay_nodes)) &&
+                delay_nodes_wf(delay_nodes_after) &&
+                store_dll(
+                  store_delay_info,
+                  task_delay_head_addr,
+                  delay_nodes_after) *
+                data_at(
+                  task_delay_pointer_addr(task), struct Delay *, delay_after))
+           )
+ */
+;
+/*@ Import Coq Require Import CRTOS_Verify.libai.KTaskSchedDelayState */
+/*@ Import Coq Require Import CRTOS_Verify.libai.KTaskUnSetDelayState */
+/*@ Extern Coq
+      (ktask_unset_delay_step : Z -> VarGlobalState -> VarGlobalState -> Prop)
+*/
+/*@ Extern Coq (vDelayView :: *) */
+/*@ Extern Coq
+      (vDelayNull : vDelayView)
+      (vDelayInactive : Z -> TaskDelayAbs -> vDelayView)
+      (vDelayActive :
+        Z -> TaskDelayAbs ->
+        list(DL_Node TaskDelayAbs) ->
+        list(DL_Node TaskDelayAbs) -> vDelayView)
+      (store_ktask_unset_delay_pre :
+        Z -> vDelayView -> Assertion)
+      (store_ktask_unset_delay_post :
+        Z -> vDelayView -> Assertion)
+ */
+x_err_t KTaskUnSetDelay(struct TaskDescriptor *task)
+/*@ inside_global <= delay_unified
+    With (sg : StableGlobalState) (st_before : VarGlobalState)
+         (desc_before : TaskDescriptorAbs)
+    Require task != 0 &&
+            st_before.os_tasks.task_desc_map(task) == Some(desc_before) &&
+            os_global_context(sg) &&
+            task_fields(sg, st_before) *
+            delay_inv(sg, st_before)
+    Ensure __return == KOK &&
+           exists st_after,
+             ktask_unset_delay_step(
+               desc_before.tdDelay, st_before, st_after) &&
+             task_fields(sg, st_after) *
+             delay_inv(sg, st_after)
+ */
+/*@ delay_unified
+    With (delay_view : vDelayView)
+    Require store_ktask_unset_delay_pre(task, delay_view)
+    Ensure
+      __return == KOK &&
+      store_ktask_unset_delay_post(task, delay_view)
+ */
+;
+void CheckTaskDelay(void);
+struct TaskBaseInfo {
+    char name[32]; ///< task name
+    void *func_entry; ///< task function entry
+    void *func_param; ///< task parameter
+    uint8 origin_prio; ///< task init priority
+    uint32 stack_depth; ///< task stack size
+    void *stack_start; ///< task stack start address
+};
+typedef struct TaskBaseInfo TaskBaseInfoType;
+struct TaskDyncSchedMember {
+    uint8 stat; ///< task stat
+    uint8 advance_cnt; ///< total time slice advance process count
+    uint8 cur_prio; ///< task current priority
+    x_ubase origin_timeslice; ///< task init timeslice
+    x_ubase rest_timeslice; ///< task remaining timeslice
+    DoubleLinklistType sched_link; ///< task sched list
+    uint32 bitmap_column;
+    DelayType delay;
+};
+typedef struct TaskDyncSchedMember TaskDyncSchedMembeType;
+struct KTaskDone;
+struct TaskDescriptor
+{
+    void *stack_point; ///< stack point
+    TaskDyncSchedMembeType task_dync_sched_member; ///< task dynamic sched member
+    TaskBaseInfoType task_base_info; ///< task base information
+    uint32 event_id_trigger; ///< event ops (event trigger )
+    uint32 event_mode; ///<  event mode (AND/OR/AUTOCLEAN)
+    x_err_t exstatus; ///< exception status
+    DoubleLinklistType link; ///< manage list
+    struct IdNode id; ///< task id
+    struct KTaskDone *Done;
+};
+typedef struct TaskDescriptor *KTaskDescriptorType;
+struct OsAssignReadyVector {
+    DoubleLinklistType priority_ready_vector[32];
+    uint32 priority_ready_group;
+    x_ubase highest_prio;
+};
+struct KTaskDone
+{
+    int32 (*init)(KTaskDescriptorType task,
+                        const char *name,
+                        void (*entry)(void *parameter),
+                        void *parameter,
+                        uint32 stack_depth,
+                        uint8 priority);
+    x_err_t (*start)(KTaskDescriptorType task);
+    x_err_t (*Delete)(KTaskDescriptorType task);
+    x_err_t (*delay)(KTaskDescriptorType task, x_ticks_t ticks);
+    x_err_t (*mdelay)(KTaskDescriptorType task,uint32 ms);
+    x_err_t (*prioset)(KTaskDescriptorType task, uint8 prio);
+    x_err_t (*suspend)(KTaskDescriptorType task);
+    x_err_t (*wake)(KTaskDescriptorType task);
+};
+int32 KTaskCreate(const char *name,
+                             void (*entry)(void *parameter),
+                             void *parameter,
+                             uint32 stack_depth,
+                             uint8 priority);
+void KTaskQuit(void);
+void KUpdateExstatus(x_err_t no);
+int *KObtainExstatus(void);
+KTaskDescriptorType GetKTaskDescriptor(void);
+KTaskDescriptorType KTaskSearch(char *name);
+x_err_t StartupKTask(int32 id);
+x_err_t KTaskDelete(int32 id);
+x_err_t YieldOsAssign(void);
+x_err_t DelayKTask(x_ticks_t tick);
+x_err_t MdelayKTask(uint32 ms);
+// KTaskPrioSet is bugged, dont use this
+x_err_t KTaskPrioSet(int32 id, uint8 prio);
+x_err_t KTaskCoreCombine(int32 id, uint8 coreid);
+x_err_t KTaskCoreUnCombine(int32 id);
+x_err_t SuspendKTask(int32 id);
+x_err_t KTaskWakeup(int32 id);
+void KTaskTimeout(void *parameter);
+void InitIdleKTask(void);
+void IdleKTaskExec(void);
+KTaskDescriptorType GetIdleKTaskDescripter(void);
+void KTaskOsAssign(void);
+void KTaskOsAssignRemoveKTask(struct TaskDescriptor *task);
+void RoundRobinRemainTaskTimesliceInit(struct TaskDescriptor *task);
+void RoundRobinRemainReadyVectorInsert(struct TaskDescriptor *task, struct OsAssignReadyVector* ready_table);
+void RoundRobinRemainTaskTimesliceUpdate(struct TaskDescriptor *task);
+x_err_t LinklistSuspend(DoubleLinklistType *list,struct TaskDescriptor *task,uint8 flag);
+x_err_t LinklistResume(DoubleLinklistType *list);
+x_err_t LinklistResumeAll(DoubleLinklistType *list);
+void HwSendIpi(int ipi_vector, unsigned int cpu_mask);
+void KTaskIdDelete(int32 id);
+struct TaskDescriptor *GetTaskWithIdnodeInfo(int32 id);
+/*@ Extern Coq (TaskBaseInfoAbs :: *) */
+/*@ Extern Coq (StackRegisterContextAbs :: *) */
+/*@ Extern Coq (store_string_n : Z -> Z -> list Z -> Assertion)
+               (store_task_base_info : Z -> TaskBaseInfoAbs -> Assertion)
+               (store_ktask_stack :
+                  Z -> Z -> list Z ->
+                  StackRegisterContextAbs -> Assertion)
+               (store_stack_register_context_slots :
+                  Z -> StackRegisterContextAbs -> Assertion)
+               (ktask_context_regs_setup :
+                  Z -> Z -> Z -> Z -> Z -> StackRegisterContextAbs)
+               (UCharArray::full : Z -> Z -> list Z -> Assertion)
+               (UIntArray::full : Z -> Z -> list Z -> Assertion)
+               (CHAR_SHARP : Z)
+               (OxFADEFACE : Z)
+               (SAVED_MSTATUS : Z)
+               (REG_COUNT : Z)
+               (REG_LENGTH : Z)
+               (unsigned_last_nbits : Z -> Z -> Z)
+               (ktask_stack_aligned_top : Z -> Z -> Z -> Z)
+               (ktask_stack_context_addr : Z -> Z -> Z -> Z)
+               (ktask_stack_setup_layout_ok : Z -> Z -> Z -> Prop)
+               (ktask_stack_context_layout_ok : Prop)
+               (aligned_reglen : Z -> Prop)
+               (ktask_xubase_value : Z -> Prop)
+               (kss_raw_top : TaskBaseInfoAbs -> Z)
+               (kss_aligned_top : TaskBaseInfoAbs -> Z)
+               (kss_context_addr : TaskBaseInfoAbs -> Z) */
+struct StackRegisterContext
+{
+    x_ubase epc;
+    x_ubase ra;
+    x_ubase mstatus;
+    x_ubase gp;
+    x_ubase tp;
+    x_ubase t0;
+    x_ubase t1;
+    x_ubase t2;
+    x_ubase s0_fp;
+    x_ubase s1;
+    x_ubase a0;
+    x_ubase a1;
+    x_ubase a2;
+    x_ubase a3;
+    x_ubase a4;
+    x_ubase a5;
+    x_ubase a6;
+    x_ubase a7;
+    x_ubase s2;
+    x_ubase s3;
+    x_ubase s4;
+    x_ubase s5;
+    x_ubase s6;
+    x_ubase s7;
+    x_ubase s8;
+    x_ubase s9;
+    x_ubase s10;
+    x_ubase s11;
+    x_ubase t3;
+    x_ubase t4;
+    x_ubase t5;
+    x_ubase t6;
+};
+uint8 KTaskStackSetup(struct TaskDescriptor *task)
+/*@ With info
+    Require task != 0 &&
+            ktask_xubase_value(&KTaskQuit) &&
+            ktask_stack_setup_layout_ok(
+              info.tbStackStart, info.tbStackDepth, REG_LENGTH) &&
+            has_permission(&(task->stack_point)) *
+            store_task_base_info(task, info) *
+            UCharArray::full(
+              info.tbStackStart, info.tbStackDepth,
+              repeat_Z(CHAR_SHARP, info.tbStackDepth))
+    Ensure __return == 0 &&
+            store(&(task->stack_point), kss_context_addr(info)) *
+            store_task_base_info(task, info) *
+            store_ktask_stack(
+              info.tbStackStart, info.tbStackDepth,
+              repeat_Z(
+                CHAR_SHARP,
+                kss_context_addr(info) - info.tbStackStart),
+              ktask_context_regs_setup(
+                info.tbFuncEntry, info.tbFuncParam, &KTaskQuit,
+                SAVED_MSTATUS, OxFADEFACE))
+ */
+;
+inline void NULL_PARAM_CHECK_1(void *p)
+/*@
+    Require emp
+    Ensure p != 0
+*/
+;
+inline void NULL_PARAM_CHECK_2(void (*entry)(void *parameter))
+/*@
+    Require emp
+    Ensure entry != 0
+*/
+;
+/*@ Extern Coq (TaskBaseInfoAbs :: *) */
+/*@ Extern Coq (StackRegisterContextAbs :: *) */
+/*@ Extern Coq (store_string : Z -> list Z -> Assertion)
+               (crtos_valid_string : list Z -> Prop)
+               (string_length : list Z -> Z)
+               (ktask_xubase_value : Z -> Prop)
+               (kss_context_addr : TaskBaseInfoAbs -> Z)
+               (mkTaskBaseInfoAbs :
+                  list Z -> Z -> Z -> Z -> Z -> Z -> TaskBaseInfoAbs)
+               (KOK : Z)
+               (NOMEMORY : Z)
+               (INVALID : Z)
+               (PRIORITY_MAX : Z)
+               (NAME_MAX_SIZE : Z)
+               (REG_LENGTH : Z)
+               (ktask_stack_aligned_top : Z -> Z -> Z -> Z)
+               (ktask_stack_context_addr : Z -> Z -> Z -> Z)
+               (ktask_stack_setup_layout_ok : Z -> Z -> Z -> Prop)
+               (aligned_reglen : Z -> Prop)
+               (store_ktask_stack :
+                  Z -> Z -> list Z ->
+                  StackRegisterContextAbs -> Assertion)
+               (ktask_context_regs_setup :
+                  Z -> Z -> Z -> Z -> Z -> StackRegisterContextAbs)
+               (CHAR_SHARP : Z)
+               (OxFADEFACE : Z)
+               (SAVED_MSTATUS : Z)
+               (store_task_base_info :
+                  Z -> TaskBaseInfoAbs -> Assertion)
+               (has_permission_ktask_base_info : Z -> Assertion)
+               (ktask_init_input_arguments_ok :
+                  Z -> Z -> Z -> Z -> Z -> Prop)
+               (assert_task_base_info_values :
+                  TaskBaseInfoAbs -> list Z ->
+                  Z -> Z -> Z -> Z -> Prop)
+               (has_permission_ktask_base_info_start0 : Z -> Assertion)
+               (ALIGN_SIZE : Z)
+               (addr_aligned : Z -> Z -> Prop)
+ */
+/*
+ * Verification-facing replacement for
+ * CONTAINER_OF(..., TaskDescriptor, task_dync_sched_member.sched_link).
+ * The helper has no memory effect.  Its alignment premise is the local fact
+ * required by the centralized 32-bit TaskDescriptor layout axiom.
+ */
+struct TaskDescriptor *CONTAINER_OF_TASK_SCHED(
+    DoubleLinklistType *sched_link_ptr)
+/*@ With task_ptr
+    Require addr_aligned(task_ptr, ALIGN_SIZE) &&
+            sched_link_ptr == sched_link_of(task_ptr) &&
+            emp
+    Ensure __return == task_ptr &&
+           addr_aligned(__return, ALIGN_SIZE) &&
+           sched_link_ptr ==
+             &(__return->task_dync_sched_member.sched_link)
+ */
+;
+void *KERNEL_MALLOC(uint32 size)
+/*@ Require 0 <= size && size <= UINT_MAX
+    Ensure (__return == 0) ||
+           (0 < __return &&
+            __return <= UINT_MAX - size &&
+            addr_aligned(__return, ALIGN_SIZE) &&
+            CharArray::undef_full(__return, size))
+ */
+;
+void *x_malloc(x_size_t size)
+/*@ delay_object
+    Require 0 <= size && size <= UINT_MAX
+    Ensure (__return == 0) ||
+           (0 < __return &&
+            __return <= UINT_MAX - size &&
+            addr_aligned(__return, ALIGN_SIZE) &&
+            CharArray::undef_full(__return, size))
+ */
+;
+void *memset(void *s, int c, size_t n)
+/*@ Require 0 <= n && n <= UINT_MAX &&
+            0 <= c && c <= 127 &&
+            CharArray::undef_full(s, n)
+    Ensure __return == s && CharArray::full(s, n, repeat_Z(c, n))
+*/
+;
+/*@ Printing Coq Name crtos_valid_string := Crtos_C_Rules.valid_string */
+/*@ Printing Strategy Name crtos_valid_string := Crtos_C_Rules.valid_string */
+char *strncpy(char *dest, const char *src, size_t n)
+/*@ With src_str
+    Require 0 <= n && n <= UINT_MAX &&
+            CharArray::undef_full(dest, n) *
+            store_string(src, src_str)
+    Ensure  __return == dest &&
+            crtos_valid_string(sublist(0, n, src_str)) &&
+            CharArray::full(dest, n,
+              app(sublist(0, n, src_str),
+                  repeat_Z(0, n - string_length(sublist(0, n, src_str))))) *
+            store_string(src, src_str)
+*/
+;
+static x_err_t _KTaskBaseInfoParse(KTaskDescriptorType task,
+                            const char *name,
+                            void (*entry)(void *parameter),
+                            void *parameter,
+                            uint32 stack_depth,
+                            uint8 priority)
+/*@ With src_name
+    Require ktask_init_input_arguments_ok(
+              entry, parameter, &KTaskQuit,
+              stack_depth, priority) &&
+            has_permission(&(task->stack_point)) *
+            has_permission_ktask_base_info(task) *
+            store_string(name, src_name)
+    Ensure ktask_init_input_arguments_ok(
+             entry, parameter, &KTaskQuit,
+             stack_depth, priority) &&
+           task != 0 && name != 0 && entry != 0 &&
+           ((__return == -INVALID &&
+              priority >= PRIORITY_MAX &&
+              has_permission(&(task->stack_point)) *
+              has_permission_ktask_base_info(task) *
+              store_string(name, src_name)) ||
+            (__return == -NOMEMORY &&
+              priority < PRIORITY_MAX &&
+              has_permission(&(task->stack_point)) *
+              has_permission_ktask_base_info_start0(task) *
+              store_string(name, src_name)) ||
+            (__return == KOK &&
+              exists info,
+              info.tbStackStart != 0 &&
+              priority < PRIORITY_MAX &&
+              assert_task_base_info_values(
+                info, sublist(0, NAME_MAX_SIZE - 1, src_name),
+                entry, parameter, stack_depth, priority) &&
+              store(&(task->stack_point), kss_context_addr(info)) *
+              store_task_base_info(task, info) *
+              store_string(name, src_name) *
+              store_ktask_stack(
+                info.tbStackStart, info.tbStackDepth,
+                repeat_Z(
+                  CHAR_SHARP,
+                  kss_context_addr(info) - info.tbStackStart),
+                ktask_context_regs_setup(
+                  info.tbFuncEntry, info.tbFuncParam, &KTaskQuit,
+                  SAVED_MSTATUS, OxFADEFACE))))
+ */
+;
+/*@ Extern Coq
+    (mkTaskSchedMemberAbs :
+        TaskStatus -> Z -> Z -> Z -> Z -> Z -> TaskSchedMemberAbs)
+      (has_permission_task_sched_member : Z -> TaskStatus -> Assertion)
+*/
+// Copied from /home/cheng/osroot/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/assign_roundrobinremain.c
+void RoundRobinRemainTaskTimesliceInit(struct TaskDescriptor *task)
+/*@ Require
+      has_permission(
+        &(task->task_dync_sched_member.origin_timeslice)) *
+      has_permission(
+        &(task->task_dync_sched_member.rest_timeslice))
+    Ensure
+      task != 0 &&
+      store(
+        &(task->task_dync_sched_member.origin_timeslice),
+        unsigned int, 10) *
+      store(
+        &(task->task_dync_sched_member.rest_timeslice),
+        unsigned int, 10)
+ */
+;
+int32 _InitKTask(KTaskDescriptorType task,
+              const char *name,
+       void (*entry)(void *parameter),
+       void *parameter,
+       uint32 stack_depth,
+       uint8 priority);
+x_err_t _StartupKTask(KTaskDescriptorType task);
+x_err_t _DeleteKTask(KTaskDescriptorType task);
+x_err_t _DelayKTask(KTaskDescriptorType task, x_ticks_t ticks);
+x_err_t _MdelayKTask(KTaskDescriptorType task, uint32 ms);
+x_err_t _KTaskPrioSet(KTaskDescriptorType task, uint8 prio);
+x_err_t _SuspendKTask(KTaskDescriptorType task);
+x_err_t _KTaskWakeup(KTaskDescriptorType task);
+DoubleLinklistType xiaoshan_task_head ={&xiaoshan_task_head, &xiaoshan_task_head}; ///< global task manage list
+// k_task_id_manager中的ID MAX NUM和桶的大小初始化后固定；
+// 抽象状态应为分可变和不可变的部分
+// DECLARE_ID_MANAGER(k_task_id_manager, ID_NUM_MAX);
+// =================================================>
+uint8 __id_map_k_task_id_manager[16];
+DoubleLinklistType __htable_k_task_id_manager[16];
+struct IdManager k_task_id_manager = {
+    .id_max = 128,
+    .hoffset = 16,
+    .id_map = __id_map_k_task_id_manager,
+    .htable = __htable_k_task_id_manager
+};
+// read-only, not protected by lock
+static struct KTaskDone Done = {
+    .init = _InitKTask,
+    .start = _StartupKTask,
+    .Delete = _DeleteKTask,
+    .delay = _DelayKTask,
+    .mdelay = _MdelayKTask,
+    .prioset = _KTaskPrioSet,
+    .suspend = _SuspendKTask,
+    .wake = _KTaskWakeup
+};
+DoubleLinklistType xiaoshan_delay_head = {&xiaoshan_delay_head, &xiaoshan_delay_head};
+typedef unsigned char BOOL;
+/*@ Import Coq Require Import CRTOS_Verify.libai.TaskStatusMemory */
+/*@ include strategies "task_status.strategies" */
+void KTaskStateSet(KTaskDescriptorType task, uint8 stat)
+/*@ With (old_stat : TaskStatus)
+    Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+    Ensure  store_task_status(&(task->task_dync_sched_member.stat), decode_task_status(stat))
+*/
+;
+void KTaskStatSetAsInit(KTaskDescriptorType task)
+/*@ With (old_stat : TaskStatus)
+    Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+    Ensure  store_task_status(&(task->task_dync_sched_member.stat), TSK_INIT)
+*/
+;
+void KTaskStatSetAsReady(KTaskDescriptorType task)
+/*@ With (old_stat : TaskStatus)
+    Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+    Ensure  store_task_status(&(task->task_dync_sched_member.stat), TSK_READY)
+*/
+;
+void KTaskStatSetAsSuspend(KTaskDescriptorType task)
+/*@ With (old_stat : TaskStatus)
+    Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+    Ensure  store_task_status(&(task->task_dync_sched_member.stat), TSK_SUSPEND)
+*/
+;
+void KTaskStatSetAsRunning(KTaskDescriptorType task)
+/*@ With (old_stat : TaskStatus)
+    Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+    Ensure  store_task_status(&(task->task_dync_sched_member.stat), TSK_RUNNING)
+*/
+;
+void KTaskStatSetAsClose(KTaskDescriptorType task)
+/*@ With (old_stat : TaskStatus)
+    Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+    Ensure  store_task_status(&(task->task_dync_sched_member.stat), TSK_CLOSE)
+*/
+;
+uint8 KTaskStatGet(KTaskDescriptorType task)
+/*@ With (old_stat : TaskStatus)
+    Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+    Ensure task_status_matches(old_stat, __return) &&
+           store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+*/
+;
+BOOL JudgeKTaskStatIsInit(KTaskDescriptorType task)
+/*@ With (old_stat : TaskStatus)
+    Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+    Ensure ((__return == 1 && old_stat == TSK_INIT) ||
+            (__return == 0 && old_stat != TSK_INIT)) &&
+           store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+*/
+;
+BOOL JudgeKTaskStatIsReady(KTaskDescriptorType task)
+/*@ With (old_stat : TaskStatus)
+    Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+    Ensure ((__return == 1 && old_stat == TSK_READY) ||
+            (__return == 0 && old_stat != TSK_READY)) &&
+           store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+*/
+;
+BOOL JudgeKTaskStatIsSuspend(KTaskDescriptorType task)
+/*@ With (old_stat : TaskStatus)
+    Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+    Ensure ((__return == 1 && old_stat == TSK_SUSPEND) ||
+            (__return == 0 && old_stat != TSK_SUSPEND)) &&
+           store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+*/
+;
+BOOL JudgeKTaskStatIsRunning(KTaskDescriptorType task)
+/*@ With (old_stat : TaskStatus)
+    Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+    Ensure ((__return == 1 && old_stat == TSK_RUNNING) ||
+            (__return == 0 && old_stat != TSK_RUNNING)) &&
+           store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+*/
+;
+BOOL JudgeKTaskStatIsClose(KTaskDescriptorType task)
+/*@ With (old_stat : TaskStatus)
+    Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+    Ensure ((__return == 1 && old_stat == TSK_CLOSE) ||
+            (__return == 0 && old_stat != TSK_CLOSE)) &&
+           store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+*/
+;
+/* Native QCP MonadErr declarations shared by all abstract-program Specs. */
+/*@ Import Coq From MonadLib.MonadErr
+      Require Import MonadErrBasic MonadErrHoare monadesafe_lib */
+/*@ Import Coq Import Monad MonadNotation */
+/*@ Import Coq Local Open Scope monad */
+/*@ Extern Coq (program :: * => * => *) (unit :: *) */
+/*@ Printing Coq Name program := MonadErr.M */
+/*@ Printing Strategy Name program := MonadErr.M */
+/*@ Extern Coq
+      (safeExec : {Sigma} {A} ->
+        (Sigma -> Prop) -> program Sigma A -> (A -> Sigma -> Prop) -> Prop)
+      (return : {Sigma} {A} -> A -> program Sigma A)
+      (tt : unit)
+ */
+/*@ Printing Coq Name safeExec := monadesafe_lib.safeExec */
+/*@ Printing Coq Name return := MonadErr.ret */
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskOsAssign */
+/*@ Import Coq Require Import CRTOS_Verify.libai.TaskSafeExec */
+/*@ Extern Coq
+      (LastSeen : VarGlobalState -> (VarGlobalState -> Prop) -> Prop)
+      (abs_ktask_assign : program (VarGlobalState -> Prop) unit)
+ */
+/*
+ * Stage-1 model requested by the user: an empty critical section represents
+ * the scheduling/yield boundary. No extra caller-owned data is required;
+ * OutsideCritical remains necessary. This is not a proof of DO_KTASK_ASSIGN.
+ */
+void KTASK_ASSIGN()
+/*@ outside_critical
+    With (sg : StableGlobalState) (before : VarGlobalState) X
+    Require
+      safeExec(LastSeen(before), abs_ktask_assign, X) &&
+      OutsideCritical(sg, before)
+    Ensure
+      exists after,
+        safeExec(LastSeen(after), return(tt), X) &&
+        OutsideCritical(sg, after)
+ */;
+/*@ Import Coq Require Import CRTOS_Verify.libai.CriticalViews */
+/*@ Extern Coq
+ (os_task_fields_frame : StableGlobalState -> VarGlobalState -> Assertion)
+ (task_world_wf : VarGlobalState -> Prop) */
+/*
+* Copyright (c) 2020 AIIT XUOS Lab
+* XiUOS is licensed under Mulan PSL v2.
+* You can use this software according to the terms and conditions of the Mulan PSL v2.
+* You may obtain a copy of Mulan PSL v2 at:
+*        http://license.coscl.org.cn/MulanPSL2
+* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+* See the Mulan PSL v2 for more details.
+*/
+/**
+* @file:   xs_assign.h
+* @brief:  function declaration and structure defintion of system assign
+* @version: 1.0
+* @author:  AIIT XUOS Lab
+* @date:    2020/3/10
+*
+*/
+/*
+* Copyright (c) 2020 AIIT XUOS Lab
+* XiUOS is licensed under Mulan PSL v2.
+* You can use this software according to the terms and conditions of the Mulan PSL v2.
+* You may obtain a copy of Mulan PSL v2 at:
+*        http://license.coscl.org.cn/MulanPSL2
+* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+* EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+* MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+* See the Mulan PSL v2 for more details.
+*/
+/**
+* @file:    xs_base.h
+* @brief:   basic data type defintions 
+* @version: 1.0
+* @author:  AIIT XUOS Lab
+* @date:    2020/3/10
+*
+*/
+// #include <xs_klist.h>
+// #include <xs_spinlock.h>
+// #ifdef __cplusplus
+// extern "C" {
+// #endif
+struct PriorityReadyVectorDone
+{
+    void (*init)(struct OsAssignReadyVector *ready_vector);
+    void (*insert)(struct TaskDescriptor *task);
+    void (*remove)(struct TaskDescriptor *task);
+};
+struct Assign
+{
+    struct OsAssignReadyVector os_assign_ready_vector;
+    struct TaskDescriptor *os_running_task;
+    struct PriorityReadyVectorDone *ready_vector_done;
+    uint8 current_priority;
+};
+/*
+ * DISABLE_INTERRUPT/ENABLE_INTERRUPT 在当前验证切片中作为临界区接口，
+ * ordinary/stable 两个行为与已经使用并验证的
+ * CriticalAreaLock/CriticalAreaUnLock 规格逐字保持一致。
+ * nested 行为只恢复调用前已经持有的 critical view；其余临界区内的
+ * 局部内存资源由 separation-logic frame 原样保存。
+ */
+x_base DISABLE_INTERRUPT(void)
+/*@ ordinary
+    With (sg : StableGlobalState) (st1 : VarGlobalState)
+    Require
+      OutsideCritical(sg, st1)
+    Ensure
+      exists st_lock,
+        Crtos_RTrans(st1, st_lock) &&
+        InsideCritical(sg, st_lock) *
+        os_inv(sg, st_lock)
+ */
+/*@ nested
+    With (sg : StableGlobalState) (st : VarGlobalState)
+    Require
+      InsideCritical(sg, st)
+    Ensure
+      InsideCritical(sg, st)
+ */
+;
+void ENABLE_INTERRUPT(x_base lock)
+/*@ stable
+    With (sg : StableGlobalState) (st1 st2 : VarGlobalState)
+    Require
+      Crtos_GTrans(st1, st2) &&
+      InsideCritical(sg, st1) *
+      os_inv(sg, st2)
+    Ensure
+      OutsideCritical(sg, st2)
+ */
+/*@ nested
+    With (sg : StableGlobalState) (st : VarGlobalState)
+    Require
+      InsideCritical(sg, st)
+    Ensure
+      InsideCritical(sg, st)
+ */
+;
+void SwitchKtaskContext(x_ubase from, x_ubase to , struct TaskDescriptor *to_task);
+void SwitchKtaskContextTo(x_ubase to, struct TaskDescriptor *to_task);
+void HwInterruptcontextSwitch( x_ubase from, x_ubase to, struct TaskDescriptor *to_task ,void *context);
+void KTaskInsertToReadyVector(struct TaskDescriptor *task);
+int PrioCaculate(uint32 bitmap);
+void SysInitOsAssign(void);
+void ResetCriticalAreaLock(void );
+void StartupOsAssign(void);
+uint16 GetOsAssignLockLevel(void);
+int32 JudgeAssignReadyBitmapIsEmpty(struct OsAssignReadyVector *ready_vector);
+void OsAssignReadyVectorInit(struct OsAssignReadyVector *ready_vector);
+void AssignPolicyInsert(struct TaskDescriptor *task, struct OsAssignReadyVector* ready_table);
+struct TaskDescriptor * ChooseTaskWithHighestPrio(struct OsAssignReadyVector *ready_vector);
+void _KTaskOsAssignStackCheck(struct TaskDescriptor *task);
+/*
+ * QCP 需要在单个验证翻译单元中看到这两个全局对象的具体定义。
+ * m_ktask.h 已经声明 CriticalAreaLock/CriticalAreaUnLock，因此本头文件不再
+ * 重复声明它们，避免 QCP 对重复函数声明的前端崩溃。
+ */
+struct Assign Assign;
+static struct PriorityReadyVectorDone SingleReadyVectorDone =
+{
+    OsAssignReadyVectorInit,
+    KTaskInsertToReadyVector,
+    KTaskOsAssignRemoveKTask
+};
+// #ifdef __cplusplus
+// }
+// #endif
+/*@ Import Coq Require Import CRTOS_Verify.VC.code.kernel.thread.ktask_suspend_lib */
+/*@ Extern Coq
+      (task_fields_id_frame : StableGlobalState -> VarGlobalState -> Assertion)
+ */
+/*@ Extern Coq
+      (task_fields_except_sched : StableGlobalState -> VarGlobalState -> Z -> TaskDescriptorAbs -> Assertion)
+      (store_assign_insert_sched_except_stat : Z -> TaskSchedMemberAbs -> Assertion)
+      (store_ktask_suspend_sched_stat_frame :
+        StableGlobalState -> VarGlobalState -> Z -> TaskDescriptorAbs -> Assertion)
+ */
+/*@ Import Coq Require Import CRTOS_Verify.libai.TaskExstatusView */
+/*@ Extern Coq
+ (task_fields_exstatus_frame : StableGlobalState -> VarGlobalState -> Z -> TaskDescriptorAbs -> Assertion)
+ (replace_descriptor_exstatus : Z -> TaskDescriptorAbs -> TaskDescriptorAbs)
+ (update_task_desc_map : Z -> TaskDescriptorAbs -> (Z -> option TaskDescriptorAbs) -> Z -> option TaskDescriptorAbs)
+ */
+/*@ include strategies "critical_task_view.strategies" */
+/*@ include strategies "task_stat_view.strategies" */
+/*@ include strategies "task_exstatus_view.strategies" */
+/*@ Import Coq Require Import CRTOS_Verify.VC.code.kernel.thread.ktask_timeout_lib */
+/*@ Extern Coq
+ (timeout_source :: *)
+ */
+/*@ Extern Coq
+ (timeout_detached : timeout_source)
+ (timeout_linked : Z -> list(DL_Node Z) -> list(DL_Node Z) -> timeout_source)
+ (timeout_source_pre : (Z -> option TaskDescriptorAbs) -> Z -> timeout_source -> Assertion)
+ (timeout_source_post : (Z -> option TaskDescriptorAbs) -> timeout_source -> Assertion)
+ (timeout_source_frame : StableGlobalState -> VarGlobalState -> Z -> TaskDescriptorAbs -> timeout_source -> Assertion)
+ (timeout_global_frame : StableGlobalState -> VarGlobalState -> Z -> Assertion)
+ (timeout_sched_pool : (Z -> option TaskDescriptorAbs) -> StableGlobalState -> VarGlobalState -> Assertion)
+ (ktask_timeout_body : Z -> program (VarGlobalState -> Prop) unit)
+ (ktask_timeout_descriptor : TaskDescriptorAbs -> TaskDescriptorAbs)
+ (ktask_timeout_unlink_state : Z -> VarGlobalState -> VarGlobalState)
+ (ktask_timeout_state : VarGlobalState -> Z -> TaskDescriptorAbs -> OsAssignReadyVectorAbs -> VarGlobalState)
+ (pure_suspend_sched_link : (Z -> option TaskDescriptorAbs) -> Z -> Z -> Assertion)
+ */
+/*@ Import Coq Require Import CRTOS_Verify.libai.KTaskTimeout */
+/*@ Extern Coq
+      (abs_ktask_timeout :
+        StableGlobalState -> Z -> program (VarGlobalState -> Prop) unit)
+      (set_task_desc_ready : TaskDescriptorAbs -> TaskDescriptorAbs)
+      (update_task_desc_map :
+        Z -> TaskDescriptorAbs -> (Z -> option TaskDescriptorAbs) ->
+        Z -> option TaskDescriptorAbs)
+      (assign_insert_step_ic :
+        (Z -> option TaskDescriptorAbs) -> Z -> TaskDescriptorAbs ->
+        OsAssignReadyVectorAbs -> OsAssignReadyVectorAbs -> Prop)
+ */
+/*
+ * 来源：../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c。
+ * 按“源代码处理.md”提取 KTaskTimeout。
+ * delay.c 的 CheckTaskDelay 在解锁后调用本函数，故保留原有临界区；
+ * 任务状态读取、exstatus 写入和调度链表操作均在该临界区内。
+ * 当前 annotated_C/src/include/xsconfig.h 未启用 ARCH_SMP。
+ * 本文件是锁外调用的源码切片；证明覆盖下方 OC Spec 的两个状态分支。
+ * KTASK_ASSIGN 的 outside_critical Spec 复用 ktask_assign_oc.h。
+ */
+/*
+ * assign.c 的 SingleReadyVectorDone.insert 指向 KTaskInsertToReadyVector。
+ * 在本函数的原有临界区内调用，复用 assign_ready_insert.c 的锁内切片；
+ * 该切片已注释内部 DISABLE_INTERRUPT / ENABLE_INTERRUPT。
+ * 调用 Spec 与 assign_ready_insert.c 一致；task_fields 包含已写入的
+ * exstatus，来源节点由 remove_self/remove_member 取得后交给 ready 表。
+ */
+void KTaskInsertToReadyVector(struct TaskDescriptor *task)
+/*@ With (sg : StableGlobalState)
+         (st : VarGlobalState)
+         (desc : TaskDescriptorAbs)
+    Require
+      os_global_context(sg) &&
+      st.os_tasks.task_desc_map(task) == Some(desc) &&
+      task_fields(sg, st) * assign_ready_pending(sg, st) *
+      occupy_dll_node(sched_link_of(task))
+    Ensure
+      exists (insert_before ready_after : OsAssignReadyVectorAbs) (st_insert : VarGlobalState),
+        insert_before == st.os_assign.assignReadyVector &&
+        assign_insert_step_ic(st.os_tasks.task_desc_map, task, desc, insert_before, ready_after) &&
+        st_insert ==
+          replace_global_ready_vector(ready_after,
+            replace_task_desc_map(
+              update_task_desc_map(task, set_task_desc_ready(desc), st.os_tasks.task_desc_map), st)) &&
+        task_fields(sg, st_insert) * assign_ready_pending(sg, st_insert)
+ */;
+/**
+ * timeout function of task timer,this function removes the suspend task and add to ready queue
+ * then start a new schedule
+ *
+ * @param parameter arg for task timeout function
+ *
+ * assertS 在首次加锁观察处要求 task_desc_map(parameter) != None，即任务已发布；
+ * 只在旧 before 中存在不够，单独管理链登记也不够。该纯检查不提供内存。
+ * 对 SUSPEND 任务还检查 bitmap_column == 1 << cur_prio；插入 helper
+ * 直接使用此字段，而 KTaskTimeout 本身不重新计算位图。
+ * 非 SUSPEND 原样解锁返回；SUSPEND 写 -ETIMEOUT、摘除 sched_link 并入
+ * READY 队列，解锁后执行 KTASK_ASSIGN。不读取或改变 Delay 对象。
+ * 后续调度允许环境推进，故返回时不保证目标仍 READY 或仍然存活。
+ */
+void KTaskTimeout(void *parameter)
+/*@ outside_critical
+    With (sg : StableGlobalState) (before : VarGlobalState) X
+    Require
+      safeExec(LastSeen(before), abs_ktask_timeout(sg, parameter), X) &&
+      OutsideCritical(sg, before)
+    Ensure
+      exists after,
+        safeExec(LastSeen(after), return(tt), X) &&
+        OutsideCritical(sg, after)
+ */
+{
+    x_base lock = 0;
+    struct TaskDescriptor *task = (0);
+    NULL_PARAM_CHECK_1(parameter);
+    lock = CriticalAreaLock() /*@ where (ordinary) sg = sg, st1 = before */;
+    /*@ Given st_lock */
+    /*@ safeExec(LastSeen(before), abs_ktask_timeout(sg, parameter), X) &&
+        Crtos_RTrans(before, st_lock) && InsideCritical(sg, st_lock) * os_inv(sg, st_lock)
+        which implies exists desc,
+        safeExec(LastSeen(before), ktask_timeout_body(parameter), X) &&
+        st_lock.os_tasks.task_desc_map(parameter) == Some(desc) &&
+        (desc.tdSchedMember.tsmStat != TSK_SUSPEND ||
+         desc.tdSchedMember.tsmBitmapColumn == (1 << desc.tdSchedMember.tsmCurPrio)) &&
+        InsideCritical(sg, st_lock) * os_inv(sg, st_lock)
+     */
+    /*@ Given desc */
+    /* 首次检查在此完整 cut 消耗；后续只使用固定锁观察及 body 的 safeExec。 */
+    /*@ Assert exists lock_saved,
+        safeExec(LastSeen(before), ktask_timeout_body(parameter@pre), X) &&
+        st_lock.os_tasks.task_desc_map(parameter@pre) == Some(desc) &&
+        (desc.tdSchedMember.tsmStat != TSK_SUSPEND ||
+         desc.tdSchedMember.tsmBitmapColumn == (1 << desc.tdSchedMember.tsmCurPrio)) &&
+        Crtos_RTrans(before, st_lock) &&
+        store_ptr(&parameter, parameter@pre) * store_ptr(&task, 0) *
+        store(&lock, signed long, lock_saved) *
+        InsideCritical(sg, st_lock) * os_inv(sg, st_lock)
+     */
+    /*@ Given lock_saved */
+    task = (struct TaskDescriptor *)parameter;
+    if(1 == JudgeKTaskStatIsSuspend(task)) {
+        /*@ st_lock.os_tasks.task_desc_map(task) == Some(desc) &&
+            desc.tdSchedMember.tsmStat == TSK_SUSPEND && os_inv(sg, st_lock)
+            which implies exists source,
+            os_global_context(sg) && sched_link_of(task) != 0 &&
+            timeout_global_frame(sg, st_lock, task) * task_fields(sg, st_lock) *
+            assign_ready_pending(sg, st_lock) *
+            timeout_source_pre(st_lock.os_tasks.task_desc_map, task, source) *
+            timeout_source_frame(sg, st_lock, task, desc, source)
+         */
+        /*@ Given source */
+        task->exstatus = -2;
+        /*@ timeout_source_pre(st_lock.os_tasks.task_desc_map, task, source)
+            which implies
+            ((exists head prefix suffix,
+              source == timeout_linked(head, prefix, suffix) && source != timeout_detached &&
+              store_dll(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), head,
+                app(prefix, cons(Build_DL_Node(task, &(task->task_dync_sched_member.sched_link)), suffix)))) ||
+             (source == timeout_detached && store_node_self_linked(&(task->task_dync_sched_member.sched_link))))
+         */
+        /*@ Branch name
+            timeout_linked_path: source != timeout_detached;
+            timeout_detached_path: source == timeout_detached */
+        DoubleLinkListRmNode(&(task->task_dync_sched_member.sched_link))
+          /*@ where (remove_member) storeA = pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), a = task;
+                    A = Z $ timeout_linked_path
+              where (remove_self) node = &(task->task_dync_sched_member.sched_link) $ timeout_detached_path */;
+        // #ifdef ARCH_SMP
+        // HwLockSpinlock(&AssignSpinLock);
+        // #endif
+        /*@ Assert
+            safeExec(LastSeen(before), ktask_timeout_body(parameter@pre), X) &&
+            st_lock.os_tasks.task_desc_map(parameter@pre) == Some(desc) &&
+            desc.tdSchedMember.tsmStat == TSK_SUSPEND &&
+            desc.tdSchedMember.tsmBitmapColumn == (1 << desc.tdSchedMember.tsmCurPrio) &&
+            Crtos_RTrans(before, st_lock) && os_global_context(sg) &&
+            store_ptr(&parameter, parameter@pre) * store_ptr(&task, parameter@pre) *
+            store(&lock, signed long, lock_saved) * InsideCritical(sg, st_lock) *
+            timeout_global_frame(sg, st_lock, parameter@pre) *
+            task_fields(sg, replace_task_desc_map(update_task_desc_map(parameter@pre, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)) * assign_ready_pending(sg, st_lock) *
+            timeout_source_post(st_lock.os_tasks.task_desc_map, source) *
+            store_node_self_linked(sched_link_of(parameter@pre)) *
+            timeout_source_frame(sg, st_lock, parameter@pre, desc, source)
+            $ timeout_linked_path timeout_detached_path
+         */
+        /*@ task_fields(sg, replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)) * assign_ready_pending(sg, st_lock) *
+            timeout_source_post(st_lock.os_tasks.task_desc_map, source) *
+            store_node_self_linked(sched_link_of(task)) *
+            timeout_source_frame(sg, st_lock, task, desc, source)
+            which implies
+            (replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)).os_tasks.task_desc_map(task) == Some(replace_descriptor_exstatus(-2, desc)) &&
+            task_fields(sg, replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)) * assign_ready_pending(sg, replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)) *
+            occupy_dll_node(sched_link_of(task)) * timeout_sched_pool(update_task_desc_map(task, set_task_desc_ready(ktask_timeout_descriptor(desc)), st_lock.os_tasks.task_desc_map), sg, ktask_timeout_unlink_state(task, st_lock))
+         */
+        // 原调用：Assign.ready_vector_done->insert(task);
+        KTaskInsertToReadyVector(task)
+          /*@ where sg = sg, st = replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock), desc = replace_descriptor_exstatus(-2, desc) */;
+        /*@ Given insert_before ready_after st_insert */
+        // #ifdef ARCH_SMP
+        // HwUnlockSpinlock(&AssignSpinLock);
+        // #endif
+        /*@ st_lock.os_tasks.task_desc_map(task) == Some(desc) &&
+            desc.tdSchedMember.tsmStat == TSK_SUSPEND &&
+            desc.tdSchedMember.tsmBitmapColumn == (1 << desc.tdSchedMember.tsmCurPrio) &&
+            safeExec(LastSeen(before), ktask_timeout_body(task), X) && Crtos_RTrans(before, st_lock) &&
+            insert_before == st_lock.os_assign.assignReadyVector &&
+            assign_insert_step_ic((replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)).os_tasks.task_desc_map, task, replace_descriptor_exstatus(-2, desc), insert_before, ready_after) &&
+            st_insert == replace_global_ready_vector(ready_after, replace_task_desc_map(update_task_desc_map(task, set_task_desc_ready(replace_descriptor_exstatus(-2, desc)), (replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)).os_tasks.task_desc_map), replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock))) &&
+            timeout_global_frame(sg, st_lock, task) * task_fields(sg, st_insert) *
+            assign_ready_pending(sg, st_insert) * timeout_sched_pool(update_task_desc_map(task, set_task_desc_ready(ktask_timeout_descriptor(desc)), st_lock.os_tasks.task_desc_map), sg, ktask_timeout_unlink_state(task, st_lock))
+            which implies
+            Crtos_GTrans(st_lock, ktask_timeout_state(st_lock, task, desc, ready_after)) &&
+            safeExec(LastSeen(ktask_timeout_state(st_lock, task, desc, ready_after)), abs_ktask_assign, X) && os_inv(sg, ktask_timeout_state(st_lock, task, desc, ready_after))
+         */
+        CriticalAreaUnLock(lock) /*@ where (stable) st1 = st_lock, st2 = ktask_timeout_state(st_lock, task, desc, ready_after) */;
+        // 原语句：DO_KTASK_ASSIGN;
+        KTASK_ASSIGN() /*@ where (outside_critical) before = ktask_timeout_state(st_lock, task, desc, ready_after), X = X */;
+    } else {
+        /*@ task == parameter@pre && st_lock.os_tasks.task_desc_map(task) == Some(desc) &&
+            desc.tdSchedMember.tsmStat != TSK_SUSPEND &&
+            safeExec(LastSeen(before), ktask_timeout_body(task), X) && Crtos_RTrans(before, st_lock) &&
+            os_inv(sg, st_lock)
+            which implies task == parameter@pre && Crtos_GTrans(st_lock, st_lock) &&
+            safeExec(LastSeen(st_lock), return(tt), X) && os_inv(sg, st_lock)
+         */
+        CriticalAreaUnLock(lock) /*@ where (stable) st1 = st_lock, st2 = st_lock */;
+    }
+}

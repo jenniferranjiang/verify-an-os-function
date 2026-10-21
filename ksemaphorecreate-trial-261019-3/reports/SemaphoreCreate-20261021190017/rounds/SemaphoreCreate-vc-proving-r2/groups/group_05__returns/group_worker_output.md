@@ -1,0 +1,3 @@
+Completed all three assigned return witnesses and their three aggressive split goals. Success selects allocation success and the atomic publication execution; manager-full selects the atomic failure execution returning -5 while retaining locked state; allocation failure selects the immediate return branch. Reused compatible r1 return_refinement proofs, adapting environment/safeExec hypothesis references to the two additional r2 node nonzero premises. No helpers or seed changes.
+
+The exact assigned controller group-check exited 0 with JSON status passed (105.299892 seconds), compiling current library, goals, auto/manual proofs, and group wrapper. Forbidden lemma/tactic scan found no hits. Stopped writing after this terminal report.

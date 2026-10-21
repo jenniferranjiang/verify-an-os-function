@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "purpose": "Evidence for constant-folding two sizeof(struct Semaphore) arguments to 32 in the existing ILP32 verification slice",
+  "source_test": "checks/abi-check.c",
+  "slice_test": "checks/slice-abi-check.c",
+  "source_command": "gcc -m32 -std=c11 -fsyntax-only -Iksemaphorecreate-trial-261019-3/checks -IUbiquitous/XiZi_IIoT_Macro/kernel/include ksemaphorecreate-trial-261019-3/checks/abi-check.c",
+  "slice_command": "gcc -m32 -std=c11 -Wall -Werror -fsyntax-only ksemaphorecreate-trial-261019-3/checks/slice-abi-check.c",
+  "cwd": "/home/xinra/crtos",
+  "results": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "b2cff9",
+        "wall_time_seconds": 0.000033884,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "f0df4b",
+        "wall_time_seconds": 0.000039022,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    }
+  ],
+  "limitation": "GCC ILP32 surrogate plus existing Cortex-M3 natural-layout analysis; not an ARM cross-compiler run. No Coq layout axiom added."
+}

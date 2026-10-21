@@ -1,0 +1,237 @@
+#include "delay_views_strategy.h"
+
+// Demand-driven payload exposure. The three fields and padding exclude every link cell.
+id : 1
+priority : core(2)
+left : store_delay_info(field_addr(?delay, Delay, link), ?info) at 0
+right : store(field_addr(?base, Delay, task), PTR(struct TaskDescriptor), ?value) at 1
+check : infer(base == delay);
+        infer(addr_aligned(delay, ALIGN_SIZE()));
+action : left_erase(0);
+         left_add(store(field_addr(delay, Delay, task), PTR(struct TaskDescriptor), info.tdTaskPtr));
+         left_add(store(field_addr(delay, Delay, ticks), U32, info.tdTicks));
+         left_add(store(field_addr(delay, Delay, status), U8, info.tdStatus));
+         left_add(CharArray::full(delay + 9, 3, cons{Z}(0, cons{Z}(0, cons{Z}(0, nil{Z})))));
+
+id : 2
+priority : core(2)
+left : store_delay_info(field_addr(?delay, Delay, link), ?info) at 0
+right : undef_data_at(field_addr(?base, Delay, task), PTR(struct TaskDescriptor)) at 1
+check : infer(base == delay);
+        infer(addr_aligned(delay, ALIGN_SIZE()));
+action : left_erase(0);
+         left_add(store(field_addr(delay, Delay, task), PTR(struct TaskDescriptor), info.tdTaskPtr));
+         left_add(store(field_addr(delay, Delay, ticks), U32, info.tdTicks));
+         left_add(store(field_addr(delay, Delay, status), U8, info.tdStatus));
+         left_add(CharArray::full(delay + 9, 3, cons{Z}(0, cons{Z}(0, cons{Z}(0, nil{Z})))));
+
+id : 3
+priority : core(2)
+left : store_delay_info(field_addr(?delay, Delay, link), ?info) at 0
+right : store(field_addr(?base, Delay, ticks), U32, ?value) at 1
+check : infer(base == delay);
+        infer(addr_aligned(delay, ALIGN_SIZE()));
+action : left_erase(0);
+         left_add(store(field_addr(delay, Delay, task), PTR(struct TaskDescriptor), info.tdTaskPtr));
+         left_add(store(field_addr(delay, Delay, ticks), U32, info.tdTicks));
+         left_add(store(field_addr(delay, Delay, status), U8, info.tdStatus));
+         left_add(CharArray::full(delay + 9, 3, cons{Z}(0, cons{Z}(0, cons{Z}(0, nil{Z})))));
+
+id : 4
+priority : core(2)
+left : store_delay_info(field_addr(?delay, Delay, link), ?info) at 0
+right : undef_data_at(field_addr(?base, Delay, ticks), U32) at 1
+check : infer(base == delay);
+        infer(addr_aligned(delay, ALIGN_SIZE()));
+action : left_erase(0);
+         left_add(store(field_addr(delay, Delay, task), PTR(struct TaskDescriptor), info.tdTaskPtr));
+         left_add(store(field_addr(delay, Delay, ticks), U32, info.tdTicks));
+         left_add(store(field_addr(delay, Delay, status), U8, info.tdStatus));
+         left_add(CharArray::full(delay + 9, 3, cons{Z}(0, cons{Z}(0, cons{Z}(0, nil{Z})))));
+
+id : 5
+priority : core(2)
+left : store_delay_info(field_addr(?delay, Delay, link), ?info) at 0
+right : store(field_addr(?base, Delay, status), U8, ?value) at 1
+check : infer(base == delay);
+        infer(addr_aligned(delay, ALIGN_SIZE()));
+action : left_erase(0);
+         left_add(store(field_addr(delay, Delay, task), PTR(struct TaskDescriptor), info.tdTaskPtr));
+         left_add(store(field_addr(delay, Delay, ticks), U32, info.tdTicks));
+         left_add(store(field_addr(delay, Delay, status), U8, info.tdStatus));
+         left_add(CharArray::full(delay + 9, 3, cons{Z}(0, cons{Z}(0, cons{Z}(0, nil{Z})))));
+
+id : 6
+priority : core(2)
+left : store_delay_info(field_addr(?delay, Delay, link), ?info) at 0
+right : undef_data_at(field_addr(?base, Delay, status), U8) at 1
+check : infer(base == delay);
+        infer(addr_aligned(delay, ALIGN_SIZE()));
+action : left_erase(0);
+         left_add(store(field_addr(delay, Delay, task), PTR(struct TaskDescriptor), info.tdTaskPtr));
+         left_add(store(field_addr(delay, Delay, ticks), U32, info.tdTicks));
+         left_add(store(field_addr(delay, Delay, status), U8, info.tdStatus));
+         left_add(CharArray::full(delay + 9, 3, cons{Z}(0, cons{Z}(0, cons{Z}(0, nil{Z})))));
+
+// A fresh/unlinked Delay exposes its payload only when initialization writes ticks.
+id : 7
+priority : core(1)
+left : store_delay_unlinked_info(?delay, ?info) at 0
+right : undef_data_at(field_addr(?base, Delay, ticks), U32) at 1
+check : infer(base == delay);
+action : left_erase(0);
+         left_add(store_delay_info(field_addr(delay, Delay, link), info));
+         left_add(occupy_dll_node(field_addr(delay, Delay, link)));
+
+// Borrow only the sentinel's next slot; retain the entire payload/link remainder.
+id : 8
+priority : core(2)
+left : store_dll{TaskDelayAbs}(store_delay_info(), ?head, ?nodes) at 0
+right : store(field_addr(?base, SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode), ?value) at 1
+check : infer(base == head);
+action : left_erase(0);
+         right_erase(1);
+         left_exist_add(first : Z);
+         left_add(store_delay_dll_head_frame(head, nodes, first));
+         right_add(value == first);
+
+// An inactive updated payload restores the complete list before remove_member.
+// The frame retains all other nodes and every link; no list is unfolded here.
+id : 9
+priority : post(2)
+left : store_delay_dll_frame(?head, ?prefix, Build_DL_Node{TaskDelayAbs}(?old_info, field_addr(?delay, Delay, link)), ?suffix) at 0
+       store(field_addr(delay, Delay, task), PTR(struct TaskDescriptor), ?task) at 1
+       store(field_addr(delay, Delay, ticks), U32, ?ticks) at 2
+       store(field_addr(delay, Delay, status), U8, 0) at 3
+       CharArray::full(delay + 9, 3, cons{Z}(0, cons{Z}(0, cons{Z}(0, nil{Z})))) at 4
+check : infer(delay != 0);
+        infer(addr_aligned(delay, ALIGN_SIZE()));
+action : left_erase(0);
+         left_erase(1);
+         left_erase(2);
+         left_erase(3);
+         left_erase(4);
+         left_add(TASK_DELAY_INACTIVE_VALUE() == 0);
+         left_add(store_dll{TaskDelayAbs}(store_delay_info(), head, app{DL_Node{TaskDelayAbs}}(prefix, cons{DL_Node{TaskDelayAbs}}(Build_DL_Node{TaskDelayAbs}(mkTaskDelayAbs(task, ticks, 0), field_addr(delay, Delay, link)), suffix))));
+
+// Calls may require canonical payloads while the current operation still has raw cells.
+id : 10
+priority : core(2)
+left : store(field_addr(?delay, Delay, task), PTR(struct TaskDescriptor), ?task) at 0
+       store(field_addr(delay, Delay, ticks), U32, ?ticks) at 1
+       store(field_addr(delay, Delay, status), U8, ?status) at 2
+       CharArray::full(delay + 9, 3, cons{Z}(0, cons{Z}(0, cons{Z}(0, nil{Z})))) at 3
+right : store_delay_info(field_addr(?base, Delay, link), ?info) at 4
+check : infer(base == delay);
+        infer(delay != 0);
+        infer(addr_aligned(delay, ALIGN_SIZE()));
+        infer(task == info.tdTaskPtr);
+        infer(ticks == info.tdTicks);
+        infer(status == info.tdStatus);
+action : left_erase(0);
+         left_erase(1);
+         left_erase(2);
+         left_erase(3);
+         right_erase(4);
+
+// Null is a genuine one-slot specialization of the unified Delay interface.
+id : 11
+priority : core(1)
+left : store(field_addr(field_addr(?task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, delay), PTR(struct Delay), 0) at 0
+right : store_ktask_unset_delay_pre(task, vDelayNull()) at 1
+action : left_erase(0);
+         right_erase(1);
+
+id : 12
+priority : post(1)
+left : store_ktask_unset_delay_post(?task, vDelayNull()) at 0
+action : left_erase(0);
+         left_add(store(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, delay), PTR(struct Delay), 0));
+
+// Fast C writes may bypass post; restore only when a DLL interface is demanded.
+id : 13
+priority : core(3)
+left : store_delay_dll_frame(?head, ?prefix, Build_DL_Node{TaskDelayAbs}(?old_info, field_addr(?delay, Delay, link)), ?suffix) at 0
+       store(field_addr(delay, Delay, task), PTR(struct TaskDescriptor), ?task) at 1
+       store(field_addr(delay, Delay, ticks), U32, ?ticks) at 2
+       store(field_addr(delay, Delay, status), U8, 0) at 3
+       CharArray::full(delay + 9, 3, cons{Z}(0, cons{Z}(0, cons{Z}(0, nil{Z})))) at 4
+right : store_dll{TaskDelayAbs}(?storeA, ?rhead, ?nodes) at 5
+check : infer(delay != 0);
+        infer(addr_aligned(delay, ALIGN_SIZE()));
+action : left_erase(0);
+         left_erase(1);
+         left_erase(2);
+         left_erase(3);
+         left_erase(4);
+         left_add(TASK_DELAY_INACTIVE_VALUE() == 0);
+         left_add(store_dll{TaskDelayAbs}(store_delay_info(), head, app{DL_Node{TaskDelayAbs}}(prefix, cons{DL_Node{TaskDelayAbs}}(Build_DL_Node{TaskDelayAbs}(mkTaskDelayAbs(task, ticks, 0), field_addr(delay, Delay, link)), suffix))));
+
+
+// Preserve list equality as a Rocq obligation instead of requiring syntactic
+// identity of equivalent payload records (e.g. the C zero/inactive constant).
+id : 14
+priority : core(4)
+left : store_dll{TaskDelayAbs}(store_delay_info(), ?head, ?nodes) at 0
+right : store_dll{TaskDelayAbs}(store_delay_info(), head, app{DL_Node{TaskDelayAbs}}(?prefix, cons{DL_Node{TaskDelayAbs}}(Build_DL_Node{TaskDelayAbs}(?info, ?link), ?suffix))) at 1
+action : left_erase(0);
+         right_erase(1);
+         right_add(nodes == app{DL_Node{TaskDelayAbs}}(prefix, cons{DL_Node{TaskDelayAbs}}(Build_DL_Node{TaskDelayAbs}(info, link), suffix)));
+
+// A selected current node exposes its payload; the list/link complement stays opaque.
+id : 15
+priority : core(1)
+left : store_delay_dll_focus(?head, ?prefix, Build_DL_Node{TaskDelayAbs}(?info, field_addr(?delay, Delay, link)), ?suffix) at 0
+right : store(field_addr(?base, Delay, status), U8, ?value) at 1
+check : infer(base == delay);
+action : left_erase(0);
+         left_add(store_delay_dll_frame(head, prefix, Build_DL_Node{TaskDelayAbs}(info, field_addr(delay, Delay, link)), suffix));
+         left_add(store_delay_info(field_addr(delay, Delay, link), info));
+
+// The selected container base is supplied by the local cursor witness. The
+// strategy does not invent an independently quantified function-call argument.
+id : 16
+priority : core(1)
+left : store_delay_dll_focus(?head, ?prefix, Build_DL_Node{TaskDelayAbs}(?info, ?link), ?suffix) at 0
+right : store(field_addr(?base, Delay, ticks), U32, ?value) at 1
+check : infer(link == field_addr(base, Delay, link));
+        infer(addr_aligned(base, ALIGN_SIZE()));
+action : left_erase(0);
+         left_add(store_delay_dll_frame(head, prefix, Build_DL_Node{TaskDelayAbs}(info, link), suffix));
+         left_add(store_delay_info(field_addr(base, Delay, link), info));
+
+// Stage 1 draft: task_fields_delay_open exposes only the requested pointer slot.
+id : 17
+priority : core(2)
+left : task_fields(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, delay), PTR(struct Delay), ?value) at 2
+check : infer(q == task);
+action : left_erase(0);
+         right_erase(2);
+         left_add(ktask_set_delay_task_frame(sg, st, task, desc));
+         right_add(value == tdDelay(desc));
+
+// Only an unchanged delay pointer may reconstruct the original task state.
+id : 18
+priority : core(2)
+left : ktask_set_delay_task_frame(?sg, ?st, ?task, ?desc) at 0
+       store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, delay), PTR(struct Delay), ?value) at 1
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(desc) at 2
+right : task_fields(sg, st) at 3
+check : infer(q == task);
+        infer(value == tdDelay(desc));
+action : left_erase(0);
+         left_erase(1);
+         right_erase(3);
+
+id : 19
+priority : post(2)
+left : ktask_set_delay_task_frame(?sg, ?st, ?task, ?desc) at 0
+       store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, delay), PTR(struct Delay), ?value) at 1
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(desc) at 2
+check : infer(q == task);
+        infer(value == tdDelay(desc));
+action : left_erase(0);
+         left_erase(1);
+         left_add(task_fields(sg, st));

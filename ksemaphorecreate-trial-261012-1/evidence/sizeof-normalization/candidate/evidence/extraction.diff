@@ -1,0 +1,52 @@
+--- evidence/sizeof-normalization/before-spec-extraction.json
++++ evidence/sizeof-normalization/candidate/evidence/spec-extraction.json
+@@ -27,7 +27,8 @@
+       "normalized_function_sha256": "599d345ef1c251fffb8a8c16b5f01f63ae33e30051f617bc756cd807e6c3badf",
+       "normalizations": [
+         "source-static function externalized",
+-        "KDBG_IPC == 0 unreachable logging branch removed"
++        "KDBG_IPC == 0 unreachable logging branch removed",
++        "DCHG-20261016-01: exactly x_malloc argument 1 and memset argument 3: non-VLA sizeof(struct Semaphore) -> (x_size_t)32; fixed source-r2 Cortex-M3 ILP32 layout; no other sizeof rewrite"
+       ],
+       "direct_callees": [
+         "x_malloc",
+@@ -38,7 +39,38 @@
+         "CriticalAreaUnLock",
+         "InitDoubleLinkList",
+         "DoubleLinkListInsertNodeAfter"
+-      ]
++      ],
++      "fixed_size_argument_normalization": {
++        "source_revision": "source-r2-0c50c37013e9",
++        "abi": "Cortex-M3 ARMv7-M Thumb ILP32",
++        "sizeof_value": 32,
++        "non_vla": true,
++        "sites": [
++          {
++            "callee": "x_malloc",
++            "argument": 1,
++            "occurrences": 1
++          },
++          {
++            "callee": "memset",
++            "argument": 3,
++            "occurrences": 1
++          }
++        ],
++        "source_expression": "sizeof(struct Semaphore)",
++        "slice_expression": "(x_size_t)32",
++        "source_x_size_t": "unsigned long",
++        "source_memset_parameter": "size_t from standard string.h",
++        "slice_parameter": "x_size_t = unsigned int (existing approved ILP32 normalization)",
++        "argument_value_and_32bit_unsigned_representation_preserved": true,
++        "abi_evidence": [
++          "source-abi.c",
++          "source-check-result.json",
++          "source-abi.s"
++        ],
++        "guard": "spec-check.py rewrites two full call patterns only in authoritative _SemaphoreCreate body tokens; candidate tokens are not rewritten",
++        "review_status": "review-ready-awaiting-independent-delta-review"
++      }
+     },
+     {
+       "symbol": "IdInsertObj",

@@ -1,0 +1,97 @@
+{
+  "spec_revision": "spec-r5-480669e8557a",
+  "canonical_manifest_digest": "480669e8557a5f09a7683b69c5de2b087857f93649ef9c6729096df1c6a8b3cf",
+  "predicate_manifest_sha256": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+  "manifest_files": 11,
+  "canonical_count": 9,
+  "trusted_count": 6,
+  "changed_vs_r4": [
+    "annotated_C/src/AllocId.c",
+    "annotated_C/src/CriticalAreaLock.c",
+    "annotated_C/src/CriticalAreaUnLock.c",
+    "annotated_C/src/InsertObj.c"
+  ],
+  "header_changed": false,
+  "all_canonical_and_caller_contracts_unchanged_vs_r4": true,
+  "all_executable_tokens_unchanged_vs_r4": true,
+  "all_caller_contracts_equal_canonical": true,
+  "direct_calls": {
+    "AllocId": [
+      "KPrintf"
+    ],
+    "CriticalAreaLock": [
+      "DisableLocalInterrupt"
+    ],
+    "CriticalAreaUnLock": [
+      "EnableLocalInterrupt"
+    ],
+    "DoubleLinkListInsertNodeAfter": [],
+    "IdInsertObj": [
+      "AllocId",
+      "InsertObj",
+      "KPrintf"
+    ],
+    "InitDoubleLinkList": [],
+    "InsertObj": [
+      "DoubleLinkListInsertNodeAfter",
+      "InitDoubleLinkList",
+      "KPrintf"
+    ],
+    "KSemaphoreCreate": [
+      "_SemaphoreCreate"
+    ],
+    "_SemaphoreCreate": [
+      "CriticalAreaLock",
+      "CriticalAreaUnLock",
+      "DoubleLinkListInsertNodeAfter",
+      "IdInsertObj",
+      "InitDoubleLinkList",
+      "memset",
+      "x_free",
+      "x_malloc"
+    ]
+  },
+  "reachable": [
+    "AllocId",
+    "CriticalAreaLock",
+    "CriticalAreaUnLock",
+    "DisableLocalInterrupt",
+    "DoubleLinkListInsertNodeAfter",
+    "EnableLocalInterrupt",
+    "IdInsertObj",
+    "InitDoubleLinkList",
+    "InsertObj",
+    "KPrintf",
+    "KSemaphoreCreate",
+    "_SemaphoreCreate",
+    "memset",
+    "x_free",
+    "x_malloc"
+  ],
+  "c_compile": {
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=gnu11",
+      "-ffreestanding",
+      "-fno-builtin",
+      "-Wall",
+      "-Wextra",
+      "-fsyntax-only",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/AllocId.c",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/CriticalAreaLock.c",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/CriticalAreaUnLock.c",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/IdInsertObj.c",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/InitDoubleLinkList.c",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/InsertObj.c",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/KSemaphoreCreate.c",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/_SemaphoreCreate.c",
+      "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/spec-layout-check.c"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  "elapsed_seconds": 0.04604181700051413,
+  "qcp_invoked": false
+}

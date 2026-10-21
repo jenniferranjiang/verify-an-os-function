@@ -1,0 +1,156 @@
+HEADER annotated_C/include/monad.h SHA256 a92d5ec0d92efbca6ac0b2d61fe2d63a96ce5d14fcf1398a91639bdf41ccdc21
+HEADER annotated_C/include/logic.h SHA256 ce5123321ddc282219aad95987ac71a74701f391ff6fbe95a98023673ea92018
+EXTERN declarations 58; composition checks 4
+program : Type -> Type -> Type
+     : Type -> Type -> Type
+unit : Type
+     : Type
+@safeExec
+:
+forall Sigma A : Type,
+(Sigma -> Prop) -> program Sigma A -> (A -> Sigma -> Prop) -> Prop
+     : forall Sigma A : Type,
+       (Sigma -> Prop) -> program Sigma A -> (A -> Sigma -> Prop) -> Prop
+@MonadErr.ret : forall Sigma A : Type, A -> program Sigma A
+     : forall Sigma A : Type, A -> program Sigma A
+tt : unit
+     : unit
+StableGlobalState : Type
+     : Type
+VarGlobalState : Type
+     : Type
+SemaphoreStable : Type
+     : Type
+SemaphoreState : Type
+     : Type
+StableIdmanager : Type
+     : Type
+VarIdmanager : Type
+     : Type
+IdNodeAbs : Type
+     : Type
+DL_Node : Type -> Type
+     : Type -> Type
+OutsideCritical : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+InsideCritical : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+IRQMask : Z -> Assertion
+     : Z -> Assertion
+slice_OS_inv : StableGlobalState -> VarGlobalState -> Z -> Assertion
+     : StableGlobalState -> VarGlobalState -> Z -> Assertion
+Crtos_RTrans : VarGlobalState -> VarGlobalState -> Prop
+     : VarGlobalState -> VarGlobalState -> Prop
+Crtos_GTrans : VarGlobalState -> VarGlobalState -> Prop
+     : VarGlobalState -> VarGlobalState -> Prop
+LastSeen : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+     : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+ExactSeen : VarGlobalState -> VarGlobalState -> Prop
+     : VarGlobalState -> VarGlobalState -> Prop
+abs_semaphore_create
+:
+StableGlobalState -> Z -> program (VarGlobalState -> Prop) Z
+     : StableGlobalState -> Z -> program (VarGlobalState -> Prop) Z
+abs_semaphore_create_nested
+:
+StableGlobalState -> Z -> program VarGlobalState Z
+     : StableGlobalState -> Z -> program VarGlobalState Z
+semaphore_create_nested_result
+:
+StableGlobalState ->
+Z -> VarGlobalState -> Z -> Z -> VarGlobalState -> Z -> Prop
+     : StableGlobalState ->
+       Z -> VarGlobalState -> Z -> Z -> VarGlobalState -> Z -> Prop
+nest_inc : Z -> Z
+     : Z -> Z
+nest_dec : Z -> Z
+     : Z -> Z
+nest_roundtrip : Z -> Z
+     : Z -> Z
+critical_anchor : Z -> VarGlobalState -> VarGlobalState -> VarGlobalState
+     : Z -> VarGlobalState -> VarGlobalState -> VarGlobalState
+sem_allocated : Z -> Assertion
+     : Z -> Assertion
+sem_zero : Z -> Assertion
+     : Z -> Assertion
+sem_id_registered : Z -> Assertion
+     : Z -> Assertion
+sem_ready_to_publish : Z -> Z -> Assertion
+     : Z -> Z -> Assertion
+idnode_private : Z -> Z -> Z -> Z -> Assertion
+     : Z -> Z -> Z -> Z -> Assertion
+store_idmanager : StableIdmanager -> VarIdmanager -> Z -> Assertion
+     : StableIdmanager -> VarIdmanager -> Z -> Assertion
+store_idmanager_allocated_unlinked
+:
+StableIdmanager -> VarIdmanager -> Z -> Z -> Assertion
+     : StableIdmanager -> VarIdmanager -> Z -> Z -> Assertion
+store_idnode_unlinked : Z -> IdNodeAbs -> Assertion
+     : Z -> IdNodeAbs -> Assertion
+Build_IdNodeAbs : Z -> Z -> IdNodeAbs
+     : Z -> Z -> IdNodeAbs
+idmanager_full : StableIdmanager -> VarIdmanager -> Prop
+     : StableIdmanager -> VarIdmanager -> Prop
+idmanager_min_free_id : StableIdmanager -> VarIdmanager -> Z -> Prop
+     : StableIdmanager -> VarIdmanager -> Z -> Prop
+idmanager_add : VarIdmanager -> Z -> VarIdmanager
+     : VarIdmanager -> Z -> VarIdmanager
+idmanager_link : StableIdmanager -> VarIdmanager -> Z -> Z -> VarIdmanager
+     : StableIdmanager -> VarIdmanager -> Z -> Z -> VarIdmanager
+occupy_dll_node : Z -> Assertion
+     : Z -> Assertion
+@store_dll
+:
+forall A : Type, (Z -> A -> Assertion) -> Z -> list (DL_Node A) -> Assertion
+     : forall A : Type,
+       (Z -> A -> Assertion) -> Z -> list (DL_Node A) -> Assertion
+@Build_DL_Node : forall A : Type, A -> Z -> DL_Node A
+     : forall A : Type, A -> Z -> DL_Node A
+store_idnode : Z -> IdNodeAbs -> Assertion
+     : Z -> IdNodeAbs -> Assertion
+idnodes_to_dll : list IdNodeAbs -> list (DL_Node IdNodeAbs)
+     : list IdNodeAbs -> list (DL_Node IdNodeAbs)
+idbuckets : VarIdmanager -> list (list IdNodeAbs)
+     : VarIdmanager -> list (list IdNodeAbs)
+hoffset : StableIdmanager -> Z
+     : StableIdmanager -> Z
+semaphore_idmanager : SemaphoreStable -> SemaphoreState -> VarIdmanager
+     : SemaphoreStable -> SemaphoreState -> VarIdmanager
+os_semaphore_stable : StableGlobalState -> SemaphoreStable
+     : StableGlobalState -> SemaphoreStable
+sem_idmanager_stable : SemaphoreStable -> StableIdmanager
+     : SemaphoreStable -> StableIdmanager
+os_semaphores : VarGlobalState -> SemaphoreState
+     : VarGlobalState -> SemaphoreState
+sem_ptr_list : SemaphoreState -> list Z
+     : SemaphoreState -> list Z
+semaphore_link_nodes : list Z -> list (DL_Node Z)
+     : list Z -> list (DL_Node Z)
+pure_semaphore_link_member : Z -> Z -> Assertion
+     : Z -> Z -> Assertion
+semaphore_publish : Z -> Z -> Z -> SemaphoreState -> SemaphoreState
+     : Z -> Z -> Z -> SemaphoreState -> SemaphoreState
+replace_semaphores : SemaphoreState -> VarGlobalState -> VarGlobalState
+     : SemaphoreState -> VarGlobalState -> VarGlobalState
+@Znth : forall A : Type, Z -> list A -> A -> A
+     : forall A : Type, Z -> list A -> A -> A
+fun (sg : StableGlobalState) (val : Z) (before : VarGlobalState)
+  (X : Z -> (VarGlobalState -> Prop) -> Prop) =>
+safeExec (LastSeen before) (abs_semaphore_create sg val) X
+     : StableGlobalState ->
+       Z -> VarGlobalState -> (Z -> (VarGlobalState -> Prop) -> Prop) -> Prop
+fun (sg : StableGlobalState) (val : Z) (before : VarGlobalState)
+  (Y : Z -> VarGlobalState -> Prop) =>
+safeExec (ExactSeen before) (abs_semaphore_create_nested sg val) Y
+     : StableGlobalState ->
+       Z -> VarGlobalState -> (Z -> VarGlobalState -> Prop) -> Prop
+fun (ret : Z) (P : (VarGlobalState -> Prop) -> Prop)
+  (X : Z -> (VarGlobalState -> Prop) -> Prop) =>
+safeExec P (MonadErr.ret ret) X
+     : Z ->
+       ((VarGlobalState -> Prop) -> Prop) ->
+       (Z -> (VarGlobalState -> Prop) -> Prop) -> Prop
+fun (ret : Z) (P : VarGlobalState -> Prop) (Y : Z -> VarGlobalState -> Prop)
+=> safeExec P (MonadErr.ret ret) Y
+     : Z -> (VarGlobalState -> Prop) -> (Z -> VarGlobalState -> Prop) -> Prop
+EXIT 0

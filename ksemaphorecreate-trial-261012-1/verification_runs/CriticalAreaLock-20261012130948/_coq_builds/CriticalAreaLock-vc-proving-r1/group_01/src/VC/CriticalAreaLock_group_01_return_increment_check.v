@@ -1,0 +1,2 @@
+From CRTOS_Verify.VC Require Import CriticalAreaLock_goal CriticalAreaLock_proof_auto CriticalAreaLock_proof_manual.
+Check proof_of_CriticalAreaLock_return_wit_1.

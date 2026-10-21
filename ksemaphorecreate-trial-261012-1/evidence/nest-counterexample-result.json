@@ -1,0 +1,39 @@
+{
+  "purpose": "source behavior counterexample; not QCP verification",
+  "scope": "C critical API sequence with concrete allocation/zeroing/PRIMASK stubs; neither a board execution reachability claim nor a proof of the formal IRQ token/rely contracts",
+  "input_sha256": {
+    "annotated_C/src/KSemaphoreCreate.c": "dd0b493f96aa2a0ddca865a3a975ffdad89470f258f3f957a8712a58880bdb48",
+    "annotated_C/src/_SemaphoreCreate.c": "96570d597dc9ee6c4cf031acfd7f48a5c9b7129b6f0b2ae76f7fd66a95e1b4f0",
+    "annotated_C/src/IdInsertObj.c": "3b63256f54f2b71a02eb21d816dab3e9d17194d666231a753dab7d22a9cb49c2",
+    "annotated_C/src/AllocId.c": "521b544ee0715b94f71fd5f0e0bec83677dfbcc3345a2f0d956c7f871a6b7ab0",
+    "annotated_C/src/InsertObj.c": "63237b3732447e60e90b6d2bd7a77468ed65d553852d9016f3ed73db51875b8a",
+    "annotated_C/src/InitDoubleLinkList.c": "52c472e6e6c1cf2f51be6f2105d000258023573cda0d757115efa1181e8c5c3f",
+    "annotated_C/src/DoubleLinkListInsertNodeAfter.c": "fb47608bf3a8ef458e0505a23f7c4926428dd4e8329776bd6ed495196fcd382d",
+    "annotated_C/src/CriticalAreaLock.c": "2a5f92539c74216b6489ad064330faecd24dc0b6ecaec759215c8471b8c0e0bd",
+    "annotated_C/src/CriticalAreaUnLock.c": "c0af6875ff41c36d594f3fc31a353769cf1a95f40f75fbea0c967b8b181286e3"
+  },
+  "harness_sha256": "b27b3d8773b6e5128c04489ac6255edb92dc4b8cd8b174d7fd68c88dd44af49e",
+  "command": [
+    "gcc",
+    "-m32",
+    "-std=gnu11",
+    "-O0",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-fno-stack-protector",
+    "-fno-pie",
+    "-no-pie",
+    "-nostdlib",
+    "-static",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nest-counterexample.c",
+    "-o",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/nest-counterexample"
+  ],
+  "compile_exit": 0,
+  "compile_stderr": "",
+  "build_only": true,
+  "balanced_caller_locks": true,
+  "run_exit": null,
+  "stdout": "",
+  "stderr": ""
+}

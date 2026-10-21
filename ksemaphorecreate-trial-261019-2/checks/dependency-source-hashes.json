@@ -1,0 +1,6 @@
+{
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_ktask.h": "22ac5492376ed2df9d6b86a518f8d8c8f88ff0cd1a7bbb615e70fd4cb92ddf20",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_ktask_stat.h": "3cba560dcbf3c3e375c44933243da525a1a69c5bb668124335f9ae6f3911690f",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask_stat.c": "445b75b62bfc2bf8c26ff4f7c61eca776ab51a2dd48f2ec2cb9a8d5011682dc1",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/delay.c": "96bae0517d57db4dd5b960a0bc88fa1b096b15eca5d0c69224d6b93f309e0961"
+}

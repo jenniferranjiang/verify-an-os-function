@@ -1,0 +1,16 @@
+{
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/board/stm32f103-nano/config": "6702975d356756d6e46534d620e28611db221c88a5e23aa57a612db21ea16713",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/board/stm32f103-nano/config.mk": "0814ca204a82413d504c415aac1c9f14a437b3261cda25d48920efda81fcc3f8",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_base.h": "1861d40f9934834c0b6515e3c273d84e50787252f69f38d72420774f9b7d49c8",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_id.h": "a44025ae2113ce756ddfb659556ba2211140284ba324907255e60fd515f8f42d",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_isr.h": "cd78673f5defbf088a8bcd6f9c18cc618b97643c296e28a25a27c76133b8e561",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_kdbg.h": "14cbe426145b99a1b69c01113ffb5aff77f2553bfcfddde13e43df3d6ea34eae",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_klist.h": "5bea28cd16a799e414830dadfb6f3be8efd9dbf69b980fc4d44611531f71f7ca",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_memory.h": "b899d05d63944144be3c4d6d42aed0b659bb6f65a0655d23f315fd1fe166edab",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_sem.h": "c2c6edfde22823863a655d6d2a3f59fb749085a8b426166c885c2d5354174fab",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/CriticalArea.c": "946b214eb678c1202c96dc6fd5272fd2c8d2dd245736888a0ea4114fdd6f113a",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c": "fb114fe11fed1eb2dd717c81e95a1fb8675277b65f1d1009349e56b473846352",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c": "189a94e7dc17d6c9da6f7992a232e4422c9dc11dea539b40452b0041546a9fca",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c": "d5b41c3bde69e0416431d2425c61e35453778ae4b1569747f2c2258f3dfe16ec",
+  "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/tool/hosttools/xsconfig.sh": "b60750690d205d4970f441ddfe51b5940a422c4dddfe485061f654e3eaf5b7e6"
+}

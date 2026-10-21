@@ -1,0 +1,23 @@
+COMPILE TaskStatus
+COMPILE TickOrder
+COMPILE StructFieldOffsetAxiom
+COMPILE dll_abs
+COMPILE idnode_abs
+COMPILE KTaskPure
+COMPILE KTaskDelay
+COMPILE CrtosGlobState
+COMPILE CrtosRules
+COMPILE dll
+COMPILE idnode
+COMPILE SemaphoreInv
+COMPILE KSemaphoreCreate
+fun (sg : StableGlobalState) (val : Z) (st : VarGlobalState)
+  (X : Z -> (VarGlobalState -> Prop) -> Prop) =>
+safeExec (LastSeen st) (abs_semaphore_create sg val) X
+     : StableGlobalState ->
+       Z -> VarGlobalState -> (Z -> (VarGlobalState -> Prop) -> Prop) -> Prop
+fun (sg : StableGlobalState) (val : Z) (st : VarGlobalState)
+  (Y : Z -> VarGlobalState -> Prop) =>
+safeExec (ExactSeen st) (abs_semaphore_create_nested sg val) Y
+     : StableGlobalState ->
+       Z -> VarGlobalState -> (Z -> VarGlobalState -> Prop) -> Prop

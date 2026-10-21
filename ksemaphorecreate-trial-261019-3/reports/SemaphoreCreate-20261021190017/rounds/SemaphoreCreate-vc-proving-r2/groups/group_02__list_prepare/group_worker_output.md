@@ -1,0 +1,3 @@
+Completed all five assigned proof spans. The pure entail_wit_5 split obtains idmax = 128 from semaphore_context. The spatial split uses list_cut__list_prepare to expose the boundary cells and retain the shifted old list, covering empty and nonempty lists, and node_zero_storage__list_prepare to forget the pending node values under the explicit nonzero premise. The two partial-solve witnesses reinsert the existing pure facts and reorder the unchanged spatial frame.
+
+Validation: controller coq-check group-check returned exit 0 and JSON status passed, recompiling the current library, goal, auto/manual proofs and group wrapper. Assigned spans and group library were scanned against the complete forbidden list with no matches. No semantic input or unassigned proof was edited.

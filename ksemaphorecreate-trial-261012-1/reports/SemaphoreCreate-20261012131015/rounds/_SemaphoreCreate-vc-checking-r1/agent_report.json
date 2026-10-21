@@ -1,0 +1,21 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "dependency-gap",
+    "kind": "missing_formal_sizeof_layout_bridge",
+    "vcs": [
+      {
+        "name": "proof_of__SemaphoreCreate_partial_solve_wit_1_pure",
+        "parent": null,
+        "annotation_location": "annotated_C/src/_SemaphoreCreate.c:121 (x_malloc Require at line 31)"
+      },
+      {
+        "name": "proof_of__SemaphoreCreate_partial_solve_wit_2_pure",
+        "parent": null,
+        "annotation_location": "annotated_C/src/_SemaphoreCreate.c:125 (memset Require at line 37)"
+      }
+    ],
+    "message": "Both non-split pure top-level goals require sizeof(\"Semaphore\") = 32. Official CNotation interprets this as the unconstrained Parameter sizeof_alias_type \"Semaphore\"; no current premise or imported layout fact fixes it to 32. Interpret that Parameter as 64 while retaining valid disjoint scalar locals, an empty-stack OutsideCritical state at nest zero, and (for witness 2) the independently literal 32-byte allocated block. Each antecedent can hold while its consequent is false. The unsuffixed pure -> aux goals are not classified as false by this argument.",
+    "repair_boundary": "Return to annotation/spec/source-extraction owner for an authorized, independently checked source-to-formal layout repair or exact compile-time constant normalization, with any changed semantic input revision rebound. Preserve frozen contracts and real three-path/critical/IRQ/task/scheduler behavior. Do not add an unproved layout axiom or Require premise, edit canonical generated goals, or ask a group worker to prove these false raw obligations."
+  }
+}

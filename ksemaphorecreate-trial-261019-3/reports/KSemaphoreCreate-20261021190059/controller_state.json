@@ -1,0 +1,198 @@
+{
+  "schema_version": 4,
+  "generation": 20,
+  "run_id": "KSemaphoreCreate-20261021190059",
+  "case": "KSemaphoreCreate",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3",
+  "run_root": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/verification_runs/KSemaphoreCreate-20261021190059",
+  "report_root": "/home/xinra/crtos/ksemaphorecreate-trial-261019-3/reports/KSemaphoreCreate-20261021190059",
+  "target_files": {
+    "c_file": "annotated_C/src/KSemaphoreCreate.c",
+    "formal_directory": "VC",
+    "formal_case_lib": "VC/KSemaphoreCreate_lib.v",
+    "goal_file": "VC/KSemaphoreCreate_goal.v",
+    "proof_auto_file": "VC/KSemaphoreCreate_proof_auto.v",
+    "proof_manual_file": "VC/KSemaphoreCreate_proof_manual.v",
+    "goal_check_file": "VC/KSemaphoreCreate_goal_check.v",
+    "case_name": "KSemaphoreCreate",
+    "active_case_theory": "CRTOS_Verify.VC"
+  },
+  "problem_context": {
+    "problem_statement": "Prove current KSemaphoreCreate wrapper against its frozen spec; use the matching _SemaphoreCreate declaration contract. The separate _SemaphoreCreate run must succeed before reporting the combined API verified. User requests only these two functions, no helper re-proofs. Trust boundary: /home/xinra/TrustBase.md. Shared semantic sources are frozen in checks/implement-frozen-inputs.json. Do not change predicates or contract semantics. Local adapter uses trial _CoqProject and ARM32 little-endian QCP. Current authorization is implement, historical reviews are not asserted current; report actual semantic issues.",
+    "target_function": "KSemaphoreCreate"
+  },
+  "formal_case_lib_policy": "create",
+  "spec_freeze": {
+    "functions": [
+      "KSemaphoreCreate",
+      "_SemaphoreCreate"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "_SemaphoreCreate::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_create(sg, val), X) && OutsideCritical(sg, before) Ensure (exists after, __return == -5 && safeExec(LastSeen(after), return(-5), X) && OutsideCritical(sg, after)) || (exists after, 0 <= __return && __return < 128 && safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after))",
+        "KSemaphoreCreate::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_create(sg, val), X) && OutsideCritical(sg, before) Ensure (exists after, __return == -5 && safeExec(LastSeen(after), return(-5), X) && OutsideCritical(sg, after)) || (exists after, 0 <= __return && __return < 128 && safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after))"
+      },
+      "lib": {
+        "declarations": {},
+        "imports": {
+          "From\nCoq\nRequire\nImport\nZArith\nList\n.\nImport\nListNotations\n.\nLocal\nOpen\nScope\nZ_scope\n.": "From Coq Require Import ZArith List ."
+        }
+      }
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-10-21T11:00:59.281451Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 2,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/KSemaphoreCreate_goal_check.vo",
+    "base_artifact_count": 189,
+    "current_source_count": 5,
+    "elapsed_seconds": 43.609315,
+    "snapshot": "verification_runs/KSemaphoreCreate-20261021190059/dependency_plan.json"
+  },
+  "attempts": {
+    "KSemaphoreCreate-annotation-r1": {
+      "attempt_id": "KSemaphoreCreate-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/KSemaphoreCreate-20261021190059",
+      "claimed_action": "deliver:KSemaphoreCreate-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-21T11:01:22.181611Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-21T11:01:40.673822Z",
+            "finished_at": "2026-10-21T11:07:18.392896Z",
+            "elapsed_seconds": 337.719074
+          }
+        ]
+      },
+      "returned_at": "2026-10-21T11:07:18.392866Z",
+      "finished_at": "2026-10-21T11:07:19.348511Z"
+    },
+    "KSemaphoreCreate-vc-checking-r1": {
+      "attempt_id": "KSemaphoreCreate-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/KSemaphoreCreate-vc-checking-r1",
+      "claimed_action": "deliver:KSemaphoreCreate-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-21T11:12:02.269133Z",
+      "source_annotation": "KSemaphoreCreate-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-21T11:13:15.448148Z",
+            "finished_at": "2026-10-21T11:14:51.971457Z",
+            "elapsed_seconds": 96.523309
+          }
+        ]
+      },
+      "returned_at": "2026-10-21T11:14:51.971428Z",
+      "finished_at": "2026-10-21T11:14:52.004427Z"
+    },
+    "KSemaphoreCreate-vc-proving-r1": {
+      "attempt_id": "KSemaphoreCreate-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-21T11:14:52.004449Z",
+      "source_annotation": "KSemaphoreCreate-annotation-r1",
+      "source_vc_checking": "KSemaphoreCreate-vc-checking-r1",
+      "groups": {
+        "return_results": {
+          "status": "accepted",
+          "owner": "group-worker/KSemaphoreCreate-vc-proving-r1:return_results",
+          "claimed_action": "deliver:KSemaphoreCreate-vc-proving-r1:return_results:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T11:14:59.471509Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T11:15:04.970888Z",
+                "finished_at": "2026-10-21T11:17:26.076092Z",
+                "elapsed_seconds": 141.105204
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T11:17:26.076063Z",
+          "finished_at": "2026-10-21T11:18:25.716074Z"
+        },
+        "call_precondition": {
+          "status": "accepted",
+          "owner": "group-worker/KSemaphoreCreate-vc-proving-r1:call_precondition",
+          "claimed_action": "deliver:KSemaphoreCreate-vc-proving-r1:call_precondition:0",
+          "repair_index": 0,
+          "created_at": "2026-10-21T11:14:59.471527Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-21T11:15:05.202476Z",
+                "finished_at": "2026-10-21T11:20:33.010498Z",
+                "elapsed_seconds": 327.808022
+              }
+            ]
+          },
+          "returned_at": "2026-10-21T11:20:33.010468Z",
+          "finished_at": "2026-10-21T11:21:30.200066Z"
+        }
+      },
+      "finished_at": "2026-10-21T11:22:56.658146Z"
+    }
+  },
+  "current": {
+    "annotation": "KSemaphoreCreate-annotation-r1",
+    "vc-checking": "KSemaphoreCreate-vc-checking-r1",
+    "vc-proving": "KSemaphoreCreate-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/KSemaphoreCreate-20261021190059",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "KSemaphoreCreate-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-10-21T11:24:09.505285Z",
+    "files": [
+      "VC/KSemaphoreCreate_proof_manual.v",
+      "VC/KSemaphoreCreate_lib.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-10-21T11:25:31.571382Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-10-21T11:00:59.281481Z",
+  "updated_at": "2026-10-21T11:25:31.579920Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file",
+      "formal_case_lib"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-10-21T11:25:31.571350Z"
+}

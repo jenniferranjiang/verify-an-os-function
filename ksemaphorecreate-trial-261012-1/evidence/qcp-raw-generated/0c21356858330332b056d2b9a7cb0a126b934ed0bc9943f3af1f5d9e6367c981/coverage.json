@@ -1,0 +1,14 @@
+{
+  "case": "DoubleLinkListInsertNodeAfter",
+  "added_manual_witnesses": [
+    "proof_of_DoubleLinkListInsertNodeAfter_return_wit_1"
+  ],
+  "raw_roles": {
+    "goal_file": "da1f03e4fd5d76a4b518c48d070e19098ac0c9297415a3cfc78b0f327a6bead1",
+    "proof_auto_file": "e4547ea84465c6aac20a2cbe91327be42ce685e003b09259ae4d3b950c52251b",
+    "proof_manual_file": "4ed7286ebb38a269e49a801d8dfc523ff21902cf4d15c1356c21422226548bfd",
+    "goal_check_file": "bd9ddd538e8ec7e55e2ad626adc9df7033c72b0d870463b68f6002a74f7080d6"
+  },
+  "goal_definitions_changed": false,
+  "auto_file_changed": false
+}

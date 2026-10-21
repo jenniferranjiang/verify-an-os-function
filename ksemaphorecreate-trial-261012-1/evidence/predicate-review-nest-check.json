@@ -1,0 +1,54 @@
+{
+  "checks": {
+    "KSemaphoreCreate": {
+      "sha256": "dd0b493f96aa2a0ddca865a3a975ffdad89470f258f3f957a8712a58880bdb48",
+      "independent_token_comparison": true
+    },
+    "_SemaphoreCreate": {
+      "sha256": "96570d597dc9ee6c4cf031acfd7f48a5c9b7129b6f0b2ae76f7fd66a95e1b4f0",
+      "independent_token_comparison": true
+    },
+    "IdInsertObj": {
+      "sha256": "3b63256f54f2b71a02eb21d816dab3e9d17194d666231a753dab7d22a9cb49c2",
+      "independent_token_comparison": true
+    },
+    "AllocId": {
+      "sha256": "521b544ee0715b94f71fd5f0e0bec83677dfbcc3345a2f0d956c7f871a6b7ab0",
+      "independent_token_comparison": true
+    },
+    "InsertObj": {
+      "sha256": "63237b3732447e60e90b6d2bd7a77468ed65d553852d9016f3ed73db51875b8a",
+      "independent_token_comparison": true
+    },
+    "InitDoubleLinkList": {
+      "sha256": "52c472e6e6c1cf2f51be6f2105d000258023573cda0d757115efa1181e8c5c3f",
+      "independent_token_comparison": true
+    },
+    "DoubleLinkListInsertNodeAfter": {
+      "sha256": "fb47608bf3a8ef458e0505a23f7c4926428dd4e8329776bd6ed495196fcd382d",
+      "independent_token_comparison": true
+    },
+    "CriticalAreaLock": {
+      "sha256": "2a5f92539c74216b6489ad064330faecd24dc0b6ecaec759215c8471b8c0e0bd",
+      "independent_token_comparison": true
+    },
+    "CriticalAreaUnLock": {
+      "sha256": "c0af6875ff41c36d594f3fc31a353769cf1a95f40f75fbea0c967b8b181286e3",
+      "independent_token_comparison": true
+    }
+  },
+  "harness_sha256": "b27b3d8773b6e5128c04489ac6255edb92dc4b8cd8b174d7fd68c88dd44af49e",
+  "binary_sha256": "d4145a1b12480f33ea16725fbe892fcb80e34cc51830254f677240e3c06b70b3",
+  "reviewer_independent_execution": {
+    "mode": "require_escalated; auto-approved",
+    "exit_code": 0,
+    "stdout": "REPRODUCED: before=65535 after=0 id=0 value=3 primask=1\n",
+    "stderr": ""
+  },
+  "limitations": [
+    "ILP32 x86 diagnostic, not execution on Cortex-M3 hardware",
+    "IRQ stubs match concrete PRIMASK effects; full formal Rely/token contracts not proved",
+    "Unrestricted API-client sequence, not fixed-board call-graph reachability",
+    "Typed arena and matching caller unlock sequence reviewed; no claim that r1 Outside nest=0 permits this sequence"
+  ]
+}

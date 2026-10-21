@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "AllocId",
+      "meaning": "Returns -1 with unchanged full manager, or the least free identifier with its bitmap allocation unlinked."
+    },
+    {
+      "name": "InsertObj",
+      "meaning": "Links the allocated detached ID node into the corresponding manager bucket."
+    },
+    {
+      "name": "KPrintf",
+      "meaning": "Preserves the empty footprint under the accepted trusted logging contract."
+    },
+    {
+      "name": "IdInsertObj",
+      "meaning": "Returns -1 preserving manager and detached node exactly when full, or returns the least free identifier and publishes that node in the manager."
+    }
+  ],
+  "loop_invariants": [
+    {
+      "location": "IdInsertObj: manager parameter-check do while (0)",
+      "progress": "Single-pass parameter check preserves initial resources and id zero."
+    },
+    {
+      "location": "IdInsertObj: manager-null while (1)",
+      "progress": "Unreachable because the frozen precondition requires a nonzero manager."
+    },
+    {
+      "location": "IdInsertObj: idnode parameter-check do while (0)",
+      "progress": "Single-pass parameter check preserves initial resources and id zero."
+    },
+    {
+      "location": "IdInsertObj: idnode-null while (1)",
+      "progress": "Unreachable because the frozen precondition requires a nonzero node."
+    }
+  ],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

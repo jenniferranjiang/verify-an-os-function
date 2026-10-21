@@ -1,0 +1,31 @@
+libai/TaskStatus.v EXIT 0
+
+libai/TickOrder.v EXIT 0
+
+lib/dll_abs.v EXIT 0
+
+lib/idnode_abs.v EXIT 0
+
+lib/StructFieldOffsetAxiom.v EXIT 0
+
+lib/KTaskPure.v EXIT 0
+
+lib/KTaskDelay.v EXIT 0
+
+lib/CrtosGlobState.v EXIT 0
+
+lib/NonemptyCSL.v EXIT 0
+
+lib/CrtosRules.v EXIT 0
+
+libai/NodeSelfLinked.v EXIT 0
+
+lib/dll.v EXIT 0
+
+lib/idnode.v EXIT 0
+
+lib/semaphore.v EXIT 0
+
+lib/CrtosInv.v EXIT 0
+
+lib/KSemaphoreCreate.v EXIT 0

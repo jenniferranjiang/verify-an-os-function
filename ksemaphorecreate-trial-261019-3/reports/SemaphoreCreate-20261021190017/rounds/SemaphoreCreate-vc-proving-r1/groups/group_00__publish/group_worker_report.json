@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-nonzero-facts-at-publication",
+    "vcs": [
+      {
+        "name": "proof_of__SemaphoreCreate_entail_wit_5_split_goal_spatial",
+        "parent": "proof_of__SemaphoreCreate_entail_wit_5",
+        "annotation_location": "annotated_C/src/_SemaphoreCreate.c:226"
+      }
+    ],
+    "message": "The publication premise contains store_node_self_linked for sem.pend_list, DllInsertedCut for sem.link and dllseg_shift_rev for the old management list, but none retains the respective pending-head nonzero, new-link nonzero or old dll_nodes_nonzero facts required by store_dll in the target os_inv. sem <> 0 and alignment do not establish separately addressed subobject nonzero; SemaphoreLayout is not a premise, and isvalidptr permits zero. These facts were available or required before the helper calls but are absent from their current postconditions and the exposed tail.",
+    "repair_boundary": "Review the private zeroed-object/layout contract and C:198 assertion, preserve sem.pend_list <> 0 and sem.link <> 0 across C:221-224 helper calls, and retain old management dll_nodes_nonzero when exposing dllseg_shift_rev so that C:226 can reconstruct store_dll. Accepted predicates/specs/annotations require a reviewed revision; this worker made no such edits."
+  }
+}

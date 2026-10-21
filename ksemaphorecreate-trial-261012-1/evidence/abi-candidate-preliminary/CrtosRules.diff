@@ -1,0 +1,19 @@
+--- /home/xinra/crtos/lib/CrtosRules.v
++++ /home/xinra/crtos/ksemaphorecreate-trial-261012-1/shared-candidate/arm32le/CrtosRules.v
+@@ -36,11 +36,11 @@
+ Module Task_C_Rules.
+   Include C_STS_Task.
+   Include ConAssertion.CSL.
+-  Include DerivedPredSig.
+-  Include StoreLibSig.
+-  Include ArrayLibSig.
+-  Include MapLibSig.
+-  Include StringLibSig.
++  Include DerivedPredSig Arch32 LittleEndian.
++  Include StoreLibSig Arch32 LittleEndian.
++  Include ArrayLibSig Arch32 LittleEndian.
++  Include MapLibSig Arch32 LittleEndian.
++  Include StringLibSig Arch32 LittleEndian.
+ End Task_C_Rules.
+ 
+ Export Task_C_Rules.

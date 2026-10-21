@@ -1,0 +1,7 @@
+From CRTOS_Verify.VC Require Import AllocId_goal AllocId_proof_auto AllocId_proof_manual.
+Check proof_of_AllocId_safety_wit_7.
+Check proof_of_AllocId_safety_wit_8.
+Check proof_of_AllocId_safety_wit_10.
+Check proof_of_AllocId_safety_wit_11.
+Check proof_of_AllocId_safety_wit_12.
+Check proof_of_AllocId_safety_wit_13.

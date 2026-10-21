@@ -1,0 +1,34 @@
+{
+  "status": "review-ready",
+  "previous_revision": "spec-r1-9c6b3806e173",
+  "previous_snapshot": "evidence/spec-r1-snapshot",
+  "planned_revision_number": 2,
+  "authorization": "允许 nest<65535，明确排除更深调用",
+  "affected_nontrusted": [
+    "KSemaphoreCreate",
+    "_SemaphoreCreate",
+    "CriticalAreaLock",
+    "CriticalAreaUnLock"
+  ],
+  "affected_trusted_declarations": [
+    "DisableLocalInterrupt",
+    "EnableLocalInterrupt"
+  ],
+  "retained_trusted_symbols": [
+    "x_malloc",
+    "x_free",
+    "memset",
+    "DisableLocalInterrupt",
+    "EnableLocalInterrupt",
+    "KPrintf"
+  ],
+  "constraint": "No QCP execution; no spec review-ready before predicate independent review-passed. No extra handler==1/current==before trusted guarantee without reviewed derivation.",
+  "pending": "Independent spec delta review by main agent; no author self-acceptance.",
+  "spec_revision": "spec-r4-9f3ebc915b99",
+  "annotated_manifest_sha256": "9f3ebc915b995fc8655bab8014878df4648f3dca6602cef7d65b936714274c48",
+  "predicate_revision": "predicate-r5-0a139d64743c",
+  "predicate_manifest_sha256": "0a139d64743cce8000b0910d7880d6c5a0bf89147b730665aa6ebefbfb45585a",
+  "source_revision": "source-r2-0c50c37013e9",
+  "interface_check": "evidence/spec-interface-check.json",
+  "accepted_semantic_revision": "spec-r2-6d54bb88379e"
+}

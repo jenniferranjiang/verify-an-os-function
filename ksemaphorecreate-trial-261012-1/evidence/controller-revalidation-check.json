@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "checks": [
+    "actual invalidated inputs refuse proof acceptance",
+    "legacy done result requires revalidation",
+    "current bound result does not recheck needlessly",
+    "paused run is not resumed",
+    "archives prior result and queues original check without accepting proofs or changing owners"
+  ],
+  "actual_run_state_modified": false,
+  "c_vcs_proved": false
+}

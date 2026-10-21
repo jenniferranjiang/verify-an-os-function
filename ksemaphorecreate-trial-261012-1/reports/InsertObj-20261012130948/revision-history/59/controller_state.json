@@ -1,0 +1,513 @@
+{
+  "schema_version": 4,
+  "generation": 59,
+  "run_id": "InsertObj-20261012130948",
+  "case": "InsertObj",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1",
+  "run_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/InsertObj-20261012130948",
+  "report_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/InsertObj-20261012130948",
+  "target_files": {
+    "c_file": "annotated_C/src/InsertObj.c",
+    "formal_directory": "VC",
+    "formal_case_lib": "VC/InsertObj_lib.v",
+    "goal_file": "VC/InsertObj_goal.v",
+    "proof_auto_file": "VC/InsertObj_proof_auto.v",
+    "proof_manual_file": "VC/InsertObj_proof_manual.v",
+    "goal_check_file": "VC/InsertObj_goal_check.v",
+    "case_name": "InsertObj",
+    "active_case_theory": "CRTOS_Verify.VC"
+  },
+  "problem_context": {
+    "problem_statement": "Verify CRTOS KSemaphoreCreate under the accepted source/config and predicates/specs.\nAuthoritative accepted inputs: evidence/accepted-revisions.json.\nSource: source-r2-0c50c37013e9, Cortex-M3 Thumb ILP32, STM32F103 nano, non-SMP.\nPredicate: predicate-r3-16b6ee4a4e02, independently review-passed.\nSpec: spec-r2-6d54bb88379e, independently review-passed.\nDomain: entry scheduler_lock_nest < 65535, explicitly authorized by user.\nPreserve ordinary nested calls and exact caller IRQ/heap ownership.\n\nThe complete required non-trusted closure has nine unique canonical active bodies:\nannotated_C/src/KSemaphoreCreate.c\nannotated_C/src/_SemaphoreCreate.c\nannotated_C/src/CriticalAreaLock.c\nannotated_C/src/CriticalAreaUnLock.c\nannotated_C/src/IdInsertObj.c\nannotated_C/src/AllocId.c\nannotated_C/src/InsertObj.c\nannotated_C/src/InitDoubleLinkList.c\nannotated_C/src/DoubleLinkListInsertNodeAfter.c\nAll canonical contracts and caller-local API copies are frozen accepted inputs.\nOnly these six C symbols are trusted, with the existing reviewed contracts:\nx_malloc, x_free, memset, DisableLocalInterrupt, EnableLocalInterrupt, KPrintf.\nDeclaration contracts do not constitute verified callee bodies.\n\nAbsolutely do not read, enumerate, search, copy, import, or depend on any file in\n/home/xinra/crtos/ksemaphorecreate-trial-260928-1.\nThis includes ancestor-root searches, load paths, proof lookup and dependency closure.\nNo other historical trial is an authorized formal/proof reference.\nDo not change root shared library definitions, authoritative C/config, or any skills.\nOnly this new trial and already authorized project path configuration may be changed.\nDo not create a second active body for a canonical symbol or a central specs header.\nDo not add axioms, parameters, Admitted/admit, placeholders, weaker postconditions,\nunjustified stronger preconditions, deleted paths or omitted VCs.\n\nThe user authorizes automatic acceptance of independently reviewed, machine-checked\npredicate/spec revisions within the approved semantics. Such changes must return to\nthe appropriate independent design review and bind new manifests before resuming.\nMaterial semantic changes require explicit user authorization. No routine phase gate\nrequires another user confirmation.\n\nMain must follow only the verification-orchestrator controller actions. If the current\ncontroller does not support this CRTOS trial layout, retain its original blocker;\ndo not improvise another implementation workflow.\nCompletion additionally requires complete closure proofs, goal checks, full coqchk,\ntrust scan, C/VC/proof integrity, and a final integrity record. Historical 172 VCs is\nonly a diagnostic baseline, never a target for deleting or weakening obligations.\n\nExplicit user exception (2026-10-12): \u5141\u8bb8\u5728\u65b0 trial \u5185\u9002\u914d controller.\nThe local controller adapter may support canonical annotated_C/src and VC paths,\nread-only existing external dependencies, and the full nine-case closure. Preserve\nall original owner, symbolic, acceptance, proof and final-check actions.",
+    "target_function": "InsertObj"
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "DoubleLinkListInsertNodeAfter",
+      "InitDoubleLinkList",
+      "InsertObj",
+      "KPrintf"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "InitDoubleLinkList::<default>": "With (head : Z) Require linklist_head == head && head != 0 && undef_data_at(&(linklist_head->node_next), struct SysDoubleLinklistNode *) * undef_data_at(&(linklist_head->node_prev), struct SysDoubleLinklistNode *) Ensure store(&(linklist_head->node_next), struct SysDoubleLinklistNode *, head) * store(&(linklist_head->node_prev), struct SysDoubleLinklistNode *, head)",
+        "DoubleLinkListInsertNodeAfter::<default>": "With (successor : Z) (previous : Z) Require linklist != 0 && linklist_node != 0 && successor != 0 && store(&(linklist->node_next), struct SysDoubleLinklistNode *, successor) * store(&(((struct SysDoubleLinklistNode *)successor)->node_prev), struct SysDoubleLinklistNode *, previous) * undef_data_at(&(linklist_node->node_next), struct SysDoubleLinklistNode *) * undef_data_at(&(linklist_node->node_prev), struct SysDoubleLinklistNode *) Ensure store(&(linklist->node_next), struct SysDoubleLinklistNode *, linklist_node) * store(&(((struct SysDoubleLinklistNode *)successor)->node_prev), struct SysDoubleLinklistNode *, linklist_node) * store(&(linklist_node->node_next), struct SysDoubleLinklistNode *, successor) * store(&(linklist_node->node_prev), struct SysDoubleLinklistNode *, linklist)",
+        "KPrintf::<default>": "Require emp Ensure emp",
+        "InsertObj::<default>": "With (sm : StableIdmanager) (before : VarIdmanager) (id : Z) (previous : Z) (next : Z) Require manager != 0 && idnode != 0 && OSHeap(store_idmanager_allocated_unlinked(sm, before, manager, id)) * OSHeap(store_sem_id_detached(idnode, id, previous, next)) Ensure OSHeap(store_idmanager(sm, idmanager_link(sm, idmanager_add(before, id), id, idnode), manager))"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-10-12T05:09:48.666624Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/InsertObj_goal_check.vo",
+    "base_artifact_count": 163,
+    "current_source_count": 4,
+    "elapsed_seconds": 40.917028,
+    "snapshot": "verification_runs/InsertObj-20261012130948/dependency_plan.json"
+  },
+  "attempts": {
+    "InsertObj-annotation-r1": {
+      "attempt_id": "InsertObj-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/InsertObj-20261012130948",
+      "claimed_action": "deliver:InsertObj-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T13:46:33.272471Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T13:46:44.426662Z",
+            "finished_at": "2026-10-12T13:52:20.338622Z",
+            "elapsed_seconds": 335.91196
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T13:52:20.338598Z",
+      "finished_at": "2026-10-12T13:52:20.853027Z"
+    },
+    "InsertObj-vc-checking-r1": {
+      "attempt_id": "InsertObj-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/InsertObj-vc-checking-r1",
+      "claimed_action": "deliver:InsertObj-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T13:53:19.065287Z",
+      "source_annotation": "InsertObj-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T13:53:53.310032Z",
+            "finished_at": "2026-10-12T13:58:36.945948Z",
+            "elapsed_seconds": 283.635916
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T13:58:36.945689Z",
+      "finished_at": "2026-10-12T13:58:36.992403Z"
+    },
+    "InsertObj-vc-proving-r1": {
+      "attempt_id": "InsertObj-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "running",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-12T13:58:36.992425Z",
+      "source_annotation": "InsertObj-annotation-r1",
+      "source_vc_checking": "InsertObj-vc-checking-r1",
+      "groups": {
+        "insertion_result": {
+          "status": "accepted",
+          "owner": "group-worker/InsertObj-vc-proving-r1:insertion_result",
+          "claimed_action": "deliver:InsertObj-vc-proving-r1:insertion_result:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T13:58:55.905260Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T13:59:20.961444Z",
+                "finished_at": "2026-10-12T15:02:46.370249Z",
+                "elapsed_seconds": 3805.408805
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T15:02:46.370225Z",
+          "finished_at": "2026-10-12T15:04:13.795569Z"
+        },
+        "manager_open": {
+          "status": "blocked",
+          "owner": "group-worker/InsertObj-vc-proving-r1:manager_open",
+          "claimed_action": "deliver:InsertObj-vc-proving-r1:manager_open:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T13:58:55.905286Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T13:59:21.303579Z",
+                "finished_at": "2026-10-12T14:09:06.574118Z",
+                "elapsed_seconds": 585.270539
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T14:09:06.574061Z",
+          "blocker": {
+            "failure_class": "annotation-gap",
+            "kind": "missing-nonzero-bucket-head",
+            "vcs": [
+              {
+                "name": "proof_of_InsertObj_entail_wit_2",
+                "parent": null,
+                "annotation_location": "annotated_C/src/InsertObj.c:103 (head != 0)"
+              }
+            ],
+            "message": "The uninitialized empty-bucket alternative owns two zero-valued pointer cells but supplies no nonzero-head fact. The actual isvalidptr definition permits address zero, as does mstore. With hoffset=1, id=0, htable=0, idmax=1, idlist=[], and idbuckets=[[]], the premises can hold while the computed head is zero; neither target disjunct can satisfy its head<>0 conclusion.",
+            "repair_boundary": "Annotation/spec/predicate design outside assigned proof spans: justify and propagate nonzero selected bucket addresses to the assertion at annotated_C/src/InsertObj.c:101-125 and the InsertObj contract or accepted bucket representation; accepted predicate sources remain unchanged."
+          },
+          "finished_at": "2026-10-12T14:09:06.668764Z"
+        },
+        "bucket_insert_ready": {
+          "status": "blocked",
+          "owner": "group-worker/InsertObj-vc-proving-r1:bucket_insert_ready",
+          "claimed_action": "deliver:InsertObj-vc-proving-r1:bucket_insert_ready:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T13:58:55.905292Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T13:59:21.611394Z",
+                "finished_at": "2026-10-12T14:14:35.119163Z",
+                "elapsed_seconds": 913.507769
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T14:14:35.119130Z",
+          "blocker": {
+            "failure_class": "annotation-gap",
+            "kind": "missing-link-nonzero-premise",
+            "vcs": [
+              {
+                "name": "proof_of_InsertObj_entail_wit_3_1",
+                "parent": null,
+                "annotation_location": "annotated_C/src/InsertObj.c:130 (&(idnode->link)!=0)"
+              },
+              {
+                "name": "proof_of_InsertObj_entail_wit_3_2",
+                "parent": null,
+                "annotation_location": "annotated_C/src/InsertObj.c:130 (&(idnode->link)!=0)"
+              }
+            ],
+            "message": "Both whole-goal premises retain idnode nonzero and its three field resources, but not the embedded link address nonzero. valid_store_ushort proves only that the abstract id-field address is nonnegative. eval_addr_expr is an uninterpreted Parameter in the current formal notation, and no accepted layout equality connects the id and link addresses; therefore this does not imply the required link-address nonzero conclusion. The accepted store_sem_id_detached predicate also lacks that pure fact.",
+            "repair_boundary": "Repair upstream annotation/spec or accepted representation to provide and preserve the embedded link nonzero fact, or supply a separately justified formal layout bridge; do not change generated VC statements or add assumptions in a worker proof. See group_worker_output.md for exact premises, diagnostic, and annotation locations."
+          },
+          "finished_at": "2026-10-12T14:14:35.187752Z"
+        },
+        "entry_safety": {
+          "status": "accepted",
+          "owner": "group-worker/InsertObj-vc-proving-r1:entry_safety",
+          "claimed_action": "deliver:InsertObj-vc-proving-r1:entry_safety:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T13:58:55.905295Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T14:10:20.603899Z",
+                "finished_at": "2026-10-12T14:15:32.425826Z",
+                "elapsed_seconds": 311.821927
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T14:15:32.425788Z",
+          "finished_at": "2026-10-12T14:17:05.783577Z"
+        },
+        "bucket_safety": {
+          "status": "accepted",
+          "owner": "group-worker/InsertObj-vc-proving-r1:bucket_safety",
+          "claimed_action": "deliver:InsertObj-vc-proving-r1:bucket_safety:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T13:58:55.905298Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T14:14:54.227839Z",
+                "finished_at": "2026-10-12T14:18:16.168505Z",
+                "elapsed_seconds": 201.940666
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T14:18:16.168474Z",
+          "finished_at": "2026-10-12T14:19:50.856288Z"
+        },
+        "call_preparation": {
+          "status": "accepted",
+          "owner": "group-worker/InsertObj-vc-proving-r1:call_preparation",
+          "claimed_action": "deliver:InsertObj-vc-proving-r1:call_preparation:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T13:58:55.905300Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T14:17:42.085709Z",
+                "finished_at": "2026-10-12T14:27:33.154280Z",
+                "elapsed_seconds": 591.068571
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T14:27:33.154246Z",
+          "finished_at": "2026-10-12T14:29:40.172538Z"
+        }
+      }
+    },
+    "InsertObj-annotation-r2": {
+      "attempt_id": "InsertObj-annotation-r2",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/InsertObj-20261012130948",
+      "claimed_action": "deliver:InsertObj-annotation-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T15:04:39.116618Z",
+      "feedback_sources": [
+        {
+          "phase": "group",
+          "attempt_id": "InsertObj-vc-proving-r1:manager_open",
+          "evidence": [
+            "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/InsertObj-20261012130948/rounds/InsertObj-vc-proving-r1/groups/group_01__manager_open/group_worker_report.json",
+            "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/InsertObj-20261012130948/rounds/InsertObj-vc-proving-r1/groups/group_01__manager_open/group_worker_output.md"
+          ]
+        },
+        {
+          "phase": "group",
+          "attempt_id": "InsertObj-vc-proving-r1:bucket_insert_ready",
+          "evidence": [
+            "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/InsertObj-20261012130948/rounds/InsertObj-vc-proving-r1/groups/group_02__bucket_insert_ready/group_worker_report.json",
+            "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/InsertObj-20261012130948/rounds/InsertObj-vc-proving-r1/groups/group_02__bucket_insert_ready/group_worker_output.md"
+          ]
+        }
+      ],
+      "reason": "group-worker-annotation-gaps",
+      "failed_vcs": [
+        {
+          "source_attempt": "InsertObj-vc-proving-r1:manager_open",
+          "manual": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/InsertObj-20261012130948/InsertObj-vc-proving-r1/groups/group_01__manager_open/InsertObj_proof_manual.v",
+          "message": "The uninitialized empty-bucket alternative owns two zero-valued pointer cells but supplies no nonzero-head fact. The actual isvalidptr definition permits address zero, as does mstore. With hoffset=1, id=0, htable=0, idmax=1, idlist=[], and idbuckets=[[]], the premises can hold while the computed head is zero; neither target disjunct can satisfy its head<>0 conclusion.",
+          "name": "proof_of_InsertObj_entail_wit_2",
+          "parent": null,
+          "annotation_location": "annotated_C/src/InsertObj.c:103 (head != 0)"
+        },
+        {
+          "source_attempt": "InsertObj-vc-proving-r1:bucket_insert_ready",
+          "manual": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/InsertObj-20261012130948/InsertObj-vc-proving-r1/groups/group_02__bucket_insert_ready/InsertObj_proof_manual.v",
+          "message": "Both whole-goal premises retain idnode nonzero and its three field resources, but not the embedded link address nonzero. valid_store_ushort proves only that the abstract id-field address is nonnegative. eval_addr_expr is an uninterpreted Parameter in the current formal notation, and no accepted layout equality connects the id and link addresses; therefore this does not imply the required link-address nonzero conclusion. The accepted store_sem_id_detached predicate also lacks that pure fact.",
+          "name": "proof_of_InsertObj_entail_wit_3_1",
+          "parent": null,
+          "annotation_location": "annotated_C/src/InsertObj.c:130 (&(idnode->link)!=0)"
+        },
+        {
+          "source_attempt": "InsertObj-vc-proving-r1:bucket_insert_ready",
+          "manual": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/InsertObj-20261012130948/InsertObj-vc-proving-r1/groups/group_02__bucket_insert_ready/InsertObj_proof_manual.v",
+          "message": "Both whole-goal premises retain idnode nonzero and its three field resources, but not the embedded link address nonzero. valid_store_ushort proves only that the abstract id-field address is nonnegative. eval_addr_expr is an uninterpreted Parameter in the current formal notation, and no accepted layout equality connects the id and link addresses; therefore this does not imply the required link-address nonzero conclusion. The accepted store_sem_id_detached predicate also lacks that pure fact.",
+          "name": "proof_of_InsertObj_entail_wit_3_2",
+          "parent": null,
+          "annotation_location": "annotated_C/src/InsertObj.c:130 (&(idnode->link)!=0)"
+        }
+      ],
+      "retry_reason": "group-worker-annotation-gaps",
+      "retry_previous_attempt": "InsertObj-vc-proving-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T15:04:57.551291Z",
+            "finished_at": "2026-10-12T15:51:03.490622Z",
+            "elapsed_seconds": 2765.939331
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T15:51:03.490593Z",
+      "finished_at": "2026-10-12T15:51:04.002530Z"
+    },
+    "InsertObj-vc-checking-r2": {
+      "attempt_id": "InsertObj-vc-checking-r2",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/InsertObj-vc-checking-r2",
+      "claimed_action": "deliver:InsertObj-vc-checking-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T15:51:53.724481Z",
+      "source_annotation": "InsertObj-annotation-r2",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T15:52:09.202645Z",
+            "finished_at": "2026-10-12T15:58:09.947399Z",
+            "elapsed_seconds": 360.744754
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T15:58:09.947370Z",
+      "finished_at": "2026-10-12T15:58:09.997288Z"
+    },
+    "InsertObj-vc-proving-r2": {
+      "attempt_id": "InsertObj-vc-proving-r2",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-12T15:58:09.997317Z",
+      "source_annotation": "InsertObj-annotation-r2",
+      "source_vc_checking": "InsertObj-vc-checking-r2",
+      "groups": {
+        "manager_open": {
+          "status": "accepted",
+          "owner": "group-worker/InsertObj-vc-proving-r2:manager_open",
+          "claimed_action": "deliver:InsertObj-vc-proving-r2:manager_open:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T15:58:25.400284Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T14:09:42.652170Z",
+                "finished_at": "2026-10-15T14:24:14.202359Z",
+                "elapsed_seconds": 871.550189
+              }
+            ]
+          },
+          "returned_at": "2026-10-15T14:24:14.202334Z",
+          "finished_at": "2026-10-15T14:25:33.683333Z"
+        },
+        "bucket_insert_ready": {
+          "status": "accepted",
+          "owner": "group-worker/InsertObj-vc-proving-r2:bucket_insert_ready",
+          "claimed_action": "deliver:InsertObj-vc-proving-r2:bucket_insert_ready:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T15:58:25.400301Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T14:09:42.839438Z",
+                "finished_at": "2026-10-15T14:22:49.471471Z",
+                "elapsed_seconds": 786.632033
+              }
+            ]
+          },
+          "returned_at": "2026-10-15T14:22:49.471418Z",
+          "finished_at": "2026-10-15T14:23:38.522997Z"
+        },
+        "final_result": {
+          "status": "accepted",
+          "owner": "group-worker/InsertObj-vc-proving-r2:final_result",
+          "claimed_action": "deliver:InsertObj-vc-proving-r2:final_result:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T15:58:25.400305Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T14:26:03.111976Z",
+                "finished_at": "2026-10-15T14:31:48.143487Z",
+                "elapsed_seconds": 345.031511
+              }
+            ]
+          },
+          "returned_at": "2026-10-15T14:31:48.143462Z",
+          "finished_at": "2026-10-15T14:33:00.942015Z"
+        },
+        "call_preconditions": {
+          "status": "accepted",
+          "owner": "group-worker/InsertObj-vc-proving-r2:call_preconditions",
+          "claimed_action": "deliver:InsertObj-vc-proving-r2:call_preconditions:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T15:58:25.400307Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T14:26:03.277120Z",
+                "finished_at": "2026-10-15T14:33:55.433531Z",
+                "elapsed_seconds": 472.156411
+              }
+            ]
+          },
+          "returned_at": "2026-10-15T14:33:55.433504Z",
+          "finished_at": "2026-10-15T14:35:02.237118Z"
+        },
+        "entry_safety": {
+          "status": "accepted",
+          "owner": "group-worker/InsertObj-vc-proving-r2:entry_safety",
+          "claimed_action": "deliver:InsertObj-vc-proving-r2:entry_safety:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T15:58:25.400309Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T14:26:03.476990Z",
+                "finished_at": "2026-10-15T14:30:04.716442Z",
+                "elapsed_seconds": 241.239452
+              }
+            ]
+          },
+          "returned_at": "2026-10-15T14:30:04.716415Z",
+          "finished_at": "2026-10-15T14:30:54.774283Z"
+        },
+        "bucket_safety": {
+          "status": "accepted",
+          "owner": "group-worker/InsertObj-vc-proving-r2:bucket_safety",
+          "claimed_action": "deliver:InsertObj-vc-proving-r2:bucket_safety:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T15:58:25.400311Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-15T14:31:05.165694Z",
+                "finished_at": "2026-10-15T15:03:55.208800Z",
+                "elapsed_seconds": 1970.043106
+              }
+            ]
+          },
+          "returned_at": "2026-10-15T15:03:55.208773Z",
+          "finished_at": "2026-10-15T15:04:53.675481Z"
+        }
+      },
+      "finished_at": "2026-10-15T15:07:25.139107Z"
+    }
+  },
+  "current": {
+    "annotation": "InsertObj-annotation-r2",
+    "vc-checking": "InsertObj-vc-checking-r2",
+    "vc-proving": "InsertObj-vc-proving-r2"
+  },
+  "annotation_owner": "annotation/InsertObj-20261012130948",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "InsertObj-vc-proving-r2"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-10-15T15:09:38.732660Z",
+    "files": [
+      "VC/InsertObj_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-10-15T15:11:42.879672Z",
+    "errors": [],
+    "cleanup_removed_count": 0,
+    "accepted_inputs": {
+      "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+      "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+      "spec_manifest": "480669e8557a5f09a7683b69c5de2b087857f93649ef9c6729096df1c6a8b3cf",
+      "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+    }
+  },
+  "created_at": "2026-10-12T05:09:48.666639Z",
+  "updated_at": "2026-10-15T15:11:42.889447Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-10-15T15:11:42.879650Z"
+}

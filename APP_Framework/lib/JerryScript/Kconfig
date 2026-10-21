@@ -1,0 +1,5 @@
+menu "lib using JerryScript"
+    menuconfig LIB_USING_JERRYSCRIPT
+        bool "Enable support JerryScript."
+        default n
+endmenu

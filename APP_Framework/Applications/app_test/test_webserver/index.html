@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单</title>
+</head>
+<body>
+
+<!--
+表单form
+action：表单提交的位置，可以是网站，也可以是一个请求处理地址
+method：有post，get提交方式
+-->
+<form action="http://192.168.1.5/" method="post">
+  <h2>设置路由信息</h2>
+    
+<!--
+<input type="text">是文本输入框
+<input type="password">是密码输入框，默认是用小黑点表示密码的
+-->
+    <p>IP地址：<input type="text" name="ip"></p>
+    <p>子网掩码：<input type="text" name="netmask"></p>
+    <p>默认网关：<input type="text" name="iproute"></p>
+    <p>DNS服务器<input type="text" name="dns"></p>
+    <p>
+        <input type="submit">
+        <input type="reset">
+    </p>
+
+</form>
+
+</body>
+</html>

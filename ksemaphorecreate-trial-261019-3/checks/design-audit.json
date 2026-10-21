@@ -1,0 +1,69 @@
+{
+  "status": "passed",
+  "non_trusted": [
+    "AllocId",
+    "DoubleLinkListInsertNodeAfter",
+    "IdInsertObj",
+    "InitDoubleLinkList",
+    "InsertObj",
+    "KSemaphoreCreate",
+    "_SemaphoreCreate"
+  ],
+  "trusted": [
+    "CriticalAreaLock",
+    "CriticalAreaUnLock",
+    "KPrintf",
+    "memset",
+    "x_free",
+    "x_malloc"
+  ],
+  "calls": {
+    "AllocId": [
+      "KPrintf"
+    ],
+    "DoubleLinkListInsertNodeAfter": [],
+    "IdInsertObj": [
+      "AllocId",
+      "InsertObj",
+      "KPrintf"
+    ],
+    "InitDoubleLinkList": [],
+    "InsertObj": [
+      "DoubleLinkListInsertNodeAfter",
+      "InitDoubleLinkList",
+      "KPrintf"
+    ],
+    "KSemaphoreCreate": [
+      "_SemaphoreCreate"
+    ],
+    "_SemaphoreCreate": [
+      "CriticalAreaLock",
+      "CriticalAreaUnLock",
+      "DoubleLinkListInsertNodeAfter",
+      "IdInsertObj",
+      "InitDoubleLinkList",
+      "memset",
+      "x_free",
+      "x_malloc"
+    ]
+  },
+  "canonical_sha256": {
+    "annotated_C/src/AllocId.c": "3f06a47e78618add867311a4c19d936539dd5f77657cd60115f133fad0be2288",
+    "annotated_C/src/DoubleLinkListInsertNodeAfter.c": "39ca5671d82e7fe72687707128b475f5d19c022750dbd0d635bc627d271d2841",
+    "annotated_C/src/IdInsertObj.c": "b402c71a7c1741b0e27b5af390f3fc5ee142835097612a2e2f1a276ff17f6b99",
+    "annotated_C/src/InitDoubleLinkList.c": "7d5753a0bff344f5de6321a085280fcb9c9ed763ef757a49a8ea186637c38175",
+    "annotated_C/src/InsertObj.c": "8251e404f260b1aa957d995c117047d7346a506a344dfcffd7fb24bb353e9f33",
+    "annotated_C/src/KSemaphoreCreate.c": "ffb4ec343f9fbda31518f69827a757cd40c51ff19ef4f556b06f833c3fa24060",
+    "annotated_C/src/_SemaphoreCreate.c": "c5b4a72ed4c7b23b1ee4dacd759e56df991025007c76b00325faa14418f12656"
+  },
+  "checks": [
+    "authoritative source hashes unchanged",
+    "seven unique active canonical bodies",
+    "normalized source tokens equal active C bodies, with TrustBase-authorized dead KPrintf removal and two checked sizeof constant folds in _SemaphoreCreate",
+    "complete declaration-only caller contracts",
+    "caller copies exactly match canonical contracts",
+    "six and only six trusted symbols",
+    "full source call reachability"
+  ],
+  "limitations": "Structural audit only; semantic review is separate."
+}

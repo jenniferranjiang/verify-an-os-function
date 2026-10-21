@@ -1,0 +1,10 @@
+from building import *
+import os
+
+cwd = GetCurrentDir()
+src = []
+if GetDepend(['ADAPTER_WCHNET_ETHERNET']):
+    src += ['wchnet_ethernet.c']
+group = DefineGroup('connection ethernet wchnet', src, depend = [], CPPPATH = [cwd])
+
+Return('group')

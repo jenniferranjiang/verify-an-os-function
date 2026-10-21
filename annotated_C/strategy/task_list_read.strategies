@@ -1,0 +1,30 @@
+#include "task_list_read.h"
+
+// 仅借用管理链哨兵的 next；全部共享资源留在只读线性补集中。
+id : 1
+priority : core(3)
+left : os_inv(?sg, ?st) at 0
+right : store(field_addr(?base, SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode), ?value) at 1
+check : infer(base == task_list_head(os_task_stable(sg)));
+action : left_erase(0); right_erase(1);
+         left_add(ktask_search_next_frame(sg, st, base, ktask_search_cursor(base, task_ptr_list(os_tasks(st)))));
+         right_add(value == ktask_search_cursor(base, task_ptr_list(os_tasks(st))));
+
+// 已知管理链中的分解位置才借出该节点的 next，不匹配其他节点或写操作。
+id : 2
+priority : core(2)
+left : os_inv(?sg, ?st) at 0
+       task_ptr_list(os_tasks(st)) == app{Z}(?prefix, cons{Z}(?task, ?suffix)) at 1
+right : store(field_addr(?base, SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode), ?value) at 2
+check : infer(base == field_addr(task, TaskDescriptor, link));
+action : left_erase(0); right_erase(2);
+         left_add(ktask_search_next_frame(sg, st, base, ktask_search_cursor(task_list_head(os_task_stable(sg)), suffix)));
+         right_add(value == ktask_search_cursor(task_list_head(os_task_stable(sg)), suffix));
+
+// 只归还原值；读后恢复唯一规范形式 os_inv，不生成展开/折叠循环。
+id : 3
+priority : post(3)
+left : ktask_search_next_frame(?sg, ?st, ?node, ?next) at 0
+       store(field_addr(?base, SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode), ?value) at 1
+check : infer(base == node); infer(value == next);
+action : left_erase(0); left_erase(1); left_add(os_inv(sg, st));

@@ -1,0 +1,177 @@
+{
+  "schema_version": 4,
+  "generation": 21,
+  "run_id": "DoubleLinkListInsertNodeAfter-20261012130948",
+  "case": "DoubleLinkListInsertNodeAfter",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1",
+  "run_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/DoubleLinkListInsertNodeAfter-20261012130948",
+  "report_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/DoubleLinkListInsertNodeAfter-20261012130948",
+  "target_files": {
+    "c_file": "annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+    "formal_directory": "VC",
+    "formal_case_lib": "VC/DoubleLinkListInsertNodeAfter_lib.v",
+    "goal_file": "VC/DoubleLinkListInsertNodeAfter_goal.v",
+    "proof_auto_file": "VC/DoubleLinkListInsertNodeAfter_proof_auto.v",
+    "proof_manual_file": "VC/DoubleLinkListInsertNodeAfter_proof_manual.v",
+    "goal_check_file": "VC/DoubleLinkListInsertNodeAfter_goal_check.v",
+    "case_name": "DoubleLinkListInsertNodeAfter",
+    "active_case_theory": "CRTOS_Verify.VC"
+  },
+  "problem_context": {
+    "problem_statement": "Verify CRTOS KSemaphoreCreate under the accepted source/config and predicates/specs.\nAuthoritative accepted inputs: evidence/accepted-revisions.json.\nSource: source-r2-0c50c37013e9, Cortex-M3 Thumb ILP32, STM32F103 nano, non-SMP.\nPredicate: predicate-r3-16b6ee4a4e02, independently review-passed.\nSpec: spec-r2-6d54bb88379e, independently review-passed.\nDomain: entry scheduler_lock_nest < 65535, explicitly authorized by user.\nPreserve ordinary nested calls and exact caller IRQ/heap ownership.\n\nThe complete required non-trusted closure has nine unique canonical active bodies:\nannotated_C/src/KSemaphoreCreate.c\nannotated_C/src/_SemaphoreCreate.c\nannotated_C/src/CriticalAreaLock.c\nannotated_C/src/CriticalAreaUnLock.c\nannotated_C/src/IdInsertObj.c\nannotated_C/src/AllocId.c\nannotated_C/src/InsertObj.c\nannotated_C/src/InitDoubleLinkList.c\nannotated_C/src/DoubleLinkListInsertNodeAfter.c\nAll canonical contracts and caller-local API copies are frozen accepted inputs.\nOnly these six C symbols are trusted, with the existing reviewed contracts:\nx_malloc, x_free, memset, DisableLocalInterrupt, EnableLocalInterrupt, KPrintf.\nDeclaration contracts do not constitute verified callee bodies.\n\nAbsolutely do not read, enumerate, search, copy, import, or depend on any file in\n/home/xinra/crtos/ksemaphorecreate-trial-260928-1.\nThis includes ancestor-root searches, load paths, proof lookup and dependency closure.\nNo other historical trial is an authorized formal/proof reference.\nDo not change root shared library definitions, authoritative C/config, or any skills.\nOnly this new trial and already authorized project path configuration may be changed.\nDo not create a second active body for a canonical symbol or a central specs header.\nDo not add axioms, parameters, Admitted/admit, placeholders, weaker postconditions,\nunjustified stronger preconditions, deleted paths or omitted VCs.\n\nThe user authorizes automatic acceptance of independently reviewed, machine-checked\npredicate/spec revisions within the approved semantics. Such changes must return to\nthe appropriate independent design review and bind new manifests before resuming.\nMaterial semantic changes require explicit user authorization. No routine phase gate\nrequires another user confirmation.\n\nMain must follow only the verification-orchestrator controller actions. If the current\ncontroller does not support this CRTOS trial layout, retain its original blocker;\ndo not improvise another implementation workflow.\nCompletion additionally requires complete closure proofs, goal checks, full coqchk,\ntrust scan, C/VC/proof integrity, and a final integrity record. Historical 172 VCs is\nonly a diagnostic baseline, never a target for deleting or weakening obligations.\n\nExplicit user exception (2026-10-12): \u5141\u8bb8\u5728\u65b0 trial \u5185\u9002\u914d controller.\nThe local controller adapter may support canonical annotated_C/src and VC paths,\nread-only existing external dependencies, and the full nine-case closure. Preserve\nall original owner, symbolic, acceptance, proof and final-check actions.",
+    "target_function": "DoubleLinkListInsertNodeAfter"
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "DoubleLinkListInsertNodeAfter"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "DoubleLinkListInsertNodeAfter::<default>": "With (successor : Z) (previous : Z) Require linklist != 0 && linklist_node != 0 && successor != 0 && store(&(linklist->node_next), struct SysDoubleLinklistNode *, successor) * store(&(((struct SysDoubleLinklistNode *)successor)->node_prev), struct SysDoubleLinklistNode *, previous) * undef_data_at(&(linklist_node->node_next), struct SysDoubleLinklistNode *) * undef_data_at(&(linklist_node->node_prev), struct SysDoubleLinklistNode *) Ensure store(&(linklist->node_next), struct SysDoubleLinklistNode *, linklist_node) * store(&(((struct SysDoubleLinklistNode *)successor)->node_prev), struct SysDoubleLinklistNode *, linklist_node) * store(&(linklist_node->node_next), struct SysDoubleLinklistNode *, successor) * store(&(linklist_node->node_prev), struct SysDoubleLinklistNode *, linklist)"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-10-12T05:09:48.599362Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/DoubleLinkListInsertNodeAfter_goal_check.vo",
+    "base_artifact_count": 163,
+    "current_source_count": 4,
+    "elapsed_seconds": 62.727038,
+    "snapshot": "verification_runs/DoubleLinkListInsertNodeAfter-20261012130948/dependency_plan.json"
+  },
+  "attempts": {
+    "DoubleLinkListInsertNodeAfter-annotation-r1": {
+      "attempt_id": "DoubleLinkListInsertNodeAfter-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/DoubleLinkListInsertNodeAfter-20261012130948",
+      "claimed_action": "deliver:DoubleLinkListInsertNodeAfter-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T11:27:15.285832Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T11:27:20.718264Z",
+            "finished_at": "2026-10-12T11:29:02.962781Z",
+            "elapsed_seconds": 102.244517
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T11:29:02.962748Z",
+      "finished_at": "2026-10-12T11:29:03.176862Z"
+    },
+    "DoubleLinkListInsertNodeAfter-vc-checking-r1": {
+      "attempt_id": "DoubleLinkListInsertNodeAfter-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/DoubleLinkListInsertNodeAfter-vc-checking-r1",
+      "claimed_action": "deliver:DoubleLinkListInsertNodeAfter-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T11:30:11.441621Z",
+      "source_annotation": "DoubleLinkListInsertNodeAfter-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T11:30:23.229832Z",
+            "finished_at": "2026-10-12T11:31:57.366261Z",
+            "elapsed_seconds": 94.136429
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T11:31:57.366235Z",
+      "finished_at": "2026-10-12T11:31:57.403297Z"
+    },
+    "DoubleLinkListInsertNodeAfter-vc-proving-r1": {
+      "attempt_id": "DoubleLinkListInsertNodeAfter-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-12T11:31:57.403332Z",
+      "source_annotation": "DoubleLinkListInsertNodeAfter-annotation-r1",
+      "source_vc_checking": "DoubleLinkListInsertNodeAfter-vc-checking-r1",
+      "groups": {
+        "return_identity": {
+          "status": "accepted",
+          "owner": "group-worker/DoubleLinkListInsertNodeAfter-vc-proving-r1:return_identity",
+          "claimed_action": "deliver:DoubleLinkListInsertNodeAfter-vc-proving-r1:return_identity:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T11:32:03.566030Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T11:32:10.013305Z",
+                "finished_at": "2026-10-12T11:34:14.949761Z",
+                "elapsed_seconds": 124.936456
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T11:34:14.949730Z",
+          "finished_at": "2026-10-12T11:35:29.503399Z"
+        }
+      },
+      "finished_at": "2026-10-12T11:37:26.424165Z"
+    }
+  },
+  "current": {
+    "annotation": "DoubleLinkListInsertNodeAfter-annotation-r1",
+    "vc-checking": "DoubleLinkListInsertNodeAfter-vc-checking-r1",
+    "vc-proving": "DoubleLinkListInsertNodeAfter-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/DoubleLinkListInsertNodeAfter-20261012130948",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "DoubleLinkListInsertNodeAfter-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-10-12T11:39:30.809501Z",
+    "files": [
+      "VC/DoubleLinkListInsertNodeAfter_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-10-15T16:27:20.800875Z",
+    "errors": [],
+    "cleanup_removed_count": 0,
+    "accepted_inputs": {
+      "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+      "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+      "spec_manifest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+      "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+    }
+  },
+  "created_at": "2026-10-12T05:09:48.599379Z",
+  "updated_at": "2026-10-15T16:27:20.809386Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-10-15T16:27:20.800852Z"
+}

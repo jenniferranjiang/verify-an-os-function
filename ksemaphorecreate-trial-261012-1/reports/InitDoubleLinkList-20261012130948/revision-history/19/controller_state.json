@@ -1,0 +1,177 @@
+{
+  "schema_version": 4,
+  "generation": 19,
+  "run_id": "InitDoubleLinkList-20261012130948",
+  "case": "InitDoubleLinkList",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1",
+  "run_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/InitDoubleLinkList-20261012130948",
+  "report_root": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/reports/InitDoubleLinkList-20261012130948",
+  "target_files": {
+    "c_file": "annotated_C/src/InitDoubleLinkList.c",
+    "formal_directory": "VC",
+    "formal_case_lib": "VC/InitDoubleLinkList_lib.v",
+    "goal_file": "VC/InitDoubleLinkList_goal.v",
+    "proof_auto_file": "VC/InitDoubleLinkList_proof_auto.v",
+    "proof_manual_file": "VC/InitDoubleLinkList_proof_manual.v",
+    "goal_check_file": "VC/InitDoubleLinkList_goal_check.v",
+    "case_name": "InitDoubleLinkList",
+    "active_case_theory": "CRTOS_Verify.VC"
+  },
+  "problem_context": {
+    "problem_statement": "Verify CRTOS KSemaphoreCreate under the accepted source/config and predicates/specs.\nAuthoritative accepted inputs: evidence/accepted-revisions.json.\nSource: source-r2-0c50c37013e9, Cortex-M3 Thumb ILP32, STM32F103 nano, non-SMP.\nPredicate: predicate-r3-16b6ee4a4e02, independently review-passed.\nSpec: spec-r2-6d54bb88379e, independently review-passed.\nDomain: entry scheduler_lock_nest < 65535, explicitly authorized by user.\nPreserve ordinary nested calls and exact caller IRQ/heap ownership.\n\nThe complete required non-trusted closure has nine unique canonical active bodies:\nannotated_C/src/KSemaphoreCreate.c\nannotated_C/src/_SemaphoreCreate.c\nannotated_C/src/CriticalAreaLock.c\nannotated_C/src/CriticalAreaUnLock.c\nannotated_C/src/IdInsertObj.c\nannotated_C/src/AllocId.c\nannotated_C/src/InsertObj.c\nannotated_C/src/InitDoubleLinkList.c\nannotated_C/src/DoubleLinkListInsertNodeAfter.c\nAll canonical contracts and caller-local API copies are frozen accepted inputs.\nOnly these six C symbols are trusted, with the existing reviewed contracts:\nx_malloc, x_free, memset, DisableLocalInterrupt, EnableLocalInterrupt, KPrintf.\nDeclaration contracts do not constitute verified callee bodies.\n\nAbsolutely do not read, enumerate, search, copy, import, or depend on any file in\n/home/xinra/crtos/ksemaphorecreate-trial-260928-1.\nThis includes ancestor-root searches, load paths, proof lookup and dependency closure.\nNo other historical trial is an authorized formal/proof reference.\nDo not change root shared library definitions, authoritative C/config, or any skills.\nOnly this new trial and already authorized project path configuration may be changed.\nDo not create a second active body for a canonical symbol or a central specs header.\nDo not add axioms, parameters, Admitted/admit, placeholders, weaker postconditions,\nunjustified stronger preconditions, deleted paths or omitted VCs.\n\nThe user authorizes automatic acceptance of independently reviewed, machine-checked\npredicate/spec revisions within the approved semantics. Such changes must return to\nthe appropriate independent design review and bind new manifests before resuming.\nMaterial semantic changes require explicit user authorization. No routine phase gate\nrequires another user confirmation.\n\nMain must follow only the verification-orchestrator controller actions. If the current\ncontroller does not support this CRTOS trial layout, retain its original blocker;\ndo not improvise another implementation workflow.\nCompletion additionally requires complete closure proofs, goal checks, full coqchk,\ntrust scan, C/VC/proof integrity, and a final integrity record. Historical 172 VCs is\nonly a diagnostic baseline, never a target for deleting or weakening obligations.\n\nExplicit user exception (2026-10-12): \u5141\u8bb8\u5728\u65b0 trial \u5185\u9002\u914d controller.\nThe local controller adapter may support canonical annotated_C/src and VC paths,\nread-only existing external dependencies, and the full nine-case closure. Preserve\nall original owner, symbolic, acceptance, proof and final-check actions.",
+    "target_function": "InitDoubleLinkList"
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "InitDoubleLinkList"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "InitDoubleLinkList::<default>": "With (head : Z) Require linklist_head == head && head != 0 && undef_data_at(&(linklist_head->node_next), struct SysDoubleLinklistNode *) * undef_data_at(&(linklist_head->node_prev), struct SysDoubleLinklistNode *) Ensure store(&(linklist_head->node_next), struct SysDoubleLinklistNode *, head) * store(&(linklist_head->node_prev), struct SysDoubleLinklistNode *, head)"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-10-12T05:09:48.644759Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/InitDoubleLinkList_goal_check.vo",
+    "base_artifact_count": 163,
+    "current_source_count": 4,
+    "elapsed_seconds": 55.52718,
+    "snapshot": "verification_runs/InitDoubleLinkList-20261012130948/dependency_plan.json"
+  },
+  "attempts": {
+    "InitDoubleLinkList-annotation-r1": {
+      "attempt_id": "InitDoubleLinkList-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/InitDoubleLinkList-20261012130948",
+      "claimed_action": "deliver:InitDoubleLinkList-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T13:28:52.556560Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T13:29:05.612161Z",
+            "finished_at": "2026-10-12T13:30:58.006844Z",
+            "elapsed_seconds": 112.394683
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T13:30:58.006812Z",
+      "finished_at": "2026-10-12T13:30:58.182695Z"
+    },
+    "InitDoubleLinkList-vc-checking-r1": {
+      "attempt_id": "InitDoubleLinkList-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/InitDoubleLinkList-vc-checking-r1",
+      "claimed_action": "deliver:InitDoubleLinkList-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-10-12T13:32:03.585678Z",
+      "source_annotation": "InitDoubleLinkList-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-10-12T13:32:36.380297Z",
+            "finished_at": "2026-10-12T13:34:11.485270Z",
+            "elapsed_seconds": 95.104973
+          }
+        ]
+      },
+      "returned_at": "2026-10-12T13:34:11.485239Z",
+      "finished_at": "2026-10-12T13:34:11.530016Z"
+    },
+    "InitDoubleLinkList-vc-proving-r1": {
+      "attempt_id": "InitDoubleLinkList-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-10-12T13:34:11.530045Z",
+      "source_annotation": "InitDoubleLinkList-annotation-r1",
+      "source_vc_checking": "InitDoubleLinkList-vc-checking-r1",
+      "groups": {
+        "self_link_result": {
+          "status": "accepted",
+          "owner": "group-worker/InitDoubleLinkList-vc-proving-r1:self_link_result",
+          "claimed_action": "deliver:InitDoubleLinkList-vc-proving-r1:self_link_result:0",
+          "repair_index": 0,
+          "created_at": "2026-10-12T13:34:23.818738Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-10-12T13:34:42.880071Z",
+                "finished_at": "2026-10-12T13:37:44.673012Z",
+                "elapsed_seconds": 181.792941
+              }
+            ]
+          },
+          "returned_at": "2026-10-12T13:37:44.672972Z",
+          "finished_at": "2026-10-12T13:39:12.202482Z"
+        }
+      },
+      "finished_at": "2026-10-12T13:41:37.597981Z"
+    }
+  },
+  "current": {
+    "annotation": "InitDoubleLinkList-annotation-r1",
+    "vc-checking": "InitDoubleLinkList-vc-checking-r1",
+    "vc-proving": "InitDoubleLinkList-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/InitDoubleLinkList-20261012130948",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "InitDoubleLinkList-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-10-12T13:43:58.234701Z",
+    "files": [
+      "VC/InitDoubleLinkList_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-10-12T15:50:49.134395Z",
+    "errors": [],
+    "cleanup_removed_count": 0,
+    "accepted_inputs": {
+      "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+      "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+      "spec_manifest": "480669e8557a5f09a7683b69c5de2b087857f93649ef9c6729096df1c6a8b3cf",
+      "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+    }
+  },
+  "created_at": "2026-10-12T05:09:48.644878Z",
+  "updated_at": "2026-10-12T15:50:49.141921Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-10-12T15:50:49.134328Z"
+}

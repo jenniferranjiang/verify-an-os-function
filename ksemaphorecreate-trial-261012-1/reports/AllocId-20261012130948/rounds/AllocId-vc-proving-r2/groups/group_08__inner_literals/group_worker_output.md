@@ -1,0 +1,1 @@
+Completed all six assigned literal-bound witnesses (20, 21, 23, 24, 25, 26) using LLM_pre_process ltac:(lia || int_auto). No helpers or semantic input changes were needed. Searched the handed-off prior round for matching completed proofs; none were found. Forbidden-lemma scan returned no matches. The exact group-check completed with process exit 0 and JSON status passed.

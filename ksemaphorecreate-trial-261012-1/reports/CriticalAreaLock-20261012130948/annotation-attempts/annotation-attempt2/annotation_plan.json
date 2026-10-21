@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "DisableLocalInterrupt",
+      "meaning": "Return the saved IRQ handler and acquire the reviewed critical invariant after a permitted environment transition."
+    },
+    {
+      "name": "CriticalAreaLock",
+      "meaning": "For entry nesting below 65535, acquire the critical region and return the saved handler with the acquired invariant nesting incremented once."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

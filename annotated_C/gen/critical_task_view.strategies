@@ -1,0 +1,32 @@
+#include "critical_task_view.h"
+
+// ID 查询只下沉到 task_fields；其余四个子不变量作为一个封装 frame 保留。
+id : 1
+priority : core(3)
+left : InsideCritical(?sg, ?st) at 0
+       os_inv(sg, st) at 1
+right : store_idmanager(?sidm, ?idm, ?manager) at 2
+check : infer(manager == k_task_id_manager);
+action : left_erase(1);
+         left_add(task_fields(sg, st));
+         left_add(os_task_fields_frame(sg, st));
+         left_add(task_idmanager_ptr(os_task_stable(sg)) == manager);
+         left_add(task_world_wf(st));
+
+id : 2
+priority : post(4)
+left : task_fields(?sg, ?st) at 0
+       os_task_fields_frame(sg, st) at 1
+action : left_erase(0); left_erase(1);
+         left_add(os_inv(sg, st));
+
+// 状态查询同样只借用任务子不变量；stat 本身由 task_stat_view 定位。
+id : 3
+priority : core(3)
+left : InsideCritical(?sg, ?st) at 0
+       os_inv(sg, st) at 1
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 2
+right : store_task_status(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), ?value) at 3
+check : infer(q == task);
+action : left_erase(1); left_add(task_fields(sg, st));
+         left_add(os_task_fields_frame(sg, st));

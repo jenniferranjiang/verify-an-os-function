@@ -1,0 +1,3 @@
+Completed all four assigned partial-solve witnesses using the required LLM_pre_process route. Each proof preserves all pure premises and manager/bucket frames and applies UCharArray.full_split_to_missing_i with bounds derived from index and qcp_local_end. Witness 4 additionally applies store_uchar_undef_store_uchar. No helper, import, predicate, statement, or unassigned proof was changed.
+
+The previous proving round contained no completed matching proofs to reuse. Forbidden-lemma/tactic scan found no matches. Exact group-check completed with exit code 0 and JSON status passed; it recompiled AllocId_goal.v, AllocId_proof_auto.v, AllocId_proof_manual.v, and AllocId_group_04_array_access_check.v.

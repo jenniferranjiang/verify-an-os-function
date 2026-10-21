@@ -1,0 +1,7 @@
+{
+  "status": "passed",
+  "actual_groups": 2,
+  "absent_library_preserved": true,
+  "unrelated_nested_and_mismatched_families_rejected": true,
+  "canonical_files_unchanged": true
+}

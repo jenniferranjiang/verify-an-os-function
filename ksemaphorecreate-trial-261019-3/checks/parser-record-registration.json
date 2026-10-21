@@ -1,0 +1,9 @@
+{
+  "kind": "parser-record-registration",
+  "file": "annotated_C/logic.h",
+  "before_sha256": "004c17c815da36da26670e00c440504f1e257318c29f15a3f4616e9ff44041c5",
+  "after_sha256": "8696ac07c9514009dec5e581b78094ef9fef5e4c136f3b0d22be40a658cf46c8",
+  "meaning": "Register existing StableIdmanager record with its four actual fields. addr is definitionally Z. No Rocq or frozen function contract changes.",
+  "formal_source": "/home/xinra/crtos/lib/idnode_abs.v:7",
+  "reference": "/home/xinra/crtos/annotated_C/gen/kernel/thread/ktask_startup.c:387"
+}

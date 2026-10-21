@@ -1,0 +1,290 @@
+{
+  "groups": [
+    {
+      "id": "normalized_calls",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_1_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. Pure projection/reflexivity pattern: prove 32 = 32. P also has C locals and SemaphoreOutsideCritical sg hs before; Q has only the stated pure conjunction. Extract explicit premises and split the conjunction; do not consume or reconstruct resources. No existential witnesses or new refinement transition."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. This definition is pure-VC -> auxiliary-VC. Introduce that implication premise, unfold the auxiliary, and establish its pure conjuncts directly: 32 = 32. P and Q contain exactly SemaphoreOutsideCritical sg hs before; cancel these resources modulo separating associativity/commutativity. Retain all other named pure premises. No change of abstract state or existential instantiation is required."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_2_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. Pure projection/reflexivity pattern: prove 0 = 0 and 32 = 32; retval <> 0 and the entry nesting bound are explicit premises. P also has C locals and OSHeap(store_sem_allocated retval) and SemaphoreOutsideCritical sg hs before; Q has only the stated pure conjunction. Extract explicit premises and split the conjunction; do not consume or reconstruct resources. No existential witnesses or new refinement transition."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. This definition is pure-VC -> auxiliary-VC. Introduce that implication premise, unfold the auxiliary, and establish its pure conjuncts directly: 0 = 0 and 32 = 32; retval <> 0 and the entry nesting bound are explicit premises. P and Q contain exactly OSHeap(store_sem_allocated retval) and SemaphoreOutsideCritical sg hs before; cancel these resources modulo separating associativity/commutativity. Retain all other named pure premises. No change of abstract state or existential instantiation is required."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The two conclusions are INT_MIN <= 32 and 32 <= INT_MAX. Reduce the imported signed 32-bit limits and discharge both closed inequalities. The antecedent locals and protocol/heap resources are unchanged and are used only as the domain of a pure assertion; no existential, list transformation, or transition is needed."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_12",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The two conclusions are INT_MIN <= 32 and 32 <= INT_MAX. Reduce the imported signed 32-bit limits and discharge both closed inequalities. The antecedent locals and protocol/heap resources are unchanged and are used only as the domain of a pure assertion; no existential, list transformation, or transition is needed."
+        }
+      ]
+    },
+    {
+      "id": "publish_transition",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_entail_wit_5",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreCreate_entail_wit_5_split_goal_1": "P contains the updated manager, actual post-insertion registry boundary/link cells and old shifted-reverse segment, new value=val_pre, empty self-linked pending head and padding, plus task/scheduler and IRQ frames. First expose StableContext (idmax=128, hoffset=16), CrtosOSValid current from Rely, and uint16 bounds of val_pre from the owned value cell. Prove sem is absent from map semaphore_addr old objects: recurse through the actual old shifted segment, exposing each store_semaphore_body value cell; equal base sem would duplicate the owned new value cell, contradicting separation. Use map getData nodes = old objects to transport the absence. This is a spatial argument, not a malloc-freshness assumption. From min_free_id/query=false derive ID absence and 0<=id<128. With empty pending list, prove semaphore_valid after head insertion (NoDup addresses/IDs/pending and Forall ranges); all task-world, ready, pending-SUSPEND and scheduler clauses of CrtosOSValid stay unchanged. Thus establish SemaphoreGuarantee current (publish sem id val_pre current) by validity and definitional task/scheduler preservation. Transport the entry nest bound through Rely, use validity for the lower bound, and note publish preserves the whole scheduler. Apply semaphore_nesting_roundtrip_bounded to the published state, rewriting the target guarantee to the publication guarantee just established. No resource is fabricated and no existential is required. All supporting claims must be proved inline because formal_case_lib is absent.",
+            "proof_of__SemaphoreCreate_entail_wit_5_split_goal_2": "P contains the updated manager, actual post-insertion registry boundary/link cells and old shifted-reverse segment, new value=val_pre, empty self-linked pending head and padding, plus task/scheduler and IRQ frames. First expose StableContext (idmax=128, hoffset=16), CrtosOSValid current from Rely, and uint16 bounds of val_pre from the owned value cell. Prove sem is absent from map semaphore_addr old objects: recurse through the actual old shifted segment, exposing each store_semaphore_body value cell; equal base sem would duplicate the owned new value cell, contradicting separation. Use map getData nodes = old objects to transport the absence. This is a spatial argument, not a malloc-freshness assumption. From min_free_id/query=false derive ID absence and 0<=id<128. With empty pending list, prove semaphore_valid after head insertion (NoDup addresses/IDs/pending and Forall ranges); all task-world, ready, pending-SUSPEND and scheduler clauses of CrtosOSValid stay unchanged. Thus establish SemaphoreGuarantee current (publish sem id val_pre current) by validity and definitional task/scheduler preservation. Conclude the publication guarantee directly; no IRQ token update occurs inside this entailment. Prove any induction/disjointness claims inline, using current premises only; formal_case_lib is absent.",
+            "proof_of__SemaphoreCreate_entail_wit_5_split_goal_spatial": "P contains the updated manager, actual post-insertion registry boundary/link cells and old shifted-reverse segment, new value=val_pre, empty self-linked pending head and padding, plus task/scheduler and IRQ frames. First expose StableContext (idmax=128, hoffset=16), CrtosOSValid current from Rely, and uint16 bounds of val_pre from the owned value cell. Prove sem is absent from map semaphore_addr old objects: recurse through the actual old shifted segment, exposing each store_semaphore_body value cell; equal base sem would duplicate the owned new value cell, contradicting separation. Use map getData nodes = old objects to transport the absence. This is a spatial argument, not a malloc-freshness assumption. From min_free_id/query=false derive ID absence and 0<=id<128. With empty pending list, prove semaphore_valid after head insertion (NoDup addresses/IDs/pending and Forall ranges); all task-world, ready, pending-SUSPEND and scheduler clauses of CrtosOSValid stay unchanged. Thus establish SemaphoreGuarantee current (publish sem id val_pre current) by validity and definitional task/scheduler preservation. For the spatial Q, fold the new value, padding and self-linked empty pending head into store_semaphore_body (Build_SemaphoreObject sem id val_pre []). Add Build_DL_Node new_object sem.link to nodes; use the four updated boundary/link cells and shifted-reverse segment to fold the registry. Derive that old nodes equal the registry map of old objects by extensionality/induction from map getData and the per-node getPtr equation, retaining nonzero head/nodes and deriving the tail nonzero in empty/nonempty cases. Prove inline semaphore_manager_state stable (new_object::old) = idmanager_link manager_abs (idmanager_add old_manager id) id sem.id: unfold map/filter over seq, split on k=id mod 16, and show its bucket list equals the replace_Znth result by length and indexed extensionality; 0<=id mod 16<16 supplies the index bound. Rewrite the actual manager resource by this equality. Fold store_semaphore and OSInvariant at nest_increment(publish...), using CrtosOSValid_with_nest and the bounded increment to establish its validity. Task and scheduler heap projections are unchanged; keep exactly the original InsideCritical token at current. Use heap-lift equivalences only on heap pieces. No helper declarations are permitted; any mathematical and transport claims are inline local proof assertions."
+          }
+        }
+      ]
+    },
+    {
+      "id": "registry_preparation",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_entail_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. Choose the first whole-goal disjunct. P owns the updated ID manager and the registered private remainder, with registry, task/scheduler and IRQ frames. Unfold only store_sem_registered_private and its detached link predicates under OSHeap: obtain semaphore_object_addresses sem, value=0, both zero pending slots, both zero link slots and padding. Project nonzero pending/link metadata; preserve all existing pure premises and frames. Use crtos_heap_lift_sep and the established ushort bridge; derive the analogous pointer/undef transport inline from the heap lift and byte definitions if needed. Normalize chained field addressing using addr_of_arrow_field/csimpl and weaken each known-zero pointer cell to undef. The first disjunct needs no existential; if using the equivalent second branch its four slot witnesses are all zero. No OS transition occurs."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_entail_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. Choose the second whole-goal disjunct, which exposes only the necessary registry footprint. Let nodes be map (fun obj => Build_DL_Node obj (&(semaphore_addr obj # \"Semaphore\" ->s \"link\"))) (os_semaphores current), exactly as in store_sem_registry. Unfold registry and store_dll under OSHeap, obtain its actual head-next successor and tail predecessor, retain head/tail/node nonzero metadata, and use dllseg_to_dllseg_shift_rev to expose head.next, successor.prev, and shifted-reverse segment. StableContext from InsideCritical rewrites the registry address to k_sem_list. Prove map getData nodes = old objects by map_map/induction, and the per-node getPtr equation by in_map_iff; carry dll_nodes_nonzero from store_dll. The existential successor is the observed head-next, including the empty-list case successor=head; it is not invented. Lift pointer cells to the OS carrier, normalize address notation and cancel all manager/task/scheduler/IRQ/padding frames. No publication or state change is asserted here."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_7_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. Pure projection/reflexivity pattern: prove pend_list address reflexivity and its nonzero premise PreH3. P also has C locals and manager, registry, task/scheduler and IRQ frames, value=val_pre, undefined pend/link slots, and padding; Q has only the stated pure conjunction. Extract explicit premises and split the conjunction; do not consume or reconstruct resources. No existential witnesses or new refinement transition."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. This definition is pure-VC -> auxiliary-VC. Introduce that implication premise, unfold the auxiliary, and establish its pure conjuncts directly: pend_list address reflexivity and its nonzero premise PreH3. P and Q contain exactly manager, registry, task/scheduler and IRQ frames, value=val_pre, undefined pend/link slots, and padding; cancel these resources modulo separating associativity/commutativity. Retain all other named pure premises. Move the two undefined pending slots to the call footprint; preserve value and all link slots."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_8_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. Pure projection/reflexivity pattern: prove k_sem_list, sem.link, successor are nonzero by PreH4, PreH9, PreH5. P also has C locals and manager, task/scheduler and IRQ frames, registry boundary slots plus shifted-reverse segment, initialized pending head, value, undefined link slots and padding; Q has only the stated pure conjunction. Extract explicit premises and split the conjunction; do not consume or reconstruct resources. No existential witnesses or new refinement transition."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. This definition is pure-VC -> auxiliary-VC. Introduce that implication premise, unfold the auxiliary, and establish its pure conjuncts directly: k_sem_list, sem.link, successor are nonzero by PreH4, PreH9, PreH5. P and Q contain exactly manager, task/scheduler and IRQ frames, registry boundary slots plus shifted-reverse segment, initialized pending head, value, undefined link slots and padding; cancel these resources modulo separating associativity/commutativity. Retain all other named pure premises. Move the two registry boundary cells and two undefined new link slots to the call footprint; leave the shifted segment and pending/value/padding frame intact."
+        }
+      ]
+    },
+    {
+      "id": "critical_decomposition",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_entail_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreCreate_entail_wit_1_split_goal_1": "P owns InsideCritical, OSInvariant(nest_increment current), and zeroed private sem. Unfold SemaphoreOSInvariant or use SemaphoreOSInvariant_valid to expose CrtosOSValid(nest_increment current), then project it as Q. No witnesses or transition; the heap/protocol domain is retained while proving a pure fact.",
+            "proof_of__SemaphoreCreate_entail_wit_1_split_goal_2": "From the zeroed-private OSHeap resource expose semaphore_object_addresses retval and project its sem.id nonzero conjunct. Lift its pure-and through OSHeap by its definition. The premise retval <> 0 alone does not imply nonzero field addresses. IRQ and OSInvariant are frames; no existential or transition.",
+            "proof_of__SemaphoreCreate_entail_wit_1_split_goal_3": "Q is the address of the named global k_sem_id_manager being nonzero. Apply the existing framework CNotation.addr_of_LE_var_not_zero to the LE_var notation (qualified according to the imported CNotation namespace). Do not derive a base-address fact from manager field ownership. P needs no transformation; no existential or transition.",
+            "proof_of__SemaphoreCreate_entail_wit_1_split_goal_spatial": "Unfold OSInvariant, store_semaphore, store_sem_manager and store_sem_zeroed_private. InsideCritical supplies SemaphoreStableContext: rewrite semaphore_manager_addr to the named global. Lift heap separating conjunction through crtos_heap_lift_sep; preserve the same token in InsideCritical. Project tasks/semaphores of nest_increment current to current, retaining the incremented scheduler view. Split zeroed private into the existing zero detached ID node and store_sem_registered_private; its metadata feeds both folded pieces. Reassociate and cancel all six heap pieces and the IRQ frame. No new addresses or state witnesses are introduced; metadata and validity already reside in P."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_4_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. Pure projection/reflexivity pattern: prove manager-global and sem.id addresses are nonzero by PreH3 and PreH4. P also has C locals and the manager and detached zero ID node, registered private remainder, registry, task/scheduler views and SemaphoreInsideCritical at current; Q has only the stated pure conjunction. Extract explicit premises and split the conjunction; do not consume or reconstruct resources. No existential witnesses or new refinement transition."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. This definition is pure-VC -> auxiliary-VC. Introduce that implication premise, unfold the auxiliary, and establish its pure conjuncts directly: manager-global and sem.id addresses are nonzero by PreH3 and PreH4. P and Q contain exactly the manager and detached zero ID node, registered private remainder, registry, task/scheduler views and SemaphoreInsideCritical at current; cancel these resources modulo separating associativity/commutativity. Retain all other named pure premises. Move detached ID/manager resources to the call footprint."
+        }
+      ]
+    },
+    {
+      "id": "manager_failure",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_entail_wit_2_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreCreate_entail_wit_2_1_split_goal_1": "Use SemaphoreRely to obtain CrtosOSValid current and equality of before/current scheduler nest. Transport before.nest < 65535, combine with current validity for 0 <= current.nest, and apply semaphore_nesting_roundtrip_bounded. Rewrite the target to SemaphoreGuarantee current current and unfold it; validity and unchanged task/scheduler are immediate. P includes the manager/private/registry/task/scheduler and IRQ resources, but Q is pure; no spatial creation or existential.",
+            "proof_of__SemaphoreCreate_entail_wit_2_1_split_goal_spatial": "P has the unchanged manager, detached ID zero node, registered private remainder, registry, borrowed task/scheduler views, and InsideCritical. Recombine detached ID plus private remainder into store_sem_zeroed_private. Recombine manager and registry into store_semaphore with semaphore_valid obtained from PreH11 (CrtosOSValid of nest_increment current), then into OSInvariant of that same state. StableContext from InsideCritical supplies manager/global equality. Use the heap lift sep equivalence in reverse; preserve the IRQ token and exact incremented scheduler view. No transition or new existential is needed."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_entail_wit_2_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreCreate_entail_wit_2_2_split_goal_1": "The negative-result guard PreH1 is retval < 0, while PreH2 = idmanager_min_free_id includes 0 <= retval. Unfold that pure definition and derive False by lia. Thus the entire antecedent is impossible and this split conclusion (including the spatial one) follows by ex falso; do not invent full-manager, retval=-1, private-object, or guarantee facts on a reachable branch. No witnesses or resource transformations are required.",
+            "proof_of__SemaphoreCreate_entail_wit_2_2_split_goal_2": "The negative-result guard PreH1 is retval < 0, while PreH2 = idmanager_min_free_id includes 0 <= retval. Unfold that pure definition and derive False by lia. Thus the entire antecedent is impossible and this split conclusion (including the spatial one) follows by ex falso; do not invent full-manager, retval=-1, private-object, or guarantee facts on a reachable branch. No witnesses or resource transformations are required.",
+            "proof_of__SemaphoreCreate_entail_wit_2_2_split_goal_3": "The negative-result guard PreH1 is retval < 0, while PreH2 = idmanager_min_free_id includes 0 <= retval. Unfold that pure definition and derive False by lia. Thus the entire antecedent is impossible and this split conclusion (including the spatial one) follows by ex falso; do not invent full-manager, retval=-1, private-object, or guarantee facts on a reachable branch. No witnesses or resource transformations are required.",
+            "proof_of__SemaphoreCreate_entail_wit_2_2_split_goal_spatial": "The negative-result guard PreH1 is retval < 0, while PreH2 = idmanager_min_free_id includes 0 <= retval. Unfold that pure definition and derive False by lia. Thus the entire antecedent is impossible and this split conclusion (including the spatial one) follows by ex falso; do not invent full-manager, retval=-1, private-object, or guarantee facts on a reachable branch. No witnesses or resource transformations are required."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. Reordering pattern: P owns InsideCritical, OSInvariant(nest_increment current), and the zeroed private object. Q adds only the existing id=-1, sem nonzero, IRQ, Rely, full-manager and restoration-guarantee premises and moves the same private object to the front. Introduce pure conjuncts and cancel the three spatial factors. There is no allocation, existential, or transition in this VC."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_6_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. Pure projection/reflexivity pattern: prove IRQ handler validity and the failed-branch restoration guarantee are PreH3 and PreH6. P also has C locals and SemaphoreInsideCritical at current and SemaphoreOSInvariant at nest_increment current; Q has only the stated pure conjunction. Extract explicit premises and split the conjunction; do not consume or reconstruct resources. No existential witnesses or new refinement transition."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. This definition is pure-VC -> auxiliary-VC. Introduce that implication premise, unfold the auxiliary, and establish its pure conjuncts directly: IRQ handler validity and the failed-branch restoration guarantee are PreH3 and PreH6. P and Q contain exactly SemaphoreInsideCritical at current and SemaphoreOSInvariant at nest_increment current; cancel these resources modulo separating associativity/commutativity. Retain all other named pure premises. No change of abstract state or existential instantiation is required."
+        }
+      ]
+    },
+    {
+      "id": "returns_and_unlock",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. P is OutsideCritical at dec(inc(publish sem id val_pre current_3)); Q has three result alternatives. Choose the successful third alternative with current_2=current_3 and p=sem. Copy sem nonzero, Rely, min_free_id and the direct publication guarantee from PreH1/3/4/5. Establish dec(inc(publish...)) = publish... by record equality: task and semaphore components reduce definitionally; PreH6 SemaphoreGuarantee gives equality of the restored scheduler to current_3, which is also the scheduler of publish. This avoids assuming an entry bound absent from this VC. Rewrite and cancel exactly the OutsideCritical resource, including caller stack/tokens and nested heap when present."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_return_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. P is OutsideCritical at dec(inc current_3). Choose the second (ID-full failure) result alternative with current=current_3 and return value -5. Copy Rely and idmanager_full from PreH4/5. Derive dec(inc current_3)=current_3 by record equality: task/semaphore fields are definitionally unchanged; PreH6 guarantee supplies full scheduler equality. No additional bound is needed or available. Rewrite and cancel the OutsideCritical resource; prove -5=-5 by reflexivity. Preserve the same caller IRQ stack and all nested invariant resources."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_return_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. Choose the first allocation-failure result alternative. The return equality is -5=-5 and P already is the exact OutsideCritical sg hs before required by Q. Prove reflexivity and cancel that resource. No existential current, Rely step, heap allocation, or IRQ transition is required."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_9_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. Pure projection/reflexivity pattern: prove IRQ handler validity and the published-state restoration guarantee are PreH2 and PreH6. P also has C locals and SemaphoreInsideCritical at current and SemaphoreOSInvariant at nest_increment(publish sem id val_pre current); Q has only the stated pure conjunction. Extract explicit premises and split the conjunction; do not consume or reconstruct resources. No existential witnesses or new refinement transition."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. This definition is pure-VC -> auxiliary-VC. Introduce that implication premise, unfold the auxiliary, and establish its pure conjuncts directly: IRQ handler validity and the published-state restoration guarantee are PreH2 and PreH6. P and Q contain exactly SemaphoreInsideCritical at current and SemaphoreOSInvariant at nest_increment(publish sem id val_pre current); cancel these resources modulo separating associativity/commutativity. Retain all other named pure premises. No change of abstract state or existential instantiation is required."
+        }
+      ]
+    },
+    {
+      "id": "entry_and_lock",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_3_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. Pure projection/reflexivity pattern: prove the entry nesting bound is PreH4; retval_2 = retval and retval <> 0 are explicit premises. P also has C locals and OSHeap(store_sem_zeroed_private retval) and SemaphoreOutsideCritical sg hs before; Q has only the stated pure conjunction. Extract explicit premises and split the conjunction; do not consume or reconstruct resources. No existential witnesses or new refinement transition."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_partial_solve_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. This definition is pure-VC -> auxiliary-VC. Introduce that implication premise, unfold the auxiliary, and establish its pure conjuncts directly: the entry nesting bound is PreH4; retval_2 = retval and retval <> 0 are explicit premises. P and Q contain exactly OSHeap(store_sem_zeroed_private retval) and SemaphoreOutsideCritical sg hs before; cancel these resources modulo separating associativity/commutativity. Retain all other named pure premises. Move outside protocol ahead of the zeroed private object."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The two conclusions are INT_MIN <= 0 and 0 <= INT_MAX. Reduce the imported signed 32-bit limits and discharge both closed inequalities. The antecedent locals and protocol/heap resources are unchanged and are used only as the domain of a pure assertion; no existential, list transformation, or transition is needed."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The two conclusions are INT_MIN <= 0 and 0 <= INT_MAX. Reduce the imported signed 32-bit limits and discharge both closed inequalities. The antecedent locals and protocol/heap resources are unchanged and are used only as the domain of a pure assertion; no existential, list transformation, or transition is needed."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The two conclusions are INT_MIN <= 0 and 0 <= INT_MAX. Reduce the imported signed 32-bit limits and discharge both closed inequalities. The antecedent locals and protocol/heap resources are unchanged and are used only as the domain of a pure assertion; no existential, list transformation, or transition is needed."
+        }
+      ]
+    },
+    {
+      "id": "allocation_safety",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The two conclusions are INT_MIN <= 0 and 0 <= INT_MAX. Reduce the imported signed 32-bit limits and discharge both closed inequalities. The antecedent locals and protocol/heap resources are unchanged and are used only as the domain of a pure assertion; no existential, list transformation, or transition is needed."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The two conclusions are INT_MIN <= 0 and 0 <= INT_MAX. Reduce the imported signed 32-bit limits and discharge both closed inequalities. The antecedent locals and protocol/heap resources are unchanged and are used only as the domain of a pure assertion; no existential, list transformation, or transition is needed."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The pure premises contain retval = 0 and retval <> 0; contradiction proves the False conclusion for every antecedent heap. No spatial conversion, existential, or state transition is needed."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The pure premises contain retval = 0 and retval <> 0; contradiction proves the False conclusion for every antecedent heap. No spatial conversion, existential, or state transition is needed."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The conclusion is the closed arithmetic fact 5 <> INT_MIN. Reduce the imported signed 32-bit limit and discharge arithmetically. Antecedent resources are irrelevant to this pure assertion; there are no existential witnesses or transitions."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The two conclusions are INT_MIN <= 5 and 5 <= INT_MAX. Reduce the imported signed 32-bit limits and discharge both closed inequalities. The antecedent locals and protocol/heap resources are unchanged and are used only as the domain of a pure assertion; no existential, list transformation, or transition is needed."
+        }
+      ]
+    },
+    {
+      "id": "manager_and_exit_safety",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The two conclusions are INT_MIN <= 0 and 0 <= INT_MAX. Reduce the imported signed 32-bit limits and discharge both closed inequalities. The antecedent locals and protocol/heap resources are unchanged and are used only as the domain of a pure assertion; no existential, list transformation, or transition is needed."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The two conclusions are INT_MIN <= 0 and 0 <= INT_MAX. Reduce the imported signed 32-bit limits and discharge both closed inequalities. The antecedent locals and protocol/heap resources are unchanged and are used only as the domain of a pure assertion; no existential, list transformation, or transition is needed."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The two conclusions are INT_MIN <= 0 and 0 <= INT_MAX. Reduce the imported signed 32-bit limits and discharge both closed inequalities. The antecedent locals and protocol/heap resources are unchanged and are used only as the domain of a pure assertion; no existential, list transformation, or transition is needed."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_15",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The guard retval >= 0 contradicts retval = -1. Derive False arithmetically; manager, detached node, registry, task/scheduler and IRQ resources need no conversion."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_16",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The conclusion is the closed arithmetic fact 5 <> INT_MIN. Reduce the imported signed 32-bit limit and discharge arithmetically. Antecedent resources are irrelevant to this pure assertion; there are no existential witnesses or transitions."
+        },
+        {
+          "name": "proof_of__SemaphoreCreate_safety_wit_17",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the named VC, introduce its quantified parameters, and use LLM_pre_process on the whole goal. The two conclusions are INT_MIN <= 5 and 5 <= INT_MAX. Reduce the imported signed 32-bit limits and discharge both closed inequalities. The antecedent locals and protocol/heap resources are unchanged and are used only as the domain of a pure assertion; no existential, list transformation, or transition is needed."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+#include "critical_views_strategy.h"
+
+// 持锁只读借用 running-task 槽；其余子不变量保持在原有 frame 中。
+id : 1
+priority : core(2)
+left : InsideCritical(?sg, ?st) at 0
+       os_inv(sg, st) at 1
+right : store(field_addr(?assign, Assign, os_running_task), PTR(struct TaskDescriptor), ?value) at 2
+check : infer(assign == Assign);
+action : left_erase(1);
+         right_erase(2);
+         left_add(get_ktask_descriptor_frame(sg, st));
+         right_add(value == st.os_assign.assignRunningTask);
+
+id : 2
+priority : post(2)
+left : InsideCritical(?sg, ?st) at 0
+       get_ktask_descriptor_frame(sg, st) at 1
+       store(field_addr(?assign, Assign, os_running_task), PTR(struct TaskDescriptor), ?value) at 2
+check : infer(assign == Assign);
+        infer(value == st.os_assign.assignRunningTask);
+action : left_erase(1);
+         left_erase(2);
+         left_add(os_inv(sg, st));
+

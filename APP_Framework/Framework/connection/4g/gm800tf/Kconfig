@@ -1,0 +1,21 @@
+config ADAPTER_4G_GM800TF
+        string "GM800TF adapter name"
+        default "gm800tf"
+
+if ADD_XIZI_FEATURES
+        config ADAPTER_GM800TF_DEV
+                string "GM800TF device path"
+                default "/dev/lte_dev1"
+endif
+
+if ADD_NUTTX_FEATURES
+        config ADAPTER_GM800TF_DEV
+                string "GM800TF device path"
+                default "/dev/ttyS8"
+endif
+
+if ADD_RTTHREAD_FEATURES
+        config ADAPTER_GM800TF_DEV
+                string "GM800TF device path"
+                default "/dev/usart8"
+endif

@@ -1,0 +1,137 @@
+{
+  "groups": [
+    {
+      "id": "insertion_result",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_InsertObj_return_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_InsertObj_return_wit_1_split_goal_spatial": "For mixed OSHeap/root-heap assertions use crtos_heap_lift_sep and crtos_heap_lift_entails plus unfolding of OSHeap, crtos_heap_state and primitive stores to transport the same concrete heap; OSHeap_ushort_eq is public. Do not assume the Local OSHeap_* lemmas are exported. Any additional carrier equality must be an inline assertion in this witness body, since no case lib exists. Let k=id mod hoffset sm, n=Build_IdNodeAbs id idnode_pre and new_bucket=n::bucket. Fold the id UShort and idnode_pre<>0 into store_idnode at link=idnode_pre+4. Use DLL.dllseg_shift_rev_contact_a to prefix n to the existing reverse-shifted segment, using the two updated next/prev cells. Combine its new first-prev=head cell with DLL.dllseg_shift_rev_to_dllseg, obtaining the tail pointer and head-prev resource; retain head-next=link and fold store_dll/store_idnodes. Derive tail nonzero by induction/list-last cases on the reconstructed nonempty dllseg and idnodes_nonzero of the new list (a pointer value cell alone does not imply nonzero); head and new-link nonzero are explicit. Apply store_idbuckets_replace to the unchanged except frame with k>=0 from positive hoffset. Prove idbuckets_ok for replace_Znth k new_bucket old_buckets as inline pure assertions: length unchanged; id is in range and absent from old ids by min_free_id/query=false; old permutation implies absence in every old bucket; extend idlist_ok and the selected idnodes_ok using idnode_pre<>0; preserve other buckets and bucket-index equations, adding id mod hoffset=k; prove concat/map permutation equals id::old_ids by the prefix/selected/suffix decomposition (commute the new singleton past prefix). Fold idmanager_link(idmanager_add before id), store_idmanager, and cancel the unchanged manager fields and already updated bitmap. No protocol-state transition is involved; only the abstract manager changes from allocated-unlinked to linked."
+          }
+        }
+      ]
+    },
+    {
+      "id": "manager_open",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_InsertObj_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "For mixed OSHeap/root-heap assertions use crtos_heap_lift_sep and crtos_heap_lift_entails plus unfolding of OSHeap, crtos_heap_state and primitive stores to transport the same concrete heap; OSHeap_ushort_eq is public. Do not assume the Local OSHeap_* lemmas are exported. Any additional carrier equality must be an inline assertion in this witness body, since no case lib exists. Choose the left whole-goal disjunct. Unfold allocated_unlinked and store_sem_id_detached. Expose min_free_id, idbuckets_ok and the four manager fields, updated bitmap, id value and two detached link cells. Derive 0<=id<=65535 from id UShort validity (or min-free-id and idmax field range); positive hoffset from idbuckets_ok and upper bound from its UShort cell. Forget previous/next contents to undef with their actual values as witnesses, frame all other resources, and reassemble the conjunction. No existential state change."
+        },
+        {
+          "name": "proof_of_InsertObj_entail_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "For mixed OSHeap/root-heap assertions use crtos_heap_lift_sep and crtos_heap_lift_entails plus unfolding of OSHeap, crtos_heap_state and primitive stores to transport the same concrete heap; OSHeap_ushort_eq is public. Do not assume the Local OSHeap_* lemmas are exported. Any additional carrier equality must be an inline assertion in this witness body, since no case lib exists. Set k=id mod hoffset sm and bucket=Znth k (idbuckets before) nil. From 0<hoffset and the length component of idbuckets_ok obtain 0<=k<Zlength buckets. Lift store_idbuckets_split, retain the except frame, and use store_idbucket_cases. For the uninitialized alternative choose the left disjunct with empty bucket and zero head fields; prove head<>0 from validity of head.node_prev at offset zero. For initialized DLL choose the right disjunct with its actual hn,hp and nonzero facts. Frame manager, bitmap, id and undef links unchanged. All other pure conjuncts are original premises or the reflexive computed-head equation."
+        }
+      ]
+    },
+    {
+      "id": "bucket_insert_ready",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of_InsertObj_entail_wit_3_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "For mixed OSHeap/root-heap assertions use crtos_heap_lift_sep and crtos_heap_lift_entails plus unfolding of OSHeap, crtos_heap_state and primitive stores to transport the same concrete heap; OSHeap_ushort_eq is public. Do not assume the Local OSHeap_* lemmas are exported. Any additional carrier equality must be an inline assertion in this witness body, since no case lib exists. Choose the first whole-goal disjunct, keeping idnode fields. Instantiate bucket=bucket_2=nil and successor=head. Obtain link=idnode_pre+4<>0 from the retained idnode UShort valid-address lower bound, which was lost by splitting. Use head<>0 and trivial idnodes_nonzero nil. The empty DLL.dllseg_shift_rev head head [] is pure equality plus emp; add it and cancel/reorder every existing resource, including the initialized self-loop head fields. Bucket observation comes from PreH3."
+        },
+        {
+          "name": "proof_of_InsertObj_entail_wit_3_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "For mixed OSHeap/root-heap assertions use crtos_heap_lift_sep and crtos_heap_lift_entails plus unfolding of OSHeap, crtos_heap_state and primitive stores to transport the same concrete heap; OSHeap_ushort_eq is public. Do not assume the Local OSHeap_* lemmas are exported. Any additional carrier equality must be an inline assertion in this witness body, since no case lib exists. Choose the first whole-goal disjunct and witnesses bucket=bucket_2, successor=hn. Retain idnode fields to derive idnode_pre+4<>0 from UShort address validity. Lift DLL.dllseg_to_dllseg_shift_rev using existing idnodes_dllseg hn head head hp bucket_2 and head.prev=hp; it yields hn.prev=head plus reverse-shifted segment. Cancel head.next=hn and unchanged manager, bitmap, id and except resources. All nonzero and bucket observation facts are explicit premises."
+        }
+      ]
+    },
+    {
+      "id": "entry_safety",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_InsertObj_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce premises and use the concrete INT_MIN/INT_MAX definitions to prove INT_MIN<=0<=INT_MAX. The spatial antecedent is unchanged and irrelevant to these closed arithmetic pure conclusions; use normal pure-entailment introduction."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce all variables and pure premises; the branch guard contradicts the existing nonzero premise (manager_pre=0 and manager_pre<>0). Eliminate False and close the entailment without transforming spatial resources."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce premises and use the concrete INT_MIN/INT_MAX definitions to prove INT_MIN<=0<=INT_MAX. The spatial antecedent is unchanged and irrelevant to these closed arithmetic pure conclusions; use normal pure-entailment introduction."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce premises and use the concrete INT_MIN/INT_MAX definitions to prove INT_MIN<=0<=INT_MAX. The spatial antecedent is unchanged and irrelevant to these closed arithmetic pure conclusions; use normal pure-entailment introduction."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce all variables and pure premises; the branch guard contradicts the existing nonzero premise (idnode_pre=0 and idnode_pre<>0). Eliminate False and close the entailment without transforming spatial resources."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce premises and use the concrete INT_MIN/INT_MAX definitions to prove INT_MIN<=0<=INT_MAX. The spatial antecedent is unchanged and irrelevant to these closed arithmetic pure conclusions; use normal pure-entailment introduction."
+        }
+      ]
+    },
+    {
+      "id": "bucket_safety",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_InsertObj_safety_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce explicit 0<=id and 0<hoffset sm bounds. They imply divisor<>0 and divisor<>-1, satisfying the division-overflow disjunction and nonzero divisor obligations. Frame/drop heap only as allowed by pure-entailment rules; no ownership transformation or witness is needed."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce premises and use the concrete INT_MIN/INT_MAX definitions to prove INT_MIN<=0<=INT_MAX. The spatial antecedent is unchanged and irrelevant to these closed arithmetic pure conclusions; use normal pure-entailment introduction."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce premises and use the concrete INT_MIN/INT_MAX definitions to prove INT_MIN<=0<=INT_MAX. The spatial antecedent is unchanged and irrelevant to these closed arithmetic pure conclusions; use normal pure-entailment introduction."
+        },
+        {
+          "name": "proof_of_InsertObj_safety_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce all variables and pure premises; the branch guard contradicts the existing nonzero premise (hp=0 and hp<>0). Eliminate False and close the entailment without transforming spatial resources."
+        }
+      ]
+    },
+    {
+      "id": "call_preparation",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_InsertObj_partial_solve_wit_1_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce variables and premises. Prove head=head by reflexivity and head<>0 by PreH2. No existential or heap transformation is needed."
+        },
+        {
+          "name": "proof_of_InsertObj_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the implication from the pure witness to the auxiliary entailment; introduce that assumption and all variables/premises. Every consequent pure fact is reflexive or already explicit. Replace the two zero-valued head fields by undef using witness 0 for each; reorder/cancel the identical manager fields, bitmap, idnode cells, except frame. This establishes the call preparation without changing abstract state."
+        },
+        {
+          "name": "proof_of_InsertObj_partial_solve_wit_2_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce variables and premises. Project head<>0, idnode link<>0 and successor<>0 directly from PreH2, PreH4 and PreH3. No existential or heap transformation is needed."
+        },
+        {
+          "name": "proof_of_InsertObj_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the implication from the pure witness to the auxiliary entailment; introduce that assumption and all variables/premises. Every consequent pure fact is reflexive or already explicit. reorder/cancel the identical manager fields, bitmap, idnode cells, except frame and reverse-shifted segment. This establishes the call preparation without changing abstract state."
+        }
+      ]
+    }
+  ]
+}

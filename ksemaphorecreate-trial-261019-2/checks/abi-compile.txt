@@ -1,0 +1,52 @@
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+Target evidence: GCC -m32 ILP32; no installed ARM cross compiler was located on PATH.
+COMMAND: gcc -m32 -std=c11 -ffreestanding -Wall -Werror -I/home/xinra/crtos/ksemaphorecreate-trial-261019-2/checks/abi -I/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include -c /home/xinra/crtos/ksemaphorecreate-trial-261019-2/checks/abi_original.c -o /home/xinra/crtos/ksemaphorecreate-trial-261019-2/checks/abi/abi_original.o
+
+
+EXIT: 0
+COMMAND: gcc -m32 -std=c11 -ffreestanding -Wall -Werror -I/home/xinra/crtos/ksemaphorecreate-trial-261019-2/checks/abi -I/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include -c /home/xinra/crtos/ksemaphorecreate-trial-261019-2/checks/abi_slice.c -o /home/xinra/crtos/ksemaphorecreate-trial-261019-2/checks/abi/abi_slice.o
+
+
+EXIT: 0
+COMMAND: gcc -m32 -std=c11 -ffreestanding -Wall -Werror -fsyntax-only /home/xinra/crtos/ksemaphorecreate-trial-261019-2/annotated_C/src/AllocId.c
+
+
+EXIT: 0
+COMMAND: gcc -m32 -std=c11 -ffreestanding -Wall -Werror -fsyntax-only /home/xinra/crtos/ksemaphorecreate-trial-261019-2/annotated_C/src/CriticalAreaLock.c
+
+
+EXIT: 0
+COMMAND: gcc -m32 -std=c11 -ffreestanding -Wall -Werror -fsyntax-only /home/xinra/crtos/ksemaphorecreate-trial-261019-2/annotated_C/src/CriticalAreaUnLock.c
+
+
+EXIT: 0
+COMMAND: gcc -m32 -std=c11 -ffreestanding -Wall -Werror -fsyntax-only /home/xinra/crtos/ksemaphorecreate-trial-261019-2/annotated_C/src/DoubleLinkListInsertNodeAfter.c
+
+
+EXIT: 0
+COMMAND: gcc -m32 -std=c11 -ffreestanding -Wall -Werror -fsyntax-only /home/xinra/crtos/ksemaphorecreate-trial-261019-2/annotated_C/src/IdInsertObj.c
+
+
+EXIT: 0
+COMMAND: gcc -m32 -std=c11 -ffreestanding -Wall -Werror -fsyntax-only /home/xinra/crtos/ksemaphorecreate-trial-261019-2/annotated_C/src/InitDoubleLinkList.c
+
+
+EXIT: 0
+COMMAND: gcc -m32 -std=c11 -ffreestanding -Wall -Werror -fsyntax-only /home/xinra/crtos/ksemaphorecreate-trial-261019-2/annotated_C/src/InsertObj.c
+
+
+EXIT: 0
+COMMAND: gcc -m32 -std=c11 -ffreestanding -Wall -Werror -fsyntax-only /home/xinra/crtos/ksemaphorecreate-trial-261019-2/annotated_C/src/KSemaphoreCreate.c
+
+
+EXIT: 0
+COMMAND: gcc -m32 -std=c11 -ffreestanding -Wall -Werror -fsyntax-only /home/xinra/crtos/ksemaphorecreate-trial-261019-2/annotated_C/src/_SemaphoreCreate.c
+
+
+EXIT: 0
+PASS: original-header ABI, slice ABI, all nine C slices.

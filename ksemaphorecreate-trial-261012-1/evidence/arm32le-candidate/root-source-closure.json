@@ -1,0 +1,61 @@
+{
+  "format": "explicit-root-source-closure-v1",
+  "build_order": [
+    "KTaskPure",
+    "dll_abs",
+    "idnode_abs",
+    "CrtosGlobState",
+    "TaskProtocolSTS",
+    "CrtosRules",
+    "dll",
+    "idnode",
+    "KTaskSchedMember"
+  ],
+  "files": [
+    {
+      "source": "/home/xinra/crtos/lib/KTaskPure.v",
+      "source_sha256": "c1a158838005371f2e5886aa026b006d01c264a6552af88032b6af299ee4f47b",
+      "candidate": "shared-candidate/arm32le/KTaskPure.v"
+    },
+    {
+      "source": "/home/xinra/crtos/lib/dll_abs.v",
+      "source_sha256": "844f770c865704b68281c07224e99e8366f7886b4650848038de273250496d6f",
+      "candidate": "shared-candidate/arm32le/dll_abs.v"
+    },
+    {
+      "source": "/home/xinra/crtos/lib/idnode_abs.v",
+      "source_sha256": "0c93b588560bf72bfd352dd5129b578148f5a01264679ea1ddc3ad3ec222467a",
+      "candidate": "shared-candidate/arm32le/idnode_abs.v"
+    },
+    {
+      "source": "/home/xinra/crtos/lib/CrtosGlobState.v",
+      "source_sha256": "ae8d05137b1db9f4f51d88c3608ee63ddf1065a73129652135e0b33afd55aeed",
+      "candidate": "shared-candidate/arm32le/CrtosGlobState.v"
+    },
+    {
+      "source": "/home/xinra/crtos/lib/TaskProtocolSTS.v",
+      "source_sha256": "04ac5f561cb407a6479f08ac9ce8f911e568a6b1ae95474244e682cfda440f77",
+      "candidate": "shared-candidate/arm32le/TaskProtocolSTS.v"
+    },
+    {
+      "source": "/home/xinra/crtos/lib/CrtosRules.v",
+      "source_sha256": "0511780ac40c58e470a5f9f6aba89840d9809730f2649e9e917c1245b95726c3",
+      "candidate": "shared-candidate/arm32le/CrtosRules.v"
+    },
+    {
+      "source": "/home/xinra/crtos/lib/dll.v",
+      "source_sha256": "63e4b4fd6457a9a8f815f3ba347918bdd43172a5ebdd0754c4c5a8853a1268ca",
+      "candidate": "shared-candidate/arm32le/dll.v"
+    },
+    {
+      "source": "/home/xinra/crtos/lib/idnode.v",
+      "source_sha256": "3b2b579226c7ca00890c80fbc3a7b9804e89428bd18f434446c9e1d50244757a",
+      "candidate": "shared-candidate/arm32le/idnode.v"
+    },
+    {
+      "source": "/home/xinra/crtos/lib/KTaskSchedMember.v",
+      "source_sha256": "731129e7150d854ba1233b94a257921e0672a9ff38b53eed72932d15d02460ae",
+      "candidate": "shared-candidate/arm32le/KTaskSchedMember.v"
+    }
+  ]
+}

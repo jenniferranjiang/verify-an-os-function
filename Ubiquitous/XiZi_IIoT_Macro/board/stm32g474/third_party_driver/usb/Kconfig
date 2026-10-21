@@ -1,0 +1,15 @@
+menu "USB Configuration"
+
+config USB_BUS_NAME
+    string "USB Bus Name"
+    default "usb"
+
+config USB_DRIVER_NAME
+    string "USB Driver Name"
+    default "usb_drv"
+
+config USB_DEVICE_NAME
+    string "USB Device Name"
+    default "usb_dev"
+
+endmenu

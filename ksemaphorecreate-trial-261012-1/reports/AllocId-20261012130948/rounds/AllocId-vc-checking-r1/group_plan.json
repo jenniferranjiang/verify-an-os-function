@@ -1,0 +1,308 @@
+{
+  "groups": [
+    {
+      "id": "allocate_result",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern ALLOCATE (high risk, single independent final-result group): select the success disjunct. Let b=Znth index bytes 0 and destruct allocid_entry_scan_inv to obtain offset, id=index*8+offset, entry=shiftr b offset, lower bits true, and 0<=offset<=8. From byte range, b<>255 and byte_eq_255_of_low_bits derive offset<8. Use land entry 1=0 and shiftr/testbit to prove bit offset is false; div8_add_offset/mod8_add_offset identify id/8=index and id mod 8=offset (normalize C quot/rem with id>=0). Earlier IDs are set by splitting their quotient before index versus in the same byte below offset, using allocid_index_scan_inv, Ztestbit_255_low and id_map_bytes_ok_query_eq. This proves idmanager_min_free_id. Instantiate store_id_map in store_idmanager_allocated_unlinked with the displayed replace_Znth index updated_byte bytes. Normalize unsigned_last_nbits of b and the one-bit shift using byte range and 0<=offset<8. Prove id_map_bytes_ok for idlist_add id old_ids: length by replacement, Forall byte bounds by OR bit bounds, list validity/NoDup by id being free, and each membership/testbit equation by splitting query=id, different byte, or same byte/different bit (same_div8_mod8_neq and Ztestbit_1_neq0). Use proof-local assertions, no new helper declarations. Fold OSHeap through the transport definitions/crtos_heap_lift_sep, instantiate the updated bytes, and cancel unchanged id_max/hoffset/id_map/htable fields and original bucket heap. Buckets retain old idlist validity because the allocated bit is deliberately unlinked; no node ownership is manufactured."
+        }
+      ]
+    },
+    {
+      "id": "entry_scan",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_entail_wit_5",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_entail_wit_5_split_goal_1": "Pattern ENTRY_SCAN: use id_map_bytes_ok_Znth_range with the loop index bounds for 0<=b<=255. Unfold allocid_entry_scan_inv; instantiate offset=0 and id=index*8. shiftr b 0=b, bounds are linear, and the quantified lower-bit range is empty. Pure target, no resource updates."
+          }
+        },
+        {
+          "name": "proof_of_AllocId_entail_wit_6",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_entail_wit_6_split_goal_1": "Pattern ENTRY_SCAN (high risk): destruct old invariant and instantiate offset+1. The old byte range plus lower-bit clause and b<>255 exclude offset=8 via byte_eq_255_of_low_bits, so offset+1<=8. From entry=shiftr b offset and land entry 1<>0 derive testbit b offset=true; append this bit to the old lower-bit prefix. Use shiftr composition to identify shiftr entry 1=shiftr b (offset+1), prove this is in 0..255, and remove unsigned_last_nbits at width 8. Prove updated id range by lia. Only a pure target; establish needed facts as proof-local assertions, no new helper."
+          }
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_22",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_safety_wit_22_split_goal_1": "Pattern BOUNDS: unfold entry-scan invariant for id<=index*8+8; byte validity bounds idmax<=65535 and end<=8192. With index<end derive id+1<=65537<INT_MAX. No additional loop premise or heap fact needed.",
+            "proof_of_AllocId_safety_wit_22_split_goal_2": "Pattern BOUNDS: entry-scan invariant gives index*8<=id; index>=0 yields id+1>=1>=INT_MIN. Heap is frame."
+          }
+        }
+      ]
+    },
+    {
+      "id": "full_results",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_return_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern FULL: choose the -1/full disjunct. For any 0<=j<idmax, use id>=idmax and entry-scan invariant to show j<id=index*8+offset. If j/8<index, index-scan invariant gives byte=255 and Ztestbit_255_low gives query=true. Otherwise j is in the selected byte and j mod 8<offset, so the lower-bit clause gives query=true; use id_map_bytes_ok_query_eq. This proves idmanager_full without requiring padding bits set. Fold store_idmanager with the original bytes and idbuckets_ok, transporting the unchanged six heap components under OSHeap using definitions/crtos_heap_lift_sep. No bitmap update or node transfer."
+        },
+        {
+          "name": "proof_of_AllocId_return_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern FULL: choose the -1/full disjunct. For every valid ID j, id_div8_lt_quot_ceil8 and index=end show j/8<index, so allocid_index_scan_inv gives byte 255. Apply Ztestbit_255_low and id_map_bytes_ok_query_eq to establish idmanager_full, including vacuous idmax=0. Fold OSHeap(store_idmanager) with original bytes; field values, bitmap and buckets are unchanged, and quot/div length equality follows from idmax nonnegativity."
+        }
+      ]
+    },
+    {
+      "id": "manager_transport",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern FRAME: preserve the single OSHeap(store_idmanager sm before manager_pre), inject the given nonzero fact and four reflexive zero equalities; no existential, state update or ownership transfer."
+        },
+        {
+          "name": "proof_of_AllocId_entail_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern TRANSPORT: choose the first disjunct of the whole generated VC. Unfold store_idmanager/store_id_map and OSHeap transport, move separating conjunction, existentials and pure facts through crtos_heap_lift. Instantiate RHS bytes by the bytes extracted from store_id_map. Transport ushort/pointer/uchar-array atoms from the Task carrier to the current CRTOS carrier; OSHeap_ushort_eq is public, while other transport equalities may be established as proof-local assertions directly from the definitions and crtos_heap_lift_sep (do not rely on Local lemmas from SemaphoreCriticalViews). Normalize quot/div using 0 <= idmax from id_map_bytes_ok, preserve the same bucket heap, and cancel all six components. The extracted byte/bucket validity facts and the entry zero/nonzero hypotheses discharge RHS pure facts; before and sm do not change."
+        }
+      ]
+    },
+    {
+      "id": "index_scan",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_entail_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_entail_wit_3_split_goal_1": "Pattern INDEX_SCAN: this target is pure; unfold allocid_index_scan_inv at index=0. Nonnegativity is immediate and no integer i satisfies 0<=i<0. No spatial transformation.",
+            "proof_of_AllocId_entail_wit_3_split_goal_2": "Pattern BOUNDS: this target is pure; id_map_bytes_ok supplies idmax>=0. Positive-divisor/nonnegative-numerator facts prove 0<=(idmax+7) quot 8; no heap required."
+          }
+        },
+        {
+          "name": "proof_of_AllocId_entail_wit_4",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_entail_wit_4_split_goal_1": "Pattern INDEX_SCAN: unfold allocid_index_scan_inv. index>=0 gives nonnegative index+1; any 0<=i<index+1 is either i<index, using old invariant, or i=index, using Znth index bytes 0=255. Pure target only."
+          }
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_9",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_safety_wit_9_split_goal_1": "Pattern BOUNDS: expose the pure upper bound, extract idmax<=65535 from id_map_bytes_ok, normalize INT_MAX and use lia; local/manager/bitmap/bucket resources are frame.",
+            "proof_of_AllocId_safety_wit_9_split_goal_2": "Pattern BOUNDS: extract 0<=idmax from id_map_bytes_ok and prove INT_MIN<=idmax+7 by lia; no resource conversion or existential."
+          }
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern BOUNDS: extract 0 <= idmax <= 65535 from id_map_bytes_ok. Convert (idmax+7) quot 8 to div using nonnegativity, derive end <= 8192. Together with 0 <= index < end, prove both INT bounds of index+1. Spatial locals/fields/bitmap/buckets carry no needed additional premise."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_19",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_safety_wit_19_split_goal_1": "Pattern BOUNDS: from id_map_bytes_ok obtain 0<=idmax<=65535, normalize quot/div and bound end<=8192. With index<end derive index*8<=65528<=INT_MAX. All spatial resources are frame.",
+            "proof_of_AllocId_safety_wit_19_split_goal_2": "Pattern BOUNDS: index>=0 gives index*8>=0>=INT_MIN; retain the spatial frame."
+          }
+        }
+      ]
+    },
+    {
+      "id": "array_access",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern ARRAY: use given 0 <= index < end and end=(idmax+7) quot 8 to split UCharArray.full at index into its Znth cell and missing_i segment. Reintroduce all existing pure facts, and cancel id_max/hoffset/id_map/htable fields plus OSHeap bucket frame. The chosen cell value is Znth index bytes 0; no abstract-state change. Keep the cell initialized for the read."
+        },
+        {
+          "name": "proof_of_AllocId_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern ARRAY: use given 0 <= index < end and end=(idmax+7) quot 8 to split UCharArray.full at index into its Znth cell and missing_i segment. Reintroduce all existing pure facts, and cancel id_max/hoffset/id_map/htable fields plus OSHeap bucket frame. The chosen cell value is Znth index bytes 0; no abstract-state change. Keep the cell initialized for the read."
+        },
+        {
+          "name": "proof_of_AllocId_partial_solve_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern ARRAY: use given 0 <= index < end and end=(idmax+7) quot 8 to split UCharArray.full at index into its Znth cell and missing_i segment. Reintroduce all existing pure facts, and cancel id_max/hoffset/id_map/htable fields plus OSHeap bucket frame. The chosen cell value is Znth index bytes 0; no abstract-state change. Keep the cell initialized for the read."
+        },
+        {
+          "name": "proof_of_AllocId_partial_solve_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern ARRAY: use given 0 <= index < end and end=(idmax+7) quot 8 to split UCharArray.full at index into its Znth cell and missing_i segment. Reintroduce all existing pure facts, and cancel id_max/hoffset/id_map/htable fields plus OSHeap bucket frame. The chosen cell value is Znth index bytes 0; no abstract-state change. Then weaken this initialized cell to the uninitialized cell required for the write, preserving missing_i."
+        }
+      ]
+    },
+    {
+      "id": "mask_safety",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_safety_wit_27",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_AllocId_safety_wit_27_split_goal_1": "Pattern MASK: use 0<=id rem 8<8 (id>=0 from entry-scan invariant), reduce the eight possible remainders if needed, and compute signed_last_nbits of 1*2^r at width 32. The maximum is 128, hence <=INT_MAX. Spatial resources unchanged.",
+            "proof_of_AllocId_safety_wit_27_split_goal_2": "Pattern MASK: the same eight remainder cases make the signed 32-bit result positive, hence >=INT_MIN. No witness or resource transformation.",
+            "proof_of_AllocId_safety_wit_27_split_goal_3": "Pattern MASK: derive 0<=id from 0<=index and entry-scan lower bound, use C remainder bounds with positive divisor 8, then lia to show id rem 8<=31; heap is frame.",
+            "proof_of_AllocId_safety_wit_27_split_goal_4": "Pattern MASK: use id>=0 from entry-scan invariant and positive divisor 8 to prove C remainder nonnegative; heap is frame."
+          }
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_23",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: prove the UChar shift-count facts 0 <= 1 <= 7, independently of entry and id; spatial frame is unchanged."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_28",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: use 8 <> -1 and 8 <> 0 for signed remainder safety; no bound on id needed for these two conditions. Heap frame unchanged."
+        }
+      ]
+    },
+    {
+      "id": "initial_constants",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONTRADICTION: manager_pre = 0 and manager_pre <> 0 contradict directly. Eliminate this pure contradiction before using any spatial resources; target is pure False."
+        }
+      ]
+    },
+    {
+      "id": "outer_constants",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_safety_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: the divisor 8 is nonzero and is not -1, so select the right disjunct of the division-overflow side condition; frame all heap resources."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_12",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        }
+      ]
+    },
+    {
+      "id": "exit_constants",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_safety_wit_15",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONTRADICTION: index >= end, index <= end and index <> end contradict by lia; all local/manager/bitmap/bucket resources are merely frame."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_16",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONTRADICTION: index = end and index < end contradict; conclude pure False with unchanged spatial frame."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_17",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_18",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_25",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_26",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        }
+      ]
+    },
+    {
+      "id": "inner_constants",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_AllocId_safety_wit_20",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_21",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_24",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_29",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        },
+        {
+          "name": "proof_of_AllocId_safety_wit_30",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern CONST: introduce quantified values and pure hypotheses, use LLM_pre_process to expose the pure target; the local cells, manager fields, bitmap and bucket heap are irrelevant to the closed integer fact. Normalize INT_MIN/INT_MAX and discharge the displayed constants with lia; no existential or state transition."
+        }
+      ]
+    }
+  ]
+}

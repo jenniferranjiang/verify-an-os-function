@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "exit_code": 0,
+  "elapsed_seconds": 703.4324010740002,
+  "explicit_roots": 30,
+  "local_modules": 57,
+  "recursive": true,
+  "admit_or_norec": false,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "28b83cf49c8557ec63c6df3e60a03232282aa21cb523fadd207aa10185803080"
+}

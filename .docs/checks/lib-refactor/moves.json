@@ -1,0 +1,522 @@
+[
+  {
+    "symbol": "ID_MAX_NUM",
+    "destination": "CrtosConfig.v",
+    "original_block_sha256": "50901b6f651364cbf4e820ac47ff1b631638269a69c5421a317d6cfefc8df37c"
+  },
+  {
+    "symbol": "BUCKET_NUM",
+    "destination": "CrtosConfig.v",
+    "original_block_sha256": "e6218826fae975b8f43b6c0de58e97f14a0dd9c8962b26cd3cdc526ce470ff03"
+  },
+  {
+    "symbol": "PRIORITY_MAX",
+    "destination": "CrtosConfig.v",
+    "original_block_sha256": "da98104ae17296e6b8fe5dd9cf5d448e1073ade4971f05573eb48db5b0367349"
+  },
+  {
+    "symbol": "CORE_COUNT",
+    "destination": "CrtosConfig.v",
+    "original_block_sha256": "4e46823ad8257ae8e41f46035d6f93ecdcdb5ce2872c8853d9c0430d9a8580c4"
+  },
+  {
+    "symbol": "IRQ_COUNT",
+    "destination": "CrtosConfig.v",
+    "original_block_sha256": "4544855f3b094803fd24cbc8e0929a6d3e73fb9df1768c2fd54912470fae8b80"
+  },
+  {
+    "symbol": "TaskDoneAbs",
+    "destination": "TaskState.v",
+    "original_block_sha256": "aed4002ef388dd92374a85a7fb12e42d4c06a4ff4ba01791b2cac5922a11b536"
+  },
+  {
+    "symbol": "TaskDescriptorAbs",
+    "destination": "TaskState.v",
+    "original_block_sha256": "825f3d0705582bd6bc7fc42dee8185432435c192647a46531a3201f6daf223bd"
+  },
+  {
+    "symbol": "update_sched_member",
+    "destination": "TaskState.v",
+    "original_block_sha256": "58827cc86010658d42b4cb3cc678928f0262146a3db02c9a92db04c802f6e7fe"
+  },
+  {
+    "symbol": "RolePhase",
+    "destination": "TaskState.v",
+    "original_block_sha256": "cd66d1e2242f7671cd273606d0d745c816330bf913f356f2e98229afc72dbee3"
+  },
+  {
+    "symbol": "RoleSlotAbs",
+    "destination": "TaskState.v",
+    "original_block_sha256": "0edf55cec3b1be1ecdeb28465ccf59e5016ba16a07d8d9501ae4ccefc35d926a"
+  },
+  {
+    "symbol": "ZombieQueueAbs",
+    "destination": "TaskState.v",
+    "original_block_sha256": "016013bcf1f1a1735bb503ee196d53311cbd5bdd10e8442e1f33635c2b2ef369"
+  },
+  {
+    "symbol": "TaskStable",
+    "destination": "TaskState.v",
+    "original_block_sha256": "ef152a5da58cd0cf90a3d051886c5d0de8adfd6d42597a9e8dfe7eabb255263c"
+  },
+  {
+    "symbol": "TaskState",
+    "destination": "TaskState.v",
+    "original_block_sha256": "998b0018b8e641ce96ddac7dbd4a9afdb73e3af52a5034ad5cb2c5746b0d5461"
+  },
+  {
+    "symbol": "task_context",
+    "destination": "TaskState.v",
+    "original_block_sha256": "3e939da772eae567b018ed4b37b7a949ed3651cbbf285934334ac4400b2992ea"
+  },
+  {
+    "symbol": "task_link_node",
+    "destination": "TaskState.v",
+    "original_block_sha256": "ed9a1dd7739c3662d19c4d462276ff6a923af4daba0549afef22fa58c0f7624f"
+  },
+  {
+    "symbol": "task_link_nodes",
+    "destination": "TaskState.v",
+    "original_block_sha256": "63b6aa3ca70ab2521d2fc1624ce7bb5e5dc8e2b31951a179f4af5a6fcbce0e37"
+  },
+  {
+    "symbol": "update_task_desc_map",
+    "destination": "TaskState.v",
+    "original_block_sha256": "532710ca43dbe4d90e042803fdd885d01f0727e0068fc7a56e3187b96bf836a0"
+  },
+  {
+    "symbol": "sched_link_of",
+    "destination": "TaskState.v",
+    "original_block_sha256": "2030269667782d0f6f5c2b69e6ddc0acb4b6bc1262c3374b3b039268e7a33183"
+  },
+  {
+    "symbol": "zombie_nodes",
+    "destination": "TaskState.v",
+    "original_block_sha256": "5ed8e33c37000d713d036b5863a551cec93f076f3e1da81af2746e0b7e96e34b"
+  },
+  {
+    "symbol": "task_context_idmanager_nonnull",
+    "destination": "TaskState.v",
+    "original_block_sha256": "860457b6ae4c322438c38dbbf05d4069194bc945012653d4baa95eeed21c7613"
+  },
+  {
+    "symbol": "OsAssignReadyVectorAbs",
+    "destination": "AssignState.v",
+    "original_block_sha256": "bd2acfcbb0991bbc771fb83f54dec585935a189ce4e09ee514aac90f2ef208e7"
+  },
+  {
+    "symbol": "PriorityReadyVectorDoneAbs",
+    "destination": "AssignState.v",
+    "original_block_sha256": "774679ba3e70dae80c42e7af9a22afae66848952c1fd47d87da86be13e82718e"
+  },
+  {
+    "symbol": "VarAssignAbs",
+    "destination": "AssignState.v",
+    "original_block_sha256": "8c0cdfad6545baf1211508b0ccbddc70debb8f856e6dd33c4597085f006621d0"
+  },
+  {
+    "symbol": "AssignStable",
+    "destination": "AssignState.v",
+    "original_block_sha256": "a5c02923e6e62c6e64ce20ea7fd9c671f0383d4c308db4e942820277a638ffbd"
+  },
+  {
+    "symbol": "assign_context",
+    "destination": "AssignState.v",
+    "original_block_sha256": "3ecfcf0e54e72f6488ad879ce3ebde1993f0f32c180d0fc25b20bc53049d25e7"
+  },
+  {
+    "symbol": "empty_os_assign_ready_vector",
+    "destination": "AssignState.v",
+    "original_block_sha256": "95263dac6545922dbfa849b8d36de072e826f4aea89c4d4465a7bc6600ed5dd1"
+  },
+  {
+    "symbol": "os_ready_nodes",
+    "destination": "AssignState.v",
+    "original_block_sha256": "31070f62db44c0dffc7777b4aae1680e9dc65a7090274d3ff7942afae459058e"
+  },
+  {
+    "symbol": "ready_task_node",
+    "destination": "AssignState.v",
+    "original_block_sha256": "cde875d7efe65c81dc84d427bbd623d093114f195343936ca73dac17aad395cf"
+  },
+  {
+    "symbol": "ready_node_task_desc",
+    "destination": "AssignState.v",
+    "original_block_sha256": "9e0fb94e273746fc9a43e4d6f3a95b9fdf2c866fb95380e97bfad52da26207ec"
+  },
+  {
+    "symbol": "ready_node_at_priority_ok",
+    "destination": "AssignState.v",
+    "original_block_sha256": "009b273a235c0041629716291bd6e72bc6425cbfdda000e80fcfa199bb129f60"
+  },
+  {
+    "symbol": "priority_ready_buckets_task_ok",
+    "destination": "AssignState.v",
+    "original_block_sha256": "d4dece372002d9575c1c9a24ecd67d10b67a332d6ccc638078bd03499943ee53"
+  },
+  {
+    "symbol": "priority_ready_buckets_ok",
+    "destination": "AssignState.v",
+    "original_block_sha256": "956e88e39af268fba97c4b6f4f1312175fb80ce0c76500472afacb167f16144c"
+  },
+  {
+    "symbol": "priority_ready_group_ok",
+    "destination": "AssignState.v",
+    "original_block_sha256": "7049c92f007bd06318885d19e62893d6d4f904c190150526811fd9636196c827"
+  },
+  {
+    "symbol": "highest_ready_prio_ok",
+    "destination": "AssignState.v",
+    "original_block_sha256": "909367ddbc902992dcca29184afd1a2c467b7eae2e717131d4330c78a1827963"
+  },
+  {
+    "symbol": "os_assign_ready_vector_ok",
+    "destination": "AssignState.v",
+    "original_block_sha256": "d0e55fbb4390dde0137472ade021ccd22bdadc2d30a883722e9564fbab4f84fe"
+  },
+  {
+    "symbol": "assign_world_wf",
+    "destination": "AssignState.v",
+    "original_block_sha256": "e75c94188887bbda1a92777857a5a1b99f22838c735f338fe51835c603d0ea34"
+  },
+  {
+    "symbol": "DelayState",
+    "destination": "DelayState.v",
+    "original_block_sha256": "98178ba895896484bc52d6a4fc3cba89042ae0242ce5023d12775c1086e515ee"
+  },
+  {
+    "symbol": "delay_world_wf",
+    "destination": "DelayState.v",
+    "original_block_sha256": "52fa0289e6e86b97b1fda71e2a2bbe2dd8d506c70c47a0de8819d277adaf57cb"
+  },
+  {
+    "symbol": "MutexAbs",
+    "destination": "MutexState.v",
+    "original_block_sha256": "7750f901734bd022bc43b4c6a58f59639f02fd9c15762060648ff0a2d9066972"
+  },
+  {
+    "symbol": "MutexDoneAbs",
+    "destination": "MutexState.v",
+    "original_block_sha256": "20acf6712190dc252b3b8806760cb42a1dca6dc931b7c30a7e51d2666e8c1883"
+  },
+  {
+    "symbol": "MutexStable",
+    "destination": "MutexState.v",
+    "original_block_sha256": "38db6a1924f5d7bfd667da3f16b334946e131c9d06cab99faa3dc6fe33283b3a"
+  },
+  {
+    "symbol": "MutexState",
+    "destination": "MutexState.v",
+    "original_block_sha256": "ca56b4d211c7daf8bd9defd034f52c6e07b25691d585e3ad9b9b3c8dda137352"
+  },
+  {
+    "symbol": "mutex_context",
+    "destination": "MutexState.v",
+    "original_block_sha256": "ab997e095abec145bf7dee49987bf75335de4c374ef96829c27b4711f1ae713b"
+  },
+  {
+    "symbol": "EventAbs",
+    "destination": "EventState.v",
+    "original_block_sha256": "eef8c067d9772fbfb1856bf0efe67ba4f2e317e9f845287e95c3495a6c8fde27"
+  },
+  {
+    "symbol": "EventDoneAbs",
+    "destination": "EventState.v",
+    "original_block_sha256": "00581fda6348d02783d27c74bf394b3b7acaaae4ecf6011197a822d561e47778"
+  },
+  {
+    "symbol": "EventStable",
+    "destination": "EventState.v",
+    "original_block_sha256": "70ccf34cffb501986c4fb8a48f956ec6a0ebf13000b0653ed9404b832600e12d"
+  },
+  {
+    "symbol": "EventState",
+    "destination": "EventState.v",
+    "original_block_sha256": "eebb94afaac0917bfa3c515620edcf356844ceeae6f592578a5fda241bd8f124"
+  },
+  {
+    "symbol": "event_context",
+    "destination": "EventState.v",
+    "original_block_sha256": "a61274edab3fbb8ad4435a40b23262b16c422655cd380721257bb3feb8d1780e"
+  },
+  {
+    "symbol": "MsgQueueAbs",
+    "destination": "MsgQueueState.v",
+    "original_block_sha256": "535d2999151334ac61dfd3e0e3478c584de26ccec8ec0bc1514ecaca322b33b7"
+  },
+  {
+    "symbol": "MsgQueueDoneAbs",
+    "destination": "MsgQueueState.v",
+    "original_block_sha256": "b94f11c72ff5224c4ddce675c0b8e2ce78bbf0c0a59853e55581e7f56e6af62c"
+  },
+  {
+    "symbol": "MsgQueueStable",
+    "destination": "MsgQueueState.v",
+    "original_block_sha256": "749d094875e07625439beac399e225aefe20e1a7bddb7744df446584b4583c80"
+  },
+  {
+    "symbol": "MsgQueueState",
+    "destination": "MsgQueueState.v",
+    "original_block_sha256": "bacbdb304f67f49ce21b33336e86c96ead4a982e5bdd4e58050bdefe82c9f09a"
+  },
+  {
+    "symbol": "msgqueue_context",
+    "destination": "MsgQueueState.v",
+    "original_block_sha256": "0aab2f19a7006730dbd561fdf64d8c8af21dbe7b3087e2d5ec011613a48f6206"
+  },
+  {
+    "symbol": "IrqDescAbs",
+    "destination": "IsrState.v",
+    "original_block_sha256": "a198107d6522127296b437f449a8e18472aefae38ab27799584d93d6f489a911"
+  },
+  {
+    "symbol": "IsrDoneAbs",
+    "destination": "IsrState.v",
+    "original_block_sha256": "24856a58b164707b27259aa83d8cbdcec3825e36030901bacaa6309a7ef6bb3a"
+  },
+  {
+    "symbol": "IsrStable",
+    "destination": "IsrState.v",
+    "original_block_sha256": "a69a9cb5fb615717087b29de721349d592bd845aa1d0c727d1c7621c4b1ca200"
+  },
+  {
+    "symbol": "IsrAbs",
+    "destination": "IsrState.v",
+    "original_block_sha256": "b88360f2986a6b99f7b7cba52a05b56b055e9c330b6cd65a6349dc72a812846d"
+  },
+  {
+    "symbol": "IsrGlobalContext",
+    "destination": "IsrState.v",
+    "original_block_sha256": "bd14d9176ea22e6d77c1903bf7195e49ad0d5d0f8ed96592bd7b024abb9f7b23"
+  },
+  {
+    "symbol": "empty_irq_desc",
+    "destination": "IsrState.v",
+    "original_block_sha256": "8d67a4ea3dc306f59fe6d6b38116bfc3031f65fa2cc16edc41b65b78dd12bf52"
+  },
+  {
+    "symbol": "isr_static_zero_state",
+    "destination": "IsrState.v",
+    "original_block_sha256": "8ebd9596d3ec5a8f1e735295acd6f1dd8dc05e61074dde1c9d0e2115fb025720"
+  },
+  {
+    "symbol": "isr_linker_indices_ok",
+    "destination": "IsrState.v",
+    "original_block_sha256": "20d25ff95235d77f8f3657b8bb9faf19df49534de2a278032a0e9afba75c5ed9"
+  },
+  {
+    "symbol": "isr_linker_table",
+    "destination": "IsrState.v",
+    "original_block_sha256": "1ed4fddc2dcf7e9fe8c6588ed974d3e8ec235dd6620762e6c0c2d4400538dbe9"
+  },
+  {
+    "symbol": "isr_initialized_state",
+    "destination": "IsrState.v",
+    "original_block_sha256": "ac21964839600766e6524d093784f83a12f68b779cad5643fe3cf5f7a5ae8f8f"
+  },
+  {
+    "symbol": "isr_initialized_from",
+    "destination": "IsrState.v",
+    "original_block_sha256": "0280a8819ea7d3e04db393cb6d8c66957c86862b5ab9be99963c6c1f54af5d98"
+  },
+  {
+    "symbol": "SemaphoreAbs",
+    "destination": "REMOVED.v",
+    "original_block_sha256": "d928d7db6973ebb1a6298b70e3c9c1e9a17eec128114e4abff804db5aa5353ef"
+  },
+  {
+    "symbol": "SemaphoreDoneAbs",
+    "destination": "REMOVED.v",
+    "original_block_sha256": "1e02d21f3267367943bc44fd41173f83de1fffd78eb8fea87d00b2acb5db47dd"
+  },
+  {
+    "symbol": "SemaphoreStable",
+    "destination": "REMOVED.v",
+    "original_block_sha256": "722dabd6bf065eeb7fa4b653b2f42a67fdea7580ff743d15413f6c2f619e04ab"
+  },
+  {
+    "symbol": "SemaphoreState",
+    "destination": "REMOVED.v",
+    "original_block_sha256": "87ad0b16fb636e660d5774e82201a35f056c12146b8cbc5dcde8b11bb5c3bc6c"
+  },
+  {
+    "symbol": "semaphore_context",
+    "destination": "REMOVED.v",
+    "original_block_sha256": "dcb9357faff2e7584b928e8f24ecbe6ea66796d94a85ea33074a74df542b7523"
+  },
+  {
+    "symbol": "task_world_wf",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "a00806b0a4f22e2431a2e2a72dbeee5df4d596bc2629d9e25e8e2f64545810b4"
+  },
+  {
+    "symbol": "store_task_descriptor_padding",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "1f80da7149bb6bb5cf5898c54b889c5f372a94809c8f69f81e3e1296a9864dc3"
+  },
+  {
+    "symbol": "store_task_descriptor",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "ef77b868156f569fcd5729cf4a69cc840e931cbcf0ce3086e38d60dae419cd21"
+  },
+  {
+    "symbol": "store_detached_sched_link",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "47cf0c29598cd7d52fcbfe9cc59db988dcedb6d759d3d8940b5a72f5aaae7b61"
+  },
+  {
+    "symbol": "store_owned_sched_nodes",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "b2cea9310d4daae71d60ace00202851e2c17d127d31edbb30ca198de50bf5f73"
+  },
+  {
+    "symbol": "store_published_task",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "f0bdb07cf868b95fc229e4079987880de59b948d5a2910f28fe28caee88ce275"
+  },
+  {
+    "symbol": "pure_task_link_member",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "5e638ddcb39afa1d7068b5bebc870bab46d4f3fbb520cfc7537a347cc3ed9e37"
+  },
+  {
+    "symbol": "store_task_done",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "9235611129501e171dcb5889080ba8cf875989d36acb9253fea2cac697f04a04"
+  },
+  {
+    "symbol": "task_inv",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "5e02e39bdce5c5074566a07f81ef5cb4eb5c984dcfe2554dc0b57f6c3966b36a"
+  },
+  {
+    "symbol": "pure_published_slink",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "393ab61ed201598ac2ee6aedae7b7004ac915d135ebdcfbe63ad1da2c8d94b93"
+  },
+  {
+    "symbol": "pure_suspend_sched_link",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "62ab7c8fb4d40b7d4acadab713b5f5a1ea3bd4391118cb4a8c43acd577372595"
+  },
+  {
+    "symbol": "pure_close_sched_link",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "e913d26af74b6b0cb2c4097a2607668557c760cc1b5a5f7ce4e3ebcf2abff941"
+  },
+  {
+    "symbol": "store_zombie_queue",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "adfadafe5ba652dae8dd6d5a2fa5366a8d1786bc06b81018773d0118d80563da"
+  },
+  {
+    "symbol": "role_slot_wf",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "80ccfc068da2f108fda47b7a99655e5b7536e1ec7235cedc48bd1dca8891deaa"
+  },
+  {
+    "symbol": "pure_suspend_sched_link_open",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "c530e03c4aec090a095c25fad6e333af933729ec0115d095eed9a9b3ad8075cc"
+  },
+  {
+    "symbol": "pure_suspend_sched_link_close",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "c1ae85df46663a02f55a3037dfaba611749290b0e2ca8a54dce9bbd62fed4a95"
+  },
+  {
+    "symbol": "suspend_sched_link_to_owned",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "8279c7e17277b554282c653fa310dde42bd7f786a9e06929d92124348dcd319e"
+  },
+  {
+    "symbol": "owned_sched_link_not_close",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "42b5f81fc30a55cbbc16971b1999067d4c0c9b66a828a4cf5619c85646464992"
+  },
+  {
+    "symbol": "close_sched_link_to_local",
+    "destination": "TaskInv.v",
+    "original_block_sha256": "9dcd31d4616eb752a086296cf3acf68e01c1f743c893aa3fbde10a44be49c86f"
+  },
+  {
+    "symbol": "store_priority_ready_bucket",
+    "destination": "AssignInv.v",
+    "original_block_sha256": "ce91c57c702078fc0703ff2c338730c5614348f1b6763769d4d288a1169adb64"
+  },
+  {
+    "symbol": "store_priority_ready_vector_rec",
+    "destination": "AssignInv.v",
+    "original_block_sha256": "3f84bd061fb0eb202ab1341be9b645cece6a626bd07ba316feb7beee08315c82"
+  },
+  {
+    "symbol": "store_priority_ready_vector",
+    "destination": "AssignInv.v",
+    "original_block_sha256": "87bfbd16bb482e2254ee5feb925fe8414c1f53ea139ce8868a04b91a707021ed"
+  },
+  {
+    "symbol": "store_os_assign_ready_vector",
+    "destination": "AssignInv.v",
+    "original_block_sha256": "4c0dc99af2f81d04cc57692e6139c632bc1942de17774a2597e4c410b61558db"
+  },
+  {
+    "symbol": "store_assign_padding",
+    "destination": "AssignInv.v",
+    "original_block_sha256": "ad7da71591563016c6311db145f7340a76462c90d1135e7f354534b02150cb4b"
+  },
+  {
+    "symbol": "store_priority_ready_vector_done",
+    "destination": "AssignInv.v",
+    "original_block_sha256": "3b81d4ee3319190beb862d47a952b7ce4718b7dd778a4db82dea2a4d11672f21"
+  },
+  {
+    "symbol": "assign_inv",
+    "destination": "AssignInv.v",
+    "original_block_sha256": "a66aaf247e5488fe84611dfdce8402c97e02687118971bf86c45640d8be896bf"
+  },
+  {
+    "symbol": "store_inactive_delay",
+    "destination": "DelayInv.v",
+    "original_block_sha256": "164ce66baff3b152f487bc8299395c18f2d64cb992904fe15912fa59e3229b34"
+  },
+  {
+    "symbol": "delay_inv",
+    "destination": "DelayInv.v",
+    "original_block_sha256": "4d34d0414744492fd8be6a286df544c6494ad602867c54796765a3ba7cf4ec2e"
+  },
+  {
+    "symbol": "tick_inv",
+    "destination": "TickInv.v",
+    "original_block_sha256": "9d0b1af7b8d5ec2f39a450abf29fedd5f4835671a95733f0d30699bd0fe29a67"
+  },
+  {
+    "symbol": "exstatus_inv",
+    "destination": "ExstatusInv.v",
+    "original_block_sha256": "e3579b3889d8abd5c6da5663583362ab2813b78c4b8bb5059e23eb49c94eeffc"
+  },
+  {
+    "symbol": "exstatus_inv_range",
+    "destination": "ExstatusInv.v",
+    "original_block_sha256": "a3e824d281deb1fc053b30b5b2ce6cf5298062e573884f63a6556c8d2244e0cb"
+  },
+  {
+    "symbol": "exstatus_update_range",
+    "destination": "ExstatusInv.v",
+    "original_block_sha256": "b1a7bb644c4b52a46b2edd008aa0efeef06b00fe4f3217d3a636d46099b9ca38"
+  },
+  {
+    "symbol": "os_without_semaphore",
+    "destination": "REMOVED.v",
+    "original_block_sha256": "b29016fdd01a21494c4f8edeb84101cbe6f32773ab35045f4435aa8cd471fad5"
+  },
+  {
+    "symbol": "os_inv_semaphore_open",
+    "destination": "REMOVED.v",
+    "original_block_sha256": "3c3ad56b3f70deb68ad29b94a9e392619ba9133ecb88c9ec28a75c1f02856f25"
+  },
+  {
+    "symbol": "os_inv_semaphore_close",
+    "destination": "REMOVED.v",
+    "original_block_sha256": "4af4c98ada16ff582dc8c4ea088ab0e57015fc66b811edee03bf33e17e4c2c32"
+  }
+]

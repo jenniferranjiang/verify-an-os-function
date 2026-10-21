@@ -1,0 +1,53 @@
+#include "task_name_view.h"
+
+// 数组衰变的零偏移：只朝裸地址归一化，左右均无反向规则。
+id : 1
+priority : core(1)
+right : store_string(pointer_offset(?p, 0, I8), ?name) at 0
+action : right_erase(0); right_add(store_string(p, name));
+
+id : 2
+priority : core(1)
+right : store_string_n(pointer_offset(?p, 0, I8), ?n, ?name) at 0
+action : right_erase(0); right_add(store_string_n(p, n, name));
+
+id : 3
+priority : post(1)
+left : store_string(pointer_offset(?p, 0, I8), ?name) at 0
+action : left_erase(0); left_add(store_string(p, name));
+
+id : 4
+priority : post(1)
+left : store_string_n(pointer_offset(?p, 0, I8), ?n, ?name) at 0
+action : left_erase(0); left_add(store_string_n(p, n, name));
+
+// map 命中与具体 name 需求共同定位唯一任务；只借出固定名字槽。
+id : 5
+priority : core(2)
+left : task_fields(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : store_string_n(field_addr(field_addr(?q, TaskDescriptor, task_base_info), TaskBaseInfo, name), ?n, ?name) at 2
+check : infer(q == task);
+action : left_erase(0); right_erase(2);
+         left_add(task_fields_name_frame(sg, st, task, desc));
+         right_add(n == 32);
+         right_add(name == tbName(tdBaseInfo(desc)));
+
+id : 6
+priority : post(2)
+left : task_fields_name_frame(?sg, ?st, ?task, ?desc) at 0
+       store_string_n(field_addr(field_addr(?q, TaskDescriptor, task_base_info), TaskBaseInfo, name), ?n, ?name) at 1
+check : infer(q == task); infer(n == 32);
+        infer(name == tbName(tdBaseInfo(desc)));
+action : left_erase(0); left_erase(1); left_add(task_fields(sg, st));
+
+// 首次借名时只下沉到 task_fields，其他子不变量始终封装在已有 frame 中。
+id : 7
+priority : core(3)
+left : InsideCritical(?sg, ?st) at 0
+       os_inv(sg, st) at 1
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 2
+right : store_string_n(field_addr(field_addr(?q, TaskDescriptor, task_base_info), TaskBaseInfo, name), ?n, ?name) at 3
+check : infer(q == task);
+action : left_erase(1); left_add(task_fields(sg, st));
+         left_add(os_task_fields_frame(sg, st));

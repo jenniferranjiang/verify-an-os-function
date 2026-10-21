@@ -1,0 +1,48 @@
+{
+  "status": "passed",
+  "valid_names": [
+    "_SemaphoreCreate-vc-proving-r1",
+    "_SemaphoreCreate-vc-proving-r2",
+    "AllocId-vc-proving-r2",
+    "__foo-r1",
+    "x"
+  ],
+  "rejected_names": [
+    "",
+    "_",
+    "__",
+    ".",
+    "..",
+    "../x",
+    "_../x",
+    "/x",
+    "_/x",
+    "x/y",
+    "x\\y",
+    " x",
+    "x ",
+    ".x",
+    "_..",
+    "_ x",
+    "x.",
+    "x-",
+    null,
+    1
+  ],
+  "actual_round": "_SemaphoreCreate-vc-proving-r1",
+  "group_count": 9,
+  "actual_run_state_modified": false,
+  "c_vcs_proved": false,
+  "original_failure": {
+    "action": "vc-proving-preparing",
+    "round": "_SemaphoreCreate-vc-proving-r1",
+    "error": "ValueError: proving round must be a fixed directory name",
+    "cause": "slug strips leading underscore while controller preserves C case identifier in round identity",
+    "state_mutation_before_exception": false
+  },
+  "repaired_action": {
+    "status": "passed",
+    "group_count": 9,
+    "proofs_accepted": false
+  }
+}

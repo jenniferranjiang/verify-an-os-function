@@ -1,0 +1,29 @@
+menuconfig APPLICATION_WEBSERVER
+    bool "Application webserver using mongoose"
+    default n
+
+    if APPLICATION_WEBSERVER
+        choice
+            prompt "choose board for webserver"
+            default APPLICATION_WEBSERVER_XISHUTONG_4G
+
+            config APPLICATION_WEBSERVER_XISHUTONG_4G
+                bool "board select xishutong-4g, support dual ethernet port and 4G"
+                select BSP_USING_SDIO
+                select BSP_USING_W5500
+                select BSP_USING_ETHERNET
+                select SUPPORT_CONNECTION_FRAMEWORK
+                select CONNECTION_ADAPTER_4G
+                select ADAPTER_EC200A
+                select LIB_USING_LORAWAN
+                select LIB_USING_LORA_RADIO
+
+            config APPLICATION_WEBSERVER_XISHUTONG
+                bool "board select xishutong, support single ethernet port"
+                select BSP_USING_SDIO
+                select BSP_USING_LWIP
+                select LIB_USING_LORAWAN
+                select LIB_USING_LORA_RADIO
+        endchoice
+    endif
+

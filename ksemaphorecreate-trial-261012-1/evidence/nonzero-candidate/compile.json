@@ -1,0 +1,138 @@
+{
+  "compiler": "/home/xinra/.opam/pv-bench-8.20.1/bin/coqc",
+  "elapsed_seconds": 119.96420418600246,
+  "results": [
+    {
+      "file": "framework-candidate/NestedCriticalSTS.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "shared-candidate/arm32le/KTaskPure.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "shared-candidate/arm32le/dll_abs.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "shared-candidate/arm32le/idnode_abs.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "shared-candidate/arm32le/CrtosGlobState.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "shared-candidate/arm32le/TaskProtocolSTS.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "shared-candidate/arm32le/CrtosRules.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "shared-candidate/arm32le/dll.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "shared-candidate/arm32le/idnode.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "shared-candidate/arm32le/KTaskSchedMember.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "lib/SemaphorePure.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "lib/CrtosOSPure.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "lib/CrtosHeapBridge.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "lib/CrtosNestedState.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "lib/CrtosOSProtocol.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "lib/CrtosOSProtocolProof.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "lib/SemaphoreRep.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "lib/CrtosOSInv.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "lib/SemaphoreCritical.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "lib/SemaphoreCriticalViews.v",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "file": "lib/SemaphoreInitialization.v",
+      "returncode": 0,
+      "stdout": "Axioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\nPropExtensionality.propositional_extensionality :\n  forall P Q : Prop, P <-> Q -> P = Q\nFunctionalExtensionality.functional_extensionality_dep :\n  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),\n  (forall x : A, f x = g x) -> f = g\neval_addr_expr : rvalue_expr -> addr\n",
+      "stderr": ""
+    },
+    {
+      "file": "CandidateChecks.v",
+      "returncode": 0,
+      "stdout": "Axioms:\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\nFunctionalExtensionality.functional_extensionality_dep :\n  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),\n  (forall x : A, f x = g x) -> f = g\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\nFunctionalExtensionality.functional_extensionality_dep :\n  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),\n  (forall x : A, f x = g x) -> f = g\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\nFunctionalExtensionality.functional_extensionality_dep :\n  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),\n  (forall x : A, f x = g x) -> f = g\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\nFunctionalExtensionality.functional_extensionality_dep :\n  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),\n  (forall x : A, f x = g x) -> f = g\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\neval_addr_expr : rvalue_expr -> addr\nAxioms:\nsizeof_union_type : string -> Z\nsizeof_struct_type : string -> Z\nsizeof_enum_type : string -> Z\nsizeof_alias_type : string -> Z\nFunctionalExtensionality.functional_extensionality_dep :\n  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),\n  (forall x : A, f x = g x) -> f = g\neval_addr_expr : rvalue_expr -> addr\n",
+      "stderr": ""
+    }
+  ]
+}

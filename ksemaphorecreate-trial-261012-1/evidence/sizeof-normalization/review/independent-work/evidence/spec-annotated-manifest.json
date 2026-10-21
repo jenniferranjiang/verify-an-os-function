@@ -1,0 +1,13 @@
+{
+  "annotated_C/include/crtos_semaphore_layout.h": "83eb861c4bc4eb20a7fab822c2dd11daf665571483d363fa352f7d29b072ee9a",
+  "annotated_C/include/semaphore_logic.h": "75888b65f50bfd68c1c02caf256c5326f054aa0665a5531fcd6d05436c9f916f",
+  "annotated_C/src/AllocId.c": "43d0923b137fb2acd164e4d7faecf6c3a7f12d67c81f239c33dff9b305f3e132",
+  "annotated_C/src/CriticalAreaLock.c": "3f93c74a38ad3b511bcdbb74cf38ac47b183068fbcf261742dfa44c0071c37f8",
+  "annotated_C/src/CriticalAreaUnLock.c": "3ec6f9223b1707c7ad167152f8af9b092fef42a419628388c8514524722826e0",
+  "annotated_C/src/DoubleLinkListInsertNodeAfter.c": "fb47608bf3a8ef458e0505a23f7c4926428dd4e8329776bd6ed495196fcd382d",
+  "annotated_C/src/IdInsertObj.c": "30113868fe7485260e9f12bb1318ab7ddcfea22a175e1f9a24ecd6672f3a126e",
+  "annotated_C/src/InitDoubleLinkList.c": "52c472e6e6c1cf2f51be6f2105d000258023573cda0d757115efa1181e8c5c3f",
+  "annotated_C/src/InsertObj.c": "c7a1eb6e6ed14fb779a27006d1a8edc9d0321067314b214cab31e1efd2bdd109",
+  "annotated_C/src/KSemaphoreCreate.c": "a64df0b8d0a356680d8b765a030b77f0587e5ea41755362cdae6c4567f7b911c",
+  "annotated_C/src/_SemaphoreCreate.c": "a2bdb2e526d37b23af374ef630f4f57a4cd9a03e77b9420c560bb77ac6dab656"
+}

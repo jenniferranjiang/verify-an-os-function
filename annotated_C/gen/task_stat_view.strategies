@@ -1,0 +1,46 @@
+#include "task_stat_view.h"
+
+// 只有既有 map 命中和单个 stat 读需求同时出现时才借出该字节。
+id : 1
+priority : core(2)
+left : task_fields(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : store_task_status(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), ?value) at 2
+check : infer(q == task);
+action : left_erase(0);
+         right_erase(2);
+         left_add(store_ktask_suspend_sched_stat_frame(sg, st, task, desc));
+         right_add(value == tsmStat(tdSchedMember(desc)));
+
+// 仅原值允许返回原 st；状态写入后的 map 转移仍由 C 局部证明承担。
+id : 2
+priority : core(2)
+left : store_ktask_suspend_sched_stat_frame(?sg, ?st, ?task, ?desc) at 0
+       store_task_status(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), ?value) at 1
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(desc) at 2
+right : task_fields(sg, st) at 3
+check : infer(q == task);
+        infer(value == tsmStat(tdSchedMember(desc)));
+action : left_erase(0);
+         left_erase(1);
+         right_erase(3);
+
+id : 3
+priority : post(2)
+left : store_ktask_suspend_sched_stat_frame(?sg, ?st, ?task, ?desc) at 0
+       store_task_status(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), ?value) at 1
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(desc) at 2
+check : infer(q == task);
+        infer(value == tsmStat(tdSchedMember(desc)));
+action : left_erase(0);
+         left_erase(1);
+         left_add(task_fields(sg, st));
+
+// 算法 cutpoint 明确需要任务补集时，拆开已有 stat frame；不展开全局 invariant。
+id : 4
+priority : core(2)
+left : store_ktask_suspend_sched_stat_frame(?sg, ?st, ?task, ?desc) at 0
+right : task_fields_except_sched(sg, st, ?q, desc) at 1
+check : infer(q == task);
+action : left_erase(0); right_erase(1);
+         left_add(store_assign_insert_sched_except_stat(task, tdSchedMember(desc)));

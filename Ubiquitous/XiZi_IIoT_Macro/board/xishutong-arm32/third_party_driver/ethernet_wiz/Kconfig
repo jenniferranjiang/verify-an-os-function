@@ -1,0 +1,5 @@
+# Kconfig file
+
+config BSP_WIZ_INT_PIN
+    int 
+    default 106

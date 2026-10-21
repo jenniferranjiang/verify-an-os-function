@@ -1,0 +1,216 @@
+{
+  "spec_revision": "spec-r6-ae22a04e2c95",
+  "canonical_manifest_digest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+  "delivery_manifest_sha256": "4e7a946348b00ad00bd14b3fd54d36889f3f8748c536095b180ebae2bd5d89ad",
+  "checker_sha256": "4552ac330b87264a5cc32851b9d7bbc7600e42eb0d9e00cb33867ff4605d139b",
+  "validator_sha256": "d645bb29b9317b6f1f697aff734943c43476ca7a080f2742d12f7f99d8ae1dd5",
+  "extraction_sha256": "cee093ce8f9b66d4342d054cd79fee0915ae890d45fcd186bb8e9c54355ee5ea",
+  "source_hash_count": 47,
+  "source_reextracted": [
+    "AllocId",
+    "CriticalAreaLock",
+    "CriticalAreaUnLock",
+    "DoubleLinkListInsertNodeAfter",
+    "IdInsertObj",
+    "InitDoubleLinkList",
+    "InsertObj",
+    "KSemaphoreCreate",
+    "_SemaphoreCreate"
+  ],
+  "predicate_source_count": 21,
+  "exact_delta_only_two_arguments": true,
+  "all_annotations_identical": true,
+  "candidate_unchanged": true,
+  "negative_checker_tests": [
+    {
+      "mutation": "malloc31",
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "source token mismatch"
+    },
+    {
+      "mutation": "memset64",
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "source token mismatch"
+    },
+    {
+      "mutation": "malloc_original",
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "source token mismatch"
+    },
+    {
+      "mutation": "memset_original",
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "source token mismatch"
+    },
+    {
+      "mutation": "wrong_type",
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "source token mismatch"
+    },
+    {
+      "mutation": "extra_sizeof",
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "source token mismatch"
+    },
+    {
+      "mutation": "other_function",
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "source token mismatch"
+    },
+    {
+      "mutation": "wrong_zero_value",
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "source token mismatch"
+    },
+    {
+      "mutation": "wrong_destination",
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "source token mismatch"
+    },
+    {
+      "mutation": "size_side_effect",
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "source token mismatch"
+    },
+    {
+      "mutation": "other_assignment",
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "source token mismatch"
+    },
+    {
+      "mutation": "extra_call",
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "source token mismatch"
+    }
+  ],
+  "commands": [
+    {
+      "command": [
+        "gcc",
+        "-m32",
+        "-std=gnu11",
+        "-ffreestanding",
+        "-fno-builtin",
+        "-fsyntax-only",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/sizeof-normalization/candidate/evidence/source-type-check.c",
+        "-I",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/source-config",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/arm/cortex-m3",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/tool/shell/letter-shell"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "gcc",
+        "-m32",
+        "-std=gnu11",
+        "-ffreestanding",
+        "-fno-builtin",
+        "-fsyntax-only",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/sizeof-normalization/candidate/evidence/slice-type-check.c"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "gcc",
+        "-E",
+        "-P",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c",
+        "-I",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/source-config",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/arm/cortex-m3",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/tool/shell/letter-shell"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "gcc",
+        "-E",
+        "-P",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c",
+        "-I",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/source-config",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/arm/cortex-m3",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/tool/shell/letter-shell"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "gcc",
+        "-E",
+        "-P",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c",
+        "-I",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/source-config",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/arm/cortex-m3",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/tool/shell/letter-shell"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "gcc",
+        "-E",
+        "-P",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/CriticalArea.c",
+        "-I",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/source-config",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/arm/cortex-m3",
+        "-I",
+        "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/tool/shell/letter-shell"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/sizeof-normalization/candidate/evidence/spec-check.py"
+      ],
+      "exit_code": 0,
+      "stderr": ""
+    }
+  ],
+  "elapsed_seconds": 4.38396610899963,
+  "qcp_invoked": false
+}

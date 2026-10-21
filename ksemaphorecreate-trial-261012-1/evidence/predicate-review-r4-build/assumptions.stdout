@@ -1,0 +1,325 @@
+Welcome to Coq 8.20.1
+[Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+[Loading ML file extraction_plugin.cmxs (using legacy method) ... done]
+Fetching opaque proofs from disk for CRTOS_Verify.sem.CrtosOSPure
+Closed under the global context
+Closed under the global context
+Closed under the global context
+Axioms:
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Fetching opaque proofs from disk for Coq.Lists.List
+Axioms:
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Fetching opaque proofs from disk for Coq.micromega.ZMicromega
+Fetching opaque proofs from disk for Coq.micromega.Tauto
+Fetching opaque proofs from disk for Coq.Classes.Morphisms
+Fetching opaque proofs from disk for Coq.Init.Logic
+Fetching opaque proofs from disk for Coq.micromega.Refl
+Fetching opaque proofs from disk for Coq.Bool.Bool
+Fetching opaque proofs from disk for Coq.micromega.RingMicromega
+Fetching opaque proofs from disk for Coq.micromega.OrderedRing
+Fetching opaque proofs from disk for Coq.setoid_ring.InitialRing
+Fetching opaque proofs from disk for Coq.setoid_ring.Ring_theory
+Fetching opaque proofs from disk for Coq.ZArith.BinInt
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZAdd
+Fetching opaque proofs from disk for Coq.PArith.BinPos
+Fetching opaque proofs from disk for Coq.Structures.OrdersFacts
+Fetching opaque proofs from disk for Coq.Init.Datatypes
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZBase
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZMul
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZAdd
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZBase
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZOrder
+Fetching opaque proofs from disk for Coq.Structures.OrdersTac
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZAddOrder
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZMulOrder
+Fetching opaque proofs from disk for Coq.Classes.Morphisms_Prop
+Fetching opaque proofs from disk for Coq.ZArith.Zbool
+Fetching opaque proofs from disk for Coq.micromega.EnvRing
+Fetching opaque proofs from disk for Coq.micromega.Env
+Fetching opaque proofs from disk for Coq.setoid_ring.Ring_polynom
+Fetching opaque proofs from disk for Coq.setoid_ring.BinList
+Fetching opaque proofs from disk for Coq.NArith.BinNat
+Fetching opaque proofs from disk for Coq.Numbers.Natural.Abstract.NSub
+Fetching opaque proofs from disk for Coq.Numbers.Natural.Abstract.NBase
+Fetching opaque proofs from disk for Coq.Numbers.Natural.Abstract.NAdd
+Fetching opaque proofs from disk for Coq.Numbers.Natural.Abstract.NOrder
+Fetching opaque proofs from disk for Coq.setoid_ring.ZArithRing
+Fetching opaque proofs from disk for Coq.ZArith.Zpow_def
+Fetching opaque proofs from disk for Coq.ZArith.Zorder
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZAddOrder
+Fetching opaque proofs from disk for Coq.ZArith.auxiliary
+Fetching opaque proofs from disk for Coq.Arith.PeanoNat
+Fetching opaque proofs from disk for Coq.Init.Peano
+Fetching opaque proofs from disk for Coq.ZArith.Znumtheory
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZMul
+Fetching opaque proofs from disk for Coq.ZArith.Zdiv
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZDivFloor
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZDiv
+Fetching opaque proofs from disk for Coq.ZArith.Zmax
+Fetching opaque proofs from disk for Coq.Structures.GenericMinMax
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZGcd
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZGcd
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZLt
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZSgnAbs
+Fetching opaque proofs from disk for Coq.micromega.ZifyClasses
+Fetching opaque proofs from disk for Coq.ZArith.Znat
+Fetching opaque proofs from disk for Coq.Arith.Compare_dec
+Fetching opaque proofs from disk for Coq.NArith.Nnat
+Fetching opaque proofs from disk for Coq.PArith.Pnat
+Fetching opaque proofs from disk for Coq.Structures.Equalities
+Fetching opaque proofs from disk for Coq.micromega.Ztac
+Closed under the global context
+Closed under the global context
+Closed under the global context
+Closed under the global context
+Axioms:
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Fetching opaque proofs from disk for CRTOS_Verify.lib.CrtosRules
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Fetching opaque proofs from disk for CRTOS_Verify.sem.CrtosHeapBridge
+Fetching opaque proofs from disk for Coq.Logic.FunctionalExtensionality
+Axioms:
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+Closed under the global context
+Axioms:
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Fetching opaque proofs from disk for CRTOS_Verify.sem.CrtosOSProtocol
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Fetching opaque proofs from disk for SetsClass.SetsDomain
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Fetching opaque proofs from disk for CRTOS_Verify.sem.CrtosOSProtocolProof
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Fetching opaque proofs from disk for CRTOS_Verify.sem.CrtosOSInv
+Fetching opaque proofs from disk for Logic.GeneralLogic.ProofTheory.BasicLogicEquiv
+Fetching opaque proofs from disk for Logic.GeneralLogic.ProofTheory.BasicDeduction
+Fetching opaque proofs from disk for Logic.PropositionalLogic.ShallowEmbedded.ModelLanguagePropositionalLogic
+Fetching opaque proofs from disk for Coq.Classes.RelationClasses
+Fetching opaque proofs from disk for Logic.PropositionalLogic.ProofTheory.RewriteClass
+Fetching opaque proofs from disk for Logic.PropositionalLogic.ProofTheory.Intuitionistic
+Fetching opaque proofs from disk for Logic.SeparationLogic.ProofTheory.Deduction
+Fetching opaque proofs from disk for Logic.SeparationLogic.ShallowEmbedded.ModelLanguageSeparationLogic
+Fetching opaque proofs from disk for SimpleC.SL.ConAssertion
+Fetching opaque proofs from disk for SimpleC.SL.Mem
+Fetching opaque proofs from disk for AUXLib.Axioms
+Fetching opaque proofs from disk for SimpleC.SL.CommonAssertion
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Fetching opaque proofs from disk for CRTOS_Verify.sem.SemaphoreCritical
+Fetching opaque proofs from disk for Logic.lib.Ensembles_ext
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Fetching opaque proofs from disk for Logic.SeparationLogic.ProofTheory.RewriteClass
+Fetching opaque proofs from disk for Logic.ShallowQuantifierLogic.ProofTheory
+Fetching opaque proofs from disk for Logic.MetaLogicInj.ShallowEmbedded.ModelLanguageMetaLogic
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Fetching opaque proofs from disk for CRTOS_Verify.lib.idnode
+Fetching opaque proofs from disk for Logic.ShallowQuantifierLogic.ModelConstrEX
+Fetching opaque proofs from disk for Coq.ZArith.Zcomplements
+Fetching opaque proofs from disk for ListLib.General.Length
+Fetching opaque proofs from disk for Coq.micromega.ZifyInst
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Fetching opaque proofs from disk for CRTOS_Verify.lib.dll
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Fetching opaque proofs from disk for CRTOS_Verify.lib.TaskProtocolSTS
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+struct_padding =
+fun (_ : CNotation.lvalue_expr) (_ : String.string) => emp%sac
+     : CNotation.lvalue_expr -> String.string -> Assertion
+
+Arguments struct_padding x struct_name%string_scope _
+Crtos_C_Rules.struct_padding =
+fun (_ : CNotation.lvalue_expr) (_ : String.string) => Crtos_C_Rules.emp
+     : CNotation.lvalue_expr -> String.string -> Crtos_C_Rules.expr
+
+Arguments Crtos_C_Rules.struct_padding x struct_name%string_scope _

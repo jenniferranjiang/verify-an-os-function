@@ -1,0 +1,16 @@
+--- before/annotated_C/src/_SemaphoreCreate.c
++++ candidate/annotated_C/src/_SemaphoreCreate.c
+@@ -118,11 +118,11 @@
+     x_base lock = 0;
+     struct Semaphore *sem = NONE;
+ 
+-    sem = (struct Semaphore *)x_malloc(sizeof(struct Semaphore));
++    sem = (struct Semaphore *)x_malloc((x_size_t)32);
+     if (sem == NONE)
+         return -ENOMEMORY;
+ 
+-    memset(sem, 0, sizeof(struct Semaphore));
++    memset(sem, 0, (x_size_t)32);
+     lock = CriticalAreaLock();
+     /*@ Given current */
+     /*@ Assert

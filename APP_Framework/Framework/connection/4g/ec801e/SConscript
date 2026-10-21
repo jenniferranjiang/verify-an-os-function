@@ -1,0 +1,10 @@
+from building import *
+import os
+
+cwd = GetCurrentDir()
+src = []
+if GetDepend(['ADAPTER_EC801E']):
+    src += ['ec801e.c']
+group = DefineGroup('connection 4g ec801e', src, depend = [], CPPPATH = [cwd])
+
+Return('group')

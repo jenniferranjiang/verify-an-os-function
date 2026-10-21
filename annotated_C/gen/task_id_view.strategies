@@ -1,0 +1,31 @@
+#include "task_id_view.h"
+
+// ID 查询需求只借出管理器；DLL 与全部 descriptor 保留于既有 frame。
+id : 1
+priority : core(2)
+left : task_fields(?sg, ?st) at 0
+right : store_idmanager(?sidm, ?idm, ?p) at 1
+check : infer(p == task_idmanager_ptr(os_task_stable(sg)));
+action : left_erase(0);
+         left_add(task_fields_id_frame(sg, st));
+         left_add(store_idmanager(task_stable_ids(os_task_stable(sg)), task_idmanager_abs(os_tasks(st)), task_idmanager_ptr(os_task_stable(sg))));
+
+// 只在调用/返回目标需要原不变量时收回完整管理器，不改变抽象状态。
+id : 2
+priority : core(2)
+left : task_fields_id_frame(?sg, ?st) at 0
+       store_idmanager(task_stable_ids(os_task_stable(sg)), task_idmanager_abs(os_tasks(st)), ?p) at 1
+right : task_fields(sg, st) at 2
+check : infer(p == task_idmanager_ptr(os_task_stable(sg)));
+action : left_erase(0);
+         left_erase(1);
+         right_erase(2);
+
+id : 3
+priority : post(2)
+left : task_fields_id_frame(?sg, ?st) at 0
+       store_idmanager(task_stable_ids(os_task_stable(sg)), task_idmanager_abs(os_tasks(st)), ?p) at 1
+check : infer(p == task_idmanager_ptr(os_task_stable(sg)));
+action : left_erase(0);
+         left_erase(1);
+         left_add(task_fields(sg, st));

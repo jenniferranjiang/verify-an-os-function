@@ -1,0 +1,33 @@
+#include "bitmap_views_strategy.h"
+
+// 只借出本次查表的一个字节，其余 255 个元素由 missing_i 保留。
+id : 1
+priority : core(2)
+left : store_prio_lookup_table() at 0
+right : store(?base + ?i * sizeof(U8), U8, ?v) at 1
+check : infer(base == LeaderZeroCount);
+        infer(0 <= i);
+        infer(i < 256);
+action : left_erase(0);
+         right_erase(1);
+         left_add(UCharArray::missing_i(base, i, 0, 256, leader_zero_count_table()));
+         right_add(v == Znth{Z}(i, leader_zero_count_table(), 0));
+
+// 常量表只允许原值归还，不提供写后重建旧表的规则。
+id : 2
+priority : post(2)
+left : UCharArray::missing_i(?base, ?i, 0, 256, leader_zero_count_table()) at 0
+       store(base + i * sizeof(U8), U8, Znth{Z}(i, leader_zero_count_table(), 0)) at 1
+check : infer(base == LeaderZeroCount);
+        infer(0 <= i);
+        infer(i < 256);
+action : left_erase(0);
+         left_erase(1);
+         left_add(store_prio_lookup_table());
+
+id : 3
+priority : core(2)
+left : UCharArray::full(LeaderZeroCount, 256, leader_zero_count_table()) at 0
+right : store_prio_lookup_table() at 1
+action : left_erase(0);
+         right_erase(1);

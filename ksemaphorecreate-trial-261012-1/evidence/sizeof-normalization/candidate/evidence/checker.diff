@@ -1,0 +1,90 @@
+--- evidence/sizeof-normalization/before-spec-check.py
++++ evidence/sizeof-normalization/candidate/evidence/spec-check.py
+@@ -5,11 +5,23 @@
+ """
+ from pathlib import Path
+ import hashlib,json,os,re,subprocess,time
+-E=Path(__file__).resolve().parent; T=E.parent; A=T/'annotated_C'
++E=Path(os.environ.get('SPEC_TRIAL_EVIDENCE', Path(__file__).resolve().parent)).resolve()
++T=E.parent
++A=Path(os.environ.get('SPEC_ANNOTATED_ROOT', T/'annotated_C')).resolve()
++O=Path(os.environ.get('SPEC_OUTPUT_DIR', E)).resolve()
+ start=time.monotonic()
+-SPEC_REVISION_NUMBER = 5
++SPEC_REVISION_NUMBER = 6
+ source_result=json.loads((E/'source-check-result.json').read_text())
+ source_manifest=json.loads((E/'source-manifest.json').read_text())
++assert source_result['source_revision']=='source-r2-0c50c37013e9'
++assert source_result['config']=='board/stm32f103-nano/config'
++assert len(source_manifest)==47
++# Frozen current-trial target ABI evidence: this check does not claim a new ARM compile.
++assert hashlib.sha256((E/'source-manifest.json').read_bytes()).hexdigest()=='0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651', ('changed size32 ABI evidence', 'source-manifest.json')
++assert hashlib.sha256((E/'source-check-result.json').read_bytes()).hexdigest()=='798a370a8b3644afc97ff085a57766b82763966a26461c16b0dec207d159f6f8', ('changed size32 ABI evidence', 'source-check-result.json')
++assert hashlib.sha256((E/'source-abi.c').read_bytes()).hexdigest()=='206bc62ad3a3231c8114b96f6413f694baf7860be16b9c71d142cf28b3ad7377', ('changed size32 ABI evidence', 'source-abi.c')
++assert hashlib.sha256((E/'source-abi.s').read_bytes()).hexdigest()=='a65cefb3ec420b8ec4c7c5c75ad53ad0cec9bfb3d8dab0c6f492069b3d18d834', ('changed size32 ABI evidence', 'source-abi.s')
++assert hashlib.sha256((E/'source-config/xsconfig.h').read_bytes()).hexdigest()=='ad9135bd836e78b8ace5af15e88a1e7a34a0b3d723435f85c281a18d1bdc40db', ('changed size32 ABI evidence', 'source-config/xsconfig.h')
+ source_root=Path(source_result['authoritative_root'])
+ for rel,h in source_manifest.items():
+  assert hashlib.sha256((source_root/rel).read_bytes()).hexdigest()==h,('changed authoritative source',rel)
+@@ -32,7 +44,7 @@
+   elif s[k]=='}':depth-=1
+   k+=1
+  return s[m.start():k]
+-def normalize(s,name):
++def normalize(s,name,authoritative=False):
+  s=s.replace('__FUNCTION__','"'+name+'"')
+  if name=='KSemaphoreCreate':
+   s=s.replace('done.SemaphoreCreate','_SemaphoreCreate')
+@@ -41,7 +53,18 @@
+   s=re.sub(r'do\s*\{\s*if\s*\(0\)\s*\{.*?\}\s*\}\s*while\s*\(0\);','',s,flags=re.S)
+  if name=='IdInsertObj':
+   s=re.sub(r'if\s*\(\(id\s*=\s*AllocId\(manager\)\)\s*<\s*0\)', 'id = AllocId(manager); if (id < 0)',s)
+- return tokens(re.sub(r'\(0\)','0',s))
++ ts=tokens(re.sub(r'\(0\)','0',s))
++ if name=='_SemaphoreCreate' and authoritative:
++  # DCHG-20261016-01: only these two complete fixed-struct call patterns.
++  # Applied to authoritative tokens only; never erase sizeof on the candidate.
++  for old,new in [
++   ('x_malloc(sizeof(struct Semaphore))','x_malloc((x_size_t)32)'),
++   ('memset(sem, 0, sizeof(struct Semaphore))','memset(sem, 0, (x_size_t)32)')]:
++   a,b=tokens(old),tokens(new)
++   hits=[i for i in range(len(ts)-len(a)+1) if ts[i:i+len(a)]==a]
++   assert len(hits)==1,('fixed sizeof source call count',old,len(hits))
++   i=hits[0]; ts[i:i+len(a)]=b
++ return ts
+ files=sorted((A/'src').glob('*.c'))
+ assert {p.stem for p in files}==expected
+ canonical={}; api={}; bodies={}; checks={}; calls={}
+@@ -49,7 +72,7 @@
+  raw=p.read_text(); name=p.stem
+  pp=subprocess.run(['gcc','-E','-P',str(p)],check=True,capture_output=True,text=True).stdout
+  body=definition(pp,name); bodies[name]=body
+- assert normalize(body,name)==normalize(source[name],name),(name,'source token mismatch',normalize(body,name),normalize(source[name],name))
++ assert normalize(body,name)==normalize(source[name],name,authoritative=True),(name,'source token mismatch',normalize(body,name),normalize(source[name],name,authoritative=True))
+  without_strings=re.sub(r'"(?:\\.|[^"\\])*"','""',body[body.index('{'):])
+  calls[name]=sorted(set(re.findall(r'\b([A-Za-z_]\w*)\s*\(',without_strings))-keywords)
+  specs={}
+@@ -99,16 +122,16 @@
+  compiler_args=[str(arm),'-mcpu=cortex-m3','-mthumb']
+ else:
+  compiler_args=['gcc','-m32']
+- # Current changes are logical comments only. The previously checked physical
+- # slice layout remains byte-identical; actual authoritative C hashes matched above.
++ # Only the two reviewed fixed-size call arguments are normalized. The physical
++ # slice layout remains byte-identical; authoritative C hashes matched above.
+  basis=json.loads((E/'spec-arm32le-r4/accepted-r3-annotated-manifest.json').read_text())
+  layout='annotated_C/include/crtos_semaphore_layout.h'
+- assert hashlib.sha256((T/layout).read_bytes()).hexdigest()==basis[layout]
+-command=[*compiler_args,'-std=gnu11','-ffreestanding','-fno-builtin','-Wall','-Wextra','-fsyntax-only',*[str(p) for p in files],str(E/'spec-layout-check.c')]
++ assert hashlib.sha256((A/'include/crtos_semaphore_layout.h').read_bytes()).hexdigest()==basis[layout]
++command=[*compiler_args,'-std=gnu11','-ffreestanding','-fno-builtin','-Wall','-Wextra','-fsyntax-only',*[str(p) for p in files],str(O/'spec-layout-check.c')]
+ subprocess.run(command,check=True,capture_output=True,text=True)
+-manifest={str(p.relative_to(T)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(A.rglob('*')) if p.is_file()}
++manifest={str(Path('annotated_C')/p.relative_to(A)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(A.rglob('*')) if p.is_file()}
+ manifest_sha=hashlib.sha256(json.dumps(manifest,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+-(E/'spec-annotated-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
++(O/'spec-annotated-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+ result={'status':'checks-passed-awaiting-independent-spec-delta-review','predicate_revision':accepted['predicate_revision'],'predicate_manifest_sha256':accepted['predicate_manifest'],'source_revision':source_result['source_revision'],'current_authoritative_source_hashes_checked':len(source_manifest),'spec_revision':'spec-r'+str(SPEC_REVISION_NUMBER)+'-'+manifest_sha[:12], 'annotated_manifest_sha256':manifest_sha,'source_check_result_sha256':hashlib.sha256((E/'source-check-result.json').read_bytes()).hexdigest(),'source_equivalence':'token equality after documented normalizations against current-source preprocessing','checks':checks,'nontrusted':sorted(expected),'trusted':sorted(trusted),'all_caller_contracts_identical':True,'trusted_declaration_delta':trusted_delta,'current_c_syntax_and_slice_layout':'passed','current_c_compiler_target':'Cortex-M3' if current_arm_compile else 'native ILP32 gcc -m32','current_arm_compile':current_arm_compile,'cortex_m3_abi_evidence':'new target compilation' if current_arm_compile else 'reused unchanged current-source ARM evidence; temporary ARM compiler no longer installed','source_abi_assembly_sha256':hashlib.sha256((E/'source-abi.s').read_bytes()).hexdigest(),'command':command,'qcp_started':False,'elapsed_seconds':time.monotonic()-start}
+-(E/'spec-check-result.json').write_text(json.dumps(result,indent=2)+'\n')
++(O/'spec-check-result.json').write_text(json.dumps(result,indent=2)+'\n')
+ print(json.dumps({k:v for k,v in result.items() if k not in ['checks','command']},indent=2))

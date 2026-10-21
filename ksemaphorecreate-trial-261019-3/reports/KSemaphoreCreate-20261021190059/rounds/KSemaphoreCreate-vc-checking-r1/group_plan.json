@@ -1,0 +1,36 @@
+{
+  "groups": [
+    {
+      "id": "return_results",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_KSemaphoreCreate_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold KSemaphoreCreate_return_wit_1 and introduce its parameters and pure hypotheses (or use the standard LLM_pre_process tactic). The sole spatial resource is OutsideCritical sg after_3. Instantiate the consequent existential after with after_3. Prove retval = -5 from PreH1 and safeExec (LastSeen after_3) (ret (-5)) X from PreH2, then cancel the identical OutsideCritical resource. The earlier abs_semaphore_create safeExec premise is not needed: this VC packages the callee's returned state and failure result without a new transition. No helper or resource transformation is needed."
+        },
+        {
+          "name": "proof_of_KSemaphoreCreate_return_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold KSemaphoreCreate_return_wit_2 and introduce parameters and pure hypotheses (or use LLM_pre_process). Instantiate after_2 with after_3. The bounds 0 <= retval and retval < 128 are exactly PreH1 and PreH2; the required safeExec (LastSeen after_3) (ret retval) X is PreH3. Insert these pure facts and cancel OutsideCritical sg after_3. No unfolding of OutsideCritical or the abstract operation is necessary, and no new refinement transition or helper is required."
+        }
+      ]
+    },
+    {
+      "id": "call_precondition",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_KSemaphoreCreate_partial_solve_wit_1_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold KSemaphoreCreate_partial_solve_wit_1_pure and introduce all parameters and PreH1. The antecedent contains val's UShort points-to cell framed with OutsideCritical sg before. The consequent is the pure proposition safeExec (LastSeen before) (abs_semaphore_create sg val_pre) X, literally supplied by PreH1. Apply pure-right entailment (entailer!/standard pure introduction) and exact PreH1; there are no existential witnesses or target spatial resources and no heap mutation, bounds argument, or abstract transition. No helper is needed."
+        },
+        {
+          "name": "proof_of_KSemaphoreCreate_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold KSemaphoreCreate_partial_solve_wit_1, introduce its pure-VC implication argument, then unfold KSemaphoreCreate_partial_solve_wit_1_aux and introduce parameters and PreH1. Establish both pure conjuncts with the same PreH1, which is safeExec (LastSeen before) (abs_semaphore_create sg val_pre) X. Preserve and cancel the identical OutsideCritical sg before resource. The implication argument need not be applied because the aux obligation already quantifies PreH1. There are no existential witnesses, resource conversions, or new transitions and no helper is needed."
+        }
+      ]
+    }
+  ]
+}

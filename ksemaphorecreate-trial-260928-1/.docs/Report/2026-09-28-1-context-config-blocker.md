@@ -11,7 +11,7 @@
 - 同一 Makefile 的 `:175-182` 表明只有执行 `menuconfig` 时才把 board `.defconfig` 复制为根 `.config`，因此当前不存在已经激活的 feature config。
 - `board/kd233/.defconfig:9-11,177-178` 选择 RV64 且 `CONFIG_ARCH_SMP=y`、`CONFIG_CPUS_NR=2`；`board/kd233/config.mk:1,5` 使用 `-march=rv64imafdc -mabi=lp64d`。
 - `board/stm32f103-nano/config` 是仓库中唯一无前导点的已生成 board config，启用 semaphore、禁用 SMP并选择 32 位 Cortex-M3；但根 Makefile 不读取该文件，除非另行把它选为验证配置。
-- `task-proof/annotated_C/src/include/xsconfig.h` 没有启用 `ARCH_SMP`/64 位；`task-proof/lib/KTaskPure.v` 与 `KTaskDescriptor.v` 的布局说明按 4 字节指针。因此现有 task formal 与默认 kd233 SMP/LP64 配置不一致。
+- `annotated_C/src/include/xsconfig.h` 没有启用 `ARCH_SMP`/64 位；`lib/KTaskPure.v` 与 `KTaskDescriptor.v` 的布局说明按 4 字节指针。因此现有 task formal 与默认 kd233 SMP/LP64 配置不一致。
 
 ## 影响
 

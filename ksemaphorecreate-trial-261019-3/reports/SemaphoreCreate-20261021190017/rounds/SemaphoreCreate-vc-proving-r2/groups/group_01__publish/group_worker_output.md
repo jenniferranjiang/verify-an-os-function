@@ -1,0 +1,5 @@
+Publish group reconstructs the published semaphore invariant from the current trial's existing call resources. Local helpers prove the 16-bucket manager update, preservation of world well-formedness by adding an empty waiting queue, the empty pending DLL, the nonzero final DLL pointer, and the management-list splice. InsideCritical remains framed at locked.
+
+The current Crtos_GTrans uses the existing unrestricted CriticalSTS transition, so its pure obligation is discharged directly by the current definitions. No new transition or layout assumptions are introduced. The global management sentinel's nonzero fact uses the existing CNotation global-variable address fact.
+
+All edits are limited to assigned proof spans and the group library; semantic inputs and C annotations remain unchanged. The controller group-check completed with process exit code 0 and JSON status passed. All five assigned proof declarations are closed with Qed, and the seven local helpers have the required __publish suffix. The task invariant is transported by reconstructing its indexed task_world_wf record from unchanged fields.

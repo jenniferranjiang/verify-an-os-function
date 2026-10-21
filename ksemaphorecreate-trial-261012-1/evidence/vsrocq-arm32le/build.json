@@ -1,0 +1,28 @@
+[
+  {
+    "argv": [
+      "make",
+      "dune-files"
+    ],
+    "cwd": "/tmp/crtos-vsrocq-arm32le-build",
+    "exit_code": 0,
+    "seconds": 0.15938231700010874,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "/home/xinra/.opam/pv-bench-8.20.1/bin/dune",
+      "build",
+      "-p",
+      "vsrocq-language-server",
+      "-j",
+      "2"
+    ],
+    "cwd": "/tmp/crtos-vsrocq-arm32le-build",
+    "exit_code": 1,
+    "seconds": 1.6560079079999923,
+    "stdout": "",
+    "stderr": "(cd _build/default && /home/xinra/.opam/pv-bench-8.20.1/bin/ocamlopt.opt -g -w -24 -o .ppx/a323d13ce029407e35443f5310272cab/ppx.exe /home/xinra/.opam/pv-bench-8.20.1/lib/ocaml/compiler-libs/ocamlcommon.cmxa /home/xinra/.opam/default/lib/ocaml-compiler-libs/common/ocaml_common.cmxa /home/xinra/.opam/default/lib/ppxlib/astlib/astlib.cmxa /home/xinra/.opam/default/lib/stdlib-shims/stdlib_shims.cmxa /home/xinra/.opam/default/lib/ppxlib/ast/ppxlib_ast.cmxa /home/xinra/.opam/default/lib/ocaml-compiler-libs/shadow/ocaml_shadow.cmxa /home/xinra/.opam/default/lib/ppxlib/print_diff/ppxlib_print_diff.cmxa /home/xinra/.opam/default/lib/ppx_derivers/ppx_derivers.cmxa /home/xinra/.opam/default/lib/ppxlib/traverse_builtins/ppxlib_traverse_builtins.cmxa /home/xinra/.opam/default/lib/sexplib0/sexplib0.cmxa /home/xinra/.opam/default/lib/ppxlib/stdppx/stdppx.cmxa /home/xinra/.opam/default/lib/ppxlib/ppxlib.cmxa /home/xinra/.opam/default/lib/ppx_import/ppx_import.cmxa /home/xinra/.opam/default/lib/base/base_internalhash_types/base_internalhash_types.cmxa -I /home/xinra/.opam/default/lib/base/base_internalhash_types /home/xinra/.opam/default/lib/base/caml/caml.cmxa /home/xinra/.opam/default/lib/base/shadow_stdlib/shadow_stdlib.cmxa /home/xinra/.opam/default/lib/base/base.cmxa -I /home/xinra/.opam/default/lib/base /home/xinra/.opam/default/lib/stdio/stdio.cmxa /home/xinra/.opam/default/lib/ppx_optcomp/ppx_optcomp.cmxa /home/xinra/.opam/default/lib/ppxlib/metaquot_lifters/ppxlib_metaquot_lifters.cmxa /home/xinra/.opam/default/lib/ppx_sexp_conv/expander/ppx_sexp_conv_expander.cmxa /home/xinra/.opam/default/lib/ppx_sexp_conv/ppx_sexp_conv.cmxa /home/xinra/.opam/default/lib/ppx_yojson_conv/expander/ppx_yojson_conv_expander.cmxa /home/xinra/.opam/default/lib/ppx_yojson_conv/ppx_yojson_conv.cmxa .ppx/a323d13ce029407e35443f5310272cab/dune__exe___ppx.cmx)\nFile \"_none_\", line 1:\nError: Files /home/xinra/.opam/default/lib/ppxlib/astlib/astlib.cmxa\n       and /home/xinra/.opam/pv-bench-8.20.1/lib/ocaml/stdlib.cmxa\n       make inconsistent assumptions over implementation Stdlib__List\n(cd _build/default && /home/xinra/.opam/pv-bench-8.20.1/bin/ocamlopt.opt -g -w -24 -o .ppx/a8ec365ff0d5df069e0e3be1a3a480b4/ppx.exe /home/xinra/.opam/pv-bench-8.20.1/lib/ocaml/compiler-libs/ocamlcommon.cmxa /home/xinra/.opam/default/lib/base/base_internalhash_types/base_internalhash_types.cmxa -I /home/xinra/.opam/default/lib/base/base_internalhash_types /home/xinra/.opam/default/lib/base/caml/caml.cmxa /home/xinra/.opam/default/lib/sexplib0/sexplib0.cmxa /home/xinra/.opam/default/lib/base/shadow_stdlib/shadow_stdlib.cmxa /home/xinra/.opam/default/lib/base/base.cmxa -I /home/xinra/.opam/default/lib/base /home/xinra/.opam/default/lib/ocaml-compiler-libs/common/ocaml_common.cmxa /home/xinra/.opam/default/lib/ppxlib/astlib/astlib.cmxa /home/xinra/.opam/default/lib/stdlib-shims/stdlib_shims.cmxa /home/xinra/.opam/default/lib/ppxlib/ast/ppxlib_ast.cmxa /home/xinra/.opam/default/lib/ocaml-compiler-libs/shadow/ocaml_shadow.cmxa /home/xinra/.opam/default/lib/ppxlib/print_diff/ppxlib_print_diff.cmxa /home/xinra/.opam/default/lib/ppx_derivers/ppx_derivers.cmxa /home/xinra/.opam/default/lib/ppxlib/traverse_builtins/ppxlib_traverse_builtins.cmxa /home/xinra/.opam/default/lib/ppxlib/stdppx/stdppx.cmxa /home/xinra/.opam/default/lib/ppxlib/ppxlib.cmxa /home/xinra/.opam/default/lib/stdio/stdio.cmxa /home/xinra/.opam/default/lib/ppx_optcomp/ppx_optcomp.cmxa .ppx/a8ec365ff0d5df069e0e3be1a3a480b4/dune__exe___ppx.cmx)\nFile \"_none_\", line 1:\nError: Files /home/xinra/.opam/default/lib/sexplib0/sexplib0.cmxa\n       and /home/xinra/.opam/pv-bench-8.20.1/lib/ocaml/stdlib.cmxa\n       make inconsistent assumptions over implementation Stdlib__StringLabels\n"
+  }
+]

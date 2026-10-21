@@ -1,0 +1,11 @@
+{
+  "source_count": 47,
+  "source_mismatches": [],
+  "source_abi_c_sha256": "206bc62ad3a3231c8114b96f6413f694baf7860be16b9c71d142cf28b3ad7377",
+  "source_abi_s_sha256": "a65cefb3ec420b8ec4c7c5c75ad53ad0cec9bfb3d8dab0c6f492069b3d18d834",
+  "source_check_result_sha256": "798a370a8b3644afc97ff085a57766b82763966a26461c16b0dec207d159f6f8",
+  "source_config_sha256": "ad9135bd836e78b8ace5af15e88a1e7a34a0b3d723435f85c281a18d1bdc40db",
+  "arm_cc_path_exists": false,
+  "arm_cc_on_path": null,
+  "clang_on_path": null
+}

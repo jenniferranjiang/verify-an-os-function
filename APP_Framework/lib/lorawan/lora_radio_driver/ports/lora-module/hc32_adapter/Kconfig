@@ -1,0 +1,18 @@
+choice
+    prompt "choose lora device module"
+    default LORA_RADIO_DRIVER_USING_SX1268_E22400M30S
+
+    config LORA_RADIO_DRIVER_USING_SX1268_E22400M30S
+        bool "lora device module select E22-400M30S(SX1268)"
+
+    config LORA_RADIO_DRIVER_USING_SX1278_RA01
+        bool "lora device module select RA01(SX1278)"
+endchoice
+
+if LORA_RADIO_DRIVER_USING_SX1268_E22400M30S
+    source "$APP_DIR/lib/lorawan/lora_radio_driver/ports/lora-module/hc32_adapter/SX1268_E22-400M30S/Kconfig"
+endif
+
+if LORA_RADIO_DRIVER_USING_SX1278_RA01
+    source "$APP_DIR/lib/lorawan/lora_radio_driver/ports/lora-module/hc32_adapter/SX1278_Ra-01/Kconfig"
+endif    

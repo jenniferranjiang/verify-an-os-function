@@ -1,0 +1,156 @@
+{
+  "run": {
+    "status": "completed",
+    "phase": "done",
+    "created_at": "2026-10-12T05:09:48.599379Z",
+    "finished_at": "2026-10-15T16:27:20.800852Z",
+    "elapsed_seconds": 299852.201473
+  },
+  "commands": [
+    {
+      "phase": "annotation",
+      "command": "coq-check",
+      "calls": 1,
+      "elapsed_seconds": 0.008761
+    },
+    {
+      "phase": "annotation",
+      "command": "symexec",
+      "calls": 1,
+      "elapsed_seconds": 0.155645
+    },
+    {
+      "phase": "annotation",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 0.24631
+    },
+    {
+      "phase": "vc-checking",
+      "command": "dune-build",
+      "calls": 1,
+      "elapsed_seconds": 62.808345
+    },
+    {
+      "phase": "vc-checking",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 0.062289
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-preparing",
+      "calls": 1,
+      "elapsed_seconds": 0.064812
+    },
+    {
+      "phase": "vc-proving",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 76.82121
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-verify",
+      "calls": 1,
+      "elapsed_seconds": 75.69382
+    },
+    {
+      "phase": "final-check",
+      "command": "final-apply",
+      "calls": 1,
+      "elapsed_seconds": 82.746766
+    },
+    {
+      "phase": "done",
+      "command": "final-check",
+      "calls": 3,
+      "elapsed_seconds": 182.463797
+    }
+  ],
+  "annotation_attempts": [
+    {
+      "attempt_id": "DoubleLinkListInsertNodeAfter-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-10-12T11:28:24.724158Z",
+          "finished_at": "2026-10-12T11:28:24.737547Z",
+          "elapsed_seconds": 0.008761
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-10-12T11:29:02.952848Z",
+          "finished_at": "2026-10-12T11:29:03.207552Z",
+          "elapsed_seconds": 0.24631
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-10-12T11:27:20.718264Z",
+          "finished_at": "2026-10-12T11:29:02.962781Z",
+          "elapsed_seconds": 102.244517
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-10-12T11:28:31.361348Z",
+          "finished_at": "2026-10-12T11:28:31.521630Z",
+          "elapsed_seconds": 0.155645
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "attempt_id": "DoubleLinkListInsertNodeAfter-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-10-12T11:31:57.354813Z",
+          "finished_at": "2026-10-12T11:31:57.424649Z",
+          "elapsed_seconds": 0.062289
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-10-12T11:30:23.229832Z",
+          "finished_at": "2026-10-12T11:31:57.366261Z",
+          "elapsed_seconds": 94.136429
+        }
+      ]
+    },
+    {
+      "attempt_id": "DoubleLinkListInsertNodeAfter-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-10-12T11:34:14.933346Z",
+          "finished_at": "2026-10-12T11:35:29.539782Z",
+          "elapsed_seconds": 76.82121
+        },
+        {
+          "name": "group-work",
+          "started_at": "2026-10-12T11:32:10.013305Z",
+          "finished_at": "2026-10-12T11:34:14.949761Z",
+          "elapsed_seconds": 124.936456
+        },
+        {
+          "name": "vc-proving-preparing",
+          "started_at": "2026-10-12T11:32:03.519592Z",
+          "finished_at": "2026-10-12T11:32:03.589676Z",
+          "elapsed_seconds": 0.064812
+        },
+        {
+          "name": "vc-proving-verify",
+          "started_at": "2026-10-12T11:36:12.949170Z",
+          "finished_at": "2026-10-12T11:37:26.447272Z",
+          "elapsed_seconds": 75.69382
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+if BSP_USING_SPI
+    config BSP_USING_SPI1
+    bool "Using spi1 for W5500"
+    default y
+
+    if BSP_USING_SPI1
+        config SPI_BUS_NAME_1
+            string "spi bus 1 name"
+            default "spi1"
+        config SPI_1_DEVICE_NAME_0
+            string "spi bus 1 device 0 name"
+            default "spi1_dev0" 
+        config SPI_1_DRV_NAME
+            string "spi bus 1 driver name"
+            default "spi1_drv"
+    endif   
+
+    config BSP_USING_SPI2
+    bool "Using spi2 for E22 LoRa"
+    default y
+
+    if BSP_USING_SPI2
+        config SPI_BUS_NAME_2
+            string "spi bus 2 name"
+            default "spi2"
+        config SPI_2_DEVICE_NAME_0
+            string "spi bus 2 device 0 name"
+            default "spi2_dev0" 
+        config SPI_2_DRV_NAME
+            string "spi bus 2 driver name"
+            default "spi2_drv"
+    endif  
+endif

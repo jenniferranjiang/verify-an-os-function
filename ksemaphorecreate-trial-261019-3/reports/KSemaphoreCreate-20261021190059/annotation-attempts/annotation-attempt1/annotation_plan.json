@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "_SemaphoreCreate",
+      "meaning": "Refine abs_semaphore_create from LastSeen(before), returning -5 or an ID in [0,128), preserving OutsideCritical and the continuation."
+    },
+    {
+      "name": "KSemaphoreCreate",
+      "meaning": "Provide exactly the same semaphore-creation refinement and OutsideCritical postcondition by calling _SemaphoreCreate."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

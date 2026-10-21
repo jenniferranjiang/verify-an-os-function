@@ -1,0 +1,11 @@
+{
+  "board/stm32f103-nano/config": "6702975d356756d6e46534d620e28611db221c88a5e23aa57a612db21ea16713",
+  "kernel/thread/data_queue.c": "a8b12c43c3f2061df08320f50daaabda7ada033e40670c2d37ea2d8ef774f601",
+  "kernel/thread/linklist.c": "d64d3275b6d936f46352bc4625fc11efc9e0b113ca838f60a98eabaa09a7342c",
+  "kernel/thread/ktask.c": "dbf27468d0e386cc54c9aeb28219662aa6248bfd8292120423b4d2fa4f8bf3d1",
+  "kernel/thread/CriticalArea.c": "946b214eb678c1202c96dc6fd5272fd2c8d2dd245736888a0ea4114fdd6f113a",
+  "kernel/thread/semaphore.c": "d5b41c3bde69e0416431d2425c61e35453778ae4b1569747f2c2258f3dfe16ec",
+  "kernel/thread/assign.c": "418f58833c6e8a9198daf6f8ce0364ee5646a0483cc3750052127f8a7f435ada",
+  "kernel/thread/assignstat.c": "422eb74d2990fa7a2af43399f01061c4a700f30edb2ddac336cd982cba564407",
+  "kernel/include/xs_ktask_stat.h": "3cba560dcbf3c3e375c44933243da525a1a69c5bb668124335f9ae6f3911690f"
+}

@@ -1,0 +1,11 @@
+Require Import CRTOS_Verify.nestdraft.SemaphoreCriticalViews.
+Print Assumptions CrtosSchedulerViews.store_scheduler_split_nest.
+Print Assumptions CrtosSchedulerViews.store_scheduler_merge_nest.
+Print Assumptions OSHeap_ushort_eq.
+Print Assumptions SemaphoreOSInvariant_split_nest.
+Print Assumptions SemaphoreOSInvariant_merge_nest.
+Print Assumptions SemaphoreCriticalFrame_with_nest.
+Print Assumptions CrtosOSValid_with_nest.
+Print Assumptions SemaphoreOSInvariant_merge_updated_nest.
+Print Assumptions SemaphoreOSInvariant_merge_increment.
+Print Assumptions SemaphoreOSInvariant_merge_decrement.

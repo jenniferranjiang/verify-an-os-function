@@ -1,0 +1,6 @@
+From CRTOS_Verify.VC Require Import IdInsertObj_goal IdInsertObj_proof_auto IdInsertObj_proof_manual.
+Check proof_of_IdInsertObj_safety_wit_1.
+Check proof_of_IdInsertObj_safety_wit_2.
+Check proof_of_IdInsertObj_safety_wit_4.
+Check proof_of_IdInsertObj_safety_wit_5.
+Check proof_of_IdInsertObj_safety_wit_7.

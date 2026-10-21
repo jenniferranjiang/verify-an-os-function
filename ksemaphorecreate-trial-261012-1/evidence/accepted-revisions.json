@@ -1,0 +1,67 @@
+{
+  "accepted_at_utc": "2026-10-15T16:22:40.209315+00:00",
+  "basis": "User one-time automatic acceptance of independent review-passed revisions, plus explicit DCHG-20261012-01 authorization",
+  "source_revision": "source-r2-0c50c37013e9",
+  "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+  "predicate_revision": "predicate-nonzero-candidate-fe8c4261db5c",
+  "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+  "predicate_reviewer": "/root/nonzero_source_review",
+  "predicate_status": "review-passed",
+  "spec_revision": "spec-r6-ae22a04e2c95",
+  "spec_manifest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+  "spec_author": "/root/sizeof_spec_author",
+  "spec_reviewer": "/root/nonzero_source_review",
+  "spec_status": "review-passed",
+  "domain": "entry scheduler_lock_nest < 65535; deeper entries excluded",
+  "trusted": [
+    "x_malloc",
+    "x_free",
+    "memset",
+    "DisableLocalInterrupt",
+    "EnableLocalInterrupt",
+    "KPrintf"
+  ],
+  "implementation_verified": true,
+  "spec_review": ".docs/Report/2026-10-16-1-spec-review.md",
+  "predicate_review": ".docs/Report/2026-10-12-6-predicate-review.md",
+  "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15",
+  "compiler": "/home/xinra/.opam/pv-bench-8.20.1/bin/coqc",
+  "framework": "official Rocq Arch32 LittleEndian, explicit trial shared/framework candidates",
+  "design_change": ".docs/Report/design-changes/2026-10-16-1-sizeof-normalization.md",
+  "implementation_pending": [],
+  "implementation_resolved": [
+    {
+      "issue": "IMPL-20261016-BODY-01",
+      "owner": "original _SemaphoreCreate annotation owner",
+      "required": "Resolve Basics import composition-notation conflict and regenerate/typecheck under controller",
+      "status": "resolved-at-actual-generated-goal-typechecking",
+      "evidence": "reports/SemaphoreCreate-20261012131015/rounds/_SemaphoreCreate-vc-checking-r2/agent_output.md",
+      "limitation": "This closes the body interface typing issue, not any C VC proof."
+    },
+    {
+      "issue": "IMPL-20261016-BODY-02",
+      "owner": "original _SemaphoreCreate annotation owner",
+      "required": "Use real getData/getPtr projections and regenerate/typecheck under controller",
+      "status": "resolved-at-actual-generated-goal-typechecking",
+      "evidence": "reports/SemaphoreCreate-20261012131015/rounds/_SemaphoreCreate-vc-checking-r2/agent_output.md",
+      "limitation": "This closes the body interface typing issue, not any C VC proof."
+    },
+    {
+      "issue": "original_sizeof_VCs",
+      "required": "Regenerate and independently recheck actual pure size obligations; no deletion or proof claim yet",
+      "status": "proved-in-accepted-normalized_calls-group",
+      "evidence": "reports/SemaphoreCreate-20261012131015/rounds/_SemaphoreCreate-vc-proving-r1/groups/group_00__normalized_calls/group_worker_output.md",
+      "limitation": "Original VC identities preserved and proved after reviewed extraction normalization; whole function final-check pending."
+    }
+  ],
+  "final_integrity": {
+    "status": "verified",
+    "report": ".docs/Report/2026-10-16-1-final-integrity.md",
+    "evidence": "evidence/final-integrity",
+    "parent_vcs": 147,
+    "split_Qed": 42,
+    "functions": 9,
+    "trust_basis": "six approved trusted C symbols plus existing QCP/Rocq framework assumptions, including three upstream CNotation equivalence admissions",
+    "domain": "entry scheduler_lock_nest < 65535; deeper entries excluded"
+  }
+}

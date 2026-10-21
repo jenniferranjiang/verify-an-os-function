@@ -1,0 +1,225 @@
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( INT )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( BOOL )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( CHAR )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( INT64 )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( SHORT )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( UINT )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( UCHAR )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( UINT64 )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( INT128 )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( UINT128 )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( USHORT )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( FLOAT )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( DOUBLE )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( LONGDOUBLE )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( PTR )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( struct _ )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( union _ )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "sizeof ( _ )" was already used.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "emp" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ |-- _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ --||-- _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ -* _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ --> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ || _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ && _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ ** _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "“ _ ”" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "TT" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "EX _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "EX _ : _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "EX _ .. _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "ALL _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "ALL _ : _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "ALL _ .. _ , _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Char |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Bool |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # UChar |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Short |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # UShort |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Int |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # UInt |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Int64 |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # UInt64 |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Int128 |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # UInt128 |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Float |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Double |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # LongDouble |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # FiniteFloat |-> _" was already used in scope
+sac_scope. [notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # FiniteDouble |-> _" was already used in scope
+sac_scope. [notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # FiniteLongDouble |-> _" was already used in scope
+sac_scope. [notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Ptr |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Char |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Bool |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # UChar |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Short |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # UShort |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Int |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # UInt |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Int64 |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # UInt64 |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Int128 |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # UInt128 |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Float |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Double |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # LongDouble |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # FiniteFloat |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # FiniteDouble |->_" was already used in scope
+sac_scope. [notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # FiniteLongDouble |->_" was already used in scope
+sac_scope. [notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # Ptr |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # _ |-> _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "_ # _ |->_" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "Padding _ _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "Padding _ _ . _" was already used in scope sac_scope.
+[notation-overridden,parsing,default]
+File "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/evidence/controller-adapter-tests/reserved-binder/AllocId_goal.v", line 27, characters 0-21:
+Warning: Notation "Assertion" was already used.
+[notation-overridden,parsing,default]

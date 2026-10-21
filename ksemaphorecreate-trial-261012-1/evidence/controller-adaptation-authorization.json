@@ -1,0 +1,18 @@
+{
+  "original_command": [
+    "/usr/bin/python3.12",
+    "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+    "--main-root",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261012-1",
+    "init-run",
+    "--case",
+    "KSemaphoreCreate",
+    "--target-c-file",
+    "annotated_C/src/KSemaphoreCreate.c"
+  ],
+  "exit_code": 1,
+  "original_blocker": "target C file must exist under main-root/QCP_examples: /home/xinra/crtos/ksemaphorecreate-trial-261012-1/annotated_C/src/KSemaphoreCreate.c",
+  "vc_generated": false,
+  "user_authorization": "允许在新 trial 内适配 controller",
+  "scope": "Local trial controller layout and complete nine-function closure; retain original action/acceptance workflow, accepted semantics and six trusted symbols."
+}

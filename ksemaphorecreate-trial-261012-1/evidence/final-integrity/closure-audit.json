@@ -1,0 +1,705 @@
+{
+  "status": "passed",
+  "accepted_inputs": {
+    "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+    "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+    "spec_manifest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+    "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+  },
+  "trusted": [
+    "x_malloc",
+    "x_free",
+    "memset",
+    "DisableLocalInterrupt",
+    "EnableLocalInterrupt",
+    "KPrintf"
+  ],
+  "formal_sources": 21,
+  "normalized_local_modules": 57,
+  "functions": [
+    {
+      "function": "CriticalAreaLock",
+      "run": "CriticalAreaLock-20261012130948",
+      "parents": 3,
+      "promoted_auto_placeholders": 1,
+      "original_manual_obligations": 2,
+      "final_manual_parent_Qed": 3,
+      "final_auto_Qed": 0,
+      "split_definitions": 2,
+      "split_Qed": 2,
+      "unused_split_Abort": [],
+      "proof_modes": {
+        "aggressive_pre_process": 1,
+        "LLM_pre_process": 2
+      },
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-10-15T16:25:30.583669Z",
+        "errors": [],
+        "cleanup_removed_count": 0,
+        "accepted_inputs": {
+          "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+          "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+          "spec_manifest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+          "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+        }
+      }
+    },
+    {
+      "function": "CriticalAreaUnLock",
+      "run": "CriticalAreaUnLock-20261012130948",
+      "parents": 7,
+      "promoted_auto_placeholders": 4,
+      "original_manual_obligations": 3,
+      "final_manual_parent_Qed": 7,
+      "final_auto_Qed": 0,
+      "split_definitions": 4,
+      "split_Qed": 4,
+      "unused_split_Abort": [],
+      "proof_modes": {
+        "aggressive_pre_process": 3,
+        "LLM_pre_process": 4
+      },
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-10-15T16:26:25.924237Z",
+        "errors": [],
+        "cleanup_removed_count": 0,
+        "accepted_inputs": {
+          "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+          "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+          "spec_manifest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+          "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+        }
+      }
+    },
+    {
+      "function": "DoubleLinkListInsertNodeAfter",
+      "run": "DoubleLinkListInsertNodeAfter-20261012130948",
+      "parents": 1,
+      "promoted_auto_placeholders": 1,
+      "original_manual_obligations": 0,
+      "final_manual_parent_Qed": 1,
+      "final_auto_Qed": 0,
+      "split_definitions": 0,
+      "split_Qed": 0,
+      "unused_split_Abort": [],
+      "proof_modes": {
+        "LLM_pre_process": 1
+      },
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-10-15T16:27:20.800875Z",
+        "errors": [],
+        "cleanup_removed_count": 0,
+        "accepted_inputs": {
+          "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+          "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+          "spec_manifest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+          "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+        }
+      }
+    },
+    {
+      "function": "AllocId",
+      "run": "AllocId-20261012130948",
+      "parents": 43,
+      "promoted_auto_placeholders": 31,
+      "original_manual_obligations": 12,
+      "final_manual_parent_Qed": 43,
+      "final_auto_Qed": 0,
+      "split_definitions": 15,
+      "split_Qed": 15,
+      "unused_split_Abort": [],
+      "proof_modes": {
+        "aggressive_pre_process": 8,
+        "LLM_pre_process": 35
+      },
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-10-15T16:28:58.478886Z",
+        "errors": [],
+        "cleanup_removed_count": 0,
+        "accepted_inputs": {
+          "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+          "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+          "spec_manifest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+          "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+        }
+      }
+    },
+    {
+      "function": "InitDoubleLinkList",
+      "run": "InitDoubleLinkList-20261012130948",
+      "parents": 1,
+      "promoted_auto_placeholders": 1,
+      "original_manual_obligations": 0,
+      "final_manual_parent_Qed": 1,
+      "final_auto_Qed": 0,
+      "split_definitions": 0,
+      "split_Qed": 0,
+      "unused_split_Abort": [],
+      "proof_modes": {
+        "LLM_pre_process": 1
+      },
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-10-15T16:29:51.418100Z",
+        "errors": [],
+        "cleanup_removed_count": 0,
+        "accepted_inputs": {
+          "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+          "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+          "spec_manifest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+          "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+        }
+      }
+    },
+    {
+      "function": "InsertObj",
+      "run": "InsertObj-20261012130948",
+      "parents": 19,
+      "promoted_auto_placeholders": 14,
+      "original_manual_obligations": 5,
+      "final_manual_parent_Qed": 19,
+      "final_auto_Qed": 0,
+      "split_definitions": 4,
+      "split_Qed": 4,
+      "unused_split_Abort": [],
+      "proof_modes": {
+        "LLM_pre_process": 16,
+        "aggressive_pre_process": 3
+      },
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-10-15T16:31:46.981075Z",
+        "errors": [],
+        "cleanup_removed_count": 0,
+        "accepted_inputs": {
+          "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+          "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+          "spec_manifest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+          "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+        }
+      }
+    },
+    {
+      "function": "IdInsertObj",
+      "run": "IdInsertObj-20261012130948",
+      "parents": 25,
+      "promoted_auto_placeholders": 22,
+      "original_manual_obligations": 3,
+      "final_manual_parent_Qed": 25,
+      "final_auto_Qed": 0,
+      "split_definitions": 4,
+      "split_Qed": 4,
+      "unused_split_Abort": [],
+      "proof_modes": {
+        "aggressive_pre_process": 2,
+        "LLM_pre_process": 23
+      },
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-10-15T16:32:45.819154Z",
+        "errors": [],
+        "cleanup_removed_count": 0,
+        "accepted_inputs": {
+          "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+          "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+          "spec_manifest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+          "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+        }
+      }
+    },
+    {
+      "function": "_SemaphoreCreate",
+      "run": "SemaphoreCreate-20261012131015",
+      "parents": 43,
+      "promoted_auto_placeholders": 35,
+      "original_manual_obligations": 8,
+      "final_manual_parent_Qed": 43,
+      "final_auto_Qed": 0,
+      "split_definitions": 13,
+      "split_Qed": 13,
+      "unused_split_Abort": [],
+      "proof_modes": {
+        "LLM_pre_process": 39,
+        "aggressive_pre_process": 4
+      },
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-10-16T05:50:00.795173Z",
+        "errors": [],
+        "cleanup_removed_count": 0,
+        "accepted_inputs": {
+          "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+          "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+          "spec_manifest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+          "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+        }
+      }
+    },
+    {
+      "function": "KSemaphoreCreate",
+      "run": "KSemaphoreCreate-20261012131015",
+      "parents": 5,
+      "promoted_auto_placeholders": 5,
+      "original_manual_obligations": 0,
+      "final_manual_parent_Qed": 5,
+      "final_auto_Qed": 0,
+      "split_definitions": 0,
+      "split_Qed": 0,
+      "unused_split_Abort": [],
+      "proof_modes": {
+        "LLM_pre_process": 5
+      },
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-10-16T06:10:16.666796Z",
+        "errors": [],
+        "cleanup_removed_count": 0,
+        "accepted_inputs": {
+          "source_manifest": "0c50c37013e9cd306791865c9deafadfa2051eaaf523ee78fdfef6b8812c4651",
+          "predicate_manifest": "fe8c4261db5cff754395f3d9038769b3e50420d542347262a831aa3ce6a422b3",
+          "spec_manifest": "ae22a04e2c951be960fddd724fae8d23a5f2034b8f65765318472ff549c79e18",
+          "coqproject_sha256": "31614155daad904f4bb2411acc60639d7c99aaf3749eb967d185d7b56d930f15"
+        }
+      }
+    }
+  ],
+  "total_parents": 147,
+  "total_promoted_auto": 114,
+  "total_original_manual": 33,
+  "total_splits": 42,
+  "files": [
+    {
+      "path": "framework-candidate/NestedCriticalSTS.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/framework-candidate/NestedCriticalSTS.v",
+      "v_sha256": "c4f4859ae5f5fdb55646bf346c020b4a9fdd377500df6ace7d18ab62745112a8",
+      "vo_sha256": "73085292a738d94380379404197554329de4c6b4422815b411dcceefd9fb9ed8"
+    },
+    {
+      "path": "shared-candidate/arm32le/KTaskPure.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/shared-candidate/arm32le/KTaskPure.v",
+      "v_sha256": "94861592d49e19ca0939e76e6aaefcf7d4d62dc73825bf7895275282d48f8f20",
+      "vo_sha256": "7e9be8ea18e613491df06fd75779591ec2a920806494095ea23400c21802a370"
+    },
+    {
+      "path": "shared-candidate/arm32le/dll_abs.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/shared-candidate/arm32le/dll_abs.v",
+      "v_sha256": "844f770c865704b68281c07224e99e8366f7886b4650848038de273250496d6f",
+      "vo_sha256": "539c97a6270adc74557dc8c7d9082edb147f983f1c15ffadc14eeccf08ee4c21"
+    },
+    {
+      "path": "shared-candidate/arm32le/idnode_abs.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/shared-candidate/arm32le/idnode_abs.v",
+      "v_sha256": "0c93b588560bf72bfd352dd5129b578148f5a01264679ea1ddc3ad3ec222467a",
+      "vo_sha256": "3ccd6949922ccec1e27951b564c1a7d3930a380a4824f24840489732f2b5a96d"
+    },
+    {
+      "path": "shared-candidate/arm32le/CrtosGlobState.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/shared-candidate/arm32le/CrtosGlobState.v",
+      "v_sha256": "ae8d05137b1db9f4f51d88c3608ee63ddf1065a73129652135e0b33afd55aeed",
+      "vo_sha256": "67d3f494734d1653eb0316f3c5b418602e40b9e0936a2ae66f544554e538651c"
+    },
+    {
+      "path": "shared-candidate/arm32le/TaskProtocolSTS.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/shared-candidate/arm32le/TaskProtocolSTS.v",
+      "v_sha256": "04ac5f561cb407a6479f08ac9ce8f911e568a6b1ae95474244e682cfda440f77",
+      "vo_sha256": "6e6eaec7f122626bc8e94cfd9f7fc90cca5e9d8dd0a954f368ead4c43a1fe2fa"
+    },
+    {
+      "path": "shared-candidate/arm32le/CrtosRules.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/shared-candidate/arm32le/CrtosRules.v",
+      "v_sha256": "22e78a2a6544aa1b653a617d29bccb9785a6458df7947ced64c3ec65e73dd17b",
+      "vo_sha256": "01d6b339a536f39876e8cdef90eb6eaedbda810816e1a05c8fcf62b9ea4c5fdd"
+    },
+    {
+      "path": "shared-candidate/arm32le/dll.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/shared-candidate/arm32le/dll.v",
+      "v_sha256": "63e4b4fd6457a9a8f815f3ba347918bdd43172a5ebdd0754c4c5a8853a1268ca",
+      "vo_sha256": "f563ea12ad1a046150527c967a1d0b155c1430b682d35c6133f67fa233a7bad9"
+    },
+    {
+      "path": "shared-candidate/arm32le/idnode.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/shared-candidate/arm32le/idnode.v",
+      "v_sha256": "3477298804bd08c5ca6e3fc872d6b5622dfa800d01ea5dca81bc0ed905cf5c62",
+      "vo_sha256": "e32c6175679772240d29c49413e686759277b9dcf1b84d4ab63acb6d19821a16"
+    },
+    {
+      "path": "shared-candidate/arm32le/KTaskSchedMember.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/shared-candidate/arm32le/KTaskSchedMember.v",
+      "v_sha256": "731129e7150d854ba1233b94a257921e0672a9ff38b53eed72932d15d02460ae",
+      "vo_sha256": "ad3bed7029648fd0fe58b87c70e2bc62eaded94ce55584ac7deb66020250132c"
+    },
+    {
+      "path": "lib/SemaphorePure.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphorePure.v",
+      "v_sha256": "a4d77870dee54f06362f77d08aa32e9720fda512874ac6eed0467b989871337e",
+      "vo_sha256": "079f81debd285ac9193a7cd0bff8657361d540c8fe275285911dac29a05f71b4"
+    },
+    {
+      "path": "lib/CrtosOSPure.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/CrtosOSPure.v",
+      "v_sha256": "e1b2ebe9b5160f923ac29962c69fbf812ada63edd0e639aac1fa464ae8ef8060",
+      "vo_sha256": "1efd4ec3d8ca09df902e4dad88eabc0fbded7b951086c61eb2afc1af2888a4aa"
+    },
+    {
+      "path": "lib/CrtosHeapBridge.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/CrtosHeapBridge.v",
+      "v_sha256": "fba2b2d72e26da91d37a42821e6df64cfe53ca9fc82cacb9c4a1edd518af39fe",
+      "vo_sha256": "1c69b6ea95f5c7368b7a49a61c348c13d340410361e88426de2c356ac7f96423"
+    },
+    {
+      "path": "lib/CrtosNestedState.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/CrtosNestedState.v",
+      "v_sha256": "3ad9cd88ddcc74085d247ae76772e893681918b3083e14746f0e9eac62f0f9a7",
+      "vo_sha256": "3bf01a831506363cafec36023130b409601d314c3076205f67bd068454bd8dda"
+    },
+    {
+      "path": "lib/CrtosOSProtocol.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/CrtosOSProtocol.v",
+      "v_sha256": "4f02a26b81cb23fbd8bc9f202bede2b2a3a262de4f3a61a366357c4d1df57cae",
+      "vo_sha256": "e7a3964205e5b63f2969b3f98419b4331c5644ff9e345569adaf223b0d050a94"
+    },
+    {
+      "path": "lib/CrtosOSProtocolProof.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/CrtosOSProtocolProof.v",
+      "v_sha256": "32fb590793b50a5522f2cc0f920e6d3c8190c26bda8e97fe8a21d2efe50c7fcf",
+      "vo_sha256": "17b32d53cee0add84d427f98af0ef9c9d434c2d9d3288b1485aa2e5b54e64932"
+    },
+    {
+      "path": "lib/SemaphoreRep.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreRep.v",
+      "v_sha256": "0a187a982f9e9a0a2c21c215f7011c2783e240a40e270ce8dad40f0a06425ce0",
+      "vo_sha256": "c1cd63e6ccecd998512c9379502d246cff12c1a2516d455d1c5b78436f5ee4a4"
+    },
+    {
+      "path": "lib/CrtosOSInv.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/CrtosOSInv.v",
+      "v_sha256": "912089fdd047fb6bce46232c9bb250b6de1a95c243f10717efc30aca46f856f0",
+      "vo_sha256": "c5648c688559c09837c34dea5c40fbe94ac1a48cf170d67df2fd329bcb333aad"
+    },
+    {
+      "path": "lib/SemaphoreCritical.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCritical.v",
+      "v_sha256": "1defb0f8508e648520db3cfa4c30a7bb06ec87d79dbdca1f9a26f2770624320f",
+      "vo_sha256": "05e1ef32e78e21b02d47d08aa4d544fa2683d151421e67ff39c77bef1f0f0a96"
+    },
+    {
+      "path": "lib/SemaphoreCriticalViews.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreCriticalViews.v",
+      "v_sha256": "fc9e6dd89e89839a21865fda06dc8c08124ed54a1b96ff07f2e910203032189a",
+      "vo_sha256": "8cd11bf6ca1bba6bcef53fea133f8a942374589f8f2ec1437cdd36e1b170b217"
+    },
+    {
+      "path": "lib/SemaphoreInitialization.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/lib/SemaphoreInitialization.v",
+      "v_sha256": "1927048578e083be3cda790f0dc33ad7f26d9ab60252f5b98b7611654f1d2550",
+      "vo_sha256": "5a573d04f9a9ba105d5498ad5d52976f1bd98cb749c5a63c0d71e61a91785896"
+    },
+    {
+      "path": "VC/CriticalAreaLock_goal.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/CriticalAreaLock-20261012130948/_coq_builds/final-check/src/VC/CriticalAreaLock_goal.v",
+      "v_sha256": "08e659c3fe3037623527f41daa11f71f306301267fc6490ead6ec2f4466b3943",
+      "vo_sha256": "1b20a68a3a7852a316b24bce637e6a1e3f0705926797209e31b4d4ac6f0037fe"
+    },
+    {
+      "path": "VC/CriticalAreaLock_proof_auto.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/CriticalAreaLock-20261012130948/_coq_builds/final-check/src/VC/CriticalAreaLock_proof_auto.v",
+      "v_sha256": "8f069dcb1fdcf2d93c15ed616fd3ac0743af40087487ad6dc244e99b738c12ae",
+      "vo_sha256": "09a49037148ee4426350e0f7a8d4e3d6b1d22b01305b571aa1f79c7764ddebde"
+    },
+    {
+      "path": "VC/CriticalAreaLock_proof_manual.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/CriticalAreaLock-20261012130948/_coq_builds/final-check/src/VC/CriticalAreaLock_proof_manual.v",
+      "v_sha256": "943d7d18d9ea4b1a77c5c8d96b486a26ac48be293fc3a74515d27b5ebaf2217a",
+      "vo_sha256": "e5ca0d64d05a89a8a5017dea25bf9456297cff482128368fa04db8ff45643013"
+    },
+    {
+      "path": "VC/CriticalAreaLock_goal_check.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/CriticalAreaLock-20261012130948/_coq_builds/final-check/src/VC/CriticalAreaLock_goal_check.v",
+      "v_sha256": "9219b5de70efcf2369f15609439643188fa6b228a92babd2ec97b10e2b52f5d2",
+      "vo_sha256": "5594c7bc880ae27850abf815f295e21990f913cf6ad4724cfcaa11ed0706ae20"
+    },
+    {
+      "path": "VC/CriticalAreaUnLock_goal.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/CriticalAreaUnLock-20261012130948/_coq_builds/final-check/src/VC/CriticalAreaUnLock_goal.v",
+      "v_sha256": "c9de3e7a38e999daa8c4f0a48c01bdac977a043020dd4b76f1463a3a39813faa",
+      "vo_sha256": "dd78fe3e66d6e2c6d4a8c02b96e872b9641f780d0e822a6c5daa8445e98c9ece"
+    },
+    {
+      "path": "VC/CriticalAreaUnLock_proof_auto.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/CriticalAreaUnLock-20261012130948/_coq_builds/final-check/src/VC/CriticalAreaUnLock_proof_auto.v",
+      "v_sha256": "46f84c209117558cb7440079fd7fc529ad057fe789716f5bcaecd211e3527663",
+      "vo_sha256": "6292d71d80264759f83fbf5e523fe6037482066ff9cace0596632a6f46ea5ce3"
+    },
+    {
+      "path": "VC/CriticalAreaUnLock_proof_manual.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/CriticalAreaUnLock-20261012130948/_coq_builds/final-check/src/VC/CriticalAreaUnLock_proof_manual.v",
+      "v_sha256": "404c11dc94ceb57f75efa9567c020a22b16e50f9542e3efc4d88f78886a3d32d",
+      "vo_sha256": "e1f71aa9c6383fedf7ed357e0db367f639c4d22016ca570f2a23f0af375427a7"
+    },
+    {
+      "path": "VC/CriticalAreaUnLock_goal_check.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/CriticalAreaUnLock-20261012130948/_coq_builds/final-check/src/VC/CriticalAreaUnLock_goal_check.v",
+      "v_sha256": "553b3e28de99a8f912219661928c4623f8080ddf1a007c64259a87c3838b07f1",
+      "vo_sha256": "ee96ab52726417d646ca31b927bda0c5c406886dafcf2f166825f3cb7a28a02b"
+    },
+    {
+      "path": "VC/DoubleLinkListInsertNodeAfter_goal.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/DoubleLinkListInsertNodeAfter-20261012130948/_coq_builds/final-check/src/VC/DoubleLinkListInsertNodeAfter_goal.v",
+      "v_sha256": "da1f03e4fd5d76a4b518c48d070e19098ac0c9297415a3cfc78b0f327a6bead1",
+      "vo_sha256": "83fafc3e0eea63d36f39d972f1be7e489833002bb05f48f758dfed519a961576"
+    },
+    {
+      "path": "VC/DoubleLinkListInsertNodeAfter_proof_auto.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/DoubleLinkListInsertNodeAfter-20261012130948/_coq_builds/final-check/src/VC/DoubleLinkListInsertNodeAfter_proof_auto.v",
+      "v_sha256": "4e4c31c594beafefffcf49b496e131ac6f5828eb2c77364b285e37fa65136f39",
+      "vo_sha256": "300294b8bf077556356dad12e0d81ab804df207265b32f7638eaac50909a58fc"
+    },
+    {
+      "path": "VC/DoubleLinkListInsertNodeAfter_proof_manual.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/DoubleLinkListInsertNodeAfter-20261012130948/_coq_builds/final-check/src/VC/DoubleLinkListInsertNodeAfter_proof_manual.v",
+      "v_sha256": "f99e68ec5c9cb8457acbc7ef67d4d8853962c4c3aa3b4cba40c3b1ccd18b2371",
+      "vo_sha256": "3b3b3451ace475e859be24132c9cfd61b84f641377a5e89bbbb3a619a83e0b50"
+    },
+    {
+      "path": "VC/DoubleLinkListInsertNodeAfter_goal_check.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/DoubleLinkListInsertNodeAfter-20261012130948/_coq_builds/final-check/src/VC/DoubleLinkListInsertNodeAfter_goal_check.v",
+      "v_sha256": "bd9ddd538e8ec7e55e2ad626adc9df7033c72b0d870463b68f6002a74f7080d6",
+      "vo_sha256": "dffeae5e3afe0e07e182b11dd5760fea6274cef5a41dfb5e5b60a03d6c548ec4"
+    },
+    {
+      "path": "VC/AllocId_goal.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/AllocId-20261012130948/_coq_builds/final-check/src/VC/AllocId_goal.v",
+      "v_sha256": "99f3a2cf637e722e8032a73c60896aba8d322c311bab9f1174239522ee3da53f",
+      "vo_sha256": "e63b8e315919560e3e2f178ab07a900e1da89da2ed8017f9667e3fa8cb607305"
+    },
+    {
+      "path": "VC/AllocId_proof_auto.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/AllocId-20261012130948/_coq_builds/final-check/src/VC/AllocId_proof_auto.v",
+      "v_sha256": "5d70a4565a0cbe94762ce8a29d09a1db05908cd230cc2b1485716cbccd009d2b",
+      "vo_sha256": "6c33e840d34a3e70fe3b54611329e658d679b8d8f76e286dd5698715ac060887"
+    },
+    {
+      "path": "VC/AllocId_proof_manual.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/AllocId-20261012130948/_coq_builds/final-check/src/VC/AllocId_proof_manual.v",
+      "v_sha256": "86493bc960dcaae56e9d2eb3be1c595b63ef5a459a2176b9eea06c351d908885",
+      "vo_sha256": "e54ab5f37028d463df51425b62e1b1033e36eb8814a131b57564715dee6103aa"
+    },
+    {
+      "path": "VC/AllocId_goal_check.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/AllocId-20261012130948/_coq_builds/final-check/src/VC/AllocId_goal_check.v",
+      "v_sha256": "ec15302c992aae8ff0288281c94a637e2fa1ffaaf0e0313dd12d19bd3beb8481",
+      "vo_sha256": "d549253824fe0b34949b59c487834af6e6cef2098ad8b961d8e617b67b6ff42d"
+    },
+    {
+      "path": "VC/InitDoubleLinkList_goal.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/InitDoubleLinkList-20261012130948/_coq_builds/final-check/src/VC/InitDoubleLinkList_goal.v",
+      "v_sha256": "91c373a78b8de3ce2c57a57fc5df4374517bcf507c3d09af0b747b63b17af5b8",
+      "vo_sha256": "afe7892ca42d9aaf7683c7cc4494655853a1f9bd507c526d57107bf1d337956b"
+    },
+    {
+      "path": "VC/InitDoubleLinkList_proof_auto.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/InitDoubleLinkList-20261012130948/_coq_builds/final-check/src/VC/InitDoubleLinkList_proof_auto.v",
+      "v_sha256": "52479e55fdba4cca83dbddbf0632d063beb431d550961665a58c50eb23c1c3ac",
+      "vo_sha256": "ea72d5acec4eb0ff066113c3a218efd6c7a281470186fe998685e25d0bfeab2e"
+    },
+    {
+      "path": "VC/InitDoubleLinkList_proof_manual.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/InitDoubleLinkList-20261012130948/_coq_builds/final-check/src/VC/InitDoubleLinkList_proof_manual.v",
+      "v_sha256": "c97944cac9de24ab198cad3c54da9daf353d45ec886beba8cb9451d2dceafa36",
+      "vo_sha256": "6e13b24a9ff473360bfb70c699345818f83818d1be4ec05ab76a6cad98b07f7e"
+    },
+    {
+      "path": "VC/InitDoubleLinkList_goal_check.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/InitDoubleLinkList-20261012130948/_coq_builds/final-check/src/VC/InitDoubleLinkList_goal_check.v",
+      "v_sha256": "1b51b2ea19e1af97fcf3b49a949abff30c3c6da392aaa03d8db7e3789e8a6910",
+      "vo_sha256": "a6a521cbe90683114ac8d73787b1a4f9b5dfc25c82f81e5f197761e0a62c02ce"
+    },
+    {
+      "path": "VC/InsertObj_goal.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/InsertObj-20261012130948/_coq_builds/final-check/src/VC/InsertObj_goal.v",
+      "v_sha256": "a26277cd0fbe33d94a5c50bff40f1d523a9a4f62a9f93b1b429b2b4a7ed6c2c5",
+      "vo_sha256": "cf8a942ee6645259764d8f4b466ce6256b9ccc649a01b32a0d844816430ab85c"
+    },
+    {
+      "path": "VC/InsertObj_proof_auto.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/InsertObj-20261012130948/_coq_builds/final-check/src/VC/InsertObj_proof_auto.v",
+      "v_sha256": "4ca91ed3ef9eb5ec0c94690b823bfe456b492049c2219e5e798c687959440bb1",
+      "vo_sha256": "dd994731048feb53e31e24cfa1a6695717a0b231388336d490b2304d47156230"
+    },
+    {
+      "path": "VC/InsertObj_proof_manual.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/InsertObj-20261012130948/_coq_builds/final-check/src/VC/InsertObj_proof_manual.v",
+      "v_sha256": "203b2c6b9460f640f94718b818d0750439a6fe2c9d6ee5a8f551a9227bdbe42b",
+      "vo_sha256": "911dea5fbd9f4f20b5a130708e50889d14f58cbc0bfb394ed81f390346279a86"
+    },
+    {
+      "path": "VC/InsertObj_goal_check.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/InsertObj-20261012130948/_coq_builds/final-check/src/VC/InsertObj_goal_check.v",
+      "v_sha256": "eecfa6c715e044c134d137ec7cc1fa526e56123c140e8f69a343927200f18776",
+      "vo_sha256": "3980b559627768ed3ed569c2050f7ea9b48b3bcc9d6fae29df6c8e90ecb63bb2"
+    },
+    {
+      "path": "VC/IdInsertObj_goal.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/IdInsertObj-20261012130948/_coq_builds/final-check/src/VC/IdInsertObj_goal.v",
+      "v_sha256": "0e8b223b910c3c142a978b8f220546f06d0b2398f0ea84987daece663cc31ea6",
+      "vo_sha256": "fefa9feb9704cf2ed64cc90284a20e0ca67d924653e0872150c7e34466df3e8c"
+    },
+    {
+      "path": "VC/IdInsertObj_proof_auto.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/IdInsertObj-20261012130948/_coq_builds/final-check/src/VC/IdInsertObj_proof_auto.v",
+      "v_sha256": "bf317c1382182712376ff0c1cd68dc5f9abae3cbc07402cc69fcd6479325cab8",
+      "vo_sha256": "cab7fa4c4dac9c2022dca7bff856a40801d00ef466e7351db2835b224293e180"
+    },
+    {
+      "path": "VC/IdInsertObj_proof_manual.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/IdInsertObj-20261012130948/_coq_builds/final-check/src/VC/IdInsertObj_proof_manual.v",
+      "v_sha256": "5c3264512ccaae5ade2d9d2b075eb5291ca9ade68acf0bcd5dc62f619e541f29",
+      "vo_sha256": "1313cdaac2adad09d8d33dc61d57eef005907f42c7781278e6962710104cd162"
+    },
+    {
+      "path": "VC/IdInsertObj_goal_check.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/IdInsertObj-20261012130948/_coq_builds/final-check/src/VC/IdInsertObj_goal_check.v",
+      "v_sha256": "f06df766e95be6380ddc567609809533c397fff3826f7ec6494b29a8f0443af8",
+      "vo_sha256": "8ed735300ca0d5cfd425f41de87e1514724753f36eaa715573a3543b3c03d2dd"
+    },
+    {
+      "path": "VC/_SemaphoreCreate_goal.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/SemaphoreCreate-20261012131015/_coq_builds/final-check/src/VC/_SemaphoreCreate_goal.v",
+      "v_sha256": "17b99fddaafc71fdb5eefb594fa6e654ecf849ca5249b9578c299aa0b745cb18",
+      "vo_sha256": "c1cac4ef31e785b598aa60d17c9fdcf47e44260c599df12c9579ed058c955d11"
+    },
+    {
+      "path": "VC/_SemaphoreCreate_proof_auto.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/SemaphoreCreate-20261012131015/_coq_builds/final-check/src/VC/_SemaphoreCreate_proof_auto.v",
+      "v_sha256": "4b84e03696f6ac460433ebc18d38c81d44369445cae7e1c515bd5ae6e6ccdaec",
+      "vo_sha256": "03e5f95a09d221042ba83d3351fa06fb76d0fc18e751de83f917a123013919ce"
+    },
+    {
+      "path": "VC/_SemaphoreCreate_proof_manual.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/SemaphoreCreate-20261012131015/_coq_builds/final-check/src/VC/_SemaphoreCreate_proof_manual.v",
+      "v_sha256": "9ddc5655b7dbfb189966e6bcde651d0e33065545866de3e6d81f1b027658f396",
+      "vo_sha256": "e024b824efa0e971e5fd208f5a14253ab40b3fcd584ea9583873413429858cf7"
+    },
+    {
+      "path": "VC/_SemaphoreCreate_goal_check.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/SemaphoreCreate-20261012131015/_coq_builds/final-check/src/VC/_SemaphoreCreate_goal_check.v",
+      "v_sha256": "c8218b6403ad8179d034dd9bda8ab813446c50a98f1dd51a89f15cfc9d78cf88",
+      "vo_sha256": "b6dccffcc8665550ecc3880604b3455228a25e9ea7d5a1a7bd79b65d2a6e2f07"
+    },
+    {
+      "path": "VC/KSemaphoreCreate_goal.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/KSemaphoreCreate-20261012131015/_coq_builds/final-check/src/VC/KSemaphoreCreate_goal.v",
+      "v_sha256": "7f6095c7215c1f5a2a6975b9c6f918c9a9035e360968947a9be2b2db4ba3dcd0",
+      "vo_sha256": "c4c41f4063eeef8bab0650470159210765e204eaa81e5a5875a29335c552ef6d"
+    },
+    {
+      "path": "VC/KSemaphoreCreate_proof_auto.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/KSemaphoreCreate-20261012131015/_coq_builds/final-check/src/VC/KSemaphoreCreate_proof_auto.v",
+      "v_sha256": "b2240621977b685c4340b10ec7a07046b7b087a34fa33b94e596c4c4b864a45c",
+      "vo_sha256": "2c7f8f85f3f0e3784da397e8d36663212d5da48c88a9cae42ed767cea76b03a5"
+    },
+    {
+      "path": "VC/KSemaphoreCreate_proof_manual.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/KSemaphoreCreate-20261012131015/_coq_builds/final-check/src/VC/KSemaphoreCreate_proof_manual.v",
+      "v_sha256": "36254649f3d1b242840caf9c891d571913a0819e6e098d685ff401d0a5b7d9f9",
+      "vo_sha256": "f4fddf3bca6f8fd58fd86e808b360190e8d8f4779cef3f31840332f797885cf2"
+    },
+    {
+      "path": "VC/KSemaphoreCreate_goal_check.v",
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261012-1/verification_runs/KSemaphoreCreate-20261012131015/_coq_builds/final-check/src/VC/KSemaphoreCreate_goal_check.v",
+      "v_sha256": "c4ad36506165a2d1d9549aa7e093c2e86785052b8d309c00cc14ded0d5c58a2f",
+      "vo_sha256": "cbca5492c9c94fce1da2b6bc61c5280417cf26c85d12b6a20c6e792e378911e4"
+    }
+  ],
+  "trust_interfaces": [
+    {
+      "file": "framework-candidate/NestedCriticalSTS.v",
+      "classification": "unchanged official Module Type parameter, instantiated by concrete protocol",
+      "tokens": [
+        "Parameter"
+      ]
+    },
+    {
+      "file": "VC/CriticalAreaLock_goal.v",
+      "classification": "generated Module Type VC_Correct interface, discharged by compiled goal_check",
+      "axiom_count": 3
+    },
+    {
+      "file": "VC/CriticalAreaUnLock_goal.v",
+      "classification": "generated Module Type VC_Correct interface, discharged by compiled goal_check",
+      "axiom_count": 7
+    },
+    {
+      "file": "VC/DoubleLinkListInsertNodeAfter_goal.v",
+      "classification": "generated Module Type VC_Correct interface, discharged by compiled goal_check",
+      "axiom_count": 1
+    },
+    {
+      "file": "VC/AllocId_goal.v",
+      "classification": "generated Module Type VC_Correct interface, discharged by compiled goal_check",
+      "axiom_count": 43
+    },
+    {
+      "file": "VC/InitDoubleLinkList_goal.v",
+      "classification": "generated Module Type VC_Correct interface, discharged by compiled goal_check",
+      "axiom_count": 1
+    },
+    {
+      "file": "VC/InsertObj_goal.v",
+      "classification": "generated Module Type VC_Correct interface, discharged by compiled goal_check",
+      "axiom_count": 19
+    },
+    {
+      "file": "VC/IdInsertObj_goal.v",
+      "classification": "generated Module Type VC_Correct interface, discharged by compiled goal_check",
+      "axiom_count": 25
+    },
+    {
+      "file": "VC/_SemaphoreCreate_goal.v",
+      "classification": "generated Module Type VC_Correct interface, discharged by compiled goal_check",
+      "axiom_count": 43
+    },
+    {
+      "file": "VC/KSemaphoreCreate_goal.v",
+      "classification": "generated Module Type VC_Correct interface, discharged by compiled goal_check",
+      "axiom_count": 5
+    }
+  ],
+  "coqchk_roots": [
+    "CRTOS_Verify.framework.NestedCriticalSTS",
+    "CRTOS_Verify.lib.KTaskPure",
+    "CRTOS_Verify.lib.dll_abs",
+    "CRTOS_Verify.lib.idnode_abs",
+    "CRTOS_Verify.lib.CrtosGlobState",
+    "CRTOS_Verify.lib.TaskProtocolSTS",
+    "CRTOS_Verify.lib.CrtosRules",
+    "CRTOS_Verify.lib.dll",
+    "CRTOS_Verify.lib.idnode",
+    "CRTOS_Verify.lib.KTaskSchedMember",
+    "CRTOS_Verify.sem.SemaphorePure",
+    "CRTOS_Verify.sem.CrtosOSPure",
+    "CRTOS_Verify.sem.CrtosHeapBridge",
+    "CRTOS_Verify.sem.CrtosNestedState",
+    "CRTOS_Verify.sem.CrtosOSProtocol",
+    "CRTOS_Verify.sem.CrtosOSProtocolProof",
+    "CRTOS_Verify.sem.SemaphoreRep",
+    "CRTOS_Verify.sem.CrtosOSInv",
+    "CRTOS_Verify.sem.SemaphoreCritical",
+    "CRTOS_Verify.sem.SemaphoreCriticalViews",
+    "CRTOS_Verify.sem.SemaphoreInitialization",
+    "CRTOS_Verify.VC.CriticalAreaLock_goal_check",
+    "CRTOS_Verify.VC.CriticalAreaUnLock_goal_check",
+    "CRTOS_Verify.VC.DoubleLinkListInsertNodeAfter_goal_check",
+    "CRTOS_Verify.VC.AllocId_goal_check",
+    "CRTOS_Verify.VC.InitDoubleLinkList_goal_check",
+    "CRTOS_Verify.VC.InsertObj_goal_check",
+    "CRTOS_Verify.VC.IdInsertObj_goal_check",
+    "CRTOS_Verify.VC._SemaphoreCreate_goal_check",
+    "CRTOS_Verify.VC.KSemaphoreCreate_goal_check"
+  ],
+  "note": "Raw canonical auto placeholders remain provenance only; copied compiled auto files contain no admissions. No historical trial path was enumerated or read."
+}

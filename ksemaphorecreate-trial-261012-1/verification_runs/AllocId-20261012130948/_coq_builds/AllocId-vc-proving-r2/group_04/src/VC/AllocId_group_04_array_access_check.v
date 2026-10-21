@@ -1,0 +1,5 @@
+From CRTOS_Verify.VC Require Import AllocId_goal AllocId_proof_auto AllocId_proof_manual.
+Check proof_of_AllocId_partial_solve_wit_1.
+Check proof_of_AllocId_partial_solve_wit_2.
+Check proof_of_AllocId_partial_solve_wit_3.
+Check proof_of_AllocId_partial_solve_wit_4.

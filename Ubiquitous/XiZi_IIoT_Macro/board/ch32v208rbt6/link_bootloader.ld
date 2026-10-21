@@ -1,0 +1,237 @@
+ENTRY( _start )
+
+__stack_size = 2048;
+
+PROVIDE( _stack_size = __stack_size );
+
+
+MEMORY
+{  
+/* CH32V20x_D6 - CH32V203F6-CH32V203G6-CH32V203K6-CH32V203C6 */
+/*
+	FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 32K
+	RAM (xrw) : ORIGIN = 0x20000000, LENGTH = 10K
+*/ 
+
+/* CH32V20x_D6 - CH32V203K8-CH32V203C8-CH32V203G8-CH32V203F8 */
+/*
+	FLASH (rx) : ORIGIN = 0x00000000, LENGTH = 64K
+	RAM (xrw) : ORIGIN = 0x20000000, LENGTH = 20K
+*/ 
+  
+/* CH32V20x_D8 - CH32V203RB
+   CH32V20x_D8W - CH32V208x
+   FLASH + RAM supports the following configuration
+   FLASH-128K + RAM-64K
+   FLASH-144K + RAM-48K
+   FLASH-160K + RAM-32K
+*/
+	FLASH_FAST (rx) : ORIGIN = 0x00000000, LENGTH = 32K
+	FLASH (rx) : ORIGIN = 0x00050000, LENGTH = 156K
+	RAM (xrw) : ORIGIN = 0x20000000, LENGTH = 64K
+}
+
+
+SECTIONS
+{
+	.init :
+	{
+		_sinit = .;
+		. = ALIGN(4);
+		KEEP(*(SORT_NONE(.init)))
+		. = ALIGN(4);
+		_einit = .;
+	} >FLASH_FAST AT>FLASH_FAST
+
+	.vector :
+	{
+		*(.vector);
+		. = ALIGN(64);
+	} >FLASH_FAST AT>FLASH_FAST
+
+	.highcode :
+	{
+		. = ALIGN(4);
+		*(.highcode);
+		*(.highcode.*);
+		. = ALIGN(4); 
+	} >FLASH_FAST AT>FLASH_FAST
+
+	.text.fast :
+	{
+		. = ALIGN(4);
+		*(.text.fast)
+		*arch/risc-v/ch32v208rbt6*.o(.text)
+		*board/ch32v208rbt6/third_party_driver/Peripheral/src/ch32v20x_flash.o(.text)
+		*board/ch32v208rbt6/third_party_driver/Peripheral/src/ch32v20x_usart.o(.text)
+		*board/ch32v208rbt6/third_party_driver/lte/connect_lte.o(.text)
+		*kernel/thread*.o(.text)
+		*resources/serial*.o(.text)
+		. = ALIGN(4);
+	} >FLASH_FAST AT>FLASH_FAST
+
+	.text :
+	{
+		. = ALIGN(4);
+		EXCLUDE_FILE (*wchble.a) *(.text .text*)
+		*(.text)
+		*(.text.*)
+		*(.rodata)
+		*(.rodata*)
+  		*(.sdata2.*)
+		*(.glue_7)
+		*(.glue_7t)
+		*(.gnu.linkonce.t.*)
+		. = ALIGN(4);
+
+		/* section information for  shell */
+        . = ALIGN(4);
+		_shell_command_start = .;
+		KEEP (*(shellCommand))
+		_shell_command_end = .;
+		. = ALIGN(4);
+
+		PROVIDE(__ctors_start__ = .);
+		KEEP (*(SORT(.init_array.*)))
+		KEEP (*(.init_array))
+		PROVIDE(__ctors_end__ = .);
+
+		. = ALIGN(4);
+		__isrtbl_idx_start = .;
+		KEEP(*(.isrtbl.idx))
+		__isrtbl_start = .;
+		KEEP(*(.isrtbl))
+		__isrtbl_end = .;
+		. = ALIGN(4);
+
+		PROVIDE(g_service_table_start = ABSOLUTE(.));
+		KEEP(*(.g_service_table))
+		PROVIDE(g_service_table_end = ABSOLUTE(.));
+
+		*(.gnu.linkonce.t.*)
+	} >FLASH AT>FLASH 
+
+	.fini :
+	{
+		KEEP(*(SORT_NONE(.fini)))
+		. = ALIGN(4);
+	} >FLASH AT>FLASH
+
+	PROVIDE( _etext = . );
+	PROVIDE( _eitcm = . );	
+
+	.preinit_array  :
+	{
+	  PROVIDE_HIDDEN (__preinit_array_start = .);
+	  KEEP (*(.preinit_array))
+	  PROVIDE_HIDDEN (__preinit_array_end = .);
+	} >FLASH AT>FLASH 
+	
+	.init_array     :
+	{
+	  PROVIDE_HIDDEN (__init_array_start = .);
+	  KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
+	  KEEP (*(.init_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .ctors))
+	  PROVIDE_HIDDEN (__init_array_end = .);
+	} >FLASH AT>FLASH 
+	
+	.fini_array     :
+	{
+	  PROVIDE_HIDDEN (__fini_array_start = .);
+	  KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
+	  KEEP (*(.fini_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
+	  PROVIDE_HIDDEN (__fini_array_end = .);
+	} >FLASH AT>FLASH 
+	
+	.ctors          :
+	{
+	  /* gcc uses crtbegin.o to find the start of
+	     the constructors, so we make sure it is
+	     first.  Because this is a wildcard, it
+	     doesn't matter if the user does not
+	     actually link against crtbegin.o; the
+	     linker won't look for a file to match a
+	     wildcard.  The wildcard also means that it
+	     doesn't matter which directory crtbegin.o
+	     is in.  */
+	  KEEP (*crtbegin.o(.ctors))
+	  KEEP (*crtbegin?.o(.ctors))
+	  /* We don't want to include the .ctor section from
+	     the crtend.o file until after the sorted ctors.
+	     The .ctor section from the crtend file contains the
+	     end of ctors marker and it must be last */
+	  KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
+	  KEEP (*(SORT(.ctors.*)))
+	  KEEP (*(.ctors))
+	} >FLASH AT>FLASH 
+	
+	.dtors          :
+	{
+	  KEEP (*crtbegin.o(.dtors))
+	  KEEP (*crtbegin?.o(.dtors))
+	  KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
+	  KEEP (*(SORT(.dtors.*)))
+	  KEEP (*(.dtors))
+	} >FLASH AT>FLASH 
+
+	.dalign :
+	{
+		. = ALIGN(4);
+		PROVIDE(_data_vma = .);
+	} >RAM AT>FLASH	
+
+	.dlalign :
+	{
+		. = ALIGN(4); 
+		PROVIDE(_data_lma = .);
+	} >FLASH AT>FLASH
+
+	.data :
+	{
+    	*(.gnu.linkonce.r.*)
+    	*(.data .data.*)
+    	*(.gnu.linkonce.d.*)
+		. = ALIGN(8);
+    	PROVIDE( __global_pointer$ = . + 0x800 );
+    	*(.sdata .sdata.*)
+		*(.sdata2.*)
+    	*(.gnu.linkonce.s.*)
+    	. = ALIGN(8);
+    	*(.srodata.cst16)
+    	*(.srodata.cst8)
+    	*(.srodata.cst4)
+    	*(.srodata.cst2)
+    	*(.srodata .srodata.*)
+    	. = ALIGN(4);
+		PROVIDE( _edata = .);
+	} >RAM AT>FLASH
+
+	.bss :
+	{
+		. = ALIGN(4);
+		PROVIDE( _sbss = .);
+  	    *(.sbss*)
+        *(.gnu.linkonce.sb.*)
+		*(.bss*)
+     	*(.gnu.linkonce.b.*)		
+		*(COMMON*)
+		. = ALIGN(4);
+		PROVIDE( _ebss = .);
+	} >RAM AT>FLASH
+
+	PROVIDE( _end = _ebss);
+	PROVIDE( end = . );
+
+    .stack ORIGIN(RAM) + LENGTH(RAM) - __stack_size :
+    {
+        PROVIDE( _heap_end = . );   
+        . = ALIGN(4);
+        PROVIDE(_susrstack = . );
+        . = . + __stack_size;
+        PROVIDE( _eusrstack = .);
+    } >RAM 
+
+}
+
+
+

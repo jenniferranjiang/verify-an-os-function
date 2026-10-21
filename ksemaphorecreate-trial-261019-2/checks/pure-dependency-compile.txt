@@ -1,0 +1,6 @@
+Working directory: /home/xinra/crtos/ksemaphorecreate-trial-261019-2
+coqc -Q libai CRTOS_Verify.libai libai/TaskStatus.v
+exit 0
+coqc -Q libai CRTOS_Verify.libai libai/TickOrder.v
+exit 0
+NodeSelfLinked pending candidate CrtosRules dependency compilation.

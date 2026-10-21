@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "AllocId",
+      "meaning": "返回并占用首个空闲 ID，保留 bucket 内容；所有合法 ID 已占用时返回 -1 并保持 manager。"
+    },
+    {
+      "name": "KPrintf",
+      "meaning": "受信日志调用保持受验证 heap 的 emp footprint。"
+    }
+  ],
+  "loop_invariants": [
+    {
+      "location": "AllocId: parameter-check do-while",
+      "progress": "参数检查保持非空 manager 和尚未使用的局部变量初值；按 QCP do-while 语法将 Inv Assert 放在尾部 while 前。"
+    },
+    {
+      "location": "AllocId: parameter-failure while(1)",
+      "progress": "冻结前置条件排除空 manager，循环入口不可达。"
+    },
+    {
+      "location": "AllocId: bitmap byte for-loop",
+      "progress": "index 之前的每个字节均为 255，原 bitmap 内容与 bucket ownership 保持。"
+    },
+    {
+      "location": "AllocId: low-bit while-loop",
+      "progress": "当前字节已扫描的低位均已占用，entry 为剩余高位；之前字节均满。"
+    }
+  ],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

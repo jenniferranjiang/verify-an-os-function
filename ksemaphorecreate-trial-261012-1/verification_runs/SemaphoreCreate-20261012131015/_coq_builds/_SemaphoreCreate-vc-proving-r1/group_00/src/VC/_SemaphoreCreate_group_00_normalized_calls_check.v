@@ -1,0 +1,7 @@
+From CRTOS_Verify.VC Require Import _SemaphoreCreate_goal _SemaphoreCreate_proof_auto _SemaphoreCreate_proof_manual.
+Check proof_of__SemaphoreCreate_partial_solve_wit_1_pure.
+Check proof_of__SemaphoreCreate_partial_solve_wit_1.
+Check proof_of__SemaphoreCreate_partial_solve_wit_2_pure.
+Check proof_of__SemaphoreCreate_partial_solve_wit_2.
+Check proof_of__SemaphoreCreate_safety_wit_4.
+Check proof_of__SemaphoreCreate_safety_wit_12.

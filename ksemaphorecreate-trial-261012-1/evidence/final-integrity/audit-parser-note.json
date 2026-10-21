@@ -1,0 +1,7 @@
+{
+  "issue": "Initial exact-dict freeze audit counted reviewed Import Coq Require Coq.Program.Basics as an unknown API spec",
+  "classification": "audit parser false positive",
+  "resolution": "exclude only that exact non-API module-load annotation; all real canonical/caller specs then equal both frozen baselines and independently reviewed spec-r6 candidate",
+  "actual_contract_change": false,
+  "controller_or_formal_sources_modified": false
+}

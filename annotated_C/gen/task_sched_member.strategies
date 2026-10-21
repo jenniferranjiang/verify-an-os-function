@@ -1,0 +1,78 @@
+#include "task_sched_member_strategy.h"
+
+// Open initialization ownership only for the embedded node initialization call.
+id : 0
+priority : core(1)
+left : has_permission_task_sched_member(?task, ?old_stat) at 0
+right : undef_data_at(field_addr(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link), SysDoubleLinklistNode, node_prev), PTR(struct SysDoubleLinklistNode)) at 1
+        undef_data_at(field_addr(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link), SysDoubleLinklistNode, node_next), PTR(struct SysDoubleLinklistNode)) at 2
+action : left_erase(0);
+         right_erase(1);
+         right_erase(2);
+         left_add(has_permission_task_sched_scalars(task, old_stat));
+
+// Only stat is exposed; the other five scalars remain behind their frame.
+id : 1
+priority : core(1)
+left : store_task_sched_member(field_addr(field_addr(?task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link), ?info) at 0
+right : store_task_status(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), ?value) at 1
+action : left_erase(0);
+         right_erase(1);
+         left_add(store_assign_insert_sched_except_stat(task, info));
+         right_add(value == info.tsmStat);
+
+id : 2
+priority : core(1)
+left : store_task_sched_member(field_addr(field_addr(?task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link), ?info) at 0
+right : undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), U8) at 1
+action : left_erase(0);
+         right_erase(1);
+         left_add(store_assign_insert_sched_except_stat(task, info));
+
+// Original-value restoration avoids rebuilding an unchanged abstract record.
+id : 3
+priority : post(1)
+left : store_assign_insert_sched_except_stat(?task, ?info) at 0
+       store_task_status(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), info.tsmStat) at 1
+action : left_erase(0);
+         left_erase(1);
+         left_add(store_task_sched_member(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link), info));
+
+id : 4
+priority : post(2)
+left : store_assign_insert_sched_except_stat(?task, ?info) at 0
+       store_task_status(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), ?value) at 1
+action : left_erase(0);
+         left_erase(1);
+         left_add(store_task_sched_member(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link), mkTaskSchedMemberAbs(value, info.tsmAdvanceCnt, info.tsmCurPrio, info.tsmOriginTimeslice, info.tsmRestTimeslice, info.tsmBitmapColumn)));
+
+// Fold only the complete six-scalar group. No link/delay/global resources match.
+id : 5
+priority : post(1)
+left : store_task_status(field_addr(field_addr(?task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), ?stat) at 0
+       store(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, advance_cnt), U8, ?advance) at 1
+       store(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8, ?prio) at 2
+       store(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, origin_timeslice), U32, ?origin) at 3
+       store(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, rest_timeslice), U32, ?rest) at 4
+       store(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, bitmap_column), U32, ?bitmap) at 5
+action : left_erase(0);
+         left_erase(1);
+         left_erase(2);
+         left_erase(3);
+         left_erase(4);
+         left_erase(5);
+         left_add(store_task_sched_member(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link), mkTaskSchedMemberAbs(stat, advance, prio, origin, rest, bitmap)));
+
+// The first scalar write opens only the six-scalar initialization group.
+id : 6
+priority : core(1)
+left : has_permission_task_sched_scalars(?task, ?old_stat) at 0
+right : undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8) at 1
+action : left_erase(0);
+         right_erase(1);
+         left_add(store_task_status(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), old_stat));
+         left_add(undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, advance_cnt), U8));
+         left_add(undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, origin_timeslice), U32));
+         left_add(undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, rest_timeslice), U32));
+         left_add(undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, bitmap_column), U32));
+

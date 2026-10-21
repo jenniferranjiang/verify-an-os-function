@@ -1,0 +1,15 @@
+{
+  "coqc": {
+    "path": "/home/xinra/.opam/default/bin/coqc",
+    "sha256": "29995ac94131e1b24b9951232bc5350046888c4823f823bb005b59fe1fb71ebe"
+  },
+  "coqchk": {
+    "path": "/home/xinra/.opam/default/bin/coqchk",
+    "sha256": "01484da4831e39f2c0ee8a8c9ee560c4f1ab91c622eebf7e60c3eb7a51aa31e4"
+  },
+  "arm_gcc": {
+    "path": "/tmp/crtos-arm-toolchain/root/usr/bin/arm-none-eabi-gcc",
+    "sha256": "38fc178604a84beb10f9adb8ea243bd5e0475a9e6e31c9270f53e2fcaa79ec59"
+  },
+  "purpose": "tool executable identity; source/config manifest is separate; no archived trial used"
+}

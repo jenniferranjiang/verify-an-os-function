@@ -1,0 +1,30 @@
+{
+    "device_id": 1,
+    "device_name": "Ino_H3U3232MT",
+	"communication_type": 0,
+    "socket_config": {
+        "plc_ip": "192.168.250.55",
+		"local_ip": "192.168.250.147",
+        "gateway": "192.168.250.252",
+		"netmask": "255.255.255.0",
+        "port": 502
+    },
+    "protocol_type": 2,
+    "read_period": 300,
+    "read_item_list": [
+        {
+            "value_name": "M8000",
+            "value_type": 1,
+            "function_code": 1,
+            "start_address": 8000,
+            "quantity": 1
+        },
+        {
+            "value_name": "D120",
+            "value_type": 3,
+            "function_code": 3,
+            "start_address": 120,
+            "quantity": 1
+        }
+    ]
+}

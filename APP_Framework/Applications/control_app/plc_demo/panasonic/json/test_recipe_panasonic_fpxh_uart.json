@@ -1,0 +1,66 @@
+{
+     "device_id": 1,
+    "device_name": "PANASONIC_FPXH_RTU",
+    "communication_type": 1,
+    "serial_config": {
+        "station": 1,
+        "baud_rate": 9600,
+        "data_bits": 8,
+        "stop_bits": 1,
+        "check_mode":3
+    },
+    "protocol_type": 3,
+    "read_period": 2000,
+    "read_item_list": [
+        {
+            "value_name": "Y0",
+            "value_type": 1,
+            "function_code": 1,
+            "start_address": 0,
+            "quantity": 1
+        },
+        {
+            "value_name": "R0",
+            "value_type": 1,
+            "function_code": 1,
+            "start_address":2048,
+            "quantity": 1
+        },
+        {
+            "value_name": "R100",
+            "value_type": 1,
+            "function_code": 1,
+            "start_address": 2208,
+            "quantity": 1
+        },
+       {
+            "value_name": "R101",
+            "value_type": 1,
+            "function_code": 1,
+            "start_address": 2209,
+            "quantity": 1
+        },
+        {
+            "value_name": "DT0",
+            "value_type": 3,
+            "function_code": 3,
+            "start_address": 0,
+            "quantity": 1
+        },
+        {
+            "value_name": "DT1",
+            "value_type": 3,
+            "function_code": 3,
+            "start_address": 1,
+            "quantity": 1
+        },
+        {
+            "value_name": "DT200",
+            "value_type": 3,
+            "function_code": 3,
+            "start_address": 200,
+            "quantity": 1
+        }    
+        
+    ]
+}

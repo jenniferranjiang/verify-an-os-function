@@ -1,0 +1,3 @@
+Completed all four assigned call-preparation witnesses using the required LLM_pre_process route. The pure witnesses project existing premises. Auxiliary witness 1 weakens the two zero-valued head pointer fields with Crtos_C_Rules.store_ptr_undef_store_ptr and cancels the unchanged frame; auxiliary witness 2 is discharged by preprocessing and resource cancellation. No helper, import, statement, or semantic source was changed.
+
+Validation: forbidden-lemma scan found no hits. The supplied group-check command exited 0 with JSON status passed and recompiled the goal, auto proof, copied manual, and group check wrapper.

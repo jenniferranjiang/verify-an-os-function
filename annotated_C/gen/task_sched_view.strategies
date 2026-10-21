@@ -1,0 +1,258 @@
+#include "task_sched_view.h"
+
+// 精确 map cell 和显式 scalar-group 需求；不打开其他 descriptor。
+id : 1
+priority : core(3)
+left : task_fields(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : store_task_sched_member(?p, ?info) at 2
+check : infer(p == sched_link_of(task));
+        infer(info == tdSchedMember(desc));
+action : left_erase(0); right_erase(2);
+         left_add(task_fields_except_sched(sg, st, task, desc));
+
+id : 2
+priority : core(3)
+left : task_fields_except_sched(?sg, ?st, ?task, ?desc) at 0
+       store_task_sched_member(?p, ?info) at 1
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(desc) at 2
+right : task_fields(sg, st) at 3
+check : infer(p == sched_link_of(task));
+        infer(info == tdSchedMember(desc));
+action : left_erase(0); left_erase(1); right_erase(3);
+
+id : 3
+priority : post(3)
+left : task_fields_except_sched(?sg, ?st, ?task, ?desc) at 0
+       store_task_sched_member(?p, ?info) at 1
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(desc) at 2
+check : infer(p == sched_link_of(task));
+        infer(info == tdSchedMember(desc));
+action : left_erase(0); left_erase(1);
+         left_add(task_fields(sg, st));
+
+// cur_prio 只读：抽出单个槽，其余五槽保留在补集中。
+id : 4
+priority : core(3)
+left : task_fields(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8, ?value) at 2
+check : infer(q == task);
+action : left_erase(0); right_erase(2);
+         left_add(task_fields_except_sched(sg, st, task, desc));
+         left_add(store_task_sched_except_cur_prio(task, tdSchedMember(desc)));
+         right_add(value == tsmCurPrio(tdSchedMember(desc)));
+
+id : 5
+priority : core(2)
+left : store_task_sched_member(?p, ?info) at 0
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8, ?value) at 1
+check : infer(p == sched_link_of(q));
+action : left_erase(0); right_erase(1);
+         left_add(store_task_sched_except_cur_prio(q, info));
+         right_add(value == tsmCurPrio(info));
+
+id : 6
+priority : post(2)
+left : store_task_sched_except_cur_prio(?task, ?info) at 0
+       store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8, ?value) at 1
+check : infer(q == task); infer(value == tsmCurPrio(info));
+action : left_erase(0); left_erase(1);
+         left_add(store_task_sched_member(sched_link_of(task), info));
+
+id : 7
+priority : core(2)
+left : store_task_sched_except_cur_prio(?task, ?info) at 0
+       store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8, ?value) at 1
+right : store_task_sched_member(?p, info) at 2
+check : infer(q == task); infer(value == tsmCurPrio(info));
+        infer(p == sched_link_of(task));
+action : left_erase(0); left_erase(1); right_erase(2);
+
+id : 8
+priority : core(3)
+left : task_fields_except_sched(?sg, ?st, ?task, ?desc) at 0
+       store_task_sched_except_cur_prio(task, tdSchedMember(desc)) at 1
+       store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8, ?value) at 2
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(desc) at 3
+right : task_fields(sg, st) at 4
+check : infer(q == task); infer(value == tsmCurPrio(tdSchedMember(desc)));
+action : left_erase(0); left_erase(1); left_erase(2); right_erase(4);
+
+// bitmap_column 只读：抽出单个槽，其余五槽保留在补集中。
+id : 9
+priority : core(3)
+left : task_fields(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, bitmap_column), U32, ?value) at 2
+check : infer(q == task);
+action : left_erase(0); right_erase(2);
+         left_add(task_fields_except_sched(sg, st, task, desc));
+         left_add(store_task_sched_except_bitmap_column(task, tdSchedMember(desc)));
+         right_add(value == tsmBitmapColumn(tdSchedMember(desc)));
+
+id : 10
+priority : core(2)
+left : store_task_sched_member(?p, ?info) at 0
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, bitmap_column), U32, ?value) at 1
+check : infer(p == sched_link_of(q));
+action : left_erase(0); right_erase(1);
+         left_add(store_task_sched_except_bitmap_column(q, info));
+         right_add(value == tsmBitmapColumn(info));
+
+id : 11
+priority : post(2)
+left : store_task_sched_except_bitmap_column(?task, ?info) at 0
+       store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, bitmap_column), U32, ?value) at 1
+check : infer(q == task); infer(value == tsmBitmapColumn(info));
+action : left_erase(0); left_erase(1);
+         left_add(store_task_sched_member(sched_link_of(task), info));
+
+id : 12
+priority : core(2)
+left : store_task_sched_except_bitmap_column(?task, ?info) at 0
+       store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, bitmap_column), U32, ?value) at 1
+right : store_task_sched_member(?p, info) at 2
+check : infer(q == task); infer(value == tsmBitmapColumn(info));
+        infer(p == sched_link_of(task));
+action : left_erase(0); left_erase(1); right_erase(2);
+
+id : 13
+priority : core(3)
+left : task_fields_except_sched(?sg, ?st, ?task, ?desc) at 0
+       store_task_sched_except_bitmap_column(task, tdSchedMember(desc)) at 1
+       store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, bitmap_column), U32, ?value) at 2
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(desc) at 3
+right : task_fields(sg, st) at 4
+check : infer(q == task); infer(value == tsmBitmapColumn(tdSchedMember(desc)));
+action : left_erase(0); left_erase(1); left_erase(2); right_erase(4);
+
+// advance_cnt 只读：抽出单个槽，其余五槽保留在补集中。
+id : 14
+priority : core(3)
+left : task_fields(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, advance_cnt), U8, ?value) at 2
+check : infer(q == task);
+action : left_erase(0); right_erase(2);
+         left_add(task_fields_except_sched(sg, st, task, desc));
+         left_add(store_task_sched_except_advance_cnt(task, tdSchedMember(desc)));
+         right_add(value == tsmAdvanceCnt(tdSchedMember(desc)));
+
+id : 15
+priority : core(2)
+left : store_task_sched_member(?p, ?info) at 0
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, advance_cnt), U8, ?value) at 1
+check : infer(p == sched_link_of(q));
+action : left_erase(0); right_erase(1);
+         left_add(store_task_sched_except_advance_cnt(q, info));
+         right_add(value == tsmAdvanceCnt(info));
+
+id : 16
+priority : post(2)
+left : store_task_sched_except_advance_cnt(?task, ?info) at 0
+       store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, advance_cnt), U8, ?value) at 1
+check : infer(q == task); infer(value == tsmAdvanceCnt(info));
+action : left_erase(0); left_erase(1);
+         left_add(store_task_sched_member(sched_link_of(task), info));
+
+id : 17
+priority : core(2)
+left : store_task_sched_except_advance_cnt(?task, ?info) at 0
+       store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, advance_cnt), U8, ?value) at 1
+right : store_task_sched_member(?p, info) at 2
+check : infer(q == task); infer(value == tsmAdvanceCnt(info));
+        infer(p == sched_link_of(task));
+action : left_erase(0); left_erase(1); right_erase(2);
+
+id : 18
+priority : core(3)
+left : task_fields_except_sched(?sg, ?st, ?task, ?desc) at 0
+       store_task_sched_except_advance_cnt(task, tdSchedMember(desc)) at 1
+       store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, advance_cnt), U8, ?value) at 2
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(desc) at 3
+right : task_fields(sg, st) at 4
+check : infer(q == task); infer(value == tsmAdvanceCnt(tdSchedMember(desc)));
+action : left_erase(0); left_erase(1); left_erase(2); right_erase(4);
+
+// 同一 task 先后读取 prio/bitmap 时继续借出第二槽，不重开 invariant。
+id : 19
+priority : core(2)
+left : store_task_sched_except_cur_prio(?task, ?info) at 0
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, bitmap_column), U32, ?value) at 1
+check : infer(q == task);
+action : left_erase(0); right_erase(1);
+         left_add(store_assign_remove_sched_frame(task, info));
+         right_add(value == tsmBitmapColumn(info));
+
+id : 20
+priority : core(2)
+left : store_task_sched_except_bitmap_column(?task, ?info) at 0
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8, ?value) at 1
+check : infer(q == task);
+action : left_erase(0); right_erase(1);
+         left_add(store_assign_remove_sched_frame(task, info));
+         right_add(value == tsmCurPrio(info));
+
+// task_fields 不拥有 ready-vector；去掉无关的 ready 更新，降低状态表达式深度。
+id : 21
+priority : post(4)
+left : task_fields(?sg, replace_global_ready_vector(?ready, ?st)) at 0
+action : left_erase(0); left_add(task_fields(sg, st));
+
+// 写 cur_prio 不要求旧值，但必须持有目标 task 的权威 map cell。
+id : 25
+priority : core(3)
+left : task_fields(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : undef_data_at(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8) at 2
+check : infer(q == task);
+action : left_erase(0);
+         left_add(task_fields_except_sched(sg, st, task, desc));
+         left_add(store_task_sched_member(sched_link_of(task), tdSchedMember(desc)));
+
+id : 26
+priority : core(2)
+left : store_task_sched_member(?p, ?info) at 0
+right : undef_data_at(field_addr(field_addr(?task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8) at 1
+check : infer(p == sched_link_of(task));
+action : left_erase(0); right_erase(1);
+         left_add(store_task_sched_except_cur_prio(task, info));
+
+// cur_prio 已被借出或写入后，bitmap 的写权限来自同一字段组的补集。
+id : 27
+priority : core(2)
+left : store_task_sched_except_cur_prio(?task, ?info) at 0
+right : undef_data_at(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, bitmap_column), U32) at 1
+check : infer(q == task);
+action : left_erase(0); right_erase(1);
+         left_add(store_assign_remove_sched_frame(task, info));
+
+// 将已更新的两字段连同未触及的四字段重新封装，不提前更新全局状态。
+id : 28
+priority : post(2)
+left : store_assign_remove_sched_frame(?task, ?info) at 0
+       store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8, ?prio) at 1
+       store(field_addr(field_addr(?q2, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, bitmap_column), U32, ?bitmap) at 2
+check : infer(q == task); infer(q2 == task);
+action : left_erase(0); left_erase(1); left_erase(2);
+         left_add(store_task_sched_member(sched_link_of(task), mkTaskSchedMemberAbs(tsmStat(info), tsmAdvanceCnt(info), prio, tsmOriginTimeslice(info), tsmRestTimeslice(info), bitmap)));
+
+id : 22
+priority : core(3)
+left : task_fields(?sg, ?st) at 0
+right : task_fields(sg, replace_global_ready_vector(?ready, st)) at 1
+action : left_erase(0); right_erase(1);
+
+id : 23
+priority : core(3)
+left : task_fields(?sg, replace_global_ready_vector(?ready, ?st)) at 0
+right : task_fields(sg, st) at 1
+action : left_erase(0); right_erase(1);
+
+// 某些 C 直读不会先运行 post；该需求规则只减少一个无关 ready 更新层。
+id : 24
+priority : core(4)
+left : task_fields(?sg, replace_global_ready_vector(?ready, ?st)) at 0
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8, ?value) at 1
+action : left_erase(0); left_add(task_fields(sg, st));

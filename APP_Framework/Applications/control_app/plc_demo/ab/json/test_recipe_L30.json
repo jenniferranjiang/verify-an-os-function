@@ -1,0 +1,34 @@
+{
+    "device_id": "ab_l30",
+    "device_name": "robot",
+    "communication_type": 0,
+    "socket_config": {
+        "plc_ip": "192.168.250.57",
+        "local_ip": "192.168.250.123",
+        "gateway": "192.168.250.1",
+        "netmask": "255.255.255.0",
+        "port": 44818
+    },
+    "protocol_type": 12,
+    "read_period": 100,
+    "read_item_list": [
+        {
+            "value_name": "L30_SPEED",
+            "value_type": 3,
+            "wordlen": "WORD",
+            "amount": 1
+        },
+        {
+            "value_name": "L30_TORQUE",
+            "value_type": 9,
+            "wordlen": "WORD",
+            "amount": 1
+        },
+       {
+            "value_name": "D",
+            "value_type": 3,
+            "wordlen": "WORD",
+            "amount": 1
+        }
+    ]
+}
