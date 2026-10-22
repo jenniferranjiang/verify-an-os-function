@@ -1,0 +1,15 @@
+{
+  "status": "user-approved",
+  "approval_date": "2026-10-22",
+  "user_text": "允许加入这组显式 ABI 假设",
+  "scope": "Semaphore byte field offsets in the current 32-bit little-endian target; no changes to helper specs or executable code",
+  "assumption_file": "shared_candidates/SemaphoreInv.v",
+  "assumption_symbol": "semaphore_field_offsets_trusted",
+  "predicate_file": "shared_candidates/SemaphoreInv.v",
+  "predicate_symbol": "semaphore_byte_layout",
+  "abi_evidence": "checks/abi-current.json",
+  "abi_evidence_sha256": "c0e5e063ce51e1bf6315398876fbc3de090bdd20a9a6a426ad7615fe253931de",
+  "limits": "Explicit trusted field offsets, not a proved layout, no new sizeof assumption and no claim of ARM compiler execution.",
+  "placement": "User requested LiteOS-style co-location with object memory predicates, not a standalone ABI file.",
+  "implementation_authorization": "像 LiteOS 内存模块一样，明确列出经过核对的布局前提，再证明资源转换。这样做 你可以开始implement了"
+}

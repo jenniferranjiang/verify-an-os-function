@@ -1,0 +1,15 @@
+{
+  "status": "committed",
+  "files": {
+    "proof_manual_file": {
+      "relative_path": "VC/SemaphoreCreate_proof_manual.v",
+      "original_present": true,
+      "candidate_present": true
+    },
+    "formal_case_lib": {
+      "relative_path": "VC/SemaphoreCreate_lib.v",
+      "original_present": true,
+      "candidate_present": true
+    }
+  }
+}

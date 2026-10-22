@@ -1,0 +1,42 @@
+{
+  "case": "SemaphoreCreate",
+  "added_manual_witnesses": [
+    "proof_of__SemaphoreCreate_safety_wit_1",
+    "proof_of__SemaphoreCreate_safety_wit_2",
+    "proof_of__SemaphoreCreate_safety_wit_3",
+    "proof_of__SemaphoreCreate_safety_wit_4",
+    "proof_of__SemaphoreCreate_safety_wit_5",
+    "proof_of__SemaphoreCreate_safety_wit_6",
+    "proof_of__SemaphoreCreate_safety_wit_7",
+    "proof_of__SemaphoreCreate_safety_wit_8",
+    "proof_of__SemaphoreCreate_safety_wit_9",
+    "proof_of__SemaphoreCreate_safety_wit_10",
+    "proof_of__SemaphoreCreate_safety_wit_11",
+    "proof_of__SemaphoreCreate_safety_wit_12",
+    "proof_of__SemaphoreCreate_safety_wit_13",
+    "proof_of__SemaphoreCreate_safety_wit_14",
+    "proof_of__SemaphoreCreate_safety_wit_15",
+    "proof_of__SemaphoreCreate_safety_wit_16",
+    "proof_of__SemaphoreCreate_safety_wit_17",
+    "proof_of__SemaphoreCreate_partial_solve_wit_1_pure",
+    "proof_of__SemaphoreCreate_partial_solve_wit_1",
+    "proof_of__SemaphoreCreate_partial_solve_wit_2_pure",
+    "proof_of__SemaphoreCreate_partial_solve_wit_2",
+    "proof_of__SemaphoreCreate_partial_solve_wit_3",
+    "proof_of__SemaphoreCreate_partial_solve_wit_4",
+    "proof_of__SemaphoreCreate_partial_solve_wit_5",
+    "proof_of__SemaphoreCreate_partial_solve_wit_6",
+    "proof_of__SemaphoreCreate_partial_solve_wit_7",
+    "proof_of__SemaphoreCreate_partial_solve_wit_8",
+    "proof_of__SemaphoreCreate_partial_solve_wit_9_pure",
+    "proof_of__SemaphoreCreate_partial_solve_wit_9"
+  ],
+  "raw_roles": {
+    "goal_file": "c0f862b6f2d7b02012051c2ba0b9ebafac7b0241015d6734f62a98009e6cc5ce",
+    "proof_auto_file": "48a3bf524e095b5afd03a615640ac5c639ae295da112e6c949329f40f768895f",
+    "proof_manual_file": "93fdf56a4663f1cfc3f13049fe7b36dea142865b95b698d299cc9ee918300278",
+    "goal_check_file": "897c6d0c353b7bf572ddc861f1f084479d0848dddc1b19c643c2e46d2e6defa4"
+  },
+  "goal_definitions_changed": false,
+  "auto_file_changed": false
+}

@@ -1,0 +1,90 @@
+{
+  "status": "passed",
+  "path_and_symlink_rejection": true,
+  "load_paths": 24,
+  "symbolic_plans": {
+    "_SemaphoreCreate": {
+      "helper": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/symexec_tooling.py",
+      "driver": "/home/xinra/qcp-binary-democases/linux-binary/symexec",
+      "cwd": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1",
+      "main_root": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1",
+      "output_root": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1",
+      "target_c_file": "annotated_C/src/_SemaphoreCreate.c",
+      "target_files": {
+        "c_file": "annotated_C/src/_SemaphoreCreate.c",
+        "formal_directory": "VC",
+        "formal_case_lib": "VC/_SemaphoreCreate_lib.v",
+        "goal_file": "VC/_SemaphoreCreate_goal.v",
+        "proof_auto_file": "VC/_SemaphoreCreate_proof_auto.v",
+        "proof_manual_file": "VC/_SemaphoreCreate_proof_manual.v",
+        "goal_check_file": "VC/_SemaphoreCreate_goal_check.v",
+        "case_name": "_SemaphoreCreate",
+        "active_case_theory": "CRTOS_Verify.VC"
+      },
+      "include_args": [
+        "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/annotated_C/src/",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/annotated_C/include/",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/annotated_C/"
+      ],
+      "slp_args": [],
+      "extra_flags": [],
+      "argv": [
+        "/home/xinra/qcp-binary-democases/linux-binary/symexec",
+        "--goal-file=/home/xinra/crtos/ksemaphorecreate-trial-261022-1/VC/_SemaphoreCreate_goal.v",
+        "--proof-auto-file=/home/xinra/crtos/ksemaphorecreate-trial-261022-1/VC/_SemaphoreCreate_proof_auto.v",
+        "--proof-manual-file=/home/xinra/crtos/ksemaphorecreate-trial-261022-1/VC/_SemaphoreCreate_proof_manual.v",
+        "--arch=32",
+        "--endian=little",
+        "--no-CRules",
+        "-I/home/xinra/crtos/ksemaphorecreate-trial-261022-1/annotated_C/src/",
+        "-I/home/xinra/crtos/ksemaphorecreate-trial-261022-1/annotated_C/include/",
+        "-I/home/xinra/crtos/ksemaphorecreate-trial-261022-1/annotated_C/",
+        "--coq-logic-path=CRTOS_Verify.VC",
+        "--input-file=annotated_C/src/_SemaphoreCreate.c",
+        "--no-exec-info"
+      ]
+    },
+    "KSemaphoreCreate": {
+      "helper": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/symexec_tooling.py",
+      "driver": "/home/xinra/qcp-binary-democases/linux-binary/symexec",
+      "cwd": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1",
+      "main_root": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1",
+      "output_root": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1",
+      "target_c_file": "annotated_C/src/KSemaphoreCreate.c",
+      "target_files": {
+        "c_file": "annotated_C/src/KSemaphoreCreate.c",
+        "formal_directory": "VC",
+        "formal_case_lib": "VC/KSemaphoreCreate_lib.v",
+        "goal_file": "VC/KSemaphoreCreate_goal.v",
+        "proof_auto_file": "VC/KSemaphoreCreate_proof_auto.v",
+        "proof_manual_file": "VC/KSemaphoreCreate_proof_manual.v",
+        "goal_check_file": "VC/KSemaphoreCreate_goal_check.v",
+        "case_name": "KSemaphoreCreate",
+        "active_case_theory": "CRTOS_Verify.VC"
+      },
+      "include_args": [
+        "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/annotated_C/src/",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/annotated_C/include/",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/annotated_C/"
+      ],
+      "slp_args": [],
+      "extra_flags": [],
+      "argv": [
+        "/home/xinra/qcp-binary-democases/linux-binary/symexec",
+        "--goal-file=/home/xinra/crtos/ksemaphorecreate-trial-261022-1/VC/KSemaphoreCreate_goal.v",
+        "--proof-auto-file=/home/xinra/crtos/ksemaphorecreate-trial-261022-1/VC/KSemaphoreCreate_proof_auto.v",
+        "--proof-manual-file=/home/xinra/crtos/ksemaphorecreate-trial-261022-1/VC/KSemaphoreCreate_proof_manual.v",
+        "--arch=32",
+        "--endian=little",
+        "--no-CRules",
+        "-I/home/xinra/crtos/ksemaphorecreate-trial-261022-1/annotated_C/src/",
+        "-I/home/xinra/crtos/ksemaphorecreate-trial-261022-1/annotated_C/include/",
+        "-I/home/xinra/crtos/ksemaphorecreate-trial-261022-1/annotated_C/",
+        "--coq-logic-path=CRTOS_Verify.VC",
+        "--input-file=annotated_C/src/KSemaphoreCreate.c",
+        "--no-exec-info"
+      ]
+    }
+  },
+  "c_proofs_executed": false
+}

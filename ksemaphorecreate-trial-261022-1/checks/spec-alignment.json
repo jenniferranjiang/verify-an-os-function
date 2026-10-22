@@ -1,0 +1,150 @@
+{
+  "status": "text-aligned; resource bridges compiled; affected-only predicate/spec review passed",
+  "spec_text_alignment": "passed: nine selected VRTOS interfaces, 16 canonical/caller occurrences; see vrtos-spec-comparison.json",
+  "functions": {
+    "AllocId": {
+      "reference": "/home/xinra/vrtos/annotated_C/src/headers/m_id.h",
+      "reference_line": 75,
+      "selected_case": null,
+      "reference_header_sha256": "846c2ea8e4cf9fe7950d5d096a54d21a9cc04dd346c72424915c3f7292a6c8e5",
+      "occurrences": [
+        {
+          "file": "annotated_C/src/AllocId.c",
+          "count": 1
+        },
+        {
+          "file": "annotated_C/src/IdInsertObj.c",
+          "count": 1
+        }
+      ]
+    },
+    "InsertObj": {
+      "reference": "/home/xinra/vrtos/annotated_C/src/headers/m_id.h",
+      "reference_line": 87,
+      "selected_case": null,
+      "reference_header_sha256": "846c2ea8e4cf9fe7950d5d096a54d21a9cc04dd346c72424915c3f7292a6c8e5",
+      "occurrences": [
+        {
+          "file": "annotated_C/src/IdInsertObj.c",
+          "count": 1
+        },
+        {
+          "file": "annotated_C/src/InsertObj.c",
+          "count": 1
+        }
+      ]
+    },
+    "IdInsertObj": {
+      "reference": "/home/xinra/vrtos/annotated_C/src/headers/m_id.h",
+      "reference_line": 95,
+      "selected_case": null,
+      "reference_header_sha256": "846c2ea8e4cf9fe7950d5d096a54d21a9cc04dd346c72424915c3f7292a6c8e5",
+      "occurrences": [
+        {
+          "file": "annotated_C/src/IdInsertObj.c",
+          "count": 1
+        },
+        {
+          "file": "annotated_C/src/_SemaphoreCreate.c",
+          "count": 1
+        }
+      ]
+    },
+    "InitDoubleLinkList": {
+      "reference": "/home/xinra/vrtos/annotated_C/src/headers/m_double_linklist.h",
+      "reference_line": 68,
+      "selected_case": null,
+      "reference_header_sha256": "28949a5fca3825a36cd8185fe2a6ffe2af10bd6f87b7925b52e1b29d8801fa06",
+      "occurrences": [
+        {
+          "file": "annotated_C/src/InitDoubleLinkList.c",
+          "count": 1
+        },
+        {
+          "file": "annotated_C/src/InsertObj.c",
+          "count": 1
+        },
+        {
+          "file": "annotated_C/src/_SemaphoreCreate.c",
+          "count": 1
+        }
+      ]
+    },
+    "DoubleLinkListInsertNodeAfter": {
+      "reference": "/home/xinra/vrtos/annotated_C/src/headers/m_double_linklist.h",
+      "reference_line": 141,
+      "selected_case": "dispatch_case",
+      "reference_header_sha256": "28949a5fca3825a36cd8185fe2a6ffe2af10bd6f87b7925b52e1b29d8801fa06",
+      "occurrences": [
+        {
+          "file": "annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+          "count": 1
+        },
+        {
+          "file": "annotated_C/src/InsertObj.c",
+          "count": 1
+        },
+        {
+          "file": "annotated_C/src/_SemaphoreCreate.c",
+          "count": 1
+        }
+      ]
+    },
+    "CriticalAreaLock": {
+      "reference": "/home/xinra/vrtos/annotated_C/src/headers/m_ktask.h",
+      "reference_line": 71,
+      "selected_case": "ordinary",
+      "reference_header_sha256": "36de7b44151c3fa5592e21943b7229576bf21213317c8424feed87f92cba282e",
+      "occurrences": [
+        {
+          "file": "annotated_C/src/_SemaphoreCreate.c",
+          "count": 1
+        }
+      ]
+    },
+    "CriticalAreaUnLock": {
+      "reference": "/home/xinra/vrtos/annotated_C/src/headers/m_ktask.h",
+      "reference_line": 89,
+      "selected_case": "stable",
+      "reference_header_sha256": "36de7b44151c3fa5592e21943b7229576bf21213317c8424feed87f92cba282e",
+      "occurrences": [
+        {
+          "file": "annotated_C/src/_SemaphoreCreate.c",
+          "count": 1
+        }
+      ]
+    },
+    "x_malloc": {
+      "reference": "/home/xinra/vrtos/annotated_C/src/headers/m_ktask.h",
+      "reference_line": 573,
+      "selected_case": "delay_object",
+      "reference_header_sha256": "36de7b44151c3fa5592e21943b7229576bf21213317c8424feed87f92cba282e",
+      "occurrences": [
+        {
+          "file": "annotated_C/src/_SemaphoreCreate.c",
+          "count": 1
+        }
+      ]
+    },
+    "memset": {
+      "reference": "/home/xinra/vrtos/annotated_C/src/headers/m_ktask.h",
+      "reference_line": 584,
+      "selected_case": null,
+      "reference_header_sha256": "36de7b44151c3fa5592e21943b7229576bf21213317c8424feed87f92cba282e",
+      "occurrences": [
+        {
+          "file": "annotated_C/src/_SemaphoreCreate.c",
+          "count": 1
+        }
+      ]
+    }
+  },
+  "exceptions": {
+    "x_free": "Trusted KERNEL_FREE macro target uses SemaphoreRaw -> emp; complete allocated object ownership with unknown field values, not a matching VRTOS spec claim.",
+    "KPrintf": "Existing debug-only trusted contract retained.",
+    "KSemaphoreCreate/_SemaphoreCreate": "Public contracts retained; this task aligns callees."
+  },
+  "model_equivalence": "not claimed; user chose only two modular caller proofs under current model",
+  "implementation_status": "KSemaphoreCreate and _SemaphoreCreate modular proofs passed final-check; helper implementation proofs not claimed",
+  "implementation_evidence": "checks/status.json"
+}

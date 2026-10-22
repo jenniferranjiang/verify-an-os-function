@@ -1,0 +1,142 @@
+{
+  "status": "completed",
+  "phase": "done",
+  "trial": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1",
+  "revision": "vrtos-implement-r1",
+  "revision_sha256": "a7bd7fdd2af11d77f78065cfcd3b40479e9d622a98d5b813360eb2de38b45d53",
+  "source_sha256": {
+    "_CoqProject": "91db1b73d59f8f6ff25009f6886109f2356b50663173156c9986d27da5e178d0",
+    "annotated_C/logic.h": "9ace78d8c8b3bf76ad6598a41f843e005566bd62eab6a6cfe4c1d99883046ef2",
+    "annotated_C/slice_types.h": "66f5b7ffab645234754bd4d2aca315e761db402db609bf8a33950b702b53cf08",
+    "shared_candidates/AssignInv.v": "2cecf8f892d6ceb171de818404fc6ffff3bb867d44df658385373ba6feefbbe5",
+    "shared_candidates/Bitmap.v": "70e55e230c54c2b30243d63d33afde5705ca653e03118cecb405ef7ae1a659c6",
+    "shared_candidates/CrtosGlobState.v": "9dc65a597a292397a93e32beb587c2828d21bdc08cb757e1835cdae91560219e",
+    "shared_candidates/CrtosInv.v": "84c32c932758019c1bef062a3200d643bba1cf5b40c6d74f82fa94cfd78726af",
+    "shared_candidates/CrtosRules.v": "9c69d6a5d6a9a13783fe2dc3c1d226b21c7dd2b308be91d8dda63be1a1d5a430",
+    "shared_candidates/DelayInv.v": "d84b44d4495745469ff2836e098d0826494353ffd3eef76cd49e188f44f7bf38",
+    "shared_candidates/DoubleLinkListSpec.v": "9ba518bcf2cb9065cd6364fffbebfa0639fd30745add0316eecc4d871ac3dc85",
+    "shared_candidates/EventInv.v": "919a0ffb13e35d9b23845f3d74b2efc8a0e320fcafe996026ab719ee549e59a3",
+    "shared_candidates/ExstatusInv.v": "295eefa00335d89f7ad6cc89a8f76d03f5db85f8d59b01127dde396f8cf67c4e",
+    "shared_candidates/IsrManagerInv.v": "7d3b335f1e3bcf0c2b9aeb901de6ff693847cf5a0cf71061279e1d6a18a8645a",
+    "shared_candidates/KTaskDelayMem.v": "328accc334c4d503c8cb2ed4a2d3afb4513cb88e2acefe7714ca1d991a8f4697",
+    "shared_candidates/KTaskSchedMember.v": "7bd3a7858a49c28be99f5f208ff8244d66bdf67b6fad4f4c044848e0df4fd010",
+    "shared_candidates/KTaskStackSetup.v": "9a2494476f8c332a50f2ad1d0c6cfb103720e98400bab96540153b65ecbcdf29",
+    "shared_candidates/MsgQueueInv.v": "17cafa6347423876e6c2e6cc98207c7244ea96f58e593be51b116ea206636b20",
+    "shared_candidates/MutexInv.v": "5e62d3e12a284d9d7247a2ea00676fcd74f3c57d7cd666c317084a63dcddf05d",
+    "shared_candidates/NodeSelfLinked.v": "96129a66203d097a84f137df9313a52a122289a63e6566896556e18858b2b2e0",
+    "shared_candidates/SemaphoreInv.v": "69f6625fb300ea7f8f9e08834d427b05ced77008ea81e0bb79076e0fdcc76ee4",
+    "shared_candidates/SemaphoreState.v": "fa21dbdc2780795cd9a2c8c9ae5d5b9731e21ca6cef6f09a850cbe2aaf4994bf",
+    "shared_candidates/TaskInv.v": "9a6bd794321f9a42a3826db0447ca3cb8c1cb5984140f8f3818732dbae741943",
+    "shared_candidates/TaskStatusMemory.v": "78ba922baf32938ffb6b4f626bcee73921576bd1b1d0feb60cf430d89310e290",
+    "shared_candidates/TickInv.v": "e1b0f28797e9bffaa13f4c49fdd3a8282246bb67bfffe39c35a0368e9a45a21b",
+    "shared_candidates/dll.v": "7867b5d5cfe251cbadd672222879c7f00c1c36ee0687b3b3a764cdbf95ce49f4",
+    "shared_candidates/idnode.v": "f996fccf16b68f253671d641e2100ba5ac37f01398dac8fd4b1d3cbfe5b4aaa1",
+    "lib/KSemaphoreCreate.v": "ee3a68dd7ab4a93e377da5eec8abc9da82fb12addaf7d5c805a4f123256925c3",
+    "lib/SemaphoreByteLayout.v": "e6ecd53d4cc12bb71584b2bebbaab6274ff754f6f2a92414c2208b5f5e434154",
+    "lib/SemaphoreOwnership.v": "abca579d4172d6505cf77c674f6af65fcf7bd1f51c213da41d9b38ba59f30b06",
+    "lib/SemaphoreSpecBridge.v": "6366f505934ca185fe36192445e220c883cac6e52f8a1fb41eabe39726b71785",
+    "vendor/MonadLib/Monad.v": "39d18b8b0d8dfcb2ca072d128dc3dc51df1d9310304fb5524b6e2d6a6891dfaf",
+    "vendor/MonadLib/MonadErr/MonadErrBasic.v": "3052b34d48a4e30455fd69868421ba124ac546690a0755b9f40cec5a107f16b0",
+    "vendor/MonadLib/MonadErr/MonadErrHoare.v": "1d04f5f7cfc385933bdfb470a2d599d9ad0df93c3f05cc9e4e740d63ed55c5de",
+    "vendor/MonadLib/MonadErr/MonadErrLoop.v": "2fa6dae9f424b6d0331956787f93a90c48c8465e3408e4891be105659e5ae2a6",
+    "vendor/MonadLib/MonadErr/monadesafe_lib.v": "9a58699a640ceaaf089db26aa12039805c75d233093f6262db7cae9cd73980ac"
+  },
+  "user_authorization": "Align callee specs with VRTOS in a new trial; keep 261019-3 unchanged.",
+  "review_status": "affected-only predicate/spec integration passed",
+  "checks": {
+    "vrtos_spec_text": {
+      "status": "passed",
+      "functions": 9,
+      "occurrences": 16,
+      "evidence": "checks/vrtos-spec-comparison.json"
+    },
+    "source_body_and_call_contracts": {
+      "status": "passed",
+      "evidence": "checks/design-audit.json"
+    },
+    "gcc_syntax": {
+      "status": "passed",
+      "returncode": 0,
+      "command": "gcc -m32 -std=gnu11 -Wall -Werror -fsyntax-only annotated_C/src/*.c"
+    },
+    "rocq_libraries": {
+      "status": "passed",
+      "files": 32,
+      "evidence": "checks/predicate-compile.log"
+    },
+    "rocq_vocabulary": {
+      "status": "passed",
+      "checks": 57,
+      "returncode": 0,
+      "evidence": "checks/spec-vocabulary.log"
+    },
+    "integration_review": {
+      "status": "passed",
+      "evidence": "checks/integration-review.json"
+    }
+  },
+  "qcp_symbolic": "passed for both target functions",
+  "generated_vcs": 46,
+  "implementation_proof": "Both target functions passed controller final-check; modular scope only.",
+  "previous_trial_proof_status": "Historical only; no old proof result is claimed for the current sources.",
+  "open_issues": [],
+  "design_change": ".docs/Report/design-changes/2026-10-22-1-vrtos-spec-alignment.md",
+  "preserved_local_annotations": [
+    "_SemaphoreCreate: 0 <= val && val <= 65535 by local; independent of callee spec changes"
+  ],
+  "limits": [
+    "No assertion of helper C implementation closure verification",
+    "Memory/global-state models differ from upstream VRTOS; no cross-model proof transport claimed",
+    "Allocation provenance remains an explicit trusted malloc/free modeling boundary"
+  ],
+  "abi_record": "checks/abi-authorization.json",
+  "scope": "ONLY KSemaphoreCreate and _SemaphoreCreate modular proofs with unchanged VRTOS helper specs; no helper C reproof.",
+  "run_ids": {
+    "_SemaphoreCreate": "SemaphoreCreate-20261022181446",
+    "KSemaphoreCreate": "KSemaphoreCreate-20261022181446"
+  },
+  "spec_text_reference": "checks/spec-alignment.json",
+  "generated_top_level_vcs": {
+    "KSemaphoreCreate": 4,
+    "_SemaphoreCreate": 42
+  },
+  "groups": {
+    "_SemaphoreCreate": 10
+  },
+  "wrapper_status": "done",
+  "wrapper_final_check": {
+    "status": "passed",
+    "checked_at": "2026-10-22T10:36:22.768829Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "source_audit": "checks/design-audit.json passed after annotation acceptance",
+  "group_status": {
+    "byte_layout": "accepted",
+    "publish": "accepted",
+    "open_id": "accepted",
+    "id_failure": "accepted",
+    "list_prepare": "accepted",
+    "returns": "accepted",
+    "entry_calls": "accepted",
+    "safety_entry": "accepted",
+    "safety_alloc": "accepted",
+    "safety_locked": "accepted"
+  },
+  "updated_at": "2026-10-22T12:04:58.529649+00:00",
+  "final_checks": {
+    "_SemaphoreCreate": {
+      "status": "passed",
+      "checked_at": "2026-10-22T12:03:43.122897Z",
+      "errors": [],
+      "cleanup_removed_count": 0
+    },
+    "KSemaphoreCreate": {
+      "status": "passed",
+      "checked_at": "2026-10-22T10:36:22.768829Z",
+      "errors": [],
+      "cleanup_removed_count": 0
+    }
+  },
+  "timing_record": "checks/implementation-timing.json"
+}

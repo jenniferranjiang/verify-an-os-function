@@ -1,0 +1,127 @@
+{
+  "status": "compatibility-not-established",
+  "reference_vrtos": "/home/xinra/vrtos",
+  "checked_local_git_refs": {
+    "origin/idnode": "12378745b310bfcefb150a6c0e5a5fbfdd95787c",
+    "origin/double_linklist": "6420104507a04d7f9e01df4c365ce1859f5e002e"
+  },
+  "implementations": {
+    "IdInsertObj": {
+      "repository": "/home/xinra/crtosverify",
+      "commit": "12378745b310bfcefb150a6c0e5a5fbfdd95787c",
+      "files": {
+        "VC/code_proof/id/IdInsertObj_proof_auto.v": {
+          "sha256": "b35e7e4e0497e3e032df885da253f599a643d53c7c3a2150e147b1d02be7e9ec",
+          "Admitted": 18,
+          "Qed": 0
+        },
+        "VC/code_proof/id/IdInsertObj_proof_manual.v": {
+          "sha256": "f44b5472fbee5d15e381d15b34cf902dfaf85bd81aa443023ba3a221cde5fd93",
+          "Admitted": 0,
+          "Qed": 3
+        },
+        "VC/code_proof/id/IdInsertObj_goal_check.v": {
+          "sha256": "eb4dee4923e51cbedbcd1e54cea353786476890d913ac1fa7b8e6a09d49d2784",
+          "Admitted": 0,
+          "Qed": 0
+        }
+      },
+      "reuse_status": "not directly compatible with trial Assertion/global-state/predicate definitions"
+    },
+    "AllocId": {
+      "repository": "/home/xinra/crtosverify",
+      "commit": "12378745b310bfcefb150a6c0e5a5fbfdd95787c",
+      "files": {
+        "VC/code_proof/id/AllocId_proof_auto.v": {
+          "sha256": "8a418577970b87acabd451d90a688f5dfa9929205bc27efe4f64d4e255fd0b1a",
+          "Admitted": 28,
+          "Qed": 0
+        },
+        "VC/code_proof/id/AllocId_proof_manual.v": {
+          "sha256": "f145302e6635b36a5e0dfb4c1fcb1d0fa7b0a3ae61d7d5a5ea3c196eb8dbdb29",
+          "Admitted": 0,
+          "Qed": 22
+        },
+        "VC/code_proof/id/AllocId_goal_check.v": {
+          "sha256": "8bc40e1c92d202f47783679b12481abb97d2f0321617a365654cedfa6343401c",
+          "Admitted": 0,
+          "Qed": 0
+        }
+      },
+      "reuse_status": "not directly compatible with trial Assertion/global-state/predicate definitions"
+    },
+    "InsertObj": {
+      "repository": "/home/xinra/crtosverify",
+      "commit": "12378745b310bfcefb150a6c0e5a5fbfdd95787c",
+      "files": {
+        "VC/code_proof/id/InsertObj_proof_auto.v": {
+          "sha256": "3ab3d0ada139f0d6b7e7045ea65e2b01481727f30c0573d75aec238f60a228ec",
+          "Admitted": 16,
+          "Qed": 0
+        },
+        "VC/code_proof/id/InsertObj_proof_manual.v": {
+          "sha256": "67d5d6da54662d8d09ecce2afb1a321a4406441c746aef73759d3d2018295c14",
+          "Admitted": 0,
+          "Qed": 7
+        },
+        "VC/code_proof/id/InsertObj_goal_check.v": {
+          "sha256": "e2c07a1945c5525781196a9a6b92b962196f03bdb842f5f367e050f1499c85ad",
+          "Admitted": 0,
+          "Qed": 0
+        }
+      },
+      "reuse_status": "not directly compatible with trial Assertion/global-state/predicate definitions"
+    },
+    "xizi_double_link_init": {
+      "repository": "/home/xinra/crtosverify",
+      "commit": "6420104507a04d7f9e01df4c365ce1859f5e002e",
+      "files": {
+        "VC/code_proof/xizi/xizi_double_link_init/xizi_double_link_init_proof_auto.v": {
+          "sha256": "0b98568a2f9edbf274545442b0ce9c93b9193829ad50f341823506263fc2e037",
+          "Admitted": 0,
+          "Qed": 0
+        },
+        "VC/code_proof/xizi/xizi_double_link_init/xizi_double_link_init_proof_manual.v": {
+          "sha256": "eea6bbc98daf4ee8b6befc43d5f6923e74e8cfecdb2199f40f8813ae1898c5c5",
+          "Admitted": 0,
+          "Qed": 2
+        },
+        "VC/code_proof/xizi/xizi_double_link_init/xizi_double_link_init_goal_check.v": {
+          "sha256": "043973fa93a5e6f3d762279cb1bfd561aea57c6913a3de1574bf3c8e54fdaa82",
+          "Admitted": 0,
+          "Qed": 0
+        }
+      },
+      "reuse_status": "not directly compatible with trial Assertion/global-state/predicate definitions"
+    },
+    "xizi_double_link_insert_after": {
+      "repository": "/home/xinra/crtosverify",
+      "commit": "6420104507a04d7f9e01df4c365ce1859f5e002e",
+      "files": {
+        "VC/code_proof/xizi/xizi_double_link_insert_after/xizi_double_link_insert_after_proof_auto.v": {
+          "sha256": "15249b3fa733bf85b4004742c0e8c4b073e200bf086c35aeb09c190a9bd9ea25",
+          "Admitted": 0,
+          "Qed": 0
+        },
+        "VC/code_proof/xizi/xizi_double_link_insert_after/xizi_double_link_insert_after_proof_manual.v": {
+          "sha256": "a3a95af8e7a651ad98ac4bf8b4d9666f31d007abad39434b944100e765d9721c",
+          "Admitted": 0,
+          "Qed": 7
+        },
+        "VC/code_proof/xizi/xizi_double_link_insert_after/xizi_double_link_insert_after_goal_check.v": {
+          "sha256": "70108747703ccdcd94fa7bfa56992f4a24d05494a82a5147ea9636d0445fa940",
+          "Admitted": 0,
+          "Qed": 0
+        }
+      },
+      "reuse_status": "not directly compatible with trial Assertion/global-state/predicate definitions"
+    }
+  },
+  "findings": [
+    "No matching complete helper implementation VC records located in current VRTOS tree.",
+    "ID branch contracts differ from current VRTOS contracts, including missing first_free_id=None in IdInsertObj failure post; auto admissions remain.",
+    "DLL branch Init and InsertAfter have archived successful compilation, no auto admissions for these two targets, but need predicate/carrier and contract transport.",
+    "VRTOS header generic deterministic dispatch is not the same contract as upstream existential-result dispatch.",
+    "No helper C implementation is re-proved or newly treated as trusted by this audit."
+  ]
+}

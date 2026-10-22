@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {"name": "_SemaphoreCreate", "meaning": "创建信号量，返回失败码 -5 或 [0,128) 内的 ID，保持临界区外资源并细化已有抽象创建程序。"},
+    {"name": "KSemaphoreCreate", "meaning": "转发创建请求，返回失败码 -5 或 [0,128) 内的 ID，保持临界区外资源并细化已有抽象创建程序。"}
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

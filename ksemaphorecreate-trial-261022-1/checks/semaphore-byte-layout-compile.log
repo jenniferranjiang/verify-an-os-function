@@ -1,0 +1,14 @@
+Compiler version:
+The Coq Proof Assistant, version 8.20.1
+compiled with OCaml 4.14.2
+
+Command:
+/home/xinra/.opam/pv-bench-8.20.1/bin/coqc -R /home/xinra/qcp-binary-democases/Rocq/flocq/src Flocq -R /home/xinra/qcp-binary-democases/Rocq/SeparationLogic SimpleC.SL -R /home/xinra/qcp-binary-democases/Rocq/unifysl Logic -R /home/xinra/qcp-binary-democases/Rocq/sets SetsClass -R /home/xinra/qcp-binary-democases/Rocq/compcert_lib compcert.lib -R /home/xinra/qcp-binary-democases/Rocq/auxlibs AUXLib -R /home/xinra/qcp-binary-democases/Rocq/examples SimpleC.EE -R /home/xinra/qcp-binary-democases/Rocq/stdlib SimpleC.StdLib -R /home/xinra/qcp-binary-democases/Rocq/StrategyLib SimpleC.StrategyLib -R /home/xinra/qcp-binary-democases/Rocq/Common SimpleC.Common -R /home/xinra/crtos/vendor/fixedpoints FP -R /home/xinra/crtos/ksemaphorecreate-trial-261022-1/vendor/MonadLib MonadLib -R /home/xinra/qcp-binary-democases/Rocq/listlib ListLib -R /home/xinra/qcp-binary-democases/Rocq/MaxMinLib MaxMinLib -R /home/xinra/qcp-binary-democases/Rocq/GraphLib GraphLib -R /home/xinra/qcp-binary-democases/Rocq/SumLib SumLib -R /home/xinra/qcp-binary-democases/Rocq/tracelib TraceLib -R /home/xinra/qcp-binary-democases/Rocq/coq-record-update/src RecordUpdate -Q /home/xinra/qcp-binary-democases/Rocq/algorithms Algorithms -R /home/xinra/qcp-binary-democases/Rocq/cdcllib CDCLLib -R /home/xinra/crtos/lib CRTOS_Verify.lib -R /home/xinra/crtos/ksemaphorecreate-trial-261022-1/shared_candidates TrialShared -R /home/xinra/crtos/ksemaphorecreate-trial-261022-1/lib KSemaphoreCreateTrial -R /home/xinra/crtos/ksemaphorecreate-trial-261022-1/VC CRTOS_Verify.VC /home/xinra/crtos/ksemaphorecreate-trial-261022-1/lib/SemaphoreByteLayout.v
+
+Source SHA256: bc2d14547b058c993de5f9c1c7a71945856bfe398426871f2429363eaaee671a
+Exit code: 0
+Elapsed monotonic seconds: 9.293384
+
+STDOUT:
+
+STDERR:

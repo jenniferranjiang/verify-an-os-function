@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "x_malloc",
+      "meaning": "返回空指针，或完整的对齐未知字节数组。"
+    },
+    {
+      "name": "memset",
+      "meaning": "归还全部设置为指定字符的字节数组。"
+    },
+    {
+      "name": "CriticalAreaLock",
+      "meaning": "进入临界区并取得环境转换后的系统不变量。"
+    },
+    {
+      "name": "IdInsertObj",
+      "meaning": "返回容量满失败，或分配最小空闲 ID 并归还更新的管理器。"
+    },
+    {
+      "name": "x_free",
+      "meaning": "消费原分配基址的完整私有对象所有权。"
+    },
+    {
+      "name": "InitDoubleLinkList",
+      "meaning": "将两个未知指针槽初始化为自链接节点。"
+    },
+    {
+      "name": "DoubleLinkListInsertNodeAfter",
+      "meaning": "按通用 DLL 插入点规约插入节点并归还完整链表。"
+    },
+    {
+      "name": "CriticalAreaUnLock",
+      "meaning": "将满足全局转换和完整不变量的状态交还临界区外。"
+    },
+    {
+      "name": "_SemaphoreCreate",
+      "meaning": "精化冻结抽象创建程序：返回 -5 或已发布对象的 ID，恢复临界区外资源。"
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

@@ -1,0 +1,89 @@
+COMMAND: /home/xinra/.opam/pv-bench-8.20.1/bin/coqc -R /home/xinra/qcp-binary-democases/Rocq/flocq/src Flocq -R /home/xinra/qcp-binary-democases/Rocq/SeparationLogic SimpleC.SL -R /home/xinra/qcp-binary-democases/Rocq/unifysl Logic -R /home/xinra/qcp-binary-democases/Rocq/sets SetsClass -R /home/xinra/qcp-binary-democases/Rocq/compcert_lib compcert.lib -R /home/xinra/qcp-binary-democases/Rocq/auxlibs AUXLib -R /home/xinra/qcp-binary-democases/Rocq/examples SimpleC.EE -R /home/xinra/qcp-binary-democases/Rocq/stdlib SimpleC.StdLib -R /home/xinra/qcp-binary-democases/Rocq/StrategyLib SimpleC.StrategyLib -R /home/xinra/qcp-binary-democases/Rocq/Common SimpleC.Common -R /home/xinra/crtos/vendor/fixedpoints FP -R /home/xinra/crtos/ksemaphorecreate-trial-261022-1/vendor/MonadLib MonadLib -R /home/xinra/qcp-binary-democases/Rocq/listlib ListLib -R /home/xinra/qcp-binary-democases/Rocq/MaxMinLib MaxMinLib -R /home/xinra/qcp-binary-democases/Rocq/GraphLib GraphLib -R /home/xinra/qcp-binary-democases/Rocq/SumLib SumLib -R /home/xinra/qcp-binary-democases/Rocq/tracelib TraceLib -R /home/xinra/qcp-binary-democases/Rocq/coq-record-update/src RecordUpdate -Q /home/xinra/qcp-binary-democases/Rocq/algorithms Algorithms -R /home/xinra/qcp-binary-democases/Rocq/cdcllib CDCLLib -R /home/xinra/crtos/lib CRTOS_Verify.lib -R /home/xinra/crtos/ksemaphorecreate-trial-261022-1/shared_candidates TrialShared -R /home/xinra/crtos/ksemaphorecreate-trial-261022-1/lib KSemaphoreCreateTrial -R /home/xinra/crtos/ksemaphorecreate-trial-261022-1/VC CRTOS_Verify.VC lib/SemaphoreSpecBridge.v
+
+RETURN CODE: 0
+
+ASSUMPTIONS CHECK
+Require Import KSemaphoreCreateTrial.SemaphoreSpecBridge.
+Print Assumptions idmanager_first_free_id_none_iff_full.
+Print Assumptions idmanager_first_free_id_some_min.
+Print Assumptions dll_insert_after_dispatch_at_head.
+Welcome to Coq 8.20.1
+
+Coq < [Loading ML file ring_plugin.cmxs (using legacy method) ... done]
+[Loading ML file zify_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_core_plugin.cmxs (using legacy method) ... done]
+[Loading ML file micromega_plugin.cmxs (using legacy method) ... done]
+[Loading ML file btauto_plugin.cmxs (using legacy method) ... done]
+[Loading ML file extraction_plugin.cmxs (using legacy method) ... done]
+
+Coq < Fetching opaque proofs from disk for KSemaphoreCreateTrial.SemaphoreSpecBridge
+Fetching opaque proofs from disk for Coq.Lists.List
+Fetching opaque proofs from disk for Coq.Classes.Morphisms
+Fetching opaque proofs from disk for Coq.Init.Logic
+Fetching opaque proofs from disk for Coq.micromega.ZMicromega
+Fetching opaque proofs from disk for Coq.micromega.Tauto
+Fetching opaque proofs from disk for Coq.micromega.Refl
+Fetching opaque proofs from disk for Coq.Bool.Bool
+Fetching opaque proofs from disk for Coq.micromega.RingMicromega
+Fetching opaque proofs from disk for Coq.micromega.OrderedRing
+Fetching opaque proofs from disk for Coq.setoid_ring.InitialRing
+Fetching opaque proofs from disk for Coq.setoid_ring.Ring_theory
+Fetching opaque proofs from disk for Coq.ZArith.BinInt
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZAdd
+Fetching opaque proofs from disk for Coq.PArith.BinPos
+Fetching opaque proofs from disk for Coq.Structures.OrdersFacts
+Fetching opaque proofs from disk for Coq.Init.Datatypes
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZBase
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZMul
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZAdd
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZBase
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZOrder
+Fetching opaque proofs from disk for Coq.Structures.OrdersTac
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZAddOrder
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZMulOrder
+Fetching opaque proofs from disk for Coq.Classes.Morphisms_Prop
+Fetching opaque proofs from disk for Coq.ZArith.Zbool
+Fetching opaque proofs from disk for Coq.micromega.EnvRing
+Fetching opaque proofs from disk for Coq.micromega.Env
+Fetching opaque proofs from disk for Coq.setoid_ring.Ring_polynom
+Fetching opaque proofs from disk for Coq.setoid_ring.BinList
+Fetching opaque proofs from disk for Coq.NArith.BinNat
+Fetching opaque proofs from disk for Coq.Numbers.Natural.Abstract.NSub
+Fetching opaque proofs from disk for Coq.Numbers.Natural.Abstract.NBase
+Fetching opaque proofs from disk for Coq.Numbers.Natural.Abstract.NAdd
+Fetching opaque proofs from disk for Coq.Numbers.Natural.Abstract.NOrder
+Fetching opaque proofs from disk for Coq.setoid_ring.ZArithRing
+Fetching opaque proofs from disk for Coq.ZArith.Zpow_def
+Fetching opaque proofs from disk for Coq.ZArith.Zorder
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZAddOrder
+Fetching opaque proofs from disk for Coq.ZArith.auxiliary
+Fetching opaque proofs from disk for Coq.Arith.PeanoNat
+Fetching opaque proofs from disk for Coq.Init.Peano
+Fetching opaque proofs from disk for Coq.ZArith.Znumtheory
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZMul
+Fetching opaque proofs from disk for Coq.ZArith.Zdiv
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZDivFloor
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZDiv
+Fetching opaque proofs from disk for Coq.ZArith.Zmax
+Fetching opaque proofs from disk for Coq.Structures.GenericMinMax
+Fetching opaque proofs from disk for Coq.Numbers.NatInt.NZGcd
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZGcd
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZLt
+Fetching opaque proofs from disk for Coq.Numbers.Integer.Abstract.ZSgnAbs
+Fetching opaque proofs from disk for Coq.micromega.ZifyClasses
+Fetching opaque proofs from disk for Coq.ZArith.Znat
+Fetching opaque proofs from disk for Coq.Arith.Compare_dec
+Fetching opaque proofs from disk for Coq.NArith.Nnat
+Fetching opaque proofs from disk for Coq.PArith.Pnat
+Fetching opaque proofs from disk for Coq.Structures.Equalities
+Fetching opaque proofs from disk for Coq.micromega.Ztac
+Fetching opaque proofs from disk for Coq.micromega.ZifyInst
+Closed under the global context
+
+Coq < Closed under the global context
+
+Coq < Closed under the global context
+
+Coq < 
+
+RETURN CODE: 0

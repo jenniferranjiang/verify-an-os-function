@@ -1,0 +1,159 @@
+{
+  "run": {
+    "status": "completed",
+    "phase": "done",
+    "created_at": "2026-10-22T10:14:46.685841Z",
+    "finished_at": "2026-10-22T10:36:22.768797Z",
+    "elapsed_seconds": 1296.082956
+  },
+  "commands": [
+    {
+      "phase": "annotation",
+      "command": "coq-check",
+      "calls": 2,
+      "elapsed_seconds": 0.866904
+    },
+    {
+      "phase": "annotation",
+      "command": "symexec",
+      "calls": 1,
+      "elapsed_seconds": 0.110734
+    },
+    {
+      "phase": "annotation",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 0.557619
+    },
+    {
+      "phase": "vc-checking",
+      "command": "dune-build",
+      "calls": 1,
+      "elapsed_seconds": 572.068579
+    },
+    {
+      "phase": "vc-checking",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 0.050296
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-preparing",
+      "calls": 1,
+      "elapsed_seconds": 0.063767
+    },
+    {
+      "phase": "vc-proving",
+      "command": "finalize-delivery",
+      "calls": 2,
+      "elapsed_seconds": 99.931739
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-verify",
+      "calls": 1,
+      "elapsed_seconds": 43.810141
+    },
+    {
+      "phase": "final-check",
+      "command": "final-apply",
+      "calls": 1,
+      "elapsed_seconds": 44.244835
+    },
+    {
+      "phase": "done",
+      "command": "final-check",
+      "calls": 1,
+      "elapsed_seconds": 44.757931
+    }
+  ],
+  "annotation_attempts": [
+    {
+      "attempt_id": "KSemaphoreCreate-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-10-22T10:16:22.219371Z",
+          "calls": 2,
+          "finished_at": "2026-10-22T10:16:38.395485Z",
+          "elapsed_seconds": 0.866904
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-10-22T10:17:01.753947Z",
+          "finished_at": "2026-10-22T10:17:02.314350Z",
+          "elapsed_seconds": 0.557619
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-10-22T10:15:01.285820Z",
+          "finished_at": "2026-10-22T10:17:01.763339Z",
+          "elapsed_seconds": 120.477519
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-10-22T10:16:29.978808Z",
+          "finished_at": "2026-10-22T10:16:30.092256Z",
+          "elapsed_seconds": 0.110734
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "attempt_id": "KSemaphoreCreate-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-10-22T10:28:45.115151Z",
+          "finished_at": "2026-10-22T10:28:45.169752Z",
+          "elapsed_seconds": 0.050296
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-10-22T10:26:47.766123Z",
+          "finished_at": "2026-10-22T10:28:45.127007Z",
+          "elapsed_seconds": 117.360884
+        }
+      ]
+    },
+    {
+      "attempt_id": "KSemaphoreCreate-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-10-22T10:31:20.987895Z",
+          "calls": 2,
+          "finished_at": "2026-10-22T10:33:50.640511Z",
+          "elapsed_seconds": 99.931739
+        },
+        {
+          "name": "group-work",
+          "started_at": "2026-10-22T10:28:58.441990Z",
+          "calls": 2,
+          "finished_at": "2026-10-22T10:33:12.648506Z",
+          "elapsed_seconds": 396.589877
+        },
+        {
+          "name": "vc-proving-preparing",
+          "started_at": "2026-10-22T10:28:53.743259Z",
+          "finished_at": "2026-10-22T10:28:53.811258Z",
+          "elapsed_seconds": 0.063767
+        },
+        {
+          "name": "vc-proving-verify",
+          "started_at": "2026-10-22T10:33:56.625216Z",
+          "finished_at": "2026-10-22T10:34:39.360050Z",
+          "elapsed_seconds": 43.810141
+        }
+      ]
+    }
+  ]
+}

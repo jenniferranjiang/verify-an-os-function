@@ -1,0 +1,45 @@
+{
+  "checks": [
+    {
+      "command": [
+        "gcc",
+        "-m32",
+        "-std=c11",
+        "-Wall",
+        "-Werror",
+        "-fsyntax-only",
+        "-I/home/xinra/crtos/ksemaphorecreate-trial-261022-1/checks",
+        "-I/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/checks/abi-check.c"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "gcc",
+        "-m32",
+        "-std=c11",
+        "-Wall",
+        "-Werror",
+        "-fsyntax-only",
+        "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/checks/slice-abi-check.c"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "status": "passed",
+  "limitation": "Fresh GCC x86 ILP32 checks of real and slice headers, including all nested fields; not an ARM cross-compiler or Rocq proof of field addresses.",
+  "arm_compiler_available": false,
+  "source_sha256": {
+    "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/checks/abi-check.c": "e51770487a66dbcf5046937713aaf6ccd59094a955984d9a70e126645404a86c",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/checks/slice-abi-check.c": "465351f86be6ca5451f2316a63ea915dd031863da243f58d27eebb0122370570",
+    "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/annotated_C/slice_types.h": "66f5b7ffab645234754bd4d2aca315e761db402db609bf8a33950b702b53cf08",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_sem.h": "c2c6edfde22823863a655d6d2a3f59fb749085a8b426166c885c2d5354174fab",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_klist.h": "5bea28cd16a799e414830dadfb6f3be8efd9dbf69b980fc4d44611531f71f7ca",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_id.h": "a44025ae2113ce756ddfb659556ba2211140284ba324907255e60fd515f8f42d"
+  }
+}

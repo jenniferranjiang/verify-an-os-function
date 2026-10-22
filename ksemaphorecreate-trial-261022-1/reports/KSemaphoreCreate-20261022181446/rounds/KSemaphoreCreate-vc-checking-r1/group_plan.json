@@ -1,0 +1,36 @@
+{
+  "groups": [
+    {
+      "id": "return_results",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_KSemaphoreCreate_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the witness and introduce val_pre, X, before, sg, after_3, retval and the pure hypotheses. Instantiate the result state existential with after_3. The spatial resource OutsideCritical sg after_3 is identical on both sides and cancels. The result equality retval = -5 and safeExec for ret(-5) are exactly PreH1 and PreH2; introduce these pure conjunctions directly. The earlier abs_semaphore_create safeExec hypothesis is only a frame of logical context; no transition or invariant unfolding is necessary."
+        },
+        {
+          "name": "proof_of_KSemaphoreCreate_return_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold and introduce all variables/hypotheses. Instantiate after_2 with after_3, retain OutsideCritical sg after_3 by reflexive entailment, and introduce the three consequent pure facts using PreH1 (nonnegative retval), PreH2 (retval < 128), and PreH3 (safeExec of ret retval). No new arithmetic, resource transformation, or refinement transition is required."
+        }
+      ]
+    },
+    {
+      "id": "call_precondition",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_KSemaphoreCreate_partial_solve_wit_1_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold and introduce the variables and PreH1. The antecedent contains the UShort val cell and OutsideCritical sg before. The entire consequent is a lifted pure proposition already equal to PreH1, so introduce the pure assertion directly (entailer or the pure-introduction rule). Neither byte conversion nor extraction of UShort bounds is needed; the spatial resources need not be transformed."
+        },
+        {
+          "name": "proof_of_KSemaphoreCreate_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold KSemaphoreCreate_partial_solve_wit_1, introduce its pure-witness implication premise, then unfold KSemaphoreCreate_partial_solve_wit_1_aux and introduce its quantified variables and PreH1. Both required safeExec propositions are exactly PreH1; introduce both pure conjunctions and close the unchanged OutsideCritical sg before entailment by cancellation/reflexivity. The pure-witness implication premise may remain unused because the aux definition explicitly supplies the same fact. No strengthened callee contract or helper is needed."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "timezone": "Asia/Shanghai",
+  "segments": [
+    {
+      "start_utc": "2026-10-22T11:20:57Z",
+      "start_local": "2026-10-22T19:20:57+08:00",
+      "end_utc": "2026-10-22T12:03:43.122897Z",
+      "status": "completed",
+      "basis": "User requested timing from now; clock tool sampled immediately after request.",
+      "measure": "wall-clock elapsed during this recorded work segment; not CPU or model inference time",
+      "end_local": "2026-10-22T20:03:43.122897+08:00",
+      "elapsed_seconds": 2566.122897,
+      "end_basis": "Final controller check passed; final documentation bookkeeping excluded."
+    }
+  ],
+  "earlier_time": {
+    "status": "elapsed-window-only; active time unconfirmed",
+    "runs": [
+      {
+        "run_id": "SemaphoreCreate-20261022181446",
+        "created_at": "2026-10-22T10:14:46.551392Z",
+        "phase_at_timing_start": "vc-proving",
+        "controller_pause_count": 0,
+        "source": "reports/SemaphoreCreate-20261022181446/controller_state.json"
+      },
+      {
+        "run_id": "KSemaphoreCreate-20261022181446",
+        "created_at": "2026-10-22T10:14:46.685841Z",
+        "phase_at_timing_start": "done",
+        "controller_pause_count": 0,
+        "source": "reports/KSemaphoreCreate-20261022181446/controller_state.json"
+      }
+    ],
+    "start_utc": "2026-10-22T10:14:46.551392+00:00",
+    "end_utc": "2026-10-22T11:20:57+00:00",
+    "elapsed_seconds": 3970.448608,
+    "note": "Controller records no explicit pause for these runs. This does not detect chat inactivity, computer shutdown, or pauses before run creation. Do not treat the elapsed window as verified active work. Parallel run/worker durations overlap and must not be summed."
+  },
+  "last_activity_utc": "2026-10-22T12:04:58.529062+00:00",
+  "activity": "Both modular implementation runs done; final records updated.",
+  "total_run_elapsed_seconds": 6536.571505,
+  "total_run_elapsed_note": "Elapsed from current run creation to final check; earlier uncertain pauses are included, not verified active time. Parallel durations are not summed."
+}

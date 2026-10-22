@@ -1,0 +1,132 @@
+StableGlobalState : Type
+     : Type
+VarGlobalState : Type
+     : Type
+VarIdmanager : Type
+     : Type
+SemaphoreStable : Type
+     : Type
+SemaphoreAbs : Type
+     : Type
+program : Type -> Type -> Type
+     : Type -> Type -> Type
+DL_Node : Type -> Type
+     : Type -> Type
+IdNodeAbs : Type
+     : Type
+option : Type -> Type
+     : Type -> Type
+@Some : forall A : Type, A -> option A
+     : forall A : Type, A -> option A
+@None : forall A : Type, option A
+     : forall A : Type, option A
+Build_IdNodeAbs : Z -> addr -> IdNodeAbs
+     : Z -> addr -> IdNodeAbs
+@Build_DL_Node : forall A : Type, A -> addr -> DL_Node A
+     : forall A : Type, A -> addr -> DL_Node A
+idmanager_first_free_id : StableIdmanager -> VarIdmanager -> option Z
+     : StableIdmanager -> VarIdmanager -> option Z
+store_idnode_insert_ready : addr -> Assertion
+     : addr -> Assertion
+store_idnode_unlinked : addr -> IdNodeAbs -> Assertion
+     : addr -> IdNodeAbs -> Assertion
+@store_dll
+:
+forall A : Type,
+(addr -> A -> Assertion) -> addr -> list (DL_Node A) -> Assertion
+     : forall A : Type,
+       (addr -> A -> Assertion) -> addr -> list (DL_Node A) -> Assertion
+occupy_dll_node : addr -> Assertion
+     : addr -> Assertion
+@dll_insert_anchor
+:
+forall A : Type, addr -> list (DL_Node A) -> addr -> Prop
+     : forall A : Type, addr -> list (DL_Node A) -> addr -> Prop
+@dll_insert_after_dispatch
+:
+forall A : Type,
+addr -> list (DL_Node A) -> addr -> DL_Node A -> list (DL_Node A)
+     : forall A : Type,
+       addr -> list (DL_Node A) -> addr -> DL_Node A -> list (DL_Node A)
+ALIGN_SIZE : Z
+     : Z
+addr_aligned : Z -> Z -> Prop
+     : Z -> Z -> Prop
+CharArray.undef_full : Z -> Z -> Assertion
+     : Z -> Z -> Assertion
+CharArray.full : Z -> Z -> list Z -> Assertion
+     : Z -> Z -> list Z -> Assertion
+@repeat_Z : forall A : Type, A -> Z -> list A
+     : forall A : Type, A -> Z -> list A
+@safeExec
+:
+forall Sigma A : Type,
+(Sigma -> Prop) -> program Sigma A -> (A -> Sigma -> Prop) -> Prop
+     : forall Sigma A : Type,
+       (Sigma -> Prop) -> program Sigma A -> (A -> Sigma -> Prop) -> Prop
+@MonadErr.ret : forall Sigma A : Type, A -> program Sigma A
+     : forall Sigma A : Type, A -> program Sigma A
+LastSeen : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+     : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+abs_semaphore_create
+:
+StableGlobalState -> Z -> program (VarGlobalState -> Prop) Z
+     : StableGlobalState -> Z -> program (VarGlobalState -> Prop) Z
+OutsideCritical : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+InsideCritical : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+Crtos_RTrans : VarGlobalState -> VarGlobalState -> Prop
+     : VarGlobalState -> VarGlobalState -> Prop
+Crtos_GTrans : VarGlobalState -> VarGlobalState -> Prop
+     : VarGlobalState -> VarGlobalState -> Prop
+os_inv : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+CriticalNest : Z -> Assertion
+     : Z -> Assertion
+os_semaphores : VarGlobalState -> SemaphoreState
+     : VarGlobalState -> SemaphoreState
+os_semaphore_stable : StableGlobalState -> SemaphoreStable
+     : StableGlobalState -> SemaphoreStable
+semaphore_manager_stable : SemaphoreStable -> StableIdmanager
+     : SemaphoreStable -> StableIdmanager
+semaphore_manager : SemaphoreState -> VarIdmanager
+     : SemaphoreState -> VarIdmanager
+semaphore_first_link : SemaphoreStable -> SemaphoreState -> Z
+     : SemaphoreStable -> SemaphoreState -> Z
+idbucket_first_link : StableIdmanager -> VarIdmanager -> Z -> Z
+     : StableIdmanager -> VarIdmanager -> Z -> Z
+semaphore_publish : Z -> Z -> Z -> SemaphoreState -> SemaphoreState
+     : Z -> Z -> Z -> SemaphoreState -> SemaphoreState
+replace_semaphores : SemaphoreState -> VarGlobalState -> VarGlobalState
+     : SemaphoreState -> VarGlobalState -> VarGlobalState
+store_idmanager : StableIdmanager -> VarIdmanager -> Z -> Assertion
+     : StableIdmanager -> VarIdmanager -> Z -> Assertion
+store_idmanager_allocated_unlinked
+:
+StableIdmanager -> VarIdmanager -> Z -> Z -> Assertion
+     : StableIdmanager -> VarIdmanager -> Z -> Z -> Assertion
+idmanager_full : StableIdmanager -> VarIdmanager -> Prop
+     : StableIdmanager -> VarIdmanager -> Prop
+idmanager_min_free_id : StableIdmanager -> VarIdmanager -> Z -> Prop
+     : StableIdmanager -> VarIdmanager -> Z -> Prop
+idmanager_add : VarIdmanager -> Z -> VarIdmanager
+     : VarIdmanager -> Z -> VarIdmanager
+idmanager_link : StableIdmanager -> VarIdmanager -> Z -> Z -> VarIdmanager
+     : StableIdmanager -> VarIdmanager -> Z -> Z -> VarIdmanager
+ZeroIdNode : Z -> Assertion
+     : Z -> Assertion
+AssignedIdNode : Z -> Z -> Assertion
+     : Z -> Z -> Assertion
+NodeStorage : Z -> Assertion
+     : Z -> Assertion
+store_node_self_linked : Z -> Assertion
+     : Z -> Assertion
+DllInsertAfterCut : Z -> Z -> Z -> Z -> Z -> Assertion
+     : Z -> Z -> Z -> Z -> Z -> Assertion
+DllInsertedCut : Z -> Z -> Z -> Assertion
+     : Z -> Z -> Z -> Assertion
+SemaphoreRaw : Z -> Assertion
+     : Z -> Assertion
+SemaphoreZero : Z -> Assertion
+     : Z -> Assertion

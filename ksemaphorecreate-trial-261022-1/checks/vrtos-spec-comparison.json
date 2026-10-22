@@ -1,0 +1,56 @@
+{
+  "status": "passed",
+  "functions": {
+    "AllocId": {
+      "signature_and_spec_tokens_identical": true,
+      "case": null,
+      "occurrences": 2
+    },
+    "InsertObj": {
+      "signature_and_spec_tokens_identical": true,
+      "case": null,
+      "occurrences": 2
+    },
+    "IdInsertObj": {
+      "signature_and_spec_tokens_identical": true,
+      "case": null,
+      "occurrences": 2
+    },
+    "InitDoubleLinkList": {
+      "signature_and_spec_tokens_identical": true,
+      "case": null,
+      "occurrences": 3
+    },
+    "DoubleLinkListInsertNodeAfter": {
+      "signature_and_spec_tokens_identical": true,
+      "case": "dispatch_case",
+      "occurrences": 3
+    },
+    "CriticalAreaLock": {
+      "signature_and_spec_tokens_identical": true,
+      "case": "ordinary",
+      "occurrences": 1
+    },
+    "CriticalAreaUnLock": {
+      "signature_and_spec_tokens_identical": true,
+      "case": "stable",
+      "occurrences": 1
+    },
+    "x_malloc": {
+      "signature_and_spec_tokens_identical": true,
+      "case": "delay_object",
+      "occurrences": 1
+    },
+    "memset": {
+      "signature_and_spec_tokens_identical": true,
+      "case": null,
+      "occurrences": 1
+    }
+  },
+  "baseline_sources_unchanged": true,
+  "public_specs_and_debug_spec_unchanged": true,
+  "x_free": "Separate trusted KERNEL_FREE macro-target adaptation; not a VRTOS spec identity claim.",
+  "old_trial_not_in_load_path": true,
+  "generated_vc_validation": "Outside this source comparison; use current controller runs.",
+  "limitations": "Token identity only. Models differ; no C proof or compatibility theorem checked."
+}
