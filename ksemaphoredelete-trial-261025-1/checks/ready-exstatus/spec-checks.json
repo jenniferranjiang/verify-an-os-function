@@ -1,0 +1,15 @@
+{
+  "LinklistResumeAll": {
+    "quantifier_expansion_identical": true,
+    "executable_text_unchanged": true,
+    "gcc_exit_code": 0,
+    "diagnostics": ""
+  },
+  "_SemaphoreDelete": {
+    "quantifier_expansion_identical": true,
+    "executable_text_unchanged": true,
+    "gcc_exit_code": 0,
+    "diagnostics": ""
+  },
+  "caller_contract_identical": true
+}

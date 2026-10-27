@@ -69,6 +69,15 @@ Record task_world_wf (st : VarGlobalState) : Prop := {
     st.(os_tasks).(task_desc_map) task = Some desc ->
     desc.(tdSchedMember).(tsmStat) = TSK_RUNNING ->
     desc.(tdSchedMember).(tsmBitmapColumn) =
+      Z.shiftl 1 desc.(tdSchedMember).(tsmCurPrio);
+  (** SUSPEND 从已启动任务挂起而来；挂起保持 cur_prio 与 bitmap_column。
+      唤醒直接使用该掩码，不重新计算。本条件是源码生命周期保持义务，
+      不能由原 RUNNING 条件或字段类型推出；本次未将保持性当作已证引理。 *)
+  task_wf_suspend_bitmap :
+    forall task desc,
+    st.(os_tasks).(task_desc_map) task = Some desc ->
+    desc.(tdSchedMember).(tsmStat) = TSK_SUSPEND ->
+    desc.(tdSchedMember).(tsmBitmapColumn) =
       Z.shiftl 1 desc.(tdSchedMember).(tsmCurPrio)
 }.
 

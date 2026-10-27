@@ -1,0 +1,468 @@
+{
+  "status": "passed",
+  "errors": [],
+  "body_count": 23,
+  "reachable": [
+    "AssignPolicyInsert",
+    "CONTAINER_OF_IDNODE_LINK",
+    "CONTAINER_OF_SEMAPHORE_ID",
+    "CONTAINER_OF_TASK_ID",
+    "CONTAINER_OF_TASK_SCHED",
+    "CriticalAreaLock",
+    "CriticalAreaUnLock",
+    "DoubleLinkListInsertNodeAfter",
+    "DoubleLinkListInsertNodeBefore",
+    "DoubleLinkListRmNode",
+    "FreeId",
+    "GetObj",
+    "GetTaskWithIdnodeInfo",
+    "IdGetObj",
+    "IdRemoveObj",
+    "InitDoubleLinkList",
+    "IsDoubleLinkListEmpty",
+    "JudgeKTaskStatIsSuspend",
+    "KSemaphoreDelete",
+    "KTASK_ASSIGN",
+    "KTaskInsertToReadyVector",
+    "KTaskStatSetAsReady",
+    "KTaskStateSet",
+    "KTaskUnSetDelay",
+    "KTaskWakeup",
+    "LinklistResumeAll",
+    "RemoveObj",
+    "RoundRobinRemainReadyVectorInsert",
+    "_KTaskWakeup",
+    "_SemaphoreDelete",
+    "x_free"
+  ],
+  "boundaries": [
+    "CONTAINER_OF_IDNODE_LINK",
+    "CONTAINER_OF_SEMAPHORE_ID",
+    "CONTAINER_OF_TASK_ID",
+    "CONTAINER_OF_TASK_SCHED",
+    "CriticalAreaLock",
+    "CriticalAreaUnLock",
+    "KTASK_ASSIGN",
+    "x_free"
+  ],
+  "files": {
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c": "93555a927905bb827256131673507c6618e18f8a29231b114519d90da5a0c963",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListInsertNodeAfter.c": "66c9654dfb4faea731ccdf647a1b6fed57ef0acd2acf5c1ef5b746f618f0d0dd",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListInsertNodeBefore.c": "f9975e812f50a23fd7fce919e935a89d74c41745e1ccb2be9b92bae9e8ff3947",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListRmNode.c": "780f3465cbd2b80002ad91822407f9cd48cf88a247f78c6f9ccc1d74e77fe256",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/FreeId.c": "6ec3ce91db6e1d533f70f85b6eae3b87b83632555a0c56ca4f34cdbe724b67d6",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/GetObj.c": "d945a4a7627b4c372fe500134bcab9b275bb7b2eb6c82605dd4bbc022d606c84",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/GetTaskWithIdnodeInfo.c": "065799508c56a6b5cb371dfd947fb8adfc6081956c77f048498355e746252cc0",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/IdGetObj.c": "9df09bceade7f6e241c18b6531054d39a9aec25701ef18e83ca617ab09108d51",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/IdRemoveObj.c": "2121f84508fb4226be2e2f39ea493ec1259575d9614f689e6266e71d8b57eac9",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/InitDoubleLinkList.c": "9b64aea58b40fef8b205772844d978ed5fbfee73892198fd8dcb91f37db0c1ac",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/IsDoubleLinkListEmpty.c": "2bd677005589b0eb0559783015b29aa73042a9fe228ca7de7f5bd27a12472fb4",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/JudgeKTaskStatIsSuspend.c": "1a46f6fc5cce7a0d9eca2d60ede2838046e33b5964b3ecc9d377b033b568d056",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/KSemaphoreDelete.c": "ea52a061a542e98280a5c3f2088d54d6f9cc6b3573181055ca30510c596cc264",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskInsertToReadyVector.c": "ed7e6210062c89425b0269821890be3848878b560606b27939390fd615351649",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskStatSetAsReady.c": "00474593d6f90fc91ab9f064b47b19328b169a13b803856ce7b3ed3afcb24f5a",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskStateSet.c": "1f7e2bddf09a2340464e5d40b8213084535fe2501e31445a900237c094699f68",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskUnSetDelay.c": "b8311b2b0d38ec091f6cdaea5f04f289b79210b72e2c93ba4bd10626a9783229",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskWakeup.c": "c677efe6368a2d985b3c5153759673de0f3a608cb5c8f8f812a145cfe31e2cbd",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/LinklistResumeAll.c": "923569c14bc74b8ca1d146fc9d520909bbf5d333b1d981577f0df580b1868a5d",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/RemoveObj.c": "641714f55710c787c427a333f9992bc91cf69c5c9e47fe838bb3b9813b17cbce",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/RoundRobinRemainReadyVectorInsert.c": "4fd526dc99a1abbf841d110a148fde4ac017b0d4251d51fbc92af0629d8731fe",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/_KTaskWakeup.c": "3e1463fb5b02c23f436c85efdd8d6102383fe305bb6abe5752bba6cdb38dd45c",
+    "ksemaphoredelete-trial-261025-1/annotated_C/src/_SemaphoreDelete.c": "fb8ab41c174ea76fb1070874bd07e057195fa0f4b80f03683db1efe8a28594f6"
+  },
+  "entries": {
+    "AssignPolicyInsert": {
+      "calls": [
+        "RoundRobinRemainReadyVectorInsert"
+      ],
+      "contracts": {
+        "RoundRobinRemainReadyVectorInsert": [
+          "/*@With(sg:StableGlobalState)(st:VarGlobalState)(desc:TaskDescriptorAbs)(before:OsAssignReadyVectorAbs)Requirebefore==st.os_assign.assignReadyVector&&ready_table==assign_ready_vector_addr(sg)&&st.os_tasks.task_desc_map(task)==Some(desc)&&task_fields(sg,st)*assign_ready_pending(sg,st)*occupy_dll_node(sched_link_of(task))Ensuretask!=0&&ready_table!=0&&st.os_tasks.task_desc_map(task)==Some(desc)&&existsnew_bucket,rrr_bucket_insert(st.os_tasks.task_desc_map,desc.tdSchedMember,ready_task_node(task),Znth(desc.tdSchedMember.tsmCurPrio,before.orvBuckets,nil),new_bucket)&&task_fields(sg,replace_global_ready_vector(os_assign_ready_vector_replace_bucket(before,desc.tdSchedMember.tsmCurPrio,new_bucket),st))*assign_ready_pending(sg,replace_global_ready_vector(os_assign_ready_vector_replace_bucket(before,desc.tdSchedMember.tsmCurPrio,new_bucket),st))*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c: In function \u2018AssignPolicyInsert\u2019:\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c:56:32: warning: unused variable \u2018tmp\u2019 [-Wunused-variable]\n   56 |         struct TaskDescriptor *tmp = NONE;\n      |                                ^~~\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c:55:29: warning: unused variable \u2018tail\u2019 [-Wunused-variable]\n   55 |         DoubleLinklistType* tail = NONE;\n      |                             ^~~~\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c:54:29: warning: unused variable \u2018node\u2019 [-Wunused-variable]\n   54 |         DoubleLinklistType* node = NONE;\n      |                             ^~~~\n"
+      }
+    },
+    "DoubleLinkListInsertNodeAfter": {
+      "calls": [],
+      "contracts": {},
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "DoubleLinkListInsertNodeBefore": {
+      "calls": [],
+      "contracts": {},
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "DoubleLinkListRmNode": {
+      "calls": [],
+      "contracts": {},
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "FreeId": {
+      "calls": [],
+      "contracts": {},
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "GetObj": {
+      "calls": [
+        "CONTAINER_OF_IDNODE_LINK",
+        "InitDoubleLinkList"
+      ],
+      "contracts": {
+        "CONTAINER_OF_IDNODE_LINK": [
+          "/*@With(idnode_ptr:addr)Requirelink_ptr==field_addr(idnode_ptr,structIdNode,link)&&empEnsure__return==idnode_ptr&&link_ptr==&(__return->link)&&emp*/"
+        ],
+        "InitDoubleLinkList": [
+          "/*@Requireundef_data_at(&(linklist_head->node_prev))*undef_data_at(&(linklist_head->node_next))Ensurelinklist_head!=0&&store_node_self_linked(linklist_head)*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "GetTaskWithIdnodeInfo": {
+      "calls": [
+        "CONTAINER_OF_TASK_ID",
+        "IdGetObj"
+      ],
+      "contracts": {
+        "CONTAINER_OF_TASK_ID": [
+          "/*@With(task:Z)Requireid_ptr==field_addr(task,structTaskDescriptor,id)&&empEnsure__return==task&&id_ptr==&(__return->id)*/"
+        ],
+        "IdGetObj": [
+          "/*@With(sidm:StableIdmanager)(idm:VarIdmanager)Require0<=id&&id<65536&&store_idmanager(sidm,idm,manager)Ensure(manager==0&&__return==0&&store_idmanager(sidm,idm,manager))||(manager!=0&&__return==0&&idmanager_query(idm,id)==false&&store_idmanager(sidm,idm,manager))||(manager!=0&&__return!=0&&idmanager_query(idm,id)==true&&store_idmanager_found(sidm,idm,manager,__return,id))*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/GetTaskWithIdnodeInfo.c: In function \u2018GetTaskWithIdnodeInfo\u2019:\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/GetTaskWithIdnodeInfo.c:66:12: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n   66 |     x_base lock = 0;\n      |            ^~~~\n"
+      }
+    },
+    "IdGetObj": {
+      "calls": [
+        "GetObj"
+      ],
+      "contracts": {
+        "GetObj": [
+          "/*@With(sidm:StableIdmanager)(idm:VarIdmanager)Require0<=id&&id<sidm.idmax&&store_idmanager(sidm,idm,manager)Ensure(__return==0&&idmanager_query(idm,id)==false&&store_idmanager(sidm,idm,manager))||(__return!=0&&idmanager_query(idm,id)==true&&store_idmanager_found(sidm,idm,manager,__return,id))*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "IdRemoveObj": {
+      "calls": [
+        "FreeId",
+        "IdGetObj",
+        "RemoveObj"
+      ],
+      "contracts": {
+        "FreeId": [
+          "/*@found_nodeWith(sidm:StableIdmanager)(idm:VarIdmanager)(idnode:addr)Requirestore_idmanager_found(sidm,idm,manager,idnode,id)Ensurestore_idmanager_remove_ready(sidm,idm,manager,idnode,id)*/"
+        ],
+        "IdGetObj": [
+          "/*@With(sidm:StableIdmanager)(idm:VarIdmanager)Require0<=id&&id<65536&&store_idmanager(sidm,idm,manager)Ensure(manager==0&&__return==0&&store_idmanager(sidm,idm,manager))||(manager!=0&&__return==0&&idmanager_query(idm,id)==false&&store_idmanager(sidm,idm,manager))||(manager!=0&&__return!=0&&idmanager_query(idm,id)==true&&store_idmanager_found(sidm,idm,manager,__return,id))*/"
+        ],
+        "RemoveObj": [
+          "/*@With(sidm:StableIdmanager)(idm:VarIdmanager)(id:Z)Requirestore_idmanager_remove_ready(sidm,idm,manager,idnode,id)Ensurestore_idmanager_removeobj_post(sidm,idm,manager,idnode,id)*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "InitDoubleLinkList": {
+      "calls": [],
+      "contracts": {},
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "IsDoubleLinkListEmpty": {
+      "calls": [],
+      "contracts": {},
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "JudgeKTaskStatIsSuspend": {
+      "calls": [],
+      "contracts": {},
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "KSemaphoreDelete": {
+      "calls": [
+        "_SemaphoreDelete"
+      ],
+      "contracts": {
+        "_SemaphoreDelete": [
+          "/*@outside_criticalWith(sg:StableGlobalState)(before:VarGlobalState)XRequiresafeExec(LastSeen(before),abs_semaphore_delete(sg,id),X)&&OutsideCritical(sg,before)Ensureexistsafter,safeExec(LastSeen(after),return(tt),X)&&OutsideCritical(sg,after)*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "KTaskInsertToReadyVector": {
+      "calls": [
+        "AssignPolicyInsert",
+        "KTaskStatSetAsReady"
+      ],
+      "contracts": {
+        "AssignPolicyInsert": [
+          "/*@With(sg:StableGlobalState)(st:VarGlobalState)(desc:TaskDescriptorAbs)(before:OsAssignReadyVectorAbs)Requirebefore==st.os_assign.assignReadyVector&&ready_table==assign_ready_vector_addr(sg)&&st.os_tasks.task_desc_map(task)==Some(desc)&&task_fields(sg,st)*assign_ready_pending(sg,st)*occupy_dll_node(sched_link_of(task))Ensuretask!=0&&ready_table!=0&&st.os_tasks.task_desc_map(task)==Some(desc)&&existsnew_bucket,rrr_bucket_insert(st.os_tasks.task_desc_map,desc.tdSchedMember,ready_task_node(task),Znth(desc.tdSchedMember.tsmCurPrio,before.orvBuckets,nil),new_bucket)&&task_fields(sg,replace_global_ready_vector(assign_policy_insert_ready_vector(before,desc.tdSchedMember,new_bucket),st))*assign_ready_pending(sg,replace_global_ready_vector(assign_policy_insert_ready_vector(before,desc.tdSchedMember,new_bucket),st))*/"
+        ],
+        "KTaskStatSetAsReady": [
+          "/*@With(old_stat:TaskStatus)Requirestore_task_status(&(task->task_dync_sched_member.stat),old_stat)Ensurestore_task_status(&(task->task_dync_sched_member.stat),TSK_READY)*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskInsertToReadyVector.c: In function \u2018KTaskInsertToReadyVector\u2019:\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskInsertToReadyVector.c:52:12: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n   52 |     x_base lock = 0;\n      |            ^~~~\n"
+      }
+    },
+    "KTaskStatSetAsReady": {
+      "calls": [
+        "KTaskStateSet"
+      ],
+      "contracts": {
+        "KTaskStateSet": [
+          "/*@With(old_stat:TaskStatus)Requirestore_task_status(&(task->task_dync_sched_member.stat),old_stat)Ensurestore_task_status(&(task->task_dync_sched_member.stat),decode_task_status(stat))*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "KTaskStateSet": {
+      "calls": [],
+      "contracts": {},
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "KTaskUnSetDelay": {
+      "calls": [
+        "DoubleLinkListRmNode"
+      ],
+      "contracts": {
+        "DoubleLinkListRmNode": [
+          "/*@remove_ready_memberWith(taskhead:Z)(prefixsuffix:list(DL_NodeZ))Requirelinklist_node==sched_link_of(task)&&store_priority_ready_bucket(head,app(prefix,cons(ready_task_node(task),suffix)))Ensurelinklist_node==sched_link_of(task)&&store_priority_ready_bucket(head,app(prefix,suffix))*store_node_self_linked(linklist_node)*/",
+          "/*@remove_sched_selfWith(task:Z)(sched:TaskSchedMemberAbs)Requirelinklist_node==sched_link_of(task)&&linklist_node!=0&&store_task_sched_member(sched_link_of(task),sched)*store_node_self_linked(sched_link_of(task))Ensurestore_task_sched_member(sched_link_of(task),sched)*store_node_self_linked(sched_link_of(task))*/",
+          "/*@remove_selfWith(node:Z)Requirelinklist_node==node&&node!=0&&store_node_self_linked(node)Ensurestore_node_self_linked(node)*/",
+          "/*@remove_memberWith{A}(storeA:addr->A->Assertion)(head:addr)(a:A)(prefix:list(DL_NodeA))(suffix:list(DL_NodeA))Requirestore_dll(storeA,head,app(prefix,cons(Build_DL_Node(a,linklist_node),suffix)))Ensurestore_dll(storeA,head,app(prefix,suffix))*storeA(linklist_node,a)*store_node_self_linked(linklist_node)*/",
+          "/*@remove_from_headWith{A}(storeA:addr->A->Assertion)(head:addr)(a:A)(suffix:list(DL_NodeA))Requirelinklist_node!=0&&store_dll(storeA,head,cons(Build_DL_Node(a,linklist_node),suffix))Ensurestore_dll(storeA,head,suffix)*storeA(linklist_node,a)*store_node_self_linked(linklist_node)*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskUnSetDelay.c: In function \u2018KTaskUnSetDelay\u2019:\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskUnSetDelay.c:122:16: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n  122 |         x_base lock = 0;\n      |                ^~~~\n"
+      }
+    },
+    "KTaskWakeup": {
+      "calls": [
+        "GetTaskWithIdnodeInfo",
+        "_KTaskWakeup"
+      ],
+      "contracts": {
+        "GetTaskWithIdnodeInfo": [
+          "/*@inside_criticalWith(sg:StableGlobalState)(st:VarGlobalState)Requireid<65536&&task_world_wf(st)&&store_idmanager(sg.os_task_stable.task_stable_ids,st.os_tasks.task_idmanager_abs,&k_task_id_manager)Ensure((__return==0&&(id<0||idmanager_query(st.os_tasks.task_idmanager_abs,id)==false))||get_task_with_idnode_success(sg,st,id,__return))&&store_idmanager(sg.os_task_stable.task_stable_ids,st.os_tasks.task_idmanager_abs,&k_task_id_manager)*/",
+          "/*@inside_known<=inside_criticalWith(sg:StableGlobalState)(st:VarGlobalState)(target:Z)Requireid<65536&&task_world_wf(st)&&get_task_with_idnode_success(sg,st,id,target)&&store_idmanager(sg.os_task_stable.task_stable_ids,st.os_tasks.task_idmanager_abs,&k_task_id_manager)Ensure__return==target&&store_idmanager(sg.os_task_stable.task_stable_ids,st.os_tasks.task_idmanager_abs,&k_task_id_manager)*/"
+        ],
+        "_KTaskWakeup": [
+          "/*@not_suspendedWith(old_stat:TaskStatus)Requireold_stat!=TSK_SUSPEND&&store_task_status(&(task->task_dync_sched_member.stat),old_stat)Ensure__return==-KERROR&&store_task_status(&(task->task_dync_sched_member.stat),old_stat)*/",
+          "/*@wakeup_unifiedWith(sg:StableGlobalState)(st:VarGlobalState)(desc:TaskDescriptorAbs)(ready_before:OsAssignReadyVectorAbs)(sched_view:vSchedView)Requireready_before==st.os_assign.assignReadyVector&&os_global_context(sg)&&desc.tdSchedMember.tsmStat==TSK_SUSPEND&&st.os_tasks.task_desc_map(task)==Some(desc)&&task_fields(sg,st)*delay_inv(sg,st)*store_ktask_wakeup_sched_pre(st.os_tasks.task_desc_map,task,sched_view)*assign_ready_pending(sg,st)Ensure__return==KOK&&existsst_delayready_after,ktask_unset_delay_step(desc.tdDelay,st,st_delay)&&assign_insert_step_ic(st.os_tasks.task_desc_map,task,desc,ready_before,ready_after)&&task_fields(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*store_ktask_wakeup_source_post(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),sched_view)*delay_inv(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*assign_ready_pending(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*/",
+          "/*@sched_linked_delay_null<=wakeup_unifiedWith(sg:StableGlobalState)(st:VarGlobalState)(desc:TaskDescriptorAbs)(ready_before:OsAssignReadyVectorAbs)(source_head:Z)(source_prefixsource_suffix:list(DL_NodeZ))Requireready_before==st.os_assign.assignReadyVector&&os_global_context(sg)&&desc.tdSchedMember.tsmStat==TSK_SUSPEND&&st.os_tasks.task_desc_map(task)==Some(desc)&&desc.tdDelay==0&&task_fields(sg,st)*delay_inv(sg,st)*store_ktask_wakeup_sched_pre(st.os_tasks.task_desc_map,task,vSchedLinked(source_head,source_prefix,source_suffix))*assign_ready_pending(sg,st)Ensure__return==KOK&&existsst_delayready_after,ktask_unset_delay_step(desc.tdDelay,st,st_delay)&&assign_insert_step_ic(st.os_tasks.task_desc_map,task,desc,ready_before,ready_after)&&task_fields(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*store_ktask_wakeup_source_post(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),vSchedLinked(source_head,source_prefix,source_suffix))*delay_inv(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*assign_ready_pending(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*/",
+          "/*@sched_linked_delay_inactive<=wakeup_unifiedWith(sg:StableGlobalState)(st:VarGlobalState)(desc:TaskDescriptorAbs)(ready_before:OsAssignReadyVectorAbs)(source_head:Z)(source_prefixsource_suffix:list(DL_NodeZ))(delay_ptr:Z)(delay_abs:TaskDelayAbs)Requireready_before==st.os_assign.assignReadyVector&&os_global_context(sg)&&desc.tdSchedMember.tsmStat==TSK_SUSPEND&&st.os_tasks.task_desc_map(task)==Some(desc)&&desc.tdDelay==delay_ptr&&st.os_delays.delay_inactive_map(delay_ptr)==Some(delay_abs)&&task_fields(sg,st)*delay_inv(sg,st)*store_ktask_wakeup_sched_pre(st.os_tasks.task_desc_map,task,vSchedLinked(source_head,source_prefix,source_suffix))*assign_ready_pending(sg,st)Ensure__return==KOK&&existsst_delayready_after,ktask_unset_delay_step(desc.tdDelay,st,st_delay)&&assign_insert_step_ic(st.os_tasks.task_desc_map,task,desc,ready_before,ready_after)&&task_fields(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*store_ktask_wakeup_source_post(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),vSchedLinked(source_head,source_prefix,source_suffix))*delay_inv(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*assign_ready_pending(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*/",
+          "/*@sched_linked_delay_active<=wakeup_unifiedWith(sg:StableGlobalState)(st:VarGlobalState)(desc:TaskDescriptorAbs)(ready_before:OsAssignReadyVectorAbs)(source_head:Z)(source_prefixsource_suffix:list(DL_NodeZ))(delay_ptr:Z)(delay_abs_before:TaskDelayAbs)(task_delay_node:DL_NodeTaskDelayAbs)(delay_prefixdelay_suffix:list(DL_NodeTaskDelayAbs))Requireready_before==st.os_assign.assignReadyVector&&os_global_context(sg)&&desc.tdSchedMember.tsmStat==TSK_SUSPEND&&st.os_tasks.task_desc_map(task)==Some(desc)&&task_delay_node==Build_DL_Node(delay_abs_before,field_addr(delay_ptr,structDelay,link))&&desc.tdDelay==delay_ptr&&delay_ptr!=0&&st.os_delays.delay_active_nodes==app(delay_prefix,cons(task_delay_node,delay_suffix))&&task_fields(sg,st)*delay_inv(sg,st)*store_ktask_wakeup_sched_pre(st.os_tasks.task_desc_map,task,vSchedLinked(source_head,source_prefix,source_suffix))*assign_ready_pending(sg,st)Ensure__return==KOK&&existsst_delayready_after,ktask_unset_delay_step(desc.tdDelay,st,st_delay)&&assign_insert_step_ic(st.os_tasks.task_desc_map,task,desc,ready_before,ready_after)&&task_fields(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*store_ktask_wakeup_source_post(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),vSchedLinked(source_head,source_prefix,source_suffix))*delay_inv(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*assign_ready_pending(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*/",
+          "/*@sched_detached_delay_null<=wakeup_unifiedWith(sg:StableGlobalState)(st:VarGlobalState)(desc:TaskDescriptorAbs)(ready_before:OsAssignReadyVectorAbs)Requireready_before==st.os_assign.assignReadyVector&&os_global_context(sg)&&desc.tdSchedMember.tsmStat==TSK_SUSPEND&&st.os_tasks.task_desc_map(task)==Some(desc)&&desc.tdDelay==0&&task_fields(sg,st)*delay_inv(sg,st)*store_ktask_wakeup_sched_pre(st.os_tasks.task_desc_map,task,vSchedDetached)*assign_ready_pending(sg,st)Ensure__return==KOK&&existsst_delayready_after,ktask_unset_delay_step(desc.tdDelay,st,st_delay)&&assign_insert_step_ic(st.os_tasks.task_desc_map,task,desc,ready_before,ready_after)&&task_fields(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*store_ktask_wakeup_source_post(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),vSchedDetached)*delay_inv(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*assign_ready_pending(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*/",
+          "/*@sched_detached_delay_inactive<=wakeup_unifiedWith(sg:StableGlobalState)(st:VarGlobalState)(desc:TaskDescriptorAbs)(ready_before:OsAssignReadyVectorAbs)(delay_ptr:Z)(delay_abs:TaskDelayAbs)Requireready_before==st.os_assign.assignReadyVector&&os_global_context(sg)&&desc.tdSchedMember.tsmStat==TSK_SUSPEND&&st.os_tasks.task_desc_map(task)==Some(desc)&&desc.tdDelay==delay_ptr&&st.os_delays.delay_inactive_map(delay_ptr)==Some(delay_abs)&&task_fields(sg,st)*delay_inv(sg,st)*store_ktask_wakeup_sched_pre(st.os_tasks.task_desc_map,task,vSchedDetached)*assign_ready_pending(sg,st)Ensure__return==KOK&&existsst_delayready_after,ktask_unset_delay_step(desc.tdDelay,st,st_delay)&&assign_insert_step_ic(st.os_tasks.task_desc_map,task,desc,ready_before,ready_after)&&task_fields(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*store_ktask_wakeup_source_post(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),vSchedDetached)*delay_inv(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*assign_ready_pending(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*/",
+          "/*@sched_detached_delay_active<=wakeup_unifiedWith(sg:StableGlobalState)(st:VarGlobalState)(desc:TaskDescriptorAbs)(ready_before:OsAssignReadyVectorAbs)(delay_ptr:Z)(delay_abs_before:TaskDelayAbs)(task_delay_node:DL_NodeTaskDelayAbs)(delay_prefixdelay_suffix:list(DL_NodeTaskDelayAbs))Requireready_before==st.os_assign.assignReadyVector&&os_global_context(sg)&&desc.tdSchedMember.tsmStat==TSK_SUSPEND&&st.os_tasks.task_desc_map(task)==Some(desc)&&task_delay_node==Build_DL_Node(delay_abs_before,field_addr(delay_ptr,structDelay,link))&&desc.tdDelay==delay_ptr&&delay_ptr!=0&&st.os_delays.delay_active_nodes==app(delay_prefix,cons(task_delay_node,delay_suffix))&&task_fields(sg,st)*delay_inv(sg,st)*store_ktask_wakeup_sched_pre(st.os_tasks.task_desc_map,task,vSchedDetached)*assign_ready_pending(sg,st)Ensure__return==KOK&&existsst_delayready_after,ktask_unset_delay_step(desc.tdDelay,st,st_delay)&&assign_insert_step_ic(st.os_tasks.task_desc_map,task,desc,ready_before,ready_after)&&task_fields(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*store_ktask_wakeup_source_post(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),vSchedDetached)*delay_inv(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*assign_ready_pending(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskWakeup.c: In function \u2018KTaskWakeup\u2019:\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskWakeup.c:308:12: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n  308 |     x_base lock = 0;\n      |            ^~~~\n"
+      }
+    },
+    "LinklistResumeAll": {
+      "calls": [
+        "CONTAINER_OF_TASK_SCHED",
+        "KTaskWakeup"
+      ],
+      "contracts": {
+        "CONTAINER_OF_TASK_SCHED": [
+          "/*@Withtask_ptrRequireaddr_aligned(task_ptr,ALIGN_SIZE)&&sched_link_ptr==sched_link_of(task_ptr)&&empEnsure__return==task_ptr&&addr_aligned(__return,ALIGN_SIZE)&&sched_link_ptr==&(__return->task_dync_sched_member.sched_link)*/"
+        ],
+        "KTaskWakeup": [
+          "/*@not_suspendedWith(sg:StableGlobalState)(st:VarGlobalState)(target:Z)(old_stat:TaskStatus)Requireid<65536&&task_world_wf(st)&&get_task_with_idnode_success(sg,st,id,target)&&old_stat!=TSK_SUSPEND&&store_idmanager(sg.os_task_stable.task_stable_ids,st.os_tasks.task_idmanager_abs,&k_task_id_manager)*store_task_status(&(target->task_dync_sched_member.stat),old_stat)Ensure__return==-KERROR&&store_idmanager(sg.os_task_stable.task_stable_ids,st.os_tasks.task_idmanager_abs,&k_task_id_manager)*store_task_status(&(target->task_dync_sched_member.stat),old_stat)*/",
+          "/*@wakeup_unifiedWith(sg:StableGlobalState)(st:VarGlobalState)(target:Z)(desc:TaskDescriptorAbs)(ready_before:OsAssignReadyVectorAbs)(sched_view:vSchedView)Requireready_before==st.os_assign.assignReadyVector&&os_global_context(sg)&&id<65536&&task_world_wf(st)&&sg.os_task_stable.task_idmanager_ptr==&k_task_id_manager&&get_task_with_idnode_success(sg,st,id,target)&&desc.tdSchedMember.tsmStat==TSK_SUSPEND&&(st.os_tasks.task_desc_map(target)==Some(desc)&&0<=desc.tdSchedMember.tsmCurPrio&&desc.tdSchedMember.tsmCurPrio<PRIORITY_MAX)&&task_addr_aligned(target,ready_before)&&task_fields(sg,st)*delay_inv(sg,st)*store_ktask_wakeup_sched_pre(st.os_tasks.task_desc_map,target,sched_view)*assign_ready_pending(sg,st)Ensure__return==KOK&&existsst_delayready_after,ktask_unset_delay_step(desc.tdDelay,st,st_delay)&&assign_insert_step_ic(st.os_tasks.task_desc_map,target,desc,ready_before,ready_after)&&task_fields(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(target,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*store_ktask_wakeup_source_post(update_task_desc_map(target,set_task_desc_ready(desc),st.os_tasks.task_desc_map),sched_view)*delay_inv(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(target,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*assign_ready_pending(sg,replace_global_ready_vector(ready_after,replace_task_desc_map(update_task_desc_map(target,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st_delay)))*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/LinklistResumeAll.c: In function \u2018LinklistResumeAll\u2019:\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/LinklistResumeAll.c:77:13: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n   77 |     x_ubase lock = 0;\n      |             ^~~~\n"
+      }
+    },
+    "RemoveObj": {
+      "calls": [
+        "DoubleLinkListRmNode"
+      ],
+      "contracts": {
+        "DoubleLinkListRmNode": [
+          "/*@remove_ready_memberWith(taskhead:Z)(prefixsuffix:list(DL_NodeZ))Requirelinklist_node==sched_link_of(task)&&store_priority_ready_bucket(head,app(prefix,cons(ready_task_node(task),suffix)))Ensurelinklist_node==sched_link_of(task)&&store_priority_ready_bucket(head,app(prefix,suffix))*store_node_self_linked(linklist_node)*/",
+          "/*@remove_sched_selfWith(task:Z)(sched:TaskSchedMemberAbs)Requirelinklist_node==sched_link_of(task)&&linklist_node!=0&&store_task_sched_member(sched_link_of(task),sched)*store_node_self_linked(sched_link_of(task))Ensurestore_task_sched_member(sched_link_of(task),sched)*store_node_self_linked(sched_link_of(task))*/",
+          "/*@remove_selfWith(node:Z)Requirelinklist_node==node&&node!=0&&store_node_self_linked(node)Ensurestore_node_self_linked(node)*/",
+          "/*@remove_memberWith{A}(storeA:addr->A->Assertion)(head:addr)(a:A)(prefix:list(DL_NodeA))(suffix:list(DL_NodeA))Requirestore_dll(storeA,head,app(prefix,cons(Build_DL_Node(a,linklist_node),suffix)))Ensurestore_dll(storeA,head,app(prefix,suffix))*storeA(linklist_node,a)*store_node_self_linked(linklist_node)*/",
+          "/*@remove_from_headWith{A}(storeA:addr->A->Assertion)(head:addr)(a:A)(suffix:list(DL_NodeA))Requirelinklist_node!=0&&store_dll(storeA,head,cons(Build_DL_Node(a,linklist_node),suffix))Ensurestore_dll(storeA,head,suffix)*storeA(linklist_node,a)*store_node_self_linked(linklist_node)*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "RoundRobinRemainReadyVectorInsert": {
+      "calls": [
+        "CONTAINER_OF_TASK_SCHED",
+        "DoubleLinkListInsertNodeAfter",
+        "DoubleLinkListInsertNodeBefore"
+      ],
+      "contracts": {
+        "CONTAINER_OF_TASK_SCHED": [
+          "/*@Withtask_ptrRequireaddr_aligned(task_ptr,ALIGN_SIZE)&&sched_link_ptr==sched_link_of(task_ptr)&&empEnsure__return==task_ptr&&addr_aligned(__return,ALIGN_SIZE)&&sched_link_ptr==&(__return->task_dync_sched_member.sched_link)*/"
+        ],
+        "DoubleLinkListInsertNodeAfter": [
+          "/*@rrr_ready_insert_afterWith(head:Z)(nodes:list(DL_NodeZ))(task_ptrready_table_guard:Z)Requireready_table_guard!=0&&task_ptr!=0&&linklist_node!=0&&linklist_node==sched_link_of(task_ptr)&&store_ready_dll_tail_view(head,nodes,linklist)*occupy_dll_node(linklist_node)Ensuretask_ptr!=0&&ready_table_guard!=0&&store_priority_ready_bucket(head,app(nodes,cons(Build_DL_Node(task_ptr,linklist_node),nil)))*/",
+          "/*@dispatch_caseWith{A}(storeA:addr->A->Assertion)(nodes:list(DL_NodeA))(a:A)(head:addr)Requiredll_insert_anchor(head,nodes,linklist)&&linklist_node!=0&&store_dll(storeA,head,nodes)*storeA(linklist_node,a)*occupy_dll_node(linklist_node)Ensurestore_dll(storeA,head,dll_insert_after_dispatch(head,nodes,linklist,Build_DL_Node(a,linklist_node)))*/"
+        ],
+        "DoubleLinkListInsertNodeBefore": [
+          "/*@rrr_ready_insert_beforeWith(head:Z)(prefix:list(DL_NodeZ))(current_taskcurrent_linktask_ptr:Z)(suffix:list(DL_NodeZ))(nodes:list(DL_NodeZ))(ready_table_guard:Z)Requireready_table_guard!=0&&task_ptr!=0&&linklist==current_link&&linklist_node!=0&&linklist_node==sched_link_of(task_ptr)&&nodes==app(prefix,cons(Build_DL_Node(current_task,current_link),suffix))&&store_priority_ready_bucket(head,nodes)*occupy_dll_node(linklist_node)Ensuretask_ptr!=0&&ready_table_guard!=0&&store_priority_ready_bucket(head,app(prefix,cons(Build_DL_Node(task_ptr,linklist_node),cons(Build_DL_Node(current_task,current_link),suffix))))*/",
+          "/*@dispatch_caseWith{A}(storeA:Z->A->Assertion)(head:Z)(nodes:list(DL_NodeA))(inserted_data:A)Requiredll_insert_anchor(head,nodes,linklist)&&linklist_node!=0&&store_dll(storeA,head,nodes)*storeA(linklist_node,inserted_data)*occupy_dll_node(linklist_node)Ensurestore_dll(storeA,head,dll_insert_before_dispatch(head,nodes,linklist,Build_DL_Node(inserted_data,linklist_node)))*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    },
+    "_KTaskWakeup": {
+      "calls": [
+        "DoubleLinkListRmNode",
+        "JudgeKTaskStatIsSuspend",
+        "KTaskInsertToReadyVector",
+        "KTaskUnSetDelay"
+      ],
+      "contracts": {
+        "DoubleLinkListRmNode": [
+          "/*@remove_ready_memberWith(taskhead:Z)(prefixsuffix:list(DL_NodeZ))Requirelinklist_node==sched_link_of(task)&&store_priority_ready_bucket(head,app(prefix,cons(ready_task_node(task),suffix)))Ensurelinklist_node==sched_link_of(task)&&store_priority_ready_bucket(head,app(prefix,suffix))*store_node_self_linked(linklist_node)*/",
+          "/*@remove_sched_selfWith(task:Z)(sched:TaskSchedMemberAbs)Requirelinklist_node==sched_link_of(task)&&linklist_node!=0&&store_task_sched_member(sched_link_of(task),sched)*store_node_self_linked(sched_link_of(task))Ensurestore_task_sched_member(sched_link_of(task),sched)*store_node_self_linked(sched_link_of(task))*/",
+          "/*@remove_selfWith(node:Z)Requirelinklist_node==node&&node!=0&&store_node_self_linked(node)Ensurestore_node_self_linked(node)*/",
+          "/*@remove_memberWith{A}(storeA:addr->A->Assertion)(head:addr)(a:A)(prefix:list(DL_NodeA))(suffix:list(DL_NodeA))Requirestore_dll(storeA,head,app(prefix,cons(Build_DL_Node(a,linklist_node),suffix)))Ensurestore_dll(storeA,head,app(prefix,suffix))*storeA(linklist_node,a)*store_node_self_linked(linklist_node)*/",
+          "/*@remove_from_headWith{A}(storeA:addr->A->Assertion)(head:addr)(a:A)(suffix:list(DL_NodeA))Requirelinklist_node!=0&&store_dll(storeA,head,cons(Build_DL_Node(a,linklist_node),suffix))Ensurestore_dll(storeA,head,suffix)*storeA(linklist_node,a)*store_node_self_linked(linklist_node)*/"
+        ],
+        "JudgeKTaskStatIsSuspend": [
+          "/*@With(old_stat:TaskStatus)Requirestore_task_status(&(task->task_dync_sched_member.stat),old_stat)Ensure((__return==1&&old_stat==TSK_SUSPEND)||(__return==0&&old_stat!=TSK_SUSPEND))&&store_task_status(&(task->task_dync_sched_member.stat),old_stat)*/"
+        ],
+        "KTaskInsertToReadyVector": [
+          "/*@With(sg:StableGlobalState)(st:VarGlobalState)(desc:TaskDescriptorAbs)Requireos_global_context(sg)&&st.os_tasks.task_desc_map(task)==Some(desc)&&task_fields(sg,st)*assign_ready_pending(sg,st)*occupy_dll_node(sched_link_of(task))Ensureexists(beforeafter:OsAssignReadyVectorAbs)(st':VarGlobalState),before==st.os_assign.assignReadyVector&&assign_insert_step_ic(st.os_tasks.task_desc_map,task,desc,before,after)&&st'==replace_global_ready_vector(after,replace_task_desc_map(update_task_desc_map(task,set_task_desc_ready(desc),st.os_tasks.task_desc_map),st))&&task_fields(sg,st')*assign_ready_pending(sg,st')*/"
+        ],
+        "KTaskUnSetDelay": [
+          "/*@unset_delay_unifiedWith(delay_view:vDelayView)Requirestore_ktask_unset_delay_pre(task,delay_view)Ensure__return==KOK&&store_ktask_unset_delay_post(task,delay_view)*/",
+          "/*@null_delay<=unset_delay_unifiedWith(sg:StableGlobalState)(st_before:VarGlobalState)(desc:TaskDescriptorAbs)Requirest_before.os_tasks.task_desc_map(task)==Some(desc)&&desc.tdDelay==0&&store_ptr(&(task->task_dync_sched_member.delay),desc.tdDelay)*delay_inv(sg,st_before)Ensure__return==KOK&&store_ptr(&(task->task_dync_sched_member.delay),desc.tdDelay)*delay_inv(sg,st_before)*/",
+          "/*@in_delay_list<=unset_delay_unifiedWith(sg:StableGlobalState)(st_before:VarGlobalState)(desc:TaskDescriptorAbs)(delay_data:TaskDelayAbs)Requirest_before.os_tasks.task_desc_map(task)==Some(desc)&&sg.delay_head_ptr==&xiaoshan_delay_head&&desc.tdDelay!=0&&In(Build_DL_Node(delay_data,field_addr(desc.tdDelay,structDelay,link)),st_before.os_delays.delay_active_nodes)&&store_ptr(&(task->task_dync_sched_member.delay),desc.tdDelay)*delay_inv(sg,st_before)Ensure__return==KOK&&existsst_after,unset_linked_delay_step(desc.tdDelay,delay_data,st_before,st_after)&&store_ptr(&(task->task_dync_sched_member.delay),desc.tdDelay)*delay_inv(sg,st_after)*/",
+          "/*@null_or_inactive<=unset_delay_unifiedWith(sg:StableGlobalState)(st_before:VarGlobalState)(desc:TaskDescriptorAbs)Requirest_before.os_tasks.task_desc_map(task)==Some(desc)&&(desc.tdDelay==0||st_before.os_delays.delay_inactive_map(desc.tdDelay)!=None)&&store_ptr(&(task->task_dync_sched_member.delay),desc.tdDelay)*delay_inv(sg,st_before)Ensure__return==KOK&&store_ptr(&(task->task_dync_sched_member.delay),desc.tdDelay)*delay_inv(sg,st_before)*/",
+          "/*@all_case_delay<=unset_delay_unifiedWith(sg:StableGlobalState)(st_before:VarGlobalState)(desc:TaskDescriptorAbs)Requirest_before.os_tasks.task_desc_map(task)==Some(desc)&&sg.delay_head_ptr==&xiaoshan_delay_head&&store_ptr(&(task->task_dync_sched_member.delay),desc.tdDelay)*delay_inv(sg,st_before)Ensure__return==KOK&&existsst_after,ktask_unset_delay_step(desc.tdDelay,st_before,st_after)&&store_ptr(&(task->task_dync_sched_member.delay),desc.tdDelay)*delay_inv(sg,st_after)*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/_KTaskWakeup.c: In function \u2018_KTaskWakeup\u2019:\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/_KTaskWakeup.c:369:12: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n  369 |     x_base lock = 0;\n      |            ^~~~\n"
+      }
+    },
+    "_SemaphoreDelete": {
+      "calls": [
+        "CONTAINER_OF_SEMAPHORE_ID",
+        "CriticalAreaLock",
+        "CriticalAreaUnLock",
+        "DoubleLinkListRmNode",
+        "IdGetObj",
+        "IdRemoveObj",
+        "IsDoubleLinkListEmpty",
+        "KTASK_ASSIGN",
+        "LinklistResumeAll",
+        "x_free"
+      ],
+      "contracts": {
+        "CONTAINER_OF_SEMAPHORE_ID": [
+          "/*@With(sem_ptr:addr)Requireid_ptr==field_addr(sem_ptr,structSemaphore,id)&&empEnsure__return==sem_ptr&&id_ptr==&(__return->id)&&emp*/"
+        ],
+        "CriticalAreaLock": [
+          "/*@ordinaryWith(sg:StableGlobalState)(st1:VarGlobalState)RequireOutsideCritical(sg,st1)Ensureexistsst_lock,Crtos_RTrans(st1,st_lock)&&InsideCritical(sg,st_lock)*os_inv(sg,st_lock)*/"
+        ],
+        "CriticalAreaUnLock": [
+          "/*@stableWith(sg:StableGlobalState)(st1st2:VarGlobalState)RequireCrtos_GTrans(st1,st2)&&InsideCritical(sg,st1)*os_inv(sg,st2)EnsureOutsideCritical(sg,st2)*/"
+        ],
+        "DoubleLinkListRmNode": [
+          "/*@remove_ready_memberWith(taskhead:Z)(prefixsuffix:list(DL_NodeZ))Requirelinklist_node==sched_link_of(task)&&store_priority_ready_bucket(head,app(prefix,cons(ready_task_node(task),suffix)))Ensurelinklist_node==sched_link_of(task)&&store_priority_ready_bucket(head,app(prefix,suffix))*store_node_self_linked(linklist_node)*/",
+          "/*@remove_sched_selfWith(task:Z)(sched:TaskSchedMemberAbs)Requirelinklist_node==sched_link_of(task)&&linklist_node!=0&&store_task_sched_member(sched_link_of(task),sched)*store_node_self_linked(sched_link_of(task))Ensurestore_task_sched_member(sched_link_of(task),sched)*store_node_self_linked(sched_link_of(task))*/",
+          "/*@remove_selfWith(node:Z)Requirelinklist_node==node&&node!=0&&store_node_self_linked(node)Ensurestore_node_self_linked(node)*/",
+          "/*@remove_memberWith{A}(storeA:addr->A->Assertion)(head:addr)(a:A)(prefix:list(DL_NodeA))(suffix:list(DL_NodeA))Requirestore_dll(storeA,head,app(prefix,cons(Build_DL_Node(a,linklist_node),suffix)))Ensurestore_dll(storeA,head,app(prefix,suffix))*storeA(linklist_node,a)*store_node_self_linked(linklist_node)*/",
+          "/*@remove_from_headWith{A}(storeA:addr->A->Assertion)(head:addr)(a:A)(suffix:list(DL_NodeA))Requirelinklist_node!=0&&store_dll(storeA,head,cons(Build_DL_Node(a,linklist_node),suffix))Ensurestore_dll(storeA,head,suffix)*storeA(linklist_node,a)*store_node_self_linked(linklist_node)*/"
+        ],
+        "IdGetObj": [
+          "/*@With(sidm:StableIdmanager)(idm:VarIdmanager)Require0<=id&&id<65536&&store_idmanager(sidm,idm,manager)Ensure(manager==0&&__return==0&&store_idmanager(sidm,idm,manager))||(manager!=0&&__return==0&&idmanager_query(idm,id)==false&&store_idmanager(sidm,idm,manager))||(manager!=0&&__return!=0&&idmanager_query(idm,id)==true&&store_idmanager_found(sidm,idm,manager,__return,id))*/"
+        ],
+        "IdRemoveObj": [
+          "/*@known_nodeWith(sidm:StableIdmanager)(idm:VarIdmanager)(idnode:addr)Requiremanager!=0&&0<=id&&id<65536&&idmanager_query(idmanager_link(sidm,idmanager_add(idm,id),id,idnode),id)==true&&store_idmanager(sidm,idmanager_link(sidm,idmanager_add(idm,id),id,idnode),manager)Ensureidnode!=0&&&(idnode->link)!=0&&store_idmanager(sidm,idmanager_remove(sidm,idmanager_link(sidm,idmanager_add(idm,id),id,idnode),id),manager)*(idnode->id==65535)*store_node_self_linked(&(idnode->link))*/",
+          "/*@current_nodeWith(sidm:StableIdmanager)(idm:VarIdmanager)(idnode:addr)Requirestore_idmanager_found(sidm,idm,manager,idnode,id)Ensurestore_idmanager(sidm,idmanager_remove(sidm,idm,id),manager)*store_idnode(&(idnode->link),Build_IdNodeAbs(65535,idnode))*store_node_self_linked(&(idnode->link))*/",
+          "/*@found_nodeWith(sidm:StableIdmanager)(idm:VarIdmanager)(idnode:addr)Requirestore_idmanager_found(sidm,idm,manager,idnode,id)Ensurestore_idmanager(sidm,idmanager_remove(sidm,idm,id),manager)*store_idnode(&(idnode->link),Build_IdNodeAbs(65535,idnode))*store_node_self_linked(&(idnode->link))*/",
+          "/*@absent_nodeWith(sidm:StableIdmanager)(idm:VarIdmanager)Requireidmanager_query(idm,id)==false&&store_idmanager(sidm,idm,manager)Ensurestore_idmanager(sidm,idm,manager)*/"
+        ],
+        "IsDoubleLinkListEmpty": [
+          "/*@ready_dllWith(nodes:list(DL_NodeZ))Requirestore_priority_ready_bucket(linklist,nodes)Ensure((__return==1&&nodes==nil)||(__return==0&&nodes!=nil))&&store_priority_ready_bucket(linklist,nodes)*/",
+          "/*@dllWith{A}(storeA:Z->A->Assertion)(nodes:list(DL_NodeA))Requirestore_dll(storeA,linklist,nodes)Ensure((__return==1&&nodes==nil)||(__return==0&&nodes!=nil))&&store_dll(storeA,linklist,nodes)*/"
+        ],
+        "KTASK_ASSIGN": [
+          "/*@outside_criticalWith(sg:StableGlobalState)(before:VarGlobalState)XRequiresafeExec(LastSeen(before),abs_ktask_assign,X)&&OutsideCritical(sg,before)Ensureexistsafter,safeExec(LastSeen(after),return(tt),X)&&OutsideCritical(sg,after)*/"
+        ],
+        "LinklistResumeAll": [
+          "/*@semaphore_waitersWith(sg:StableGlobalState)(stanchor:VarGlobalState)(sem:SemaphoreAbs)RequireIn(sem,st.os_semaphores)&&list==semaphore_pending_head(sem.semaphore_addr)&&InsideCritical(sg,anchor)*os_inv(sg,st)Ensure__return==KOK&&existsafter,semaphore_resume_all_steps(sem.semaphore_addr,sem.semaphore_pending_addrs,st,after)&&InsideCritical(sg,anchor)*os_inv(sg,after)*/"
+        ],
+        "x_free": [
+          "/*@RequireSemaphoreRaw(ptr)Ensureemp*/"
+        ]
+      },
+      "syntax": {
+        "exit_code": 0,
+        "diagnostics": ""
+      }
+    }
+  }
+}

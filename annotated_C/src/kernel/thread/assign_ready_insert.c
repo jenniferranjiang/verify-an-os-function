@@ -1,3 +1,4 @@
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskWakeup */
 // 本文件是设定 assign.c 的 KTaskInsertToReadyVector 在临界区内被调用版本
 
 #include "m_assign.h"
@@ -178,11 +179,12 @@ which implies
         assign_ready_pending(sg, replace_task_desc_map(update_task_desc_map(task@pre, set_task_desc_ready(desc), st.os_tasks.task_desc_map), st))
      */
     AssignPolicyInsert(task, &Assign.os_assign_ready_vector)
-        /*@ where
+/*@ where
             sg = sg,
             st = replace_task_desc_map(update_task_desc_map(task@pre, set_task_desc_ready(desc), st.os_tasks.task_desc_map), st),
             desc = set_task_desc_ready(desc),
-            before = before  */;
+            before = before  */
+;
 
     /*@ Given new_bucket */
     /*@ assign_ready_vector_addr(sg) == &(Assign.os_assign_ready_vector) &&

@@ -1,0 +1,49 @@
+COQDEP VFILES
+COQC lib/SemaphoreState.v
+COQC vendor/MonadLib/MonadErr/MonadErrLoop.v
+COQC vendor/MonadLib/MonadErr/MonadErrHoare.v
+COQC vendor/MonadLib/MonadErr/monadesafe_lib.v
+COQC lib/CrtosGlobState.v
+COQC lib/CrtosRules.v
+COQC lib/dll.v
+COQC lib/Bitmap.v
+COQC lib/KTaskStackSetup.v
+COQC lib/TaskStatusMemory.v
+COQC lib/KTaskDelayMem.v
+COQC lib/TickInv.v
+COQC lib/ExstatusInv.v
+COQC lib/KTaskStackSetupProofAux.v
+COQC lib/KTaskOsAssign.v
+COQC lib/DoubleLinkListSpec.v
+COQC lib/NodeSelfLinked.v
+COQC lib/KTaskSchedMember.v
+COQC lib/idnode.v
+COQC lib/AssignInv.v
+COQC lib/TaskInv.v
+COQC lib/DelayInv.v
+COQC lib/MutexInv.v
+COQC lib/EventInv.v
+COQC lib/MsgQueueInv.v
+COQC lib/IsrManagerInv.v
+COQC lib/SemaphoreInv.v
+COQC lib/OsAssignReadyVector.v
+COQC lib/SemaphoreByteLayout.v
+COQC lib/SemaphoreOwnership.v
+COQC lib/SemaphoreSpecBridge.v
+COQC lib/CrtosInv.v
+COQC lib/KTaskParseInfo.v
+COQC lib/KSemaphoreCreate.v
+@safeExec
+     : forall Σ A : Type,
+       (Σ -> Prop) -> program Σ A -> (A -> Σ -> Prop) -> Prop
+LastSeen
+     : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+abs_semaphore_create
+     : StableGlobalState -> Z -> program (VarGlobalState -> Prop) Z
+SemaphoreRaw
+     : CNotation.addr -> Assertion
+SemaphoreZero
+     : CNotation.addr -> Assertion
+CriticalNest
+     : Z -> Assertion
+COQC lib/KTaskDescriptor.v

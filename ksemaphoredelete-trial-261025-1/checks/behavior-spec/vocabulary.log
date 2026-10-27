@@ -1,0 +1,10 @@
+fun (after : VarGlobalState) (waiting : list addr) =>
+forall task : addr,
+In task waiting ->
+exists desc : TaskDescriptorAbs,
+  task_desc_map (os_tasks after) task = Some desc /\
+  tsmStat (tdSchedMember desc) = TSK_READY /\ tdExstatus desc = -1
+     : VarGlobalState -> list addr -> Prop
+fun (after : VarGlobalState) (head : addr) =>
+store_dll (pure_suspend_sched_link (task_desc_map (os_tasks after))) head nil
+     : VarGlobalState -> addr -> Assertion

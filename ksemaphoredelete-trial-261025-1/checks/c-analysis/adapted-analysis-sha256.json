@@ -1,0 +1,10 @@
+{
+  "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/checks/c-analysis/xsconfig.h": "e961aea78700d6663cd040eb3caa5e4e85bd7f18858ca66ba6086c0213ad3e28",
+  "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/checks/c-analysis/abi-original.c": "f240ca4434b7c94cae00f83390bec334ebbe0874e2ad109f7866926ff9ff110b",
+  "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/checks/c-analysis/abi-adapted.c": "09c949459be840a580ceb8c060519187da5d6ba4d3f78c589b97a66746609aec",
+  "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/checks/c-analysis/abi-slice.c": "b0618544ca684ed488e62f5002a73a190595e0299fffce181f9e66310a82762e",
+  "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/include/slice_types.h": "9c41a5e64e718f921cef058145c80d0d6dd0a946e068d91d3830d08f8b133777",
+  "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/checks/c-analysis/adapted/xs_ktask.h": "d9816c337618172804065595474c3dbb7b4a87d7b0cbe2645bb70c2d674bb67f",
+  "/home/xinra/crtos/.agents/skills/verify-an-os-function/SKILL.md": "b59ac2378ab592770be79f618c5fd1ed6d9d2f8ead77d281e753ea809a73a9bd",
+  "/home/xinra/crtos/.agents/skills/verify-an-os-function/references/\u6e90\u4ee3\u7801\u5904\u7406.md": "4c3304a3c12297330f5d4793c0e4cb4a31ed3d55ad974b5917d59c951986d1e8"
+}

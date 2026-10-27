@@ -1,0 +1,17 @@
+{
+  "LinklistResumeAll": {
+    "two_named_specs": true,
+    "expanded_matches_r5": true,
+    "encapsulated_expands_to_same_spec": true,
+    "c_executable_text_unchanged": true,
+    "gcc_exit_code": 0
+  },
+  "_SemaphoreDelete": {
+    "two_named_specs": true,
+    "expanded_matches_r5": true,
+    "encapsulated_expands_to_same_spec": true,
+    "c_executable_text_unchanged": true,
+    "gcc_exit_code": 0
+  },
+  "both_caller_contracts_identical": true
+}

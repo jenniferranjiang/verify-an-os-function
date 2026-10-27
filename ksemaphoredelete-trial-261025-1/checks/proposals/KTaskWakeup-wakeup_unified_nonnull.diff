@@ -1,0 +1,16 @@
+--- existing wakeup_unified (retained)
++++ proposed additional wakeup_unified_nonnull
+@@ -1,4 +1,4 @@
+-/*@ wakeup_unified
++/*@ wakeup_unified_nonnull
+     With (sg : StableGlobalState) (st : VarGlobalState)
+          (target : Z)
+          (desc : TaskDescriptorAbs)
+@@ -21,6 +21,7 @@
+         st.os_tasks.task_desc_map, target, sched_view) *
+       assign_ready_pending(sg, st)
+     Ensure
++      target != 0 &&
+       __return == KOK &&
+       exists st_delay ready_after,
+         ktask_unset_delay_step(desc.tdDelay, st, st_delay) &&

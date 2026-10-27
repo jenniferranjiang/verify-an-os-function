@@ -1,0 +1,296 @@
+{
+  "spec_revision": "KSemaphoreDelete-spec-r2",
+  "files": [
+    {
+      "global_path": "annotated_C/include/logic.h",
+      "baseline_sha256": null,
+      "staged_sha256": "20a85c96b26a07f729a38ede9378f63dc6f489b2b51b707d05ffeea1ba8efac1",
+      "changed": true,
+      "method": [
+        "New shared ABI/vocabulary header; no function contracts. Trial logical prefixes migrated only."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/include/slice_types.h",
+      "baseline_sha256": null,
+      "staged_sha256": "9c41a5e64e718f921cef058145c80d0d6dd0a946e068d91d3830d08f8b133777",
+      "changed": true,
+      "method": [
+        "New shared ABI/vocabulary header; no function contracts. Trial logical prefixes migrated only."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+      "baseline_sha256": null,
+      "staged_sha256": "66c9654dfb4faea731ccdf647a1b6fed57ef0acd2acf5c1ef5b746f618f0d0dd",
+      "changed": true,
+      "method": [
+        "Add reviewed canonical function; change only logical imports to global modules."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/DoubleLinkListInsertNodeBefore.c",
+      "baseline_sha256": null,
+      "staged_sha256": "f9975e812f50a23fd7fce919e935a89d74c41745e1ccb2be9b92bae9e8ff3947",
+      "changed": true,
+      "method": [
+        "Add reviewed canonical function; change only logical imports to global modules."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/FreeId.c",
+      "baseline_sha256": null,
+      "staged_sha256": "6ec3ce91db6e1d533f70f85b6eae3b87b83632555a0c56ca4f34cdbe724b67d6",
+      "changed": true,
+      "method": [
+        "Add reviewed canonical function; change only logical imports to global modules."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/GetObj.c",
+      "baseline_sha256": null,
+      "staged_sha256": "d945a4a7627b4c372fe500134bcab9b275bb7b2eb6c82605dd4bbc022d606c84",
+      "changed": true,
+      "method": [
+        "Add reviewed canonical function; change only logical imports to global modules."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/IdGetObj.c",
+      "baseline_sha256": null,
+      "staged_sha256": "9df09bceade7f6e241c18b6531054d39a9aec25701ef18e83ca617ab09108d51",
+      "changed": true,
+      "method": [
+        "Add reviewed canonical function; change only logical imports to global modules."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/IdRemoveObj.c",
+      "baseline_sha256": null,
+      "staged_sha256": "2121f84508fb4226be2e2f39ea493ec1259575d9614f689e6266e71d8b57eac9",
+      "changed": true,
+      "method": [
+        "Add reviewed canonical function; change only logical imports to global modules."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/InitDoubleLinkList.c",
+      "baseline_sha256": null,
+      "staged_sha256": "9b64aea58b40fef8b205772844d978ed5fbfee73892198fd8dcb91f37db0c1ac",
+      "changed": true,
+      "method": [
+        "Add reviewed canonical function; change only logical imports to global modules."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/IsDoubleLinkListEmpty.c",
+      "baseline_sha256": null,
+      "staged_sha256": "2bd677005589b0eb0559783015b29aa73042a9fe228ca7de7f5bd27a12472fb4",
+      "changed": true,
+      "method": [
+        "Add reviewed canonical function; change only logical imports to global modules."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/KSemaphoreDelete.c",
+      "baseline_sha256": null,
+      "staged_sha256": "ea52a061a542e98280a5c3f2088d54d6f9cc6b3573181055ca30510c596cc264",
+      "changed": true,
+      "method": [
+        "Add reviewed canonical function; change only logical imports to global modules."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/LinklistResumeAll.c",
+      "baseline_sha256": null,
+      "staged_sha256": "923569c14bc74b8ca1d146fc9d520909bbf5d333b1d981577f0df580b1868a5d",
+      "changed": true,
+      "method": [
+        "Add reviewed canonical function; change only logical imports to global modules."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/RemoveObj.c",
+      "baseline_sha256": null,
+      "staged_sha256": "641714f55710c787c427a333f9992bc91cf69c5c9e47fe838bb3b9813b17cbce",
+      "changed": true,
+      "method": [
+        "Add reviewed canonical function; change only logical imports to global modules."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/_SemaphoreDelete.c",
+      "baseline_sha256": null,
+      "staged_sha256": "fb8ab41c174ea76fb1070874bd07e057195fa0f4b80f03683db1efe8a28594f6",
+      "changed": true,
+      "method": [
+        "Add reviewed canonical function; change only logical imports to global modules."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/headers/ktask_set_status.h",
+      "baseline_sha256": "eca170b1fdb72f801b2f0d334f6b68fdb37d227fc58b6bbffc22930fe416b515",
+      "staged_sha256": "14d82394357510589ae55852f6ae94beb4645c4a0fb183755e80f99814fcef27",
+      "changed": true,
+      "method": [
+        "Replace missing libai.TaskStatusMemory by existing CRTOS_Verify.lib.TaskStatusMemory; retain other status functions."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/headers/ktask_unset_delay.h",
+      "baseline_sha256": "6882163f07657b4a0f39b513e1e4a9ac6ee978525c2509eb6ae756480dcecbb3",
+      "staged_sha256": "ca60e3e2b4c590bf09179b3957e28e0d59235bc271d5962b651e2dbeca980e66",
+      "changed": true,
+      "method": [
+        "Replace missing libai imports by reviewed KTaskUnSetDelay/KTaskWakeup modules; retain five contracts."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/headers/m_double_linklist.h",
+      "baseline_sha256": "28949a5fca3825a36cd8185fe2a6ffe2af10bd6f87b7925b52e1b29d8801fa06",
+      "staged_sha256": "5bedea5b2e3f147370b033ec8e21e0b23e9b4f0d447755073f7f9534bbc4f26a",
+      "changed": true,
+      "method": [
+        "Existing contracts retained; new store_ready_dll_tail_view source made available by new shared module."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/headers/m_id.h",
+      "baseline_sha256": "846c2ea8e4cf9fe7950d5d096a54d21a9cc04dd346c72424915c3f7292a6c8e5",
+      "staged_sha256": "358eba45106404d24ae29e4b5da8d4dfc5690247d71a88a0a904f3b4baea1010",
+      "changed": true,
+      "method": [
+        "Restore RemoveObj real pointer return type; current_node explicit semantic repair; append found_node/absent_node and FreeId API without disturbing other functions."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/headers/m_ktask.h",
+      "baseline_sha256": "36de7b44151c3fa5592e21943b7229576bf21213317c8424feed87f92cba282e",
+      "staged_sha256": "36de7b44151c3fa5592e21943b7229576bf21213317c8424feed87f92cba282e",
+      "changed": false,
+      "method": [
+        "Keep the existing CONTAINER_OF_TASK_SCHED contract identical to the selected typed boundary; no body or extra assumptions changed."
+      ],
+      "remaining_libai_imports": [
+        "/*@ Import Coq Require Import CRTOS_Verify.libai.AssignReadyPending */",
+        "/*@ Import Coq Require Import CRTOS_Verify.libai.KTaskSetDelay */"
+      ]
+    },
+    {
+      "global_path": "annotated_C/src/kernel/thread/assign_ready_insert.c",
+      "baseline_sha256": "89fc45aaa57d2e86a665bf78d702f4759927169ac184ecbf2c0b1a079b836fd4",
+      "staged_sha256": "c209b008d036d3e8108e8ad0b9fb834b17ddeafbc05dcba120c4177628c71c81",
+      "changed": true,
+      "method": [
+        "Synchronize existing full KTaskInsertToReadyVector contract blocks; retain all C bodies, short spec references and proof annotations."
+      ],
+      "remaining_libai_imports": [
+        "/*@ Import Coq Require Import CRTOS_Verify.libai.AssignInCritical */",
+        "/*@ Import Coq Require Import CRTOS_Verify.libai.AssignCommon */"
+      ]
+    },
+    {
+      "global_path": "annotated_C/src/kernel/thread/assignstat.c",
+      "baseline_sha256": "1a434c1cd914062489d760c3814af71343d661dbb512762ed2b30e8e7b60e5b5",
+      "staged_sha256": "a8c17e11fb7a2651ab087714c34e2d04044b9f3993353925c49a554b1a2aed26",
+      "changed": true,
+      "method": [
+        "Synchronize existing full AssignPolicyInsert contract blocks; retain all C bodies, short spec references and proof annotations."
+      ],
+      "remaining_libai_imports": [
+        "/*@ Import Coq Require Import CRTOS_Verify.libai.AssignStat */"
+      ]
+    },
+    {
+      "global_path": "annotated_C/src/kernel/thread/double_link_remove_member.c",
+      "baseline_sha256": "de6b677d837aff8ad14bc3ac26a29080f0fbe3eb756082567958529c2e9d3071",
+      "staged_sha256": "de6b677d837aff8ad14bc3ac26a29080f0fbe3eb756082567958529c2e9d3071",
+      "changed": false,
+      "method": [
+        "Synchronize existing full DoubleLinkListRmNode contract blocks; retain all C bodies, short spec references and proof annotations."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/kernel/thread/get_task_with_idnode.c",
+      "baseline_sha256": "80c9313a0a7bc5c5c5563da22c12cfd26d2df186085aab773e8a8dbc942f2993",
+      "staged_sha256": "67a2282454c0774dfa9e3686a5ba072271aa0293622edfc92f816cf93afa9559",
+      "changed": true,
+      "method": [
+        "Synchronize existing full GetTaskWithIdnodeInfo contract blocks; retain all C bodies, short spec references and proof annotations."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/kernel/thread/ktask_set_status.c",
+      "baseline_sha256": "ca6ee01a2f8a06a206ab7c33ec3650c5338d610078d38856a4a829bacc9ddf83",
+      "staged_sha256": "0e0c5fc80f248711383b4305521bbf2469974eef709be45eda2ec4457ea55c78",
+      "changed": true,
+      "method": [
+        "Synchronize existing full JudgeKTaskStatIsSuspend contract blocks; retain all C bodies, short spec references and proof annotations.",
+        "Synchronize existing full KTaskStatSetAsReady contract blocks; retain all C bodies, short spec references and proof annotations.",
+        "Synchronize existing full KTaskStateSet contract blocks; retain all C bodies, short spec references and proof annotations."
+      ],
+      "remaining_libai_imports": []
+    },
+    {
+      "global_path": "annotated_C/src/kernel/thread/ktask_unset_delay.c",
+      "baseline_sha256": "3f26a6482af9204b649787d4c3c8351a491a7c88ea5c7447a411932db114c4a9",
+      "staged_sha256": "22e6309b567b3b777155a98922ec083a461e41aaf2833666e003e4dd0bbebcc8",
+      "changed": true,
+      "method": [
+        "Synchronize existing full KTaskUnSetDelay contract blocks; retain all C bodies, short spec references and proof annotations."
+      ],
+      "remaining_libai_imports": [
+        "/*@ Import Coq Require Import CRTOS_Verify.libai.KTaskSetDelay */"
+      ]
+    },
+    {
+      "global_path": "annotated_C/src/kernel/thread/ktask_wakeup.c",
+      "baseline_sha256": "a385927b9260bb08c9ed8d8300247d4ea01befd12f4157dbcc1be9de8884fad0",
+      "staged_sha256": "8e534845b13d2d8e5c387ecb27da14a2cd17287d957f42ee20187e0b3ae74cd6",
+      "changed": true,
+      "method": [
+        "Synchronize existing full KTaskWakeup contract blocks; retain all C bodies, short spec references and proof annotations.",
+        "Synchronize existing full _KTaskWakeup contract blocks; retain all C bodies, short spec references and proof annotations."
+      ],
+      "remaining_libai_imports": [
+        "/*@ Import Coq Require Import CRTOS_Verify.libai.AssignInCritical */",
+        "/*@ Import Coq Require Import CRTOS_Verify.libai.AssignCommon */",
+        "/*@ Import Coq Require Import CRTOS_Verify.libai.RRR_ReadyInsert */",
+        "/*@ Import Coq Require Import CRTOS_Verify.libai.KTaskSetDelay */",
+        "/*@ Import Coq Require Import CRTOS_Verify.libai.KTaskWakeup */"
+      ]
+    },
+    {
+      "global_path": "annotated_C/src/kernel/thread/rrr_ready_vector_insert.c",
+      "baseline_sha256": "d8f23cfd8d27bda9a4d2b4c27a2110c9126c78e387e843726c7f214953f939d4",
+      "staged_sha256": "1af3231a956dbda90e2c94e277fc8af7aea7fd567e89d7c001bc1438c77cae3d",
+      "changed": true,
+      "method": [
+        "Synchronize existing full RoundRobinRemainReadyVectorInsert contract blocks; retain all C bodies, short spec references and proof annotations."
+      ],
+      "remaining_libai_imports": [
+        "/*@ Import Coq Require Import CRTOS_Verify.libai.RRR_ReadyInsert */"
+      ]
+    }
+  ]
+}

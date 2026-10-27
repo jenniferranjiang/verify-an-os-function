@@ -1,0 +1,54 @@
+{
+  "lib/CrtosGlobState.v": {
+    "source": "ksemaphorecreate-trial-261022-1/shared_candidates/CrtosGlobState.v",
+    "source_sha256": "9dc65a597a292397a93e32beb587c2828d21bdc08cb757e1835cdae91560219e"
+  },
+  "lib/CrtosRules.v": {
+    "source": "ksemaphorecreate-trial-261022-1/shared_candidates/CrtosRules.v",
+    "source_sha256": "9c69d6a5d6a9a13783fe2dc3c1d226b21c7dd2b308be91d8dda63be1a1d5a430"
+  },
+  "lib/CrtosInv.v": {
+    "source": "ksemaphorecreate-trial-261022-1/shared_candidates/CrtosInv.v",
+    "source_sha256": "84c32c932758019c1bef062a3200d643bba1cf5b40c6d74f82fa94cfd78726af"
+  },
+  "lib/SemaphoreState.v": {
+    "source": "ksemaphorecreate-trial-261022-1/shared_candidates/SemaphoreState.v",
+    "source_sha256": "fa21dbdc2780795cd9a2c8c9ae5d5b9731e21ca6cef6f09a850cbe2aaf4994bf"
+  },
+  "lib/SemaphoreInv.v": {
+    "source": "ksemaphorecreate-trial-261022-1/shared_candidates/SemaphoreInv.v",
+    "source_sha256": "69f6625fb300ea7f8f9e08834d427b05ced77008ea81e0bb79076e0fdcc76ee4"
+  },
+  "lib/DoubleLinkListSpec.v": {
+    "source": "ksemaphorecreate-trial-261022-1/shared_candidates/DoubleLinkListSpec.v",
+    "source_sha256": "9ba518bcf2cb9065cd6364fffbebfa0639fd30745add0316eecc4d871ac3dc85"
+  },
+  "lib/SemaphoreOwnership.v": {
+    "source": "ksemaphorecreate-trial-261022-1/lib/SemaphoreOwnership.v",
+    "source_sha256": "abca579d4172d6505cf77c674f6af65fcf7bd1f51c213da41d9b38ba59f30b06"
+  },
+  "lib/KSemaphoreCreate.v": {
+    "source": "ksemaphorecreate-trial-261022-1/lib/KSemaphoreCreate.v",
+    "source_sha256": "ee3a68dd7ab4a93e377da5eec8abc9da82fb12addaf7d5c805a4f123256925c3"
+  },
+  "lib/SemaphoreByteLayout.v": {
+    "source": "ksemaphorecreate-trial-261022-1/lib/SemaphoreByteLayout.v",
+    "source_sha256": "e6ecd53d4cc12bb71584b2bebbaab6274ff754f6f2a92414c2208b5f5e434154"
+  },
+  "lib/SemaphoreSpecBridge.v": {
+    "source": "ksemaphorecreate-trial-261022-1/lib/SemaphoreSpecBridge.v",
+    "source_sha256": "6366f505934ca185fe36192445e220c883cac6e52f8a1fb41eabe39726b71785"
+  },
+  "vendor/MonadLib/MonadErr/MonadErrHoare.v": {
+    "source": "ksemaphorecreate-trial-261022-1/vendor/MonadLib/MonadErr/MonadErrHoare.v",
+    "source_sha256": "1d04f5f7cfc385933bdfb470a2d599d9ad0df93c3f05cc9e4e740d63ed55c5de"
+  },
+  "vendor/MonadLib/MonadErr/MonadErrLoop.v": {
+    "source": "ksemaphorecreate-trial-261022-1/vendor/MonadLib/MonadErr/MonadErrLoop.v",
+    "source_sha256": "2fa6dae9f424b6d0331956787f93a90c48c8465e3408e4891be105659e5ae2a6"
+  },
+  "vendor/MonadLib/MonadErr/monadesafe_lib.v": {
+    "source": "ksemaphorecreate-trial-261022-1/vendor/MonadLib/MonadErr/monadesafe_lib.v",
+    "source_sha256": "9a58699a640ceaaf089db26aa12039805c75d233093f6262db7cae9cd73980ac"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "KSemaphoreDelete": "/*@ outside_critical\n    With (sg : StableGlobalState) (before : VarGlobalState) X\n    Require safeExec(LastSeen(before), abs_semaphore_delete(sg, id), X) &&\n            OutsideCritical(sg, before)\n    Ensure exists after,\n      safeExec(LastSeen(after), return(tt), X) && OutsideCritical(sg, after)\n */",
+  "_SemaphoreDelete": "/*@ outside_critical\n    With (sg : StableGlobalState) (before : VarGlobalState) X\n    Require safeExec(LastSeen(before), abs_semaphore_delete(sg, id), X) &&\n            OutsideCritical(sg, before)\n    Ensure exists after,\n      safeExec(LastSeen(after), return(tt), X) && OutsideCritical(sg, after)\n */",
+  "LinklistResumeAll": "/*@ semaphore_waiters\n    With (sg : StableGlobalState) (st anchor : VarGlobalState) (sem : SemaphoreAbs)\n    Require In(sem, st.os_semaphores) &&\n      list == semaphore_pending_head(sem.semaphore_addr) &&\n      InsideCritical(sg, anchor) * os_inv(sg, st)\n    Ensure __return == KOK && exists after,\n      semaphore_resume_all_steps(sem.semaphore_addr, sem.semaphore_pending_addrs, st, after) &&\n      InsideCritical(sg, anchor) * os_inv(sg, after)\n */"
+}

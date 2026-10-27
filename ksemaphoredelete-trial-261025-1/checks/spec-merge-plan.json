@@ -1,0 +1,165 @@
+{
+  "note": "Do not overwrite old multi-function files or broad headers with trial slices. Before merge compare checks/spec-baseline with newest globals. Original annotations may contain legacy proof vocabulary outside this review; do not claim migration/proof of unreviewed vocabulary.",
+  "functions": [
+    {
+      "symbol": "AssignPolicyInsert",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c",
+      "global_source": "annotated_C/src/kernel/thread/assignstat.c",
+      "method": "retain existing C body and all original contracts; incrementally migrate applicable imports/canonical declaration only"
+    },
+    {
+      "symbol": "DoubleLinkListInsertNodeAfter",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+      "global_source": null,
+      "method": "new one-function canonical file, with imports changed to global reviewed modules"
+    },
+    {
+      "symbol": "DoubleLinkListInsertNodeBefore",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListInsertNodeBefore.c",
+      "global_source": null,
+      "method": "new one-function canonical file, with imports changed to global reviewed modules"
+    },
+    {
+      "symbol": "DoubleLinkListRmNode",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListRmNode.c",
+      "global_source": "annotated_C/src/kernel/thread/double_link_remove_member.c",
+      "method": "retain existing C body and all original contracts; incrementally migrate applicable imports/canonical declaration only"
+    },
+    {
+      "symbol": "FreeId",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/FreeId.c",
+      "global_source": null,
+      "method": "new one-function canonical file, with imports changed to global reviewed modules"
+    },
+    {
+      "symbol": "GetObj",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/GetObj.c",
+      "global_source": null,
+      "method": "new one-function canonical file, with imports changed to global reviewed modules"
+    },
+    {
+      "symbol": "GetTaskWithIdnodeInfo",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/GetTaskWithIdnodeInfo.c",
+      "global_source": "annotated_C/src/kernel/thread/get_task_with_idnode.c",
+      "method": "retain existing C body and all original contracts; incrementally migrate applicable imports/canonical declaration only"
+    },
+    {
+      "symbol": "IdGetObj",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/IdGetObj.c",
+      "global_source": null,
+      "method": "new one-function canonical file, with imports changed to global reviewed modules"
+    },
+    {
+      "symbol": "IdRemoveObj",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/IdRemoveObj.c",
+      "global_source": null,
+      "method": "new one-function canonical file, with imports changed to global reviewed modules"
+    },
+    {
+      "symbol": "InitDoubleLinkList",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/InitDoubleLinkList.c",
+      "global_source": null,
+      "method": "new one-function canonical file, with imports changed to global reviewed modules"
+    },
+    {
+      "symbol": "IsDoubleLinkListEmpty",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/IsDoubleLinkListEmpty.c",
+      "global_source": null,
+      "method": "new one-function canonical file, with imports changed to global reviewed modules"
+    },
+    {
+      "symbol": "JudgeKTaskStatIsSuspend",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/JudgeKTaskStatIsSuspend.c",
+      "global_source": "annotated_C/src/kernel/thread/ktask_set_status.c",
+      "method": "retain existing C body and all original contracts; incrementally migrate applicable imports/canonical declaration only"
+    },
+    {
+      "symbol": "KSemaphoreDelete",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/KSemaphoreDelete.c",
+      "global_source": null,
+      "method": "new one-function canonical file, with imports changed to global reviewed modules"
+    },
+    {
+      "symbol": "KTaskInsertToReadyVector",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskInsertToReadyVector.c",
+      "global_source": "annotated_C/src/kernel/thread/assign_ready_insert.c",
+      "method": "retain existing C body and all original contracts; incrementally migrate applicable imports/canonical declaration only"
+    },
+    {
+      "symbol": "KTaskStatSetAsReady",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskStatSetAsReady.c",
+      "global_source": "annotated_C/src/kernel/thread/ktask_set_status.c",
+      "method": "retain existing C body and all original contracts; incrementally migrate applicable imports/canonical declaration only"
+    },
+    {
+      "symbol": "KTaskStateSet",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskStateSet.c",
+      "global_source": "annotated_C/src/kernel/thread/ktask_set_status.c",
+      "method": "retain existing C body and all original contracts; incrementally migrate applicable imports/canonical declaration only"
+    },
+    {
+      "symbol": "KTaskUnSetDelay",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskUnSetDelay.c",
+      "global_source": "annotated_C/src/kernel/thread/ktask_unset_delay.c",
+      "method": "retain existing C body and all original contracts; incrementally migrate applicable imports/canonical declaration only"
+    },
+    {
+      "symbol": "KTaskWakeup",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskWakeup.c",
+      "global_source": "annotated_C/src/kernel/thread/ktask_wakeup.c",
+      "method": "retain existing C body and all original contracts; incrementally migrate applicable imports/canonical declaration only"
+    },
+    {
+      "symbol": "LinklistResumeAll",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/LinklistResumeAll.c",
+      "global_source": null,
+      "method": "new one-function canonical file, with imports changed to global reviewed modules"
+    },
+    {
+      "symbol": "RemoveObj",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/RemoveObj.c",
+      "global_source": null,
+      "method": "new one-function canonical file, with imports changed to global reviewed modules"
+    },
+    {
+      "symbol": "RoundRobinRemainReadyVectorInsert",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/RoundRobinRemainReadyVectorInsert.c",
+      "global_source": "annotated_C/src/kernel/thread/rrr_ready_vector_insert.c",
+      "method": "retain existing C body and all original contracts; incrementally migrate applicable imports/canonical declaration only"
+    },
+    {
+      "symbol": "_KTaskWakeup",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/_KTaskWakeup.c",
+      "global_source": "annotated_C/src/kernel/thread/ktask_wakeup.c",
+      "method": "retain existing C body and all original contracts; incrementally migrate applicable imports/canonical declaration only"
+    },
+    {
+      "symbol": "_SemaphoreDelete",
+      "trial": "ksemaphoredelete-trial-261025-1/annotated_C/src/_SemaphoreDelete.c",
+      "global_source": null,
+      "method": "new one-function canonical file, with imports changed to global reviewed modules"
+    }
+  ],
+  "existing_header_changes": [
+    {
+      "file": "annotated_C/src/headers/m_id.h",
+      "changes": "Restore RemoveObj real pointer return type; current_node explicit semantic repair; append found_node/absent_node and FreeId API without disturbing other functions."
+    },
+    {
+      "file": "annotated_C/src/headers/ktask_unset_delay.h",
+      "changes": "Replace missing libai imports by reviewed KTaskUnSetDelay/KTaskWakeup modules; retain five contracts."
+    },
+    {
+      "file": "annotated_C/src/headers/ktask_set_status.h",
+      "changes": "Replace missing libai.TaskStatusMemory by existing CRTOS_Verify.lib.TaskStatusMemory; retain other status functions."
+    },
+    {
+      "file": "annotated_C/src/headers/m_double_linklist.h",
+      "changes": "Existing contracts retained; new store_ready_dll_tail_view source made available by new shared module."
+    }
+  ],
+  "new_shared_headers": [
+    "annotated_C/include/slice_types.h",
+    "annotated_C/include/logic.h"
+  ]
+}

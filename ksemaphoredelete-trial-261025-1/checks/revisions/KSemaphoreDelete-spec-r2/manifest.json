@@ -1,0 +1,119 @@
+{
+  "revision": "KSemaphoreDelete-spec-r2",
+  "status": "review-passed",
+  "predicate_revision": "KSemaphoreDelete-pred-r2",
+  "predicate_sha256": "9cd7d0759ba6015950e7ab63a448998c9daf844c3458396a132544b12e060879",
+  "aggregate_sha256": "1ebdb05ad64fcdabdf6275e5cb21a05c940ef9e9c156b777692713b25d385a9d",
+  "digest_method": "SHA256 of sorted lines: <sha256>  <relative path>\\n",
+  "files": [
+    {
+      "file": "annotated_C/include/logic.h",
+      "sha256": "368675bd4484a12a7ae79b613e6942fbc1b528331c8f6d2a9f94e8b35049775c"
+    },
+    {
+      "file": "annotated_C/include/slice_types.h",
+      "sha256": "9c41a5e64e718f921cef058145c80d0d6dd0a946e068d91d3830d08f8b133777"
+    },
+    {
+      "file": "annotated_C/src/AssignPolicyInsert.c",
+      "sha256": "93555a927905bb827256131673507c6618e18f8a29231b114519d90da5a0c963"
+    },
+    {
+      "file": "annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+      "sha256": "66c9654dfb4faea731ccdf647a1b6fed57ef0acd2acf5c1ef5b746f618f0d0dd"
+    },
+    {
+      "file": "annotated_C/src/DoubleLinkListInsertNodeBefore.c",
+      "sha256": "f9975e812f50a23fd7fce919e935a89d74c41745e1ccb2be9b92bae9e8ff3947"
+    },
+    {
+      "file": "annotated_C/src/DoubleLinkListRmNode.c",
+      "sha256": "780f3465cbd2b80002ad91822407f9cd48cf88a247f78c6f9ccc1d74e77fe256"
+    },
+    {
+      "file": "annotated_C/src/FreeId.c",
+      "sha256": "6ec3ce91db6e1d533f70f85b6eae3b87b83632555a0c56ca4f34cdbe724b67d6"
+    },
+    {
+      "file": "annotated_C/src/GetObj.c",
+      "sha256": "d945a4a7627b4c372fe500134bcab9b275bb7b2eb6c82605dd4bbc022d606c84"
+    },
+    {
+      "file": "annotated_C/src/GetTaskWithIdnodeInfo.c",
+      "sha256": "065799508c56a6b5cb371dfd947fb8adfc6081956c77f048498355e746252cc0"
+    },
+    {
+      "file": "annotated_C/src/IdGetObj.c",
+      "sha256": "9df09bceade7f6e241c18b6531054d39a9aec25701ef18e83ca617ab09108d51"
+    },
+    {
+      "file": "annotated_C/src/IdRemoveObj.c",
+      "sha256": "2121f84508fb4226be2e2f39ea493ec1259575d9614f689e6266e71d8b57eac9"
+    },
+    {
+      "file": "annotated_C/src/InitDoubleLinkList.c",
+      "sha256": "9b64aea58b40fef8b205772844d978ed5fbfee73892198fd8dcb91f37db0c1ac"
+    },
+    {
+      "file": "annotated_C/src/IsDoubleLinkListEmpty.c",
+      "sha256": "2bd677005589b0eb0559783015b29aa73042a9fe228ca7de7f5bd27a12472fb4"
+    },
+    {
+      "file": "annotated_C/src/JudgeKTaskStatIsSuspend.c",
+      "sha256": "1a46f6fc5cce7a0d9eca2d60ede2838046e33b5964b3ecc9d377b033b568d056"
+    },
+    {
+      "file": "annotated_C/src/KSemaphoreDelete.c",
+      "sha256": "ea52a061a542e98280a5c3f2088d54d6f9cc6b3573181055ca30510c596cc264"
+    },
+    {
+      "file": "annotated_C/src/KTaskInsertToReadyVector.c",
+      "sha256": "ed7e6210062c89425b0269821890be3848878b560606b27939390fd615351649"
+    },
+    {
+      "file": "annotated_C/src/KTaskStatSetAsReady.c",
+      "sha256": "00474593d6f90fc91ab9f064b47b19328b169a13b803856ce7b3ed3afcb24f5a"
+    },
+    {
+      "file": "annotated_C/src/KTaskStateSet.c",
+      "sha256": "1f7e2bddf09a2340464e5d40b8213084535fe2501e31445a900237c094699f68"
+    },
+    {
+      "file": "annotated_C/src/KTaskUnSetDelay.c",
+      "sha256": "b8311b2b0d38ec091f6cdaea5f04f289b79210b72e2c93ba4bd10626a9783229"
+    },
+    {
+      "file": "annotated_C/src/KTaskWakeup.c",
+      "sha256": "c677efe6368a2d985b3c5153759673de0f3a608cb5c8f8f812a145cfe31e2cbd"
+    },
+    {
+      "file": "annotated_C/src/LinklistResumeAll.c",
+      "sha256": "923569c14bc74b8ca1d146fc9d520909bbf5d333b1d981577f0df580b1868a5d"
+    },
+    {
+      "file": "annotated_C/src/RemoveObj.c",
+      "sha256": "641714f55710c787c427a333f9992bc91cf69c5c9e47fe838bb3b9813b17cbce"
+    },
+    {
+      "file": "annotated_C/src/RoundRobinRemainReadyVectorInsert.c",
+      "sha256": "4fd526dc99a1abbf841d110a148fde4ac017b0d4251d51fbc92af0629d8731fe"
+    },
+    {
+      "file": "annotated_C/src/_KTaskWakeup.c",
+      "sha256": "3e1463fb5b02c23f436c85efdd8d6102383fe305bb6abe5752bba6cdb38dd45c"
+    },
+    {
+      "file": "annotated_C/src/_SemaphoreDelete.c",
+      "sha256": "fb8ab41c174ea76fb1070874bd07e057195fa0f4b80f03683db1efe8a28594f6"
+    }
+  ],
+  "checks": {
+    "canonical_functions": 23,
+    "boundaries": 8,
+    "gcc": "passed",
+    "abi": "unchanged; prior independent ABI result applies",
+    "formal_vocabulary": "137 actual Check commands; exit_code=0"
+  },
+  "change": "S1 typed container APIs; common canonical requirements unchanged; predicate unchanged",
+  "qcp_started": false
+}

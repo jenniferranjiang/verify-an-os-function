@@ -1,0 +1,42 @@
+{
+  "revision": "KSemaphoreDelete-pred-r2",
+  "status": "review-passed",
+  "aggregate_sha256": "9cd7d0759ba6015950e7ab63a448998c9daf844c3458396a132544b12e060879",
+  "files": [
+    {
+      "file": "lib/TaskInv.v",
+      "sha256": "53336f97119434443770031ec50f3569ac518250faacd06f53ff638fd711e653"
+    },
+    {
+      "file": "lib/SemaphoreInv.v",
+      "sha256": "19b64af60cb154dd5b8230034fe365dd21a4962eb0398eb6cabbee33cfd41ea7"
+    },
+    {
+      "file": "lib/CrtosInv.v",
+      "sha256": "72f16003633105296e9694e1f93a0b60a0e0dfd6c0e86e73bdcbaa118d77dcf9"
+    },
+    {
+      "file": "lib/KTaskUnSetDelay.v",
+      "sha256": "2ae517e1ee113659326081bd8e9ec54eeb4b3274df4f60705b694a3d6f25daba"
+    },
+    {
+      "file": "lib/KTaskWakeup.v",
+      "sha256": "35800d60cdfd0ac652c7b70d9fb237bc396405d48ed1a98155ec6ad634006534"
+    },
+    {
+      "file": "lib/SemaphoreOps.v",
+      "sha256": "dee519dd864ce99bc73e801e01eea1bde7d945151a90e7998bce8c80c5a075c9"
+    },
+    {
+      "file": "lib/KSemaphoreDelete.v",
+      "sha256": "e9b1b1d70ece585e4f5ad6ad860cd8abfd897baf496867f491585c914f4e386a"
+    }
+  ],
+  "scope": "adapted non-SMP 32-bit; DO_KTASK_ASSIGN model boundary per current skill; P1 corrected to canonical nested task sched_link; no implementation proof",
+  "migration": {
+    "status": "checked",
+    "record": "checks/migration-check.json",
+    "active_namespace": "CRTOS_Verify.lib",
+    "reviewed_snapshot": "checks/revisions/KSemaphoreDelete-pred-r2"
+  }
+}

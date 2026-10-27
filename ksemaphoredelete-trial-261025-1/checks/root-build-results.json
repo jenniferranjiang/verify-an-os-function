@@ -1,0 +1,34 @@
+[
+  {
+    "command": [
+      "coq_makefile",
+      "-f",
+      "_CoqProject",
+      "-o",
+      "Makefile.coq"
+    ],
+    "cwd": "/home/xinra/crtos",
+    "exit_code": 0,
+    "log": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/checks/root-configure.log"
+  },
+  {
+    "command": [
+      "make",
+      "-f",
+      "Makefile.coq",
+      "-j2",
+      "COQBIN=/home/xinra/.opam/pv-bench-8.20.1/bin/",
+      "lib/TaskInv.vo",
+      "lib/SemaphoreInv.vo",
+      "lib/CrtosInv.vo",
+      "lib/KTaskUnSetDelay.vo",
+      "lib/KTaskWakeup.vo",
+      "lib/SemaphoreOps.vo",
+      "lib/KSemaphoreDelete.vo",
+      "lib/KSemaphoreCreate.vo"
+    ],
+    "cwd": "/home/xinra/crtos",
+    "exit_code": 0,
+    "log": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/checks/root-library-build.log"
+  }
+]

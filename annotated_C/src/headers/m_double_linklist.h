@@ -24,11 +24,11 @@ typedef struct SysDoubleLinklistNode
  */
 /*@ Import Coq Require Import CRTOS_Verify.lib.dll */
 /*@ Import Coq Require Import CRTOS_Verify.lib.CrtosRules */
-/*@ Import Coq Require Import CRTOS_Verify.libai.DoubleLinkListSpec */
-/*@ Import Coq Require Import CRTOS_Verify.libai.NodeSelfLinked */
+/*@ Import Coq Require Import CRTOS_Verify.lib.DoubleLinkListSpec */
+/*@ Import Coq Require Import CRTOS_Verify.lib.NodeSelfLinked */
 /*@ Import Coq Require Import CRTOS_Verify.lib.KTaskSchedMember */
 /*@ Import Coq Require Import CRTOS_Verify.lib.OsAssignReadyVector */
-/*@ Import Coq Require Import CRTOS_Verify.libai.RRR_ReadyInsert */
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskWakeup */
 /*@ Import Coq Import DLL */
 
 /*@ Extern Coq addr := Z */
@@ -71,7 +71,8 @@ void InitDoubleLinkList(DoubleLinklistType *linklist_head)
       undef_data_at(&(linklist_head->node_next))
     Ensure
       linklist_head != 0 && store_node_self_linked(linklist_head)
- */;
+ */
+;
 
 void DoubleLinkListInsertNodeBefore(
   DoubleLinklistType *linklist, DoubleLinklistType *linklist_node)
@@ -118,7 +119,8 @@ void DoubleLinkListInsertNodeBefore(DoubleLinklistType *linklist,
              dll_insert_before_dispatch(
                head, nodes, linklist,
                Build_DL_Node(inserted_data, linklist_node)))
-*/;
+*/
+;
 
 void DoubleLinkListInsertNodeAfter(
   DoubleLinklistType *linklist, DoubleLinklistType *linklist_node)
@@ -153,7 +155,8 @@ void DoubleLinkListInsertNodeAfter(DoubleLinklistType *linklist,
              dll_insert_after_dispatch(
                head, nodes, linklist,
                Build_DL_Node(a, linklist_node)))
-*/;
+*/
+;
 
 /* Ready-vector specialization of the verified member-removal contract. */
 void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
@@ -196,7 +199,8 @@ void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
       store_node_self_linked(node)
     Ensure
       store_node_self_linked(node)
- */;
+ */
+;
 
 void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
 /*@ remove_member

@@ -1,0 +1,66 @@
+--- before/annotated_C/src/LinklistResumeAll.c
++++ annotated_C/src/LinklistResumeAll.c
+@@ -65,13 +65,21 @@
+ 
+ x_err_t LinklistResumeAll(DoubleLinklistType *list)
+ /*@ semaphore_waiters
+-    With (sg : StableGlobalState) (st anchor : VarGlobalState) (sem : SemaphoreAbs)
++    With (sg : StableGlobalState) (st : VarGlobalState) (sem : SemaphoreAbs)
+     Require In(sem, st.os_semaphores) &&
+       list == semaphore_pending_head(sem.semaphore_addr) &&
+-      InsideCritical(sg, anchor) * os_inv(sg, st)
++      os_global_context(sg) &&
++      task_fields(sg, st) *
++      delay_inv(sg, st) *
++      assign_ready_pending(sg, st) *
++      store_dll(pure_suspend_sched_link(st.os_tasks.task_desc_map),
++        list, map(semaphore_wait_node, sem.semaphore_pending_addrs))
+     Ensure __return == KOK && exists after,
+       semaphore_resume_all_steps(sem.semaphore_addr, sem.semaphore_pending_addrs, st, after) &&
+-      InsideCritical(sg, anchor) * os_inv(sg, after)
++      task_fields(sg, after) *
++      delay_inv(sg, after) *
++      assign_ready_pending(sg, after) *
++      store_node_self_linked(list)
+  */
+ {
+     x_ubase lock = 0;
+--- before/annotated_C/src/_SemaphoreDelete.c
++++ annotated_C/src/_SemaphoreDelete.c
+@@ -72,13 +72,21 @@
+ 
+ x_err_t LinklistResumeAll(DoubleLinklistType *list)
+ /*@ semaphore_waiters
+-    With (sg : StableGlobalState) (st anchor : VarGlobalState) (sem : SemaphoreAbs)
++    With (sg : StableGlobalState) (st : VarGlobalState) (sem : SemaphoreAbs)
+     Require In(sem, st.os_semaphores) &&
+       list == semaphore_pending_head(sem.semaphore_addr) &&
+-      InsideCritical(sg, anchor) * os_inv(sg, st)
++      os_global_context(sg) &&
++      task_fields(sg, st) *
++      delay_inv(sg, st) *
++      assign_ready_pending(sg, st) *
++      store_dll(pure_suspend_sched_link(st.os_tasks.task_desc_map),
++        list, map(semaphore_wait_node, sem.semaphore_pending_addrs))
+     Ensure __return == KOK && exists after,
+       semaphore_resume_all_steps(sem.semaphore_addr, sem.semaphore_pending_addrs, st, after) &&
+-      InsideCritical(sg, anchor) * os_inv(sg, after)
++      task_fields(sg, after) *
++      delay_inv(sg, after) *
++      assign_ready_pending(sg, after) *
++      store_node_self_linked(list)
+  */;
+ 
+ void IdRemoveObj(struct IdManager *manager, uint16 id)
+--- before/annotated_C/include/logic.h
++++ annotated_C/include/logic.h
+@@ -64,6 +64,9 @@
+   (idmanager_add : VarIdmanager -> Z -> VarIdmanager)
+   (idmanager_link : StableIdmanager -> VarIdmanager -> Z -> addr -> VarIdmanager)
+   (store_dll : {A} -> (addr -> A -> Assertion) -> addr -> list(DL_Node A) -> Assertion)
++  (map : {A} {B} -> (A -> B) -> list A -> list B)
++  (pure_suspend_sched_link : (addr -> option TaskDescriptorAbs) -> addr -> addr -> Assertion)
++  (semaphore_wait_node : addr -> DL_Node addr)
+   (occupy_dll_node : addr -> Assertion)
+   (store_node_self_linked : addr -> Assertion)
+   (store_task_sched_member : addr -> TaskSchedMemberAbs -> Assertion)

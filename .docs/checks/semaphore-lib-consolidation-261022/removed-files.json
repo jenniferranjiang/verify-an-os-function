@@ -1,0 +1,20 @@
+[
+  "lib/SemaphoreOwnership.v",
+  "lib/SemaphoreOwnership.vo",
+  "lib/SemaphoreOwnership.vos",
+  "lib/SemaphoreOwnership.vok",
+  "lib/SemaphoreOwnership.glob",
+  "lib/.SemaphoreOwnership.aux",
+  "lib/SemaphoreByteLayout.v",
+  "lib/SemaphoreByteLayout.vo",
+  "lib/SemaphoreByteLayout.vos",
+  "lib/SemaphoreByteLayout.vok",
+  "lib/SemaphoreByteLayout.glob",
+  "lib/.SemaphoreByteLayout.aux",
+  "lib/SemaphoreSpecBridge.v",
+  "lib/SemaphoreSpecBridge.vo",
+  "lib/SemaphoreSpecBridge.vos",
+  "lib/SemaphoreSpecBridge.vok",
+  "lib/SemaphoreSpecBridge.glob",
+  "lib/.SemaphoreSpecBridge.aux"
+]

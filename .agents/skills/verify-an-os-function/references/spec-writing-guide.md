@@ -3,7 +3,7 @@
 本指南服务 `write-spec`。以当前配置下的权威源码、目标模块与依赖，以及用户批准的 `trusted` 函数为依据；涉及 lock/IRQ/atomicity 或 abstract-command 时，核对相应协议。当前 predicate revision 提供总状态、module state、局部读取/更新函数、predicate、lemma、crtOS `LastSeen`、目标函数的 atomic command 和适用的
 crtOS 临界区定义；函数的 canonical contract 写在其自身 annotated C 的函数定义上；caller
 文件可以复制 direct-callee contract 作为 declaration-only API，但必须
-与 canonical spec 一致。Markdown 和手写 .v 均不得复制函数 contract 正文。Markdown 只可记录路径、symbol、C 证据、返回路径和审阅状态，不承载 spec 正文。Spec review 与 predicate review
+与 canonical 文件中所选的同名 spec 一致。Markdown 和手写 .v 均不得复制函数 contract 正文。Markdown 只可记录路径、symbol、C 证据、返回路径和审阅状态，不承载 spec 正文。Spec review 与 predicate review
 分开。Predicate 和 spec 草案可以共同修改；草案期间发现 predicate 缺口时直接返回 `slice-design`
 修正，不标记 `invalidated` 也不做中间 review。Spec review 必须引用同一份 `review-passed` predicate revision。
 
@@ -19,7 +19,7 @@ QCP parser/symbolic、VC 和 proof 在用户确认 review-passed revisions 后�
 1. [先固定模型和函数层次](#1-先固定模型和函数层次)
 2. [确定参数和 effect](#2-确定参数和-effect)
 3. [写每个函数的 Spec](#3-写每个函数的-spec)
-   - [3.1 一函数一 Spec 与注解位置](#31-一函数一-spec-与注解位置)
+   - [3.1 Spec 与注解位置](#31-spec-与注解位置)
    - [3.2 函数 Spec 的直接可审阅性](#32-函数-spec-的直接可审阅性)
    - [3.3 保持函数层次的抽象边界](#33-保持函数层次的抽象边界)
    - [3.4 Predicate 接口不足时的处理](#34-predicate-接口不足时的处理)
@@ -41,12 +41,16 @@ QCP parser/symbolic、VC 和 proof 在用户确认 review-passed revisions 后�
 只有已批准 protocol 允许等待 lock 时环境推进状态，才区分 `old/current`；顺序或中断屏蔽语义若保证无环境并发更新，
 不应机械引入两个状态。
 
-主 `SKILL.md` 给出唯一的验证闭包规则：从当前配置下的 target 出发，递归跟随直接调用、可唯一解析的
-function pointer/done-table dispatch，以及 function-like 宏展开后产生的真实调用。除用户批准的
-`trusted` 函数外，所有可达函数都继续递归并按本节建立 annotated C。Main agent 可以建议把复杂
+验证闭包遵循主 `SKILL.md` 的[验证范围](../SKILL.md#验证范围)：先按当前配置和
+[源代码处理](源代码处理.md) 完成适配，再沿切片中保留的调用递归。文档明确规定且适用的
+模型/API 替换作为边界，无需重复批准，也不递归被替换部分的原始内部调用。
+从根 annotated_C 导入复用的依赖 spec 按[工程配置指南](project-configuration-guide.md#已有-spec-的复用与特化)
+记为 `reused-spec` 边界，不为该函数及其内部调用安排本轮 VC 或函数体重证；适用性和 contract 一致性仍须检查。其余非
+`trusted` 函数按本节建立 annotated C。Main agent 可以建议把复杂
 callee 作为 `trusted`，但不能代替用户决定。批准的 symbol 和 contract 记录在当前任务
 上下文或报告中，不写入本通用 guide。无法唯一解析的调用须说明位置和原因，解决前阻塞 review。dispatch 和宏
-归一必须绑定 table initializer、macro definition、配置分支或赋值点证据，且保持 body、路径和副作用。
+归一必须绑定 table initializer、macro definition、配置分支、赋值点或采用的源码处理规则。
+普通归一保持 body、路径和副作用；模型替换记录适用条件、接口和结论限制，不将其当作原实现已获证明。
 
 实际项目常见的推进方向是：通用 link/array/bitmap 等局部操作，接着是对象或业务容器操作，再到同时维护多个
 对象、容器和 globals 一致性的模块操作，最后到包含参数/返回码、critical/IRQ 和 caller resources 的最外层 API。
@@ -55,22 +59,24 @@ callee 作为 `trusted`，但不能代替用户决定。批准的 symbol 和 con
 每个 canonical 文件先声明当前函数的 direct callees 并附完整 declaration-only
 `With/Require/Ensure`，随后保存当前函数自己的 canonical spec、真实定义和 active 函数体。
 
-写完文件后按主 skill 的闭包门禁重新从 target 扫描 body calls、dispatch 和宏展开结果。
-Function-like 宏产生的真实调用继续进入闭包；空宏、常量、`sizeof` 和纯类型/布局宏不产生函数；
-宏产生的可执行语句在 caller 中作等价归一。只给真实 C symbol 建 canonical 文件，不为宏虚构函数。
-正文不允许出现没有完整 formal API 的真实调用。
+写完文件后按主 skill 的闭包门禁重新从适配后的 target 扫描 body calls、dispatch 和宏处理结果。
+《源代码处理》规定的替代函数按其模型/API contract 检查；其他宏展开后保留的调用继续进入闭包，
+可执行语句在 caller 中等价归一。空宏、常量、`sizeof` 和纯类型/布局宏不产生函数。
+正文中每个保留的调用都须有完整 formal API，不自行发明文档未规定的替代函数。
 
-修改 callee canonical spec 时，其全部 caller API 副本失效，必须同步更新并
-重新检查受影响的 dependency closure。
+修改 callee 已有具名 spec 时，引用该 spec 的 caller API 副本必须同步更新，并重新检查受影响的
+dependency closure。只新增特化 spec 且原 spec 与依赖未变时，不使使用原 spec 的 caller 失效。
 
 LOS 文件只提供函数 spec 的写法示例。可以复用的是 QCP 的通用 `critical_STS/CriticalCSL`，不是 LOS 的
 `Los_CS_C`、`Los_Verify_State` 或 transition；crtOS 使用自己的状态和允许转换。
+
+已有 spec 的导入、等价适配与场景特化统一按 [工程配置指南](project-configuration-guide.md#已有-spec-的复用与特化)执行。
 
 ### 单函数切片的等价转换
 
 完整源码模式下，`annotated_C/src` 只增加或修改注解。单函数切片为适配工具可进行有源码与配置依据的等价转换，例如拆分赋值或逗号表达式、展开函数式宏、解析固定函数表分派，或把原编译单元中的 static 对象以外部声明形式提供给切片。
 
-转换必须保留求值顺序、执行路径、返回值、副作用、对象身份和实际访问字段的布局。外部声明须对应原对象，不能创建新的对象代替它。每项转换在 spec review 中说明位置、理由及源码/config 依据；不得换算法、隐藏函数体或凭空简化数据布局。
+本节的等价转换必须保留求值顺序、执行路径、返回值、副作用、对象身份和实际访问字段的布局。外部声明须对应原对象，不能创建新的对象代替它。每项转换在 spec review 中说明位置、理由及源码/config 依据；不得换算法、隐藏函数体或凭空简化数据布局。《源代码处理》明确规定的抽象适配按主 skill 的专门规则执行，不要求将其表述为逐语句等价转换。
 
 ## 2. 确定参数和 effect
 
@@ -212,7 +218,7 @@ allocation、free 或 container membership 变化，应使用已有 object/conta
 
 ### 3.1 Spec 与注解位置
 
-每个真实 C 函数分别写一个 spec。`Require` 写调用前必须持有的具体资源和事实，`Ensure` 按真实
+每个真实 C 函数有唯一 canonical 文件和一份 active 函数体，可以包含原有具名 specs 及按 [工程配置指南](project-configuration-guide.md#已有-spec-的复用与特化)新增的特化 spec。`Require` 写调用前必须持有的具体资源和事实，`Ensure` 按真实
 成功、失败、阻塞或早返回路径写返回值、状态变化、资源转移与 frame。外层函数证明调用
 其他函数时，只使用这些函数已经写好并最终证明的 spec，不展开它们的实现。
 
@@ -314,19 +320,16 @@ Ensure
 
 ### 4.3 在临界区内更新
 
-如果这里调用辅助函数，每个辅助函数也分别写自己的 spec：
+临界区内的分步更新可能暂时破坏完整 `os_inv`，因此锁内辅助函数不要求维护完整 `os_inv`。
+各函数按自身抽象层次描述调用条件、操作行为和资源变化：
+通用链表等底层函数只描述相应数据结构的操作；上层函数负责组合这些操作，最终由负责退出临界区的函数
+在解锁前重建完整 `os_inv`。操作效果可以直接体现在前后资源谓词的参数变化中，不要求统一使用额外的效果关系或固定模板。
 
-```text
-With (sg : StableGlobalState)
-     (st_lock : VarGlobalState)
-     (old_module new_module : ModuleState)
-Require
-  InsideCritical(sg, st_lock) *
-  module_inv(sg, old_module)
-Ensure
-  InsideCritical(sg, st_lock) *
-  module_inv(sg, new_module)
-```
+对不进行临界区资源交接、仅操作已有局部资源的辅助函数，`InsideCritical` 不必写入其 spec，
+可以由调用者保留。这是指证明调用时只向 callee 提供其 spec 所需的资源，其余资源通过 frame rule
+留在 caller 的证明上下文中，并非 C 代码实际传递锁 token。
+
+期间锁没有释放；外层最终将保留的 `InsideCritical` 与重建的 `os_inv` 一起交给 Unlock。
 
 如果更新由外层函数自己的 C 语句完成，这里没有额外函数 spec，只是外层函数 proof 中的内存更新步骤。
 
@@ -401,12 +404,15 @@ Ensure
 从以下方面检查，根据目标代码选择适用的具体情形，不要求逐项写检查结论。验证范围、资源与行为一致性、产物完整性仍须保证，影响正确性的未解决问题不能留到 proof 阶段。
 
 1. 检查验证范围。
-   从目标函数重新扫描当前配置下的全部调用、dispatch 和宏展开结果。对于每个未被用户批准为
-   `trusted` 的可达函数，`annotated_C/src/` 中必须有且只有一个以该函数命名的 `.c` 文件；该文件包含
-   该函数的一份真实完整定义和 canonical `With/Require/Ensure`。切片提取和调用归一不能改变原 C 的
-   控制流、返回值或副作用；caller 中声明的 callee spec 必须与 callee 的 canonical spec 一致。
+   从适配后的目标函数重新扫描当前配置下保留的调用、dispatch 和宏处理结果。模型/API 边界核对
+   《源代码处理》的适用规则、contract 及结论限制，不要求递归被替换部分的原始内部调用。
+   `reused-spec` 边界核对原 spec 的来源、revision、导入适配及 caller-local contract 一致性，不要求重证函数体。
+   对其余未被用户批准为 `trusted` 的可达函数，`annotated_C/src/` 中必须有且只有一个以该函数命名的 `.c` 文件；
+   该文件包含该函数的一份真实完整定义和 canonical `With/Require/Ensure`。
+   除文档规定且适用的适配外，切片提取和调用归一不能改变原 C 的控制流、返回值或副作用；
+   caller 中声明的 callee spec 必须与 canonical 文件中所选同名 spec 或采用的模型/API contract 一致。复用的原 contract 保持语义；新增特化须检查原 spec 到特化的推导、调用点前提的依据及资源重组，不能把未证明的特化当成已验证保证。
 
-   将每个切片与当前配置下对应的原始 C 函数核对，包括函数体、实际生效的宏和调用目标，以及用到的类型、字段布局和全局对象声明。只比较函数体文本不足以确认一致性；调整过写法的地方需要说明对应源码位置和为何不改变行为。审阅记录注明原源码、配置和切片版本，保留足以比较后续变化的依据。QCP 检查提交给它的 C，不能替代切片与原源码的核对。
+   将每个切片与当前配置下对应的原始 C 函数核对，包括函数体、实际生效的宏和调用目标，以及用到的类型、字段布局和全局对象声明。只比较函数体文本不足以确认一致性；普通等价转换说明为何不改变行为，按《源代码处理》采用的抽象转换说明规则依据、适用条件和结论限制。审阅记录注明原源码、配置和切片版本，保留足以比较后续变化的依据。QCP 检查提交给它的 C，不能替代切片与原源码的核对。
 
 2. 检查 spec 的两部分。
 

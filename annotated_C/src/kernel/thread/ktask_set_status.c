@@ -29,7 +29,7 @@
 
 /*@ Import Coq Require Import CRTOS_Verify.lib.KTaskPure */
 
-/*@ Import Coq Require Import CRTOS_Verify.libai.TaskStatusMemory */
+/*@ Import Coq Require Import CRTOS_Verify.lib.TaskStatusMemory */
 /*@ include strategies "task_status.strategies" */
 
 void KTaskStateSet(KTaskDescriptorType task, uint8 stat)
@@ -132,7 +132,7 @@ BOOL JudgeKTaskStatIsSuspend(KTaskDescriptorType task)
     Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
     Ensure ((__return == 1 && old_stat == TSK_SUSPEND) ||
             (__return == 0 && old_stat != TSK_SUSPEND)) &&
-            store_task_status(&(task->task_dync_sched_member.stat), old_stat)
+           store_task_status(&(task->task_dync_sched_member.stat), old_stat)
 */
 {
     NULL_PARAM_CHECK_1(task);

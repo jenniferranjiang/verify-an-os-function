@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "make_exit_code": 0,
+  "import_and_assumptions_exit_code": 0,
+  "compiled_files": [
+    "lib/idnode.v",
+    "lib/DoubleLinkListSpec.v",
+    "lib/AssignInv.v",
+    "lib/TaskInv.v",
+    "lib/DelayInv.v",
+    "lib/MutexInv.v",
+    "lib/EventInv.v",
+    "lib/MsgQueueInv.v",
+    "lib/IsrManagerInv.v",
+    "lib/SemaphoreInv.v",
+    "lib/KTaskDescriptor.v",
+    "lib/OsAssignReadyVector.v",
+    "lib/CrtosInv.v",
+    "lib/KSemaphoreCreate.v"
+  ],
+  "project_source_count": 52,
+  "stale_files": []
+}

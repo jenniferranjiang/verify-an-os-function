@@ -1,3 +1,4 @@
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskWakeup */
 /*
 * Copyright (c) 2020 AIIT XUOS Lab
 * XiUOS is licensed under Mulan PSL v2.
@@ -252,23 +253,16 @@ void AssignPolicyInsert(struct TaskDescriptor *task, struct OsAssignReadyVector*
       before == st.os_assign.assignReadyVector &&
       ready_table == assign_ready_vector_addr(sg) &&
       st.os_tasks.task_desc_map(task) == Some(desc) &&
-      task_fields(sg, st) *
-      assign_ready_pending(sg, st) *
+      task_fields(sg, st) * assign_ready_pending(sg, st) *
       occupy_dll_node(sched_link_of(task))
     Ensure
       task != 0 && ready_table != 0 &&
       st.os_tasks.task_desc_map(task) == Some(desc) &&
       exists new_bucket,
-        rrr_bucket_insert(
-          st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task),
-          Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
-          new_bucket) &&
-        task_fields(sg, replace_global_ready_vector(
-          assign_policy_insert_ready_vector(
-            before, desc.tdSchedMember, new_bucket), st)) *
-        assign_ready_pending(sg, replace_global_ready_vector(
-          assign_policy_insert_ready_vector(
-            before, desc.tdSchedMember, new_bucket), st))
+        rrr_bucket_insert(st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task),
+          Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil), new_bucket) &&
+        task_fields(sg, replace_global_ready_vector(assign_policy_insert_ready_vector(before, desc.tdSchedMember, new_bucket), st)) *
+        assign_ready_pending(sg, replace_global_ready_vector(assign_policy_insert_ready_vector(before, desc.tdSchedMember, new_bucket), st))
  */
 {
     /* 从已发布任务不变量取得后续标量读取所需的范围和基址对齐。 */
@@ -290,7 +284,8 @@ void AssignPolicyInsert(struct TaskDescriptor *task, struct OsAssignReadyVector*
     NULL_PARAM_CHECK_1(ready_table);
 
     RoundRobinRemainReadyVectorInsert(task, ready_table)
-        /*@ where sg = sg, st = st, desc = desc, before = before */;
+/*@ where sg = sg, st = st, desc = desc, before = before */
+;
 
     /*
      * Both NULL checks are preserved across the call.  Keeping the complete

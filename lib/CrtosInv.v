@@ -9,6 +9,7 @@ Require Export CRTOS_Verify.lib.DelayInv CRTOS_Verify.lib.TickInv.
 Require Export CRTOS_Verify.lib.ExstatusInv CRTOS_Verify.lib.Bitmap.
 Require Export CRTOS_Verify.lib.MutexInv CRTOS_Verify.lib.EventInv.
 Require Export CRTOS_Verify.lib.MsgQueueInv CRTOS_Verify.lib.IsrManagerInv.
+Require Export CRTOS_Verify.lib.SemaphoreInv.
 Import ListNotations DLL IDNode.
 Local Open Scope Z_scope.
 Local Open Scope string.
@@ -23,7 +24,8 @@ Definition os_sched_owners (st : VarGlobalState) : list addr :=
     (os_ready_nodes st.(os_assign).(assignReadyVector).(orvBuckets)) ++
   map (@getData addr) (zombie_nodes st.(zombie_queue)) ++
   mutex_waiters st.(os_mutexes) ++
-  msgqueue_waiters st.(os_msgqueues) ++ event_waiters st.(os_events).
+  msgqueue_waiters st.(os_msgqueues) ++ event_waiters st.(os_events) ++
+  semaphore_waiters st.(os_semaphores).
 
 (** 一个计数条件同时表达：已发布任务恰有一个 sched_link 所有者，未发布
     任务没有全局调度节点。无需另加 NoDup、两两不交或 owner 属于管理链：
@@ -44,7 +46,7 @@ Record os_world_wf (sg : StableGlobalState) (st : VarGlobalState) : Prop := {
 
 (**
   当前范围内的资源组合（msg_buf 缓冲区暂缓）。包含统一任务字段和独立调度节点；每个
-  模块只出现一次，三条 IPC 接口固定使用同一 task map 的纯等待关联。
+  模块只出现一次，四个 IPC 模块固定使用同一 task map 的纯等待关联。
   Bitmap 表在此唯一持有；Assign padding 只在 assign_inv 内。
   ISR/exstatus 的普通锁外访问、静态函数表读取及锁外回收仍有协议义务。
 *)
@@ -64,7 +66,8 @@ Definition os_inv (sg : StableGlobalState) (st : VarGlobalState) : Assertion :=
   msgqueue_inv wait sg.(os_msgqueue_stable) st.(os_msgqueues) **
   event_inv wait sg.(os_event_stable) st.(os_events) **
   isrmanager_inv sg.(os_isr_stable) st.(os_isr) **
-  exstatus_inv sg st.
+  exstatus_inv sg st **
+  semaphore_inv wait sg.(os_semaphore_stable) st.(os_semaphores).
 
 (** 定义域、唯一性与管理链包含关系都是总覆盖的推论，不重复存入 Record。 *)
 Lemma os_sched_owners_domain : forall sg st task,
@@ -112,6 +115,12 @@ Proof.
   apply NoDup_remove_2 in Hunique.
   apply Hunique.
   apply in_or_app; right; apply in_or_app; right.
-  apply in_or_app; right; apply in_or_app; right; exact Hwait.
+  apply in_or_app; right; apply in_or_app; right.
+  repeat rewrite <- app_assoc in *.
+  apply in_app_or in Hwait as [Hwait|Hwait].
+  - apply in_or_app; left; exact Hwait.
+  - apply in_or_app; right. apply in_app_or in Hwait as [Hwait|Hwait].
+    + apply in_or_app; left; exact Hwait.
+    + apply in_or_app; right; apply in_or_app; left; exact Hwait.
 Qed.
 

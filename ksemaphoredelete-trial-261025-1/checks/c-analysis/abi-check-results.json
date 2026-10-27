@@ -1,0 +1,76 @@
+[
+  {
+    "kind": "original",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-I",
+      "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/checks/c-analysis",
+      "-I",
+      "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+      "-I",
+      "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/risc-v/k210",
+      "-I",
+      "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/board/kd233/third_party_driver/include",
+      "-I",
+      "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/board/kd233/include",
+      "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/checks/c-analysis/abi-original.c"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "kind": "adapted",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-I",
+      "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/checks/c-analysis",
+      "-I",
+      "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/checks/c-analysis/adapted",
+      "-I",
+      "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+      "-I",
+      "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/risc-v/k210",
+      "-I",
+      "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/board/kd233/third_party_driver/include",
+      "-I",
+      "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/board/kd233/include",
+      "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/checks/c-analysis/abi-adapted.c"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "kind": "slice",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-I",
+      "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/checks/c-analysis",
+      "-I",
+      "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+      "-I",
+      "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/risc-v/k210",
+      "-I",
+      "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/board/kd233/third_party_driver/include",
+      "-I",
+      "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/board/kd233/include",
+      "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/checks/c-analysis/abi-slice.c"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

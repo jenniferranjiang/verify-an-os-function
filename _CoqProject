@@ -65,3 +65,14 @@ lib/dll.v
 lib/dll_abs.v
 lib/idnode.v
 lib/idnode_abs.v
+lib/DoubleLinkListSpec.v
+lib/KSemaphoreCreate.v
+lib/SemaphoreInv.v
+lib/SemaphoreState.v
+vendor/MonadLib/MonadErr/MonadErrHoare.v
+vendor/MonadLib/MonadErr/MonadErrLoop.v
+vendor/MonadLib/MonadErr/monadesafe_lib.v
+lib/KTaskUnSetDelay.v
+lib/KTaskWakeup.v
+lib/SemaphoreOps.v
+lib/KSemaphoreDelete.v

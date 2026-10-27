@@ -1,0 +1,35 @@
+COQDEP VFILES
+/home/xinra/.opam/pv-bench-8.20.1/bin/coq_makefile -f _CoqProject -o Makefile.coq
+Warning: ../qcp-binary-democases/Rocq/algorithms (used in -R or -Q) is not a subdirectory of the current directory
+
+Warning: No common logical root.
+Warning: In this case the -docroot option should be given.
+Warning: Otherwise the install-doc target is going to install files
+Warning: in orphan_Algorithms_Flocq_SimpleC.SL_Logic_SetsClass_compcert.lib_AUXLib_SimpleC.EE_SimpleC.StdLib_SimpleC.StrategyLib_SimpleC.Common_FP_MonadLib_ListLib_MaxMinLib_GraphLib_SumLib_TraceLib_RecordUpdate_CDCLLib_CRTOS_Verify.lib
+COQC lib/idnode.v
+COQC lib/DoubleLinkListSpec.v
+COQC lib/AssignInv.v
+COQC lib/TaskInv.v
+COQC lib/DelayInv.v
+COQC lib/MutexInv.v
+COQC lib/EventInv.v
+COQC lib/MsgQueueInv.v
+COQC lib/IsrManagerInv.v
+COQC lib/SemaphoreInv.v
+COQC lib/KTaskDescriptor.v
+COQC lib/OsAssignReadyVector.v
+COQC lib/CrtosInv.v
+COQC lib/KSemaphoreCreate.v
+@safeExec
+     : forall Σ A : Type,
+       (Σ -> Prop) -> program Σ A -> (A -> Σ -> Prop) -> Prop
+LastSeen
+     : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+abs_semaphore_create
+     : StableGlobalState -> Z -> program (VarGlobalState -> Prop) Z
+SemaphoreRaw
+     : CNotation.addr -> Assertion
+SemaphoreZero
+     : CNotation.addr -> Assertion
+CriticalNest
+     : Z -> Assertion

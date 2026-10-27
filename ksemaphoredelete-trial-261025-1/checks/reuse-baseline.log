@@ -1,0 +1,26 @@
+semaphore_inv
+     : (CNotation.addr -> CNotation.addr -> Assertion) ->
+       SemaphoreStable -> SemaphoreState -> Assertion
+SemaphoreRaw
+     : CNotation.addr -> Assertion
+IDNode.store_idmanager_removeobj_post
+     : StableIdmanager ->
+       VarIdmanager ->
+       CNotation.addr -> CNotation.addr -> BinNums.Z -> Assertion
+pure_suspend_sched_link
+     : (CNotation.addr -> option TaskDescriptorAbs) ->
+       CNotation.addr -> CNotation.addr -> Assertion
+delay_inv
+     : StableGlobalState -> VarGlobalState -> Assertion
+assign_inv
+     : StableGlobalState -> VarGlobalState -> Assertion
+os_inv
+     : StableGlobalState -> VarGlobalState -> Assertion
+InsideCritical
+     : StableGlobalState -> VarGlobalState -> Assertion
+OutsideCritical
+     : StableGlobalState -> VarGlobalState -> Assertion
+abs_ktask_assign
+     : MonadErrBasic.MonadErr.M (VarGlobalState -> Prop) unit
+
+exit_code=0

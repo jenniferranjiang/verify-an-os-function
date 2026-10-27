@@ -1,0 +1,58 @@
+[
+  {
+    "trial": "lib/TaskInv.v",
+    "global": "lib/TaskInv.v",
+    "reviewed_sha256": "53336f97119434443770031ec50f3569ac518250faacd06f53ff638fd711e653",
+    "global_baseline_sha256": "42b37050158a7acefd56f43d19dc22fa9face3d6dfc07778ad43ded54bae07ca",
+    "staged_sha256": "53336f97119434443770031ec50f3569ac518250faacd06f53ff638fd711e653",
+    "migration": "only local logical import prefixes change at merge"
+  },
+  {
+    "trial": "lib/SemaphoreInv.v",
+    "global": "lib/SemaphoreInv.v",
+    "reviewed_sha256": "19b64af60cb154dd5b8230034fe365dd21a4962eb0398eb6cabbee33cfd41ea7",
+    "global_baseline_sha256": "64455cd3c4448245365eb450481aa37c7e616e89e5ba29ed721d50147afb6c77",
+    "staged_sha256": "19b64af60cb154dd5b8230034fe365dd21a4962eb0398eb6cabbee33cfd41ea7",
+    "migration": "only local logical import prefixes change at merge"
+  },
+  {
+    "trial": "lib/CrtosInv.v",
+    "global": "lib/CrtosInv.v",
+    "reviewed_sha256": "72f16003633105296e9694e1f93a0b60a0e0dfd6c0e86e73bdcbaa118d77dcf9",
+    "global_baseline_sha256": "ddf29e1262bb2270d9c1e038e2378b26408b3174942d0c1d75aa8c9293d99f47",
+    "staged_sha256": "ddf29e1262bb2270d9c1e038e2378b26408b3174942d0c1d75aa8c9293d99f47",
+    "migration": "only local logical import prefixes change at merge"
+  },
+  {
+    "trial": "lib/KTaskUnSetDelay.v",
+    "global": "lib/KTaskUnSetDelay.v",
+    "reviewed_sha256": "2ae517e1ee113659326081bd8e9ec54eeb4b3274df4f60705b694a3d6f25daba",
+    "global_baseline_sha256": null,
+    "staged_sha256": "2ae517e1ee113659326081bd8e9ec54eeb4b3274df4f60705b694a3d6f25daba",
+    "migration": "only local logical import prefixes change at merge"
+  },
+  {
+    "trial": "lib/KTaskWakeup.v",
+    "global": "lib/KTaskWakeup.v",
+    "reviewed_sha256": "35800d60cdfd0ac652c7b70d9fb237bc396405d48ed1a98155ec6ad634006534",
+    "global_baseline_sha256": null,
+    "staged_sha256": "ea7b30179e2afad4eeb834727655562a93dc3f3013b9cead4ff921856b249eab",
+    "migration": "only local logical import prefixes change at merge"
+  },
+  {
+    "trial": "lib/SemaphoreOps.v",
+    "global": "lib/SemaphoreOps.v",
+    "reviewed_sha256": "dee519dd864ce99bc73e801e01eea1bde7d945151a90e7998bce8c80c5a075c9",
+    "global_baseline_sha256": null,
+    "staged_sha256": "dee519dd864ce99bc73e801e01eea1bde7d945151a90e7998bce8c80c5a075c9",
+    "migration": "only local logical import prefixes change at merge"
+  },
+  {
+    "trial": "lib/KSemaphoreDelete.v",
+    "global": "lib/KSemaphoreDelete.v",
+    "reviewed_sha256": "e9b1b1d70ece585e4f5ad6ad860cd8abfd897baf496867f491585c914f4e386a",
+    "global_baseline_sha256": null,
+    "staged_sha256": "c75726c92aa6bcb7db3c4065955a363c57d8af11141484f23e05d396c476f6f5",
+    "migration": "only local logical import prefixes change at merge"
+  }
+]

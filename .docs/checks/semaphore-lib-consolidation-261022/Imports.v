@@ -1,0 +1,32 @@
+Require Import CRTOS_Verify.lib.CrtosInv CRTOS_Verify.lib.DoubleLinkListSpec.
+Import IDNode.
+Check zero_idnode_insert_ready.
+Print Assumptions zero_idnode_insert_ready.
+Check semaphore_zero_insert_ready.
+Print Assumptions semaphore_zero_insert_ready.
+Check semaphore_id_ready_fields.
+Print Assumptions semaphore_id_ready_fields.
+Check semaphore_insert_failure_raw.
+Print Assumptions semaphore_insert_failure_raw.
+Check semaphore_two_zero_chars_ushort.
+Print Assumptions semaphore_two_zero_chars_ushort.
+Check semaphore_two_zero_bytes_ushort.
+Print Assumptions semaphore_two_zero_bytes_ushort.
+Check semaphore_four_zero_chars_ptr.
+Print Assumptions semaphore_four_zero_chars_ptr.
+Check semaphore_four_zero_bytes_ptr.
+Print Assumptions semaphore_four_zero_bytes_ptr.
+Check semaphore_zero_bytes_fields.
+Print Assumptions semaphore_zero_bytes_fields.
+Check semaphore_zero_bytes_object.
+Print Assumptions semaphore_zero_bytes_object.
+Check first_free_from_none_iff.
+Print Assumptions first_free_from_none_iff.
+Check idmanager_first_free_id_none_iff_full.
+Print Assumptions idmanager_first_free_id_none_iff_full.
+Check first_free_from_some_min.
+Print Assumptions first_free_from_some_min.
+Check idmanager_first_free_id_some_min.
+Print Assumptions idmanager_first_free_id_some_min.
+Check dll_insert_after_dispatch_at_head.
+Print Assumptions dll_insert_after_dispatch_at_head.

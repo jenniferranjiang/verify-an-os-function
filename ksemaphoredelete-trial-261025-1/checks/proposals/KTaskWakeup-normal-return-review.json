@@ -1,0 +1,13 @@
+{
+  "revision": "KTaskWakeup-normal-return-v1",
+  "status": "review-passed",
+  "reviewer": "/root/c_analysis",
+  "proposal_sha256": "f5eecbe205d0b0047187976da7098fe3d9d7031a973bad6d3f2715ff392b87f0",
+  "input": "QCP_examples/crtos_delete/spec_cases/KTaskWakeupNonNull.c",
+  "with_require": "byte-identical to existing wakeup_unified",
+  "ensure_delta": "target != 0 && original Ensure",
+  "original_interfaces_changed": false,
+  "shared_predicate_changed": false,
+  "proof_status": "not yet proved",
+  "authorization_basis": "Existing user instruction passing all human reviews based on checks; implement authorized; this additional contract is proved from C, not added as a trusted guarantee."
+}

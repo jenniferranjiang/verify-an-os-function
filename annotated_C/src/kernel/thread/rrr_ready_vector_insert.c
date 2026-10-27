@@ -1,3 +1,4 @@
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskWakeup */
 
 #include "m_ktask.h"
 #include "ready_views_strategy.h"

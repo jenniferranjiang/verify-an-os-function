@@ -1,0 +1,32 @@
+{
+  "revision": "KSemaphoreDelete-pred-r1",
+  "status": "review-ready",
+  "aggregate_sha256": "429b7de69063a6217c1ed349851fc76f2c166c054893daebd6fb30342e481515",
+  "files": [
+    {
+      "file": "lib/TaskInv.v",
+      "sha256": "53336f97119434443770031ec50f3569ac518250faacd06f53ff638fd711e653"
+    },
+    {
+      "file": "lib/CrtosInv.v",
+      "sha256": "85a283733f3b54e9eb2308c049e18b8fcfd11845f7d8de21ce1deb299d7c1991"
+    },
+    {
+      "file": "lib/KTaskUnSetDelay.v",
+      "sha256": "2ae517e1ee113659326081bd8e9ec54eeb4b3274df4f60705b694a3d6f25daba"
+    },
+    {
+      "file": "lib/KTaskWakeup.v",
+      "sha256": "35800d60cdfd0ac652c7b70d9fb237bc396405d48ed1a98155ec6ad634006534"
+    },
+    {
+      "file": "lib/SemaphoreOps.v",
+      "sha256": "dee519dd864ce99bc73e801e01eea1bde7d945151a90e7998bce8c80c5a075c9"
+    },
+    {
+      "file": "lib/KSemaphoreDelete.v",
+      "sha256": "e9b1b1d70ece585e4f5ad6ad860cd8abfd897baf496867f491585c914f4e386a"
+    }
+  ],
+  "scope": "adapted non-SMP 32-bit; DO_KTASK_ASSIGN model boundary per current skill; no implementation proof"
+}

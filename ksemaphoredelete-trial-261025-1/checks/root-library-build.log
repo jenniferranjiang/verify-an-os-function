@@ -1,0 +1,24 @@
+COQDEP VFILES
+COQC lib/TaskInv.v
+COQC lib/SemaphoreInv.v
+COQC lib/KTaskUnSetDelay.v
+COQC lib/SemaphoreOps.v
+COQC lib/CrtosInv.v
+COQC lib/KTaskWakeup.v
+COQC lib/KSemaphoreCreate.v
+@safeExec
+     : forall Σ A : Type,
+       (Σ -> Prop) -> program Σ A -> (A -> Σ -> Prop) -> Prop
+LastSeen
+     : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+abs_semaphore_create
+     : StableGlobalState -> Z -> program (VarGlobalState -> Prop) Z
+SemaphoreRaw
+     : CNotation.addr -> Assertion
+SemaphoreZero
+     : CNotation.addr -> Assertion
+CriticalNest
+     : Z -> Assertion
+COQC lib/KSemaphoreDelete.v
+
+exit_code=0

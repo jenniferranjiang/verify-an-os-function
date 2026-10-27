@@ -1,0 +1,11 @@
+--- annotated_C/src/headers/ktask_set_status.h (global baseline)
++++ annotated_C/src/headers/ktask_set_status.h (staged)
+@@ -5,7 +5,7 @@
+ #include "m_stdbool.h"
+ 
+ 
+-/*@ Import Coq Require Import CRTOS_Verify.libai.TaskStatusMemory */
++/*@ Import Coq Require Import CRTOS_Verify.lib.TaskStatusMemory */
+ /*@ include strategies "task_status.strategies" */
+ 
+ void KTaskStateSet(KTaskDescriptorType task, uint8 stat)

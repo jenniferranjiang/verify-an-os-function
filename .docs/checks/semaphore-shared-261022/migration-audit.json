@@ -1,0 +1,50 @@
+{
+  "normalized_source_equivalence": {
+    "lib/CrtosGlobState.v": true,
+    "lib/CrtosRules.v": true,
+    "lib/CrtosInv.v": true,
+    "lib/SemaphoreState.v": true,
+    "lib/SemaphoreInv.v": true,
+    "lib/DoubleLinkListSpec.v": true,
+    "lib/SemaphoreOwnership.v": true,
+    "lib/KSemaphoreCreate.v": true,
+    "lib/SemaphoreByteLayout.v": true,
+    "lib/SemaphoreSpecBridge.v": true,
+    "vendor/MonadLib/MonadErr/MonadErrHoare.v": true,
+    "vendor/MonadLib/MonadErr/MonadErrLoop.v": true,
+    "vendor/MonadLib/MonadErr/monadesafe_lib.v": true
+  },
+  "changed_existing_files": [
+    "lib/CrtosRules.v",
+    "lib/CrtosInv.v",
+    "lib/CrtosGlobState.v",
+    "_CoqProject",
+    "Makefile.coq",
+    "Makefile.coq.conf",
+    ".vscode/settings.json"
+  ],
+  "current_trial_sources_unchanged": 43,
+  "current_trial_shared_dependency_closure_unchanged": [
+    "AssignState",
+    "CrtosConfig",
+    "DelayState",
+    "EventState",
+    "IsrState",
+    "KTaskDelay",
+    "KTaskPure",
+    "MsgQueueState",
+    "MutexState",
+    "StructFieldOffsetAxiom",
+    "TaskState",
+    "TaskStatus",
+    "TickOrder",
+    "dll_abs",
+    "idnode_abs"
+  ],
+  "shared_library_files": 47,
+  "no_trial_imports": true,
+  "root_project_no_trial_paths": true,
+  "endianness": "Arch32 LittleEndian",
+  "promoted_axiom": "semaphore_field_offsets_trusted (unchanged from approved trial)",
+  "vendor_aborted_goal": "MonadErrHoare.Hoare_forall ends in Abort; no theorem or axiom exported"
+}

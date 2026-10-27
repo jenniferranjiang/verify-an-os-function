@@ -1,0 +1,60 @@
+--- annotated_C/src/headers/m_id.h (global baseline)
++++ annotated_C/src/headers/m_id.h (staged)
+@@ -154,7 +154,18 @@
+   (UCharArray::full : Z -> Z -> list Z -> Assertion)
+ */
+ 
+-void RemoveObj(struct IdManager *manager, struct IdNode *idnode)
++/*@ Extern Coq
++  (store_idnode : addr -> IdNodeAbs -> Assertion)
++*/
++
++void FreeId(struct IdManager *manager, uint16 id)
++/*@ found_node
++    With (sidm : StableIdmanager) (idm : VarIdmanager) (idnode : addr)
++    Require store_idmanager_found(sidm, idm, manager, idnode, id)
++    Ensure store_idmanager_remove_ready(sidm, idm, manager, idnode, id)
++ */;
++
++struct IdNode *RemoveObj(struct IdManager *manager, struct IdNode *idnode)
+ /*@ With (sidm: StableIdmanager) (idm: VarIdmanager) (id: Z)
+     Require store_idmanager_remove_ready(sidm, idm, manager, idnode, id)
+     Ensure store_idmanager_removeobj_post(sidm, idm, manager, idnode, id)
+@@ -182,18 +193,24 @@
+            store_node_self_linked(&(idnode->link))
+ */
+ /*@ current_node
+-    With (sidm: StableIdmanager) (idm: VarIdmanager) (idnode: addr)
+-    Require manager != 0 &&
+-            0 <= id && id < 65536 &&
+-            store_idmanager_remove_ready(sidm, idm, manager, idnode, id)
+-    Ensure idnode != 0 &&
+-           &(idnode->link) != 0 &&
+-           store_idmanager_removeobj_post(sidm, idm, manager, idnode, id)
+-*/
+-;
+-
+-/*@ Extern Coq
+-  (store_idnode : addr -> IdNodeAbs -> Assertion)
+-*/
++    With (sidm : StableIdmanager) (idm : VarIdmanager) (idnode : addr)
++    Require store_idmanager_found(sidm, idm, manager, idnode, id)
++    Ensure store_idmanager(sidm, idmanager_remove(sidm, idm, id), manager) *
++      store_idnode(&(idnode->link), Build_IdNodeAbs(65535, idnode)) *
++      store_node_self_linked(&(idnode->link))
++ */
++/*@ found_node
++    With (sidm : StableIdmanager) (idm : VarIdmanager) (idnode : addr)
++    Require store_idmanager_found(sidm, idm, manager, idnode, id)
++    Ensure store_idmanager(sidm, idmanager_remove(sidm, idm, id), manager) *
++      store_idnode(&(idnode->link), Build_IdNodeAbs(65535, idnode)) *
++      store_node_self_linked(&(idnode->link))
++ */
++/*@ absent_node
++    With (sidm : StableIdmanager) (idm : VarIdmanager)
++    Require idmanager_query(idm, id) == false && store_idmanager(sidm, idm, manager)
++    Ensure store_idmanager(sidm, idm, manager)
++ */
++;
+ 
+ #endif

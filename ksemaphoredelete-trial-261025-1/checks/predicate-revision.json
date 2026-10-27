@@ -1,0 +1,46 @@
+{
+  "revision": "KSemaphoreDelete-pred-r4",
+  "status": "review-passed",
+  "base_revision": "KSemaphoreDelete-pred-r3",
+  "aggregate_sha256": "d8996d5d10fe14e0a1a9379b9f9a4bd71235860c232bc324e946913e56dd6e67",
+  "files": [
+    {
+      "file": "../lib/CrtosInv.v",
+      "snapshot_file": "shared/lib/CrtosInv.v",
+      "sha256": "ddf29e1262bb2270d9c1e038e2378b26408b3174942d0c1d75aa8c9293d99f47"
+    },
+    {
+      "file": "../lib/KSemaphoreDelete.v",
+      "snapshot_file": "shared/lib/KSemaphoreDelete.v",
+      "sha256": "c75726c92aa6bcb7db3c4065955a363c57d8af11141484f23e05d396c476f6f5"
+    },
+    {
+      "file": "../lib/KTaskUnSetDelay.v",
+      "snapshot_file": "shared/lib/KTaskUnSetDelay.v",
+      "sha256": "2ae517e1ee113659326081bd8e9ec54eeb4b3274df4f60705b694a3d6f25daba"
+    },
+    {
+      "file": "../lib/KTaskWakeup.v",
+      "snapshot_file": "shared/lib/KTaskWakeup.v",
+      "sha256": "b7dc13fe58fd0f1019efe74d732afe45189d05a9da01e2a99b8c873781baa701"
+    },
+    {
+      "file": "../lib/SemaphoreInv.v",
+      "snapshot_file": "shared/lib/SemaphoreInv.v",
+      "sha256": "19b64af60cb154dd5b8230034fe365dd21a4962eb0398eb6cabbee33cfd41ea7"
+    },
+    {
+      "file": "../lib/SemaphoreOps.v",
+      "snapshot_file": "shared/lib/SemaphoreOps.v",
+      "sha256": "dee519dd864ce99bc73e801e01eea1bde7d945151a90e7998bce8c80c5a075c9"
+    },
+    {
+      "file": "../lib/TaskInv.v",
+      "snapshot_file": "shared/lib/TaskInv.v",
+      "sha256": "53336f97119434443770031ec50f3569ac518250faacd06f53ff638fd711e653"
+    }
+  ],
+  "scope": "Add the pure tasks_ready_with_exstatus result property; existing definitions unchanged.",
+  "review_record": ".docs/Report/predicate-review.md",
+  "validation_record": "checks/ready-exstatus/shared-build.json"
+}

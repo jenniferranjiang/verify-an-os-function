@@ -1,0 +1,347 @@
+[
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c"
+    ],
+    "returncode": 0,
+    "output": "ksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c: In function \u2018AssignPolicyInsert\u2019:\nksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c:56:32: warning: unused variable \u2018tmp\u2019 [-Wunused-variable]\n   56 |         struct TaskDescriptor *tmp = NONE;\n      |                                ^~~\nksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c:55:29: warning: unused variable \u2018tail\u2019 [-Wunused-variable]\n   55 |         DoubleLinklistType* tail = NONE;\n      |                             ^~~~\nksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c:54:29: warning: unused variable \u2018node\u2019 [-Wunused-variable]\n   54 |         DoubleLinklistType* node = NONE;\n      |                             ^~~~\n"
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListInsertNodeAfter.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListInsertNodeBefore.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListInsertNodeBefore.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListRmNode.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListRmNode.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/FreeId.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/FreeId.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/GetObj.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/GetObj.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/GetTaskWithIdnodeInfo.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/GetTaskWithIdnodeInfo.c"
+    ],
+    "returncode": 0,
+    "output": "ksemaphoredelete-trial-261025-1/annotated_C/src/GetTaskWithIdnodeInfo.c: In function \u2018GetTaskWithIdnodeInfo\u2019:\nksemaphoredelete-trial-261025-1/annotated_C/src/GetTaskWithIdnodeInfo.c:66:12: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n   66 |     x_base lock = 0;\n      |            ^~~~\n"
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/IdGetObj.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/IdGetObj.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/IdRemoveObj.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/IdRemoveObj.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/InitDoubleLinkList.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/InitDoubleLinkList.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/IsDoubleLinkListEmpty.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/IsDoubleLinkListEmpty.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/JudgeKTaskStatIsSuspend.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/JudgeKTaskStatIsSuspend.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/KSemaphoreDelete.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/KSemaphoreDelete.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskInsertToReadyVector.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskInsertToReadyVector.c"
+    ],
+    "returncode": 0,
+    "output": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskInsertToReadyVector.c: In function \u2018KTaskInsertToReadyVector\u2019:\nksemaphoredelete-trial-261025-1/annotated_C/src/KTaskInsertToReadyVector.c:52:12: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n   52 |     x_base lock = 0;\n      |            ^~~~\n"
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskStatSetAsReady.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskStatSetAsReady.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskStateSet.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskStateSet.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskUnSetDelay.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskUnSetDelay.c"
+    ],
+    "returncode": 0,
+    "output": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskUnSetDelay.c: In function \u2018KTaskUnSetDelay\u2019:\nksemaphoredelete-trial-261025-1/annotated_C/src/KTaskUnSetDelay.c:122:16: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n  122 |         x_base lock = 0;\n      |                ^~~~\n"
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskWakeup.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskWakeup.c"
+    ],
+    "returncode": 0,
+    "output": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskWakeup.c: In function \u2018KTaskWakeup\u2019:\nksemaphoredelete-trial-261025-1/annotated_C/src/KTaskWakeup.c:308:12: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n  308 |     x_base lock = 0;\n      |            ^~~~\n"
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/LinklistResumeAll.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/LinklistResumeAll.c"
+    ],
+    "returncode": 0,
+    "output": "ksemaphoredelete-trial-261025-1/annotated_C/src/LinklistResumeAll.c: In function \u2018LinklistResumeAll\u2019:\nksemaphoredelete-trial-261025-1/annotated_C/src/LinklistResumeAll.c:77:13: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n   77 |     x_ubase lock = 0;\n      |             ^~~~\n"
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/RemoveObj.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/RemoveObj.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/RoundRobinRemainReadyVectorInsert.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/RoundRobinRemainReadyVectorInsert.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/_KTaskWakeup.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/_KTaskWakeup.c"
+    ],
+    "returncode": 0,
+    "output": "ksemaphoredelete-trial-261025-1/annotated_C/src/_KTaskWakeup.c: In function \u2018_KTaskWakeup\u2019:\nksemaphoredelete-trial-261025-1/annotated_C/src/_KTaskWakeup.c:369:12: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n  369 |     x_base lock = 0;\n      |            ^~~~\n"
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/_SemaphoreDelete.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "ksemaphoredelete-trial-261025-1/annotated_C/src/_SemaphoreDelete.c"
+    ],
+    "returncode": 0,
+    "output": ""
+  }
+]

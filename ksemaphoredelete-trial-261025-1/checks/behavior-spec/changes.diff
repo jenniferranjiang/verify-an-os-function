@@ -1,0 +1,84 @@
+--- r3/annotated_C/src/LinklistResumeAll.c
++++ r4/annotated_C/src/LinklistResumeAll.c
+@@ -63,23 +63,32 @@
+         assign_ready_pending(sg, replace_global_ready_vector(ready_after, replace_task_desc_map(update_task_desc_map(target, set_task_desc_ready(desc), st.os_tasks.task_desc_map), st_delay)))
+  */;
+ 
++/* waiting 是调用前的挂起任务序列。正常返回时原等待任务均为 READY、
++ * exstatus=-ERROR，等待链为空；steps 还约束逐项唤醒的顺序和其余状态变化。 */
+ x_err_t LinklistResumeAll(DoubleLinklistType *list)
+ /*@ semaphore_waiters
+-    With (sg : StableGlobalState) (st : VarGlobalState) (sem : SemaphoreAbs)
+-    Require In(sem, st.os_semaphores) &&
++    With (sg : StableGlobalState) (before : VarGlobalState)
++         (sem : SemaphoreAbs) (waiting : list addr)
++    Require In(sem, before.os_semaphores) &&
++      waiting == sem.semaphore_pending_addrs &&
+       list == semaphore_pending_head(sem.semaphore_addr) &&
+       os_global_context(sg) &&
+-      task_fields(sg, st) *
+-      delay_inv(sg, st) *
+-      assign_ready_pending(sg, st) *
+-      store_dll(pure_suspend_sched_link(st.os_tasks.task_desc_map),
+-        list, map(semaphore_wait_node, sem.semaphore_pending_addrs))
++      task_fields(sg, before) *
++      delay_inv(sg, before) *
++      assign_ready_pending(sg, before) *
++      store_dll(pure_suspend_sched_link(before.os_tasks.task_desc_map),
++        list, map(semaphore_wait_node, waiting))
+     Ensure __return == KOK && exists after,
+-      semaphore_resume_all_steps(sem.semaphore_addr, sem.semaphore_pending_addrs, st, after) &&
++      (forall (task : addr), In(task, waiting) =>
++        (exists (desc : TaskDescriptorAbs),
++          after.os_tasks.task_desc_map(task) == Some(desc) &&
++          desc.tdSchedMember.tsmStat == TSK_READY &&
++          desc.tdExstatus == -ERROR)) &&
++      semaphore_resume_all_steps(sem.semaphore_addr, waiting, before, after) &&
+       task_fields(sg, after) *
+       delay_inv(sg, after) *
+       assign_ready_pending(sg, after) *
+-      store_node_self_linked(list)
++      store_dll(pure_suspend_sched_link(after.os_tasks.task_desc_map), list, nil)
+  */
+ {
+     x_ubase lock = 0;
+--- r3/annotated_C/src/_SemaphoreDelete.c
++++ r4/annotated_C/src/_SemaphoreDelete.c
+@@ -72,21 +72,28 @@
+ 
+ x_err_t LinklistResumeAll(DoubleLinklistType *list)
+ /*@ semaphore_waiters
+-    With (sg : StableGlobalState) (st : VarGlobalState) (sem : SemaphoreAbs)
+-    Require In(sem, st.os_semaphores) &&
++    With (sg : StableGlobalState) (before : VarGlobalState)
++         (sem : SemaphoreAbs) (waiting : list addr)
++    Require In(sem, before.os_semaphores) &&
++      waiting == sem.semaphore_pending_addrs &&
+       list == semaphore_pending_head(sem.semaphore_addr) &&
+       os_global_context(sg) &&
+-      task_fields(sg, st) *
+-      delay_inv(sg, st) *
+-      assign_ready_pending(sg, st) *
+-      store_dll(pure_suspend_sched_link(st.os_tasks.task_desc_map),
+-        list, map(semaphore_wait_node, sem.semaphore_pending_addrs))
++      task_fields(sg, before) *
++      delay_inv(sg, before) *
++      assign_ready_pending(sg, before) *
++      store_dll(pure_suspend_sched_link(before.os_tasks.task_desc_map),
++        list, map(semaphore_wait_node, waiting))
+     Ensure __return == KOK && exists after,
+-      semaphore_resume_all_steps(sem.semaphore_addr, sem.semaphore_pending_addrs, st, after) &&
++      (forall (task : addr), In(task, waiting) =>
++        (exists (desc : TaskDescriptorAbs),
++          after.os_tasks.task_desc_map(task) == Some(desc) &&
++          desc.tdSchedMember.tsmStat == TSK_READY &&
++          desc.tdExstatus == -ERROR)) &&
++      semaphore_resume_all_steps(sem.semaphore_addr, waiting, before, after) &&
+       task_fields(sg, after) *
+       delay_inv(sg, after) *
+       assign_ready_pending(sg, after) *
+-      store_node_self_linked(list)
++      store_dll(pure_suspend_sched_link(after.os_tasks.task_desc_map), list, nil)
+  */;
+ 
+ void IdRemoveObj(struct IdManager *manager, uint16 id)

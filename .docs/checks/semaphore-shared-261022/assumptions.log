@@ -1,0 +1,197 @@
+store_2byte =
+fun (x : CNotation.addr) (v : BinNums.Z) =>
+(EX z1 : BinNums.Z,
+ EX z2 : BinNums.Z,
+ “ merge_short z1 z2 v ” &&
+ store_byte x z1 ** store_byte (BinInt.Z.add x (BinNums.Zpos BinNums.xH)) z2)%sac
+     : CNotation.addr -> BinNums.Z -> Assertion
+
+Arguments store_2byte x v%Z_scope _
+Axioms:
+CNotation.rvalue_expr_equiv :
+  CNotation.rvalue_expr -> CNotation.rvalue_expr -> Prop
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr_congr :
+  Morphisms.Proper (Morphisms.respectful CNotation.rvalue_expr_equiv eq)
+    CNotation.eval_addr_expr
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+eval_addr :
+  forall (R : CNotation.rvalue_expr) (t : CNotation.front_end_type),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_const (CNotation.eval_addr_expr R) t) R
+addr_of_arrow_field :
+  forall (L : CNotation.lvalue_expr) (x : String.string),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_addr_of (CNotation.LE_dot_field L x))
+    (CNotation.RE_addr_of
+       (CNotation.LE_arrow_field (CNotation.RE_addr_of L) x))
+CNotation.RE_addr_of_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       CNotation.rvalue_expr_equiv) CNotation.RE_addr_of
+CNotation.LE_arrow_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.rvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_arrow_field
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.rvalue_expr_equiv :
+  CNotation.rvalue_expr -> CNotation.rvalue_expr -> Prop
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr_congr :
+  Morphisms.Proper (Morphisms.respectful CNotation.rvalue_expr_equiv eq)
+    CNotation.eval_addr_expr
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+eval_addr :
+  forall (R : CNotation.rvalue_expr) (t : CNotation.front_end_type),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_const (CNotation.eval_addr_expr R) t) R
+addr_of_arrow_field :
+  forall (L : CNotation.lvalue_expr) (x : String.string),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_addr_of (CNotation.LE_dot_field L x))
+    (CNotation.RE_addr_of
+       (CNotation.LE_arrow_field (CNotation.RE_addr_of L) x))
+CNotation.RE_addr_of_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       CNotation.rvalue_expr_equiv) CNotation.RE_addr_of
+CNotation.LE_arrow_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.rvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_arrow_field
+Axioms:
+CNotation.rvalue_expr_equiv :
+  CNotation.rvalue_expr -> CNotation.rvalue_expr -> Prop
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr_congr :
+  Morphisms.Proper (Morphisms.respectful CNotation.rvalue_expr_equiv eq)
+    CNotation.eval_addr_expr
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+eval_addr :
+  forall (R : CNotation.rvalue_expr) (t : CNotation.front_end_type),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_const (CNotation.eval_addr_expr R) t) R
+addr_of_arrow_field :
+  forall (L : CNotation.lvalue_expr) (x : String.string),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_addr_of (CNotation.LE_dot_field L x))
+    (CNotation.RE_addr_of
+       (CNotation.LE_arrow_field (CNotation.RE_addr_of L) x))
+CNotation.RE_addr_of_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       CNotation.rvalue_expr_equiv) CNotation.RE_addr_of
+CNotation.LE_dot_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_dot_field
+CNotation.LE_arrow_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.rvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_arrow_field
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.rvalue_expr_equiv :
+  CNotation.rvalue_expr -> CNotation.rvalue_expr -> Prop
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr_congr :
+  Morphisms.Proper (Morphisms.respectful CNotation.rvalue_expr_equiv eq)
+    CNotation.eval_addr_expr
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+eval_addr :
+  forall (R : CNotation.rvalue_expr) (t : CNotation.front_end_type),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_const (CNotation.eval_addr_expr R) t) R
+addr_of_arrow_field :
+  forall (L : CNotation.lvalue_expr) (x : String.string),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_addr_of (CNotation.LE_dot_field L x))
+    (CNotation.RE_addr_of
+       (CNotation.LE_arrow_field (CNotation.RE_addr_of L) x))
+CNotation.RE_addr_of_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       CNotation.rvalue_expr_equiv) CNotation.RE_addr_of
+CNotation.LE_dot_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_dot_field
+CNotation.LE_arrow_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.rvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_arrow_field
+Axioms:
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+Axioms:
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+Closed under the global context
+Closed under the global context
+Closed under the global context
+Closed under the global context
+Closed under the global context

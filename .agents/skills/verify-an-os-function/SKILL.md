@@ -16,6 +16,7 @@ Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。
 ```text
 确认验证上下文 -> C 分析 -> predicate 与 spec 草案迭代
              -> predicate review-passed -> spec review-passed
+             -> 自动合并 trial 库及复用 spec 的增量修改到全局目录并完成一致性检查
              -> 用户确认两份 revision
              -> QCP verification-orchestrator implement（含 final-check）
              -> 最终完整性审阅与结果汇总
@@ -51,15 +52,15 @@ owned memory、mutable fields、lifecycle states 和 unchanged resources。隐�
 
 ### 已有定义复用
 
-开始设计前先读取 CRTOS 全局库 `/home/xinra/crtos/lib`。已有定义直接导入复用，不重复定义。QCP 库及 LOSVerify、VRTOS 的证明参考位置见 [库与证明参考](#库与证明参考)。
+开始设计前先读取 CRTOS 全局库 `/home/xinra/crtos/lib`。已有定义直接导入复用，不重复定义。当前工程 annotated C、QCP 库及 crtosverify、LOSVerify、VRTOS 的证明参考位置见 [库与证明参考](#库与证明参考)。
 
 新增定义放入职责对应的模块文件，使用处通过 `Require Import` 引用；需要向下游公开的接口使用 `Require Export`。已有模块增加元素或操作时，在该模块中增量补充；新增模块时，由全局状态或系统不变量导入并增加必要的组合项，不复制整套共享定义。
 
-共享定义可以直接在 `/home/xinra/crtos/lib/` 对应文件中增补或修改，无需先复制到 trial。当前实验专用、尚在探索的定义可放在 trial 的 `lib/`；这些文件通过审阅及编译或类型检查后，也可以复制到共享库并重新编译，不要求被多个模块或 trial 使用。修改已有文件时检查修改处及受影响内容，新建文件时检查完整文件。
+已有共享库允许按源码和验证需求增补或修改；无需修改的定义直接导入，需要修改的文件在 trial 副本中处理。修改范围、依赖调整与审阅要求统一按 [工程配置指南](references/project-configuration-guide.md#已有共享库的复用与修改)执行。
 
 ### 文件组织与存放
 
-Trial 中用于实验的 Rocq 库源文件，无论是本次新增的定义，还是从共享库复制并在本次使用或修改的文件，都统一放在 `trial/lib/`。模块职责通过文件划分，依赖通过 imports 和构建配置管理。
+`trial/lib/` 只保存本次需要修改的全局库文件副本及新增库文件。如果当前实验使用的其他库文件必须修改 import、类型或接口，才能引用 trial 中的新定义，也将这些文件复制到 trial 后修改；无需改动的库文件继续直接引用全局版本。模块职责通过文件划分，依赖通过 imports 和构建配置管理，确保本次构建使用一致的定义版本。
 
 参考 LiteOS 验证工程 `/home/xinra/LOS_Verify/lib/` 的职责分层：
 `glob_vars_and_defs.v` 保存稳定全局变量及公共基础定义，`Los_Verify_State_def.v`
@@ -81,9 +82,13 @@ OS 总状态时，将模块纯状态放在不依赖全局协议的 `semaphore_de
 供全局状态和模块内存表示共同import。上述名称仅作示例；是否单设
 `glob_vars_and_defs.v` 取决于稳定全局上下文或公共基础定义是否需要独立的依赖层。
 
-文件按上述职责放入共享库或当前 trial。Trial 中的模块文件和函数专用文件均可在文件及必要依赖通过对应审阅后复制到共享 `lib/`；更新使用处的 imports 和必要的全局组合，并使用根项目配置重新编译复制的文件及受影响的依赖者。Trial 中保留此次通过审阅的版本，但避免它与共享版本在构建路径中相互遮蔽。
+### 审阅后自动合并库
 
-当前任务范围内的共享库修改，以及通过审阅后的 trial 文件复制与重新编译，无需另设一次共享库更新确认。若改变已有定义的含义或接口，应说明原因和影响，更新受影响的构造、操作、规格与证明，并按审阅规则复查相关结论。不得覆盖其他人的修改；依赖、索引和路径配置按 [工程配置指南](references/project-configuration-guide.md#共享库的增量维护)处理。进入实现证明前的 predicate/spec revision 确认要求仍按总流程执行。
+在完整验证流程中，predicate 和 spec 均达到 `review-passed` 后，main agent 必须主动将本次修改及新增的库文件合并到全局 `lib/`，包括模块文件和函数专用文件，不要求已被多个 trial 使用。无需另行请求共享库更新确认，也不等到实现证明结束才合并。审阅结束但未通过时不得合并。用户仅要求只读 review 时仍遵守该范围。
+
+按复制时的基线、trial 修改版及全局最新版本合并已有文件，保留其他工作；必要的新增依赖一并纳入全局库，全局库不得依赖 trial 文件或专属路径。按 [工程配置指南](references/project-configuration-guide.md#共享库的增量维护)更新 imports、索引、全局组合和相关配置，将当前 trial 对已合并定义的引用切回全局库。审阅留存副本不再参与构建。
+
+使用根项目配置重新编译新增、修改的库文件及受影响的依赖者，并检查当前 trial 的引用与类型一致性；不得用 trial 的旧编译产物充当检查结果。检查通过后才报告合并完成。纯路径迁移且不改变已审阅语义时记录迁移对应关系即可；若合并必须改变定义含义或接口，说明原因和影响，更新受影响的构造、操作、规格与证明，并重新审阅受影响部分。进入实现证明前的 predicate/spec revision 确认要求仍按总流程执行。
 
 
 ### 定义注释与文件顺序
@@ -108,21 +113,24 @@ Predicate 设计记录按 [验证记录指南](references/reporting-guide.md)编
 ### 验证范围
 
 进入本模式前必须完整阅读 [spec-writing-guide.md](references/spec-writing-guide.md)。默认使用**扁平的
-一函数一文件切片**。验证闭包从用户指定的目标函数开始，在当前配置下递归跟随
-全部直接调用、可唯一解析的 function pointer/done-table dispatch，以及 function-like 宏展开后产生的
-真实函数调用，直到函数叶子或用户批准的 `trusted` 函数。Main agent 可以建议将复杂函数排除出
+一函数一文件切片**。先按当前配置和 [源代码处理](references/源代码处理.md) 完成源码适配，
+再从目标函数沿适配后切片中的直接调用、已解析的 function pointer/done-table dispatch 和宏展开后的调用
+确定验证闭包。以文档规定的模型或 API contract 为边界，不再递归其原始内部调用。
+从根 `annotated_C/` 导入复用的依赖 spec 按下节作为 `reused-spec` 边界，不递归其内部调用安排实现证明。
+其余调用递归至函数叶子或用户批准的 `trusted` 函数。Main agent 可以建议将复杂函数排除出
 验证闭包，但不得代替用户决定。无法唯一解析的调用须说明调用位置和无法确定目标的原因，解决前阻塞 review。
 
-### 参考与文件组织
+### 已有 spec 复用与文件组织
 
-写 spec 时可先参考 `/home/xinra/crtos/annotated_C/` 中已有的 annotated C；它们只作为参考，
-当前目标仍须按权威源码、配置和本流程在 trial 中建立并审阅自己的 canonical spec。
+写 spec 时先查 `/home/xinra/crtos/annotated_C/`，已有 spec 应导入 trial 并完成保持原语义的适配。复用、修改、场景特化及审阅后合并统一按 [工程配置指南](references/project-configuration-guide.md#annotated-c-的增量维护)执行。
 
-- 闭包中每个非 `trusted` 函数 `f` 必须且只能有一个 `annotated_C/src/f.c`，其中包含 `f` 的一个真实
+从该目录导入复用已有 spec 的依赖函数，本轮不生成其实现的 VC，也不重新证明函数体；记录为 `reused-spec` 边界并检查适用性及接口一致性。具体范围与新增、修改规格的处理见 [已有 spec 的复用与特化](references/project-configuration-guide.md#已有-spec-的复用与特化)。
+
+- 闭包中保留实现验证的每个非 `trusted` 函数 `f` 必须且只能有一个 `annotated_C/src/f.c`，其中包含 `f` 的一个真实
   active 定义、完整函数体和 canonical `With/Require/Ensure`；declaration-only 文件不合格。
 - `f.c` 中调用 `g` 时，只在 `f` 的定义前写 `g` 的完整 declaration-only API spec，不复制
-  `g` 的函数体。`g` 必须在闭包中有自己的 active canonical 文件，或由用户批准为 `trusted`；
-  前者的 caller-local contract 必须与 canonical spec alpha/typedef 等价。
+  `g` 的函数体。`g` 必须在闭包中有自己的 active canonical 文件、属于上述源码适配的模型/API 或 `reused-spec` 边界，或由用户批准为 `trusted`；
+  前者的 caller-local contract 必须与 canonical 文件中所选的同名 spec alpha/typedef 等价，包含新增的具名特化 spec；不得只在 caller 中另写一份不受 canonical 管理的规格。
 
 ### 函数约定与表达
 
@@ -131,22 +139,27 @@ Predicate 设计记录按 [验证记录指南](references/reporting-guide.md)编
 
 ### 宏展开与源码切片
 
-- Function-like 宏先按当前配置展开：展开产生的真实函数调用继续加入闭包；空宏、常量和纯
-  类型/布局宏不产生函数；展开产生的可执行语句在 caller 切片中作有源码依据的等价归一，
-  不为源码中不存在的宏虚构 canonical 函数。
+处理源码到验证切片的转换时，按照 [源代码处理](references/源代码处理.md) 执行，并结合当前配置与 TrustBase 核对适用条件。
+其中明确规定的适配优先于下述一般宏展开与源码等价要求。
+
+- Function-like 宏先按《源代码处理》选择适用的处理方式。没有规定抽象替换的宏按当前配置展开，
+  展开后保留的调用继续加入闭包；空宏、常量和纯类型/布局宏不产生函数。
+  允许使用文档规定的宏替代函数及其 spec；其余可执行语句在 caller 中等价归一，不自行发明替代 API。
 - 不得集中建立模块级 `*_specs.h`。
 - 不按目录复制整套 kernel/libc source tree 或无关 headers；已进入闭包的 kernel/libc
   函数仍按一函数一文件切片。切片只保留当前函数真正需要的声明；若正文按字段访问 struct，声明必须保持被访问字段的真实 ABI offset，
   否则把该字段操作整体抽成具名 API，不得发明错误的精简布局。
-- 从权威 C 提取单函数切片时，不改算法、路径、返回值或副作用。parser 所需的等价
+- 除《源代码处理》明确规定且适用的适配外，从权威 C 提取单函数切片时，不改算法、路径、返回值或副作用。parser 所需的等价
   拆句、宏展开、dispatch 解析和 static-to-slice-external 归一必须逐项记录并审阅；没有用户
   批准或源码/配置依据时不得做语义替换。
 
 ### 闭包检查与审阅准备
 
-结束 `write-spec` 前必须从目标函数重新扫描完整可达闭包。目标函数及每个递归可达 symbol 都必须
-恰好满足一项：由用户批准为 `trusted` 并记录 contract；或者具有唯一同名文件、active body、
-canonical spec 和一致的 caller-local contracts。
+结束 `write-spec` 前必须从适配后的目标函数重新扫描完整可达闭包。目标函数及每个递归可达 symbol 都必须
+恰好满足一项：属于《源代码处理》规定且适用的模型/API 边界，并记录规则及 contract；
+属于 `reused-spec` 边界，并记录原 spec 来源、revision 及一致的导入 contract；
+由用户批准为 `trusted` 并记录 contract；或者具有唯一同名文件、active body、canonical spec 和一致的 caller-local contracts。
+模型/API 与 `reused-spec` 边界的 caller-local contracts 同样须与所采用接口一致；已按规则删除、替换或由复用 spec 覆盖的内部调用不作为实现闭包缺失。
 任何缺失、裸 call、未解析 dispatch/宏调用或多重归类都是 blocker。此模式只设计和审阅 spec，
 不启动 QCP verification-orchestrator。Predicate `review-passed`
 前不得进入 spec review 或请求用户批准。
@@ -175,10 +188,10 @@ Rocq predicate 文件通过 compile/typecheck，annotated C 已完成人工结�
 ## `implement`
 
 只有用户明确确认 review-passed predicate/spec revisions 后才能进入。Main agent 在这里读取
-`/home/xinra/qcp-binary-democases/AGENTS.md`，从其中指定的 `verification-orchestrator` 启动 QCP workflow，
+`/home/xinra/qcp-binary-democases/AGENTS.md`，按[沿用现有工程](references/implementation-and-validation-guide.md#沿用现有工程)要求由 QCP 工具适配本 OS 的 trial 格式，从其中指定的 `verification-orchestrator` 启动 QCP workflow，
 把已批准 predicate/spec 作为冻结输入，然后只执行 controller 返回的 action，直到 `done` 或明确 blocker。
 
-交接时提供 TrustBase 文件路径；trusted contract 不作为已完成的实现证明计数。
+交接时提供 TrustBase 文件路径，并明确本轮实现证明目标与 `reused-spec` 清单；导入复用函数不提交为 VC/函数体证明目标。trusted 和 reused-spec contract 均不作为本轮新完成的实现证明计数。
 
 Annotation、spec、predicate、VC 和 proof 的诊断、修正与重试全部由该 workflow 按自己的规则处理；
 main agent 不再定义第二套步骤或返回状态。具体调用边界见
@@ -201,7 +214,7 @@ main agent 不再定义第二套步骤或返回状态。具体调用边界见
 
 具体检查按目标代码及设计选择适用项，不要求逐项写报告；适用的编译、类型或证明检查须通过，影响正确性的未解决问题仍阻塞审阅通过。
 
-Spec 审阅使用明确的、已通过审阅的 predicate 版本。两者分别 `review-passed` 后，请用户确认两份明确版本；确认前不得启动 QCP verification-orchestrator。
+Spec 审阅使用明确的、已通过审阅的 predicate 版本。在完整验证流程中，两者分别 `review-passed` 后，main agent 先按[审阅后自动合并库](#审阅后自动合并库)完成合并与依赖检查，再请用户确认两份明确版本及其迁移对应关系；确认前不得启动 QCP verification-orchestrator。库编译与引用、类型检查不替代后续实现证明，也不提前运行 QCP symbolic 或生成 VC。
 
 ### 审阅与复查
 
@@ -221,21 +234,28 @@ Predicate/spec 草案（`draft`）可以共同修改，不做中间审阅。满�
 
 每个 trial 维护自己的 `_CoqProject`；全局 `lib/` 由 CRTOS 根目录的 `_CoqProject` 统一管理，不依赖某个 trial 的配置或实验文件。各 trial 显式配置对全局库的引用，本地实验定义使用独立逻辑路径。确保构建工具、QCP 和编辑器使用一致的库路径；路径变化后同步配置并重新编译受影响的文件。配置或调整路径时参考 [工程配置指南](references/project-configuration-guide.md)。
 
-验证以当前配置下的真实 CRTOS 源码为准。完整源码模式只修改注解；单函数切片允许为工具适配进行不改变程序行为的转换，并在 spec review 中说明转换位置、理由及源码依据。不得改变算法、遗漏执行路径或副作用，也不得使用错误的数据布局。转换示例见 [Spec 编写指南](references/spec-writing-guide.md#单函数切片的等价转换)。
+验证以当前配置下的真实 CRTOS 源码为准。完整源码模式只修改注解；单函数切片按上述《源代码处理》规则适配，其他工具转换须保持程序行为，并在 spec review 中说明转换位置、理由及源码依据。不得超出已规定的适配范围改变算法、遗漏执行路径或副作用，也不得使用错误的数据布局。等价转换示例见 [Spec 编写指南](references/spec-writing-guide.md#单函数切片的等价转换)。
 
 ### 库与证明参考
 
-写新定义、strategy 或断言前，先查 CRTOS 全局库，再查 QCP 库；需要参考设计或证明方法时，查看 LOSVerify 和 VRTOS。用 `rg` 查找实际定义和用法，不猜测 QCP 语法。
+写新定义、strategy 或断言前，先查 CRTOS 全局库及当前工程的 annotated C，再查 QCP 库；需要参考设计或证明方法时，查看 crtosverify、LOSVerify 和 VRTOS。查找实际定义和用法，不猜测 QCP 语法。
+
+来源链接指向对应根目录，“位置”均相对于该目录。
 
 | 来源 | 位置 | 用途 |
 |---|---|---|
-| CRTOS 全局库 | `/home/xinra/crtos/lib/`| 优先复用已有模块定义、predicate 和适用的已证明引理。 |
-| QCP 基础库 | `/home/xinra/qcp-binary-democases/SeparationLogic/`，包括 `SeparationLogic/`、`MonadLib/`、`StrategyLib/`、`auxlibs/` 等 | 复用QCP已有库分离逻辑、抽象 program、strategy、tactic 及通用引理。 |
-| QCP 示例 | `/home/xinra/qcp-binary-democases/SeparationLogic/examples/` 及 QCP 项目中的教程、示例 | 参考注解、assertion、`which implies` 和证明写法。 |
-| LOSVerify | `/home/xinra/LOS_Verify/lib/`、`annotated_C/`、`VC/code_proof/` | 参考 OS 模块定义、函数 spec 和证明，例如 `lib/sem.v`、`lib/task.v`。 |
-| VRTOS | `/home/xinra/vrtos/lib/`、`annotated_C/`、`VC/code_proof/` | 参考 CRTOS 对象表示、函数 spec 和证明。 |
+| [CRTOS 全局库](/home/xinra/crtos/) | `lib/` | 复用模块定义、predicate<br>和已证明引理。 |
+| [CRTOS annotated C](/home/xinra/crtos/) | `annotated_C/` | 查找函数 spec、注解、断言<br>和 strategy 用法。 |
+| [当前 trial](/home/xinra/crtos/) | `<trial>/annotated_C/` | 参考当前函数及依赖函数的<br>切片、spec 和局部断言。 |
+| [QCP 基础库](/home/xinra/qcp-binary-democases/SeparationLogic/) | `SeparationLogic/`、`MonadLib/`<br>`StrategyLib/`、`auxlibs/` 等 | 复用分离逻辑、抽象 program、<br>strategy、tactic 及通用引理。 |
+| [QCP 示例](/home/xinra/qcp-binary-democases/SeparationLogic/) | `examples/` 及 QCP 项目教程 | 参考注解、assertion、<br>`which implies` 和证明写法。 |
+| [crtosverify](/home/xinra/crtosverify/) | `lib/`、`annotated_C/`<br>`VC/` | 参考 CRTOS 模块定义、predicate、<br>spec 和 VC 证明。 |
+| [LOSVerify](/home/xinra/LOS_Verify/) | `lib/`、`annotated_C/`<br>`VC/code_proof/` | 参考 OS 模块、spec 和证明，<br>如 `lib/sem.v`、`lib/task.v`。 |
+| [VRTOS](/home/xinra/vrtos/) | `lib/`、`annotated_C/`<br>`VC/code_proof/` | 参考 CRTOS 对象表示、spec 和证明。 |
 
-表中“复用”指使用适合当前目标的可使用实际定义或已证明结论；作为证明依据时确认其证明状态、依赖假设和当前工程兼容性。“参考”允许借鉴设计和证明方法，不表示整个目录已经可信，也不替代用户对具体 `trusted` C symbol 的批准。
+已有 spec 的复用与修改按上述“已有 spec 复用与文件组织”执行。当前 trial 的内容须结合对应 revision 与审阅记录确认状态；例如 [ksemaphoredelete-trial-261025-1 的 annotated_C](/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/)，该示例不作为新任务的默认 trial。
 
-涉及跨模块调用时必须导入共享 `lib/` 中的已有定义，不得重复增加已有概念。若现有接口缺少所需内容，直接在所属共享模块增补定义，并更新必要的导入与全局组合；若已有定义不符合当前 C 或本 skill 的要求，应说明定义位置、修改依据和影响，修改对应文件并检查受影响的使用处。
+上述“复用”指使用适合当前目标的可使用实际定义或已证明结论；作为证明依据时确认其证明状态、依赖假设和当前工程兼容性。“参考”允许借鉴设计和证明方法，不表示整个目录已经可信，也不替代用户对具体 `trusted` C symbol 的批准。
+
+涉及跨模块调用时必须复用共享 `lib/` 中的已有定义，不得重复增加已有概念。若现有接口缺少所需内容，先复制所属模块到 `trial/lib/`，在副本中增补定义并更新必要的导入与全局组合；若已有定义不符合当前 C 或本 skill 的要求，应说明定义位置、修改依据和影响，在副本中修改并检查受影响的使用处。按上述审阅后自动合并流程写回全局库。
 

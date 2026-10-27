@@ -1,0 +1,21 @@
+Require Import CRTOS_Verify.lib.SemaphoreOwnership.
+Require Import CRTOS_Verify.lib.SemaphoreByteLayout.
+Require Import CRTOS_Verify.lib.SemaphoreSpecBridge.
+Require Import CRTOS_Verify.lib.KSemaphoreCreate.
+Fail Check MonadErrHoare.Hoare_forall.
+Print Crtos_C_Rules.store_2byte.
+Print Assumptions zero_idnode_insert_ready.
+Print Assumptions semaphore_zero_insert_ready.
+Print Assumptions semaphore_id_ready_fields.
+Print Assumptions semaphore_insert_failure_raw.
+Print Assumptions semaphore_two_zero_chars_ushort.
+Print Assumptions semaphore_two_zero_bytes_ushort.
+Print Assumptions semaphore_four_zero_chars_ptr.
+Print Assumptions semaphore_four_zero_bytes_ptr.
+Print Assumptions semaphore_zero_bytes_fields.
+Print Assumptions semaphore_zero_bytes_object.
+Print Assumptions first_free_from_none_iff.
+Print Assumptions idmanager_first_free_id_none_iff_full.
+Print Assumptions first_free_from_some_min.
+Print Assumptions idmanager_first_free_id_some_min.
+Print Assumptions dll_insert_after_dispatch_at_head.

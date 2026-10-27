@@ -1,0 +1,1109 @@
+zero_idnode_insert_ready
+     : forall p : CNotation.addr,
+       (ZeroIdNode p |-- store_idnode_insert_ready p)%sac
+Axioms:
+CNotation.rvalue_expr_equiv :
+  CNotation.rvalue_expr -> CNotation.rvalue_expr -> Prop
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr_congr :
+  Morphisms.Proper (Morphisms.respectful CNotation.rvalue_expr_equiv eq)
+    CNotation.eval_addr_expr
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+eval_addr :
+  forall (R : CNotation.rvalue_expr) (t : CNotation.front_end_type),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_const (CNotation.eval_addr_expr R) t) R
+addr_of_arrow_field :
+  forall (L : CNotation.lvalue_expr) (x : String.string),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_addr_of (CNotation.LE_dot_field L x))
+    (CNotation.RE_addr_of
+       (CNotation.LE_arrow_field (CNotation.RE_addr_of L) x))
+CNotation.RE_addr_of_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       CNotation.rvalue_expr_equiv) CNotation.RE_addr_of
+CNotation.LE_arrow_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.rvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_arrow_field
+semaphore_zero_insert_ready
+     : forall p : CNotation.addr,
+       (SemaphoreZero p
+        |-- “ p <> BinNums.Z0 /\
+              addr_aligned p
+                (BinNums.Zpos (BinNums.xO (BinNums.xO BinNums.xH))) ” &&
+            store_idnode_insert_ready
+              (CNotation.eval_addr_expr
+                 (CNotation.RE_addr_of
+                    (CNotation.LE_arrow_field
+                       (CNotation.RE_const p
+                          (CNotation.FET_alias
+                             (String.String
+                                (Ascii.Ascii true true false false true false
+                                   true false)
+                                (String.String
+                                   (Ascii.Ascii true false true false false
+                                      true true false)
+                                   (String.String
+                                      (Ascii.Ascii true false true true false
+                                         true true false)
+                                      (String.String
+                                         (Ascii.Ascii true false false false
+                                            false true true false)
+                                         (String.String
+                                            (Ascii.Ascii false false false
+                                               false true true true false)
+                                            (String.String
+                                               (Ascii.Ascii false false false
+                                                 true false true true false)
+                                               (String.String
+                                                 (Ascii.Ascii true true true
+                                                 true false true true false)
+                                                 (String.String
+                                                 (Ascii.Ascii false true
+                                                 false false true true true
+                                                 false)
+                                                 (String.String
+                                                 (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                 String.EmptyString)))))))))))
+                       (String.String
+                          (Ascii.Ascii true false false true false true true
+                             false)
+                          (String.String
+                             (Ascii.Ascii false false true false false true
+                                true false) String.EmptyString))))) **
+            CNotation.eval_addr_expr
+              (CNotation.RE_addr_of
+                 (CNotation.LE_arrow_field
+                    (CNotation.RE_const p
+                       (CNotation.FET_alias
+                          (String.String
+                             (Ascii.Ascii true true false false true false
+                                true false)
+                             (String.String
+                                (Ascii.Ascii true false true false false true
+                                   true false)
+                                (String.String
+                                   (Ascii.Ascii true false true true false
+                                      true true false)
+                                   (String.String
+                                      (Ascii.Ascii true false false false
+                                         false true true false)
+                                      (String.String
+                                         (Ascii.Ascii false false false false
+                                            true true true false)
+                                         (String.String
+                                            (Ascii.Ascii false false false
+                                               true false true true false)
+                                            (String.String
+                                               (Ascii.Ascii true true true
+                                                 true false true true false)
+                                               (String.String
+                                                 (Ascii.Ascii false true
+                                                 false false true true true
+                                                 false)
+                                                 (String.String
+                                                 (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                 String.EmptyString)))))))))))
+                    (String.String
+                       (Ascii.Ascii false true true false true true true
+                          false)
+                       (String.String
+                          (Ascii.Ascii true false false false false true true
+                             false)
+                          (String.String
+                             (Ascii.Ascii false false true true false true
+                                true false)
+                             (String.String
+                                (Ascii.Ascii true false true false true true
+                                   true false)
+                                (String.String
+                                   (Ascii.Ascii true false true false false
+                                      true true false) String.EmptyString)))))))
+            # UShort |-> BinNums.Z0 **
+            NodeZero
+              (CNotation.eval_addr_expr
+                 (CNotation.RE_addr_of
+                    (CNotation.LE_arrow_field
+                       (CNotation.RE_const p
+                          (CNotation.FET_alias
+                             (String.String
+                                (Ascii.Ascii true true false false true false
+                                   true false)
+                                (String.String
+                                   (Ascii.Ascii true false true false false
+                                      true true false)
+                                   (String.String
+                                      (Ascii.Ascii true false true true false
+                                         true true false)
+                                      (String.String
+                                         (Ascii.Ascii true false false false
+                                            false true true false)
+                                         (String.String
+                                            (Ascii.Ascii false false false
+                                               false true true true false)
+                                            (String.String
+                                               (Ascii.Ascii false false false
+                                                 true false true true false)
+                                               (String.String
+                                                 (Ascii.Ascii true true true
+                                                 true false true true false)
+                                                 (String.String
+                                                 (Ascii.Ascii false true
+                                                 false false true true true
+                                                 false)
+                                                 (String.String
+                                                 (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                 String.EmptyString)))))))))))
+                       (String.String
+                          (Ascii.Ascii false false false false true true true
+                             false)
+                          (String.String
+                             (Ascii.Ascii true false true false false true
+                                true false)
+                             (String.String
+                                (Ascii.Ascii false true true true false true
+                                   true false)
+                                (String.String
+                                   (Ascii.Ascii false false true false false
+                                      true true false)
+                                   (String.String
+                                      (Ascii.Ascii true true true true true
+                                         false true false)
+                                      (String.String
+                                         (Ascii.Ascii false false true true
+                                            false true true false)
+                                         (String.String
+                                            (Ascii.Ascii true false false
+                                               true false true true false)
+                                            (String.String
+                                               (Ascii.Ascii true true false
+                                                 false true true true false)
+                                               (String.String
+                                                 (Ascii.Ascii false false
+                                                 true false true true true
+                                                 false) String.EmptyString)))))))))))) **
+            NodeZero
+              (CNotation.eval_addr_expr
+                 (CNotation.RE_addr_of
+                    (CNotation.LE_arrow_field
+                       (CNotation.RE_const p
+                          (CNotation.FET_alias
+                             (String.String
+                                (Ascii.Ascii true true false false true false
+                                   true false)
+                                (String.String
+                                   (Ascii.Ascii true false true false false
+                                      true true false)
+                                   (String.String
+                                      (Ascii.Ascii true false true true false
+                                         true true false)
+                                      (String.String
+                                         (Ascii.Ascii true false false false
+                                            false true true false)
+                                         (String.String
+                                            (Ascii.Ascii false false false
+                                               false true true true false)
+                                            (String.String
+                                               (Ascii.Ascii false false false
+                                                 true false true true false)
+                                               (String.String
+                                                 (Ascii.Ascii true true true
+                                                 true false true true false)
+                                                 (String.String
+                                                 (Ascii.Ascii false true
+                                                 false false true true true
+                                                 false)
+                                                 (String.String
+                                                 (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                 String.EmptyString)))))))))))
+                       (String.String
+                          (Ascii.Ascii false false true true false true true
+                             false)
+                          (String.String
+                             (Ascii.Ascii true false false true false true
+                                true false)
+                             (String.String
+                                (Ascii.Ascii false true true true false true
+                                   true false)
+                                (String.String
+                                   (Ascii.Ascii true true false true false
+                                      true true false) String.EmptyString))))))) **
+            SemaphorePadding p)%sac
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.rvalue_expr_equiv :
+  CNotation.rvalue_expr -> CNotation.rvalue_expr -> Prop
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr_congr :
+  Morphisms.Proper (Morphisms.respectful CNotation.rvalue_expr_equiv eq)
+    CNotation.eval_addr_expr
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+eval_addr :
+  forall (R : CNotation.rvalue_expr) (t : CNotation.front_end_type),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_const (CNotation.eval_addr_expr R) t) R
+addr_of_arrow_field :
+  forall (L : CNotation.lvalue_expr) (x : String.string),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_addr_of (CNotation.LE_dot_field L x))
+    (CNotation.RE_addr_of
+       (CNotation.LE_arrow_field (CNotation.RE_addr_of L) x))
+CNotation.RE_addr_of_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       CNotation.rvalue_expr_equiv) CNotation.RE_addr_of
+CNotation.LE_arrow_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.rvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_arrow_field
+semaphore_id_ready_fields
+     : forall p : CNotation.addr,
+       (store_idnode_insert_ready
+          (CNotation.eval_addr_expr
+             (CNotation.RE_addr_of
+                (CNotation.LE_arrow_field
+                   (CNotation.RE_const p
+                      (CNotation.FET_alias
+                         (String.String
+                            (Ascii.Ascii true true false false true false
+                               true false)
+                            (String.String
+                               (Ascii.Ascii true false true false false true
+                                  true false)
+                               (String.String
+                                  (Ascii.Ascii true false true true false
+                                     true true false)
+                                  (String.String
+                                     (Ascii.Ascii true false false false
+                                        false true true false)
+                                     (String.String
+                                        (Ascii.Ascii false false false false
+                                           true true true false)
+                                        (String.String
+                                           (Ascii.Ascii false false false
+                                              true false true true false)
+                                           (String.String
+                                              (Ascii.Ascii true true true
+                                                 true false true true false)
+                                              (String.String
+                                                 (Ascii.Ascii false true
+                                                 false false true true true
+                                                 false)
+                                                 (String.String
+                                                 (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                 String.EmptyString)))))))))))
+                   (String.String
+                      (Ascii.Ascii true false false true false true true
+                         false)
+                      (String.String
+                         (Ascii.Ascii false false true false false true true
+                            false) String.EmptyString)))))
+        |-- CNotation.eval_addr_expr
+              (CNotation.RE_addr_of
+                 (CNotation.LE_dot_field
+                    (CNotation.LE_arrow_field
+                       (CNotation.RE_const p
+                          (CNotation.FET_alias
+                             (String.String
+                                (Ascii.Ascii true true false false true false
+                                   true false)
+                                (String.String
+                                   (Ascii.Ascii true false true false false
+                                      true true false)
+                                   (String.String
+                                      (Ascii.Ascii true false true true false
+                                         true true false)
+                                      (String.String
+                                         (Ascii.Ascii true false false false
+                                            false true true false)
+                                         (String.String
+                                            (Ascii.Ascii false false false
+                                               false true true true false)
+                                            (String.String
+                                               (Ascii.Ascii false false false
+                                                 true false true true false)
+                                               (String.String
+                                                 (Ascii.Ascii true true true
+                                                 true false true true false)
+                                                 (String.String
+                                                 (Ascii.Ascii false true
+                                                 false false true true true
+                                                 false)
+                                                 (String.String
+                                                 (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                 String.EmptyString)))))))))))
+                       (String.String
+                          (Ascii.Ascii true false false true false true true
+                             false)
+                          (String.String
+                             (Ascii.Ascii false false true false false true
+                                true false) String.EmptyString)))
+                    (String.String
+                       (Ascii.Ascii true false false true false true true
+                          false)
+                       (String.String
+                          (Ascii.Ascii false false true false false true true
+                             false) String.EmptyString)))) # UShort |->_ **
+            NodeStorage
+              (CNotation.eval_addr_expr
+                 (CNotation.RE_addr_of
+                    (CNotation.LE_dot_field
+                       (CNotation.LE_arrow_field
+                          (CNotation.RE_const p
+                             (CNotation.FET_alias
+                                (String.String
+                                   (Ascii.Ascii true true false false true
+                                      false true false)
+                                   (String.String
+                                      (Ascii.Ascii true false true false
+                                         false true true false)
+                                      (String.String
+                                         (Ascii.Ascii true false true true
+                                            false true true false)
+                                         (String.String
+                                            (Ascii.Ascii true false false
+                                               false false true true false)
+                                            (String.String
+                                               (Ascii.Ascii false false false
+                                                 false true true true false)
+                                               (String.String
+                                                 (Ascii.Ascii false false
+                                                 false true false true true
+                                                 false)
+                                                 (String.String
+                                                 (Ascii.Ascii true true true
+                                                 true false true true false)
+                                                 (String.String
+                                                 (Ascii.Ascii false true
+                                                 false false true true true
+                                                 false)
+                                                 (String.String
+                                                 (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                 String.EmptyString)))))))))))
+                          (String.String
+                             (Ascii.Ascii true false false true false true
+                                true false)
+                             (String.String
+                                (Ascii.Ascii false false true false false
+                                   true true false) String.EmptyString)))
+                       (String.String
+                          (Ascii.Ascii false false true true false true true
+                             false)
+                          (String.String
+                             (Ascii.Ascii true false false true false true
+                                true false)
+                             (String.String
+                                (Ascii.Ascii false true true true false true
+                                   true false)
+                                (String.String
+                                   (Ascii.Ascii true true false true false
+                                      true true false) String.EmptyString))))))))%sac
+Axioms:
+CNotation.rvalue_expr_equiv :
+  CNotation.rvalue_expr -> CNotation.rvalue_expr -> Prop
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr_congr :
+  Morphisms.Proper (Morphisms.respectful CNotation.rvalue_expr_equiv eq)
+    CNotation.eval_addr_expr
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+eval_addr :
+  forall (R : CNotation.rvalue_expr) (t : CNotation.front_end_type),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_const (CNotation.eval_addr_expr R) t) R
+addr_of_arrow_field :
+  forall (L : CNotation.lvalue_expr) (x : String.string),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_addr_of (CNotation.LE_dot_field L x))
+    (CNotation.RE_addr_of
+       (CNotation.LE_arrow_field (CNotation.RE_addr_of L) x))
+CNotation.RE_addr_of_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       CNotation.rvalue_expr_equiv) CNotation.RE_addr_of
+CNotation.LE_dot_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_dot_field
+CNotation.LE_arrow_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.rvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_arrow_field
+semaphore_insert_failure_raw
+     : forall p : BinNums.Z,
+       p <> BinNums.Z0 ->
+       addr_aligned p (BinNums.Zpos (BinNums.xO (BinNums.xO BinNums.xH))) ->
+       CNotation.eval_addr_expr
+         (CNotation.RE_addr_of
+            (CNotation.LE_arrow_field
+               (CNotation.RE_const p
+                  (CNotation.FET_alias
+                     (String.String
+                        (Ascii.Ascii true true false false true false true
+                           false)
+                        (String.String
+                           (Ascii.Ascii true false true false false true true
+                              false)
+                           (String.String
+                              (Ascii.Ascii true false true true false true
+                                 true false)
+                              (String.String
+                                 (Ascii.Ascii true false false false false
+                                    true true false)
+                                 (String.String
+                                    (Ascii.Ascii false false false false true
+                                       true true false)
+                                    (String.String
+                                       (Ascii.Ascii false false false true
+                                          false true true false)
+                                       (String.String
+                                          (Ascii.Ascii true true true true
+                                             false true true false)
+                                          (String.String
+                                             (Ascii.Ascii false true false
+                                                false true true true false)
+                                             (String.String
+                                                (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                String.EmptyString)))))))))))
+               (String.String
+                  (Ascii.Ascii false false false false true true true false)
+                  (String.String
+                     (Ascii.Ascii true false true false false true true false)
+                     (String.String
+                        (Ascii.Ascii false true true true false true true
+                           false)
+                        (String.String
+                           (Ascii.Ascii false false true false false true
+                              true false)
+                           (String.String
+                              (Ascii.Ascii true true true true true false
+                                 true false)
+                              (String.String
+                                 (Ascii.Ascii false false true true false
+                                    true true false)
+                                 (String.String
+                                    (Ascii.Ascii true false false true false
+                                       true true false)
+                                    (String.String
+                                       (Ascii.Ascii true true false false
+                                          true true true false)
+                                       (String.String
+                                          (Ascii.Ascii false false true false
+                                             true true true false)
+                                          String.EmptyString))))))))))) <>
+       BinNums.Z0 ->
+       CNotation.eval_addr_expr
+         (CNotation.RE_addr_of
+            (CNotation.LE_arrow_field
+               (CNotation.RE_const p
+                  (CNotation.FET_alias
+                     (String.String
+                        (Ascii.Ascii true true false false true false true
+                           false)
+                        (String.String
+                           (Ascii.Ascii true false true false false true true
+                              false)
+                           (String.String
+                              (Ascii.Ascii true false true true false true
+                                 true false)
+                              (String.String
+                                 (Ascii.Ascii true false false false false
+                                    true true false)
+                                 (String.String
+                                    (Ascii.Ascii false false false false true
+                                       true true false)
+                                    (String.String
+                                       (Ascii.Ascii false false false true
+                                          false true true false)
+                                       (String.String
+                                          (Ascii.Ascii true true true true
+                                             false true true false)
+                                          (String.String
+                                             (Ascii.Ascii false true false
+                                                false true true true false)
+                                             (String.String
+                                                (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                String.EmptyString)))))))))))
+               (String.String
+                  (Ascii.Ascii false false true true false true true false)
+                  (String.String
+                     (Ascii.Ascii true false false true false true true false)
+                     (String.String
+                        (Ascii.Ascii false true true true false true true
+                           false)
+                        (String.String
+                           (Ascii.Ascii true true false true false true true
+                              false) String.EmptyString)))))) <> BinNums.Z0 ->
+       (store_idnode_insert_ready
+          (CNotation.eval_addr_expr
+             (CNotation.RE_addr_of
+                (CNotation.LE_arrow_field
+                   (CNotation.RE_const p
+                      (CNotation.FET_alias
+                         (String.String
+                            (Ascii.Ascii true true false false true false
+                               true false)
+                            (String.String
+                               (Ascii.Ascii true false true false false true
+                                  true false)
+                               (String.String
+                                  (Ascii.Ascii true false true true false
+                                     true true false)
+                                  (String.String
+                                     (Ascii.Ascii true false false false
+                                        false true true false)
+                                     (String.String
+                                        (Ascii.Ascii false false false false
+                                           true true true false)
+                                        (String.String
+                                           (Ascii.Ascii false false false
+                                              true false true true false)
+                                           (String.String
+                                              (Ascii.Ascii true true true
+                                                 true false true true false)
+                                              (String.String
+                                                 (Ascii.Ascii false true
+                                                 false false true true true
+                                                 false)
+                                                 (String.String
+                                                 (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                 String.EmptyString)))))))))))
+                   (String.String
+                      (Ascii.Ascii true false false true false true true
+                         false)
+                      (String.String
+                         (Ascii.Ascii false false true false false true true
+                            false) String.EmptyString))))) **
+        CNotation.eval_addr_expr
+          (CNotation.RE_addr_of
+             (CNotation.LE_arrow_field
+                (CNotation.RE_const p
+                   (CNotation.FET_alias
+                      (String.String
+                         (Ascii.Ascii true true false false true false true
+                            false)
+                         (String.String
+                            (Ascii.Ascii true false true false false true
+                               true false)
+                            (String.String
+                               (Ascii.Ascii true false true true false true
+                                  true false)
+                               (String.String
+                                  (Ascii.Ascii true false false false false
+                                     true true false)
+                                  (String.String
+                                     (Ascii.Ascii false false false false
+                                        true true true false)
+                                     (String.String
+                                        (Ascii.Ascii false false false true
+                                           false true true false)
+                                        (String.String
+                                           (Ascii.Ascii true true true true
+                                              false true true false)
+                                           (String.String
+                                              (Ascii.Ascii false true false
+                                                 false true true true false)
+                                              (String.String
+                                                 (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                 String.EmptyString)))))))))))
+                (String.String
+                   (Ascii.Ascii false true true false true true true false)
+                   (String.String
+                      (Ascii.Ascii true false false false false true true
+                         false)
+                      (String.String
+                         (Ascii.Ascii false false true true false true true
+                            false)
+                         (String.String
+                            (Ascii.Ascii true false true false true true true
+                               false)
+                            (String.String
+                               (Ascii.Ascii true false true false false true
+                                  true false) String.EmptyString)))))))
+        # UShort |-> BinNums.Z0 **
+        NodeZero
+          (CNotation.eval_addr_expr
+             (CNotation.RE_addr_of
+                (CNotation.LE_arrow_field
+                   (CNotation.RE_const p
+                      (CNotation.FET_alias
+                         (String.String
+                            (Ascii.Ascii true true false false true false
+                               true false)
+                            (String.String
+                               (Ascii.Ascii true false true false false true
+                                  true false)
+                               (String.String
+                                  (Ascii.Ascii true false true true false
+                                     true true false)
+                                  (String.String
+                                     (Ascii.Ascii true false false false
+                                        false true true false)
+                                     (String.String
+                                        (Ascii.Ascii false false false false
+                                           true true true false)
+                                        (String.String
+                                           (Ascii.Ascii false false false
+                                              true false true true false)
+                                           (String.String
+                                              (Ascii.Ascii true true true
+                                                 true false true true false)
+                                              (String.String
+                                                 (Ascii.Ascii false true
+                                                 false false true true true
+                                                 false)
+                                                 (String.String
+                                                 (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                 String.EmptyString)))))))))))
+                   (String.String
+                      (Ascii.Ascii false false false false true true true
+                         false)
+                      (String.String
+                         (Ascii.Ascii true false true false false true true
+                            false)
+                         (String.String
+                            (Ascii.Ascii false true true true false true true
+                               false)
+                            (String.String
+                               (Ascii.Ascii false false true false false true
+                                  true false)
+                               (String.String
+                                  (Ascii.Ascii true true true true true false
+                                     true false)
+                                  (String.String
+                                     (Ascii.Ascii false false true true false
+                                        true true false)
+                                     (String.String
+                                        (Ascii.Ascii true false false true
+                                           false true true false)
+                                        (String.String
+                                           (Ascii.Ascii true true false false
+                                              true true true false)
+                                           (String.String
+                                              (Ascii.Ascii false false true
+                                                 false true true true false)
+                                              String.EmptyString)))))))))))) **
+        NodeZero
+          (CNotation.eval_addr_expr
+             (CNotation.RE_addr_of
+                (CNotation.LE_arrow_field
+                   (CNotation.RE_const p
+                      (CNotation.FET_alias
+                         (String.String
+                            (Ascii.Ascii true true false false true false
+                               true false)
+                            (String.String
+                               (Ascii.Ascii true false true false false true
+                                  true false)
+                               (String.String
+                                  (Ascii.Ascii true false true true false
+                                     true true false)
+                                  (String.String
+                                     (Ascii.Ascii true false false false
+                                        false true true false)
+                                     (String.String
+                                        (Ascii.Ascii false false false false
+                                           true true true false)
+                                        (String.String
+                                           (Ascii.Ascii false false false
+                                              true false true true false)
+                                           (String.String
+                                              (Ascii.Ascii true true true
+                                                 true false true true false)
+                                              (String.String
+                                                 (Ascii.Ascii false true
+                                                 false false true true true
+                                                 false)
+                                                 (String.String
+                                                 (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                 String.EmptyString)))))))))))
+                   (String.String
+                      (Ascii.Ascii false false true true false true true
+                         false)
+                      (String.String
+                         (Ascii.Ascii true false false true false true true
+                            false)
+                         (String.String
+                            (Ascii.Ascii false true true true false true true
+                               false)
+                            (String.String
+                               (Ascii.Ascii true true false true false true
+                                  true false) String.EmptyString))))))) **
+        SemaphorePadding p |-- SemaphoreRaw p)%sac
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+CNotation.rvalue_expr_equiv :
+  CNotation.rvalue_expr -> CNotation.rvalue_expr -> Prop
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr_congr :
+  Morphisms.Proper (Morphisms.respectful CNotation.rvalue_expr_equiv eq)
+    CNotation.eval_addr_expr
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+eval_addr :
+  forall (R : CNotation.rvalue_expr) (t : CNotation.front_end_type),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_const (CNotation.eval_addr_expr R) t) R
+addr_of_arrow_field :
+  forall (L : CNotation.lvalue_expr) (x : String.string),
+  CNotation.rvalue_expr_equiv
+    (CNotation.RE_addr_of (CNotation.LE_dot_field L x))
+    (CNotation.RE_addr_of
+       (CNotation.LE_arrow_field (CNotation.RE_addr_of L) x))
+CNotation.RE_addr_of_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       CNotation.rvalue_expr_equiv) CNotation.RE_addr_of
+CNotation.LE_dot_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.lvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_dot_field
+CNotation.LE_arrow_field_congr :
+  Morphisms.Proper
+    (Morphisms.respectful CNotation.rvalue_expr_equiv
+       (Morphisms.respectful eq CNotation.lvalue_expr_equiv))
+    CNotation.LE_arrow_field
+semaphore_two_zero_chars_ushort
+     : forall p : BinNums.Z,
+       addr_aligned p (BinNums.Zpos (BinNums.xO BinNums.xH)) ->
+       (p # Char |-> BinNums.Z0 **
+        BinInt.Z.add p (BinNums.Zpos BinNums.xH) # Char |-> BinNums.Z0
+        |-- p # UShort |-> BinNums.Z0)%sac
+Axioms:
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+semaphore_two_zero_bytes_ushort
+     : forall p : BinNums.Z,
+       addr_aligned p (BinNums.Zpos (BinNums.xO BinNums.xH)) ->
+       (CharArray.full p (BinNums.Zpos (BinNums.xO BinNums.xH))
+          (repeat_Z BinNums.Z0 (BinNums.Zpos (BinNums.xO BinNums.xH)))
+        |-- p # UShort |-> BinNums.Z0)%sac
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+semaphore_four_zero_chars_ptr
+     : forall p : BinNums.Z,
+       addr_aligned p (BinNums.Zpos (BinNums.xO (BinNums.xO BinNums.xH))) ->
+       (p # Char |-> BinNums.Z0 **
+        BinInt.Z.add p (BinNums.Zpos BinNums.xH) # Char |-> BinNums.Z0 **
+        BinInt.Z.add p (BinNums.Zpos (BinNums.xO BinNums.xH))
+        # Char |-> BinNums.Z0 **
+        BinInt.Z.add p (BinNums.Zpos (BinNums.xI BinNums.xH))
+        # Char |-> BinNums.Z0 |-- p # Ptr |-> BinNums.Z0)%sac
+Axioms:
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+semaphore_four_zero_bytes_ptr
+     : forall p : BinNums.Z,
+       addr_aligned p (BinNums.Zpos (BinNums.xO (BinNums.xO BinNums.xH))) ->
+       (CharArray.full p (BinNums.Zpos (BinNums.xO (BinNums.xO BinNums.xH)))
+          (repeat_Z BinNums.Z0
+             (BinNums.Zpos (BinNums.xO (BinNums.xO BinNums.xH))))
+        |-- p # Ptr |-> BinNums.Z0)%sac
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+semaphore_zero_bytes_fields
+     : forall p : BinNums.Z,
+       addr_aligned p (BinNums.Zpos (BinNums.xO (BinNums.xO BinNums.xH))) ->
+       (CharArray.full p
+          (BinNums.Zpos
+             (BinNums.xO
+                (BinNums.xO (BinNums.xO (BinNums.xO (BinNums.xO BinNums.xH))))))
+          (repeat_Z BinNums.Z0
+             (BinNums.Zpos
+                (BinNums.xO
+                   (BinNums.xO
+                      (BinNums.xO (BinNums.xO (BinNums.xO BinNums.xH)))))))
+        |-- p # UShort |-> BinNums.Z0 **
+            CharArray.full
+              (BinInt.Z.add p (BinNums.Zpos (BinNums.xO BinNums.xH)))
+              (BinNums.Zpos (BinNums.xO BinNums.xH))
+              (repeat_Z BinNums.Z0 (BinNums.Zpos (BinNums.xO BinNums.xH))) **
+            BinInt.Z.add p
+              (BinNums.Zpos (BinNums.xO (BinNums.xO BinNums.xH)))
+            # Ptr |-> BinNums.Z0 **
+            BinInt.Z.add p
+              (BinNums.Zpos (BinNums.xO (BinNums.xO (BinNums.xO BinNums.xH))))
+            # Ptr |-> BinNums.Z0 **
+            BinInt.Z.add p
+              (BinNums.Zpos (BinNums.xO (BinNums.xO (BinNums.xI BinNums.xH))))
+            # UShort |-> BinNums.Z0 **
+            CharArray.full
+              (BinInt.Z.add p
+                 (BinNums.Zpos
+                    (BinNums.xO (BinNums.xI (BinNums.xI BinNums.xH)))))
+              (BinNums.Zpos (BinNums.xO BinNums.xH))
+              (repeat_Z BinNums.Z0 (BinNums.Zpos (BinNums.xO BinNums.xH))) **
+            BinInt.Z.add p
+              (BinNums.Zpos
+                 (BinNums.xO
+                    (BinNums.xO (BinNums.xO (BinNums.xO BinNums.xH)))))
+            # Ptr |-> BinNums.Z0 **
+            BinInt.Z.add p
+              (BinNums.Zpos
+                 (BinNums.xO
+                    (BinNums.xO (BinNums.xI (BinNums.xO BinNums.xH)))))
+            # Ptr |-> BinNums.Z0 **
+            BinInt.Z.add p
+              (BinNums.Zpos
+                 (BinNums.xO
+                    (BinNums.xO (BinNums.xO (BinNums.xI BinNums.xH)))))
+            # Ptr |-> BinNums.Z0 **
+            BinInt.Z.add p
+              (BinNums.Zpos
+                 (BinNums.xO
+                    (BinNums.xO (BinNums.xI (BinNums.xI BinNums.xH)))))
+            # Ptr |-> BinNums.Z0)%sac
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+semaphore_zero_bytes_object
+     : forall p : CNotation.addr,
+       semaphore_byte_layout p ->
+       BinInt.Z.lt BinNums.Z0 p ->
+       BinInt.Z.le p
+         (BinInt.Z.sub
+            (BinNums.Zpos
+               (BinNums.xI
+                  (BinNums.xI
+                     (BinNums.xI
+                        (BinNums.xI
+                           (BinNums.xI
+                              (BinNums.xI
+                                 (BinNums.xI
+                                    (BinNums.xI
+                                       (BinNums.xI
+                                          (BinNums.xI
+                                             (BinNums.xI
+                                                (BinNums.xI
+                                                 (BinNums.xI
+                                                 (BinNums.xI
+                                                 (BinNums.xI
+                                                 (BinNums.xI
+                                                 (BinNums.xI
+                                                 (BinNums.xI (BinNums.xI ...))))))))))))))))))))
+            (BinNums.Zpos
+               (BinNums.xO
+                  (BinNums.xO
+                     (BinNums.xO (BinNums.xO (BinNums.xO BinNums.xH))))))) ->
+       addr_aligned p (BinNums.Zpos (BinNums.xO (BinNums.xO BinNums.xH))) ->
+       (CharArray.full p
+          (BinNums.Zpos
+             (BinNums.xO
+                (BinNums.xO (BinNums.xO (BinNums.xO (BinNums.xO BinNums.xH))))))
+          (repeat_Z BinNums.Z0
+             (BinNums.Zpos
+                (BinNums.xO
+                   (BinNums.xO
+                      (BinNums.xO (BinNums.xO (BinNums.xO BinNums.xH)))))))
+        |-- “ CNotation.eval_addr_expr
+                (CNotation.RE_addr_of
+                   (CNotation.LE_arrow_field
+                      (CNotation.RE_const p
+                         (CNotation.FET_alias
+                            (String.String
+                               (Ascii.Ascii true true false false true false
+                                  true false)
+                               (String.String
+                                  (Ascii.Ascii true false true false false
+                                     true true false)
+                                  (String.String
+                                     (Ascii.Ascii true false true true false
+                                        true true false)
+                                     (String.String
+                                        (Ascii.Ascii true false false false
+                                           false true true false)
+                                        (String.String
+                                           (Ascii.Ascii false false false
+                                              false true true true false)
+                                           (String.String
+                                              (Ascii.Ascii false false false
+                                                 true false true true false)
+                                              (String.String
+                                                 (Ascii.Ascii true true true
+                                                 true false true true false)
+                                                 (String.String
+                                                 (Ascii.Ascii false true
+                                                 false false true true true
+                                                 false)
+                                                 (String.String
+                                                 (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                 String.EmptyString)))))))))))
+                      (String.String
+                         (Ascii.Ascii false false false false true true true
+                            false)
+                         (String.String
+                            (Ascii.Ascii true false true false false true
+                               true false)
+                            (String.String
+                               (Ascii.Ascii false true true true false true
+                                  true false)
+                               (String.String
+                                  (Ascii.Ascii false false true false false
+                                     true true false)
+                                  (String.String
+                                     (Ascii.Ascii true true true true true
+                                        false true false)
+                                     (String.String
+                                        (Ascii.Ascii false false true true
+                                           false true true false)
+                                        (String.String
+                                           (Ascii.Ascii true false false true
+                                              false true true false)
+                                           (String.String
+                                              (Ascii.Ascii true true false
+                                                 false true true true false)
+                                              (String.String
+                                                 (Ascii.Ascii false false
+                                                 true false true true true
+                                                 false) String.EmptyString))))))))))) <>
+              BinNums.Z0 /\
+              CNotation.eval_addr_expr
+                (CNotation.RE_addr_of
+                   (CNotation.LE_arrow_field
+                      (CNotation.RE_const p
+                         (CNotation.FET_alias
+                            (String.String
+                               (Ascii.Ascii true true false false true false
+                                  true false)
+                               (String.String
+                                  (Ascii.Ascii true false true false false
+                                     true true false)
+                                  (String.String
+                                     (Ascii.Ascii true false true true false
+                                        true true false)
+                                     (String.String
+                                        (Ascii.Ascii true false false false
+                                           false true true false)
+                                        (String.String
+                                           (Ascii.Ascii false false false
+                                              false true true true false)
+                                           (String.String
+                                              (Ascii.Ascii false false false
+                                                 true false true true false)
+                                              (String.String
+                                                 (Ascii.Ascii true true true
+                                                 true false true true false)
+                                                 (String.String
+                                                 (Ascii.Ascii false true
+                                                 false false true true true
+                                                 false)
+                                                 (String.String
+                                                 (Ascii.Ascii true false true
+                                                 false false true true false)
+                                                 String.EmptyString)))))))))))
+                      (String.String
+                         (Ascii.Ascii false false true true false true true
+                            false)
+                         (String.String
+                            (Ascii.Ascii true false false true false true
+                               true false)
+                            (String.String
+                               (Ascii.Ascii false true true true false true
+                                  true false)
+                               (String.String
+                                  (Ascii.Ascii true true false true false
+                                     true true false) String.EmptyString)))))) <>
+              BinNums.Z0 ” && SemaphoreZero p)%sac
+Axioms:
+CNotation.sizeof_union_type : String.string -> BinNums.Z
+CNotation.sizeof_struct_type : String.string -> BinNums.Z
+CNotation.sizeof_enum_type : String.string -> BinNums.Z
+CNotation.sizeof_alias_type : String.string -> BinNums.Z
+PropExtensionality.propositional_extensionality :
+  forall P Q : Prop, P <-> Q -> P = Q
+FunctionalExtensionality.functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+CNotation.eval_addr_expr : CNotation.rvalue_expr -> CNotation.addr
+first_free_from_none_iff
+     : forall (fuel : nat) (start : BinNums.Z) (m : VarIdmanager),
+       idmanager_first_free_id_from m fuel start = None <->
+       (forall id : BinNums.Z,
+        BinInt.Z.le start id /\
+        BinInt.Z.lt id (BinInt.Z.add start (BinInt.Z.of_nat fuel)) ->
+        idmanager_query m id = true)
+Closed under the global context
+idmanager_first_free_id_none_iff_full
+     : forall (sidm : StableIdmanager) (idm : VarIdmanager),
+       idmanager_first_free_id sidm idm = None <-> idmanager_full sidm idm
+Closed under the global context
+first_free_from_some_min
+     : forall (fuel : nat) (start : BinNums.Z) (m : VarIdmanager)
+         (free : BinNums.Z),
+       idmanager_first_free_id_from m fuel start = Some free ->
+       (BinInt.Z.le start free /\
+        BinInt.Z.lt free (BinInt.Z.add start (BinInt.Z.of_nat fuel))) /\
+       idmanager_query m free = false /\
+       (forall id : BinNums.Z,
+        BinInt.Z.le start id /\ BinInt.Z.lt id free ->
+        idmanager_query m id = true)
+Closed under the global context
+idmanager_first_free_id_some_min
+     : forall (sidm : StableIdmanager) (idm : VarIdmanager) (id : BinNums.Z),
+       idmanager_first_free_id sidm idm = Some id ->
+       idmanager_min_free_id sidm idm id
+Closed under the global context
+dll_insert_after_dispatch_at_head
+     : forall (A : Type) (head : Mem.addr) (nodes : list (DL_Node A))
+         (inserted : DL_Node A),
+       dll_insert_after_dispatch head nodes head inserted =
+       (inserted :: nodes)%list
+Closed under the global context

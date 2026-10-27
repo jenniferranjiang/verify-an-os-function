@@ -1,0 +1,221 @@
+{
+  "predicate_revision": "KSemaphoreDelete-pred-r2",
+  "spec_revision": "KSemaphoreDelete-spec-r2",
+  "status": "completed",
+  "files": [
+    {
+      "kind": "library",
+      "global": "lib/TaskInv.v",
+      "reviewed_sha256": "53336f97119434443770031ec50f3569ac518250faacd06f53ff638fd711e653",
+      "merged_sha256": "53336f97119434443770031ec50f3569ac518250faacd06f53ff638fd711e653",
+      "changed": true
+    },
+    {
+      "kind": "library",
+      "global": "lib/SemaphoreInv.v",
+      "reviewed_sha256": "19b64af60cb154dd5b8230034fe365dd21a4962eb0398eb6cabbee33cfd41ea7",
+      "merged_sha256": "19b64af60cb154dd5b8230034fe365dd21a4962eb0398eb6cabbee33cfd41ea7",
+      "changed": true
+    },
+    {
+      "kind": "library",
+      "global": "lib/CrtosInv.v",
+      "reviewed_sha256": "72f16003633105296e9694e1f93a0b60a0e0dfd6c0e86e73bdcbaa118d77dcf9",
+      "merged_sha256": "ddf29e1262bb2270d9c1e038e2378b26408b3174942d0c1d75aa8c9293d99f47",
+      "changed": false
+    },
+    {
+      "kind": "library",
+      "global": "lib/KTaskUnSetDelay.v",
+      "reviewed_sha256": "2ae517e1ee113659326081bd8e9ec54eeb4b3274df4f60705b694a3d6f25daba",
+      "merged_sha256": "2ae517e1ee113659326081bd8e9ec54eeb4b3274df4f60705b694a3d6f25daba",
+      "changed": true
+    },
+    {
+      "kind": "library",
+      "global": "lib/KTaskWakeup.v",
+      "reviewed_sha256": "35800d60cdfd0ac652c7b70d9fb237bc396405d48ed1a98155ec6ad634006534",
+      "merged_sha256": "ea7b30179e2afad4eeb834727655562a93dc3f3013b9cead4ff921856b249eab",
+      "changed": true
+    },
+    {
+      "kind": "library",
+      "global": "lib/SemaphoreOps.v",
+      "reviewed_sha256": "dee519dd864ce99bc73e801e01eea1bde7d945151a90e7998bce8c80c5a075c9",
+      "merged_sha256": "dee519dd864ce99bc73e801e01eea1bde7d945151a90e7998bce8c80c5a075c9",
+      "changed": true
+    },
+    {
+      "kind": "library",
+      "global": "lib/KSemaphoreDelete.v",
+      "reviewed_sha256": "e9b1b1d70ece585e4f5ad6ad860cd8abfd897baf496867f491585c914f4e386a",
+      "merged_sha256": "c75726c92aa6bcb7db3c4065955a363c57d8af11141484f23e05d396c476f6f5",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/include/logic.h",
+      "merged_sha256": "20a85c96b26a07f729a38ede9378f63dc6f489b2b51b707d05ffeea1ba8efac1",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/include/slice_types.h",
+      "merged_sha256": "9c41a5e64e718f921cef058145c80d0d6dd0a946e068d91d3830d08f8b133777",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+      "merged_sha256": "66c9654dfb4faea731ccdf647a1b6fed57ef0acd2acf5c1ef5b746f618f0d0dd",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/DoubleLinkListInsertNodeBefore.c",
+      "merged_sha256": "f9975e812f50a23fd7fce919e935a89d74c41745e1ccb2be9b92bae9e8ff3947",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/FreeId.c",
+      "merged_sha256": "6ec3ce91db6e1d533f70f85b6eae3b87b83632555a0c56ca4f34cdbe724b67d6",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/GetObj.c",
+      "merged_sha256": "d945a4a7627b4c372fe500134bcab9b275bb7b2eb6c82605dd4bbc022d606c84",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/IdGetObj.c",
+      "merged_sha256": "9df09bceade7f6e241c18b6531054d39a9aec25701ef18e83ca617ab09108d51",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/IdRemoveObj.c",
+      "merged_sha256": "2121f84508fb4226be2e2f39ea493ec1259575d9614f689e6266e71d8b57eac9",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/InitDoubleLinkList.c",
+      "merged_sha256": "9b64aea58b40fef8b205772844d978ed5fbfee73892198fd8dcb91f37db0c1ac",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/IsDoubleLinkListEmpty.c",
+      "merged_sha256": "2bd677005589b0eb0559783015b29aa73042a9fe228ca7de7f5bd27a12472fb4",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/KSemaphoreDelete.c",
+      "merged_sha256": "ea52a061a542e98280a5c3f2088d54d6f9cc6b3573181055ca30510c596cc264",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/LinklistResumeAll.c",
+      "merged_sha256": "923569c14bc74b8ca1d146fc9d520909bbf5d333b1d981577f0df580b1868a5d",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/RemoveObj.c",
+      "merged_sha256": "641714f55710c787c427a333f9992bc91cf69c5c9e47fe838bb3b9813b17cbce",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/_SemaphoreDelete.c",
+      "merged_sha256": "fb8ab41c174ea76fb1070874bd07e057195fa0f4b80f03683db1efe8a28594f6",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/headers/ktask_set_status.h",
+      "merged_sha256": "14d82394357510589ae55852f6ae94beb4645c4a0fb183755e80f99814fcef27",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/headers/ktask_unset_delay.h",
+      "merged_sha256": "ca60e3e2b4c590bf09179b3957e28e0d59235bc271d5962b651e2dbeca980e66",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/headers/m_double_linklist.h",
+      "merged_sha256": "5bedea5b2e3f147370b033ec8e21e0b23e9b4f0d447755073f7f9534bbc4f26a",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/headers/m_id.h",
+      "merged_sha256": "358eba45106404d24ae29e4b5da8d4dfc5690247d71a88a0a904f3b4baea1010",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/headers/m_ktask.h",
+      "merged_sha256": "36de7b44151c3fa5592e21943b7229576bf21213317c8424feed87f92cba282e",
+      "changed": false
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/kernel/thread/assign_ready_insert.c",
+      "merged_sha256": "c209b008d036d3e8108e8ad0b9fb834b17ddeafbc05dcba120c4177628c71c81",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/kernel/thread/assignstat.c",
+      "merged_sha256": "a8c17e11fb7a2651ab087714c34e2d04044b9f3993353925c49a554b1a2aed26",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/kernel/thread/double_link_remove_member.c",
+      "merged_sha256": "de6b677d837aff8ad14bc3ac26a29080f0fbe3eb756082567958529c2e9d3071",
+      "changed": false
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/kernel/thread/get_task_with_idnode.c",
+      "merged_sha256": "67a2282454c0774dfa9e3686a5ba072271aa0293622edfc92f816cf93afa9559",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/kernel/thread/ktask_set_status.c",
+      "merged_sha256": "0e0c5fc80f248711383b4305521bbf2469974eef709be45eda2ec4457ea55c78",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/kernel/thread/ktask_unset_delay.c",
+      "merged_sha256": "22e6309b567b3b777155a98922ec083a461e41aaf2833666e003e4dd0bbebcc8",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/kernel/thread/ktask_wakeup.c",
+      "merged_sha256": "8e534845b13d2d8e5c387ecb27da14a2cd17287d957f42ee20187e0b3ae74cd6",
+      "changed": true
+    },
+    {
+      "kind": "annotated_C",
+      "global": "annotated_C/src/kernel/thread/rrr_ready_vector_insert.c",
+      "merged_sha256": "1af3231a956dbda90e2c94e277fc8af7aea7fd567e89d7c001bc1438c77cae3d",
+      "changed": true
+    }
+  ],
+  "trial_active_import": "CRTOS_Verify.lib; retained trial/lib not on build path",
+  "qcp_started": false,
+  "checks": "checks/migration-check.json"
+}

@@ -23,8 +23,8 @@ Local Open Scope string.
   [Crtos_CS] 恢复原有的 CriticalSTS 模型：STS 只保存受临界区保护的
   [VarGlobalState]，使用 QCP 提供的唯一 [unit] 锁 token。
 
-  与 liteos-legacy 的抽象临界区模型一致，rely 和 guarantee 共用
-  [True] 关系，不再携带任务创建 reservation 或 owner 权限。
+  rely 和 guarantee 对 OS 数据保持既有宽松关系，不记录硬件中断状态。
+  中断保存、关闭和恢复不在当前模型的验证范围；协议只描述资源交接。
   稳定地址、固定配置和函数表由外围 [sg] 原样传递；共享内存仍由
   [os_inv] 在进入时交给调用者，并在退出时收回。
 *)
@@ -42,13 +42,13 @@ Module Crtos_C_Rules.
   Include Crtos_STS.
   Include critical_STS_to_STS_def.
   Include ConAssertion.CSL.
-  Include DerivedPredSig Arch32 BigEndian.
-  Include StoreLibSig Arch32 BigEndian.
-  Include ArrayLibSig Arch32 BigEndian.
-  Include Array2LibSig Arch32 BigEndian.
-  Include PtrArray2LibSig Arch32 BigEndian.
-  Include MapLibSig Arch32 BigEndian.
-  Include StringLibSig Arch32 BigEndian.
+  Include DerivedPredSig Arch32 LittleEndian.
+  Include StoreLibSig Arch32 LittleEndian.
+  Include ArrayLibSig Arch32 LittleEndian.
+  Include Array2LibSig Arch32 LittleEndian.
+  Include PtrArray2LibSig Arch32 LittleEndian.
+  Include MapLibSig Arch32 LittleEndian.
+  Include StringLibSig Arch32 LittleEndian.
   Include CriticalCSL.
 End Crtos_C_Rules.
 
@@ -59,7 +59,8 @@ Local Open Scope sac.
 (**
   [InsideCritical sg st] 表示当前线程持有临界区锁 token，进入时观察
   到状态 [st]。这里只保留纯 os_global_context 与 QCP 锁状态；
-  所有共享内存（包括 done 表）由 os_inv 中对应模块的不变量提供。
+  所有共享内存由 os_inv 中对应模块的不变量提供；共享库按
+  Cortex-M3 LittleEndian 实例化全部store接口。
 *)
 Definition InsideCritical
     (sg : StableGlobalState) (st : VarGlobalState) : Assertion :=
@@ -79,7 +80,7 @@ Definition Crtos_GTrans (before after : VarGlobalState) : Prop :=
 
 Lemma Crtos_RTrans_refl : forall st, Crtos_RTrans st st.
 Proof.
-  intros st. exact I.
+  intros st. reflexivity.
 Qed.
 
 (**
@@ -108,3 +109,15 @@ Definition task_atomic_cmd {A : Type}
      MonadErr.err := fun states_before =>
        exists before, states_before before /\ cmd.(MonadErr.err) before |}.
 
+
+(** 真实非SMP临界区计数单元；Disable交出0，Lock改1，Unlock归0再Enable归还。
+    Outside/Inside 采用同一 QCP phase token，仅描述协议阶段及资源交接。
+    Disable/Enable 的 trusted 接口在当前范围内抽象为取得/归还资源；
+    不对硬件中断状态作断言。使用创建函数的普通入口时排除已持有临界区资源者；
+    此计数谓词本身不限制其他接口的嵌套层数。 *)
+Definition CriticalNest (n : Z) : Assertion :=
+  &("KTaskOsAssignLockNest") # UShort |-> n.
+(** 抽象调用入口所见状态集合允许共享 OS 状态按 rely 变化，不含硬件中断状态。 *)
+Definition LastSeen (st : VarGlobalState) :
+    (VarGlobalState -> Prop) -> Prop :=
+  fun states => states == Crtos_RTrans st.

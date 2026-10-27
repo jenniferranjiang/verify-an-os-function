@@ -1,0 +1,30 @@
+--- before/annotated_C/src/LinklistResumeAll.c
++++ annotated_C/src/LinklistResumeAll.c
+@@ -77,11 +77,7 @@
+       store_dll(pure_suspend_sched_link(before.os_tasks.task_desc_map),
+         list, map(semaphore_wait_node, waiting))
+     Ensure __return == KOK && exists after,
+-      (forall (task : addr), In(task, waiting) =>
+-        (exists (desc : TaskDescriptorAbs),
+-          after.os_tasks.task_desc_map(task) == Some(desc) &&
+-          desc.tdSchedMember.tsmStat == TSK_READY &&
+-          desc.tdExstatus == -ERROR)) &&
++      tasks_ready_with_exstatus(after, waiting, -ERROR) &&
+       semaphore_resume_all_steps(sem.semaphore_addr, waiting, before, after) &&
+       task_wakeup_inv(sg, after) *
+       store_dll(pure_suspend_sched_link(after.os_tasks.task_desc_map), list, nil)
+--- before/annotated_C/src/_SemaphoreDelete.c
++++ annotated_C/src/_SemaphoreDelete.c
+@@ -82,11 +82,7 @@
+       store_dll(pure_suspend_sched_link(before.os_tasks.task_desc_map),
+         list, map(semaphore_wait_node, waiting))
+     Ensure __return == KOK && exists after,
+-      (forall (task : addr), In(task, waiting) =>
+-        (exists (desc : TaskDescriptorAbs),
+-          after.os_tasks.task_desc_map(task) == Some(desc) &&
+-          desc.tdSchedMember.tsmStat == TSK_READY &&
+-          desc.tdExstatus == -ERROR)) &&
++      tasks_ready_with_exstatus(after, waiting, -ERROR) &&
+       semaphore_resume_all_steps(sem.semaphore_addr, waiting, before, after) &&
+       task_wakeup_inv(sg, after) *
+       store_dll(pure_suspend_sched_link(after.os_tasks.task_desc_map), list, nil)

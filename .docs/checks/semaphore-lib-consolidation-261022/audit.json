@@ -1,0 +1,102 @@
+{
+  "status": "passed",
+  "moved_lemmas": [
+    {
+      "name": "zero_idnode_insert_ready",
+      "from": "lib/SemaphoreOwnership.v",
+      "to": "lib/SemaphoreInv.v",
+      "identical_statement_and_proof": true
+    },
+    {
+      "name": "semaphore_zero_insert_ready",
+      "from": "lib/SemaphoreOwnership.v",
+      "to": "lib/SemaphoreInv.v",
+      "identical_statement_and_proof": true
+    },
+    {
+      "name": "semaphore_id_ready_fields",
+      "from": "lib/SemaphoreOwnership.v",
+      "to": "lib/SemaphoreInv.v",
+      "identical_statement_and_proof": true
+    },
+    {
+      "name": "semaphore_insert_failure_raw",
+      "from": "lib/SemaphoreOwnership.v",
+      "to": "lib/SemaphoreInv.v",
+      "identical_statement_and_proof": true
+    },
+    {
+      "name": "semaphore_two_zero_chars_ushort",
+      "from": "lib/SemaphoreByteLayout.v",
+      "to": "lib/SemaphoreInv.v",
+      "identical_statement_and_proof": true
+    },
+    {
+      "name": "semaphore_two_zero_bytes_ushort",
+      "from": "lib/SemaphoreByteLayout.v",
+      "to": "lib/SemaphoreInv.v",
+      "identical_statement_and_proof": true
+    },
+    {
+      "name": "semaphore_four_zero_chars_ptr",
+      "from": "lib/SemaphoreByteLayout.v",
+      "to": "lib/SemaphoreInv.v",
+      "identical_statement_and_proof": true
+    },
+    {
+      "name": "semaphore_four_zero_bytes_ptr",
+      "from": "lib/SemaphoreByteLayout.v",
+      "to": "lib/SemaphoreInv.v",
+      "identical_statement_and_proof": true
+    },
+    {
+      "name": "semaphore_zero_bytes_fields",
+      "from": "lib/SemaphoreByteLayout.v",
+      "to": "lib/SemaphoreInv.v",
+      "identical_statement_and_proof": true
+    },
+    {
+      "name": "semaphore_zero_bytes_object",
+      "from": "lib/SemaphoreByteLayout.v",
+      "to": "lib/SemaphoreInv.v",
+      "identical_statement_and_proof": true
+    },
+    {
+      "name": "first_free_from_none_iff",
+      "from": "lib/SemaphoreSpecBridge.v",
+      "to": "lib/idnode.v",
+      "identical_statement_and_proof": true
+    },
+    {
+      "name": "idmanager_first_free_id_none_iff_full",
+      "from": "lib/SemaphoreSpecBridge.v",
+      "to": "lib/idnode.v",
+      "identical_statement_and_proof": true
+    },
+    {
+      "name": "first_free_from_some_min",
+      "from": "lib/SemaphoreSpecBridge.v",
+      "to": "lib/idnode.v",
+      "identical_statement_and_proof": true
+    },
+    {
+      "name": "idmanager_first_free_id_some_min",
+      "from": "lib/SemaphoreSpecBridge.v",
+      "to": "lib/idnode.v",
+      "identical_statement_and_proof": true
+    },
+    {
+      "name": "dll_insert_after_dispatch_at_head",
+      "from": "lib/SemaphoreSpecBridge.v",
+      "to": "lib/DoubleLinkListSpec.v",
+      "identical_statement_and_proof": true
+    }
+  ],
+  "removed_modules": [
+    "SemaphoreOwnership",
+    "SemaphoreByteLayout",
+    "SemaphoreSpecBridge"
+  ],
+  "trial_snapshot_unchanged": true,
+  "axiom_statements_changed": false
+}

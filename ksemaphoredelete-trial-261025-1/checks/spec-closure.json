@@ -1,0 +1,114 @@
+{
+  "source": {
+    "KSemaphoreDelete": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c",
+    "_SemaphoreDelete": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c",
+    "IdGetObj": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c",
+    "GetObj": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c",
+    "IdRemoveObj": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c",
+    "FreeId": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c",
+    "RemoveObj": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c",
+    "LinklistResumeAll": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/linklist.c",
+    "KTaskWakeup": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c",
+    "GetTaskWithIdnodeInfo": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c",
+    "_KTaskWakeup": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c",
+    "KTaskUnSetDelay": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/delay.c",
+    "KTaskInsertToReadyVector": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/assign.c",
+    "KTaskStatSetAsReady": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask_stat.c",
+    "KTaskStateSet": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask_stat.c",
+    "JudgeKTaskStatIsSuspend": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask_stat.c",
+    "AssignPolicyInsert": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/assignstat.c",
+    "RoundRobinRemainReadyVectorInsert": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/assign_roundrobinremain.c",
+    "InitDoubleLinkList": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c",
+    "DoubleLinkListInsertNodeBefore": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c",
+    "DoubleLinkListInsertNodeAfter": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c",
+    "DoubleLinkListRmNode": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c",
+    "IsDoubleLinkListEmpty": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c"
+  },
+  "direct_calls": {
+    "KSemaphoreDelete": [
+      "_SemaphoreDelete"
+    ],
+    "_SemaphoreDelete": [
+      "CriticalAreaLock",
+      "IdGetObj",
+      "CriticalAreaUnLock",
+      "CONTAINER_OF_SEMAPHORE_ID",
+      "IsDoubleLinkListEmpty",
+      "LinklistResumeAll",
+      "IdRemoveObj",
+      "DoubleLinkListRmNode",
+      "x_free",
+      "KTASK_ASSIGN"
+    ],
+    "IdGetObj": [
+      "GetObj"
+    ],
+    "GetObj": [
+      "InitDoubleLinkList",
+      "CONTAINER_OF_IDNODE_LINK"
+    ],
+    "IdRemoveObj": [
+      "IdGetObj",
+      "FreeId",
+      "RemoveObj"
+    ],
+    "FreeId": [],
+    "RemoveObj": [
+      "DoubleLinkListRmNode"
+    ],
+    "LinklistResumeAll": [
+      "CONTAINER_OF_TASK_SCHED",
+      "KTaskWakeup"
+    ],
+    "KTaskWakeup": [
+      "GetTaskWithIdnodeInfo",
+      "_KTaskWakeup"
+    ],
+    "GetTaskWithIdnodeInfo": [
+      "IdGetObj",
+      "CONTAINER_OF_TASK_ID"
+    ],
+    "_KTaskWakeup": [
+      "JudgeKTaskStatIsSuspend",
+      "DoubleLinkListRmNode",
+      "KTaskUnSetDelay",
+      "KTaskInsertToReadyVector"
+    ],
+    "KTaskUnSetDelay": [
+      "DoubleLinkListRmNode"
+    ],
+    "KTaskInsertToReadyVector": [
+      "KTaskStatSetAsReady",
+      "AssignPolicyInsert"
+    ],
+    "KTaskStatSetAsReady": [
+      "KTaskStateSet"
+    ],
+    "KTaskStateSet": [],
+    "JudgeKTaskStatIsSuspend": [],
+    "AssignPolicyInsert": [
+      "RoundRobinRemainReadyVectorInsert"
+    ],
+    "RoundRobinRemainReadyVectorInsert": [
+      "CONTAINER_OF_TASK_SCHED",
+      "DoubleLinkListInsertNodeBefore",
+      "DoubleLinkListInsertNodeAfter"
+    ],
+    "InitDoubleLinkList": [],
+    "DoubleLinkListInsertNodeBefore": [],
+    "DoubleLinkListInsertNodeAfter": [],
+    "DoubleLinkListRmNode": [],
+    "IsDoubleLinkListEmpty": []
+  },
+  "boundaries": [
+    "CONTAINER_OF_TASK_SCHED",
+    "KTASK_ASSIGN",
+    "CONTAINER_OF_IDNODE_LINK",
+    "x_free",
+    "CONTAINER_OF_TASK_ID",
+    "CriticalAreaUnLock",
+    "CONTAINER_OF_SEMAPHORE_ID",
+    "CriticalAreaLock"
+  ],
+  "pending_contracts": []
+}

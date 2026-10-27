@@ -1,0 +1,32 @@
+--- annotated_C/src/kernel/thread/get_task_with_idnode.c (global baseline)
++++ annotated_C/src/kernel/thread/get_task_with_idnode.c (staged)
+@@ -1,9 +1,8 @@
+ #include "m_ktask.h"
+ 
+-/*@ Import Coq Require Import CRTOS_Verify.libai.GetTaskWithIdnodeInside */
++/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskWakeup */
+ 
+ /*@ Extern Coq
+-      (KNONE : Z)
+       (task_world_wf : VarGlobalState -> Prop)
+       (get_task_with_idnode_success :
+         StableGlobalState -> VarGlobalState -> Z -> Z -> Prop)
+@@ -14,7 +13,8 @@
+     Require id_ptr == field_addr(task, struct TaskDescriptor, id) && emp
+     Ensure __return == task &&
+            id_ptr == &(__return->id)
+-*/;
++*/
++;
+ 
+ /*
+  * 锁内只读查询只借用 ID-manager；调用方其余临界区资源作为 frame 保留。
+@@ -30,7 +30,7 @@
+         sg.os_task_stable.task_stable_ids, st.os_tasks.task_idmanager_abs,
+         &k_task_id_manager)
+     Ensure
+-      ((__return == KNONE &&
++      ((__return == 0 &&
+         (id < 0 || idmanager_query(st.os_tasks.task_idmanager_abs, id) == false))
+        ||
+        get_task_with_idnode_success(sg, st, id, __return)) &&

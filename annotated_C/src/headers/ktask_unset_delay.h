@@ -3,9 +3,7 @@
 
 #include "m_ktask.h"
 
-/*@ Import Coq Require Import CRTOS_Verify.libai.KTaskSchedDelayState */
-/*@ Import Coq Require Import CRTOS_Verify.libai.KTaskUnSetDelayState */
-/*@ Import Coq Require Import CRTOS_Verify.libai.KTaskUnSetDelaySpec */
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskUnSetDelay */
 /*@ Extern Coq
       (In : {A} -> A -> list A -> Prop)
       (None : {A} -> option A)

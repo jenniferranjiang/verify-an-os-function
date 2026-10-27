@@ -1,0 +1,134 @@
+--- annotated_C/src/kernel/thread/ktask_wakeup.c (global baseline)
++++ annotated_C/src/kernel/thread/ktask_wakeup.c (staged)
+@@ -1,3 +1,4 @@
++/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskWakeup CRTOS_Verify.lib.KTaskUnSetDelay CRTOS_Verify.lib.KTaskParseInfo */
+ #include "m_assign.h"
+ #include "task_stat_view.h"
+ #include "ktask_set_status.h"
+@@ -9,7 +10,7 @@
+ /*@ Import Coq Require Import CRTOS_Verify.libai.RRR_ReadyInsert */
+ /*@ Import Coq Require Import CRTOS_Verify.libai.KTaskSetDelay */
+ /*@ Import Coq Require Import CRTOS_Verify.libai.KTaskWakeup */
+-/*@ Import Coq Require Import CRTOS_Verify.libai.GetTaskWithIdnodeInside */
++/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskWakeup */
+ /*@ Import Coq Require Import CRTOS_Verify.VC.code.kernel.thread.ktask_wakeup_lib */
+ /*@ Import Coq Import DLL */
+ 
+@@ -68,7 +69,6 @@
+         (Z -> option TaskDescriptorAbs) -> vSchedView -> Assertion)
+       (vSchedLinked : Z -> list(DL_Node Z) -> list(DL_Node Z) -> vSchedView)
+       (vSchedDetached : vSchedView)
+-      (KNONE : Z)
+       (task_fields_id_frame : StableGlobalState -> VarGlobalState -> Assertion)
+       (task_world_wf : VarGlobalState -> Prop)
+       (get_task_with_idnode_success :
+@@ -91,33 +91,47 @@
+       exists (before after : OsAssignReadyVectorAbs) (st' : VarGlobalState),
+         before == st.os_assign.assignReadyVector &&
+         assign_insert_step_ic(st.os_tasks.task_desc_map, task, desc, before, after) &&
+-        st' == replace_global_ready_vector(after, replace_task_desc_map(update_task_desc_map(task, set_task_desc_ready(desc), st.os_tasks.task_desc_map), st)) &&
++        st' ==
++          replace_global_ready_vector(after,
++            replace_task_desc_map(
++              update_task_desc_map(task, set_task_desc_ready(desc), st.os_tasks.task_desc_map), st)) &&
+         task_fields(sg, st') * assign_ready_pending(sg, st')
+- */;
++ */
++;
+ 
+ 
+ struct TaskDescriptor *GetTaskWithIdnodeInfo(int32 id)
+ /*@ inside_critical
+     With (sg : StableGlobalState) (st : VarGlobalState)
+-    Require id < 65536 && task_world_wf(st) &&
+-      store_idmanager(sg.os_task_stable.task_stable_ids,
+-        st.os_tasks.task_idmanager_abs, &k_task_id_manager)
+-    Ensure
+-      ((__return == KNONE &&
++    Require
++      id < 65536 &&
++      task_world_wf(st) &&
++      store_idmanager(
++        sg.os_task_stable.task_stable_ids, st.os_tasks.task_idmanager_abs,
++        &k_task_id_manager)
++    Ensure
++      ((__return == 0 &&
+         (id < 0 || idmanager_query(st.os_tasks.task_idmanager_abs, id) == false))
+-       || get_task_with_idnode_success(sg, st, id, __return)) &&
+-      store_idmanager(sg.os_task_stable.task_stable_ids,
+-        st.os_tasks.task_idmanager_abs, &k_task_id_manager)
+- */
+-/*@ inside_known
++       ||
++       get_task_with_idnode_success(sg, st, id, __return)) &&
++      store_idmanager(
++        sg.os_task_stable.task_stable_ids, st.os_tasks.task_idmanager_abs,
++        &k_task_id_manager)
++ */
++/*@ inside_known <= inside_critical
+     With (sg : StableGlobalState) (st : VarGlobalState) (target : Z)
+-    Require id < 65536 && task_world_wf(st) &&
++    Require
++      id < 65536 &&
++      task_world_wf(st) &&
+       get_task_with_idnode_success(sg, st, id, target) &&
+-      store_idmanager(sg.os_task_stable.task_stable_ids,
+-        st.os_tasks.task_idmanager_abs, &k_task_id_manager)
+-    Ensure __return == target &&
+-      store_idmanager(sg.os_task_stable.task_stable_ids,
+-        st.os_tasks.task_idmanager_abs, &k_task_id_manager)
++      store_idmanager(
++        sg.os_task_stable.task_stable_ids, st.os_tasks.task_idmanager_abs,
++        &k_task_id_manager)
++    Ensure
++      __return == target &&
++      store_idmanager(
++        sg.os_task_stable.task_stable_ids, st.os_tasks.task_idmanager_abs,
++        &k_task_id_manager)
+  */
+ ;
+ 
+@@ -426,9 +440,10 @@
+           wakeup_linked: sched_view != vSchedDetached;
+           wakeup_detached: sched_view == vSchedDetached */
+     DoubleLinkListRmNode(&(task->task_dync_sched_member.sched_link))
+-      /*@ where (remove_member) storeA = pure_task_sched_link_member(st.os_tasks.task_desc_map), a = task;
++/*@ where (remove_member) storeA = pure_task_sched_link_member(st.os_tasks.task_desc_map), a = task;
+               A = Z $ wakeup_linked
+-          where (remove_self) node = &(task->task_dync_sched_member.sched_link) $ wakeup_detached */;
++          where (remove_self) node = &(task->task_dync_sched_member.sched_link) $ wakeup_detached */
++;
+     /*@ Assert
+           ready_before == st.os_assign.assignReadyVector &&
+           os_global_context(sg) &&
+@@ -445,7 +460,8 @@
+           $ wakeup_linked wakeup_detached
+      */
+     KTaskUnSetDelay(task)
+-      /*@ where (all_case_delay) sg = sg, st_before = st, desc = desc */;
++/*@ where (all_case_delay) sg = sg, st_before = st, desc = desc */
++;
+     /*@ Given st_delay from st_after */
+     /* Delay 只改 os_delays；这里按已发生的转换重索引调用者资源。 */
+     /*@ ktask_unset_delay_step(desc.tdDelay, st, st_delay) &&
+@@ -457,7 +473,8 @@
+         task_fields(sg, st_delay) * assign_ready_pending(sg, st_delay)
+      */
+     KTaskInsertToReadyVector(task)
+-      /*@ where sg = sg, st = st_delay, desc = desc */;
++/*@ where sg = sg, st = st_delay, desc = desc */
++;
+     /*@ Given ready_after from after */
+     /*@ (st.os_tasks.task_desc_map(task) == Some(desc) &&
+         0 <= desc.tdSchedMember.tsmCurPrio &&
+@@ -532,7 +549,8 @@
+ 
+     NULL_PARAM_CHECK_1(task);
+     return _KTaskWakeup(task)
+-      /*@ where (not_suspended) old_stat = old_stat $ not_suspended
++/*@ where (not_suspended) old_stat = old_stat $ not_suspended
+           where (wakeup_unified) sg = sg, st = st, desc = desc,
+-            ready_before = ready_before, sched_view = sched_view $ wakeup_unified */;
++            ready_before = ready_before, sched_view = sched_view $ wakeup_unified */
++;
+ }

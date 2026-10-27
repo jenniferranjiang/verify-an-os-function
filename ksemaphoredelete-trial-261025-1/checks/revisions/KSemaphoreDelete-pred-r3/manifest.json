@@ -1,0 +1,46 @@
+{
+  "revision": "KSemaphoreDelete-pred-r3",
+  "status": "review-passed",
+  "base_revision": "KSemaphoreDelete-pred-r2",
+  "aggregate_sha256": "0105ca70df5646e5d1de67673a04aadf2d788e869b96afb89d1cf47fcedf2338",
+  "files": [
+    {
+      "file": "../lib/CrtosInv.v",
+      "snapshot_file": "shared/lib/CrtosInv.v",
+      "sha256": "ddf29e1262bb2270d9c1e038e2378b26408b3174942d0c1d75aa8c9293d99f47"
+    },
+    {
+      "file": "../lib/KSemaphoreDelete.v",
+      "snapshot_file": "shared/lib/KSemaphoreDelete.v",
+      "sha256": "c75726c92aa6bcb7db3c4065955a363c57d8af11141484f23e05d396c476f6f5"
+    },
+    {
+      "file": "../lib/KTaskUnSetDelay.v",
+      "snapshot_file": "shared/lib/KTaskUnSetDelay.v",
+      "sha256": "2ae517e1ee113659326081bd8e9ec54eeb4b3274df4f60705b694a3d6f25daba"
+    },
+    {
+      "file": "../lib/KTaskWakeup.v",
+      "snapshot_file": "shared/lib/KTaskWakeup.v",
+      "sha256": "eb9d486ccfdfcab276489248d9065294122be28698717b44911e3f628c5bfc5e"
+    },
+    {
+      "file": "../lib/SemaphoreInv.v",
+      "snapshot_file": "shared/lib/SemaphoreInv.v",
+      "sha256": "19b64af60cb154dd5b8230034fe365dd21a4962eb0398eb6cabbee33cfd41ea7"
+    },
+    {
+      "file": "../lib/SemaphoreOps.v",
+      "snapshot_file": "shared/lib/SemaphoreOps.v",
+      "sha256": "dee519dd864ce99bc73e801e01eea1bde7d945151a90e7998bce8c80c5a075c9"
+    },
+    {
+      "file": "../lib/TaskInv.v",
+      "snapshot_file": "shared/lib/TaskInv.v",
+      "sha256": "53336f97119434443770031ec50f3569ac518250faacd06f53ff638fd711e653"
+    }
+  ],
+  "scope": "Add task_wakeup_inv in shared KTaskWakeup; all previous definitions unchanged. Active files are shared modules after migration.",
+  "review_record": ".docs/Report/predicate-review.md",
+  "validation_record": "checks/task-wakeup-inv/checks.json"
+}

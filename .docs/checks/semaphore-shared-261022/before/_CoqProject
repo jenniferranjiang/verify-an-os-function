@@ -1,0 +1,67 @@
+-R ../qcp-binary-democases/Rocq/flocq/src Flocq
+-R ../qcp-binary-democases/Rocq/SeparationLogic SimpleC.SL
+-R ../qcp-binary-democases/Rocq/unifysl Logic
+-R ../qcp-binary-democases/Rocq/sets SetsClass
+-R ../qcp-binary-democases/Rocq/compcert_lib compcert.lib
+-R ../qcp-binary-democases/Rocq/auxlibs AUXLib
+-R ../qcp-binary-democases/Rocq/examples SimpleC.EE
+-R ../qcp-binary-democases/Rocq/stdlib SimpleC.StdLib
+-R ../qcp-binary-democases/Rocq/StrategyLib SimpleC.StrategyLib
+-R ../qcp-binary-democases/Rocq/Common SimpleC.Common
+-R ./vendor/fixedpoints FP
+-R ./vendor/MonadLib MonadLib
+-R ../qcp-binary-democases/Rocq/listlib ListLib
+-R ../qcp-binary-democases/Rocq/MaxMinLib MaxMinLib
+-R ../qcp-binary-democases/Rocq/GraphLib GraphLib
+-R ../qcp-binary-democases/Rocq/SumLib SumLib
+-R ../qcp-binary-democases/Rocq/tracelib TraceLib
+-R ../qcp-binary-democases/Rocq/coq-record-update/src RecordUpdate
+-Q ../qcp-binary-democases/Rocq/algorithms Algorithms
+-R ../qcp-binary-democases/Rocq/cdcllib CDCLLib
+-R ./lib CRTOS_Verify.lib
+
+vendor/fixedpoints/LiftConstructors.v
+vendor/fixedpoints/PartialOrder_Setoid.v
+vendor/fixedpoints/BourbakiWitt.v
+vendor/MonadLib/Monad.v
+vendor/MonadLib/MonadErr/MonadErrBasic.v
+lib/AssignInv.v
+lib/AssignState.v
+lib/Bitmap.v
+lib/CrtosConfig.v
+lib/CrtosGlobState.v
+lib/CrtosInv.v
+lib/CrtosRules.v
+lib/DelayInv.v
+lib/DelayState.v
+lib/EventInv.v
+lib/EventState.v
+lib/ExstatusInv.v
+lib/IsrManagerInv.v
+lib/IsrState.v
+lib/KTaskDelay.v
+lib/KTaskDelayMem.v
+lib/KTaskDescriptor.v
+lib/KTaskOsAssign.v
+lib/KTaskParseInfo.v
+lib/KTaskPure.v
+lib/KTaskSchedMember.v
+lib/KTaskStackSetup.v
+lib/KTaskStackSetupProofAux.v
+lib/MsgQueueInv.v
+lib/MsgQueueState.v
+lib/MutexInv.v
+lib/MutexState.v
+lib/NodeSelfLinked.v
+lib/OsAssignReadyVector.v
+lib/StructFieldOffsetAxiom.v
+lib/TaskInv.v
+lib/TaskState.v
+lib/TaskStatus.v
+lib/TaskStatusMemory.v
+lib/TickInv.v
+lib/TickOrder.v
+lib/dll.v
+lib/dll_abs.v
+lib/idnode.v
+lib/idnode_abs.v

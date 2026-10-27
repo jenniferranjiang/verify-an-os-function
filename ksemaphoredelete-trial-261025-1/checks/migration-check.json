@@ -1,0 +1,244 @@
+{
+  "status": "passed",
+  "predicate_revision": "KSemaphoreDelete-pred-r2",
+  "spec_revision": "KSemaphoreDelete-spec-r2",
+  "mapping": [
+    {
+      "reviewed_path": "lib/TaskInv.v",
+      "reviewed_sha256": "53336f97119434443770031ec50f3569ac518250faacd06f53ff638fd711e653",
+      "global_path": "lib/TaskInv.v",
+      "global_sha256": "53336f97119434443770031ec50f3569ac518250faacd06f53ff638fd711e653",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "lib/SemaphoreInv.v",
+      "reviewed_sha256": "19b64af60cb154dd5b8230034fe365dd21a4962eb0398eb6cabbee33cfd41ea7",
+      "global_path": "lib/SemaphoreInv.v",
+      "global_sha256": "19b64af60cb154dd5b8230034fe365dd21a4962eb0398eb6cabbee33cfd41ea7",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "lib/CrtosInv.v",
+      "reviewed_sha256": "72f16003633105296e9694e1f93a0b60a0e0dfd6c0e86e73bdcbaa118d77dcf9",
+      "global_path": "lib/CrtosInv.v",
+      "global_sha256": "ddf29e1262bb2270d9c1e038e2378b26408b3174942d0c1d75aa8c9293d99f47",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "lib/KTaskUnSetDelay.v",
+      "reviewed_sha256": "2ae517e1ee113659326081bd8e9ec54eeb4b3274df4f60705b694a3d6f25daba",
+      "global_path": "lib/KTaskUnSetDelay.v",
+      "global_sha256": "2ae517e1ee113659326081bd8e9ec54eeb4b3274df4f60705b694a3d6f25daba",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "lib/KTaskWakeup.v",
+      "reviewed_sha256": "35800d60cdfd0ac652c7b70d9fb237bc396405d48ed1a98155ec6ad634006534",
+      "global_path": "lib/KTaskWakeup.v",
+      "global_sha256": "ea7b30179e2afad4eeb834727655562a93dc3f3013b9cead4ff921856b249eab",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "lib/SemaphoreOps.v",
+      "reviewed_sha256": "dee519dd864ce99bc73e801e01eea1bde7d945151a90e7998bce8c80c5a075c9",
+      "global_path": "lib/SemaphoreOps.v",
+      "global_sha256": "dee519dd864ce99bc73e801e01eea1bde7d945151a90e7998bce8c80c5a075c9",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "lib/KSemaphoreDelete.v",
+      "reviewed_sha256": "e9b1b1d70ece585e4f5ad6ad860cd8abfd897baf496867f491585c914f4e386a",
+      "global_path": "lib/KSemaphoreDelete.v",
+      "global_sha256": "c75726c92aa6bcb7db3c4065955a363c57d8af11141484f23e05d396c476f6f5",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/include/logic.h",
+      "reviewed_sha256": "368675bd4484a12a7ae79b613e6942fbc1b528331c8f6d2a9f94e8b35049775c",
+      "active_trial_sha256": "20a85c96b26a07f729a38ede9378f63dc6f489b2b51b707d05ffeea1ba8efac1",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/include/slice_types.h",
+      "reviewed_sha256": "9c41a5e64e718f921cef058145c80d0d6dd0a946e068d91d3830d08f8b133777",
+      "active_trial_sha256": "9c41a5e64e718f921cef058145c80d0d6dd0a946e068d91d3830d08f8b133777",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/AssignPolicyInsert.c",
+      "reviewed_sha256": "93555a927905bb827256131673507c6618e18f8a29231b114519d90da5a0c963",
+      "active_trial_sha256": "93555a927905bb827256131673507c6618e18f8a29231b114519d90da5a0c963",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+      "reviewed_sha256": "66c9654dfb4faea731ccdf647a1b6fed57ef0acd2acf5c1ef5b746f618f0d0dd",
+      "active_trial_sha256": "66c9654dfb4faea731ccdf647a1b6fed57ef0acd2acf5c1ef5b746f618f0d0dd",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/DoubleLinkListInsertNodeBefore.c",
+      "reviewed_sha256": "f9975e812f50a23fd7fce919e935a89d74c41745e1ccb2be9b92bae9e8ff3947",
+      "active_trial_sha256": "f9975e812f50a23fd7fce919e935a89d74c41745e1ccb2be9b92bae9e8ff3947",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/DoubleLinkListRmNode.c",
+      "reviewed_sha256": "780f3465cbd2b80002ad91822407f9cd48cf88a247f78c6f9ccc1d74e77fe256",
+      "active_trial_sha256": "780f3465cbd2b80002ad91822407f9cd48cf88a247f78c6f9ccc1d74e77fe256",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/FreeId.c",
+      "reviewed_sha256": "6ec3ce91db6e1d533f70f85b6eae3b87b83632555a0c56ca4f34cdbe724b67d6",
+      "active_trial_sha256": "6ec3ce91db6e1d533f70f85b6eae3b87b83632555a0c56ca4f34cdbe724b67d6",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/GetObj.c",
+      "reviewed_sha256": "d945a4a7627b4c372fe500134bcab9b275bb7b2eb6c82605dd4bbc022d606c84",
+      "active_trial_sha256": "d945a4a7627b4c372fe500134bcab9b275bb7b2eb6c82605dd4bbc022d606c84",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/GetTaskWithIdnodeInfo.c",
+      "reviewed_sha256": "065799508c56a6b5cb371dfd947fb8adfc6081956c77f048498355e746252cc0",
+      "active_trial_sha256": "065799508c56a6b5cb371dfd947fb8adfc6081956c77f048498355e746252cc0",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/IdGetObj.c",
+      "reviewed_sha256": "9df09bceade7f6e241c18b6531054d39a9aec25701ef18e83ca617ab09108d51",
+      "active_trial_sha256": "9df09bceade7f6e241c18b6531054d39a9aec25701ef18e83ca617ab09108d51",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/IdRemoveObj.c",
+      "reviewed_sha256": "2121f84508fb4226be2e2f39ea493ec1259575d9614f689e6266e71d8b57eac9",
+      "active_trial_sha256": "2121f84508fb4226be2e2f39ea493ec1259575d9614f689e6266e71d8b57eac9",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/InitDoubleLinkList.c",
+      "reviewed_sha256": "9b64aea58b40fef8b205772844d978ed5fbfee73892198fd8dcb91f37db0c1ac",
+      "active_trial_sha256": "9b64aea58b40fef8b205772844d978ed5fbfee73892198fd8dcb91f37db0c1ac",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/IsDoubleLinkListEmpty.c",
+      "reviewed_sha256": "2bd677005589b0eb0559783015b29aa73042a9fe228ca7de7f5bd27a12472fb4",
+      "active_trial_sha256": "2bd677005589b0eb0559783015b29aa73042a9fe228ca7de7f5bd27a12472fb4",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/JudgeKTaskStatIsSuspend.c",
+      "reviewed_sha256": "1a46f6fc5cce7a0d9eca2d60ede2838046e33b5964b3ecc9d377b033b568d056",
+      "active_trial_sha256": "1a46f6fc5cce7a0d9eca2d60ede2838046e33b5964b3ecc9d377b033b568d056",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/KSemaphoreDelete.c",
+      "reviewed_sha256": "ea52a061a542e98280a5c3f2088d54d6f9cc6b3573181055ca30510c596cc264",
+      "active_trial_sha256": "ea52a061a542e98280a5c3f2088d54d6f9cc6b3573181055ca30510c596cc264",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/KTaskInsertToReadyVector.c",
+      "reviewed_sha256": "ed7e6210062c89425b0269821890be3848878b560606b27939390fd615351649",
+      "active_trial_sha256": "ed7e6210062c89425b0269821890be3848878b560606b27939390fd615351649",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/KTaskStatSetAsReady.c",
+      "reviewed_sha256": "00474593d6f90fc91ab9f064b47b19328b169a13b803856ce7b3ed3afcb24f5a",
+      "active_trial_sha256": "00474593d6f90fc91ab9f064b47b19328b169a13b803856ce7b3ed3afcb24f5a",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/KTaskStateSet.c",
+      "reviewed_sha256": "1f7e2bddf09a2340464e5d40b8213084535fe2501e31445a900237c094699f68",
+      "active_trial_sha256": "1f7e2bddf09a2340464e5d40b8213084535fe2501e31445a900237c094699f68",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/KTaskUnSetDelay.c",
+      "reviewed_sha256": "b8311b2b0d38ec091f6cdaea5f04f289b79210b72e2c93ba4bd10626a9783229",
+      "active_trial_sha256": "b8311b2b0d38ec091f6cdaea5f04f289b79210b72e2c93ba4bd10626a9783229",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/KTaskWakeup.c",
+      "reviewed_sha256": "c677efe6368a2d985b3c5153759673de0f3a608cb5c8f8f812a145cfe31e2cbd",
+      "active_trial_sha256": "c677efe6368a2d985b3c5153759673de0f3a608cb5c8f8f812a145cfe31e2cbd",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/LinklistResumeAll.c",
+      "reviewed_sha256": "923569c14bc74b8ca1d146fc9d520909bbf5d333b1d981577f0df580b1868a5d",
+      "active_trial_sha256": "923569c14bc74b8ca1d146fc9d520909bbf5d333b1d981577f0df580b1868a5d",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/RemoveObj.c",
+      "reviewed_sha256": "641714f55710c787c427a333f9992bc91cf69c5c9e47fe838bb3b9813b17cbce",
+      "active_trial_sha256": "641714f55710c787c427a333f9992bc91cf69c5c9e47fe838bb3b9813b17cbce",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/RoundRobinRemainReadyVectorInsert.c",
+      "reviewed_sha256": "4fd526dc99a1abbf841d110a148fde4ac017b0d4251d51fbc92af0629d8731fe",
+      "active_trial_sha256": "4fd526dc99a1abbf841d110a148fde4ac017b0d4251d51fbc92af0629d8731fe",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/_KTaskWakeup.c",
+      "reviewed_sha256": "3e1463fb5b02c23f436c85efdd8d6102383fe305bb6abe5752bba6cdb38dd45c",
+      "active_trial_sha256": "3e1463fb5b02c23f436c85efdd8d6102383fe305bb6abe5752bba6cdb38dd45c",
+      "equivalence": "exact text after logical-prefix migration"
+    },
+    {
+      "reviewed_path": "annotated_C/src/_SemaphoreDelete.c",
+      "reviewed_sha256": "fb8ab41c174ea76fb1070874bd07e057195fa0f4b80f03683db1efe8a28594f6",
+      "active_trial_sha256": "fb8ab41c174ea76fb1070874bd07e057195fa0f4b80f03683db1efe8a28594f6",
+      "equivalence": "exact text after logical-prefix migration"
+    }
+  ],
+  "authoritative_inputs_unchanged": [
+    "/home/xinra/crtos/annotated_C/src/include/xsconfig.h",
+    "/home/xinra/TrustBase.md",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/linklist.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/delay.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/assign.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/assignstat.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/assign_roundrobinremain.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask_stat.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/bitmap.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/isr.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/CriticalArea.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_sem.h",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_id.h",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_ktask.h",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_base.h",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_assign.h",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_kdbg.h",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_hook.h",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_memory.h",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/risc-v/Makefile",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/risc-v/k210/Makefile",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/risc-v/k210/interrupt.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/risc-v/shared/Makefile",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/risc-v/shared/riscv64_switch.c",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/arch/risc-v/shared/register_para.h",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/board/kd233/config.mk",
+    "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/board/kd233/.defconfig"
+  ],
+  "root_build": "passed; 8 COQC invocations including affected KSemaphoreCreate",
+  "active_trial_structure": "passed; 23 bodies and 8 boundaries",
+  "formal_vocabulary_checks": 137,
+  "local_review_copies_on_build_path": false,
+  "qcp_started": false
+}

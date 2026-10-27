@@ -1,0 +1,8 @@
+map : forall A B : Type, (A -> B) -> list A -> list B
+     : forall A B : Type, (A -> B) -> list A -> list B
+pure_suspend_sched_link
+:
+(addr -> option TaskDescriptorAbs) -> addr -> addr -> Assertion
+     : (addr -> option TaskDescriptorAbs) -> addr -> addr -> Assertion
+semaphore_wait_node : addr -> DL_Node addr
+     : addr -> DL_Node addr

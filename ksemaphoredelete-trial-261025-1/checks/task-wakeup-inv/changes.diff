@@ -1,0 +1,87 @@
+--- before/global/lib/KTaskWakeup.v
++++ global/lib/KTaskWakeup.v
+@@ -160,6 +160,15 @@
+       st.(os_assign).(assignReadyVector) ” &&
+   store_os_assign_ready_vector (assign_ready_vector_addr sg)
+     st.(os_assign).(assignReadyVector).
++
++(** 任务唤醒操作的统一资源接口：task_fields 提供已登记任务字段和 ID
++    manager，delay_inv 提供延时对象，assign_ready_pending 提供就绪队列。
++    调用前后用同一谓词表示这些资源与当前 st 对应，具体唤醒效果由 spec
++    单独描述。源等待链由调用者另行提供，不在这里重复拥有；也不包含锁
++    token 或完整 os_inv，不要求恢复就绪队列更新过程中的全部稳定一致性。 *)
++Definition task_wakeup_inv (sg : StableGlobalState) (st : VarGlobalState)
++    : Assertion :=
++  task_fields sg st ** delay_inv sg st ** assign_ready_pending sg st.
+ 
+ (** 就绪桶的尾节点视图：空桶的 tail 是哨兵，非空为最后一个节点。
+     空间资源仍只有原桶的哨兵和 links；该纯尾指针关系不重复取得内存。 *)
+--- before/global/lib/index.md
++++ global/lib/index.md
+@@ -13,7 +13,7 @@
+ | `KSemaphoreCreate.v` | 创建函数的抽象操作；不是 C 实现证明文件 |
+ | `SemaphoreOps.v` | 非负 ID 的 uint16 查询归一、等待序列更新及对象注销 |
+ | `KSemaphoreDelete.v` | 删除与逐项唤醒的抽象操作、锁外回收前的完整私有对象表示 |
+-| `KTaskWakeup.v` | 唤醒所需的任务、RRR 就绪插入及延时取消效果和局部资源接口 |
++| `KTaskWakeup.v` | 唤醒所需的任务、RRR 就绪插入及延时取消效果；统一资源接口 `task_wakeup_inv` 与底层局部 view |
+ | `KTaskUnSetDelay.v` | NULL、inactive、active 延时对象的调用者局部视图 |
+ | `DoubleLinkListSpec.v` | 链表插入纯序列语义及哨兵处头插引理 |
+ | `idnode.v` | ID 管理器内存表示，以及最小空闲 ID、容量满等引理（`IDNode` 模块） |
+--- r4/annotated_C/src/LinklistResumeAll.c
++++ r5/annotated_C/src/LinklistResumeAll.c
+@@ -73,9 +73,7 @@
+       waiting == sem.semaphore_pending_addrs &&
+       list == semaphore_pending_head(sem.semaphore_addr) &&
+       os_global_context(sg) &&
+-      task_fields(sg, before) *
+-      delay_inv(sg, before) *
+-      assign_ready_pending(sg, before) *
++      task_wakeup_inv(sg, before) *
+       store_dll(pure_suspend_sched_link(before.os_tasks.task_desc_map),
+         list, map(semaphore_wait_node, waiting))
+     Ensure __return == KOK && exists after,
+@@ -85,9 +83,7 @@
+           desc.tdSchedMember.tsmStat == TSK_READY &&
+           desc.tdExstatus == -ERROR)) &&
+       semaphore_resume_all_steps(sem.semaphore_addr, waiting, before, after) &&
+-      task_fields(sg, after) *
+-      delay_inv(sg, after) *
+-      assign_ready_pending(sg, after) *
++      task_wakeup_inv(sg, after) *
+       store_dll(pure_suspend_sched_link(after.os_tasks.task_desc_map), list, nil)
+  */
+ {
+--- r4/annotated_C/src/_SemaphoreDelete.c
++++ r5/annotated_C/src/_SemaphoreDelete.c
+@@ -78,9 +78,7 @@
+       waiting == sem.semaphore_pending_addrs &&
+       list == semaphore_pending_head(sem.semaphore_addr) &&
+       os_global_context(sg) &&
+-      task_fields(sg, before) *
+-      delay_inv(sg, before) *
+-      assign_ready_pending(sg, before) *
++      task_wakeup_inv(sg, before) *
+       store_dll(pure_suspend_sched_link(before.os_tasks.task_desc_map),
+         list, map(semaphore_wait_node, waiting))
+     Ensure __return == KOK && exists after,
+@@ -90,9 +88,7 @@
+           desc.tdSchedMember.tsmStat == TSK_READY &&
+           desc.tdExstatus == -ERROR)) &&
+       semaphore_resume_all_steps(sem.semaphore_addr, waiting, before, after) &&
+-      task_fields(sg, after) *
+-      delay_inv(sg, after) *
+-      assign_ready_pending(sg, after) *
++      task_wakeup_inv(sg, after) *
+       store_dll(pure_suspend_sched_link(after.os_tasks.task_desc_map), list, nil)
+  */;
+ 
+--- r4/annotated_C/include/logic.h
++++ r5/annotated_C/include/logic.h
+@@ -83,6 +83,7 @@
+   (os_global_context : StableGlobalState -> Prop)
+   (task_world_wf : VarGlobalState -> Prop)
+   (task_fields : StableGlobalState -> VarGlobalState -> Assertion)
++  (task_wakeup_inv : StableGlobalState -> VarGlobalState -> Assertion)
+   (delay_inv : StableGlobalState -> VarGlobalState -> Assertion)
+   (assign_ready_pending : StableGlobalState -> VarGlobalState -> Assertion)
+   (sched_link_of : addr -> addr)

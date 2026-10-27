@@ -1,0 +1,20 @@
+tasks_ready_with_exstatus : VarGlobalState -> list addr -> Z -> Prop
+     : VarGlobalState -> list addr -> Z -> Prop
+fun (st : VarGlobalState) (tasks : list CNotation.addr) (exstatus : Z) =>
+eq_refl
+:
+tasks_ready_with_exstatus st tasks exstatus =
+(forall task : CNotation.addr,
+ In task tasks ->
+ exists desc : TaskDescriptorAbs,
+   task_desc_map (os_tasks st) task = Some desc /\
+   tsmStat (tdSchedMember desc) = TSK_READY /\ tdExstatus desc = exstatus)
+     : forall (st : VarGlobalState) (tasks : list CNotation.addr)
+         (exstatus : Z),
+       tasks_ready_with_exstatus st tasks exstatus =
+       (forall task : CNotation.addr,
+        In task tasks ->
+        exists desc : TaskDescriptorAbs,
+          task_desc_map (os_tasks st) task = Some desc /\
+          tsmStat (tdSchedMember desc) = TSK_READY /\
+          tdExstatus desc = exstatus)

@@ -1,3 +1,4 @@
+/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskUnSetDelay CRTOS_Verify.lib.KTaskParseInfo */
 #include "ktask_unset_delay.h"
 #include "delay_views_strategy.h"
 
@@ -151,7 +152,7 @@ x_err_t KTaskUnSetDelay(KTaskDescriptorType task)
         delay->status = TASK_DELAY_INACTIVE;
         
         DoubleLinkListRmNode(&(delay->link))
-          /*@ where (remove_member)
+/*@ where (remove_member)
               storeA = store_delay_info,
               head = &xiaoshan_delay_head,
               a = mkTaskDelayAbs(
@@ -160,7 +161,8 @@ x_err_t KTaskUnSetDelay(KTaskDescriptorType task)
                 TASK_DELAY_INACTIVE_VALUE),
               prefix = prefix_active,
               suffix = suffix_active;
-              A = TaskDelayAbs */;
+              A = TaskDelayAbs */
+;
         // CriticalAreaUnLock(lock);
 	}
 

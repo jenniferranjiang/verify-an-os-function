@@ -1,0 +1,8 @@
+Warning: ../qcp-binary-democases/Rocq/algorithms (used in -R or -Q) is not a subdirectory of the current directory
+
+Warning: No common logical root.
+Warning: In this case the -docroot option should be given.
+Warning: Otherwise the install-doc target is going to install files
+Warning: in orphan_Algorithms_Flocq_SimpleC.SL_Logic_SetsClass_compcert.lib_AUXLib_SimpleC.EE_SimpleC.StdLib_SimpleC.StrategyLib_SimpleC.Common_FP_MonadLib_ListLib_MaxMinLib_GraphLib_SumLib_TraceLib_RecordUpdate_CDCLLib_CRTOS_Verify.lib
+
+exit_code=0

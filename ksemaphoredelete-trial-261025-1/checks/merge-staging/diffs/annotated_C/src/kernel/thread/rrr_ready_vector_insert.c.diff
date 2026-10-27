@@ -1,0 +1,7 @@
+--- annotated_C/src/kernel/thread/rrr_ready_vector_insert.c (global baseline)
++++ annotated_C/src/kernel/thread/rrr_ready_vector_insert.c (staged)
+@@ -1,3 +1,4 @@
++/*@ Import Coq Require Import CRTOS_Verify.lib.KTaskWakeup */
+ 
+ #include "m_ktask.h"
+ #include "ready_views_strategy.h"
