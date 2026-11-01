@@ -1,6 +1,6 @@
 # Trial 保存与清理约定
 
-使用现有 GitHub 仓库 `jenniferranjiang/verify-an-os-function`。全局 `lib/` 和 `annotated_C/` 保存在 `main`；所有过去的 trial 集中保存到同一个远端分支 `archive/ksemaphoredelete-trial-261025-1`，确认推送成功后从 `main` 和本地工作目录移除。沿用该分支名，不为每个 trial 另建分支。
+使用现有 GitHub 仓库 `jenniferranjiang/verify-an-os-function`。全局 `lib/` 和 `annotated_C/` 保存在 `main`；所有过去的 trial 集中保存到同一个远端分支 `trial-archive`，确认推送成功后从 `main` 和本地工作目录移除。不为每个 trial 另建分支。
 
 - 提交注解 C、predicate/spec、正式 VC 与手写证明、构建/适配脚本、依赖版本、审阅记录、最终检查结果及必要的故障证据。
 - `verification_runs/**/_coq_builds/` 是可重建的编译工作目录，新增内容不提交；`.vo`、`.glob`、`.vos`、`.vok`、辅助文件和 Python 缓存不提交。
@@ -9,7 +9,7 @@
 - 清理旧 trial 前先确认完整源码和关键证据已经提交到归档分支并推送，且依赖版本可定位。随后从当前目录删除并提交删除，需要时按下方命令恢复。
 - 删除已提交的大文件不会减少旧 Git 历史；现有历史不在日常清理中改写。
 
-`ksemaphoredelete-trial-261025-1` 已保存到 [归档分支](https://github.com/jenniferranjiang/verify-an-os-function/tree/archive/ksemaphoredelete-trial-261025-1)，固定提交为 `f96dd2e20249ed8f55d8a33097de411a97aab9ab`。
+`ksemaphoredelete-trial-261025-1` 已保存到 [归档分支](https://github.com/jenniferranjiang/verify-an-os-function/tree/trial-archive)，固定提交为 `f96dd2e20249ed8f55d8a33097de411a97aab9ab`。
 其 predicate 已进入全局 `lib/`，23 个函数的 40 个公开契约与全局对应位置一致。
 `KSemaphoreDelete.c`、`_SemaphoreDelete.c` 和 `LinklistResumeAll.c` 在全局 `annotated_C/src/` 中与归档的已验证版本逐字一致，包含完整函数体注解。
 VC 和证明辅助库保留在归档 trial，不复制到全局。注解中的 `CRTOS_Verify.VC.*` 引用也原样保留；需要重跑验证时恢复 trial，使用其原有项目配置和证明依赖。
@@ -17,14 +17,14 @@ VC 和证明辅助库保留在归档 trial，不复制到全局。注解中的 `
 按需恢复当前 trial：
 
 ```sh
-git fetch origin archive/ksemaphoredelete-trial-261025-1
+git fetch origin trial-archive
 git restore --source=f96dd2e20249ed8f55d8a33097de411a97aab9ab -- ksemaphoredelete-trial-261025-1
 ```
 
 全部 9 个历史 trial 已集中保存在该分支，当前归档提交为 `8d5877b8d9b27bfc51744723b357876b9a8eacda`。
 其中包含 event-create、mutex-create、6 个 semaphore-create 和 semaphore-delete trial；补存了旧临时目录中 150 份源码/脚本快照，保持原相对路径。
-归档分支的 `TRIALS.md` 和 `.docs/trial-archive-index.json` 提供完整目录清单。需要恢复其他 trial 时，将上方 `git restore` 的 source 换为该归档提交或 `origin/archive/ksemaphoredelete-trial-261025-1`，并指定对应目录名。
-本地历史 trial 目录全部移除。删除目录释放工作文件空间，Git 历史仍保存在本地 `.git` 中。
+归档分支的 `TRIALS.md` 和 `.docs/trial-archive-index.json` 提供完整目录清单。需要恢复其他 trial 时，将上方 `git restore` 的 source 换为该归档提交或 `origin/trial-archive`，并指定对应目录名。
+上述 9 个已归档的历史 trial 目录已从本地移除；正在进行的新 trial 仍保留在本地。删除目录释放工作文件空间，Git 历史仍保存在本地 `.git` 中。
 
 2026-11-01 的逐文件核对与清理记录：
 

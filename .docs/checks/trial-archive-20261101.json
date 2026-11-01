@@ -2,7 +2,7 @@
   "date": "2026-11-01",
   "trial": "ksemaphoredelete-trial-261025-1",
   "archive_remote": "origin",
-  "archive_branch": "archive/ksemaphoredelete-trial-261025-1",
+  "archive_branch": "trial-archive",
   "archive_commit": "f96dd2e20249ed8f55d8a33097de411a97aab9ab",
   "archive_tree": "b6159e34070b8408c5bff8261b6cc7b7fe6cd15e",
   "remote_branch_verified": true,
@@ -36,5 +36,6 @@
   "notes": [
     "Ignored build workspaces and caches were discarded.",
     "Other trial directories remain unchanged; Git object history remains local."
-  ]
+  ],
+  "previous_archive_branch": "archive/ksemaphoredelete-trial-261025-1"
 }
