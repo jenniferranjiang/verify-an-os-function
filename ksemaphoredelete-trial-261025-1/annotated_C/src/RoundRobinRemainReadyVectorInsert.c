@@ -47,7 +47,8 @@ void DoubleLinkListInsertNodeBefore(DoubleLinklistType *linklist, DoubleLinklist
              dll_insert_before_dispatch(
                head, nodes, linklist,
                Build_DL_Node(inserted_data, linklist_node)))
-*/;
+*/
+;
 
 void DoubleLinkListInsertNodeAfter(DoubleLinklistType *linklist, DoubleLinklistType *linklist_node)
 /*@ rrr_ready_insert_after
@@ -77,7 +78,8 @@ void DoubleLinkListInsertNodeAfter(DoubleLinklistType *linklist, DoubleLinklistT
              dll_insert_after_dispatch(
                head, nodes, linklist,
                Build_DL_Node(a, linklist_node)))
-*/;
+*/
+;
 
 void RoundRobinRemainReadyVectorInsert(struct TaskDescriptor *task, struct OsAssignReadyVector* ready_table)
 /*@ With (sg : StableGlobalState)
@@ -96,7 +98,7 @@ void RoundRobinRemainReadyVectorInsert(struct TaskDescriptor *task, struct OsAss
       st.os_tasks.task_desc_map(task) == Some(desc) &&
       exists new_bucket,
         rrr_bucket_insert(
-          st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task),
+          st.os_tasks.task_desc_map, desc.tdSchedMember, sched_link_node(task),
           Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
           new_bucket) &&
         task_fields(sg, replace_global_ready_vector(

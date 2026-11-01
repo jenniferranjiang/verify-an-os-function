@@ -1,0 +1,1 @@
+复用 r1 同组的八个证明块与 delete_miss_continuation__lookup_miss helper。当前 goal Definitions 逐项比较完全一致，seed 与 helper closure 兼容。helper 与全部 assigned proofs 已分别通过 Rocq MCP rocq_compile（success: true）；随后用 r2 group-check 核验当前原始声明和依赖。

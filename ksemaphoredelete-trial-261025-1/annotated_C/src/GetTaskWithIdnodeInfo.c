@@ -3,22 +3,23 @@
 
 /* Source: /home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c. Current 32-bit non-SMP configuration. */
 struct IdNode *IdGetObj(struct IdManager *manager, uint16 id)
-/*@ With (sidm: StableIdmanager) (idm: VarIdmanager)
-    Require 0 <= id && id < 65536 && store_idmanager(sidm, idm, manager)
+/*@ With (sm: StableIdmanager) (m: VarIdmanager)
+    Require 0 <= id && id < 65536 && store_idmanager(sm, m, manager)
     Ensure (manager == 0 &&
             __return == 0 &&
-            store_idmanager(sidm, idm, manager))
+            store_idmanager(sm, m, manager))
            ||
            (manager != 0 &&
             __return == 0 &&
-            idmanager_query(idm, id) == false &&
-            store_idmanager(sidm, idm, manager))
+            idmanager_query(m, id) == false &&
+            store_idmanager(sm, m, manager))
            ||
            (manager != 0 &&
             __return != 0 &&
-            idmanager_query(idm, id) == true &&
-            store_idmanager_found(sidm, idm, manager, __return, id))
-*/;
+            idmanager_query(m, id) == true &&
+            store_idmanager_found(sm, m, manager, __return, id))
+*/
+;
 
 KTaskDescriptorType CONTAINER_OF_TASK_ID(struct IdNode *id_ptr)
 /*@ With (task : Z)
@@ -31,8 +32,7 @@ struct TaskDescriptor *GetTaskWithIdnodeInfo(int32 id)
 /*@ inside_critical
     With (sg : StableGlobalState) (st : VarGlobalState)
     Require
-      id < 65536 &&
-      task_world_wf(st) &&
+      id < 65536 && task_world_wf(st) &&
       store_idmanager(
         sg.os_task_stable.task_stable_ids, st.os_tasks.task_idmanager_abs,
         &k_task_id_manager)

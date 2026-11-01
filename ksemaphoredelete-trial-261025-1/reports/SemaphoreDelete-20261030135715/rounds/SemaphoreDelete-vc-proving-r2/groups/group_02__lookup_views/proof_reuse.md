@@ -1,0 +1,1 @@
+Reused the r1 lookup_views assigned proofs and their helper closure. All three goal definitions are unchanged; the annotation-library seed differs only by whitespace. The complete current candidate, with verbatim current goal definitions, passed Rocq MCP rocq_compile before restoration. Rechecking the restored r2 files with controller group-check.

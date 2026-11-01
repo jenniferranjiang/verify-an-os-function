@@ -1,0 +1,1 @@
+Reused the six assigned proof bodies from the previous r1 unlock_frames manual. Current statements and library seed are unchanged; current pure/aux definitions were reviewed and all six candidates rechecked together using Rocq MCP against current shared dependencies. No helpers were reused or added.

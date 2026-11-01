@@ -1,0 +1,1 @@
+Reused the five assigned entry_frames proof bodies from the r1 same-group manual. The five goal Definitions and matching `_6_aux` Definition are identical to the r1 staged goal file; the group library seed is byte-identical. Current Rocq MCP candidate compilation succeeded before saving the reused bodies. No helper adaptation or additional imports were needed.

@@ -24,8 +24,7 @@ inline struct TaskDescriptor *GetTaskWithIdnodeInfo(int32 id)
 /*@ inside_critical
     With (sg : StableGlobalState) (st : VarGlobalState)
     Require
-      id < 65536 &&
-      task_world_wf(st) &&
+      id < 65536 && task_world_wf(st) &&
       store_idmanager(
         sg.os_task_stable.task_stable_ids, st.os_tasks.task_idmanager_abs,
         &k_task_id_manager)

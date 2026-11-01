@@ -1,0 +1,7 @@
+{
+  "helper_library_matches_single_import_fix_modulo_whitespace_comments": true,
+  "manual_matches_r1_modulo_whitespace_comments": true,
+  "old_library_sha256": "a7c84c0c7be771bb1c7e0601dc3d3f64921e4e2f52a8c8183861ab5f824c794c",
+  "new_library_sha256": "5bb39ac24f94c1e01140655ccdad0701c5a309c75681ed20891bbf86f12e9794",
+  "scope": "Read-only candidate comparison; native parent/final checks remain required."
+}

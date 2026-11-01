@@ -1,0 +1,5 @@
+Completed all six assigned LLM_pre_process proofs by reusing the r1 scripts after checking that each current goal Definition matches its r1 staged counterpart. Safety witnesses 9–13 close from contradictory zero/nonzero or zero/one retval hypotheses. Entailment witness 4_1 closes from the same idmanager query equaling false and true. No helper, seed-library, statement, or unassigned-proof changes were needed.
+
+Rocq MCP validation: rocq_compile of the current shared imports, literal current seed library, literal current six goal Definitions, and copied candidate proofs returned success=true in /home/xinra/crtos/ksemaphoredelete-trial-261025-1 before saving the r2 proofs. The working compiler wrapper supplied the compatible native compiler and dependency paths. No claim is made about the incompatible interactive backend.
+
+The forbidden-lemma scan found no matches. The exact r2 controller group-check exited 0 with JSON status passed (71.933944 seconds), compiling the current group library, goals, auto/manual proofs, and group wrapper.

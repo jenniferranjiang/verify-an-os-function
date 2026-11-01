@@ -6,7 +6,8 @@ void KTaskStatSetAsReady(KTaskDescriptorType task)
 /*@ With (old_stat : TaskStatus)
     Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
     Ensure  store_task_status(&(task->task_dync_sched_member.stat), TSK_READY)
-*/;
+*/
+;
 
 void AssignPolicyInsert(struct TaskDescriptor *task, struct OsAssignReadyVector* ready_table)
 /*@ With (sg : StableGlobalState)
@@ -17,17 +18,25 @@ void AssignPolicyInsert(struct TaskDescriptor *task, struct OsAssignReadyVector*
       before == st.os_assign.assignReadyVector &&
       ready_table == assign_ready_vector_addr(sg) &&
       st.os_tasks.task_desc_map(task) == Some(desc) &&
-      task_fields(sg, st) * assign_ready_pending(sg, st) *
+      task_fields(sg, st) *
+      assign_ready_pending(sg, st) *
       occupy_dll_node(sched_link_of(task))
     Ensure
       task != 0 && ready_table != 0 &&
       st.os_tasks.task_desc_map(task) == Some(desc) &&
       exists new_bucket,
-        rrr_bucket_insert(st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task),
-          Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil), new_bucket) &&
-        task_fields(sg, replace_global_ready_vector(assign_policy_insert_ready_vector(before, desc.tdSchedMember, new_bucket), st)) *
-        assign_ready_pending(sg, replace_global_ready_vector(assign_policy_insert_ready_vector(before, desc.tdSchedMember, new_bucket), st))
- */;
+        rrr_bucket_insert(
+          st.os_tasks.task_desc_map, desc.tdSchedMember, sched_link_node(task),
+          Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
+          new_bucket) &&
+        task_fields(sg, replace_global_ready_vector(
+          assign_policy_insert_ready_vector(
+            before, desc.tdSchedMember, new_bucket), st)) *
+        assign_ready_pending(sg, replace_global_ready_vector(
+          assign_policy_insert_ready_vector(
+            before, desc.tdSchedMember, new_bucket), st))
+ */
+;
 
 void KTaskInsertToReadyVector(struct TaskDescriptor *task)
 /*@ With (sg : StableGlobalState)

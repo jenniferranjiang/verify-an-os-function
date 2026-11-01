@@ -1,6 +1,6 @@
 (* Standalone type checks for the QCP Extern declarations; this is not QCP parsing or a C proof. *)
 Require Import Coq.ZArith.ZArith Coq.Lists.List.
-Require Import CRTOS_Verify.lib.KSemaphoreDelete CRTOS_Verify.lib.KTaskUnSetDelay.
+Require Import CRTOS_Verify.lib.KSemaphoreDelete CRTOS_Verify.lib.KTaskUnSetDelay CRTOS_Verify.lib.IdModuleSpec.
 Require Import CRTOS_Verify.lib.DoubleLinkListSpec CRTOS_Verify.lib.TaskStatusMemory CRTOS_Verify.lib.KTaskParseInfo.
 From MonadLib.MonadErr Require Import MonadErrBasic MonadErrHoare monadesafe_lib.
 From SimpleC.SL Require Import Mem SeparationLogic MapLib.
@@ -84,6 +84,9 @@ Check (@idmanager_remove : StableIdmanager -> VarIdmanager -> Z -> VarIdmanager)
 Check (@idmanager_add : VarIdmanager -> Z -> VarIdmanager).
 Check (@idmanager_link : StableIdmanager -> VarIdmanager -> Z -> addr -> VarIdmanager).
 Check (@store_dll : forall A : Type, (addr -> A -> Assertion) -> addr -> list(DL_Node A) -> Assertion).
+Check (@map : forall A B : Type, (A -> B) -> list A -> list B).
+Check (@pure_suspend_sched_link : (addr -> option TaskDescriptorAbs) -> addr -> addr -> Assertion).
+Check (@semaphore_wait_node : addr -> DL_Node addr).
 Check (@occupy_dll_node : addr -> Assertion).
 Check (@store_node_self_linked : addr -> Assertion).
 Check (@store_task_sched_member : addr -> TaskSchedMemberAbs -> Assertion).
@@ -104,6 +107,8 @@ Check (@store_task_status : addr -> TaskStatus -> Assertion).
 Check (@os_global_context : StableGlobalState -> Prop).
 Check (@task_world_wf : VarGlobalState -> Prop).
 Check (@task_fields : StableGlobalState -> VarGlobalState -> Assertion).
+Check (@task_wakeup_inv : StableGlobalState -> VarGlobalState -> Assertion).
+Check (@tasks_ready_with_exstatus : VarGlobalState -> list addr -> Z -> Prop).
 Check (@delay_inv : StableGlobalState -> VarGlobalState -> Assertion).
 Check (@assign_ready_pending : StableGlobalState -> VarGlobalState -> Assertion).
 Check (@sched_link_of : addr -> addr).
@@ -142,5 +147,16 @@ Check (@Crtos_RTrans : VarGlobalState -> VarGlobalState -> Prop).
 Check (@Crtos_GTrans : VarGlobalState -> VarGlobalState -> Prop).
 Check (@os_inv : StableGlobalState -> VarGlobalState -> Assertion).
 Check (@SemaphoreRaw : addr -> Assertion).
+Check (@idmanager_contains : StableIdmanager -> VarIdmanager -> Z -> Z -> Prop).
+Check (@sched_link_node : addr -> DL_Node addr).
+Check (@ktask_wakeup_step : addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop).
+Check (@ktask_wakeup_detached_null_condition : StableGlobalState -> VarGlobalState -> Z -> Prop).
+Check (@ktask_wakeup_detached_null_step : addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop).
+Check (@semaphore_pending_nodes : Z -> VarGlobalState -> list(DL_Node Z) -> Prop).
+Check (@msgqueue_send_pending_nodes : Z -> VarGlobalState -> list(DL_Node Z) -> Prop).
+Check (@msgqueue_recv_pending_nodes : Z -> VarGlobalState -> list(DL_Node Z) -> Prop).
+Check (@wakeup_semaphore_head : Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop).
+Check (@wakeup_msgqueue_send_head : Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop).
+Check (@wakeup_msgqueue_recv_head : Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop).
 Check (@semaphore_pending_head : addr -> addr).
-Check (@semaphore_resume_all_steps : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop).
+Check (@semaphore_resume_all_effect : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop).

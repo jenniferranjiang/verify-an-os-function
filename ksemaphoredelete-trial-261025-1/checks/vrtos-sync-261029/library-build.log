@@ -1,0 +1,3 @@
+COQDEP VFILES
+COQC lib/KTaskWakeup.v
+COQC lib/KSemaphoreDelete.v

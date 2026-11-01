@@ -59,7 +59,7 @@ typedef struct SysDoubleLinklistNode
       (store_task_sched_member :
         Z -> TaskSchedMemberAbs -> Assertion)
       (sched_link_of : Z -> Z)
-      (ready_task_node : Z -> DL_Node Z)
+      (sched_link_node : Z -> DL_Node Z)
       (store_priority_ready_bucket : Z -> list(DL_Node Z) -> Assertion)
       (store_ready_dll_tail_view :
         Z -> list(DL_Node Z) -> Z -> Assertion)
@@ -167,7 +167,7 @@ void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
       linklist_node == sched_link_of(task) &&
       store_priority_ready_bucket(
         head,
-        app(prefix, cons(ready_task_node(task), suffix)))
+        app(prefix, cons(sched_link_node(task), suffix)))
     Ensure
       linklist_node == sched_link_of(task) &&
       store_priority_ready_bucket(head, app(prefix, suffix)) *

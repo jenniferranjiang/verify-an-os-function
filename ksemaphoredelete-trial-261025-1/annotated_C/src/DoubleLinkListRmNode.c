@@ -12,7 +12,7 @@ void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
       linklist_node == sched_link_of(task) &&
       store_priority_ready_bucket(
         head,
-        app(prefix, cons(ready_task_node(task), suffix)))
+        app(prefix, cons(sched_link_node(task), suffix)))
     Ensure
       linklist_node == sched_link_of(task) &&
       store_priority_ready_bucket(head, app(prefix, suffix)) *

@@ -42,8 +42,8 @@ Record VarGlobalState : Type := Build_VarGlobalState {
   os_delays : DelayState;
   os_assign : VarAssignAbs;
   zombie_queue : ZombieQueueAbs;
-  os_recycle : RoleSlotAbs;
-  os_idle : list RoleSlotAbs;
+  os_recycle : ServiceSlotAbs;
+  os_idle : list ServiceSlotAbs;
   os_mutexes : MutexState;
   os_msgqueues : MsgQueueState;
   os_events : EventState;

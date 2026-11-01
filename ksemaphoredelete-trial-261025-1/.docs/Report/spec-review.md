@@ -1,6 +1,21 @@
 # Spec 独立审阅
 
-## 当前 r6 定向审阅（2026-10-27）
+2026-10-30：当前 `KSemaphoreDelete-spec-r9` 已独立审阅通过（设计审阅），见 [spec-review-r9.md](spec-review-r9.md)。正式输入未变，尚未启动实现证明。以下保留历史记录。
+
+2026-10-28 VRTOS 同步更新：当前工作版本为 `KSemaphoreDelete-spec-r8` / `KSemaphoreDelete-pred-r6`，
+已通过共享库构建、类型、C 语法和接口一致性检查，未进行独立审阅或 QCP 实现证明。
+范围仅为根共享库/注解及 1025 trial；旧审阅记录对应旧 revision。
+详见 [VRTOS 同步记录](2026-10-28-vrtos-sync.md)。
+
+## 当前 r7 定向审阅（2026-10-28）
+
+**`KSemaphoreDelete-spec-r7`：review-passed（设计审阅）**，SHA-256 `be363bc892e962d1a7b00fdffcf0566e3138ba9fa843628d06b5fa75cc820699`，绑定 `KSemaphoreDelete-pred-r5`。
+独立 reviewer locked_spec_review 在 predicate 审阅通过后核对 canonical/caller 的效果替换、原结果与资源保证以及上层 delete effect。
+随后按用户要求删除等价展开版，保留的主规格未变，最终单一规格与 caller 一致性重新检查通过。
+共享库与类型检查、C 语法及可执行文本检查通过，见 [检查目录](../../checks/resume-all-effect/)。未运行 QCP parser/symbolic/VC 或 C 实现证明。
+
+
+## 历史 r6 定向审阅（2026-10-27）
 
 **`KSemaphoreDelete-spec-r6`：review-passed（设计审阅）**，SHA-256 `7cf1f26315e947a56238ec22e4919c4ab673c62d0eaa05bce3e6701192e980ac`，引用 `KSemaphoreDelete-pred-r4`。
 独立 reviewer `locked_spec_review` 核对两份具名 spec 等价、`expanded <= semaphore_waiters` 派生方向正确、两个 caller-local 副本一致及单一函数体。

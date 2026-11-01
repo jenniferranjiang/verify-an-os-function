@@ -76,3 +76,9 @@ lib/KTaskUnSetDelay.v
 lib/KTaskWakeup.v
 lib/SemaphoreOps.v
 lib/KSemaphoreDelete.v
+lib/RemoveFound.v
+lib/ServiceSlotWf.v
+
+-R ./vendor/qcp_strategy QCPCompat
+vendor/qcp_strategy/Mapping.v
+lib/IdModuleSpec.v

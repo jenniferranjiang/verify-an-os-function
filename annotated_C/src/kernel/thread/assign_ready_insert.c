@@ -42,7 +42,7 @@
       (store_os_assign_ready_vector :
         Z -> OsAssignReadyVectorAbs -> Assertion)
 
-      (ready_task_node : Z -> DL_Node Z)
+      (sched_link_node : Z -> DL_Node Z)
       (rrr_bucket_insert :
         (Z -> option TaskDescriptorAbs) -> TaskSchedMemberAbs ->
         DL_Node Z -> list(DL_Node Z) -> list(DL_Node Z) -> Prop)
@@ -72,7 +72,7 @@ void AssignPolicyInsert(struct TaskDescriptor *task,
       task != 0 && ready_table != 0 &&
       st.os_tasks.task_desc_map(task) == Some(desc) &&
       exists new_bucket,
-        rrr_bucket_insert(st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task),
+        rrr_bucket_insert(st.os_tasks.task_desc_map, desc.tdSchedMember, sched_link_node(task),
           Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil), new_bucket) &&
         task_fields(sg, replace_global_ready_vector(assign_policy_insert_ready_vector(before, desc.tdSchedMember, new_bucket), st)) *
         assign_ready_pending(sg, replace_global_ready_vector(assign_policy_insert_ready_vector(before, desc.tdSchedMember, new_bucket), st))
@@ -210,7 +210,7 @@ which implies
         rrr_bucket_insert(
           (replace_task_desc_map(update_task_desc_map(task@pre, set_task_desc_ready(desc), st.os_tasks.task_desc_map), st)).os_tasks.task_desc_map,
           (set_task_desc_ready(desc)).tdSchedMember,
-          ready_task_node(task),
+          sched_link_node(task),
           Znth(
             ((set_task_desc_ready(desc)).tdSchedMember).tsmCurPrio,
             before.orvBuckets, nil),
@@ -243,7 +243,7 @@ which implies
       rrr_bucket_insert(
         (replace_task_desc_map(update_task_desc_map(task@pre, set_task_desc_ready(desc), st.os_tasks.task_desc_map), st)).os_tasks.task_desc_map,
         (set_task_desc_ready(desc)).tdSchedMember,
-        ready_task_node(task),
+        sched_link_node(task),
         Znth(
           ((set_task_desc_ready(desc)).tdSchedMember).tsmCurPrio,
           before.orvBuckets, nil),

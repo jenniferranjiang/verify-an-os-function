@@ -19,7 +19,7 @@ void RoundRobinRemainReadyVectorInsert(struct TaskDescriptor *task, struct OsAss
       st.os_tasks.task_desc_map(task) == Some(desc) &&
       exists new_bucket,
         rrr_bucket_insert(
-          st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task),
+          st.os_tasks.task_desc_map, desc.tdSchedMember, sched_link_node(task),
           Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
           new_bucket) &&
         task_fields(sg, replace_global_ready_vector(
@@ -28,7 +28,8 @@ void RoundRobinRemainReadyVectorInsert(struct TaskDescriptor *task, struct OsAss
         assign_ready_pending(sg, replace_global_ready_vector(
           os_assign_ready_vector_replace_bucket(
             before, desc.tdSchedMember.tsmCurPrio, new_bucket), st))
- */;
+ */
+;
 
 void AssignPolicyInsert(struct TaskDescriptor *task, struct OsAssignReadyVector* ready_table)
 /*@ With (sg : StableGlobalState)
@@ -39,16 +40,23 @@ void AssignPolicyInsert(struct TaskDescriptor *task, struct OsAssignReadyVector*
       before == st.os_assign.assignReadyVector &&
       ready_table == assign_ready_vector_addr(sg) &&
       st.os_tasks.task_desc_map(task) == Some(desc) &&
-      task_fields(sg, st) * assign_ready_pending(sg, st) *
+      task_fields(sg, st) *
+      assign_ready_pending(sg, st) *
       occupy_dll_node(sched_link_of(task))
     Ensure
       task != 0 && ready_table != 0 &&
       st.os_tasks.task_desc_map(task) == Some(desc) &&
       exists new_bucket,
-        rrr_bucket_insert(st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task),
-          Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil), new_bucket) &&
-        task_fields(sg, replace_global_ready_vector(assign_policy_insert_ready_vector(before, desc.tdSchedMember, new_bucket), st)) *
-        assign_ready_pending(sg, replace_global_ready_vector(assign_policy_insert_ready_vector(before, desc.tdSchedMember, new_bucket), st))
+        rrr_bucket_insert(
+          st.os_tasks.task_desc_map, desc.tdSchedMember, sched_link_node(task),
+          Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
+          new_bucket) &&
+        task_fields(sg, replace_global_ready_vector(
+          assign_policy_insert_ready_vector(
+            before, desc.tdSchedMember, new_bucket), st)) *
+        assign_ready_pending(sg, replace_global_ready_vector(
+          assign_policy_insert_ready_vector(
+            before, desc.tdSchedMember, new_bucket), st))
  */
 {
 	DoubleLinklistType* node = NONE;

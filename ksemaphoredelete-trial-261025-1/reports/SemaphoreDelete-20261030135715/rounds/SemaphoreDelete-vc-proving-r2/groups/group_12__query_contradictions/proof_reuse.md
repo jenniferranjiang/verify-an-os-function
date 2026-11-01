@@ -1,0 +1,1 @@
+Reused the six matching assigned proof blocks from the query_contradictions group in SemaphoreDelete-vc-proving-r1. Current statements and preprocessing imports match; all current goals retain equalities assigning false and true to the same query. No helper dependencies were added. Current-round verification follows.

@@ -1,0 +1,114 @@
+{
+  "revision": "KSemaphoreDelete-spec-r8",
+  "status": "synchronized-checked-not-reviewed",
+  "base_revision": "KSemaphoreDelete-spec-r7",
+  "files": [
+    {
+      "file": "annotated_C/include/logic.h",
+      "sha256": "4bf37efef54e2ba9158d274efae510b36457855624576d848ead6dbf82cae3e1"
+    },
+    {
+      "file": "annotated_C/include/slice_types.h",
+      "sha256": "9c41a5e64e718f921cef058145c80d0d6dd0a946e068d91d3830d08f8b133777"
+    },
+    {
+      "file": "annotated_C/src/AssignPolicyInsert.c",
+      "sha256": "ee4dc50faa75f640d7f9eb5f173fa05b70987e1fe5f85abeba98a34ba731769f"
+    },
+    {
+      "file": "annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+      "sha256": "66c9654dfb4faea731ccdf647a1b6fed57ef0acd2acf5c1ef5b746f618f0d0dd"
+    },
+    {
+      "file": "annotated_C/src/DoubleLinkListInsertNodeBefore.c",
+      "sha256": "f9975e812f50a23fd7fce919e935a89d74c41745e1ccb2be9b92bae9e8ff3947"
+    },
+    {
+      "file": "annotated_C/src/DoubleLinkListRmNode.c",
+      "sha256": "cc9717ed44946b6e28e44932cdd2c8ece3846113dad161759cc5f75c5e6460c0"
+    },
+    {
+      "file": "annotated_C/src/FreeId.c",
+      "sha256": "ceb9ee84ec639d3f2699fb72144669119b71ebd5175a8d751c8532b4535825c5"
+    },
+    {
+      "file": "annotated_C/src/GetObj.c",
+      "sha256": "64f0a29c02839ac840b5543b716299bfdfdbe6f5790334b726559a9963a4675c"
+    },
+    {
+      "file": "annotated_C/src/GetTaskWithIdnodeInfo.c",
+      "sha256": "49cec8a60b11badcf91a155fe4aa0780742bc3b2b8c2bb5e25e984e5f25186af"
+    },
+    {
+      "file": "annotated_C/src/IdGetObj.c",
+      "sha256": "e3c81f38bc18cd95671d64d50bc5454c0b506a8c85a7aff4034c1f52da44e3d8"
+    },
+    {
+      "file": "annotated_C/src/IdRemoveObj.c",
+      "sha256": "690d8789967fa4f704153597ea79f0741e839dc47dbe39c0869ee44a2c1bbbe3"
+    },
+    {
+      "file": "annotated_C/src/InitDoubleLinkList.c",
+      "sha256": "9b64aea58b40fef8b205772844d978ed5fbfee73892198fd8dcb91f37db0c1ac"
+    },
+    {
+      "file": "annotated_C/src/IsDoubleLinkListEmpty.c",
+      "sha256": "2bd677005589b0eb0559783015b29aa73042a9fe228ca7de7f5bd27a12472fb4"
+    },
+    {
+      "file": "annotated_C/src/JudgeKTaskStatIsSuspend.c",
+      "sha256": "1a46f6fc5cce7a0d9eca2d60ede2838046e33b5964b3ecc9d377b033b568d056"
+    },
+    {
+      "file": "annotated_C/src/KSemaphoreDelete.c",
+      "sha256": "ea52a061a542e98280a5c3f2088d54d6f9cc6b3573181055ca30510c596cc264"
+    },
+    {
+      "file": "annotated_C/src/KTaskInsertToReadyVector.c",
+      "sha256": "581cf1f535f0a2261d64dbe4f15408c2fdd6268467bf0a91ad335c26a5edb770"
+    },
+    {
+      "file": "annotated_C/src/KTaskStatSetAsReady.c",
+      "sha256": "9cf90c44f98c047f3936f2aa021fc7856fd72b5433ba2ad8a75fce480a68c188"
+    },
+    {
+      "file": "annotated_C/src/KTaskStateSet.c",
+      "sha256": "1f7e2bddf09a2340464e5d40b8213084535fe2501e31445a900237c094699f68"
+    },
+    {
+      "file": "annotated_C/src/KTaskUnSetDelay.c",
+      "sha256": "2547e5ba797add85bd1bc3d5591c4299c9727ce8f722b31b7cd8087fce0c2274"
+    },
+    {
+      "file": "annotated_C/src/KTaskWakeup.c",
+      "sha256": "af24086be1c7c4ed48afe41bc7e99535f4636993845d84ce24159ec897ce944a"
+    },
+    {
+      "file": "annotated_C/src/LinklistResumeAll.c",
+      "sha256": "d47b41db844b7957ae3abd470190e2e1cfe62e91c4b587cf7ea827ab6d1fabe2"
+    },
+    {
+      "file": "annotated_C/src/RemoveObj.c",
+      "sha256": "472eef5dc7196b41956262f376a17610407381f4045438240499543d79fa902f"
+    },
+    {
+      "file": "annotated_C/src/RoundRobinRemainReadyVectorInsert.c",
+      "sha256": "a9d1bcd476a877af647d11a66b9393c90eb80b81c3665a6ba31c1e5ca99633b6"
+    },
+    {
+      "file": "annotated_C/src/_KTaskWakeup.c",
+      "sha256": "0cf54bd5391504cad5cf2017313d7eaa8e710b2dcaa87304f041832fbd9fba1a"
+    },
+    {
+      "file": "annotated_C/src/_SemaphoreDelete.c",
+      "sha256": "5f0462128edc8082142e524bab20adda9208164366f654c004b357d616a15374"
+    }
+  ],
+  "aggregate_sha256": "11c7b5595c7f8ed852f8600686a32b52cf46ec139d28de002c3676a3c0c66dff",
+  "scope": "VRTOS imported contract and definition synchronization; shared library and 261025 trial only",
+  "validation_record": "checks/vrtos-sync-261028/validation.json",
+  "change_record": ".docs/Report/2026-10-28-vrtos-sync.md",
+  "qcp_started": false,
+  "predicate_revision": "KSemaphoreDelete-pred-r6",
+  "predicate_sha256": "46e5a3f1557014ece0b6fb4743b76abdf9b3fb41d9a8fd8c71e8a1d87ae28ea8"
+}

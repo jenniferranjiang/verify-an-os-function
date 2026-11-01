@@ -22,3 +22,11 @@ Ubiquitous/XiZi_AIoT/services/tools/mkfs/mkfs
 .Makefile.coq.d
 rocq_mcp_cache_*.v
 *:Zone.Identifier
+
+# Python runtime caches; keep trial sources, proof scripts and evidence tracked.
+__pycache__/
+*.pyc
+
+# Disposable controller build workspaces. Final VC proofs and reports stay tracked.
+**/verification_runs/**/_coq_builds/
+.external-inputs.lock

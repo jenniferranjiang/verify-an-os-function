@@ -8,7 +8,8 @@ void InitDoubleLinkList(DoubleLinklistType *linklist_head)
       undef_data_at(&(linklist_head->node_next))
     Ensure
       linklist_head != 0 && store_node_self_linked(linklist_head)
- */;
+ */
+;
 
 struct IdNode *CONTAINER_OF_IDNODE_LINK(DoubleLinklistType *link_ptr)
 /*@ With (idnode_ptr : addr)
@@ -17,15 +18,15 @@ struct IdNode *CONTAINER_OF_IDNODE_LINK(DoubleLinklistType *link_ptr)
  */;
 
 struct IdNode *GetObj(struct IdManager *manager, uint16 id)
-/*@ With (sidm: StableIdmanager) (idm: VarIdmanager)
-    Require 0 <= id && id < sidm.idmax && store_idmanager(sidm, idm, manager)
+/*@ With (sm: StableIdmanager) (m: VarIdmanager)
+    Require 0 <= id && id < sm.idmax && store_idmanager(sm, m, manager)
     Ensure (__return == 0 &&
-            idmanager_query(idm, id) == false &&
-            store_idmanager(sidm, idm, manager))
+            idmanager_query(m, id) == false &&
+            store_idmanager(sm, m, manager))
            ||
            (__return != 0 &&
-            idmanager_query(idm, id) == true &&
-            store_idmanager_found(sidm, idm, manager, __return, id))
+            idmanager_query(m, id) == true &&
+            store_idmanager_found(sm, m, manager, __return, id))
 */
 {
     if (manager == NONE) { while (1) { } }

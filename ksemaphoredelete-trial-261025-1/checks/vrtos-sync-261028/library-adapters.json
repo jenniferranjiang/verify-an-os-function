@@ -1,0 +1,116 @@
+[
+  {
+    "file": "lib/CrtosGlobState.v",
+    "symbol": "StableGlobalState",
+    "source": "lib/CrtosGlobState.v",
+    "ratio": 0.768
+  },
+  {
+    "file": "lib/CrtosGlobState.v",
+    "symbol": "VarGlobalState",
+    "source": "lib/CrtosGlobState.v",
+    "ratio": 0.534
+  },
+  {
+    "file": "lib/CrtosGlobState.v",
+    "symbol": "os_global_context",
+    "source": "lib/CrtosGlobState.v",
+    "ratio": 0.757
+  },
+  {
+    "file": "lib/CrtosGlobState.v",
+    "symbol": "replace_id_manager",
+    "source": "lib/CrtosGlobState.v",
+    "ratio": 0.819
+  },
+  {
+    "file": "lib/CrtosGlobState.v",
+    "symbol": "replace_task_ptr_list",
+    "source": "lib/CrtosGlobState.v",
+    "ratio": 0.944
+  },
+  {
+    "file": "lib/CrtosGlobState.v",
+    "symbol": "replace_task_desc_map",
+    "source": "lib/CrtosGlobState.v",
+    "ratio": 0.946
+  },
+  {
+    "file": "lib/CrtosGlobState.v",
+    "symbol": "replace_sched_owned_tasks",
+    "source": "lib/CrtosGlobState.v",
+    "ratio": 0.944
+  },
+  {
+    "file": "lib/CrtosInv.v",
+    "symbol": "os_inv",
+    "source": "lib/CrtosInv.v",
+    "ratio": 0.918
+  },
+  {
+    "file": "lib/CrtosRules.v",
+    "symbol": "Crtos_RTrans_refl",
+    "source": "lib/CrtosRules.v",
+    "ratio": 0.933
+  },
+  {
+    "file": "lib/KTaskWakeup.v",
+    "symbol": "replace_global_ready_vector",
+    "source": "libai/AssignState.v",
+    "ratio": 0.301
+  },
+  {
+    "file": "lib/KTaskWakeup.v",
+    "symbol": "semaphore_remove_waiter_step",
+    "source": "libai/SchedNodeState.v",
+    "ratio": 0.347
+  },
+  {
+    "file": "lib/SemaphoreInv.v",
+    "symbol": "semaphore_link_node",
+    "source": "lib/SemaphoreInv.v",
+    "ratio": 0.766
+  },
+  {
+    "file": "lib/SemaphoreInv.v",
+    "symbol": "store_semaphore",
+    "source": "lib/SemaphoreInv.v",
+    "ratio": 0.531
+  },
+  {
+    "file": "lib/SemaphoreInv.v",
+    "symbol": "semaphore_inv",
+    "source": "lib/SemaphoreInv.v",
+    "ratio": 0.425
+  },
+  {
+    "file": "lib/SemaphoreState.v",
+    "symbol": "SemaphoreAbs",
+    "source": "lib/CrtosGlobState.v",
+    "ratio": 0.635
+  },
+  {
+    "file": "lib/SemaphoreState.v",
+    "symbol": "SemaphoreState",
+    "source": "lib/CrtosGlobState.v",
+    "ratio": 0.422
+  },
+  {
+    "file": "lib/SemaphoreState.v",
+    "symbol": "SemaphoreStable",
+    "source": "lib/CrtosGlobState.v",
+    "ratio": 0.731
+  },
+  {
+    "file": "lib/SemaphoreState.v",
+    "symbol": "semaphore_context",
+    "source": "lib/CrtosGlobState.v",
+    "ratio": 0.547
+  },
+  {
+    "file": "lib/SemaphoreState.v",
+    "symbol": "semaphore_waiters",
+    "source": "lib/SemaphoreInv.v",
+    "ratio": 0.525
+  }
+]

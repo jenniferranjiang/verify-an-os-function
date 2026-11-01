@@ -19,7 +19,7 @@
         StableGlobalState -> VarGlobalState -> Z -> TaskDescriptorAbs ->
         Z -> TaskDescriptorAbs -> Assertion)
       (KTASK_MAX_ADVANCE : Z)
-      (ready_task_node : Z -> DL_Node Z)
+      (sched_link_node : Z -> DL_Node Z)
       (getPtr : {A} -> DL_Node A -> Z)
       (Build_DL_Node : {A} -> A -> Z -> DL_Node A)
       (task_addr_aligned :
@@ -88,7 +88,7 @@ void RoundRobinRemainReadyVectorInsert(struct TaskDescriptor *task, struct OsAss
       st.os_tasks.task_desc_map(task) == Some(desc) &&
       exists new_bucket,
         rrr_bucket_insert(
-          st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task),
+          st.os_tasks.task_desc_map, desc.tdSchedMember, sched_link_node(task),
           Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
           new_bucket) &&
         task_fields(sg, replace_global_ready_vector(
@@ -528,7 +528,7 @@ which implies
 			    task_addr_aligned(task@pre, before) &&
 			    exists new_bucket,
 			      rrr_bucket_insert(
-			        st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task@pre),
+			        st.os_tasks.task_desc_map, desc.tdSchedMember, sched_link_node(task@pre),
 			        Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil), new_bucket) &&
 			      task_fields(sg, replace_global_ready_vector(
                 os_assign_ready_vector_replace_bucket(before, desc.tdSchedMember.tsmCurPrio, new_bucket), st)) *
@@ -617,7 +617,7 @@ which implies
 			    task_addr_aligned(task@pre, before) &&
 			    exists new_bucket,
 			      rrr_bucket_insert(
-			        st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task@pre),
+			        st.os_tasks.task_desc_map, desc.tdSchedMember, sched_link_node(task@pre),
 			        Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil), new_bucket) &&
 			      task_fields(sg, replace_global_ready_vector(
                 os_assign_ready_vector_replace_bucket(before, desc.tdSchedMember.tsmCurPrio, new_bucket), st)) *
@@ -706,7 +706,7 @@ which implies
 		    task_addr_aligned(task@pre, before) &&
 		    exists new_bucket,
 		      rrr_bucket_insert(
-		        st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task@pre),
+		        st.os_tasks.task_desc_map, desc.tdSchedMember, sched_link_node(task@pre),
 		        Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil), new_bucket) &&
 		      task_fields(sg, replace_global_ready_vector(
                 os_assign_ready_vector_replace_bucket(before, desc.tdSchedMember.tsmCurPrio, new_bucket), st)) *

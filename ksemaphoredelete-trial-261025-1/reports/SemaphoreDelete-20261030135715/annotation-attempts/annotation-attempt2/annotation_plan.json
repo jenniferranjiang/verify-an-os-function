@@ -1,0 +1,63 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "_SemaphoreDelete",
+      "meaning": "For a nonnegative ID, query the uint16-normalized handle, drain waiters if found, retire and release the same semaphore, and schedule exactly when there were waiters; preserve the reviewed critical protocol and abstract delete continuation."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [
+    {
+      "name": "delete_global_frame",
+      "meaning": "The current os_inv resources outside the semaphore module, including its global consistency condition.",
+      "why_needed": "ID deregistration and management-DLL deletion must preserve all other modules while the semaphore module is in an intermediate state."
+    },
+    {
+      "name": "delete_manager_frame",
+      "meaning": "The concrete remainder after temporarily extracting the semaphore ID manager.",
+      "why_needed": "The remainder must expose the management DLL after ID removal, so it cannot be hidden behind a wand requiring the old manager."
+    },
+    {
+      "name": "delete_pending_restore",
+      "meaning": "A spatial continuation restoring the same os_inv after the read-only pending DLL is returned.",
+      "why_needed": "IsDoubleLinkListEmpty borrows the list, while LinklistResumeAll requires the complete invariant."
+    },
+    {
+      "name": "delete_id_restore",
+      "meaning": "A spatial continuation restoring os_inv after the semaphore ID field is returned unchanged.",
+      "why_needed": "The IdRemoveObj argument is read before lending the complete manager to its contract."
+    }
+  ],
+  "vc_comparisons": [
+    {
+      "source": {
+        "attempt": "SemaphoreDelete-vc-checking-r1",
+        "name": "proof_of__SemaphoreDelete_entail_wit_4_2",
+        "annotation_location": "after IdRemoveObj and DoubleLinkListRmNode, before CriticalAreaUnLock; resched == 0 retirement assertion"
+      },
+      "current": [
+        "proof_of__SemaphoreDelete_entail_wit_4_2",
+        "proof_of__SemaphoreDelete_which_implies_wit_7"
+      ],
+      "old_gap": "The old semaphore ID uniqueness was lost when IdRemoveObj consumed the complete old manager; post-manager validity cannot identify the returned node because deletion removes every matching ID.",
+      "change": "Before IdRemoveObj the os_inv extraction now derives NoDup(map semaphore_id drained.os_semaphores), which remains a pure frame through deregistration and management-DLL removal. The current retirement VC has this NoDup premise; the extraction obligation establishes it from the unchanged full invariant.",
+      "result": "resolved"
+    },
+    {
+      "source": {
+        "attempt": "SemaphoreDelete-vc-checking-r1",
+        "name": "proof_of__SemaphoreDelete_entail_wit_4_4",
+        "annotation_location": "after IdRemoveObj and DoubleLinkListRmNode, before CriticalAreaUnLock; resched == 1 retirement assertion"
+      },
+      "current": [
+        "proof_of__SemaphoreDelete_entail_wit_4_4",
+        "proof_of__SemaphoreDelete_which_implies_wit_7"
+      ],
+      "old_gap": "The old semaphore ID uniqueness was lost when IdRemoveObj consumed the complete old manager; post-manager validity cannot identify the returned node because deletion removes every matching ID.",
+      "change": "Before IdRemoveObj the os_inv extraction now derives NoDup(map semaphore_id drained.os_semaphores), which remains a pure frame through deregistration and management-DLL removal. The current retirement VC has this NoDup premise; the extraction obligation establishes it from the unchanged full invariant.",
+      "result": "resolved"
+    }
+  ]
+}

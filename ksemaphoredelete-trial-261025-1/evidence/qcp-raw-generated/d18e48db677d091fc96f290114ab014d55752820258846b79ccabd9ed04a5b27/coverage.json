@@ -1,0 +1,16 @@
+{
+  "case": "KSemaphoreDelete",
+  "added_manual_witnesses": [
+    "proof_of_KSemaphoreDelete_return_wit_1",
+    "proof_of_KSemaphoreDelete_partial_solve_wit_1_pure",
+    "proof_of_KSemaphoreDelete_partial_solve_wit_1"
+  ],
+  "raw_roles": {
+    "goal_file": "9f6adef32f03185e25b11d4a9750cf1b0c37e3ba93a19d6e9dacbf23bb67bdb8",
+    "proof_auto_file": "b505b9dc6910bf8b6be98d9618ac92c4bcebc4bfabab3b5dda8757b979b3e8ac",
+    "proof_manual_file": "4d33c6b454d0cdde97c20f6b84c26fca540eca1a64e52f6988466053d7df11cf",
+    "goal_check_file": "4a16be05fe3aa3615ca6008deabb9ef75de6f1591422b76631b2be4621057530"
+  },
+  "goal_definitions_changed": false,
+  "auto_file_changed": false
+}

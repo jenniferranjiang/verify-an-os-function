@@ -1,46 +1,76 @@
 {
-  "revision": "KSemaphoreDelete-pred-r4",
+  "revision": "KSemaphoreDelete-pred-r7",
   "status": "review-passed",
-  "base_revision": "KSemaphoreDelete-pred-r3",
-  "aggregate_sha256": "d8996d5d10fe14e0a1a9379b9f9a4bd71235860c232bc324e946913e56dd6e67",
+  "base_revision": "KSemaphoreDelete-pred-r6",
   "files": [
     {
+      "file": "../lib/AssignState.v",
+      "sha256": "778034a7d947d70af09913e1d1d09a11a1bc37c91abe7dcde6f904de00b20479"
+    },
+    {
+      "file": "../lib/CrtosGlobState.v",
+      "sha256": "47a9a1dbacf3059040884c077b0e166b908af7a639b801af264ba1c9c36df747"
+    },
+    {
       "file": "../lib/CrtosInv.v",
-      "snapshot_file": "shared/lib/CrtosInv.v",
-      "sha256": "ddf29e1262bb2270d9c1e038e2378b26408b3174942d0c1d75aa8c9293d99f47"
+      "sha256": "a37fae26c710c34b34d0893b26cf6832f13ac94181cc3021163ca0f7bbee8d71"
+    },
+    {
+      "file": "../lib/CrtosRules.v",
+      "sha256": "9338d39d287890070e3d242fbfc36f8006ff41aec533ec757d32e9769d3de72c"
+    },
+    {
+      "file": "../lib/IdModuleSpec.v",
+      "sha256": "e5976a3f26a517d9ba0c08297d8e130f73b623daa644eac8c1708c39c718ce6c"
     },
     {
       "file": "../lib/KSemaphoreDelete.v",
-      "snapshot_file": "shared/lib/KSemaphoreDelete.v",
-      "sha256": "c75726c92aa6bcb7db3c4065955a363c57d8af11141484f23e05d396c476f6f5"
+      "sha256": "132bf8234fa36bacf56b54639f69a206397af576265e1103de18ac640d829b71"
     },
     {
       "file": "../lib/KTaskUnSetDelay.v",
-      "snapshot_file": "shared/lib/KTaskUnSetDelay.v",
-      "sha256": "2ae517e1ee113659326081bd8e9ec54eeb4b3274df4f60705b694a3d6f25daba"
+      "sha256": "6824f1f387aa96e9202c472a829d33095407bd7d5297f6bd94618f187a50f009"
     },
     {
       "file": "../lib/KTaskWakeup.v",
-      "snapshot_file": "shared/lib/KTaskWakeup.v",
-      "sha256": "b7dc13fe58fd0f1019efe74d732afe45189d05a9da01e2a99b8c873781baa701"
+      "sha256": "b68fff8b4db88739d4682c55a1c80f94f15bd03669c5058380f5d0d73ee00217"
+    },
+    {
+      "file": "../lib/RemoveFound.v",
+      "sha256": "1dd665c09d67c6fdfef759c55f6a78e5c30491b3c0bbce4c2bec9c1365f65204"
     },
     {
       "file": "../lib/SemaphoreInv.v",
-      "snapshot_file": "shared/lib/SemaphoreInv.v",
       "sha256": "19b64af60cb154dd5b8230034fe365dd21a4962eb0398eb6cabbee33cfd41ea7"
     },
     {
       "file": "../lib/SemaphoreOps.v",
-      "snapshot_file": "shared/lib/SemaphoreOps.v",
       "sha256": "dee519dd864ce99bc73e801e01eea1bde7d945151a90e7998bce8c80c5a075c9"
     },
     {
+      "file": "../lib/ServiceSlotWf.v",
+      "sha256": "78d6b34e463444e7a57e69acad7129df44cf3247ff4534a48fdbddd95b978ee2"
+    },
+    {
       "file": "../lib/TaskInv.v",
-      "snapshot_file": "shared/lib/TaskInv.v",
-      "sha256": "53336f97119434443770031ec50f3569ac518250faacd06f53ff638fd711e653"
+      "sha256": "dcb83c321987178ff4bb5457d352359c704bd7e005d4b0c30e1ba834f3cb3d5e"
+    },
+    {
+      "file": "../lib/TaskState.v",
+      "sha256": "01f5c96657ded45055a8fdd14a5d45d2c4f739afb1591ef911172b07b4e22024"
+    },
+    {
+      "file": "../vendor/qcp_strategy/Mapping.v",
+      "sha256": "8484ec2fcea81d86b1f277f761fb7035aa251c9a71b016fa7c9ebba39f002f06"
     }
   ],
-  "scope": "Add the pure tasks_ready_with_exstatus result property; existing definitions unchanged.",
-  "review_record": ".docs/Report/predicate-review.md",
-  "validation_record": "checks/ready-exstatus/shared-build.json"
+  "aggregate_sha256": "9a204245814625aade45188ff92e1cc911bc1aad78fee08d7f2f5dfab8b9d786",
+  "scope": "Wakeup pending-head contracts and LinklistResumeAll; shared library and 261025 trial",
+  "validation_record": "checks/vrtos-sync-261029/validation.json",
+  "change_record": ".docs/Report/design-changes/2026-10-29-1-wakeup-pending-head.md",
+  "qcp_started": false,
+  "pending_obligation": "semaphore_resume_all_effect_steps_obligation (statement only; not proved)",
+  "aggregate_method": "sha256(json.dumps(files, sort_keys=True).encode())",
+  "review_record": ".docs/Report/predicate-review-r7.md",
+  "review_date": "2026-10-30"
 }

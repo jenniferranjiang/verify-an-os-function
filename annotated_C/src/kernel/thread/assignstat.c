@@ -38,7 +38,7 @@
 /*@ Extern Coq
       (getData : {A} -> DL_Node A -> Z)
       (getPtr : {A} -> DL_Node A -> Z)
-      (ready_task_node : Z -> DL_Node Z)
+      (sched_link_node : Z -> DL_Node Z)
       (ready_node_task_desc :
         (Z -> option TaskDescriptorAbs) -> DL_Node Z ->
         TaskDescriptorAbs -> Prop)
@@ -93,7 +93,7 @@ void RoundRobinRemainReadyVectorInsert(
       st.os_tasks.task_desc_map(task) == Some(desc) &&
       exists new_bucket,
         rrr_bucket_insert(
-          st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task),
+          st.os_tasks.task_desc_map, desc.tdSchedMember, sched_link_node(task),
           Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
           new_bucket) &&
         task_fields(sg, replace_global_ready_vector(
@@ -259,10 +259,16 @@ void AssignPolicyInsert(struct TaskDescriptor *task, struct OsAssignReadyVector*
       task != 0 && ready_table != 0 &&
       st.os_tasks.task_desc_map(task) == Some(desc) &&
       exists new_bucket,
-        rrr_bucket_insert(st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task),
-          Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil), new_bucket) &&
-        task_fields(sg, replace_global_ready_vector(assign_policy_insert_ready_vector(before, desc.tdSchedMember, new_bucket), st)) *
-        assign_ready_pending(sg, replace_global_ready_vector(assign_policy_insert_ready_vector(before, desc.tdSchedMember, new_bucket), st))
+        rrr_bucket_insert(
+          st.os_tasks.task_desc_map, desc.tdSchedMember, sched_link_node(task),
+          Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
+          new_bucket) &&
+        task_fields(sg, replace_global_ready_vector(
+          assign_policy_insert_ready_vector(
+            before, desc.tdSchedMember, new_bucket), st)) *
+        assign_ready_pending(sg, replace_global_ready_vector(
+          assign_policy_insert_ready_vector(
+            before, desc.tdSchedMember, new_bucket), st))
  */
 {
     /* 从已发布任务不变量取得后续标量读取所需的范围和基址对齐。 */
@@ -303,7 +309,7 @@ void AssignPolicyInsert(struct TaskDescriptor *task, struct OsAssignReadyVector*
         desc.tdSchedMember.tsmCurPrio < PRIORITY_MAX) && addr_aligned(task, ALIGN_SIZE) &&
           exists new_bucket,
             rrr_bucket_insert(
-              st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task),
+              st.os_tasks.task_desc_map, desc.tdSchedMember, sched_link_node(task),
               Znth(
                 desc.tdSchedMember.tsmCurPrio,
                 before.orvBuckets, nil),
@@ -338,7 +344,7 @@ void AssignPolicyInsert(struct TaskDescriptor *task, struct OsAssignReadyVector*
         desc.tdSchedMember.tsmCurPrio < PRIORITY_MAX) &&
       addr_aligned(task, ALIGN_SIZE) &&
       rrr_bucket_insert(
-        st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task),
+        st.os_tasks.task_desc_map, desc.tdSchedMember, sched_link_node(task),
         Znth(
           desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
         new_bucket) &&
@@ -363,7 +369,7 @@ void AssignPolicyInsert(struct TaskDescriptor *task, struct OsAssignReadyVector*
       addr_aligned(task, ALIGN_SIZE) &&
       exists final_bucket,
         rrr_bucket_insert(
-          st.os_tasks.task_desc_map, desc.tdSchedMember, ready_task_node(task),
+          st.os_tasks.task_desc_map, desc.tdSchedMember, sched_link_node(task),
           Znth(
             desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
           final_bucket) &&

@@ -1,0 +1,140 @@
+[
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c: In function \u2018AssignPolicyInsert\u2019:\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c:64:32: warning: unused variable \u2018tmp\u2019 [-Wunused-variable]\n   64 |         struct TaskDescriptor *tmp = NONE;\n      |                                ^~~\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c:63:29: warning: unused variable \u2018tail\u2019 [-Wunused-variable]\n   63 |         DoubleLinklistType* tail = NONE;\n      |                             ^~~~\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/AssignPolicyInsert.c:62:29: warning: unused variable \u2018node\u2019 [-Wunused-variable]\n   62 |         DoubleLinklistType* node = NONE;\n      |                             ^~~~\n"
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListInsertNodeBefore.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/DoubleLinkListRmNode.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/FreeId.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/GetObj.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/GetTaskWithIdnodeInfo.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/GetTaskWithIdnodeInfo.c: In function \u2018GetTaskWithIdnodeInfo\u2019:\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/GetTaskWithIdnodeInfo.c:66:12: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n   66 |     x_base lock = 0;\n      |            ^~~~\n"
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/IdGetObj.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/IdRemoveObj.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/InitDoubleLinkList.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/IsDoubleLinkListEmpty.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/JudgeKTaskStatIsSuspend.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/KSemaphoreDelete.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskInsertToReadyVector.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskInsertToReadyVector.c: In function \u2018KTaskInsertToReadyVector\u2019:\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskInsertToReadyVector.c:61:12: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n   61 |     x_base lock = 0;\n      |            ^~~~\n"
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskStatSetAsReady.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskStateSet.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskUnSetDelay.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskUnSetDelay.c: In function \u2018KTaskUnSetDelay\u2019:\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskUnSetDelay.c:123:16: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n  123 |         x_base lock = 0;\n      |                ^~~~\n"
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskWakeup.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskWakeup.c: In function \u2018KTaskWakeup\u2019:\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/KTaskWakeup.c:68:12: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n   68 |     x_base lock = 0;\n      |            ^~~~\n"
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/LinklistResumeAll.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/LinklistResumeAll.c: In function \u2018LinklistResumeAll\u2019:\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/LinklistResumeAll.c:58:13: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n   58 |     x_ubase lock = 0;\n      |             ^~~~\n"
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/RemoveObj.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/RoundRobinRemainReadyVectorInsert.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/_KTaskWakeup.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/_KTaskWakeup.c: In function \u2018_KTaskWakeup\u2019:\n/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/_KTaskWakeup.c:170:12: warning: unused variable \u2018lock\u2019 [-Wunused-variable]\n  170 |     x_base lock = 0;\n      |            ^~~~\n"
+  },
+  {
+    "file": "ksemaphoredelete-trial-261025-1/annotated_C/src/_SemaphoreDelete.c",
+    "exit_code": 0,
+    "executable_tokens_preserved": true,
+    "output": ""
+  }
+]

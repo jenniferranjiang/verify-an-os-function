@@ -1,0 +1,6 @@
+semaphore_resume_all_effect
+:
+addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop
+     : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop
+semaphore_resume_all_effect_steps_obligation : Prop
+     : Prop

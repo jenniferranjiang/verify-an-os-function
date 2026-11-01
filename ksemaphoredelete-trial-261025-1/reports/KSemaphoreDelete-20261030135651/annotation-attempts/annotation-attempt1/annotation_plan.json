@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "KSemaphoreDelete",
+      "meaning": "在临界区外按已有 abs_semaphore_delete 执行删除并保留同一 continuation，返回临界区外资源。"
+    },
+    {
+      "name": "_SemaphoreDelete",
+      "meaning": "被调用的删除实现提供同一冻结的抽象删除与临界区外资源契约；本 run 使用契约，其函数体由独立 run 证明。"
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

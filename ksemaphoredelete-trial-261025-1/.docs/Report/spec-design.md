@@ -1,6 +1,30 @@
 # KSemaphoreDelete 规格设计
 
-## 当前 r6：同时保留封装版和展开版（2026-10-27）
+2026-10-29：当前工作版本为 `KSemaphoreDelete-spec-r9` / `KSemaphoreDelete-pred-r7`。
+已同步 VRTOS 新增的等待队首接口；LinklistResumeAll 选用 `semaphore_pending_head_ic`，
+逐步效果采用 `wakeup_semaphore_head`，整体效果继续使用 `semaphore_resume_all_effect`。
+共享库构建、类型、接口一致性及 C 语法检查通过；本次只更新设计，没有运行 QCP 或实现证明。
+未将旧 revision 的审阅结论沿用为本版结论。无需用户操作。
+详见 [本次变更记录](design-changes/2026-10-29-1-wakeup-pending-head.md)。
+
+2026-10-28 历史同步版本为 `KSemaphoreDelete-spec-r8` / `KSemaphoreDelete-pred-r6`，
+已通过共享库构建、类型、C 语法和接口一致性检查，未进行独立审阅或 QCP 实现证明。
+范围仅为根共享库/注解及 1025 trial；旧审阅记录对应旧 revision。
+详见 [VRTOS 同步记录](2026-10-28-vrtos-sync.md)。
+
+## 历史 r7：整体效果与单一封装规格（2026-10-28）
+
+`KSemaphoreDelete-spec-r7` 引用 `KSemaphoreDelete-pred-r5`。LinklistResumeAll 与 _SemaphoreDelete 的 caller-local 声明改用 semaphore_resume_all_effect；
+入口信号量/队列关联仍在 Require，返回值、tasks_ready_with_exstatus、task_wakeup_inv 和空等待 DLL 保留。
+用户追加要求不再保留两份 spec，因此只留 semaphore_waiters，删除等价的 semaphore_waiters_expanded；现有调用名称不变。
+根 annotated_C 的同一调用链同步切换效果关系名称，保留其原有其余契约；新定义、共享索引和声明均已同步。
+
+[接口检查](../../checks/resume-all-effect/interface-checks.json)确认 trial/shared 各自 caller/canonical 一致、C 可执行文本不变、语法检查通过。
+原 steps 改为内部证明辅助；公开抽象删除命令的成功分支也使用整体关系，避免上下层分别采用未连接的效果表达。
+本轮只完成设计、编译及模型检查；effect_steps_obligation 和新 C 契约仍待实现阶段证明，不沿用旧控制器完成状态宣称当前闭包已验证。
+
+
+## 历史 r6：同时保留封装版和展开版（2026-10-27）
 
 按用户要求，在 LinklistResumeAll 的同一真实函数体上保留两个具名规格：`semaphore_waiters` 使用新纯谓词，`semaphore_waiters_expanded <= semaphore_waiters` 展开同一条件。
 两版前置、效果关系、资源和结果语义相同；_SemaphoreDelete 中两份声明同步，现有调用继续选择 semaphore_waiters。

@@ -43,6 +43,7 @@ typedef unsigned long size_t;
                (TaskState :: *)
                (AssignStable :: *)
                (DelayState :: *)
+               (IsrAbs :: *)
                (TaskDescriptorAbs :: *)
                (TaskSchedMemberAbs :: *)
                (TaskBaseInfoAbs :: *)
@@ -180,6 +181,10 @@ typedef struct Delay *DelayType;
       delay_active_nodes: list(DL_Node TaskDelayAbs);
     }
 */
+/*@ Extern Coq Record IsrAbs {
+      isrCount: Z;
+    }
+*/
 /*@ Extern Coq Record StableGlobalState {
       os_task_stable: TaskStable;
       os_assign_stable: AssignStable;
@@ -192,6 +197,7 @@ typedef struct Delay *DelayType;
       os_delays: DelayState;
       os_assign: VarAssignAbs;
       os_tick: Z;
+      os_isr: IsrAbs;
     }
 */
 /*@ Extern Coq Record TaskDescriptorAbs {
@@ -335,7 +341,7 @@ int32 KTaskCreate(const char *name,
 
 void KTaskQuit(void);
 
-void KUpdateExstatus(x_err_t no);
+void KUpdateExstatus(x_err_t status);
 
 int *KObtainExstatus(void);
 

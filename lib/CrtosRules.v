@@ -2,7 +2,8 @@ Require Import Coq.ZArith.ZArith.
 Require Import Coq.Lists.List.
 Require Import Coq.Strings.String.
 Require Import SetsClass.SetsClass.
-From MonadLib.MonadErr Require Import MonadErrBasic.
+From MonadLib.MonadErr Require Import MonadErrBasic MonadErrHoare monadesafe_lib.
+Require Import Coq.Classes.Morphisms.
 Import SetsNotation.
 From SimpleC.SL Require Import Mem SeparationLogic.
 Require Import Logic.LogicGenerator.demo932.Interface.
@@ -16,6 +17,54 @@ Local Open Scope Z_scope.
 
 Local Open Scope sets.
 Local Open Scope string.
+
+Import Monad MonadNotation.
+Local Open Scope monad.
+
+(** 纯命题分支复用 QCP 的 if_else；常量 test 与 assume!! 定义相同。
+    状态类型保持多态，兼容锁内状态及 OC 的状态集合。守卫只过滤行为，
+    不承担 assertS 的调用者义务；未选分支的正常行为和错误均不可达。 *)
+Notation IF P c1 c2 := (if_else (fun _ => P) c1 c2) (only parsing).
+
+(** 两个任意守卫允许重叠或缺口，不自动表示确定性条件分支。
+    迁移普通 if 时须证明 Q <-> ~ P；否则可能增加或过滤原有行为。 *)
+Definition if_pure_case {S A : Type} (P Q : Prop) (c1 c2 : program S A)
+    : program S A :=
+  choice (assume!! P ;; c1) (assume!! Q ;; c2).
+
+(** 为原生程序等价补足投影与 WLP 的改写接口；safeExec 的相应
+    Proper 实例已由 QCP 提供，始终保留其存在初态见证。 *)
+#[export] Instance program_nrm_equiv {S A} :
+  Proper (@ProgramPO.equiv S A ==> eq ==> eq ==> eq ==> iff) (@MonadErr.nrm S A).
+Proof. intros c d H s ? <- r ? <- t ? <-. exact (@ProgramPO.nrmequiv S A c d H s r t). Qed.
+
+#[export] Instance program_err_equiv {S A} :
+  Proper (@ProgramPO.equiv S A ==> eq ==> iff) (@MonadErr.err S A).
+Proof. intros c d H s ? <-. exact (@ProgramPO.errequiv S A c d H s). Qed.
+
+#[export] Instance program_wp_equiv {S A} :
+  Proper (@ProgramPO.equiv S A ==> eq ==> eq ==> iff) (@weakestpre S A).
+Proof.
+  intros c d H Q ? <- s ? <-. exact (iff_sym (wp_progequiv d c Q H s)).
+Qed.
+
+(** 保留用于 nrm、err、WLP 及组合程序内部的分支改写；
+    顶层 safeExec 消费直接使用 QCP 的 choice/test 规则。 *)
+Lemma if_pure_cond_true {S A} P (c1 c2 : program S A) :
+  P -> ProgramPO.equiv (IF P c1 c2) c1.
+Proof.
+  intro HP. unfold if_else.
+  etransitivity; [apply choice_l_equiv, (assume_false_equiv (~ P) c2); tauto |].
+  exact (assume_equiv P c1 HP).
+Qed.
+
+Lemma if_pure_cond_false {S A} P (c1 c2 : program S A) :
+  ~ P -> ProgramPO.equiv (IF P c1 c2) c2.
+Proof.
+  intro HP. unfold if_else.
+  etransitivity; [apply choice_r_equiv, (assume_false_equiv P c1); exact HP |].
+  exact (assume_equiv (~ P) c2 HP).
+Qed.
 
 (** 扩展后的全局状态统一实例化到 QCP CriticalSTS；纯上下文先于空间不变量。 *)
 

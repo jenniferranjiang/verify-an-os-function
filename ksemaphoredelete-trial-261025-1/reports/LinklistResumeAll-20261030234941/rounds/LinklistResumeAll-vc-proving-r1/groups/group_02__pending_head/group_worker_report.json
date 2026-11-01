@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "redundant-nonzero-assertion",
+    "vcs": [
+      {
+        "name": "proof_of_LinklistResumeAll_which_implies_wit_3",
+        "parent": null,
+        "annotation_location": "annotated_C/src/LinklistResumeAll.c:153, which-implies before CONTAINER_OF_TASK_SCHED"
+      }
+    ],
+    "message": "The current pending-list relation and os_inv yield a registered SUSPEND descriptor, task alignment, and the unchanged os_inv; the exact VC reduces to the sole remaining target <> 0 goal. Frozen task ownership and task_world_wf provide no nonzero base premise. Rocq MCP confirms addr_aligned 0 ALIGN_SIZE, stack_point(0)=0, sched_link_of 0=16, and isvalidptr 0 /\\ valid_ptr_value 0. Concrete mstore ownership does not exclude address 0, and nonzero embedded DLL links do not exclude a zero containing-task base.",
+    "repair_boundary": "Remove only the redundant target != 0 C body annotation conjunct at LinklistResumeAll.c:153 and regenerate VCs; frozen canonical/caller specs and predicate definitions remain unchanged."
+  }
+}

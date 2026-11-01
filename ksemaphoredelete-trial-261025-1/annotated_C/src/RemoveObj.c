@@ -10,7 +10,7 @@ void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
       linklist_node == sched_link_of(task) &&
       store_priority_ready_bucket(
         head,
-        app(prefix, cons(ready_task_node(task), suffix)))
+        app(prefix, cons(sched_link_node(task), suffix)))
     Ensure
       linklist_node == sched_link_of(task) &&
       store_priority_ready_bucket(head, app(prefix, suffix)) *
@@ -57,12 +57,13 @@ void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
     Ensure store_dll(storeA, head, suffix) *
            storeA(linklist_node, a) *
            store_node_self_linked(linklist_node)
-*/;
+*/
+;
 
 struct IdNode *RemoveObj(struct IdManager *manager, struct IdNode *idnode)
-/*@ With (sidm: StableIdmanager) (idm: VarIdmanager) (id: Z)
-    Require store_idmanager_remove_ready(sidm, idm, manager, idnode, id)
-    Ensure store_idmanager_removeobj_post(sidm, idm, manager, idnode, id)
+/*@ With (sm: StableIdmanager) (m: VarIdmanager) (id: Z)
+    Require store_idmanager_remove_ready(sm, m, manager, idnode, id)
+    Ensure store_idmanager_removeobj_post(sm, m, manager, idnode, id)
 */
 {
     if (manager == NONE) { while (1) { } }

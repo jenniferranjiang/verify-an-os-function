@@ -81,14 +81,14 @@ Definition update_sched_member
   静态零值与合法 ID 0 必须区分。Registered 只描述当前 task/ID 登记，
   不授予跨解锁存活或禁止删除的保证；注销/失败的真实协议另行建立。
 *)
-Inductive RolePhase : Type :=
-| RoleUninitialized
-| RoleCreateFailed
-| RoleRegistered (task : addr).
+Inductive ServicePhase : Type :=
+| ServiceUninitialized
+| ServiceCreateFailed
+| ServiceRegistered (task : addr).
 
-Record RoleSlotAbs : Type := {
-  role_id : Z;
-  role_phase : RolePhase
+Record ServiceSlotAbs : Type := {
+  service_id : Z;
+  service_phase : ServicePhase
 }.
 
 (**

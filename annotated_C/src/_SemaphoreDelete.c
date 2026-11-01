@@ -15,22 +15,23 @@ x_base CriticalAreaLock(void)
  */;
 
 struct IdNode *IdGetObj(struct IdManager *manager, uint16 id)
-/*@ With (sidm: StableIdmanager) (idm: VarIdmanager)
-    Require 0 <= id && id < 65536 && store_idmanager(sidm, idm, manager)
+/*@ With (sm: StableIdmanager) (m: VarIdmanager)
+    Require 0 <= id && id < 65536 && store_idmanager(sm, m, manager)
     Ensure (manager == 0 &&
             __return == 0 &&
-            store_idmanager(sidm, idm, manager))
+            store_idmanager(sm, m, manager))
            ||
            (manager != 0 &&
             __return == 0 &&
-            idmanager_query(idm, id) == false &&
-            store_idmanager(sidm, idm, manager))
+            idmanager_query(m, id) == false &&
+            store_idmanager(sm, m, manager))
            ||
            (manager != 0 &&
             __return != 0 &&
-            idmanager_query(idm, id) == true &&
-            store_idmanager_found(sidm, idm, manager, __return, id))
-*/;
+            idmanager_query(m, id) == true &&
+            store_idmanager_found(sm, m, manager, __return, id))
+*/
+;
 
 void CriticalAreaUnLock(x_base lock)
 /*@ stable
@@ -68,58 +69,61 @@ int IsDoubleLinkListEmpty(const DoubleLinklistType *linklist)
       ((__return == 1 && nodes == nil) ||
        (__return == 0 && nodes != nil)) &&
       store_dll(storeA, linklist, nodes)
- */;
+ */
+;
 
 x_err_t LinklistResumeAll(DoubleLinklistType *list)
 /*@ semaphore_waiters
-    With (sg : StableGlobalState) (st anchor : VarGlobalState) (sem : SemaphoreAbs)
-    Require In(sem, st.os_semaphores) &&
-      list == semaphore_pending_head(sem.semaphore_addr) &&
-      InsideCritical(sg, anchor) * os_inv(sg, st)
+    With (sg : StableGlobalState) (before : VarGlobalState)
+         (sem : addr) (waiting : list addr)
+    Require list == semaphore_pending_head(sem) &&
+      semaphore_pending_nodes(sem, before, map(sched_link_node, waiting)) &&
+      os_inv(sg, before)
     Ensure __return == KOK && exists after,
-      semaphore_resume_all_steps(sem.semaphore_addr, sem.semaphore_pending_addrs, st, after) &&
-      InsideCritical(sg, anchor) * os_inv(sg, after)
+      semaphore_resume_all_effect(sem, waiting, before, after) &&
+      semaphore_pending_nodes(sem, after, nil) && os_inv(sg, after)
  */;
 
 void IdRemoveObj(struct IdManager *manager, uint16 id)
-/*@ known_node
-    With (sidm: StableIdmanager) (idm: VarIdmanager) (idnode: addr)
+/*@ high_level_spec
+    With (sm: StableIdmanager) (m: VarIdmanager) (idnode: addr)
     Require manager != 0 &&
             0 <= id && id < 65536 &&
             idmanager_query(
-              idmanager_link(sidm, idmanager_add(idm, id), id, idnode), id)
+              idmanager_link(sm, idmanager_add(m, id), id, idnode), id)
               == true &&
-            store_idmanager(sidm,
-              idmanager_link(sidm, idmanager_add(idm, id), id, idnode),
+            store_idmanager(sm,
+              idmanager_link(sm, idmanager_add(m, id), id, idnode),
               manager)
     Ensure idnode != 0 &&
            &(idnode->link) != 0 &&
-           store_idmanager(sidm,
-             idmanager_remove(sidm,
-               idmanager_link(sidm, idmanager_add(idm, id), id, idnode), id),
+           store_idmanager(sm,
+             idmanager_remove(sm,
+               idmanager_link(sm, idmanager_add(m, id), id, idnode), id),
              manager) *
            (idnode->id == 65535) *
-           store_node_self_linked(&(idnode->link))
+           (idnode->link.node_prev == &(idnode->link)) *
+           (idnode->link.node_next == &(idnode->link))
 */
-/*@ current_node
-    With (sidm : StableIdmanager) (idm : VarIdmanager) (idnode : addr)
-    Require store_idmanager_found(sidm, idm, manager, idnode, id)
-    Ensure store_idmanager(sidm, idmanager_remove(sidm, idm, id), manager) *
-      store_idnode(&(idnode->link), Build_IdNodeAbs(65535, idnode)) *
-      store_node_self_linked(&(idnode->link))
- */
-/*@ found_node
-    With (sidm : StableIdmanager) (idm : VarIdmanager) (idnode : addr)
-    Require store_idmanager_found(sidm, idm, manager, idnode, id)
-    Ensure store_idmanager(sidm, idmanager_remove(sidm, idm, id), manager) *
-      store_idnode(&(idnode->link), Build_IdNodeAbs(65535, idnode)) *
-      store_node_self_linked(&(idnode->link))
- */
-/*@ absent_node
-    With (sidm : StableIdmanager) (idm : VarIdmanager)
-    Require idmanager_query(idm, id) == false && store_idmanager(sidm, idm, manager)
-    Ensure store_idmanager(sidm, idm, manager)
- */;
+/*@ low_level_spec
+    With (sm: StableIdmanager) (m: VarIdmanager)
+    Require manager != 0 &&
+            0 <= id && id < 65536 &&
+            store_idmanager(sm, m, manager)
+    Ensure (idmanager_query(m, id) == false &&
+            store_idmanager(sm, m, manager))
+           ||
+           (exists idnode,
+              idmanager_query(m, id) == true &&
+              idmanager_contains(sm, m, id, idnode) &&
+              idnode != 0 &&
+              &(idnode->link) != 0 &&
+              store_idmanager(sm, idmanager_remove(sm, m, id), manager) *
+              (idnode->id == 65535) *
+              (idnode->link.node_prev == &(idnode->link)) *
+              (idnode->link.node_next == &(idnode->link)))
+*/
+;
 
 void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
 /*@ remove_ready_member
@@ -129,7 +133,7 @@ void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
       linklist_node == sched_link_of(task) &&
       store_priority_ready_bucket(
         head,
-        app(prefix, cons(ready_task_node(task), suffix)))
+        app(prefix, cons(sched_link_node(task), suffix)))
     Ensure
       linklist_node == sched_link_of(task) &&
       store_priority_ready_bucket(head, app(prefix, suffix)) *
@@ -176,7 +180,8 @@ void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
     Ensure store_dll(storeA, head, suffix) *
            storeA(linklist_node, a) *
            store_node_self_linked(linklist_node)
-*/;
+*/
+;
 
 void x_free(void *ptr)
 /*@ Require SemaphoreRaw(ptr)
@@ -221,7 +226,7 @@ void _SemaphoreDelete(int32 id)
         LinklistResumeAll(&sem->pend_list) /*@ where (semaphore_waiters) sg = sg */;
     }
 
-    IdRemoveObj(&k_sem_id_manager, sem->id.id) /*@ where (current_node) */;
+    IdRemoveObj(&k_sem_id_manager, sem->id.id) /*@ where (low_level_spec) */;
     DoubleLinkListRmNode(&sem->link) /*@ where (remove_member) */;
     CriticalAreaUnLock(lock) /*@ where (stable) sg = sg */;
 

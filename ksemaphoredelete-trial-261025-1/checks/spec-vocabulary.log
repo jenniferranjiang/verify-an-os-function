@@ -162,6 +162,14 @@ forall A : Type,
 (addr -> A -> Assertion) -> addr -> list (DL_Node A) -> Assertion
      : forall A : Type,
        (addr -> A -> Assertion) -> addr -> list (DL_Node A) -> Assertion
+map : forall A B : Type, (A -> B) -> list A -> list B
+     : forall A B : Type, (A -> B) -> list A -> list B
+pure_suspend_sched_link
+:
+(addr -> option TaskDescriptorAbs) -> addr -> addr -> Assertion
+     : (addr -> option TaskDescriptorAbs) -> addr -> addr -> Assertion
+semaphore_wait_node : addr -> DL_Node addr
+     : addr -> DL_Node addr
 occupy_dll_node : addr -> Assertion
      : addr -> Assertion
 store_node_self_linked : addr -> Assertion
@@ -212,6 +220,10 @@ task_world_wf : VarGlobalState -> Prop
      : VarGlobalState -> Prop
 task_fields : StableGlobalState -> VarGlobalState -> Assertion
      : StableGlobalState -> VarGlobalState -> Assertion
+task_wakeup_inv : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+tasks_ready_with_exstatus : VarGlobalState -> list addr -> Z -> Prop
+     : VarGlobalState -> list addr -> Z -> Prop
 delay_inv : StableGlobalState -> VarGlobalState -> Assertion
      : StableGlobalState -> VarGlobalState -> Assertion
 assign_ready_pending : StableGlobalState -> VarGlobalState -> Assertion
@@ -341,9 +353,46 @@ os_inv : StableGlobalState -> VarGlobalState -> Assertion
      : StableGlobalState -> VarGlobalState -> Assertion
 SemaphoreRaw : addr -> Assertion
      : addr -> Assertion
+idmanager_contains : StableIdmanager -> VarIdmanager -> Z -> Z -> Prop
+     : StableIdmanager -> VarIdmanager -> Z -> Z -> Prop
+sched_link_node : addr -> DL_Node addr
+     : addr -> DL_Node addr
+ktask_wakeup_step
+:
+addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+     : addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+ktask_wakeup_detached_null_condition
+:
+StableGlobalState -> VarGlobalState -> Z -> Prop
+     : StableGlobalState -> VarGlobalState -> Z -> Prop
+ktask_wakeup_detached_null_step
+:
+addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+     : addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+semaphore_pending_nodes : Z -> VarGlobalState -> list (DL_Node Z) -> Prop
+     : Z -> VarGlobalState -> list (DL_Node Z) -> Prop
+msgqueue_send_pending_nodes : Z -> VarGlobalState -> list (DL_Node Z) -> Prop
+     : Z -> VarGlobalState -> list (DL_Node Z) -> Prop
+msgqueue_recv_pending_nodes : Z -> VarGlobalState -> list (DL_Node Z) -> Prop
+     : Z -> VarGlobalState -> list (DL_Node Z) -> Prop
+wakeup_semaphore_head
+:
+Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+     : Z ->
+       Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+wakeup_msgqueue_send_head
+:
+Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+     : Z ->
+       Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+wakeup_msgqueue_recv_head
+:
+Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+     : Z ->
+       Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
 semaphore_pending_head : addr -> addr
      : addr -> addr
-semaphore_resume_all_steps
+semaphore_resume_all_effect
 :
 addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop
      : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop

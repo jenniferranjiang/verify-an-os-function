@@ -1,0 +1,67 @@
+{
+  "canonical": "annotated_C/src/_SemaphoreDelete.c",
+  "canonical_sha256": "548fd7df66cb5bbbc602288de4c15063b18542a589c056cc1a5adc13812895fe",
+  "parser_input": "evidence/parser-normalization/0e1fb7d33cefd243d9bb8b767c62d836bd51a62b41d57e8285800dc3e52d36ad/_SemaphoreDelete.c",
+  "parser_sha256": "0e1fb7d33cefd243d9bb8b767c62d836bd51a62b41d57e8285800dc3e52d36ad",
+  "changes": [
+    {
+      "old": "(idnode->id == 65535)",
+      "new": "store(field_addr(idnode, struct IdNode, id), unsigned short, 65535)",
+      "count": 1
+    },
+    {
+      "old": "(idnode->link.node_prev == &(idnode->link))",
+      "new": "store(field_addr(field_addr(idnode, struct IdNode, link), struct SysDoubleLinklistNode, node_prev), struct SysDoubleLinklistNode *, field_addr(idnode, struct IdNode, link))",
+      "count": 1
+    },
+    {
+      "old": "(idnode->link.node_next == &(idnode->link))",
+      "new": "store(field_addr(field_addr(idnode, struct IdNode, link), struct SysDoubleLinklistNode, node_next), struct SysDoubleLinklistNode *, field_addr(idnode, struct IdNode, link))",
+      "count": 1
+    },
+    {
+      "old": "&(idnode->link)",
+      "new": "field_addr(idnode, struct IdNode, link)",
+      "count": 1
+    },
+    {
+      "old": "(idnode->id == 65535)",
+      "new": "store(field_addr(idnode, struct IdNode, id), unsigned short, 65535)",
+      "count": 1
+    },
+    {
+      "old": "(idnode->link.node_prev == &(idnode->link))",
+      "new": "store(field_addr(field_addr(idnode, struct IdNode, link), struct SysDoubleLinklistNode, node_prev), struct SysDoubleLinklistNode *, field_addr(idnode, struct IdNode, link))",
+      "count": 1
+    },
+    {
+      "old": "(idnode->link.node_next == &(idnode->link))",
+      "new": "store(field_addr(field_addr(idnode, struct IdNode, link), struct SysDoubleLinklistNode, node_next), struct SysDoubleLinklistNode *, field_addr(idnode, struct IdNode, link))",
+      "count": 1
+    },
+    {
+      "old": "&(idnode->link)",
+      "new": "field_addr(idnode, struct IdNode, link)",
+      "count": 1
+    },
+    {
+      "kind": "bound-type-alpha-rename",
+      "function": "DoubleLinkListRmNode",
+      "spec": "remove_from_head",
+      "old": "A",
+      "new": "A_from_head",
+      "count": 4
+    },
+    {
+      "kind": "exact-C-macro-expansion",
+      "old": "NONE",
+      "new": "((void *)0)",
+      "count": 3,
+      "definition": "annotated_C/include/slice_types.h:16"
+    }
+  ],
+  "canonical_code_unchanged": true,
+  "preprocessed_executable_code_unchanged": true,
+  "line_count_unchanged": true,
+  "basis": "/home/xinra/crtos/annotated_C/src/kernel/thread/ktask_id_delete.c:19-29"
+}

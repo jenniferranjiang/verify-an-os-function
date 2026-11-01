@@ -1,6 +1,21 @@
 # Predicate 独立审阅
 
-## 当前 r4 定向审阅（2026-10-27）
+2026-10-30：当前 `KSemaphoreDelete-pred-r7` 已独立审阅通过（设计审阅），见 [predicate-review-r7.md](predicate-review-r7.md)。正式输入未变，尚未启动实现证明。以下保留历史记录。
+
+2026-10-28 VRTOS 同步更新：当前工作版本为 `KSemaphoreDelete-spec-r8` / `KSemaphoreDelete-pred-r6`，
+已通过共享库构建、类型、C 语法和接口一致性检查，未进行独立审阅或 QCP 实现证明。
+范围仅为根共享库/注解及 1025 trial；旧审阅记录对应旧 revision。
+详见 [VRTOS 同步记录](2026-10-28-vrtos-sync.md)。
+
+## 当前 r5 定向审阅（2026-10-28）
+
+**`KSemaphoreDelete-pred-r5`：review-passed（设计审阅）**，SHA-256 `a24b694111d29662ef8b841a1abe54b2330542084a5b11ffecebd210c6173789`。
+独立 reviewer locked_spec_review 核对任务表字段保持、按 tdDelay 选 active、delay filter 顺序、fixed-map ready fold 的依据及空队列恒等边界。
+审核确认带合法资源前提的连接义务范围合理，但未证明；不能把 statement 当作已证事实。
+候选和合并后的根模块均编译通过，三项针对性模型检查通过；证据在 [检查目录](../../checks/resume-all-effect/)。
+
+
+## 历史 r4 定向审阅（2026-10-27）
 
 **`KSemaphoreDelete-pred-r4`：review-passed**，SHA-256 `d8996d5d10fe14e0a1a9379b9f9a4bd71235860c232bc324e946913e56dd6e67`。
 独立 reviewer `locked_spec_review` 核对类型、原量词式与定义完全相同、中文注释边界准确且无新增假设或资源。

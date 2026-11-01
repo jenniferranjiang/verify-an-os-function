@@ -1,3 +1,4 @@
+Require Export CRTOS_Verify.lib.ServiceSlotWf.
 Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.
 Require Import Coq.Sorting.Permutation Coq.Sorting.Sorted Coq.micromega.Lia.
 From SimpleC.SL Require Import Mem SeparationLogic MapLib.
@@ -67,18 +68,18 @@ Record task_world_wf (st : VarGlobalState) : Prop := {
   task_wf_running_bitmap :
     forall task desc,
     st.(os_tasks).(task_desc_map) task = Some desc ->
-    desc.(tdSchedMember).(tsmStat) = TSK_RUNNING ->
+    (desc.(tdSchedMember).(tsmStat) = TSK_RUNNING \/
+     desc.(tdSchedMember).(tsmStat) = TSK_SUSPEND) ->
     desc.(tdSchedMember).(tsmBitmapColumn) =
       Z.shiftl 1 desc.(tdSchedMember).(tsmCurPrio);
-  (** SUSPEND 从已启动任务挂起而来；挂起保持 cur_prio 与 bitmap_column。
-      唤醒直接使用该掩码，不重新计算。本条件是源码生命周期保持义务，
-      不能由原 RUNNING 条件或字段类型推出；本次未将保持性当作已证引理。 *)
-  task_wf_suspend_bitmap :
+  task_wf_init_close_bitmap :
     forall task desc,
     st.(os_tasks).(task_desc_map) task = Some desc ->
-    desc.(tdSchedMember).(tsmStat) = TSK_SUSPEND ->
-    desc.(tdSchedMember).(tsmBitmapColumn) =
-      Z.shiftl 1 desc.(tdSchedMember).(tsmCurPrio)
+    (desc.(tdSchedMember).(tsmStat) = TSK_INIT \/
+     desc.(tdSchedMember).(tsmStat) = TSK_CLOSE) ->
+    (desc.(tdSchedMember).(tsmBitmapColumn) = 0 \/
+     desc.(tdSchedMember).(tsmBitmapColumn) =
+       Z.shiftl 1 desc.(tdSchedMember).(tsmCurPrio))
 }.
 
 (**
@@ -102,6 +103,7 @@ Definition store_task_descriptor_padding (task : addr) : Assertion :=
 *)
 Definition store_task_descriptor
     (task : addr) (desc : TaskDescriptorAbs) : Assertion :=
+  “ addr_aligned task ALIGN_SIZE ” &&
   store_task_sched_member
     (&(task # "TaskDescriptor" ->ₛ
       "task_dync_sched_member" .ₛ "sched_link")) desc.(tdSchedMember) **
@@ -120,7 +122,7 @@ Definition store_task_descriptor
 (** 自持 sched_link 的唯一 cell：INIT/RUNNING 必须自持，SUSPEND 可以自持。
     CLOSE 不在此分支；仍发布的 CLOSE 由 zombie 队列拥有，摘除后的节点
     交给回收者的局部资源。INIT/RUNNING 的成员资格由 task_world_wf 保证；
-    所有状态的完整覆盖与互斥仍由 os_wf_sched_coverage 统一保证。 *)
+    所有状态的完整覆盖与互斥仍由 os_wf_sched_nodup / os_wf_sched_domain 统一保证。 *)
 Definition store_detached_sched_link
     (T : addr -> option TaskDescriptorAbs) (task : addr) : Assertion :=
   EX desc : TaskDescriptorAbs,
@@ -145,8 +147,7 @@ Definition store_owned_sched_nodes
 Definition store_published_task
     (task : addr) (desc : TaskDescriptorAbs) : Assertion :=
   let info := desc.(tdBaseInfo) in
-  “ addr_aligned task ALIGN_SIZE /\
-    aligned_reglen desc.(tdStackPoint) /\
+  “ aligned_reglen desc.(tdStackPoint) /\
     info.(tbStackStart) <= desc.(tdStackPoint) /\
     desc.(tdStackPoint) + sizeof("StackRegisterContext") <=
       kss_aligned_top info ” &&
@@ -251,19 +252,13 @@ Definition store_zombie_queue
   源码删除保护检查任务名称前缀，当前入口/ID 关系也不蕴含该保护；
   后续证明需要另行建立任务名称事实。
 *)
-Definition role_slot_wf
-    (core : VarGlobalState) (entry : addr) (role : RoleSlotAbs) : Prop :=
-  match role.(role_phase) with
-  | RoleUninitialized => role.(role_id) = 0
-  | RoleCreateFailed => role.(role_id) < 0
-  | RoleRegistered task =>
-      exists desc,
-        core.(os_tasks).(task_desc_map) task = Some desc /\
-        desc.(tdBaseInfo).(tbFuncEntry) = entry /\
-        exists node,
-          In node (task_id_nodes core) /\
-          node.(idnode_addr) = &(task # "TaskDescriptor" ->ₛ "id") /\
-          node.(idnode_id) = role.(role_id)
+Definition service_slot_wf
+    (core : VarGlobalState) (entry : addr) (os_service : ServiceSlotAbs) : Prop :=
+  match os_service.(service_phase) with
+  | ServiceUninitialized => os_service.(service_id) = 0
+  | ServiceCreateFailed => os_service.(service_id) < 0
+  | ServiceRegistered task =>
+      exists desc, recycler_idler_published_wf core entry os_service task desc
   end.
 
 Lemma pure_suspend_sched_link_open : forall T link task desc,

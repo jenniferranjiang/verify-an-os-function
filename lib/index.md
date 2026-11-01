@@ -12,8 +12,11 @@
 | `SemaphoreInv.v` | 对象各生命周期的内存所有权、模块不变量、字段偏移假设，以及资源拆分、失败回收、零字节到字段转换引理 |
 | `KSemaphoreCreate.v` | 创建函数的抽象操作；不是 C 实现证明文件 |
 | `SemaphoreOps.v` | 非负 ID 的 uint16 查询归一、等待序列更新及对象注销 |
-| `KSemaphoreDelete.v` | 删除与逐项唤醒的抽象操作、锁外回收前的完整私有对象表示 |
-| `KTaskWakeup.v` | 唤醒所需的任务、RRR 就绪插入及延时取消效果；统一资源接口 `task_wakeup_inv`、结果条件 `tasks_ready_with_exstatus` 与底层局部 view |
+| `KSemaphoreDelete.v` | 删除与批量唤醒的整体前后关系、循环逐步关系及连接义务、锁外回收对象表示 |
+| `KTaskWakeup.v` | VRTOS 唤醒与来源摘链关系、RRR 就绪插入、延时取消；保留批量更新及局部 view，公开 Wakeup 规格借还 `os_inv` |
+| `RemoveFound.v` | VRTOS 的按完整元素摘除关系及原有证明 |
+| `ServiceSlotWf.v` | recycler/idle 服务任务的登记、NULL Delay 与自持关系 |
+| `IdModuleSpec.v` | 同步 ID 模块公开契约所需的查询成员关系 |
 | `KTaskUnSetDelay.v` | NULL、inactive、active 延时对象的调用者局部视图 |
 | `DoubleLinkListSpec.v` | 链表插入纯序列语义及哨兵处头插引理 |
 | `idnode.v` | ID 管理器内存表示，以及最小空闲 ID、容量满等引理（`IDNode` 模块） |
@@ -59,3 +62,7 @@ make -f Makefile.coq -j2 COQBIN=/home/xinra/.opam/pv-bench-8.20.1/bin/
 [共享化记录](../.docs/Report/design-changes/2026-10-22-1-semaphore-shared.md)；
 最新文件组织和编译结果见
 [合并记录](../.docs/Report/2026-10-22-semaphore-lib-consolidation.md)。
+
+2026-10-28 已同步 VRTOS `bc601a1` 的导入定义和调用规格。保留小端及本地信号量表示；
+共享库构建和接口检查通过，未迁移上游实现证明。见
+[VRTOS 同步记录](../ksemaphoredelete-trial-261025-1/.docs/Report/2026-10-28-vrtos-sync.md)。

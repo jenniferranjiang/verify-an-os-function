@@ -1,5 +1,8 @@
 # 适配后闭包与源码转换登记
 
+本页的 23 个函数是源码调用闭包。本次实现证明只覆盖其中 3 个目标函数，
+其余 20 个按外部契约使用；当前责任划分以 [实现证明范围](verification-scope.md) 为准。
+
 依据：用户更新后的 verify-an-os-function/SKILL.md 与《源代码处理》。规则 SHA-256 记录于 `checks/c-analysis/adapted-analysis-sha256.json`。本文件是 C analysis 的范围清单；最终 candidate 需从其 active bodies 再扫描确认。原始源路径及效果沿用 c-analysis.md，不重复分析。
 
 ## 已规定适配及逐处作用

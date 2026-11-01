@@ -1,0 +1,48 @@
+#include "../include/slice_types.h"
+#include "../include/logic.h"
+
+/* Source: /home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c. Current 32-bit non-SMP configuration. */
+
+
+void DoubleLinkListInsertNodeBefore(DoubleLinklistType *linklist, DoubleLinklistType *linklist_node)
+/*@ rrr_ready_insert_before
+    With (head: Z) (prefix: list(DL_Node Z))
+         (current_task current_link task_ptr: Z) (suffix: list(DL_Node Z))
+         (nodes: list(DL_Node Z)) (ready_table_guard: Z)
+    Require ready_table_guard != 0 &&
+            task_ptr != 0 &&
+            linklist == current_link &&
+            linklist_node != 0 &&
+            linklist_node == sched_link_of(task_ptr) &&
+            nodes == app(prefix,
+              cons(Build_DL_Node(current_task, current_link), suffix)) &&
+            store_priority_ready_bucket(head, nodes) *
+            occupy_dll_node(linklist_node)
+    Ensure task_ptr != 0 && ready_table_guard != 0 &&
+           store_priority_ready_bucket(
+             head,
+             app(prefix,
+               cons(Build_DL_Node(task_ptr, linklist_node),
+                 cons(Build_DL_Node(current_task, current_link), suffix))))
+ */
+/*@ dispatch_case
+    With {A} (storeA: Z -> A -> Assertion)
+             (head: Z) (nodes: list(DL_Node A)) (inserted_data: A)
+    Require dll_insert_anchor(head, nodes, linklist) &&
+            linklist_node != 0 &&
+            store_dll(storeA, head, nodes) *
+            storeA(linklist_node, inserted_data) *
+            occupy_dll_node(linklist_node)
+    Ensure store_dll(
+             storeA, head,
+             dll_insert_before_dispatch(
+               head, nodes, linklist,
+               Build_DL_Node(inserted_data, linklist_node)))
+*/
+{
+    linklist->node_prev->node_next = linklist_node;
+    linklist_node->node_prev = linklist->node_prev;
+
+    linklist->node_prev = linklist_node;
+    linklist_node->node_next = linklist;
+}

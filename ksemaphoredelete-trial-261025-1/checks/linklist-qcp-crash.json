@@ -1,0 +1,23 @@
+{
+  "status": "blocked",
+  "failure_class": "infrastructure",
+  "driver": "/home/xinra/qcp-binary-democases/linux-binary/symexec",
+  "driver_sha256": "79a68bc39680b3769424717479cfe76ac8da3a9855307d46010350116b8fefda",
+  "returncode": -11,
+  "stderr": "",
+  "original_run": "LinklistResumeAll-20261030135714",
+  "retry_run": "LinklistResumeAll-20261030144041",
+  "inputs": [
+    {
+      "path": "evidence/parser-normalization/c7d709917496756bcdb0f6050fed5436913197495dd1043aaabfd8af7ccc7dff/LinklistResumeAll.c",
+      "sha256": "c7d709917496756bcdb0f6050fed5436913197495dd1043aaabfd8af7ccc7dff"
+    },
+    {
+      "path": "evidence/parser-normalization/d53eaeee853d48175f4875993f4e72e7203e4dce4e43dcaafd51fd7ba9683126/LinklistResumeAll.c",
+      "sha256": "d53eaeee853d48175f4875993f4e72e7203e4dce4e43dcaafd51fd7ba9683126"
+    }
+  ],
+  "no_function_VC_published": true,
+  "frozen_contracts_changed": false,
+  "debugging_environment": "Installed driver is stripped; gdb and lldb unavailable in current environment."
+}

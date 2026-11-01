@@ -5,11 +5,10 @@
 
 
 void FreeId(struct IdManager *manager, uint16 id)
-/*@ found_node
-    With (sidm : StableIdmanager) (idm : VarIdmanager) (idnode : addr)
-    Require store_idmanager_found(sidm, idm, manager, idnode, id)
-    Ensure store_idmanager_remove_ready(sidm, idm, manager, idnode, id)
- */
+/*@ With (sm: StableIdmanager) (m: VarIdmanager) (idnode: addr)
+    Require store_idmanager_found(sm, m, manager, idnode, id)
+    Ensure store_idmanager_remove_ready(sm, m, manager, idnode, id)
+*/
 {
     if (manager == NONE) { while (1) { } }
 

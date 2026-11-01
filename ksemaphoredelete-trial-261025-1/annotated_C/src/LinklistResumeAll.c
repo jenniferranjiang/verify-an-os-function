@@ -1,6 +1,16 @@
 #include "../include/slice_types.h"
 #include "../include/logic.h"
 
+/*@ Import Coq Require Import CRTOS_Verify.VC.LinklistResumeAll_lib */
+/*@ Extern Coq
+  (resume_remaining_effect : addr -> list addr -> VarGlobalState -> list addr -> VarGlobalState -> Prop)
+  (semaphore_resume_all_steps : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop)
+  (set_task_desc_exstatus : TaskDescriptorAbs -> Z -> TaskDescriptorAbs)
+  (resume_next_restore : StableGlobalState -> VarGlobalState -> addr -> addr -> Assertion)
+  (resume_exstatus_restore : StableGlobalState -> VarGlobalState -> Z -> Z -> Assertion)
+  (resume_id_restore : StableGlobalState -> VarGlobalState -> Z -> Z -> Assertion)
+ */
+
 /* Source: /home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/linklist.c. Current 32-bit non-SMP configuration. */
 struct TaskDescriptor *CONTAINER_OF_TASK_SCHED(DoubleLinklistType *sched_link_ptr)
 /*@ With task_ptr
@@ -14,110 +24,176 @@ struct TaskDescriptor *CONTAINER_OF_TASK_SCHED(DoubleLinklistType *sched_link_pt
  */;
 
 x_err_t KTaskWakeup(int32 id)
-/*@ not_suspended
-    With (sg : StableGlobalState) (st : VarGlobalState)
-         (target : Z) (old_stat : TaskStatus)
-    Require
-      id < 65536 && task_world_wf(st) &&
-      get_task_with_idnode_success(sg, st, id, target) &&
-      old_stat != TSK_SUSPEND &&
-      store_idmanager(sg.os_task_stable.task_stable_ids,
-        st.os_tasks.task_idmanager_abs, &k_task_id_manager) *
-      store_task_status(&(target->task_dync_sched_member.stat), old_stat)
-    Ensure __return == -KERROR &&
-      store_idmanager(sg.os_task_stable.task_stable_ids,
-        st.os_tasks.task_idmanager_abs, &k_task_id_manager) *
-      store_task_status(&(target->task_dync_sched_member.stat), old_stat)
+/*@ wakeup_by_id_ic
+    With (sg : StableGlobalState) (before : VarGlobalState)
+    Require id < 65536 && os_inv(sg, before)
+    Ensure exists (task : Z) (desc : TaskDescriptorAbs) (after : VarGlobalState),
+      task != 0 && get_task_with_idnode_success(sg, before, id, task) &&
+      before.os_tasks.task_desc_map(task) == Some(desc) &&
+      ((desc.tdSchedMember.tsmStat != TSK_SUSPEND && __return == -1 && after == before)
+       ||
+       (desc.tdSchedMember.tsmStat == TSK_SUSPEND && __return == 0 &&
+        ktask_wakeup_step(task, desc, before, after))) && os_inv(sg, after)
  */
-/*@ wakeup_unified
-    With (sg : StableGlobalState) (st : VarGlobalState)
-         (target : Z)
-         (desc : TaskDescriptorAbs)
-         (ready_before : OsAssignReadyVectorAbs)
-         (sched_view : vSchedView)
-    Require
-      ready_before == st.os_assign.assignReadyVector &&
-      os_global_context(sg) &&
-      id < 65536 && task_world_wf(st) &&
-      sg.os_task_stable.task_idmanager_ptr == &k_task_id_manager &&
-      get_task_with_idnode_success(sg, st, id, target) &&
+/*@ detached_sched_null_delay <= wakeup_by_id_ic
+    With (sg : StableGlobalState) (before : VarGlobalState)
+    Require id < 65536 && ktask_wakeup_detached_null_condition(sg, before, id) &&
+      os_inv(sg, before)
+    Ensure exists (task : Z) (desc : TaskDescriptorAbs) (after : VarGlobalState),
+      task != 0 && get_task_with_idnode_success(sg, before, id, task) &&
+      before.os_tasks.task_desc_map(task) == Some(desc) && desc.tdDelay == 0 &&
+      ((desc.tdSchedMember.tsmStat != TSK_SUSPEND && __return == -1 && after == before)
+       ||
+       (desc.tdSchedMember.tsmStat == TSK_SUSPEND && __return == 0 &&
+          ktask_wakeup_detached_null_step(task, desc, before, after))) &&
+      os_inv(sg, after)
+ */
+/*@ semaphore_pending_head_ic <= wakeup_by_id_ic
+    With (sg : StableGlobalState) (before : VarGlobalState)
+      (sem task : Z) (rest : list(DL_Node Z))
+    Require id < 65536 && get_task_with_idnode_success(sg, before, id, task) &&
+      semaphore_pending_nodes(sem, before, cons(sched_link_node(task), rest)) &&
+      os_inv(sg, before)
+    Ensure exists (desc : TaskDescriptorAbs) (after : VarGlobalState),
+      __return == 0 && task != 0 &&
+      before.os_tasks.task_desc_map(task) == Some(desc) &&
       desc.tdSchedMember.tsmStat == TSK_SUSPEND &&
-      (st.os_tasks.task_desc_map(target) == Some(desc) &&
-        0 <= desc.tdSchedMember.tsmCurPrio &&
-        desc.tdSchedMember.tsmCurPrio < PRIORITY_MAX) &&
-      task_addr_aligned(target, ready_before) &&
-      task_fields(sg, st) *
-      delay_inv(sg, st) *
-      store_ktask_wakeup_sched_pre(
-        st.os_tasks.task_desc_map, target, sched_view) *
-      assign_ready_pending(sg, st)
-    Ensure
-      __return == KOK &&
-      exists st_delay ready_after,
-        ktask_unset_delay_step(desc.tdDelay, st, st_delay) &&
-        assign_insert_step_ic(st.os_tasks.task_desc_map, target, desc, ready_before, ready_after) &&
-        task_fields(sg, replace_global_ready_vector(ready_after, replace_task_desc_map(update_task_desc_map(target, set_task_desc_ready(desc), st.os_tasks.task_desc_map), st_delay))) *
-        store_ktask_wakeup_source_post(
-          update_task_desc_map(target, set_task_desc_ready(desc), st.os_tasks.task_desc_map), sched_view) *
-        delay_inv(sg, replace_global_ready_vector(ready_after, replace_task_desc_map(update_task_desc_map(target, set_task_desc_ready(desc), st.os_tasks.task_desc_map), st_delay))) *
-        assign_ready_pending(sg, replace_global_ready_vector(ready_after, replace_task_desc_map(update_task_desc_map(target, set_task_desc_ready(desc), st.os_tasks.task_desc_map), st_delay)))
- */;
+      wakeup_semaphore_head(sem, task, desc, before, after) &&
+      semaphore_pending_nodes(sem, after, rest) && os_inv(sg, after)
+ */
+/*@ msgqueue_send_pending_head_ic <= wakeup_by_id_ic
+    With (sg : StableGlobalState) (before : VarGlobalState)
+      (mq task : Z) (rest : list(DL_Node Z))
+    Require id < 65536 && get_task_with_idnode_success(sg, before, id, task) &&
+      msgqueue_send_pending_nodes(mq, before, cons(sched_link_node(task), rest)) &&
+      os_inv(sg, before)
+    Ensure exists (desc : TaskDescriptorAbs) (after : VarGlobalState),
+      __return == 0 && task != 0 &&
+      before.os_tasks.task_desc_map(task) == Some(desc) &&
+      desc.tdSchedMember.tsmStat == TSK_SUSPEND &&
+      wakeup_msgqueue_send_head(mq, task, desc, before, after) &&
+      msgqueue_send_pending_nodes(mq, after, rest) && os_inv(sg, after)
+ */
+/*@ msgqueue_recv_pending_head_ic <= wakeup_by_id_ic
+    With (sg : StableGlobalState) (before : VarGlobalState)
+      (mq task : Z) (rest : list(DL_Node Z))
+    Require id < 65536 && get_task_with_idnode_success(sg, before, id, task) &&
+      msgqueue_recv_pending_nodes(mq, before, cons(sched_link_node(task), rest)) &&
+      os_inv(sg, before)
+    Ensure exists (desc : TaskDescriptorAbs) (after : VarGlobalState),
+      __return == 0 && task != 0 &&
+      before.os_tasks.task_desc_map(task) == Some(desc) &&
+      desc.tdSchedMember.tsmStat == TSK_SUSPEND &&
+      wakeup_msgqueue_recv_head(mq, task, desc, before, after) &&
+      msgqueue_recv_pending_nodes(mq, after, rest) && os_inv(sg, after)
+ */
+;
 
 /* waiting 是调用前的挂起任务序列。正常返回时原等待任务均为 READY、
- * exstatus=-ERROR，等待链为空；steps 还约束逐项唤醒的顺序和其余状态变化。
- * semaphore_waiters 封装结果条件；semaphore_waiters_expanded 展开同一条件。
- * 两份 spec 语义相同，共用下方函数体。 */
+ * exstatus=-ERROR，等待链为空；整体效果还约束延时、就绪队列及其余状态变化。
+ */
 x_err_t LinklistResumeAll(DoubleLinklistType *list)
 /*@ semaphore_waiters
     With (sg : StableGlobalState) (before : VarGlobalState)
-         (sem : SemaphoreAbs) (waiting : list addr)
-    Require In(sem, before.os_semaphores) &&
-      waiting == sem.semaphore_pending_addrs &&
-      list == semaphore_pending_head(sem.semaphore_addr) &&
-      os_global_context(sg) &&
-      task_wakeup_inv(sg, before) *
-      store_dll(pure_suspend_sched_link(before.os_tasks.task_desc_map),
-        list, map(semaphore_wait_node, waiting))
+         (sem : addr) (waiting : list addr)
+    Require list == semaphore_pending_head(sem) &&
+      semaphore_pending_nodes(sem, before, map(sched_link_node, waiting)) &&
+      os_inv(sg, before)
     Ensure __return == KOK && exists after,
-      tasks_ready_with_exstatus(after, waiting, -ERROR) &&
-      semaphore_resume_all_steps(sem.semaphore_addr, waiting, before, after) &&
-      task_wakeup_inv(sg, after) *
-      store_dll(pure_suspend_sched_link(after.os_tasks.task_desc_map), list, nil)
- */
-/*@ semaphore_waiters_expanded <= semaphore_waiters
-    With (sg : StableGlobalState) (before : VarGlobalState)
-         (sem : SemaphoreAbs) (waiting : list addr)
-    Require In(sem, before.os_semaphores) &&
-      waiting == sem.semaphore_pending_addrs &&
-      list == semaphore_pending_head(sem.semaphore_addr) &&
-      os_global_context(sg) &&
-      task_wakeup_inv(sg, before) *
-      store_dll(pure_suspend_sched_link(before.os_tasks.task_desc_map),
-        list, map(semaphore_wait_node, waiting))
-    Ensure __return == KOK && exists after,
-      (forall (task : addr), In(task, waiting) =>
-        (exists (desc : TaskDescriptorAbs),
-          after.os_tasks.task_desc_map(task) == Some(desc) &&
-          desc.tdSchedMember.tsmStat == TSK_READY &&
-          desc.tdExstatus == -ERROR)) &&
-      semaphore_resume_all_steps(sem.semaphore_addr, waiting, before, after) &&
-      task_wakeup_inv(sg, after) *
-      store_dll(pure_suspend_sched_link(after.os_tasks.task_desc_map), list, nil)
+      semaphore_resume_all_effect(sem, waiting, before, after) &&
+      semaphore_pending_nodes(sem, after, nil) && os_inv(sg, after)
  */
 {
     x_ubase lock = 0;
-    struct TaskDescriptor *task = NONE;
-    DoubleLinklistType *node = NONE;
+    struct TaskDescriptor *task = ((void *)0);
+    DoubleLinklistType *node = ((void *)0);
 
-    if (list == NONE) { while (1) { } }
+    if (list == ((void *)0)) {
+        /*@ Inv Assert list == list@pre && list == 0 &&
+            list == semaphore_pending_head(sem) &&
+            semaphore_pending_nodes(sem, before, map(sched_link_node, waiting)) &&
+            has_permission(&task) * has_permission(&node) * has_permission(&lock) *
+            os_inv(sg, before)
+         */ while (1) { } }
 
     /* Nested critical operation removed under the documented inside-critical adaptation. */
-    for(;;) {
+    /*@ Inv Assert exists (current : VarGlobalState) (remaining : list addr),
+        list == list@pre && list != 0 && list == semaphore_pending_head(sem) &&
+        semaphore_pending_nodes(sem, current, map(sched_link_node, remaining)) &&
+        resume_remaining_effect(sem, waiting, before, remaining, current) &&
+        has_permission(&task) * has_permission(&node) * has_permission(&lock) *
+        os_inv(sg, current)
+     */
+    while (1) {
+        /*@ Given current remaining */
+        /*@ list@pre == semaphore_pending_head(sem) && list@pre != 0 &&
+            semaphore_pending_nodes(sem, current, map(sched_link_node, remaining)) &&
+            os_inv(sg, current)
+            which implies exists next,
+            list@pre == semaphore_pending_head(sem) && list@pre != 0 &&
+            semaphore_pending_nodes(sem, current, map(sched_link_node, remaining)) &&
+            ((remaining == nil && next == list@pre) ||
+             (exists first tail, remaining == cons(first, tail) &&
+               next == sched_link_of(first) && next != list@pre)) &&
+            store(field_addr(list@pre, struct SysDoubleLinklistNode, node_next), struct SysDoubleLinklistNode *, next) * resume_next_restore(sg, current, list@pre, next)
+         */
+        /*@ Given next */
         node = list->node_next;
+        /*@ store(field_addr(list@pre, struct SysDoubleLinklistNode, node_next), struct SysDoubleLinklistNode *, next) * resume_next_restore(sg, current, list@pre, next)
+            which implies os_inv(sg, current)
+         */
         if(node != list) {
-            task = CONTAINER_OF_TASK_SCHED(node);
+            /*@ Given target from first */
+            /*@ Given rest from tail */
+            /*@ remaining == cons(target, rest) && next == sched_link_of(target) &&
+                semaphore_pending_nodes(sem, current, map(sched_link_node, remaining)) &&
+                os_inv(sg, current)
+                which implies exists desc,
+                remaining == cons(target, rest) && next == sched_link_of(target) &&
+                addr_aligned(target, ALIGN_SIZE) &&
+                current.os_tasks.task_desc_map(target) == Some(desc) &&
+                desc.tdSchedMember.tsmStat == TSK_SUSPEND &&
+                semaphore_pending_nodes(sem, current, cons(sched_link_node(target), map(sched_link_node, rest))) &&
+                os_inv(sg, current)
+             */
+            /*@ Given desc */
+            task = CONTAINER_OF_TASK_SCHED(node) /*@ where task_ptr = target */;
+            /*@ current.os_tasks.task_desc_map(target) == Some(desc) &&
+                os_inv(sg, current)
+                which implies exists marked,
+                current.os_tasks.task_desc_map(target) == Some(desc) &&
+                marked == replace_task_desc_map(
+                  update_task_desc_map(target, set_task_desc_exstatus(desc, -1), current.os_tasks.task_desc_map), current) &&
+                store(field_addr(target, struct TaskDescriptor, exstatus), int, desc.tdExstatus) * resume_exstatus_restore(sg, marked, target, -1)
+             */
+            /*@ Given marked */
             task->exstatus = -ERROR;
-            KTaskWakeup(task->id.id) /*@ where (wakeup_unified) sg = sg */;
+            /*@ store(field_addr(target, struct TaskDescriptor, exstatus), int, -1) * resume_exstatus_restore(sg, marked, target, -1)
+                which implies os_inv(sg, marked)
+             */
+            /*@ remaining == cons(target, rest) &&
+                semaphore_pending_nodes(sem, current, cons(sched_link_node(target), map(sched_link_node, rest))) &&
+                marked == replace_task_desc_map(
+                  update_task_desc_map(target, set_task_desc_exstatus(desc, -1), current.os_tasks.task_desc_map), current) &&
+                os_inv(sg, marked)
+                which implies exists task_id,
+                remaining == cons(target, rest) &&
+                semaphore_pending_nodes(sem, current, cons(sched_link_node(target), map(sched_link_node, rest))) &&
+                marked == replace_task_desc_map(
+                  update_task_desc_map(target, set_task_desc_exstatus(desc, -1), current.os_tasks.task_desc_map), current) &&
+                0 <= task_id && task_id < 65536 &&
+                get_task_with_idnode_success(sg, marked, task_id, target) &&
+                semaphore_pending_nodes(sem, marked, cons(sched_link_node(target), map(sched_link_node, rest))) &&
+                store(field_addr(field_addr(target, struct TaskDescriptor, id), struct IdNode, id), unsigned short, task_id) * resume_id_restore(sg, marked, target, task_id)
+             */
+            /*@ Given task_id */
+            int32 resume_task_id = task->id.id;
+            /*@ store(field_addr(field_addr(target, struct TaskDescriptor, id), struct IdNode, id), unsigned short, task_id) * resume_id_restore(sg, marked, target, task_id)
+                which implies os_inv(sg, marked)
+             */
+            KTaskWakeup(resume_task_id) /*@ where (semaphore_pending_head_ic) sg = sg, before = marked, sem = sem, task = target, rest = map(sched_link_node, rest) */;
+            /*@ Given woke_desc from desc */
+            /*@ Given next_state from after */
         } else {
             break;
         }

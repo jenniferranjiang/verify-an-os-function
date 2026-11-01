@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "infrastructure",
+    "kind": "qcp-symexec-segmentation-fault",
+    "vcs": [],
+    "message": "QCP exits -11 with no stderr on the original LinklistResumeAll body plus only Inv os_inv(sg,before) before its NULL while(1) loop. The unannotated original reaches a normal missing-loop-invariant diagnostic. Exact NONE expansion fixes an earlier preprocessor error; empty-loop-body normalization and explicit invariant branch mapping do not fix the crash. Minimal recorded input: evidence/parser-normalization/97e98587930328f01b27538c73a9279f81377b10f89e5977f70eb4d3de6e14ac/LinklistResumeAll.c. Formal case-lib design passed; no VC output is published.",
+    "repair_boundary": "QCP driver/parser/entailment implementation or rigorously equivalent tool-input normalization; keep approved predicate/spec and actual NULL nonreturn path unchanged."
+  }
+}

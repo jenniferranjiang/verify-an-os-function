@@ -213,7 +213,7 @@ Definition os_assign_ready_vector_ok
   [assign_world_wf] 集中保存非 SMP Assign 的纯一致性条件。
   参数为任务 descriptor map 和 Assign 抽象状态；running 指针的登记关系
   和就绪桶、位图、最高优先级缓存的一致性分别成为具名字段。READY 完整
-  覆盖由 os_wf_sched_coverage 与各容器状态限制共同保证，不在此重复。
+  覆盖由 os_wf_sched_nodup / os_wf_sched_domain 与各容器状态限制共同保证，不在此重复。
   就绪节点到已登记 READY 任务的反向关联也在此保存，
   因而底层就绪容器的空间谓词无需携带任务 map。
 

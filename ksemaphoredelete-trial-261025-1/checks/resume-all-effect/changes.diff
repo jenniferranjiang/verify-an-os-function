@@ -1,0 +1,280 @@
+--- before/trial/annotated_C/src/LinklistResumeAll.c
++++ trial/annotated_C/src/LinklistResumeAll.c
+@@ -64,9 +64,8 @@
+  */;
+ 
+ /* waiting 是调用前的挂起任务序列。正常返回时原等待任务均为 READY、
+- * exstatus=-ERROR，等待链为空；steps 还约束逐项唤醒的顺序和其余状态变化。
+- * semaphore_waiters 封装结果条件；semaphore_waiters_expanded 展开同一条件。
+- * 两份 spec 语义相同，共用下方函数体。 */
++ * exstatus=-ERROR，等待链为空；整体效果还约束延时、就绪队列及其余状态变化。
++ */
+ x_err_t LinklistResumeAll(DoubleLinklistType *list)
+ /*@ semaphore_waiters
+     With (sg : StableGlobalState) (before : VarGlobalState)
+@@ -80,27 +79,7 @@
+         list, map(semaphore_wait_node, waiting))
+     Ensure __return == KOK && exists after,
+       tasks_ready_with_exstatus(after, waiting, -ERROR) &&
+-      semaphore_resume_all_steps(sem.semaphore_addr, waiting, before, after) &&
+-      task_wakeup_inv(sg, after) *
+-      store_dll(pure_suspend_sched_link(after.os_tasks.task_desc_map), list, nil)
+- */
+-/*@ semaphore_waiters_expanded <= semaphore_waiters
+-    With (sg : StableGlobalState) (before : VarGlobalState)
+-         (sem : SemaphoreAbs) (waiting : list addr)
+-    Require In(sem, before.os_semaphores) &&
+-      waiting == sem.semaphore_pending_addrs &&
+-      list == semaphore_pending_head(sem.semaphore_addr) &&
+-      os_global_context(sg) &&
+-      task_wakeup_inv(sg, before) *
+-      store_dll(pure_suspend_sched_link(before.os_tasks.task_desc_map),
+-        list, map(semaphore_wait_node, waiting))
+-    Ensure __return == KOK && exists after,
+-      (forall (task : addr), In(task, waiting) =>
+-        (exists (desc : TaskDescriptorAbs),
+-          after.os_tasks.task_desc_map(task) == Some(desc) &&
+-          desc.tdSchedMember.tsmStat == TSK_READY &&
+-          desc.tdExstatus == -ERROR)) &&
+-      semaphore_resume_all_steps(sem.semaphore_addr, waiting, before, after) &&
++      semaphore_resume_all_effect(sem.semaphore_addr, waiting, before, after) &&
+       task_wakeup_inv(sg, after) *
+       store_dll(pure_suspend_sched_link(after.os_tasks.task_desc_map), list, nil)
+  */
+--- before/trial/annotated_C/src/_SemaphoreDelete.c
++++ trial/annotated_C/src/_SemaphoreDelete.c
+@@ -83,27 +83,7 @@
+         list, map(semaphore_wait_node, waiting))
+     Ensure __return == KOK && exists after,
+       tasks_ready_with_exstatus(after, waiting, -ERROR) &&
+-      semaphore_resume_all_steps(sem.semaphore_addr, waiting, before, after) &&
+-      task_wakeup_inv(sg, after) *
+-      store_dll(pure_suspend_sched_link(after.os_tasks.task_desc_map), list, nil)
+- */
+-/*@ semaphore_waiters_expanded <= semaphore_waiters
+-    With (sg : StableGlobalState) (before : VarGlobalState)
+-         (sem : SemaphoreAbs) (waiting : list addr)
+-    Require In(sem, before.os_semaphores) &&
+-      waiting == sem.semaphore_pending_addrs &&
+-      list == semaphore_pending_head(sem.semaphore_addr) &&
+-      os_global_context(sg) &&
+-      task_wakeup_inv(sg, before) *
+-      store_dll(pure_suspend_sched_link(before.os_tasks.task_desc_map),
+-        list, map(semaphore_wait_node, waiting))
+-    Ensure __return == KOK && exists after,
+-      (forall (task : addr), In(task, waiting) =>
+-        (exists (desc : TaskDescriptorAbs),
+-          after.os_tasks.task_desc_map(task) == Some(desc) &&
+-          desc.tdSchedMember.tsmStat == TSK_READY &&
+-          desc.tdExstatus == -ERROR)) &&
+-      semaphore_resume_all_steps(sem.semaphore_addr, waiting, before, after) &&
++      semaphore_resume_all_effect(sem.semaphore_addr, waiting, before, after) &&
+       task_wakeup_inv(sg, after) *
+       store_dll(pure_suspend_sched_link(after.os_tasks.task_desc_map), list, nil)
+  */;
+--- before/trial/annotated_C/include/logic.h
++++ trial/annotated_C/include/logic.h
+@@ -124,7 +124,7 @@
+   (os_inv : StableGlobalState -> VarGlobalState -> Assertion)
+   (SemaphoreRaw : addr -> Assertion)
+   (semaphore_pending_head : addr -> addr)
+-  (semaphore_resume_all_steps : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop)
++  (semaphore_resume_all_effect : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop)
+  */
+ /*@ Printing Coq Name program := MonadErr.M */
+ /*@ Printing Strategy Name program := MonadErr.M */
+--- before/global/lib/KTaskWakeup.v
++++ global/lib/KTaskWakeup.v
+@@ -136,6 +136,66 @@
+      before.(os_delays).(delay_inactive_map) delay = Some info /\
+      info.(tdStatus) = TASK_DELAY_INACTIVE_VALUE /\ after = before) \/
+   (exists info, unset_linked_delay_step delay info before after).
++
++(** 整批唤醒后的任务表：只更新 waiting 中已有任务的 stat/exstatus，
++    不创建新任务，其他描述符项和被唤醒任务的其余字段均保持。 *)
++Definition resume_all_task_map
++    (T : addr -> option TaskDescriptorAbs) (waiting : list addr)
++    : addr -> option TaskDescriptorAbs :=
++  fun task =>
++    match T task with
++    | Some desc =>
++        if in_dec Z.eq_dec task waiting
++        then Some (set_task_desc_ready (set_task_desc_exstatus desc (-1)))
++        else Some desc
++    | None => None
++    end.
++
++(** 整批取消延时：按原任务的非零 tdDelay 选择对象，而非只看 Delay.task。
++    原 active DLL 中被选中的对象转入 inactive map，保留 task/ticks 并置
++    INACTIVE；其余 active 节点保持顺序。NULL、原 inactive 和其他对象不变。
++    地址唯一性、active/inactive 分离及任务指针对应由调用者的 delay_inv
++    提供；本纯更新不为损坏的延时结构提供内存权限或成功保证。 *)
++Definition resume_all_delays
++    (T : addr -> option TaskDescriptorAbs) (waiting : list addr)
++    (before : DelayState) : DelayState :=
++  let selected_delays := fold_right
++    (fun task delays =>
++       match T task with
++       | Some desc => if Z.eq_dec desc.(tdDelay) 0 then delays
++                      else desc.(tdDelay) :: delays
++       | None => delays
++       end) nil waiting in
++  let selected_node := fun node : DL_Node TaskDelayAbs =>
++    existsb (fun delay => Z.eqb (getPtr node)
++      (&(delay # "Delay" ->ₛ "link"))) selected_delays in
++  {| delay_active_nodes :=
++       filter (fun node => negb (selected_node node)) before.(delay_active_nodes);
++     delay_inactive_map := fun delay =>
++       if in_dec Z.eq_dec delay selected_delays then
++         match find (fun node => Z.eqb (getPtr node)
++             (&(delay # "Delay" ->ₛ "link"))) before.(delay_active_nodes) with
++         | Some node =>
++             let info := getData node in
++             Some (mkTaskDelayAbs info.(tdTaskPtr) info.(tdTicks)
++               TASK_DELAY_INACTIVE_VALUE)
++         | None => before.(delay_inactive_map) delay
++         end
++       else before.(delay_inactive_map) delay |}.
++
++(** 整批就绪插入的前后关系。fold_left 按 waiting 原顺序组合已有插入
++    关系，保持 RRR 严格比较、bitmap_column 按位或及 highest 的更新。
++    每次传递当前 ready，不把结果简化为集合并或排序。T 固定为原任务表：
++    唤醒只改 stat/exstatus，插入读取的优先级、时间片和掩码均不变。 *)
++Definition resume_all_ready
++    (T : addr -> option TaskDescriptorAbs) (waiting : list addr)
++    (before after : OsAssignReadyVectorAbs) : Prop :=
++  fold_left
++    (fun (states : OsAssignReadyVectorAbs -> Prop) task =>
++       fun ready_after => exists ready_before desc,
++         states ready_before /\ T task = Some desc /\
++         assign_insert_step_ic T task desc ready_before ready_after)
++    waiting (fun ready => ready = before) after.
+ 
+ (** 已登记描述符 map 和 ID manager 的共享局部 view。其余任务管理链、
+     自持 sched_link 和 Done 表保留在 caller frame；不重复拥有源等待队列。
+--- before/global/lib/KSemaphoreDelete.v
++++ global/lib/KSemaphoreDelete.v
+@@ -31,18 +31,43 @@
+     after = replace_semaphores
+       (semaphore_set_pending p tail awake.(os_semaphores)) awake.
+ 
+-(** 按原等待队列顺序反复执行一轮；末态必须仍有同一已发布对象且等待链为空。
+-    这是可检查的有限关系，终止的实现证明需从 SUSPEND 登记关系和成功摘链
+-    得到长度严格下降。坏链表/未登记任务不会被当作成功返回。 *)
++(** 循环证明使用的逐步关系。空序列仅表示没有后续操作；信号量存在及
++    pending 与剩余序列一致，由调用前提和各轮更新保持，不在基例重复要求。
++    此关系不再作为公开函数的整体效果；与整体效果的连接须在合法前态下证明。 *)
+ Fixpoint semaphore_resume_all_steps (p : addr) (waiting : list addr)
+     (before after : VarGlobalState) : Prop :=
+   match waiting with
+-  | nil => after = before /\ exists sem,
+-      In sem before.(os_semaphores) /\ sem.(semaphore_addr) = p /\
+-      sem.(semaphore_pending_addrs) = nil
++  | nil => after = before
+   | task :: tail => exists middle,
+       semaphore_resume_one p task tail before middle /\
+       semaphore_resume_all_steps p tail middle after
++  end.
++
++(** 处理完整条等待队列的整体效果：任务表批量改为 READY/-ERROR，
++    延时结构批量取消，ready 按原队列顺序插入，信号量 pending 最后一次置空。
++    replace_* 保留 task ID/管理链、运行任务及其余全局分量；sem ID/value
++    保持。非空队列的任务须原已登记且 SUSPEND、无重复，这些条件由实际
++    等待 DLL 及任务资源给出，不额外加强 C spec 的前置。
++    入口的信号量成员及 pending 对应关系由 caller 给出。空队列完全不改
++    状态，避免无条件 set_pending 改写 caller 尚未重组的同地址 ghost 项。
++    延时批量更新与逐步取消的等价只在 delay_inv 等合法资源前提下成立。 *)
++Definition semaphore_resume_all_effect (p : addr) (waiting : list addr)
++    (before after : VarGlobalState) : Prop :=
++  match waiting with
++  | nil => after = before
++  | _ =>
++      let T := before.(os_tasks).(task_desc_map) in
++      NoDup waiting /\
++      Forall (fun task => exists desc,
++        T task = Some desc /\ desc.(tdSchedMember).(tsmStat) = TSK_SUSPEND)
++        waiting /\
++      exists ready_after,
++        resume_all_ready T waiting before.(os_assign).(assignReadyVector) ready_after /\
++        after = replace_semaphores
++          (semaphore_set_pending p nil before.(os_semaphores))
++          (replace_global_ready_vector ready_after
++            (replace_global_delays (resume_all_delays T waiting before.(os_delays))
++              (replace_task_desc_map (resume_all_task_map T waiting) before)))
+   end.
+ 
+ (** 锁内删除的纯效果，p=0 为未找到；找到则唤醒所有原等待任务，注销 ID
+@@ -59,7 +84,7 @@
+     sem.(semaphore_id) = semaphore_query_id id /\
+     p = sem.(semaphore_addr) /\ p <> 0 /\
+     resched = negb (Nat.eqb (List.length sem.(semaphore_pending_addrs)) 0) /\
+-    semaphore_resume_all_steps p sem.(semaphore_pending_addrs) before drained /\
++    semaphore_resume_all_effect p sem.(semaphore_pending_addrs) before drained /\
+     after = replace_semaphores (semaphore_unpublish p drained.(os_semaphores)) drained).
+ 
+ (** 返回的布尔值仅决定锁外调度；私有待释放对象地址在内存契约中存在量化，
+@@ -101,3 +126,18 @@
+ Definition semaphore_retired_raw_obligation : Prop :=
+   forall p value, SemaphoreRetired p value |-- SemaphoreRaw p.
+ 
++(** 待证的连接命题，不是已证明引理。限定于实际借出的合法资源及信号量
++    入口关联；不声称两个关系在任意损坏或未登记的纯状态上都等价。
++    后续循环证明需证明逐步结果满足整体效果，反向连接用于核对抽象行为范围。 *)
++Definition semaphore_resume_all_effect_steps_obligation : Prop :=
++  forall sg before sem after,
++    os_global_context sg -> In sem before.(os_semaphores) ->
++    task_wakeup_inv sg before **
++    store_dll (pure_suspend_sched_link before.(os_tasks).(task_desc_map))
++      (semaphore_pending_head sem.(semaphore_addr))
++      (map semaphore_wait_node sem.(semaphore_pending_addrs)) |--
++    “ (semaphore_resume_all_steps sem.(semaphore_addr)
++         sem.(semaphore_pending_addrs) before after <->
++       semaphore_resume_all_effect sem.(semaphore_addr)
++         sem.(semaphore_pending_addrs) before after) ”.
++
+--- before/global/lib/index.md
++++ global/lib/index.md
+@@ -12,8 +12,8 @@
+ | `SemaphoreInv.v` | 对象各生命周期的内存所有权、模块不变量、字段偏移假设，以及资源拆分、失败回收、零字节到字段转换引理 |
+ | `KSemaphoreCreate.v` | 创建函数的抽象操作；不是 C 实现证明文件 |
+ | `SemaphoreOps.v` | 非负 ID 的 uint16 查询归一、等待序列更新及对象注销 |
+-| `KSemaphoreDelete.v` | 删除与逐项唤醒的抽象操作、锁外回收前的完整私有对象表示 |
+-| `KTaskWakeup.v` | 唤醒所需的任务、RRR 就绪插入及延时取消效果；统一资源接口 `task_wakeup_inv`、结果条件 `tasks_ready_with_exstatus` 与底层局部 view |
++| `KSemaphoreDelete.v` | 删除与批量唤醒的整体前后关系、循环逐步关系及连接义务、锁外回收对象表示 |
++| `KTaskWakeup.v` | 唤醒所需的任务、RRR 就绪插入及延时取消效果；统一资源接口 `task_wakeup_inv`、结果条件 `tasks_ready_with_exstatus`、批量任务/延时/就绪更新与底层局部 view |
+ | `KTaskUnSetDelay.v` | NULL、inactive、active 延时对象的调用者局部视图 |
+ | `DoubleLinkListSpec.v` | 链表插入纯序列语义及哨兵处头插引理 |
+ | `idnode.v` | ID 管理器内存表示，以及最小空闲 ID、容量满等引理（`IDNode` 模块） |
+--- before/global/annotated_C/src/LinklistResumeAll.c
++++ global/annotated_C/src/LinklistResumeAll.c
+@@ -70,7 +70,7 @@
+       list == semaphore_pending_head(sem.semaphore_addr) &&
+       InsideCritical(sg, anchor) * os_inv(sg, st)
+     Ensure __return == KOK && exists after,
+-      semaphore_resume_all_steps(sem.semaphore_addr, sem.semaphore_pending_addrs, st, after) &&
++      semaphore_resume_all_effect(sem.semaphore_addr, sem.semaphore_pending_addrs, st, after) &&
+       InsideCritical(sg, anchor) * os_inv(sg, after)
+  */
+ {
+--- before/global/annotated_C/src/_SemaphoreDelete.c
++++ global/annotated_C/src/_SemaphoreDelete.c
+@@ -77,7 +77,7 @@
+       list == semaphore_pending_head(sem.semaphore_addr) &&
+       InsideCritical(sg, anchor) * os_inv(sg, st)
+     Ensure __return == KOK && exists after,
+-      semaphore_resume_all_steps(sem.semaphore_addr, sem.semaphore_pending_addrs, st, after) &&
++      semaphore_resume_all_effect(sem.semaphore_addr, sem.semaphore_pending_addrs, st, after) &&
+       InsideCritical(sg, anchor) * os_inv(sg, after)
+  */;
+ 
+--- before/global/annotated_C/include/logic.h
++++ global/annotated_C/include/logic.h
+@@ -119,7 +119,7 @@
+   (os_inv : StableGlobalState -> VarGlobalState -> Assertion)
+   (SemaphoreRaw : addr -> Assertion)
+   (semaphore_pending_head : addr -> addr)
+-  (semaphore_resume_all_steps : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop)
++  (semaphore_resume_all_effect : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop)
+  */
+ /*@ Printing Coq Name program := MonadErr.M */
+ /*@ Printing Strategy Name program := MonadErr.M */

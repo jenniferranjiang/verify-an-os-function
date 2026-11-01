@@ -1,0 +1,186 @@
+{
+  "date": "2026-11-01",
+  "status": "completed",
+  "scope": "All trial verification_runs: untracked Rocq outputs only; current trial: three superseded failed workspaces",
+  "removed_generated_outputs": [
+    {
+      "trial": "keventcreate-trial-260928-2",
+      "files": 0,
+      "bytes": 0,
+      "bytes_by_suffix": {}
+    },
+    {
+      "trial": "kmutexcreate-trial-260928-2",
+      "files": 0,
+      "bytes": 0,
+      "bytes_by_suffix": {}
+    },
+    {
+      "trial": "ksemaphorecreate-trial-260928-1",
+      "files": 0,
+      "bytes": 0,
+      "bytes_by_suffix": {}
+    },
+    {
+      "trial": "ksemaphorecreate-trial-261012-1",
+      "files": 1856,
+      "bytes": 54734066,
+      "bytes_by_suffix": {
+        ".cache": 517269,
+        ".glob": 41196684,
+        ".vo": 12481277,
+        ".vos": 0,
+        ".vok": 0,
+        ".aux": 538836
+      }
+    },
+    {
+      "trial": "ksemaphorecreate-trial-261019-1",
+      "files": 0,
+      "bytes": 0,
+      "bytes_by_suffix": {}
+    },
+    {
+      "trial": "ksemaphorecreate-trial-261019-2",
+      "files": 0,
+      "bytes": 0,
+      "bytes_by_suffix": {}
+    },
+    {
+      "trial": "ksemaphorecreate-trial-261019-3",
+      "files": 780,
+      "bytes": 31691042,
+      "bytes_by_suffix": {
+        ".glob": 23362465,
+        ".vo": 8048304,
+        ".vok": 0,
+        ".aux": 252665,
+        ".vos": 0,
+        ".cache": 27608
+      }
+    },
+    {
+      "trial": "ksemaphorecreate-trial-261022-1",
+      "files": 572,
+      "bytes": 24750210,
+      "bytes_by_suffix": {
+        ".cache": 16209,
+        ".vo": 5872817,
+        ".vok": 0,
+        ".glob": 18662279,
+        ".aux": 198905,
+        ".vos": 0
+      }
+    },
+    {
+      "trial": "ksemaphoredelete-trial-261025-1",
+      "files": 2283,
+      "bytes": 163462448,
+      "bytes_by_suffix": {
+        ".vok": 0,
+        ".vos": 0,
+        ".vo": 28924024,
+        ".aux": 1510017,
+        ".glob": 132909307,
+        ".cache": 119100
+      }
+    }
+  ],
+  "removed_generated_bytes": 274637766,
+  "retired_failed_runs": [
+    {
+      "run": "LinklistResumeAll-20261030135714",
+      "reason": "Superseded by successful LinklistResumeAll-20261030234941",
+      "reports_retained": "ksemaphoredelete-trial-261025-1/reports/LinklistResumeAll-20261030135714"
+    },
+    {
+      "run": "LinklistResumeAll-20261030144041",
+      "reason": "Superseded by successful LinklistResumeAll-20261030234941",
+      "reports_retained": "ksemaphoredelete-trial-261025-1/reports/LinklistResumeAll-20261030144041"
+    },
+    {
+      "run": "LinklistResumeAll-20261030172855",
+      "reason": "Superseded by successful LinklistResumeAll-20261030234941",
+      "reports_retained": "ksemaphoredelete-trial-261025-1/reports/LinklistResumeAll-20261030172855"
+    }
+  ],
+  "failed_source_archive": "ksemaphoredelete-trial-261025-1/evidence/retired-failed-runs-20261101.tar.gz",
+  "archive_bytes": 4090,
+  "archive_sha256": "f1c9a1113fe365b70769ef92d589626d4d2050a52a3281b1c3d67aae64f1a712",
+  "archive_source_files": [
+    {
+      "path": "verification_runs/LinklistResumeAll-20261030135714/_coq_builds/LinklistResumeAll-annotation-r1/library/src/VC/LinklistResumeAll_lib.v",
+      "sha256": "8cacb5da0349d5377968435e6444cd76c04598e0fff1e630cd35a68b404bc3c9",
+      "bytes": 1465
+    },
+    {
+      "path": "verification_runs/LinklistResumeAll-20261030135714/annotation_history/annotation-attempt1/before/VC/LinklistResumeAll_lib.v",
+      "sha256": "1f8a54afaa392924392567aef82ee5ba89cdf1a63d87dffd441a01e206123963",
+      "bytes": 85
+    },
+    {
+      "path": "verification_runs/LinklistResumeAll-20261030135714/annotation_history/annotation-attempt1/before/annotated_C/src/LinklistResumeAll.c",
+      "sha256": "3222db83b2a12f87f3d7ac9aefeb9f20541afabcd82f04151659a4aa8e8c69c1",
+      "bytes": 5326
+    },
+    {
+      "path": "verification_runs/LinklistResumeAll-20261030144041/_coq_builds/LinklistResumeAll-annotation-r1/library/src/VC/LinklistResumeAll_lib.v",
+      "sha256": "143841a67b6210b3bde51f0beb25b206e600b4e72dd9b47af89baf8f2782821f",
+      "bytes": 1759
+    },
+    {
+      "path": "verification_runs/LinklistResumeAll-20261030144041/annotation_history/annotation-attempt1/before/VC/LinklistResumeAll_lib.v",
+      "sha256": "8cacb5da0349d5377968435e6444cd76c04598e0fff1e630cd35a68b404bc3c9",
+      "bytes": 1465
+    },
+    {
+      "path": "verification_runs/LinklistResumeAll-20261030144041/annotation_history/annotation-attempt1/before/annotated_C/src/LinklistResumeAll.c",
+      "sha256": "fcac7d11e4e7d020f57d883fe145f93ccf4d471a98491a048f7f2ced56649183",
+      "bytes": 10616
+    },
+    {
+      "path": "verification_runs/LinklistResumeAll-20261030172855/_coq_builds/LinklistResumeAll-annotation-r1/library/src/VC/LinklistResumeAll_lib.v",
+      "sha256": "8cacb5da0349d5377968435e6444cd76c04598e0fff1e630cd35a68b404bc3c9",
+      "bytes": 1465
+    },
+    {
+      "path": "verification_runs/LinklistResumeAll-20261030172855/annotation_history/annotation-attempt1/before/VC/LinklistResumeAll_lib.v",
+      "sha256": "8cacb5da0349d5377968435e6444cd76c04598e0fff1e630cd35a68b404bc3c9",
+      "bytes": 1465
+    },
+    {
+      "path": "verification_runs/LinklistResumeAll-20261030172855/annotation_history/annotation-attempt1/before/annotated_C/src/LinklistResumeAll.c",
+      "sha256": "fcac7d11e4e7d020f57d883fe145f93ccf4d471a98491a048f7f2ced56649183",
+      "bytes": 10616
+    }
+  ],
+  "preserved_source_proof_evidence_files": 4915,
+  "preserved_files_hashes_unchanged": true,
+  "trial_disk_kib_before": {
+    "keventcreate-trial-260928-2": 68,
+    "kmutexcreate-trial-260928-2": 984,
+    "ksemaphorecreate-trial-260928-1": 12684,
+    "ksemaphorecreate-trial-261012-1": 117788,
+    "ksemaphorecreate-trial-261019-1": 6160,
+    "ksemaphorecreate-trial-261019-2": 6732,
+    "ksemaphorecreate-trial-261019-3": 48428,
+    "ksemaphorecreate-trial-261022-1": 38832,
+    "ksemaphoredelete-trial-261025-1": 214944
+  },
+  "trial_disk_kib_after": {
+    "keventcreate-trial-260928-2": 68,
+    "kmutexcreate-trial-260928-2": 984,
+    "ksemaphorecreate-trial-260928-1": 12684,
+    "ksemaphorecreate-trial-261012-1": 61092,
+    "ksemaphorecreate-trial-261019-1": 6160,
+    "ksemaphorecreate-trial-261019-2": 6732,
+    "ksemaphorecreate-trial-261019-3": 16080,
+    "ksemaphorecreate-trial-261022-1": 13620,
+    "ksemaphoredelete-trial-261025-1": 51160
+  },
+  "notes": [
+    "Successful run metadata, final proofs, historical group proof sources and all reports retained.",
+    "Compiled outputs can be rebuilt; this cleanup is not a new proof verification.",
+    "Historical report paths into the three retired workspaces resolve inside the source archive."
+  ]
+}

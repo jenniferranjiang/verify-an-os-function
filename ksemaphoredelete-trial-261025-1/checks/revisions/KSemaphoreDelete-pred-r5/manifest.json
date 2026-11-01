@@ -1,0 +1,47 @@
+{
+  "revision": "KSemaphoreDelete-pred-r5",
+  "status": "review-passed",
+  "base_revision": "KSemaphoreDelete-pred-r4",
+  "aggregate_sha256": "a24b694111d29662ef8b841a1abe54b2330542084a5b11ffecebd210c6173789",
+  "files": [
+    {
+      "file": "../lib/CrtosInv.v",
+      "snapshot_file": "shared/lib/CrtosInv.v",
+      "sha256": "ddf29e1262bb2270d9c1e038e2378b26408b3174942d0c1d75aa8c9293d99f47"
+    },
+    {
+      "file": "../lib/KSemaphoreDelete.v",
+      "snapshot_file": "shared/lib/KSemaphoreDelete.v",
+      "sha256": "2bce1682dee93c43cf83651bad03375d78bbab494abedde7a488e92e04c6ccaf"
+    },
+    {
+      "file": "../lib/KTaskUnSetDelay.v",
+      "snapshot_file": "shared/lib/KTaskUnSetDelay.v",
+      "sha256": "2ae517e1ee113659326081bd8e9ec54eeb4b3274df4f60705b694a3d6f25daba"
+    },
+    {
+      "file": "../lib/KTaskWakeup.v",
+      "snapshot_file": "shared/lib/KTaskWakeup.v",
+      "sha256": "7314981fa3c5dd117ff34a1b18f2c8d69bb9fecad6b32194653066fc7e1e9434"
+    },
+    {
+      "file": "../lib/SemaphoreInv.v",
+      "snapshot_file": "shared/lib/SemaphoreInv.v",
+      "sha256": "19b64af60cb154dd5b8230034fe365dd21a4962eb0398eb6cabbee33cfd41ea7"
+    },
+    {
+      "file": "../lib/SemaphoreOps.v",
+      "snapshot_file": "shared/lib/SemaphoreOps.v",
+      "sha256": "dee519dd864ce99bc73e801e01eea1bde7d945151a90e7998bce8c80c5a075c9"
+    },
+    {
+      "file": "../lib/TaskInv.v",
+      "snapshot_file": "shared/lib/TaskInv.v",
+      "sha256": "53336f97119434443770031ec50f3569ac518250faacd06f53ff638fd711e653"
+    }
+  ],
+  "scope": "Whole before/after resume effect with batch task/delay updates and ordered ready insertion; recursive steps retained only for proof with identity nil case.",
+  "review_record": ".docs/Report/predicate-review.md",
+  "validation_record": "checks/resume-all-effect/root-build.json",
+  "pending_obligation": "semaphore_resume_all_effect_steps_obligation (statement only; not proved)"
+}

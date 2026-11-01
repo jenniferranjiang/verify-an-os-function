@@ -1,5 +1,6 @@
 #ifndef KSEMAPHOREDELETE_LOGIC_H
 #define KSEMAPHOREDELETE_LOGIC_H
+/*@ Import Coq Require Import CRTOS_Verify.lib.IdModuleSpec */
 /* Formal types and semantic vocabulary only. Contracts are caller-local. */
 /*@ Import Coq Require Import CRTOS_Verify.lib.KSemaphoreDelete CRTOS_Verify.lib.KTaskUnSetDelay */
 /*@ Import Coq Require Import CRTOS_Verify.lib.DoubleLinkListSpec CRTOS_Verify.lib.TaskStatusMemory CRTOS_Verify.lib.KTaskParseInfo */
@@ -123,8 +124,19 @@
   (Crtos_GTrans : VarGlobalState -> VarGlobalState -> Prop)
   (os_inv : StableGlobalState -> VarGlobalState -> Assertion)
   (SemaphoreRaw : addr -> Assertion)
+  (idmanager_contains : StableIdmanager -> VarIdmanager -> Z -> Z -> Prop)
+  (sched_link_node : addr -> DL_Node addr)
+  (ktask_wakeup_step : addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop)
+  (ktask_wakeup_detached_null_condition : StableGlobalState -> VarGlobalState -> Z -> Prop)
+  (ktask_wakeup_detached_null_step : addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop)
+ (semaphore_pending_nodes : Z -> VarGlobalState -> list(DL_Node Z) -> Prop)
+ (msgqueue_send_pending_nodes : Z -> VarGlobalState -> list(DL_Node Z) -> Prop)
+ (msgqueue_recv_pending_nodes : Z -> VarGlobalState -> list(DL_Node Z) -> Prop)
+ (wakeup_semaphore_head : Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop)
+ (wakeup_msgqueue_send_head : Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop)
+ (wakeup_msgqueue_recv_head : Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop)
   (semaphore_pending_head : addr -> addr)
-  (semaphore_resume_all_steps : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop)
+  (semaphore_resume_all_effect : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop)
  */
 /*@ Printing Coq Name program := MonadErr.M */
 /*@ Printing Strategy Name program := MonadErr.M */

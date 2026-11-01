@@ -49,46 +49,23 @@ for n,b in list(BODY.items()):
  BODY[n]=b
 # Retain existing formal intent; only selected applicable named interfaces are duplicated in callers.
 for n in ['IdGetObj','GetObj','RemoveObj']:
- SPEC[n]=get_specs('annotated_C/src/headers/m_id.h',n)
+ SPEC[n]=get_specs('annotated_C/src/headers/id_module_spec.h',n)
 for n in ['KTaskStateSet','KTaskStatSetAsReady','JudgeKTaskStatIsSuspend']:
  SPEC[n]=get_specs('annotated_C/src/headers/ktask_set_status.h',n)
 for n in ['KTaskInsertToReadyVector','AssignPolicyInsert']:
  SPEC[n]=get_specs('annotated_C/src/kernel/thread/assign_ready_insert.c',n)
 SPEC['RoundRobinRemainReadyVectorInsert']=get_specs('annotated_C/src/kernel/thread/rrr_ready_vector_insert.c','RoundRobinRemainReadyVectorInsert')
-for n in ['KTaskWakeup','_KTaskWakeup']:
- SPEC[n]=get_specs('annotated_C/src/kernel/thread/ktask_wakeup.c',n)
+SPEC['KTaskWakeup']=get_specs('annotated_C/src/headers/ktask_wakeup.h','KTaskWakeup')
+SPEC['_KTaskWakeup']=get_specs('annotated_C/src/kernel/thread/ktask_wakeup.c','_KTaskWakeup')
 SPEC['GetTaskWithIdnodeInfo']=get_specs('annotated_C/src/kernel/thread/get_task_with_idnode.c','GetTaskWithIdnodeInfo',['inside_critical','inside_known'])
 SPEC['KTaskUnSetDelay']=get_specs('annotated_C/src/headers/ktask_unset_delay.h','KTaskUnSetDelay')
 SPEC['DoubleLinkListRmNode']=get_specs('annotated_C/src/headers/m_double_linklist.h','DoubleLinkListRmNode')
-SPEC['InitDoubleLinkList']=get_specs('ksemaphorecreate-trial-261022-1/annotated_C/src/InitDoubleLinkList.c','InitDoubleLinkList')
+SPEC['InitDoubleLinkList']=get_specs('annotated_C/src/headers/m_double_linklist.h','InitDoubleLinkList')
 SPEC['DoubleLinkListInsertNodeAfter']=get_specs('annotated_C/src/headers/m_double_linklist.h','DoubleLinkListInsertNodeAfter')
 SPEC['DoubleLinkListInsertNodeBefore']=get_specs('annotated_C/src/headers/m_double_linklist.h','DoubleLinkListInsertNodeBefore')
 SPEC['IsDoubleLinkListEmpty']=get_specs('annotated_C/src/headers/m_double_linklist.h','IsDoubleLinkListEmpty')
-SPEC['FreeId']='''/*@ found_node
-    With (sidm : StableIdmanager) (idm : VarIdmanager) (idnode : addr)
-    Require store_idmanager_found(sidm, idm, manager, idnode, id)
-    Ensure store_idmanager_remove_ready(sidm, idm, manager, idnode, id)
- */'''
-SPEC['IdRemoveObj']=get_specs('annotated_C/src/headers/m_id.h','IdRemoveObj',['known_node'])+'''
-/*@ current_node
-    With (sidm : StableIdmanager) (idm : VarIdmanager) (idnode : addr)
-    Require store_idmanager_found(sidm, idm, manager, idnode, id)
-    Ensure store_idmanager(sidm, idmanager_remove(sidm, idm, id), manager) *
-      store_idnode(&(idnode->link), Build_IdNodeAbs(65535, idnode)) *
-      store_node_self_linked(&(idnode->link))
- */
-/*@ found_node
-    With (sidm : StableIdmanager) (idm : VarIdmanager) (idnode : addr)
-    Require store_idmanager_found(sidm, idm, manager, idnode, id)
-    Ensure store_idmanager(sidm, idmanager_remove(sidm, idm, id), manager) *
-      store_idnode(&(idnode->link), Build_IdNodeAbs(65535, idnode)) *
-      store_node_self_linked(&(idnode->link))
- */
-/*@ absent_node
-    With (sidm : StableIdmanager) (idm : VarIdmanager)
-    Require idmanager_query(idm, id) == false && store_idmanager(sidm, idm, manager)
-    Ensure store_idmanager(sidm, idm, manager)
- */'''
+for n in ['FreeId','RemoveObj','IdRemoveObj']:
+ SPEC[n]=get_specs('annotated_C/src/headers/id_module_spec.h',n)
 # Boundaries authorized by TrustBase or the explicitly adopted source-processing rule.
 SIG.update({'CriticalAreaLock':'x_base CriticalAreaLock(void)','CriticalAreaUnLock':'void CriticalAreaUnLock(x_base lock)','CONTAINER_OF_IDNODE_LINK':'struct IdNode *CONTAINER_OF_IDNODE_LINK(DoubleLinklistType *link_ptr)','CONTAINER_OF_SEMAPHORE_ID':'struct Semaphore *CONTAINER_OF_SEMAPHORE_ID(struct IdNode *id_ptr)','CONTAINER_OF_TASK_ID':'KTaskDescriptorType CONTAINER_OF_TASK_ID(struct IdNode *id_ptr)','CONTAINER_OF_TASK_SCHED':'struct TaskDescriptor *CONTAINER_OF_TASK_SCHED(DoubleLinklistType *sched_link_ptr)','x_free':'void x_free(void *ptr)','KTASK_ASSIGN':'void KTASK_ASSIGN(void)'})
 SPEC['CriticalAreaLock']=get_specs('annotated_C/src/headers/m_ktask.h','CriticalAreaLock',['ordinary'])
@@ -126,16 +103,16 @@ for n,b in list(BODY.items()):
   b=b.replace('CriticalAreaUnLock(lock);', 'CriticalAreaUnLock(lock) /*@ where (stable) sg = sg */;')
   b=b.replace('IsDoubleLinkListEmpty(&sem->pend_list)', 'IsDoubleLinkListEmpty(&sem->pend_list) /*@ where (dll) */')
   b=b.replace('LinklistResumeAll(&sem->pend_list);', 'LinklistResumeAll(&sem->pend_list) /*@ where (semaphore_waiters) sg = sg */;')
-  b=b.replace('IdRemoveObj(&k_sem_id_manager, sem->id.id);', 'IdRemoveObj(&k_sem_id_manager, sem->id.id) /*@ where (current_node) */;')
+  b=b.replace('IdRemoveObj(&k_sem_id_manager, sem->id.id);', 'IdRemoveObj(&k_sem_id_manager, sem->id.id) /*@ where (low_level_spec) */;')
   b=b.replace('DoubleLinkListRmNode(&sem->link);', 'DoubleLinkListRmNode(&sem->link) /*@ where (remove_member) */;')
   b=b.replace('KTASK_ASSIGN();', 'KTASK_ASSIGN() /*@ where (outside_critical) sg = sg */;')
  if n == 'KTaskWakeup':
-  b=b.replace('GetTaskWithIdnodeInfo(id);', 'GetTaskWithIdnodeInfo(id) /*@ where (inside_known) sg = sg, st = st, target = target */;')
-  b=b.replace('_KTaskWakeup(task);', '_KTaskWakeup(task) /*@ where (not_suspended) old_stat = old_stat $ not_suspended where (wakeup_unified) sg = sg, st = st, desc = desc, ready_before = ready_before, sched_view = sched_view $ wakeup_unified */;')
+  b=b.replace('GetTaskWithIdnodeInfo(id);', 'GetTaskWithIdnodeInfo(id) /*@ where (inside_critical) sg = sg, st = before */;')
+  b=b.replace('_KTaskWakeup(task);', '_KTaskWakeup(task) /*@ where (wakeup_general_ic) sg = sg, before = before */;')
  if n == 'LinklistResumeAll':
-  b=b.replace('KTaskWakeup(task->id.id);', 'KTaskWakeup(task->id.id) /*@ where (wakeup_unified) sg = sg */;')
+  b=b.replace('KTaskWakeup(task->id.id);', 'KTaskWakeup(task->id.id) /*@ where (semaphore_pending_head_ic) sg = sg, sem = sem */;')
  if n == '_KTaskWakeup':
-  b=b.replace('KTaskUnSetDelay(task);', 'KTaskUnSetDelay(task) /*@ where (all_case_delay) sg = sg, st_before = st, desc = desc $ wakeup_unified */;')
+  b=b.replace('KTaskUnSetDelay(task);', 'KTaskUnSetDelay(task) /*@ where (all_case_delay) sg = sg, st_before = before, desc = desc */;')
  if n in ['RemoveObj','KTaskUnSetDelay']:
   b=re.sub(r'(DoubleLinkListRmNode\([^;]+\));', r'\1 /*@ where (remove_member) */;', b)
  if n == 'RoundRobinRemainReadyVectorInsert':
@@ -158,7 +135,8 @@ for n,b in BODY.items():
  else:
   contents='#include "../include/slice_types.h"\n#include "../include/logic.h"\n\n'
   contents+='/* Source: '+sources[n]+'. Current 32-bit non-SMP configuration. */\n'
-  contents+='\n\n'.join(declarations)+'\n\n'+SIG[n]+'\n'+SPEC[n]+'\n'+b+'\n'
+  own_spec = SPEC[n]
+  contents+='\n\n'.join(declarations)+'\n\n'+SIG[n]+'\n'+own_spec+'\n'+b+'\n'
   (OUT/'src'/f'{n}.c').write_text(contents)
 (TRIAL/'checks/spec-closure.json').write_text(json.dumps({'source':sources,'direct_calls':EDGES,'boundaries':list(SIG.keys()-BODY.keys()),'pending_contracts':[n for n in BODY if n not in SPEC]},indent=2))
 print('Wrote',len(list((OUT/'src').glob('*.c'))),'canonical slices; pending:',[n for n in BODY if n not in SPEC])

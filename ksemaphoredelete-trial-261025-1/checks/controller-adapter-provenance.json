@@ -1,0 +1,176 @@
+{
+  "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller",
+  "files": [
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/vc-proving/atomic_file.py",
+      "destination": "tools/qcp-controller/scripts/vc-proving/atomic_file.py",
+      "sha256": "83a90b214a866a9c2e8ea3c95162f4470ebf6db4c93d7614fd38ebec88e07996"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/vc-proving/build_mode.py",
+      "destination": "tools/qcp-controller/scripts/vc-proving/build_mode.py",
+      "sha256": "7b8dcecb3ea3bb5de309347184f30b714f652ba07afe74a06f3dfed722141cbf"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/vc-proving/coq_tooling.py",
+      "destination": "tools/qcp-controller/scripts/vc-proving/coq_tooling.py",
+      "sha256": "0a69d91c39cfbf931111c94818668ec2a02ae889d73b366b2fb946a27981fbbb"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/vc-proving/coq_tooling_common.py",
+      "destination": "tools/qcp-controller/scripts/vc-proving/coq_tooling_common.py",
+      "sha256": "aae3795bdb87fc694b52757d4c3a9f1f025ea52efa88d5dd3faa85df51822b99"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/vc-proving/coq_tooling_dune.py",
+      "destination": "tools/qcp-controller/scripts/vc-proving/coq_tooling_dune.py",
+      "sha256": "5cde0dc21ff55039c9accf6d5de1e3f24f862dcb40b4e9a40c46587b7e180630"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/vc-proving/coq_tooling_makefile.py",
+      "destination": "tools/qcp-controller/scripts/vc-proving/coq_tooling_makefile.py",
+      "sha256": "02f1f661c66ed70097def102b51aede95f536b2d583844425229a69866feab5c"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/vc-proving/crtos_layout.py",
+      "destination": "tools/qcp-controller/scripts/vc-proving/crtos_layout.py",
+      "sha256": "da1f2432b59fa0d7c2007d56ea986279504d3936be2b4e9d781e4d3c0cf60dbd"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/vc-proving/file_integrity.py",
+      "destination": "tools/qcp-controller/scripts/vc-proving/file_integrity.py",
+      "sha256": "dfd55a9585d75aba27055a383909a495968b5f72da20da1fc7bc34fcfbd5393e"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/vc-proving/group_plan_utils.py",
+      "destination": "tools/qcp-controller/scripts/vc-proving/group_plan_utils.py",
+      "sha256": "d15b9c4a1f5fd7a19cf949540029bb06982d1e5587bec1c59821ac5fd40a5d0a"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/vc-proving/path_utils.py",
+      "destination": "tools/qcp-controller/scripts/vc-proving/path_utils.py",
+      "sha256": "a685f00704fce14be32828e08c1e24851230ec1b47f4bccbc8e1f7814d8198bc"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/vc-proving/process_adapter.py",
+      "destination": "tools/qcp-controller/scripts/vc-proving/process_adapter.py",
+      "sha256": "09ac1cd87addc0441aced9e37962a5bf4d713f851b0dfec92d25bfd3f06ae8dc"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/vc-proving/proof_manual_utils.py",
+      "destination": "tools/qcp-controller/scripts/vc-proving/proof_manual_utils.py",
+      "sha256": "b1263c9b114e497711afc327d67463f320cbbc9c07ff1eb1844ceb6d9acf60da"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/vc-proving/proving.py",
+      "destination": "tools/qcp-controller/scripts/vc-proving/proving.py",
+      "sha256": "f926438bf495f1127adabf593577a130f9568b3f94818387ca4bd7dcf0b706c6"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/annotation_design.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/annotation_design.py",
+      "sha256": "e8a6667aecde230a9cdb6a937ebb4bf3b6a3f1105b1ef7764f651eefac8cad57"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/annotation_refresh.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/annotation_refresh.py",
+      "sha256": "cea473f2a75d731c98b3d5f0f00f6cf96a64de0894b7bcd390589a4e8e51e391"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/auto_obligations.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/auto_obligations.py",
+      "sha256": "288e25788be7d8ad381ecc630adedaedc0760d857e879b7ebe35ff1231e3ff3e"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/controller.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/controller.py",
+      "sha256": "cd18bd64376e829592d6fcdd69774b4ac75415cdefaa2dc0b48a10ea60c13bf9"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/controller_artifacts.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/controller_artifacts.py",
+      "sha256": "87b1c785108d2cf6e926c5fc728e60c446f373a7b61c0e018544f03cdf9030c0"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/controller_attempts.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/controller_attempts.py",
+      "sha256": "dcf1967516e0e018e8f9dcf46cf4ab3f35c87d5f6a496575d35744db7319b878"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/controller_cli.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/controller_cli.py",
+      "sha256": "83b654e751f99a911d564590b82a69537b15b3632f195169028d222e5b3e1079"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/controller_control.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/controller_control.py",
+      "sha256": "9f757d364b2a0b77531130da46160d138624e9d24b4f36c4868a2589293c4b0f"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/controller_dune.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/controller_dune.py",
+      "sha256": "5e7cc3b02f7dc2ab7d8a5b243e092598ccffc8eabd22570781422a74dc3338a9"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/controller_execution.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/controller_execution.py",
+      "sha256": "ba6c836e7faaf44acd7b87d5f0373555a1f0e120401a28953e66d93b559ea31f"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/controller_final.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/controller_final.py",
+      "sha256": "30625fede86cb12642e822360ff9fce614d83f7f11e7385ee2e85c80f096e096"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/controller_invocations.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/controller_invocations.py",
+      "sha256": "b2b436a21b784e5fcdf24f5b1ad8e6212311f395a9383d56a6957dabd6f8c7e8"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/controller_proving.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/controller_proving.py",
+      "sha256": "92c0673aa339077d97ea6bed364b94004e222ab07a2b3ebb934af152267d335c"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/controller_round_checks.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/controller_round_checks.py",
+      "sha256": "58ea05422b983e2c886552af0786ebe656a686843d238050fa7d380dbdb04bcc"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/controller_rounds.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/controller_rounds.py",
+      "sha256": "4a2f048147e0c45887af65a865e10aaa9b9deaae5277c18721475241fe59d109"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/controller_state.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/controller_state.py",
+      "sha256": "c5cd407fb61170b7c31e7de293ce93be8be88d9c6efd0392f4f5bf055741a441"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/controller_tools.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/controller_tools.py",
+      "sha256": "1a3d1f07289f129a42e2e7155a80d01b4a34b65dbfceb3f137f955589ac15615"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/crtos_frozen_inputs.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/crtos_frozen_inputs.py",
+      "sha256": "85d77f4134f6c341fe9f4e408d030bc17c85c2a58aa6de64135faa73c225ebfa"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/crtos_symexec.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/crtos_symexec.py",
+      "sha256": "a00f2edf654f6e7b1bfdd0ffa1c5a4e855860871939590ca90293002e9c4e269"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/spec_freeze.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/spec_freeze.py",
+      "sha256": "558324463ff24ce5907c44a1e34d61b2fdf0e12343c4f2cff1f7083f4ea4986f"
+    },
+    {
+      "source": "/home/xinra/crtos/ksemaphorecreate-trial-261022-1/tools/qcp-controller/scripts/verification-orchestrator/symexec_tooling.py",
+      "destination": "tools/qcp-controller/scripts/verification-orchestrator/symexec_tooling.py",
+      "sha256": "cdda55821e96496d215ad03523331c9f806362aa71c2b2aa5d37feedc70919cf"
+    }
+  ],
+  "scope": "tool code only; no former runs, proof artifacts, sources or library caches copied"
+}

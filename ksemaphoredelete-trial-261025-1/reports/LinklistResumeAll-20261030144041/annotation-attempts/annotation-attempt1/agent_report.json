@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "infrastructure",
+    "kind": "qcp-symexec-segmentation-fault",
+    "vcs": [],
+    "message": "QCP still exits -11 without stderr after the independently reviewed NULL_PARAM_CHECK_1 API adaptation and exact NONE expansion. The full candidate fails in recorded input evidence/parser-normalization/4da1ce70a056769036e4456636eb7f4925ddd1a68b81e49e65781e94322fe952/LinklistResumeAll.c; removing all body annotations also fails in d53eaeee853d48175f4875993f4e72e7203e4dce4e43dcaafd51fd7ba9683126/LinklistResumeAll.c. Empty-loop normalization and a transparent first-order map alias did not fix it; the ineffective alias was removed. Formal case-lib design passed, but no function VC output is published. Approved predicate/spec and actual canonical NULL nonreturn path are unchanged.",
+    "repair_boundary": "QCP driver/parser/entailment tooling or evidence-backed equivalent input adaptation; retain frozen predicate/spec semantics and all real control-flow paths."
+  }
+}

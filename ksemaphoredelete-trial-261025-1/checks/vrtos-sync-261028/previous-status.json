@@ -1,0 +1,33 @@
+{
+  "target": "KSemaphoreDelete",
+  "shared_merge": "completed-and-checked",
+  "baseline_import_typecheck": "passed; existing compiled libraries only",
+  "checks": {
+    "root_libraries_recompiled": 8,
+    "formal_types_checked": 137,
+    "canonical_C_functions": 23,
+    "model_or_trusted_boundaries": 8,
+    "abi": "passed",
+    "caller_contracts": "passed",
+    "migration": "passed"
+  },
+  "date": "2026-10-27",
+  "status": "design-reviewed-implementation-artifacts-removed",
+  "blocker": null,
+  "predicate_status": "review-passed",
+  "predicate_revision": "KSemaphoreDelete-pred-r4",
+  "predicate_sha256": "d8996d5d10fe14e0a1a9379b9f9a4bd71235860c232bc324e946913e56dd6e67",
+  "spec_status": "review-passed",
+  "spec_revision": "KSemaphoreDelete-spec-r6",
+  "spec_sha256": "7cf1f26315e947a56238ec22e4919c4ab673c62d0eaa05bce3e6701192e980ac",
+  "implement_started": false,
+  "qcp_started": false,
+  "symexec_started": false,
+  "whole_target_verified": false,
+  "report": ".docs/Report/status.md",
+  "cleanup": {
+    "reason": "用户要求移除 implement 阶段新增文件",
+    "backup": "/tmp/ksemaphoredelete-trial-261025-1-implement-backup-tyoe5rhw",
+    "note": "保留当前源码、predicate/spec、修订快照及设计检查；旧实现运行与证明产物已移出 trial。"
+  }
+}

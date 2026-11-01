@@ -1,0 +1,35 @@
+{
+  "upstream_commit": "bc601a10e9a50b1d86b46843c04034844a412a2d",
+  "shared_library_build": {
+    "exit_code": 0,
+    "command": "make -f Makefile.coq -j2 COQBIN=/home/xinra/.opam/pv-bench-8.20.1/bin/",
+    "log": "final-core-build.log"
+  },
+  "formal_vocabulary": {
+    "checks": 147,
+    "exit_code": 0
+  },
+  "interface_checks": {
+    "contract_copies": 65,
+    "imported_functions": 20,
+    "trial_bodies": 23,
+    "resume_contract_copies": 4,
+    "errors": []
+  },
+  "trial_c_syntax": {
+    "files": 23,
+    "exit_code": 0,
+    "executable_tokens_unchanged": true
+  },
+  "shared_c_syntax": {
+    "files": 33,
+    "exit_code": 0
+  },
+  "generator_check": {
+    "count": 23,
+    "mismatches": []
+  },
+  "qcp_started": false,
+  "implementation_verified": false,
+  "other_trials_modified": false
+}

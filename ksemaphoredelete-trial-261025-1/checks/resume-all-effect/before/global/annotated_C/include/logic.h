@@ -1,0 +1,128 @@
+#ifndef KSEMAPHOREDELETE_LOGIC_H
+#define KSEMAPHOREDELETE_LOGIC_H
+/* Formal types and semantic vocabulary only. Contracts are caller-local. */
+/*@ Import Coq Require Import CRTOS_Verify.lib.KSemaphoreDelete CRTOS_Verify.lib.KTaskUnSetDelay */
+/*@ Import Coq Require Import CRTOS_Verify.lib.DoubleLinkListSpec CRTOS_Verify.lib.TaskStatusMemory CRTOS_Verify.lib.KTaskParseInfo */
+/*@ Import Coq Import IDNode DLL */
+/*@ Import Coq From MonadLib.MonadErr Require Import MonadErrBasic MonadErrHoare monadesafe_lib */
+/*@ Import Coq Import Monad MonadNotation */
+/*@ Import Coq Local Open Scope monad */
+/*@ Extern Coq addr := Z */
+/*@ Extern Coq
+  (DL_Node :: * => *) (option :: * => *) (unit :: *)
+  (TaskStatus :: *) (StableGlobalState :: *) (VarGlobalState :: *)
+  (TaskDescriptorAbs :: *) (TaskSchedMemberAbs :: *) (TaskDelayAbs :: *)
+  (OsAssignReadyVectorAbs :: *) (vSchedView :: *) (vDelayView :: *)
+  (StableIdmanager :: *) (VarIdmanager :: *) (IdNodeAbs :: *)
+  (SemaphoreStable :: *) (SemaphoreAbs :: *)
+  (program :: * => * => *)
+ */
+/*@ Extern Coq SemaphoreState := list SemaphoreAbs */
+/*@ Extern Coq Record StableIdmanager { idmax: Z; hoffset: Z; id_map: Z; htable: Z; } */
+/*@ Extern Coq Record TaskSchedMemberAbs {
+  tsmStat: TaskStatus; tsmAdvanceCnt: Z; tsmCurPrio: Z;
+  tsmOriginTimeslice: Z; tsmRestTimeslice: Z; tsmBitmapColumn: Z;
+} */
+/*@ Extern Coq Record TaskDescriptorAbs {
+  tdSchedMember: TaskSchedMemberAbs; tdDelay: Z; tdExstatus: Z;
+} */
+/*@ Extern Coq Record TaskDelayAbs { tdTaskPtr: Z; tdTicks: Z; tdStatus: Z; } */
+/*@ Extern Coq Record OsAssignReadyVectorAbs {
+  orvBuckets: list(list(DL_Node Z)); orvReadyGroup: Z; orvHighestPrio: Z;
+} */
+/*@ Extern Coq (TaskStable :: *) (TaskState :: *) (VarAssignAbs :: *) (DelayState :: *) */
+/*@ Extern Coq Record SemaphoreAbs {
+  semaphore_addr: addr; semaphore_id: Z; semaphore_value: Z; semaphore_pending_addrs: list addr;
+} */
+/*@ Extern Coq Record TaskStable {
+  task_stable_ids: StableIdmanager; task_idmanager_ptr: Z;
+} */
+/*@ Extern Coq Record TaskState {
+  task_desc_map: Z -> option TaskDescriptorAbs; task_idmanager_abs: VarIdmanager;
+} */
+/*@ Extern Coq Record VarAssignAbs { assignReadyVector: OsAssignReadyVectorAbs; } */
+/*@ Extern Coq Record StableGlobalState { os_task_stable: TaskStable; delay_head_ptr: Z; } */
+/*@ Extern Coq Record DelayState {
+  delay_inactive_map: Z -> option TaskDelayAbs;
+  delay_active_nodes: list(DL_Node TaskDelayAbs);
+} */
+/*@ Extern Coq Record VarGlobalState {
+  os_tasks: TaskState; os_assign: VarAssignAbs; os_delays: DelayState; os_semaphores: SemaphoreState;
+} */
+/*@ Extern Coq
+  (Some : {A} -> A -> option A) (None : {A} -> option A)
+  (tt : unit) (true : bool) (false : bool)
+  (Build_IdNodeAbs : Z -> addr -> IdNodeAbs)
+  (Build_DL_Node : {A} -> A -> addr -> DL_Node A)
+  (store_idmanager : StableIdmanager -> VarIdmanager -> addr -> Assertion)
+  (store_idmanager_found : StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion)
+  (store_idmanager_remove_ready : StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion)
+  (store_idmanager_removeobj_post : StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion)
+  (store_idnode : addr -> IdNodeAbs -> Assertion)
+  (idmanager_query : VarIdmanager -> Z -> bool)
+  (idmanager_remove : StableIdmanager -> VarIdmanager -> Z -> VarIdmanager)
+  (idmanager_add : VarIdmanager -> Z -> VarIdmanager)
+  (idmanager_link : StableIdmanager -> VarIdmanager -> Z -> addr -> VarIdmanager)
+  (store_dll : {A} -> (addr -> A -> Assertion) -> addr -> list(DL_Node A) -> Assertion)
+  (occupy_dll_node : addr -> Assertion)
+  (store_node_self_linked : addr -> Assertion)
+  (store_task_sched_member : addr -> TaskSchedMemberAbs -> Assertion)
+  (store_priority_ready_bucket : addr -> list(DL_Node addr) -> Assertion)
+  (store_ready_dll_tail_view : addr -> list(DL_Node addr) -> addr -> Assertion)
+  (dll_insert_anchor : {A} -> addr -> list(DL_Node A) -> addr -> Prop)
+  (dll_insert_after_dispatch : {A} -> addr -> list(DL_Node A) -> addr -> DL_Node A -> list(DL_Node A))
+  (dll_insert_before_dispatch : {A} -> addr -> list(DL_Node A) -> addr -> DL_Node A -> list(DL_Node A))
+  (ALIGN_SIZE : Z) (addr_aligned : addr -> Z -> Prop)
+  (KOK : Z) (KERROR : Z) (PRIORITY_MAX : Z)
+  (TSK_SUSPEND : TaskStatus) (TSK_READY : TaskStatus)
+  (decode_task_status : Z -> TaskStatus)
+  (store_task_status : addr -> TaskStatus -> Assertion)
+  (os_global_context : StableGlobalState -> Prop)
+  (task_world_wf : VarGlobalState -> Prop)
+  (task_fields : StableGlobalState -> VarGlobalState -> Assertion)
+  (delay_inv : StableGlobalState -> VarGlobalState -> Assertion)
+  (assign_ready_pending : StableGlobalState -> VarGlobalState -> Assertion)
+  (sched_link_of : addr -> addr)
+  (ready_task_node : addr -> DL_Node addr)
+  (task_addr_aligned : addr -> OsAssignReadyVectorAbs -> Prop)
+  (assign_ready_vector_addr : StableGlobalState -> addr)
+  (get_task_with_idnode_success : StableGlobalState -> VarGlobalState -> Z -> addr -> Prop)
+  (set_task_desc_ready : TaskDescriptorAbs -> TaskDescriptorAbs)
+  (update_task_desc_map : addr -> TaskDescriptorAbs -> (addr -> option TaskDescriptorAbs) -> addr -> option TaskDescriptorAbs)
+  (replace_task_desc_map : (addr -> option TaskDescriptorAbs) -> VarGlobalState -> VarGlobalState)
+  (replace_global_ready_vector : OsAssignReadyVectorAbs -> VarGlobalState -> VarGlobalState)
+  (os_assign_ready_vector_replace_bucket : OsAssignReadyVectorAbs -> Z -> list(DL_Node addr) -> OsAssignReadyVectorAbs)
+  (rrr_bucket_insert : (addr -> option TaskDescriptorAbs) -> TaskSchedMemberAbs -> DL_Node addr -> list(DL_Node addr) -> list(DL_Node addr) -> Prop)
+  (assign_policy_insert_ready_vector : OsAssignReadyVectorAbs -> TaskSchedMemberAbs -> list(DL_Node addr) -> OsAssignReadyVectorAbs)
+  (assign_insert_step_ic : (addr -> option TaskDescriptorAbs) -> addr -> TaskDescriptorAbs -> OsAssignReadyVectorAbs -> OsAssignReadyVectorAbs -> Prop)
+  (ktask_unset_delay_step : addr -> VarGlobalState -> VarGlobalState -> Prop)
+  (unset_linked_delay_step : addr -> TaskDelayAbs -> VarGlobalState -> VarGlobalState -> Prop)
+  (In : {A} -> A -> list A -> Prop)
+  (vDelayNull : vDelayView)
+  (vDelayInactive : addr -> TaskDelayAbs -> vDelayView)
+  (vDelayActive : addr -> TaskDelayAbs -> list(DL_Node TaskDelayAbs) -> list(DL_Node TaskDelayAbs) -> vDelayView)
+  (store_ktask_unset_delay_pre : addr -> vDelayView -> Assertion)
+  (store_ktask_unset_delay_post : addr -> vDelayView -> Assertion)
+  (vSchedLinked : addr -> list(DL_Node addr) -> list(DL_Node addr) -> vSchedView)
+  (vSchedDetached : vSchedView)
+  (store_ktask_wakeup_sched_pre : (addr -> option TaskDescriptorAbs) -> addr -> vSchedView -> Assertion)
+  (store_ktask_wakeup_source_post : (addr -> option TaskDescriptorAbs) -> vSchedView -> Assertion)
+  (LastSeen : VarGlobalState -> (VarGlobalState -> Prop) -> Prop)
+  (safeExec : {Sigma} {A} -> (Sigma -> Prop) -> program Sigma A -> (A -> Sigma -> Prop) -> Prop)
+  (return : {Sigma} {A} -> A -> program Sigma A)
+  (abs_semaphore_delete : StableGlobalState -> Z -> program (VarGlobalState -> Prop) unit)
+  (abs_ktask_assign : program (VarGlobalState -> Prop) unit)
+  (OutsideCritical : StableGlobalState -> VarGlobalState -> Assertion)
+  (InsideCritical : StableGlobalState -> VarGlobalState -> Assertion)
+  (Crtos_RTrans : VarGlobalState -> VarGlobalState -> Prop)
+  (Crtos_GTrans : VarGlobalState -> VarGlobalState -> Prop)
+  (os_inv : StableGlobalState -> VarGlobalState -> Assertion)
+  (SemaphoreRaw : addr -> Assertion)
+  (semaphore_pending_head : addr -> addr)
+  (semaphore_resume_all_steps : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop)
+ */
+/*@ Printing Coq Name program := MonadErr.M */
+/*@ Printing Strategy Name program := MonadErr.M */
+/*@ Printing Coq Name safeExec := monadesafe_lib.safeExec */
+/*@ Printing Coq Name return := MonadErr.ret */
+#endif

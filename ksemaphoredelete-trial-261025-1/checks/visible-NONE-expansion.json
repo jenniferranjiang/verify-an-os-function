@@ -1,0 +1,12 @@
+{
+  "file": "annotated_C/src/LinklistResumeAll.c",
+  "sites": 3,
+  "change": "NONE -> ((void *)0), exact expansion of the frozen macro at executable use sites only",
+  "canonical_contracts_unchanged": true,
+  "line_count_unchanged": true,
+  "gcc_preprocessed_C_tokens_equal": true,
+  "controller_parser_input_bytes_identical": true,
+  "before_sha256": "fcac7d11e4e7d020f57d883fe145f93ccf4d471a98491a048f7f2ced56649183",
+  "after_sha256": "9bf7baf92cfe6ecbfbc898251af73b0fa3c8b9b98cc239bb511125ae65e70429",
+  "does_not_resolve": "Subsequent QCP -11 crash; does not claim function verification."
+}

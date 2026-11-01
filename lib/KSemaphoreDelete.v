@@ -15,11 +15,11 @@ Definition semaphore_pending_head (p : addr) : addr :=
   &(p # "Semaphore" ->ₛ "pend_list").
 
 (** ResumeAll 的一轮：写首任务 exstatus=-ERROR，取消其 delay，迁到 READY，
-    再从当前信号量的等待序列移除首项。原 sem 的 value/ID、其他对象以及
+    由 semaphore_pending_head_ic 对应的关系精确移除当前等待队首。原 sem 的 value/ID、其他对象以及
     未触及的任务字段由这些精确局部更新保留。每轮重新读取当前队首。 *)
 Definition semaphore_resume_one (p task : addr) (tail : list addr)
     (before after : VarGlobalState) : Prop :=
-  exists sem desc awake,
+  exists sem desc,
     In sem before.(os_semaphores) /\ sem.(semaphore_addr) = p /\
     sem.(semaphore_pending_addrs) = task :: tail /\
     before.(os_tasks).(task_desc_map) task = Some desc /\
@@ -27,22 +27,45 @@ Definition semaphore_resume_one (p task : addr) (tail : list addr)
     let failed := set_task_desc_exstatus desc (-1) in
     let marked := replace_task_desc_map
       (update_task_desc_map task failed before.(os_tasks).(task_desc_map)) before in
-    ktask_wakeup_step task failed marked awake /\
-    after = replace_semaphores
-      (semaphore_set_pending p tail awake.(os_semaphores)) awake.
+    wakeup_semaphore_head p task failed marked after.
 
-(** 按原等待队列顺序反复执行一轮；末态必须仍有同一已发布对象且等待链为空。
-    这是可检查的有限关系，终止的实现证明需从 SUSPEND 登记关系和成功摘链
-    得到长度严格下降。坏链表/未登记任务不会被当作成功返回。 *)
+(** 循环证明使用的逐步关系。空序列仅表示没有后续操作；信号量存在及
+    pending 与剩余序列一致，由调用前提和各轮更新保持，不在基例重复要求。
+    此关系不再作为公开函数的整体效果；与整体效果的连接须在合法前态下证明。 *)
 Fixpoint semaphore_resume_all_steps (p : addr) (waiting : list addr)
     (before after : VarGlobalState) : Prop :=
   match waiting with
-  | nil => after = before /\ exists sem,
-      In sem before.(os_semaphores) /\ sem.(semaphore_addr) = p /\
-      sem.(semaphore_pending_addrs) = nil
+  | nil => after = before
   | task :: tail => exists middle,
       semaphore_resume_one p task tail before middle /\
       semaphore_resume_all_steps p tail middle after
+  end.
+
+(** 处理完整条等待队列的整体效果：任务表批量改为 READY/-ERROR，
+    延时结构批量取消，ready 按原队列顺序插入，信号量 pending 最后一次置空。
+    replace_* 保留 task ID/管理链、运行任务及其余全局分量；sem ID/value
+    保持。非空队列的任务须原已登记且 SUSPEND、无重复，这些条件由实际
+    等待 DLL 及任务资源给出，不额外加强 C spec 的前置。
+    入口的信号量成员及 pending 对应关系由 caller 给出。空队列完全不改
+    状态，避免无条件 set_pending 改写 caller 尚未重组的同地址 ghost 项。
+    延时批量更新与逐步取消的等价只在 delay_inv 等合法资源前提下成立。 *)
+Definition semaphore_resume_all_effect (p : addr) (waiting : list addr)
+    (before after : VarGlobalState) : Prop :=
+  match waiting with
+  | nil => after = before
+  | _ =>
+      let T := before.(os_tasks).(task_desc_map) in
+      NoDup waiting /\
+      Forall (fun task => exists desc,
+        T task = Some desc /\ desc.(tdSchedMember).(tsmStat) = TSK_SUSPEND)
+        waiting /\
+      exists ready_after,
+        resume_all_ready T waiting before.(os_assign).(assignReadyVector) ready_after /\
+        after = replace_semaphores
+          (semaphore_set_pending p nil before.(os_semaphores))
+          (replace_global_ready_vector ready_after
+            (replace_global_delays (resume_all_delays T waiting before.(os_delays))
+              (replace_task_desc_map (resume_all_task_map T waiting) before)))
   end.
 
 (** 锁内删除的纯效果，p=0 为未找到；找到则唤醒所有原等待任务，注销 ID
@@ -59,7 +82,7 @@ Definition semaphore_delete_locked_effect (id p : Z) (resched : bool)
     sem.(semaphore_id) = semaphore_query_id id /\
     p = sem.(semaphore_addr) /\ p <> 0 /\
     resched = negb (Nat.eqb (List.length sem.(semaphore_pending_addrs)) 0) /\
-    semaphore_resume_all_steps p sem.(semaphore_pending_addrs) before drained /\
+    semaphore_resume_all_effect p sem.(semaphore_pending_addrs) before drained /\
     after = replace_semaphores (semaphore_unpublish p drained.(os_semaphores)) drained).
 
 (** 返回的布尔值仅决定锁外调度；私有待释放对象地址在内存契约中存在量化，
@@ -100,4 +123,16 @@ Definition SemaphoreRetired (p value : Z) : Assertion :=
     不能以此 Definition 为证明事实。实现阶段需由字段forget与布局组合证明。 *)
 Definition semaphore_retired_raw_obligation : Prop :=
   forall p value, SemaphoreRetired p value |-- SemaphoreRaw p.
+
+(** 待证的连接命题，不是已证明引理。限定于实际借出的合法资源及信号量
+    入口关联；不声称两个关系在任意损坏或未登记的纯状态上都等价。
+    后续循环证明需证明逐步结果满足整体效果，反向连接用于核对抽象行为范围。 *)
+Definition semaphore_resume_all_effect_steps_obligation : Prop :=
+  forall sg before sem after,
+    os_global_context sg -> In sem before.(os_semaphores) ->
+    os_inv sg before |--
+    “ (semaphore_resume_all_steps sem.(semaphore_addr)
+         sem.(semaphore_pending_addrs) before after <->
+       semaphore_resume_all_effect sem.(semaphore_addr)
+         sem.(semaphore_pending_addrs) before after) ”.
 

@@ -1,0 +1,444 @@
+{
+  "date": "2026-11-01",
+  "trial": "ksemaphoredelete-trial-261025-1",
+  "predicate_revision": "KSemaphoreDelete-pred-r7",
+  "spec_revision": "KSemaphoreDelete-spec-r9",
+  "scope": "Current file/hash/contract audit; no new QCP run or proof compilation.",
+  "predicate_files": [
+    {
+      "file": "../lib/AssignState.v",
+      "sha256": "778034a7d947d70af09913e1d1d09a11a1bc37c91abe7dcde6f904de00b20479",
+      "matches_approved": true
+    },
+    {
+      "file": "../lib/CrtosGlobState.v",
+      "sha256": "47a9a1dbacf3059040884c077b0e166b908af7a639b801af264ba1c9c36df747",
+      "matches_approved": true
+    },
+    {
+      "file": "../lib/CrtosInv.v",
+      "sha256": "a37fae26c710c34b34d0893b26cf6832f13ac94181cc3021163ca0f7bbee8d71",
+      "matches_approved": true
+    },
+    {
+      "file": "../lib/CrtosRules.v",
+      "sha256": "9338d39d287890070e3d242fbfc36f8006ff41aec533ec757d32e9769d3de72c",
+      "matches_approved": true
+    },
+    {
+      "file": "../lib/IdModuleSpec.v",
+      "sha256": "e5976a3f26a517d9ba0c08297d8e130f73b623daa644eac8c1708c39c718ce6c",
+      "matches_approved": true
+    },
+    {
+      "file": "../lib/KSemaphoreDelete.v",
+      "sha256": "132bf8234fa36bacf56b54639f69a206397af576265e1103de18ac640d829b71",
+      "matches_approved": true
+    },
+    {
+      "file": "../lib/KTaskUnSetDelay.v",
+      "sha256": "6824f1f387aa96e9202c472a829d33095407bd7d5297f6bd94618f187a50f009",
+      "matches_approved": true
+    },
+    {
+      "file": "../lib/KTaskWakeup.v",
+      "sha256": "b68fff8b4db88739d4682c55a1c80f94f15bd03669c5058380f5d0d73ee00217",
+      "matches_approved": true
+    },
+    {
+      "file": "../lib/RemoveFound.v",
+      "sha256": "1dd665c09d67c6fdfef759c55f6a78e5c30491b3c0bbce4c2bec9c1365f65204",
+      "matches_approved": true
+    },
+    {
+      "file": "../lib/SemaphoreInv.v",
+      "sha256": "19b64af60cb154dd5b8230034fe365dd21a4962eb0398eb6cabbee33cfd41ea7",
+      "matches_approved": true
+    },
+    {
+      "file": "../lib/SemaphoreOps.v",
+      "sha256": "dee519dd864ce99bc73e801e01eea1bde7d945151a90e7998bce8c80c5a075c9",
+      "matches_approved": true
+    },
+    {
+      "file": "../lib/ServiceSlotWf.v",
+      "sha256": "78d6b34e463444e7a57e69acad7129df44cf3247ff4534a48fdbddd95b978ee2",
+      "matches_approved": true
+    },
+    {
+      "file": "../lib/TaskInv.v",
+      "sha256": "dcb83c321987178ff4bb5457d352359c704bd7e005d4b0c30e1ba834f3cb3d5e",
+      "matches_approved": true
+    },
+    {
+      "file": "../lib/TaskState.v",
+      "sha256": "01f5c96657ded45055a8fdd14a5d45d2c4f739afb1591ef911172b07b4e22024",
+      "matches_approved": true
+    },
+    {
+      "file": "../vendor/qcp_strategy/Mapping.v",
+      "sha256": "8484ec2fcea81d86b1f277f761fb7035aa251c9a71b016fa7c9ebba39f002f06",
+      "matches_approved": true
+    }
+  ],
+  "library_copies": [
+    {
+      "file": "CrtosInv.v",
+      "matches_shared": true
+    },
+    {
+      "file": "IdModuleSpec.v",
+      "matches_shared": true
+    },
+    {
+      "file": "KSemaphoreDelete.v",
+      "matches_shared": true
+    },
+    {
+      "file": "KTaskUnSetDelay.v",
+      "matches_shared": true
+    },
+    {
+      "file": "KTaskWakeup.v",
+      "matches_shared": true
+    },
+    {
+      "file": "RemoveFound.v",
+      "matches_shared": true
+    },
+    {
+      "file": "SemaphoreInv.v",
+      "matches_shared": true
+    },
+    {
+      "file": "SemaphoreOps.v",
+      "matches_shared": true
+    },
+    {
+      "file": "ServiceSlotWf.v",
+      "matches_shared": true
+    },
+    {
+      "file": "TaskInv.v",
+      "matches_shared": true
+    }
+  ],
+  "contracts": [
+    {
+      "function": "AssignPolicyInsert",
+      "shared": "annotated_C/src/kernel/thread/assign_ready_insert.c",
+      "named_specs": [
+        "AssignPolicyInsert::<default>"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "DoubleLinkListInsertNodeAfter",
+      "shared": "annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+      "named_specs": [
+        "DoubleLinkListInsertNodeAfter::rrr_ready_insert_after",
+        "DoubleLinkListInsertNodeAfter::dispatch_case"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "DoubleLinkListInsertNodeBefore",
+      "shared": "annotated_C/src/DoubleLinkListInsertNodeBefore.c",
+      "named_specs": [
+        "DoubleLinkListInsertNodeBefore::rrr_ready_insert_before",
+        "DoubleLinkListInsertNodeBefore::dispatch_case"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "DoubleLinkListRmNode",
+      "shared": "annotated_C/src/headers/m_double_linklist.h",
+      "named_specs": [
+        "DoubleLinkListRmNode::remove_ready_member",
+        "DoubleLinkListRmNode::remove_sched_self",
+        "DoubleLinkListRmNode::remove_self",
+        "DoubleLinkListRmNode::remove_member",
+        "DoubleLinkListRmNode::remove_from_head"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "FreeId",
+      "shared": "annotated_C/src/FreeId.c",
+      "named_specs": [
+        "FreeId::<default>"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "GetObj",
+      "shared": "annotated_C/src/GetObj.c",
+      "named_specs": [
+        "GetObj::<default>"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "GetTaskWithIdnodeInfo",
+      "shared": "annotated_C/src/kernel/thread/get_task_with_idnode.c",
+      "named_specs": [
+        "GetTaskWithIdnodeInfo::inside_critical",
+        "GetTaskWithIdnodeInfo::inside_known"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "IdGetObj",
+      "shared": "annotated_C/src/IdGetObj.c",
+      "named_specs": [
+        "IdGetObj::<default>"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "IdRemoveObj",
+      "shared": "annotated_C/src/IdRemoveObj.c",
+      "named_specs": [
+        "IdRemoveObj::high_level_spec",
+        "IdRemoveObj::low_level_spec"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "InitDoubleLinkList",
+      "shared": "annotated_C/src/InitDoubleLinkList.c",
+      "named_specs": [
+        "InitDoubleLinkList::<default>"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "IsDoubleLinkListEmpty",
+      "shared": "annotated_C/src/IsDoubleLinkListEmpty.c",
+      "named_specs": [
+        "IsDoubleLinkListEmpty::ready_dll",
+        "IsDoubleLinkListEmpty::dll"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "JudgeKTaskStatIsSuspend",
+      "shared": "annotated_C/src/headers/ktask_set_status.h",
+      "named_specs": [
+        "JudgeKTaskStatIsSuspend::<default>"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "KSemaphoreDelete",
+      "shared": "annotated_C/src/KSemaphoreDelete.c",
+      "named_specs": [
+        "KSemaphoreDelete::outside_critical"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "KTaskInsertToReadyVector",
+      "shared": "annotated_C/src/kernel/thread/assign_ready_insert.c",
+      "named_specs": [
+        "KTaskInsertToReadyVector::<default>"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "KTaskStatSetAsReady",
+      "shared": "annotated_C/src/headers/ktask_set_status.h",
+      "named_specs": [
+        "KTaskStatSetAsReady::<default>"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "KTaskStateSet",
+      "shared": "annotated_C/src/headers/ktask_set_status.h",
+      "named_specs": [
+        "KTaskStateSet::<default>"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "KTaskUnSetDelay",
+      "shared": "annotated_C/src/headers/ktask_unset_delay.h",
+      "named_specs": [
+        "KTaskUnSetDelay::unset_delay_unified",
+        "KTaskUnSetDelay::null_delay",
+        "KTaskUnSetDelay::in_delay_list",
+        "KTaskUnSetDelay::null_or_inactive",
+        "KTaskUnSetDelay::all_case_delay"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "KTaskWakeup",
+      "shared": "annotated_C/src/headers/ktask_wakeup.h",
+      "named_specs": [
+        "KTaskWakeup::wakeup_by_id_ic",
+        "KTaskWakeup::detached_sched_null_delay",
+        "KTaskWakeup::semaphore_pending_head_ic",
+        "KTaskWakeup::msgqueue_send_pending_head_ic",
+        "KTaskWakeup::msgqueue_recv_pending_head_ic"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "LinklistResumeAll",
+      "shared": "annotated_C/src/LinklistResumeAll.c",
+      "named_specs": [
+        "LinklistResumeAll::semaphore_waiters"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "RemoveObj",
+      "shared": "annotated_C/src/RemoveObj.c",
+      "named_specs": [
+        "RemoveObj::<default>"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "RoundRobinRemainReadyVectorInsert",
+      "shared": "annotated_C/src/kernel/thread/rrr_ready_vector_insert.c",
+      "named_specs": [
+        "RoundRobinRemainReadyVectorInsert::<default>"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "_KTaskWakeup",
+      "shared": "annotated_C/src/kernel/thread/ktask_wakeup.c",
+      "named_specs": [
+        "_KTaskWakeup::wakeup_general_ic"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    },
+    {
+      "function": "_SemaphoreDelete",
+      "shared": "annotated_C/src/_SemaphoreDelete.c",
+      "named_specs": [
+        "_SemaphoreDelete::outside_critical"
+      ],
+      "comparison": "same tokens, ignoring formatting whitespace",
+      "matches_shared": true
+    }
+  ],
+  "headers": [
+    {
+      "file": "logic.h",
+      "matches_shared": true
+    },
+    {
+      "file": "slice_types.h",
+      "matches_shared": true
+    }
+  ],
+  "header_repair": {
+    "file": "annotated_C/include/logic.h",
+    "added_existing_trial_declarations": [
+      "map",
+      "pure_suspend_sched_link",
+      "semaphore_wait_node",
+      "task_wakeup_inv",
+      "tasks_ready_with_exstatus"
+    ]
+  },
+  "frozen_inputs_check": "passed",
+  "existing_proof_evidence": [
+    {
+      "function": "KSemaphoreDelete",
+      "run": "KSemaphoreDelete-20261030135651",
+      "phase": "done",
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-10-30T06:50:36.319888Z",
+        "errors": [],
+        "cleanup_removed_count": 0
+      },
+      "artifacts": [
+        {
+          "file": "VC/KSemaphoreDelete_proof_manual.v",
+          "matches_final_hash": true
+        },
+        {
+          "file": "VC/KSemaphoreDelete_lib.v",
+          "matches_final_hash": true
+        }
+      ]
+    },
+    {
+      "function": "_SemaphoreDelete",
+      "run": "SemaphoreDelete-20261030135715",
+      "phase": "done",
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-10-31T04:33:15.692243Z",
+        "errors": [],
+        "cleanup_removed_count": 0
+      },
+      "artifacts": [
+        {
+          "file": "VC/SemaphoreDelete_proof_manual.v",
+          "matches_final_hash": true
+        },
+        {
+          "file": "VC/SemaphoreDelete_lib.v",
+          "matches_final_hash": true
+        }
+      ]
+    },
+    {
+      "function": "LinklistResumeAll",
+      "run": "LinklistResumeAll-20261030234941",
+      "phase": "done",
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-10-31T03:43:44.919134Z",
+        "errors": [],
+        "cleanup_removed_count": 0
+      },
+      "artifacts": [
+        {
+          "file": "VC/LinklistResumeAll_proof_manual.v",
+          "matches_final_hash": true
+        },
+        {
+          "file": "VC/LinklistResumeAll_lib.v",
+          "matches_final_hash": true
+        }
+      ]
+    }
+  ],
+  "intentional_trial_only_content": [
+    "VC/*.v: final implementation proofs and local helper lemmas remain in the trial.",
+    "LinklistResumeAll.c and _SemaphoreDelete.c: body annotations and recorded source adaptations remain in the trial; public contracts match global files.",
+    "External callee contracts are imported boundaries, not newly proved callee bodies."
+  ],
+  "status": "passed"
+}

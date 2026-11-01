@@ -1,0 +1,61 @@
+{
+  "run": {
+    "status": "running",
+    "phase": "annotation",
+    "created_at": "2026-10-30T09:28:55.262191Z"
+  },
+  "commands": [
+    {
+      "phase": "annotation",
+      "command": "coq-check",
+      "calls": 1,
+      "elapsed_seconds": 60.396323
+    },
+    {
+      "phase": "annotation",
+      "command": "symexec",
+      "calls": 1,
+      "elapsed_seconds": 0.437769
+    },
+    {
+      "phase": "annotation",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 0.101883
+    }
+  ],
+  "annotation_attempts": [
+    {
+      "attempt_id": "LinklistResumeAll-annotation-r1",
+      "phase": "annotation",
+      "status": "blocked",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-10-30T09:31:21.594814Z",
+          "finished_at": "2026-10-30T09:32:18.337837Z",
+          "elapsed_seconds": 60.396323
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-10-30T09:33:39.927065Z",
+          "finished_at": "2026-10-30T09:33:40.032987Z",
+          "elapsed_seconds": 0.101883
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-10-30T09:30:18.247126Z",
+          "finished_at": "2026-10-30T09:33:39.971441Z",
+          "elapsed_seconds": 201.724315
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-10-30T09:32:23.773732Z",
+          "finished_at": "2026-10-30T09:32:24.215875Z",
+          "elapsed_seconds": 0.437769
+        }
+      ]
+    }
+  ],
+  "rounds": []
+}

@@ -19,3 +19,6 @@
 -Q /home/xinra/qcp-binary-democases/Rocq/algorithms Algorithms
 -R /home/xinra/qcp-binary-democases/Rocq/cdcllib CDCLLib
 -R /home/xinra/crtos/lib CRTOS_Verify.lib
+
+-R /home/xinra/crtos/vendor/qcp_strategy QCPCompat
+-R /home/xinra/crtos/ksemaphoredelete-trial-261025-1/VC CRTOS_Verify.VC

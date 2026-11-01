@@ -6,7 +6,8 @@ void KTaskStateSet(KTaskDescriptorType task, uint8 stat)
 /*@ With (old_stat : TaskStatus)
     Require store_task_status(&(task->task_dync_sched_member.stat), old_stat)
     Ensure  store_task_status(&(task->task_dync_sched_member.stat), decode_task_status(stat))
-*/;
+*/
+;
 
 void KTaskStatSetAsReady(KTaskDescriptorType task)
 /*@ With (old_stat : TaskStatus)

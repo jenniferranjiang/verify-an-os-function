@@ -1,0 +1,1 @@
+Reused the five assigned proof bodies from r1 group_14__pending_frames. The current seed library and the exact assigned goal Definition slice were compared with r1 and are unchanged. No helpers were copied or added. The exact current candidate with all five proofs passed Rocq MCP rocq_compile (success: true); controller group-check is the final current-input validation.

@@ -1,0 +1,31 @@
+{
+  "status": "failed",
+  "updated_at": "2026-10-30T09:32:24.185238Z",
+  "elapsed_seconds": 0.359,
+  "timeout_seconds": 3600.0,
+  "profile": "standard",
+  "last_output_line": "Function `LinklistResumeAll`",
+  "generated_files": [
+    {
+      "role": "goal_file",
+      "state": "missing",
+      "size": 0
+    },
+    {
+      "role": "proof_auto_file",
+      "state": "missing",
+      "size": 0
+    },
+    {
+      "role": "proof_manual_file",
+      "state": "missing",
+      "size": 0
+    },
+    {
+      "role": "goal_check_file",
+      "state": "missing",
+      "size": 0
+    }
+  ],
+  "generated_bytes": 0
+}

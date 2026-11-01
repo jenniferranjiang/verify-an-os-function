@@ -2,7 +2,7 @@ from pathlib import Path
 import re,subprocess,json,shlex
 TRIAL=Path(__file__).resolve().parents[1]
 s=(TRIAL/'annotated_C/include/logic.h').read_text()
-lines=['(* Standalone type checks for the QCP Extern declarations; this is not QCP parsing or a C proof. *)','Require Import Coq.ZArith.ZArith Coq.Lists.List.','Require Import CRTOS_Verify.lib.KSemaphoreDelete CRTOS_Verify.lib.KTaskUnSetDelay.','Require Import CRTOS_Verify.lib.DoubleLinkListSpec CRTOS_Verify.lib.TaskStatusMemory CRTOS_Verify.lib.KTaskParseInfo.','From MonadLib.MonadErr Require Import MonadErrBasic MonadErrHoare monadesafe_lib.','From SimpleC.SL Require Import Mem SeparationLogic MapLib.','Require Import Logic.LogicGenerator.demo932.Interface.','Import IDNode DLL.','Local Open Scope Z_scope.']
+lines=['(* Standalone type checks for the QCP Extern declarations; this is not QCP parsing or a C proof. *)','Require Import Coq.ZArith.ZArith Coq.Lists.List.','Require Import CRTOS_Verify.lib.KSemaphoreDelete CRTOS_Verify.lib.KTaskUnSetDelay CRTOS_Verify.lib.IdModuleSpec.','Require Import CRTOS_Verify.lib.DoubleLinkListSpec CRTOS_Verify.lib.TaskStatusMemory CRTOS_Verify.lib.KTaskParseInfo.','From MonadLib.MonadErr Require Import MonadErrBasic MonadErrHoare monadesafe_lib.','From SimpleC.SL Require Import Mem SeparationLogic MapLib.','Require Import Logic.LogicGenerator.demo932.Interface.','Import IDNode DLL.','Local Open Scope Z_scope.']
 rename={'return':'MonadErr.ret','safeExec':'monadesafe_lib.safeExec','program':'MonadErr.M'}
 def tyconvert(t):
  t=t.strip();m=re.match(r'((?:\{\w+\}\s*)+)\s*->\s*(.*)',t,re.S)

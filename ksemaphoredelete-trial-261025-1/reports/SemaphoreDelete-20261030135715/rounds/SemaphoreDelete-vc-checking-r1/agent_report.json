@@ -1,0 +1,21 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-old-id-uniqueness",
+    "vcs": [
+      {
+        "name": "proof_of__SemaphoreDelete_entail_wit_4_2",
+        "parent": null,
+        "annotation_location": "after IdRemoveObj and DoubleLinkListRmNode, before CriticalAreaUnLock; resched == 0 retirement assertion"
+      },
+      {
+        "name": "proof_of__SemaphoreDelete_entail_wit_4_4",
+        "parent": null,
+        "annotation_location": "after IdRemoveObj and DoubleLinkListRmNode, before CriticalAreaUnLock; resched == 1 retirement assertion"
+      }
+    ],
+    "message": "The retirement VCs lost the old semaphore manager ID uniqueness across IdRemoveObj. Its postcondition only gives contains(old,id,idnode_2) and store_idmanager(remove(old,id)); remove filters all matching IDs, so post-wf does not recover old NoDup. A pre-VC model with two distinct semaphore objects carrying the deleted ID can return the other object ID node, leaving no ownership of the target sem ID field required by SemaphoreRetired. Preserve a pure old-manager NoDup/unique-node fact derived before the call, through deletion and retirement.",
+    "repair_boundary": "C body annotation and proved pure bridges; approved predicate and canonical/caller specs remain unchanged"
+  }
+}

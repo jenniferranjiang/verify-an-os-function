@@ -1,0 +1,17 @@
+#include "../include/slice_types.h"
+#include "../include/logic.h"
+
+/* Source: /home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c. Current 32-bit non-SMP configuration. */
+
+
+void FreeId(struct IdManager *manager, uint16 id)
+/*@ found_node
+    With (sidm : StableIdmanager) (idm : VarIdmanager) (idnode : addr)
+    Require store_idmanager_found(sidm, idm, manager, idnode, id)
+    Ensure store_idmanager_remove_ready(sidm, idm, manager, idnode, id)
+ */
+{
+    if (manager == NONE) { while (1) { } }
+
+    manager->id_map[id / 8] &= ~(0x1 << (id % 8));
+}

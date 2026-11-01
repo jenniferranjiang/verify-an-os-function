@@ -1,0 +1,125 @@
+{
+  "status": "passed",
+  "path_and_symlink_rejection": true,
+  "load_paths": 23,
+  "symbolic_plans": {
+    "KSemaphoreDelete": {
+      "helper": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/tools/qcp-controller/scripts/verification-orchestrator/symexec_tooling.py",
+      "driver": "/home/xinra/qcp-binary-democases/linux-binary/symexec",
+      "cwd": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1",
+      "main_root": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1",
+      "output_root": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1",
+      "target_c_file": "annotated_C/src/KSemaphoreDelete.c",
+      "target_files": {
+        "c_file": "annotated_C/src/KSemaphoreDelete.c",
+        "formal_directory": "VC",
+        "formal_case_lib": "VC/KSemaphoreDelete_lib.v",
+        "goal_file": "VC/KSemaphoreDelete_goal.v",
+        "proof_auto_file": "VC/KSemaphoreDelete_proof_auto.v",
+        "proof_manual_file": "VC/KSemaphoreDelete_proof_manual.v",
+        "goal_check_file": "VC/KSemaphoreDelete_goal_check.v",
+        "case_name": "KSemaphoreDelete",
+        "active_case_theory": "CRTOS_Verify.VC"
+      },
+      "include_args": [
+        "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/",
+        "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/include/"
+      ],
+      "slp_args": [],
+      "extra_flags": [],
+      "argv": [
+        "/home/xinra/qcp-binary-democases/linux-binary/symexec",
+        "--goal-file=/home/xinra/crtos/ksemaphoredelete-trial-261025-1/VC/KSemaphoreDelete_goal.v",
+        "--proof-auto-file=/home/xinra/crtos/ksemaphoredelete-trial-261025-1/VC/KSemaphoreDelete_proof_auto.v",
+        "--proof-manual-file=/home/xinra/crtos/ksemaphoredelete-trial-261025-1/VC/KSemaphoreDelete_proof_manual.v",
+        "--arch=32",
+        "--endian=little",
+        "--no-CRules",
+        "-I/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/",
+        "-I/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/include/",
+        "--coq-logic-path=CRTOS_Verify.VC",
+        "--input-file=annotated_C/src/KSemaphoreDelete.c",
+        "--no-exec-info"
+      ]
+    },
+    "_SemaphoreDelete": {
+      "helper": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/tools/qcp-controller/scripts/verification-orchestrator/symexec_tooling.py",
+      "driver": "/home/xinra/qcp-binary-democases/linux-binary/symexec",
+      "cwd": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1",
+      "main_root": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1",
+      "output_root": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1",
+      "target_c_file": "annotated_C/src/_SemaphoreDelete.c",
+      "target_files": {
+        "c_file": "annotated_C/src/_SemaphoreDelete.c",
+        "formal_directory": "VC",
+        "formal_case_lib": "VC/_SemaphoreDelete_lib.v",
+        "goal_file": "VC/_SemaphoreDelete_goal.v",
+        "proof_auto_file": "VC/_SemaphoreDelete_proof_auto.v",
+        "proof_manual_file": "VC/_SemaphoreDelete_proof_manual.v",
+        "goal_check_file": "VC/_SemaphoreDelete_goal_check.v",
+        "case_name": "_SemaphoreDelete",
+        "active_case_theory": "CRTOS_Verify.VC"
+      },
+      "include_args": [
+        "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/",
+        "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/include/"
+      ],
+      "slp_args": [],
+      "extra_flags": [],
+      "argv": [
+        "/home/xinra/qcp-binary-democases/linux-binary/symexec",
+        "--goal-file=/home/xinra/crtos/ksemaphoredelete-trial-261025-1/VC/_SemaphoreDelete_goal.v",
+        "--proof-auto-file=/home/xinra/crtos/ksemaphoredelete-trial-261025-1/VC/_SemaphoreDelete_proof_auto.v",
+        "--proof-manual-file=/home/xinra/crtos/ksemaphoredelete-trial-261025-1/VC/_SemaphoreDelete_proof_manual.v",
+        "--arch=32",
+        "--endian=little",
+        "--no-CRules",
+        "-I/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/",
+        "-I/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/include/",
+        "--coq-logic-path=CRTOS_Verify.VC",
+        "--input-file=annotated_C/src/_SemaphoreDelete.c",
+        "--no-exec-info"
+      ]
+    },
+    "LinklistResumeAll": {
+      "helper": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/tools/qcp-controller/scripts/verification-orchestrator/symexec_tooling.py",
+      "driver": "/home/xinra/qcp-binary-democases/linux-binary/symexec",
+      "cwd": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1",
+      "main_root": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1",
+      "output_root": "/home/xinra/crtos/ksemaphoredelete-trial-261025-1",
+      "target_c_file": "annotated_C/src/LinklistResumeAll.c",
+      "target_files": {
+        "c_file": "annotated_C/src/LinklistResumeAll.c",
+        "formal_directory": "VC",
+        "formal_case_lib": "VC/LinklistResumeAll_lib.v",
+        "goal_file": "VC/LinklistResumeAll_goal.v",
+        "proof_auto_file": "VC/LinklistResumeAll_proof_auto.v",
+        "proof_manual_file": "VC/LinklistResumeAll_proof_manual.v",
+        "goal_check_file": "VC/LinklistResumeAll_goal_check.v",
+        "case_name": "LinklistResumeAll",
+        "active_case_theory": "CRTOS_Verify.VC"
+      },
+      "include_args": [
+        "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/",
+        "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/include/"
+      ],
+      "slp_args": [],
+      "extra_flags": [],
+      "argv": [
+        "/home/xinra/qcp-binary-democases/linux-binary/symexec",
+        "--goal-file=/home/xinra/crtos/ksemaphoredelete-trial-261025-1/VC/LinklistResumeAll_goal.v",
+        "--proof-auto-file=/home/xinra/crtos/ksemaphoredelete-trial-261025-1/VC/LinklistResumeAll_proof_auto.v",
+        "--proof-manual-file=/home/xinra/crtos/ksemaphoredelete-trial-261025-1/VC/LinklistResumeAll_proof_manual.v",
+        "--arch=32",
+        "--endian=little",
+        "--no-CRules",
+        "-I/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/src/",
+        "-I/home/xinra/crtos/ksemaphoredelete-trial-261025-1/annotated_C/include/",
+        "--coq-logic-path=CRTOS_Verify.VC",
+        "--input-file=annotated_C/src/LinklistResumeAll.c",
+        "--no-exec-info"
+      ]
+    }
+  },
+  "c_proofs_executed": false
+}

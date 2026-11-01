@@ -1,0 +1,1 @@
+Reused the four corresponding proof bodies from proving round r1. Current statements and relevant goal premises/conclusions retain the same frame-preserving contracts; current exact-goal candidates passed Rocq MCP before copying. No helper is needed; the current library seed is unchanged.

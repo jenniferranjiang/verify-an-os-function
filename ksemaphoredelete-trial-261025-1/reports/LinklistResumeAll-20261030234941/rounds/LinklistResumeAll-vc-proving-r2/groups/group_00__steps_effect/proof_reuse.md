@@ -1,0 +1,1 @@
+Reused the r1 steps_effect assigned proof and complete 34-helper closure. Current entail_wit_1 matches the annotation-attempt2 before snapshot exactly, the group library seed is unchanged, and frozen external formal inputs match their accepted hashes. Helper suffix remains __steps_effect. Current-round rechecking is required and performed; no sibling output is used.

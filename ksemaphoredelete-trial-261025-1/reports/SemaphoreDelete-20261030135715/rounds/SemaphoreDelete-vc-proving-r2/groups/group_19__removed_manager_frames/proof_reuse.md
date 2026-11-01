@@ -1,0 +1,1 @@
+Reused the seven assigned proof blocks from the r1 removed_manager_frames manual. Current assigned goal Definitions (including aux wrappers) match the r1 staged goals; current group seed matches r1. No helper was needed. Rechecked all proofs with Rocq MCP and the r2 controller group-check.

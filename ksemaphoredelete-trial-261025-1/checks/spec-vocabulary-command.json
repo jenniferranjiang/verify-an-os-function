@@ -63,5 +63,8 @@
   "-R",
   "/home/xinra/crtos/lib",
   "CRTOS_Verify.lib",
+  "-R",
+  "/home/xinra/crtos/vendor/qcp_strategy",
+  "QCPCompat",
   "checks/SpecVocabulary.v"
 ]

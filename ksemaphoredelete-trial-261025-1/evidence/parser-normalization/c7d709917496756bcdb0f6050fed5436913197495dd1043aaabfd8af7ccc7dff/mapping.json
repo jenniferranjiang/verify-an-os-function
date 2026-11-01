@@ -1,0 +1,19 @@
+{
+  "canonical": "annotated_C/src/LinklistResumeAll.c",
+  "canonical_sha256": "5a93c4bd4f145a1b424317e6e20efd4739e89b7a00cafbe19c58dc7d7a77b39d",
+  "parser_input": "evidence/parser-normalization/c7d709917496756bcdb0f6050fed5436913197495dd1043aaabfd8af7ccc7dff/LinklistResumeAll.c",
+  "parser_sha256": "c7d709917496756bcdb0f6050fed5436913197495dd1043aaabfd8af7ccc7dff",
+  "changes": [
+    {
+      "kind": "exact-C-macro-expansion",
+      "old": "NONE",
+      "new": "((void *)0)",
+      "count": 3,
+      "definition": "annotated_C/include/slice_types.h:16"
+    }
+  ],
+  "canonical_code_unchanged": true,
+  "preprocessed_executable_code_unchanged": true,
+  "line_count_unchanged": true,
+  "basis": "/home/xinra/crtos/annotated_C/src/kernel/thread/ktask_id_delete.c:19-29"
+}

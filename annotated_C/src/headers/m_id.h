@@ -72,145 +72,20 @@ struct IdManager _name = { \
   (store_idnodes: addr -> list IdNodeAbs -> Assertion)
 */
 
-int AllocId(struct IdManager *manager)
-/*@ With (sidm: StableIdmanager) (idm: VarIdmanager)
-    Require store_idmanager(sidm, idm, manager)
-    Ensure (idmanager_first_free_id(sidm, idm) == Some(__return) &&
-            __return < 65536 &&
-            store_idmanager_allocated_unlinked(sidm, idm, manager, __return))
-           ||
-           (idmanager_first_free_id(sidm, idm) == None &&
-            __return == -1 &&
-            store_idmanager(sidm, idm, manager))
-*/;
-
-void InsertObj(struct IdManager *manager, struct IdNode *idnode)
-/*@ With (sidm: StableIdmanager) (idm: VarIdmanager) (id: Z)
-    Require store_idmanager_allocated_unlinked(sidm, idm, manager, id) *
-            store_idnode_unlinked(&(idnode->link), Build_IdNodeAbs(id, idnode))
-    Ensure store_idmanager(sidm,
-             idmanager_link(sidm, idmanager_add(idm, id), id, idnode), manager)
-*/;
-
-int IdInsertObj(struct IdManager *manager, struct IdNode *idnode)
-/*@ With (sidm: StableIdmanager) (idm: VarIdmanager)
-    Require store_idmanager(sidm, idm, manager) *
-            store_idnode_insert_ready(idnode)
-    Ensure (__return == -1 &&
-            idmanager_first_free_id(sidm, idm) == None &&
-            store_idmanager(sidm, idm, manager) *
-            store_idnode_insert_ready(idnode))
-           ||
-           (idmanager_min_free_id(sidm, idm, __return) &&
-            store_idmanager(sidm,
-              idmanager_link(sidm, idmanager_add(idm, __return), __return, idnode),
-              manager))
-*/
-;
-
+/* Shared address-aware model declarations. The authoritative idnode-branch
+ * function contracts are included below, with predicate compatibility audited. */
 /*@ Extern Coq
   (store_idmanager_found :
     StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion)
-*/
-
-struct IdNode *GetObj(struct IdManager *manager, uint16 id)
-/*@ With (sidm: StableIdmanager) (idm: VarIdmanager)
-    Require 0 <= id && id < sidm.idmax && store_idmanager(sidm, idm, manager)
-    Ensure (__return == 0 &&
-            idmanager_query(idm, id) == false &&
-            store_idmanager(sidm, idm, manager))
-           ||
-           (__return != 0 &&
-            idmanager_query(idm, id) == true &&
-            store_idmanager_found(sidm, idm, manager, __return, id))
-*/
-;
-
-struct IdNode *IdGetObj(struct IdManager *manager, uint16 id)
-/*@ With (sidm: StableIdmanager) (idm: VarIdmanager)
-    Require 0 <= id && id < 65536 && store_idmanager(sidm, idm, manager)
-    Ensure (manager == 0 &&
-            __return == 0 &&
-            store_idmanager(sidm, idm, manager))
-           ||
-           (manager != 0 &&
-            __return == 0 &&
-            idmanager_query(idm, id) == false &&
-            store_idmanager(sidm, idm, manager))
-           ||
-           (manager != 0 &&
-            __return != 0 &&
-            idmanager_query(idm, id) == true &&
-            store_idmanager_found(sidm, idm, manager, __return, id))
-*/
-;
-
-/*@ Extern Coq
   (idmanager_remove : StableIdmanager -> VarIdmanager -> Z -> VarIdmanager)
   (store_idmanager_remove_ready :
     StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion)
   (store_idmanager_removeobj_post :
     StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion)
+  (store_idnode : addr -> IdNodeAbs -> Assertion)
   (UCharArray::full : Z -> Z -> list Z -> Assertion)
 */
 
-/*@ Extern Coq
-  (store_idnode : addr -> IdNodeAbs -> Assertion)
-*/
-
-void FreeId(struct IdManager *manager, uint16 id)
-/*@ found_node
-    With (sidm : StableIdmanager) (idm : VarIdmanager) (idnode : addr)
-    Require store_idmanager_found(sidm, idm, manager, idnode, id)
-    Ensure store_idmanager_remove_ready(sidm, idm, manager, idnode, id)
- */;
-
-struct IdNode *RemoveObj(struct IdManager *manager, struct IdNode *idnode)
-/*@ With (sidm: StableIdmanager) (idm: VarIdmanager) (id: Z)
-    Require store_idmanager_remove_ready(sidm, idm, manager, idnode, id)
-    Ensure store_idmanager_removeobj_post(sidm, idm, manager, idnode, id)
-*/
-;
-
-void IdRemoveObj(struct IdManager *manager, uint16 id)
-/*@ known_node
-    With (sidm: StableIdmanager) (idm: VarIdmanager) (idnode: addr)
-    Require manager != 0 &&
-            0 <= id && id < 65536 &&
-            idmanager_query(
-              idmanager_link(sidm, idmanager_add(idm, id), id, idnode), id)
-              == true &&
-            store_idmanager(sidm,
-              idmanager_link(sidm, idmanager_add(idm, id), id, idnode),
-              manager)
-    Ensure idnode != 0 &&
-           &(idnode->link) != 0 &&
-           store_idmanager(sidm,
-             idmanager_remove(sidm,
-               idmanager_link(sidm, idmanager_add(idm, id), id, idnode), id),
-             manager) *
-           (idnode->id == 65535) *
-           store_node_self_linked(&(idnode->link))
-*/
-/*@ current_node
-    With (sidm : StableIdmanager) (idm : VarIdmanager) (idnode : addr)
-    Require store_idmanager_found(sidm, idm, manager, idnode, id)
-    Ensure store_idmanager(sidm, idmanager_remove(sidm, idm, id), manager) *
-      store_idnode(&(idnode->link), Build_IdNodeAbs(65535, idnode)) *
-      store_node_self_linked(&(idnode->link))
- */
-/*@ found_node
-    With (sidm : StableIdmanager) (idm : VarIdmanager) (idnode : addr)
-    Require store_idmanager_found(sidm, idm, manager, idnode, id)
-    Ensure store_idmanager(sidm, idmanager_remove(sidm, idm, id), manager) *
-      store_idnode(&(idnode->link), Build_IdNodeAbs(65535, idnode)) *
-      store_node_self_linked(&(idnode->link))
- */
-/*@ absent_node
-    With (sidm : StableIdmanager) (idm : VarIdmanager)
-    Require idmanager_query(idm, id) == false && store_idmanager(sidm, idm, manager)
-    Ensure store_idmanager(sidm, idm, manager)
- */
-;
+#include "id_module_spec.h"
 
 #endif

@@ -1,6 +1,41 @@
 # KSemaphoreDelete predicate 设计
 
-## 当前 r4：具名任务结果条件（2026-10-27）
+2026-10-29：当前工作版本为 `KSemaphoreDelete-spec-r9` / `KSemaphoreDelete-pred-r7`。
+已同步 VRTOS 新增的等待队首接口；LinklistResumeAll 选用 `semaphore_pending_head_ic`，
+逐步效果采用 `wakeup_semaphore_head`，整体效果继续使用 `semaphore_resume_all_effect`。
+共享库构建、类型、接口一致性及 C 语法检查通过；本次只更新设计，没有运行 QCP 或实现证明。
+未将旧 revision 的审阅结论沿用为本版结论。无需用户操作。
+详见 [本次变更记录](design-changes/2026-10-29-1-wakeup-pending-head.md)。
+
+2026-10-28 历史同步版本为 `KSemaphoreDelete-spec-r8` / `KSemaphoreDelete-pred-r6`，
+已通过共享库构建、类型、C 语法和接口一致性检查，未进行独立审阅或 QCP 实现证明。
+范围仅为根共享库/注解及 1025 trial；旧审阅记录对应旧 revision。
+详见 [VRTOS 同步记录](2026-10-28-vrtos-sync.md)。
+
+## 历史 r5：批量唤醒的整体状态关系（2026-10-28）
+
+用户要求去掉空队列分支重复的信号量检查，并以整体前后关系表达完整 pending 的处理。
+共享 [KTaskWakeup.v](../../../lib/KTaskWakeup.v) 增加 resume_all_task_map、resume_all_delays、resume_all_ready：
+任务描述符逐点只改 stat/exstatus；延时按原非零 tdDelay 选择 active 对象，过滤保持剩余顺序并将 payload 转入 inactive map；
+ready 以关系 fold_left 复用 assign_insert_step_ic，保留原 waiting 顺序、严格时间片比较、实际 bitmap 的 OR 和最高优先级更新。
+就绪插入只读取未变字段，因此使用原任务表，不把队列结果弱化为集合或排序。
+
+共享 [KSemaphoreDelete.v](../../../lib/KSemaphoreDelete.v) 的 semaphore_resume_all_effect 直接组合批量结果，非空时最终一次清空目标 pending，并用 replace_* 保留其余全局分量。
+非空关系保留任务原已登记且 SUSPEND、NoDup 条件，均由原合法等待 DLL 前置支持，没有加强 C Require。
+空队列直接 after=before，不查找信号量，也不对 caller 未借出的同地址 ghost semaphore 项做更新。
+semaphore_resume_all_steps 仅作循环证明辅助，nil 分支简化为 after=before；semaphore_delete_locked_effect 改用整体效果。
+
+semaphore_resume_all_effect_steps_obligation 是在原合法局部资源、纯上下文和信号量成员关联下连接两种关系的待证命题。
+此命题已类型检查并通过设计审阅，但没有证明；不声称任意损坏的裸抽象状态上两种关系等价。
+尤其批量 delay 更新的正确性依赖原 delay_inv 的对应、唯一性和 active/inactive 分离；本轮不增加信任假设。
+本次改变了抽象删除命令依赖，旧 LinklistResumeAll、_SemaphoreDelete 和入口包装证明不能直接当成当前版本的实现证明。
+
+当前 `KSemaphoreDelete-pred-r5` 已独立设计审阅并合并共享库。两份候选及两个根模块编译通过；
+[模型检查](../../checks/resume-all-effect/model-checks.json)覆盖空队列同地址 ghost 保持、相同时间片插入保序、active delay 迁入 inactive 且其他项保持。
+这些针对性模型检查不代替一般连接证明或 C 实现证明。
+
+
+## 历史 r4：具名任务结果条件（2026-10-27）
 
 新增 `tasks_ready_with_exstatus`，位于 [共享 KTaskWakeup 模块](../../../lib/KTaskWakeup.v)。它仅封装原量词式的 READY 与指定 exstatus 条件，不包含资源或精确唤醒过程。
 候选独立审阅与编译通过后增量同步共享库；现有定义未变，根 KTaskWakeup、KSemaphoreDelete 重编译通过，正式导入及定义展开等式检查通过。

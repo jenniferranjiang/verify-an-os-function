@@ -1,0 +1,22 @@
+{
+  "trial/LinklistResumeAll": {
+    "executable_text_unchanged": true,
+    "gcc_exit_code": 0
+  },
+  "trial/_SemaphoreDelete": {
+    "executable_text_unchanged": true,
+    "gcc_exit_code": 0
+  },
+  "trial_caller_contracts_identical": true,
+  "global/LinklistResumeAll": {
+    "executable_text_unchanged": true,
+    "gcc_exit_code": 0
+  },
+  "global/_SemaphoreDelete": {
+    "executable_text_unchanged": true,
+    "gcc_exit_code": 0
+  },
+  "global_caller_contracts_identical": true,
+  "shared_matches_reviewed_candidates": true,
+  "single_encapsulated_spec": true
+}

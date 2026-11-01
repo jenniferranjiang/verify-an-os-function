@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "results": [
+    {
+      "function": "LinklistResumeAll",
+      "canonical_sha256": "3222db83b2a12f87f3d7ac9aefeb9f20541afabcd82f04151659a4aa8e8c69c1",
+      "parser_sha256": "c90fb0ca4704ba1ab4fae72d323509cf57edbce6597e351caad90a5f568dd066",
+      "gcc_preprocessed_C_tokens_equal": true,
+      "preprocessed_token_sha256": "61bca652d32a2ab25875303fd7cdc8466b8e07c1511524e4a0a7209d61e3f0cf"
+    },
+    {
+      "function": "_SemaphoreDelete",
+      "canonical_sha256": "0ea4bb1ca268d5f53a20a66f957d37079dea1dfe450c223a417fa1bc8bed5799",
+      "parser_sha256": "6cc0596b4158e3feafe5d22c442181b048b07eb4ec589f2f1bf6b18461dfa2eb",
+      "gcc_preprocessed_C_tokens_equal": true,
+      "preprocessed_token_sha256": "87531388fa6a52277deda1cfded429f923982d0e1dcdf142c7082d269b998563"
+    }
+  ]
+}
