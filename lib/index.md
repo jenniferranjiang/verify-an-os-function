@@ -55,7 +55,7 @@ make -f Makefile.coq -j2 COQBIN=/home/xinra/.opam/pv-bench-8.20.1/bin/
 该实验自己的 `KSemaphoreCreate.code-workspace`。
 
 库的编译检查不等于 C 实现已验证。当前创建函数的模块化证明及 helper contract
-边界仍见 `ksemaphorecreate-trial-261022-1/checks/status.json`；该 trial 保留原样。
+边界仍见[归档 trial 的状态记录](https://github.com/jenniferranjiang/verify-an-os-function/blob/8d5877b8d9b27bfc51744723b357876b9a8eacda/ksemaphorecreate-trial-261022-1/checks/status.json)；该 trial 保存在统一归档分支。
 共享库保留既有 ABI 信任假设，不将其标为已证明结论。
 
 迁移范围、编译证据和复用限制见

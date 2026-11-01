@@ -1,2 +1,0 @@
-From CRTOS_Verify.VC Require Import InitDoubleLinkList_goal InitDoubleLinkList_proof_auto InitDoubleLinkList_proof_manual.
-Check proof_of_InitDoubleLinkList_return_wit_1.

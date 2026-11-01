@@ -1,1 +1,0 @@
-Previous full_results proofs in AllocId-vc-proving-r1 contain only LLM_pre_process followed by Abort for both assigned witnesses. No completed historical proof was reused. The current proofs establish fullness from the accepted index and entry scan invariants, and rebuild the unchanged manager heap through the accepted OSHeap bridge.

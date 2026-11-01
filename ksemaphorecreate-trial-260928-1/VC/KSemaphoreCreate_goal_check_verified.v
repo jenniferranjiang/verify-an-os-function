@@ -1,6 +1,0 @@
-From CRTOS_Verify.VC Require Import KSemaphoreCreate_goal KSemaphoreCreate_proof_auto_verified KSemaphoreCreate_proof_manual.
-
-Module VC_Correctness_Verified : VC_Correct.
-  Include KSemaphoreCreate_proof_auto_verified.
-  Include KSemaphoreCreate_proof_manual.
-End VC_Correctness_Verified.
