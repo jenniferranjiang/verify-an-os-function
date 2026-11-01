@@ -66,3 +66,19 @@ make -f Makefile.coq -j2 COQBIN=/home/xinra/.opam/pv-bench-8.20.1/bin/
 2026-10-28 已同步 VRTOS `bc601a1` 的导入定义和调用规格。保留小端及本地信号量表示；
 共享库构建和接口检查通过，未迁移上游实现证明。见
 [VRTOS 同步记录](https://github.com/jenniferranjiang/verify-an-os-function/blob/f96dd2e20249ed8f55d8a33097de411a97aab9ab/ksemaphoredelete-trial-261025-1/.docs/Report/2026-10-28-vrtos-sync.md)。
+
+## Mutex 创建（2026-11-01）
+
+| 文件 | 职责 |
+| --- | --- |
+| `MutexState.v` | 完整对象字段、等待地址序列、固定配置与派生 ID 管理状态 |
+| `MutexInv.v` | 36 字节对象、模块所有权、静态初始化资源与明确待证的字节转换义务 |
+| `MutexOps.v` | 唤醒时摘除 mutex 等待者并保留其余字段的纯关系 |
+| `KMutexCreate.v` | 创建的失败/成功抽象操作；不是 C 实现证明 |
+
+`CrtosGlobState.v`、`CrtosInv.v` 和 `KTaskWakeup.v` 已接入 mutex 分量及其 frame。
+本次只完成创建设计审阅，记录见
+[KMutexCreate 实验状态](../kmutexcreate-trial-261101-1/.docs/Report/status.md)。
+[源码缺陷报告](../kmutexcreate-trial-261101-1/.docs/Report/source-errors.md)
+记录其他 mutex API 的七项问题；其中删除竞争可能破坏真实共享堆。
+因此当前设计不能证明整个 mutex 模块或任意并发调用环境保持系统不变量。

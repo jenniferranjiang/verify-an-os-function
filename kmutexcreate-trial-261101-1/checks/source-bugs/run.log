@@ -1,0 +1,12 @@
+Exact body extraction membership checks: 3/3 passed
+Authoritative mutex.c SHA256: f78f31912d12ec76ff34823102d586aef574176377e1fce3c323d670c0f0f645
+Compile: gcc -std=c11 -Wall -Wextra -Werror -fno-builtin /home/xinra/crtos/kmutexcreate-trial-261101-1/checks/source-bugs/witness.c -o /tmp/kmutex-source-bugs-witness
+Compile exit: 0
+Run: /tmp/kmutex-source-bugs-witness
+Run exit: 0
+A successful obtains=255 recursive_cnt=255
+A successful obtains=256 recursive_cnt=0
+A successful obtains=257 recursive_cnt=1
+A releases=1 outstanding_successful_obtains=256 val=1 holder=NULL
+B obtained successfully while A has 256 unmatched obtains: premature release witnessed
+KMutexObtain(65536,0) passed id=0 to uint16 IdGetObj and returned EOK: ID alias witnessed

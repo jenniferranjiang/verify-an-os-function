@@ -7,9 +7,10 @@ Require Export CRTOS_Verify.lib.dll CRTOS_Verify.lib.idnode.
 Require Export CRTOS_Verify.lib.TaskInv CRTOS_Verify.lib.AssignInv.
 Require Export CRTOS_Verify.lib.DelayInv CRTOS_Verify.lib.TickInv.
 Require Export CRTOS_Verify.lib.ExstatusInv CRTOS_Verify.lib.Bitmap.
-Require Export CRTOS_Verify.lib.MutexInv CRTOS_Verify.lib.EventInv.
+Require Export CRTOS_Verify.lib.EventInv.
 Require Export CRTOS_Verify.lib.MsgQueueInv CRTOS_Verify.lib.IsrManagerInv.
 Require Export CRTOS_Verify.lib.SemaphoreInv.
+Require Export CRTOS_Verify.lib.MutexInv.
 Import ListNotations DLL IDNode.
 Local Open Scope Z_scope.
 Local Open Scope string.
@@ -23,8 +24,9 @@ Definition os_sched_owners (st : VarGlobalState) : list addr :=
   map (@getData addr)
     (os_ready_nodes st.(os_assign).(assignReadyVector).(orvBuckets)) ++
   map (@getData addr) (zombie_nodes st.(zombie_queue)) ++
-  semaphore_waiters st.(os_semaphores) ++ mutex_waiters st.(os_mutexes) ++
-  msgqueue_waiters st.(os_msgqueues) ++ event_waiters st.(os_events).
+  semaphore_waiters st.(os_semaphores) ++
+  msgqueue_waiters st.(os_msgqueues) ++ event_waiters st.(os_events) ++
+  mutex_waiters st.(os_mutexes).
 
 (** 同步 VRTOS：NoDup 表示调度所有者互斥，定义域对应表示已发布任务的
     完整覆盖；服务任务生命周期另由 service_slot_wf 约束。 *)
@@ -56,12 +58,12 @@ Definition os_inv (sg : StableGlobalState) (st : VarGlobalState) : Assertion :=
     sg.(os_zombie_head) st.(zombie_queue) **
   sg.(os_recycler_slot) # Int |-> st.(os_recycle).(service_id) **
   IntArray.full sg.(os_idle_array) CORE_COUNT (map service_id st.(os_idle)) **
-  mutex_inv wait sg.(os_mutex_stable) st.(os_mutexes) **
   msgqueue_inv wait sg.(os_msgqueue_stable) st.(os_msgqueues) **
   event_inv wait sg.(os_event_stable) st.(os_events) **
   isrmanager_inv sg.(os_isr_stable) st.(os_isr) **
   exstatus_inv sg st **
-  semaphore_inv wait sg.(os_semaphore_stable) st.(os_semaphores).
+  semaphore_inv wait sg.(os_semaphore_stable) st.(os_semaphores) **
+  mutex_inv wait sg.(os_mutex_stable) st.(os_mutexes).
 
 (** 保留本地调用者使用的引理名；对应上游 Record 的两个投影。 *)
 Lemma os_sched_owners_domain : forall sg st task,
@@ -87,9 +89,8 @@ Qed.
 Lemma sched_owned_not_waiting : forall sg st task,
   os_world_wf sg st -> In task st.(os_tasks).(sched_owned_tasks) ->
   ~ In task (semaphore_waiters st.(os_semaphores) ++
-             mutex_waiters st.(os_mutexes) ++
              msgqueue_waiters st.(os_msgqueues) ++
-             event_waiters st.(os_events)).
+             event_waiters st.(os_events) ++ mutex_waiters st.(os_mutexes)).
 Proof.
   intros sg st task Hwf Howned Hwait.
   pose proof (os_wf_sched_nodup sg st Hwf) as Hunique.

@@ -1,135 +1,101 @@
-Require Import Coq.ZArith.ZArith.
-Require Import Coq.Lists.List.
-Require Import Coq.Sorting.Permutation.
-Require Import Coq.Strings.String.
-Require Import SetsClass.SetsClass.
-Import SetsNotation.
+Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.
 From SimpleC.SL Require Import Mem SeparationLogic MapLib.
 Require Import Logic.LogicGenerator.demo932.Interface.
-Require Export CRTOS_Verify.lib.CrtosRules.
-Require Import CRTOS_Verify.lib.dll CRTOS_Verify.lib.idnode.
-
+Require Export CRTOS_Verify.lib.CrtosRules CRTOS_Verify.lib.idnode CRTOS_Verify.lib.dll.
+Require Export CRTOS_Verify.lib.MutexState CRTOS_Verify.lib.NodeSelfLinked.
+Require Import CRTOS_Verify.lib.SemaphoreInv.
 Import ListNotations DLL IDNode.
 Local Open Scope Z_scope.
 Local Open Scope string.
 Local Open Scope sac.
 
-Definition mutex_link_node (mutex : addr) : DL_Node addr :=
-  Build_DL_Node mutex (&(mutex # "Mutex" ->ₛ "link")).
+(** 当前 QCP struct_padding 不提供字节资源；Mutex 唯一 padding 是 ID 的 [2,4)。
+    memset 后其值保持零，回收时与具名字段一起覆盖完整36字节。 *)
+Definition MutexPadding (p : addr) : Assertion :=
+  CharArray.full (p+2) 2 (repeat_Z 0 2).
 
-Definition mutex_link_nodes (mutexes : list addr) : list (DL_Node addr) :=
-  map mutex_link_node mutexes.
+(** 私有完整对象的未知字段表示，含 ID 和两个独立链节点及 padding。
+    此谓词不证明分配来源；x_free 仍须使用本次 malloc 的原始基址。
+    NodeStorage/ZeroIdNode 直接复用现有通用槽表示，不重定义同义谓词。 *)
+Definition MutexRaw (p : addr) : Assertion :=
+  “ p <> 0 /\ addr_aligned p 4 ” &&
+  store_idnode_insert_ready (&(p # "Mutex" ->ₛ "id")) **
+  &(p # "Mutex" ->ₛ "val") # UShort |->_ **
+  &(p # "Mutex" ->ₛ "recursive_cnt") # UChar |->_ **
+  &(p # "Mutex" ->ₛ "origin_prio") # UChar |->_ **
+  &(p # "Mutex" ->ₛ "holder") # Ptr |->_ **
+  NodeStorage (&(p # "Mutex" ->ₛ "pend_list")) **
+  NodeStorage (&(p # "Mutex" ->ₛ "link")) **
+  CharArray.undef_full (p+2) 2.
 
-(** 汇总实际等待顺序，供总组合建立唯一 sched_link owner；不强加永久优先级排序。 *)
-(** cc concat所有mutex的pend_list *)
-Definition mutex_waiters (st : MutexState) : list addr :=
-  List.concat
-    (map (fun mutex =>
-      match st.(mutex_obj_map) mutex with
-      | Some obj => map getData obj.(mutex_pending)
-      | None => nil
-      end) st.(mutex_ptr_list)).
+(** memset 后尚未登记 ID 的私有对象；所有36字节均被唯一拥有。
+    ID 插入失败会忘记 ID 节点值，故失败回收用 MutexRaw 而非声称仍全零。 *)
+Definition MutexZero (p : addr) : Assertion :=
+  “ p <> 0 /\ addr_aligned p 4 ” &&
+  ZeroIdNode (&(p # "Mutex" ->ₛ "id")) **
+  &(p # "Mutex" ->ₛ "val") # UShort |-> 0 **
+  &(p # "Mutex" ->ₛ "recursive_cnt") # UChar |-> 0 **
+  &(p # "Mutex" ->ₛ "origin_prio") # UChar |-> 0 **
+  &(p # "Mutex" ->ₛ "holder") # Ptr |-> 0 **
+  NodeZero (&(p # "Mutex" ->ₛ "pend_list")) **
+  NodeZero (&(p # "Mutex" ->ₛ "link")) ** MutexPadding p.
 
-(** IdNode 的 [2,4) 两字节 padding：创建时 memset 清零，后续字段写入保留。
-    QCP 的 struct_padding 当前为 emp，不能替代这些实际字节权限。
-    布局公理集中在 StructFieldOffsetAxiom；不拥有 id 或 DLL 字段。 *)
-Definition store_mutex_padding (mutex : addr) : Assertion :=
-  CharArray.full (mutex + 2) 2 (repeat_Z 0 2).
+Definition mutex_wait_node (task : addr) : DL_Node addr :=
+  Build_DL_Node task (sched_link_of task).
+Definition mutex_link_node (m : MutexAbs) : DL_Node MutexAbs :=
+  let p := m.(mutex_addr) in
+  Build_DL_Node m (&(p # "Mutex" ->ₛ "link")).
 
-(**
-  map cell 包含对象主体和完整 pend_list。store_dll 拥有等待节点的两个
-  指针槽；外部 store_wait_T 只表达同一 task map 与节点/状态的纯关联，
-  六个 sched 标量统一由 task_inv 拥有；
-  task 主体、task ID、全局 task link、Delay 对象均不在此重新拥有。
-*)
-Definition store_mutex (store_wait_T : addr -> addr -> Assertion)
-    (mutex : addr) (obj : MutexAbs) : Assertion :=
-  “ mutex <> 0 /\ addr_aligned mutex ALIGN_SIZE ” &&
-  &(mutex # "Mutex" ->ₛ "val") # UShort |-> obj.(mutex_val) **
-  &(mutex # "Mutex" ->ₛ "recursive_cnt") # UChar |-> obj.(mutex_recursive_cnt) **
-  &(mutex # "Mutex" ->ₛ "origin_prio") # UChar |-> obj.(mutex_origin_prio) **
-  &(mutex # "Mutex" ->ₛ "holder") # Ptr |-> obj.(mutex_holder) **
-  store_dll store_wait_T &(mutex # "Mutex" ->ₛ "pend_list") obj.(mutex_pending) **
-  store_mutex_padding mutex.
+(** 已发布对象的 payload：ID字段与ID link归manager，管理link归全局DLL；
+    这里拥有四个值字段、padding、等待链哨兵及等待任务的 sched_link。
+    wait 参数只提供任务关联，不转移或复制 TaskDescriptor 字段。 *)
+Definition store_mutex (wait : addr -> addr -> Assertion)
+    (link : addr) (m : MutexAbs) : Assertion :=
+  let p := m.(mutex_addr) in
+  “ p <> 0 /\ addr_aligned p 4 /\ link = &(p # "Mutex" ->ₛ "link") ” &&
+  &(p # "Mutex" ->ₛ "val") # UShort |-> m.(mutex_value) **
+  &(p # "Mutex" ->ₛ "recursive_cnt") # UChar |-> m.(mutex_recursive_count) **
+  &(p # "Mutex" ->ₛ "origin_prio") # UChar |-> m.(mutex_original_priority) **
+  &(p # "Mutex" ->ₛ "holder") # Ptr |-> m.(mutex_holder) **
+  MutexPadding p **
+  store_dll wait (&(p # "Mutex" ->ₛ "pend_list"))
+    (map mutex_wait_node m.(mutex_pending_addrs)).
 
-Definition pure_mutex_link_member (link mutex : addr) : Assertion :=
-  “ link = &(mutex # "Mutex" ->ₛ "link") ” && emp.
-
-(**
-  MutexDoneType 是匿名 typedef；按 Arch32 声明顺序保存四个4字节 Ptr 槽。
-  不使用尚未经前端注册的虚构 struct tag。后续接入应确认 typedef 布局和
-  本翻译单元独立 static done 地址。只拥有指针值，不提供函数体正确性。
-*)
-Definition store_mutex_done (p : addr) (done : MutexDoneAbs) : Assertion :=
-  p # Ptr |-> done.(mutex_done_create) **
-  (p + 4) # Ptr |-> done.(mutex_done_delete) **
-  (p + 8) # Ptr |-> done.(mutex_done_obtain) **
-  (p + 12) # Ptr |-> done.(mutex_done_abandon).
-
-(**
-  已登记 map 与管理链双向覆盖，ID manager 包含恰好相同的嵌入 ID 地址。
-  不假定 holder 一定存活，也不添加 val/recursive_cnt/holder 之间尚未
-  由生命周期证明支持的关系；持锁指针跨解锁保活另由 OC 协议处理。
-*)
-Record mutex_world_wf (st : MutexState) : Prop := {
-  mutex_wf_map_list :
-    (forall mutex, In mutex st.(mutex_ptr_list) <->
-      exists obj, st.(mutex_obj_map) mutex = Some obj);
-  mutex_wf_id_nodes :
-    Permutation
-      (map idnode_addr (List.concat st.(mutex_idmanager_abs).(idbuckets)))
-      (map (fun mutex => &(mutex # "Mutex" ->ₛ "id")) st.(mutex_ptr_list))
-}.
-
-(**
-  已发布对象的稳定资源组合。创建的分步登记、Delete 中先唤醒再加锁、
-  摘链后锁外 x_free 都须通过具体局部 Spec 转移资源；本谓词不假称覆盖
-  这些中间阶段，也未接入现有 CriticalSTS 的全生命周期不变量。
-*)
-Definition mutex_inv (store_wait_T : addr -> addr -> Assertion)
+(** 完整互斥量模块：manager唯一拥有位图、懒初始化桶及ID节点；管理DLL
+    唯一拥有管理链节点及对象payload。等待任务本体由全局 task_inv 持有。 *)
+Definition mutex_inv (wait : addr -> addr -> Assertion)
     (sg : MutexStable) (st : MutexState) : Assertion :=
-  “ mutex_context sg /\ mutex_world_wf st ” &&
-  store_idmanager sg.(mutex_idmanager_stable) st.(mutex_idmanager_abs)
-    sg.(mutex_idmanager_ptr) **
-  store_dll pure_mutex_link_member sg.(mutex_list_head)
-    (mutex_link_nodes st.(mutex_ptr_list)) **
-  store_map (store_mutex store_wait_T) st.(mutex_obj_map) **
-  store_mutex_done sg.(mutex_done_ptr) sg.(mutex_done_abs).
+  “ mutex_context sg ” &&
+  store_idmanager sg.(mutex_manager_stable) (mutex_manager st)
+    sg.(mutex_manager_ptr) **
+  store_dll (store_mutex wait) sg.(mutex_list_head)
+    (map mutex_link_node st).
 
-(** 提取单个对象后的剩余 frame，保留 ID manager、全局链、表和其他对象。 *)
-Definition mutex_inv_except (store_wait_T : addr -> addr -> Assertion)
-    (sg : MutexStable) (st : MutexState) (mutex : addr) : Assertion :=
-  “ mutex_context sg /\ mutex_world_wf st ” &&
-  store_idmanager sg.(mutex_idmanager_stable) st.(mutex_idmanager_abs)
-    sg.(mutex_idmanager_ptr) **
-  store_dll pure_mutex_link_member sg.(mutex_list_head)
-    (mutex_link_nodes st.(mutex_ptr_list)) **
-  store_map_missing_i (store_mutex store_wait_T) st.(mutex_obj_map) mutex **
-  store_mutex_done sg.(mutex_done_ptr) sg.(mutex_done_abs).
+(** 编译期静态初始化提供的全局私有内存；交给系统协议前由启动代码持有。
+    不引入初始化 token；从这里建立 mutex_inv wait sg nil 的蕴含待后续证明。 *)
+Definition mutex_initial_memory (sg : MutexStable) : Assertion :=
+  let sidm := sg.(mutex_manager_stable) in
+  let manager := sg.(mutex_manager_ptr) in
+  “ mutex_context sg ” &&
+  &(manager # "IdManager" ->ₛ "id_max") # UShort |-> 128 **
+  &(manager # "IdManager" ->ₛ "hoffset") # UShort |-> 16 **
+  &(manager # "IdManager" ->ₛ "id_map") # Ptr |-> sidm.(id_map) **
+  &(manager # "IdManager" ->ₛ "htable") # Ptr |-> sidm.(htable) **
+  UCharArray.full sidm.(id_map) 16 (repeat_Z 0 16) **
+  PtrArray.full sidm.(htable) 32 (repeat_Z 0 32) **
+  store_node_self_linked sg.(mutex_list_head).
 
-Lemma mutex_inv_open : forall store_wait_T sg st mutex obj,
-  st.(mutex_obj_map) mutex = Some obj ->
-  mutex_inv store_wait_T sg st |--
-  mutex_inv_except store_wait_T sg st mutex **
-  store_mutex store_wait_T mutex obj.
-Proof.
-  intros store_wait_T sg st mutex obj Hlookup.
-  unfold mutex_inv, mutex_inv_except.
-  Intros.
-  sep_apply (store_map_split (store_mutex store_wait_T) mutex obj
-    st.(mutex_obj_map) Hlookup).
-  entailer!.
-Qed.
-
-Lemma mutex_inv_close : forall store_wait_T sg st mutex obj,
-  st.(mutex_obj_map) mutex = Some obj ->
-  mutex_inv_except store_wait_T sg st mutex **
-  store_mutex store_wait_T mutex obj |-- mutex_inv store_wait_T sg st.
-Proof.
-  intros store_wait_T sg st mutex obj Hlookup.
-  unfold mutex_inv, mutex_inv_except.
-  Intros.
-  sep_apply (store_map_merge (store_mutex store_wait_T) mutex obj
-    st.(mutex_obj_map) Hlookup).
-  entailer!.
-Qed.
+(** 待证义务的类型化陈述：不是公理、lemma 或已证明结果；本轮只编译这些
+    Prop 定义。转换使用共享库已存在的 mutex_field_offset_ok/size 布局依据。 *)
+Definition mutex_zero_bytes_obligation : Prop :=
+  forall p, mutex_field_offset_ok p ->
+  0 < p -> p <= 4294967295 - MUTEX_MEM_SIZE -> addr_aligned p 4 ->
+  CharArray.full p MUTEX_MEM_SIZE (repeat_Z 0 MUTEX_MEM_SIZE) |--
+  “ &(p # "Mutex" ->ₛ "pend_list") <> 0 /\
+     &(p # "Mutex" ->ₛ "link") <> 0 ” && MutexZero p.
+Definition mutex_reclaim_bytes_obligation : Prop :=
+  forall p, mutex_field_offset_ok p ->
+  MutexRaw p |-- CharArray.undef_full p MUTEX_MEM_SIZE.
+Definition mutex_initialization_obligation : Prop :=
+  forall wait sg,
+    mutex_initial_memory sg |-- mutex_inv wait sg mutex_initial.

@@ -1,0 +1,49 @@
+{
+  "entrypoints": [
+    "DoubleLinkListSpec",
+    "KMutexCreate",
+    "KTaskWakeup"
+  ],
+  "required_trial_modules": [
+    "AssignInv",
+    "Bitmap",
+    "CrtosGlobState",
+    "CrtosInv",
+    "CrtosRules",
+    "DelayInv",
+    "DoubleLinkListSpec",
+    "EventInv",
+    "ExstatusInv",
+    "IsrManagerInv",
+    "KMutexCreate",
+    "KTaskDelayMem",
+    "KTaskSchedMember",
+    "KTaskStackSetup",
+    "KTaskUnSetDelay",
+    "KTaskWakeup",
+    "MsgQueueInv",
+    "MutexInv",
+    "MutexOps",
+    "MutexState",
+    "NodeSelfLinked",
+    "OsAssignReadyVector",
+    "SemaphoreInv",
+    "ServiceSlotWf",
+    "TaskInv",
+    "TaskStatusMemory",
+    "TickInv",
+    "dll",
+    "idnode"
+  ],
+  "archived_regression_only_modules": [
+    "IdModuleSpec",
+    "KSemaphoreCreate",
+    "KSemaphoreDelete",
+    "KTaskDescriptor",
+    "KTaskOsAssign",
+    "KTaskParseInfo",
+    "KTaskStackSetupProofAux"
+  ],
+  "required_module_count": 29,
+  "scope_reason": "Only target spec dependencies remain in trial/lib; other affected consumers belong to global regression checks."
+}

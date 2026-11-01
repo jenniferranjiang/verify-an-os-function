@@ -1,0 +1,21 @@
+{
+  "kind": "spec",
+  "predicate_revision": "038457b98a07c2fa559a7ec4ea7d63e980af6b73b4a8d8782668ffd97640e036",
+  "status": "candidate-awaiting-predicate-review",
+  "files": {
+    "annotated_C/include/logic.h": "c9862a80cc85f892656d1d36b52410f9bbd6e3d971ccfe7baa1f012fa245a6b8",
+    "annotated_C/include/monad.h": "a92d5ec0d92efbca6ac0b2d61fe2d63a96ce5d14fcf1398a91639bdf41ccdc21",
+    "annotated_C/include/slice_types.h": "1fcbf1d173c4bf5a2b5849ba8e674959d608c105b96f40d6d43f217676b6b503",
+    "annotated_C/src/CriticalAreaLock.c": "f4784dd6c19e340cb0012f5a8133f10622c1c7786c0478eb289b3edc19346611",
+    "annotated_C/src/CriticalAreaUnLock.c": "dc024eff30b9d8de775fc9892dd54f606f2c3e42a47c26e2e778512408e682da",
+    "annotated_C/src/DoubleLinkListInsertNodeAfter.c": "66c9654dfb4faea731ccdf647a1b6fed57ef0acd2acf5c1ef5b746f618f0d0dd",
+    "annotated_C/src/IdInsertObj.c": "63d6498fb12c19de967f68118c43364a735eaab86641e069a82001256775e5a2",
+    "annotated_C/src/InitDoubleLinkList.c": "9b64aea58b40fef8b205772844d978ed5fbfee73892198fd8dcb91f37db0c1ac",
+    "annotated_C/src/KMutexCreate.c": "65ce09bfadbd9063e1d56f021fbbf9673c6bebcfc9023f589df357d9d70006f7",
+    "annotated_C/src/_MutexCreate.c": "8ebeb95a4a471e3243fedb1cd611e9bc1bae347d34a5998679e05eeb18be2252",
+    "annotated_C/src/memset.c": "3c120f88aa64aed4baee2b6a55c69604feae215d4036c17d9b3db8fb12fbf9c4",
+    "annotated_C/src/x_free.c": "1416a13cd3615684f6d8078c04b0c5ac40005b7dfeebadd7e49f2668938fbdfc",
+    "annotated_C/src/x_malloc.c": "a1160a225a2466ae396b8c61a17192f049c6334ed560cb465fc8e89699b237e5"
+  },
+  "revision_sha256": "55bbd4bac08ceb62317b2e176f7ce83d5bc6a46314248abfd8a89f9edc497929"
+}

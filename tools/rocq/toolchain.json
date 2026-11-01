@@ -1,0 +1,10 @@
+{
+  "opam_root": "/home/xinra/.opam",
+  "opam_switch": "pv-bench-8.20.1",
+  "coq_version": "8.20.1",
+  "ocaml_version": "4.14.2",
+  "coq_lsp_version": "0.2.5+8.20",
+  "qcp_root": "/home/xinra/qcp-binary-democases",
+  "compatibility_basis": "Existing QCP/CRTOS objects match this exact Coq core/stdlib build, not merely its version. pet/coq-lsp are built locally against this unchanged core. The switch name is historical; both MCP servers come from qcp_root.",
+  "backend_bin": ".local/bin"
+}

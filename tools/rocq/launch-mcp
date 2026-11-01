@@ -1,0 +1,7 @@
+#!/usr/bin/python3
+import sys
+from qcp_toolchain import launch
+
+if len(sys.argv) < 2:
+    raise SystemExit('usage: launch-mcp {rocq|qcp|run COMMAND [ARGS...]}')
+launch(sys.argv[1], sys.argv[2:])

@@ -1,0 +1,5 @@
+#!/usr/bin/python3
+import sys
+from qcp_toolchain import compile_file
+
+compile_file(sys.argv[1:])

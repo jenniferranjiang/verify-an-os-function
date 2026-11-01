@@ -2,10 +2,11 @@
 Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.
 From SimpleC.SL Require Import Mem CNotation.
 Require Export CRTOS_Verify.lib.TaskState CRTOS_Verify.lib.AssignState.
-Require Export CRTOS_Verify.lib.DelayState CRTOS_Verify.lib.MutexState.
+Require Export CRTOS_Verify.lib.DelayState.
 Require Export CRTOS_Verify.lib.EventState CRTOS_Verify.lib.MsgQueueState.
 Require Export CRTOS_Verify.lib.IsrState.
 Require Export CRTOS_Verify.lib.SemaphoreState.
+Require Export CRTOS_Verify.lib.MutexState.
 Import KTaskCNotation ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope string.
@@ -13,12 +14,12 @@ Local Open Scope list.
 
 (** 各子系统稳定上下文分组保存；每个翻译单元的静态回调表仍各自独立。 *)
 Record StableGlobalState : Type := {
+  os_mutex_stable : MutexStable;
   os_semaphore_stable : SemaphoreStable;
   os_task_stable : TaskStable;
   os_tick_ptr : addr;
   delay_head_ptr : addr;
   os_assign_stable : AssignStable;
-  os_mutex_stable : MutexStable;
   os_msgqueue_stable : MsgQueueStable;
   os_event_stable : EventStable;
   os_isr_stable : IsrStable;
@@ -36,6 +37,7 @@ Record StableGlobalState : Type := {
 (** 当前全局状态只描述 OS 数据；硬件中断状态及其保存、恢复不在本次建模范围。
     临界区内外的资源交接由 CrtosRules 中的抽象协议描述。 *)
 Record VarGlobalState : Type := Build_VarGlobalState {
+  os_mutexes : MutexState;
   os_semaphores : SemaphoreState;
   os_tasks : TaskState;
   os_tick : Z;
@@ -44,7 +46,6 @@ Record VarGlobalState : Type := Build_VarGlobalState {
   zombie_queue : ZombieQueueAbs;
   os_recycle : ServiceSlotAbs;
   os_idle : list ServiceSlotAbs;
-  os_mutexes : MutexState;
   os_msgqueues : MsgQueueState;
   os_events : EventState;
   os_isr : IsrAbs;
@@ -56,12 +57,12 @@ Record VarGlobalState : Type := Build_VarGlobalState {
   参数分别保存，接入对应翻译单元时再建立链接关系。此 Prop 不拥有内存。
 *)
 Definition os_global_context (sg : StableGlobalState) : Prop :=
+  mutex_context sg.(os_mutex_stable) /\
   semaphore_context sg.(os_semaphore_stable) /\
   task_context sg.(os_task_stable) /\
   sg.(os_tick_ptr) = &("heartbeat_ticks") /\
   sg.(delay_head_ptr) = &("xiaoshan_delay_head") /\
   assign_context sg.(os_assign_stable) /\
-  mutex_context sg.(os_mutex_stable) /\
   msgqueue_context sg.(os_msgqueue_stable) /\
   event_context sg.(os_event_stable) /\
   IsrGlobalContext sg.(os_isr_stable) /\
@@ -97,10 +98,10 @@ Definition replace_id_manager
     zombie_queue := before.(zombie_queue);
     os_recycle := before.(os_recycle);
     os_idle := before.(os_idle);
-    os_mutexes := before.(os_mutexes);
     os_msgqueues := before.(os_msgqueues);
     os_events := before.(os_events);
     os_isr := before.(os_isr);
+    os_mutexes := before.(os_mutexes);
     os_semaphores := before.(os_semaphores);
     os_exstatus := before.(os_exstatus);
   |}.
@@ -155,10 +156,10 @@ Definition replace_task_ptr_list
     zombie_queue := before.(zombie_queue);
     os_recycle := before.(os_recycle);
     os_idle := before.(os_idle);
-    os_mutexes := before.(os_mutexes);
     os_msgqueues := before.(os_msgqueues);
     os_events := before.(os_events);
     os_isr := before.(os_isr);
+    os_mutexes := before.(os_mutexes);
     os_semaphores := before.(os_semaphores);
     os_exstatus := before.(os_exstatus);
   |}.
@@ -180,10 +181,10 @@ Definition replace_task_desc_map
     zombie_queue := before.(zombie_queue);
     os_recycle := before.(os_recycle);
     os_idle := before.(os_idle);
-    os_mutexes := before.(os_mutexes);
     os_msgqueues := before.(os_msgqueues);
     os_events := before.(os_events);
     os_isr := before.(os_isr);
+    os_mutexes := before.(os_mutexes);
     os_semaphores := before.(os_semaphores);
     os_exstatus := before.(os_exstatus);
   |}.
@@ -199,17 +200,28 @@ Definition replace_sched_owned_tasks (owned : list addr) (st : VarGlobalState)
      os_tick := st.(os_tick); os_delays := st.(os_delays); os_assign := st.(os_assign);
      zombie_queue := st.(zombie_queue); os_recycle := st.(os_recycle);
      os_idle := st.(os_idle);
-     os_mutexes := st.(os_mutexes); os_msgqueues := st.(os_msgqueues);
-     os_events := st.(os_events); os_isr := st.(os_isr); os_semaphores := st.(os_semaphores);
+     os_msgqueues := st.(os_msgqueues);
+     os_events := st.(os_events); os_isr := st.(os_isr); os_mutexes := st.(os_mutexes);
+    os_semaphores := st.(os_semaphores);
     os_exstatus := st.(os_exstatus) |}.
 
 
 (** 发布一个信号量只替换 semaphore 分量，所有其他 OS 模块保持。 *)
 Definition replace_semaphores (sems : SemaphoreState) (st : VarGlobalState)
     : VarGlobalState :=
-  {| os_semaphores := sems;
+  {| os_mutexes := st.(os_mutexes); os_semaphores := sems;
      os_tasks := st.(os_tasks); os_tick := st.(os_tick); os_delays := st.(os_delays);
      os_assign := st.(os_assign); zombie_queue := st.(zombie_queue);
      os_recycle := st.(os_recycle); os_idle := st.(os_idle);
-     os_mutexes := st.(os_mutexes); os_msgqueues := st.(os_msgqueues);
+     os_msgqueues := st.(os_msgqueues);
      os_events := st.(os_events); os_isr := st.(os_isr); os_exstatus := st.(os_exstatus) |}.
+
+(** 仅替换互斥量对象序列；其他模块与任务字段原样保留。 *)
+Definition replace_mutexes (mutexes : MutexState) (st : VarGlobalState)
+    : VarGlobalState :=
+  {| os_mutexes := mutexes; os_semaphores := st.(os_semaphores);
+     os_tasks := st.(os_tasks); os_tick := st.(os_tick); os_delays := st.(os_delays);
+     os_assign := st.(os_assign); zombie_queue := st.(zombie_queue);
+     os_recycle := st.(os_recycle); os_idle := st.(os_idle);
+     os_msgqueues := st.(os_msgqueues); os_events := st.(os_events);
+     os_isr := st.(os_isr); os_exstatus := st.(os_exstatus) |}.

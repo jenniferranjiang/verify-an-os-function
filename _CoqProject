@@ -50,8 +50,6 @@ lib/KTaskStackSetup.v
 lib/KTaskStackSetupProofAux.v
 lib/MsgQueueInv.v
 lib/MsgQueueState.v
-lib/MutexInv.v
-lib/MutexState.v
 lib/NodeSelfLinked.v
 lib/OsAssignReadyVector.v
 lib/StructFieldOffsetAxiom.v
@@ -82,3 +80,11 @@ lib/ServiceSlotWf.v
 -R ./vendor/qcp_strategy QCPCompat
 vendor/qcp_strategy/Mapping.v
 lib/IdModuleSpec.v
+
+lib/MutexState.v
+
+lib/MutexInv.v
+
+lib/MutexOps.v
+
+lib/KMutexCreate.v

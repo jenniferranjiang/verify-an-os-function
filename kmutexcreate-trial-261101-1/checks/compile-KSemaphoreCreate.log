@@ -1,0 +1,13 @@
+@safeExec
+     : forall Σ A : Type,
+       (Σ -> Prop) -> program Σ A -> (A -> Σ -> Prop) -> Prop
+LastSeen
+     : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+abs_semaphore_create
+     : StableGlobalState -> Z -> program (VarGlobalState -> Prop) Z
+SemaphoreRaw
+     : CNotation.addr -> Assertion
+SemaphoreZero
+     : CNotation.addr -> Assertion
+CriticalNest
+     : Z -> Assertion
