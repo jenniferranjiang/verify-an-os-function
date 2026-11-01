@@ -1,0 +1,172 @@
+Require Import Coq.ZArith.ZArith.
+Require Import Coq.Bool.Bool.
+Require Import Coq.Strings.String.
+Require Import Coq.Strings.Ascii.
+Require Import Coq.Lists.List.
+Require Import Coq.Classes.RelationClasses.
+Require Import Coq.Classes.Morphisms.
+Require Import Coq.micromega.Psatz.
+Require Import Coq.Sorting.Permutation.
+From AUXLib Require Import int_auto Axioms Feq Idents ListLib VMap.
+Require Import SetsClass.SetsClass. Import SetsNotation.
+From SimpleC.SL Require Import Mem SeparationLogic.
+From CRTOS_Verify.VC Require Import AllocId_goal.
+Require Import Logic.LogicGenerator.demo932.Interface.
+Local Open Scope Z_scope.
+Local Open Scope sets.
+Local Open Scope string_scope.
+Local Open Scope list.
+Require Import CRTOS_Verify.sem.CrtosOSProtocol.
+Import CrtosOS_C_Rules.
+Require Import CRTOS_Verify.sem.SemaphorePure.
+Require Import CRTOS_Verify.sem.SemaphoreRep.
+Local Open Scope sac.
+
+Lemma proof_of_AllocId_safety_wit_1 : AllocId_safety_wit_1.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_2 : AllocId_safety_wit_2.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_3 : AllocId_safety_wit_3.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_4 : AllocId_safety_wit_4.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_5 : AllocId_safety_wit_5.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_6 : AllocId_safety_wit_6.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_7 : AllocId_safety_wit_7.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_9 : AllocId_safety_wit_9.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_10 : AllocId_safety_wit_10.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_11 : AllocId_safety_wit_11.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_12 : AllocId_safety_wit_12.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_13 : AllocId_safety_wit_13.
+Proof.
+  red; intros; entailer!.
+  unfold SemaphoreStableContext in PreH4.
+  destruct PreH4 as (Hm & Hb & Hba & Hr & Hil & Hbc).
+  rewrite Hil in PreH5. unfold SEM_ID_MAX in PreH5.
+  vm_compute in PreH5. lia.
+Qed.
+
+Lemma proof_of_AllocId_safety_wit_14 : AllocId_safety_wit_14.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_15 : AllocId_safety_wit_15.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_16 : AllocId_safety_wit_16.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_17 : AllocId_safety_wit_17.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_19 : AllocId_safety_wit_19.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_20 : AllocId_safety_wit_20.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_22 : AllocId_safety_wit_22.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_23 : AllocId_safety_wit_23.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_24 : AllocId_safety_wit_24.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_25 : AllocId_safety_wit_25.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_27 : AllocId_safety_wit_27.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_28 : AllocId_safety_wit_28.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_safety_wit_29 : AllocId_safety_wit_29.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_partial_solve_wit_1_pure : AllocId_partial_solve_wit_1_pure.
+Proof. red; intros; entailer!. Qed. 
+
+Lemma proof_of_AllocId_partial_solve_wit_1 : AllocId_partial_solve_wit_1.
+Proof.
+  unfold AllocId_partial_solve_wit_1, AllocId_partial_solve_wit_1_aux.
+  intros. entailer!.
+Qed.
+
+Lemma proof_of_AllocId_partial_solve_wit_2 : AllocId_partial_solve_wit_2.
+Proof.
+  red; intros.
+  pose proof PreH3 as Hstable.
+  unfold SemaphoreStableContext in Hstable.
+  destruct Hstable as (Hm & Hb & Hba & Hr & Hil & Hbc).
+  assert (Hrange : 0 <= index < (semaphore_id_limit stable + 7) ÷ 8)
+    by (rewrite <- PreH4; lia).
+  sep_apply_l_atomic (UCharArray.full_split_to_missing_i
+    (semaphore_bitmap_addr stable) index
+    ((semaphore_id_limit stable + 7) ÷ 8) bytes 0 Hrange).
+  entailer!.
+Qed.
+
+Lemma proof_of_AllocId_partial_solve_wit_3 : AllocId_partial_solve_wit_3.
+Proof.
+  red; intros.
+  pose proof PreH5 as Hstable.
+  unfold SemaphoreStableContext in Hstable.
+  destruct Hstable as (Hm & Hb & Hba & Hr & Hil & Hbc).
+  assert (Hrange : 0 <= index < (semaphore_id_limit stable + 7) ÷ 8)
+    by (rewrite <- PreH6; lia).
+  sep_apply_l_atomic (UCharArray.full_split_to_missing_i
+    (semaphore_bitmap_addr stable) index
+    ((semaphore_id_limit stable + 7) ÷ 8) bytes 0 Hrange).
+  entailer!.
+Qed.
+
+Lemma proof_of_AllocId_partial_solve_wit_4 : AllocId_partial_solve_wit_4.
+Proof.
+  red; intros.
+  pose proof PreH3 as Hstable.
+  unfold SemaphoreStableContext in Hstable.
+  destruct Hstable as (Hm & Hb & Hba & Hr & Hil & Hbc).
+  assert (Hrange : 0 <= index_2 < (semaphore_id_limit stable + 7) ÷ 8)
+    by (rewrite <- PreH4; lia).
+  sep_apply_l_atomic (UCharArray.full_split_to_missing_i
+    (semaphore_bitmap_addr stable) index_2
+    ((semaphore_id_limit stable + 7) ÷ 8) bytes 0 Hrange).
+  entailer!.
+Qed.
+
+Lemma proof_of_AllocId_partial_solve_wit_5 : AllocId_partial_solve_wit_5.
+Proof.
+  red; intros.
+  pose proof PreH3 as Hstable.
+  unfold SemaphoreStableContext in Hstable.
+  destruct Hstable as (Hm & Hb & Hba & Hr & Hil & Hbc).
+  assert (Hrange : 0 <= index_2 < (semaphore_id_limit stable + 7) ÷ 8)
+    by (rewrite <- PreH4; lia).
+  sep_apply_l_atomic (UCharArray.full_split_to_missing_i
+    (semaphore_bitmap_addr stable) index_2
+    ((semaphore_id_limit stable + 7) ÷ 8) bytes 0 Hrange).
+  sep_apply_l_atomic (store_uchar_undef_store_uchar
+    (semaphore_bitmap_addr stable + index_2 * sizeof(UCHAR))
+    (Znth index_2 bytes 0)).
+  entailer!.
+Qed.
