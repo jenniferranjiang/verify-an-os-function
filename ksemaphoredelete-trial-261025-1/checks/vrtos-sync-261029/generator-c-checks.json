@@ -1,8 +1,0 @@
-{
-  "generated_slices": 23,
-  "annotations_match_ignoring_whitespace": true,
-  "executable_tokens": "unchanged",
-  "gcc_32bit_files": 25,
-  "gcc_32bit": "passed",
-  "errors": []
-}

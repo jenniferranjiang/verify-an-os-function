@@ -1,1 +1,0 @@
-Reused the five matching assigned proof blocks from round r1, group branch_contradictions_b. Current goal definitions still expose the same contradictory resched equalities/inequality or boolean idmanager query equalities. No helpers or imported historical modules are needed. Current-round validation is required below.

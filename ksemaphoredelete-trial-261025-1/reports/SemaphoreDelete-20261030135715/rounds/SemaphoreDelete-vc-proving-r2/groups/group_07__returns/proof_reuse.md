@@ -1,1 +1,0 @@
-Reused the five assigned returns proof bodies from SemaphoreDelete-vc-proving-r1/groups/group_07__returns/SemaphoreDelete_proof_manual.v after checking each current goal definition and lemma declaration is identical. No helpers or imports were copied. The current seed library was preserved.

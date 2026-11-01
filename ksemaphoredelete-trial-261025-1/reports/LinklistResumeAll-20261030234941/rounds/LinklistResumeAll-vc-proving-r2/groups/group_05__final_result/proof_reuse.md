@@ -1,1 +1,0 @@
-Reused the four return-witness proof blocks from the same group's r1 copied manual after checking the assigned lemma statements, prelude and library seed against the current copies. Current goal definitions were read directly and compiled with the candidate through Rocq MCP. No helper adaptation was needed.

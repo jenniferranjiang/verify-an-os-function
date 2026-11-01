@@ -1,3 +1,0 @@
-Completed safety witnesses 5, 6, 7, 8, and 14 by directly reusing the r1 LLM_pre_process proofs after confirming their exact generated definitions are unchanged. No helpers, library imports, or semantic input edits were needed. Unassigned proof spans and library seed remain preserved.
-
-Rocq MCP rocq_compile accepted the complete candidate with success: true using the r1 group_09 staged workspace; current goal definitions were compared byte-for-byte before compilation. The subsequent exact r2 handoff group-check completed with process exit code 0, JSON status: passed, returncode: 0, elapsed_seconds: 101.272982. Forbidden lemma/tactic scan passed.

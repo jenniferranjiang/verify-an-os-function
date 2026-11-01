@@ -1,1 +1,0 @@
-Reused the two assigned proof blocks from the same group in SemaphoreDelete-vc-proving-r1. Both current goal Definitions exactly match the r1 staged goal Definitions; the group seed libraries also match. The same LLM_pre_process proofs compile under current inputs. Historical files were not changed.

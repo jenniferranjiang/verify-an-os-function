@@ -29,7 +29,7 @@ semaphore 分量。`CrtosRules.v` 提供统一的临界区协议和小端内存�
 补充 SUSPEND 任务的 bitmap 一致性。当前删除输入使用非 SMP、32 位验证适配，
 调度按《源代码处理》的模型边界处理；设计审阅通过不等于实现证明完成。
 revision、共享迁移及检查结果见
-[删除设计记录](../ksemaphoredelete-trial-261025-1/.docs/Report/status.md)。
+[删除设计记录](https://github.com/jenniferranjiang/verify-an-os-function/blob/f96dd2e20249ed8f55d8a33097de411a97aab9ab/ksemaphoredelete-trial-261025-1/.docs/Report/status.md)。
 
 新 trial 可按需要导入，例如：
 
@@ -65,4 +65,4 @@ make -f Makefile.coq -j2 COQBIN=/home/xinra/.opam/pv-bench-8.20.1/bin/
 
 2026-10-28 已同步 VRTOS `bc601a1` 的导入定义和调用规格。保留小端及本地信号量表示；
 共享库构建和接口检查通过，未迁移上游实现证明。见
-[VRTOS 同步记录](../ksemaphoredelete-trial-261025-1/.docs/Report/2026-10-28-vrtos-sync.md)。
+[VRTOS 同步记录](https://github.com/jenniferranjiang/verify-an-os-function/blob/f96dd2e20249ed8f55d8a33097de411a97aab9ab/ksemaphoredelete-trial-261025-1/.docs/Report/2026-10-28-vrtos-sync.md)。

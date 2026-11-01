@@ -1,1 +1,0 @@
-Reused the five assigned r1 constant_safety_b proof blocks directly. The current generated definitions of witnesses 5, 6, 7, 8, and 14 are byte-identical to the r1 staged definitions. No helpers or imports were added. The complete candidate compiled through Rocq MCP with success: true before restoration.

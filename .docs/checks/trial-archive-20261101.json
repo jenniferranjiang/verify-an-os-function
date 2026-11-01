@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-01",
+  "trial": "ksemaphoredelete-trial-261025-1",
+  "archive_remote": "origin",
+  "archive_branch": "archive/ksemaphoredelete-trial-261025-1",
+  "archive_commit": "f96dd2e20249ed8f55d8a33097de411a97aab9ab",
+  "archive_tree": "b6159e34070b8408c5bff8261b6cc7b7fe6cd15e",
+  "remote_branch_verified": true,
+  "archived_tracked_files": 1362,
+  "local_trial_removed": true,
+  "local_trial_size_before_kib": 51160,
+  "global_c_files": [
+    {
+      "file": "annotated_C/src/KSemaphoreDelete.c",
+      "sha256": "ea52a061a542e98280a5c3f2088d54d6f9cc6b3573181055ca30510c596cc264",
+      "matches_archived_trial": true
+    },
+    {
+      "file": "annotated_C/src/_SemaphoreDelete.c",
+      "sha256": "b5dfa4f90871da6053fd95a7407b3479f20fd0204262c151663051e79074e820",
+      "matches_archived_trial": true
+    },
+    {
+      "file": "annotated_C/src/LinklistResumeAll.c",
+      "sha256": "a295dc8474fde9a7113adc3f547225b6638994b0b1676cb98a935e967bad3e68",
+      "matches_archived_trial": true
+    }
+  ],
+  "global_vc_copied": false,
+  "checks": [
+    "All archived trial tracked files matched the archive commit before removal.",
+    "Three global target C files match archived verified inputs byte-for-byte.",
+    "Frozen input guard passed before removal; C syntax check passed for all three global targets.",
+    "No new QCP proof run; imported VC helpers are available in the archive branch."
+  ],
+  "notes": [
+    "Ignored build workspaces and caches were discarded.",
+    "Other trial directories remain unchanged; Git object history remains local."
+  ]
+}

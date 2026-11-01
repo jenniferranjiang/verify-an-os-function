@@ -1,1 +1,0 @@
-Reused the four corresponding r1 group_17 id_cell_frames proof bodies. Compared current goal Definitions with the r1 staged goals and confirmed unchanged tokens; group library seed is byte-identical. Rechecked all four Qed proofs against exact current Definitions through Rocq MCP (success true).

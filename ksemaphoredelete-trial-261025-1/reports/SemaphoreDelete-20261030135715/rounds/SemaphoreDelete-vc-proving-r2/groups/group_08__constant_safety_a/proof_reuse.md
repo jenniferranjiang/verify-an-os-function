@@ -1,1 +1,0 @@
-Reused the four safety witness proof bodies from round r1, group constant_safety_a. The current witnesses still require constant 0 within signed Int bounds and retain LLM_pre_process mode; no helper dependencies were copied. Current round group-check will validate the proofs against current imports and goals.
