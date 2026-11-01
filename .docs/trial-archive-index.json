@@ -1,6 +1,6 @@
 {
   "date": "2026-11-01",
-  "branch": "archive/ksemaphoredelete-trial-261025-1",
+  "branch": "trial-archive",
   "base_commit": "f96dd2e20249ed8f55d8a33097de411a97aab9ab",
   "trial_directories": [
     "keventcreate-trial-260928-2",

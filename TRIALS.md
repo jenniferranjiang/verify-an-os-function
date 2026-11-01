@@ -1,8 +1,8 @@
 # Historical trial archive
 
 All past CRTOS trials are collected in this one branch:
-`archive/ksemaphoredelete-trial-261025-1`.
-The branch name is retained; it contains all nine trials, not just the deletion trial.
+`trial-archive`.
+This shared archive contains all nine historical trials.
 
 - `keventcreate-trial-260928-2`
 - `kmutexcreate-trial-260928-2`
@@ -22,6 +22,6 @@ See `.docs/trial-archive-index.json` for the inventory.
 Restore one trial from the main working directory when needed:
 
 ```sh
-git fetch origin archive/ksemaphoredelete-trial-261025-1
-git restore --source=origin/archive/ksemaphoredelete-trial-261025-1 -- <trial-directory>
+git fetch origin trial-archive
+git restore --source=origin/trial-archive -- <trial-directory>
 ```
