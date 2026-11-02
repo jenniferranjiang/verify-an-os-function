@@ -10,11 +10,7 @@
  (ktask_wakeup_detached_null_condition : StableGlobalState -> VarGlobalState -> Z -> Prop)
  (ktask_wakeup_detached_null_step : Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop)
  (semaphore_pending_nodes : Z -> VarGlobalState -> list(DL_Node Z) -> Prop)
- (msgqueue_send_pending_nodes : Z -> VarGlobalState -> list(DL_Node Z) -> Prop)
- (msgqueue_recv_pending_nodes : Z -> VarGlobalState -> list(DL_Node Z) -> Prop)
  (wakeup_semaphore_head : Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop)
- (wakeup_msgqueue_send_head : Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop)
- (wakeup_msgqueue_recv_head : Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop)
  */
 
 /* 锁内 ID 包装层；保持通用接口，查询失败路径不承诺正常返回。 */
@@ -65,36 +61,6 @@ x_err_t KTaskWakeup(int32 id)
       desc.tdSchedMember.tsmStat == TSK_SUSPEND &&
       wakeup_semaphore_head(sem, task, desc, before, after) &&
       semaphore_pending_nodes(sem, after, rest) && os_inv(sg, after)
- */;
-
-x_err_t KTaskWakeup(int32 id)
-/*@ msgqueue_send_pending_head_ic <= wakeup_by_id_ic
-    With (sg : StableGlobalState) (before : VarGlobalState)
-      (mq task : Z) (rest : list(DL_Node Z))
-    Require id < 65536 && get_task_with_idnode_success(sg, before, id, task) &&
-      msgqueue_send_pending_nodes(mq, before, cons(sched_link_node(task), rest)) &&
-      os_inv(sg, before)
-    Ensure exists (desc : TaskDescriptorAbs) (after : VarGlobalState),
-      __return == 0 && task != 0 &&
-      before.os_tasks.task_desc_map(task) == Some(desc) &&
-      desc.tdSchedMember.tsmStat == TSK_SUSPEND &&
-      wakeup_msgqueue_send_head(mq, task, desc, before, after) &&
-      msgqueue_send_pending_nodes(mq, after, rest) && os_inv(sg, after)
- */;
-
-x_err_t KTaskWakeup(int32 id)
-/*@ msgqueue_recv_pending_head_ic <= wakeup_by_id_ic
-    With (sg : StableGlobalState) (before : VarGlobalState)
-      (mq task : Z) (rest : list(DL_Node Z))
-    Require id < 65536 && get_task_with_idnode_success(sg, before, id, task) &&
-      msgqueue_recv_pending_nodes(mq, before, cons(sched_link_node(task), rest)) &&
-      os_inv(sg, before)
-    Ensure exists (desc : TaskDescriptorAbs) (after : VarGlobalState),
-      __return == 0 && task != 0 &&
-      before.os_tasks.task_desc_map(task) == Some(desc) &&
-      desc.tdSchedMember.tsmStat == TSK_SUSPEND &&
-      wakeup_msgqueue_recv_head(mq, task, desc, before, after) &&
-      msgqueue_recv_pending_nodes(mq, after, rest) && os_inv(sg, after)
  */;
 
 #endif

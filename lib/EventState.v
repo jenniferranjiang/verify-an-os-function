@@ -1,59 +1,57 @@
 Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.
-From AUXLib Require Import ListLib.
 From SimpleC.SL Require Import Mem CNotation.
-Require Export CRTOS_Verify.lib.CrtosConfig.
-Require Export CRTOS_Verify.lib.dll_abs CRTOS_Verify.lib.idnode_abs.
+Require Export CRTOS_Verify.lib.CrtosConfig CRTOS_Verify.lib.dll_abs CRTOS_Verify.lib.idnode_abs.
 Require Export CRTOS_Verify.lib.StructFieldOffsetAxiom.
 Import KTaskCNotation ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope string.
-Local Open Scope list.
 
-(**
-  Event 模型对应验证副本 xs_event.h 的两个普通 uint32 字段。
-  evOptions/evEvents 保留实际 32 位值；evWaitNodes 保存 pend_list 的真实
-  顺序及任务基址。原始 C 的 3/29 位自动截断不在本模型中，Spec 接入前
-  必须另证合法输入/写入保持性或建立位域与普通字段的对应关系。
-*)
-Record EventAbs : Type := {
-  evOptions : Z;
-  evEvents : Z;
-  evWaitNodes : list (DL_Node addr)
+(** Event 的地址、发布期 ID、3位 options、29位 events 及等待任务基址顺序。
+    options 不是调用者原输入，而是 C 位域赋值后保存的低3位；events 可变。
+    task 的 event_mode/event_id_trigger/exstatus 仍由 TaskState 保存，不重复。 *)
+Record EventAbs := {
+  event_addr : addr;
+  event_id : Z;
+  event_options : Z;
+  event_events : Z;
+  event_pending_addrs : list addr
 }.
+Definition EventState := list EventAbs.
 
-(** event.c 的 static done 四个函数指针值；只记录值，不赋予调用权限。 *)
-Record EventDoneAbs : Type := {
-  evdCreate : addr;
-  evdDelete : addr;
-  evdTrigger : addr;
-  evdProcess : addr
+(** 固定的 k_event_id_manager、bitmap、桶数组和 k_event_list 哨兵地址。
+    静态 done 的分派在切片中已解析，不另持有运行时函数表资源。 *)
+Record EventStable := {
+  event_manager_ptr : addr;
+  event_manager_stable : StableIdmanager;
+  event_list_head : addr
 }.
-
-(** 稳定地址分别指向独立 k_event_id_manager、k_event_list 和 event.c::done。 *)
-Record EventStable : Type := {
-  event_idmanager_ptr : addr;
-  event_stable_ids : StableIdmanager;
-  event_list_head : addr;
-  event_done_ptr : addr;
-  event_done_abs : EventDoneAbs
-}.
-
-(** 已完整发布对象的唯一 map；ID 值由 event_ids 保存，不复制 ID 字段。 *)
-Record EventState : Type := {
-  event_objects : addr -> option EventAbs;
-  event_ptrs : list addr;
-  event_ids : VarIdmanager
-}.
-
-(**
-  绑定本模块公开根和独立 ID 存储；static done 地址保持 TU 局部参数，
-  不与其他文件同名 done/Done 合并。回调值的具体链接关系待各函数 Spec 接入。
-*)
 Definition event_context (sg : EventStable) : Prop :=
-  sg.(event_idmanager_ptr) = &("k_event_id_manager") /\
-  sg.(event_list_head) = &("k_event_list") /\
-  sg.(event_stable_ids).(idmax) = ID_MAX_NUM /\
-  sg.(event_stable_ids).(hoffset) = BUCKET_NUM /\
-  sg.(event_stable_ids).(id_map) = &("__id_map_k_event_id_manager") /\
-  sg.(event_stable_ids).(htable) = &("__htable_k_event_id_manager").
+  sg.(event_manager_ptr) = &("k_event_id_manager") /\
+  sg.(event_manager_stable).(idmax) = 128 /\
+  sg.(event_manager_stable).(hoffset) = 16 /\
+  sg.(event_manager_stable).(id_map) = &("__id_map_k_event_id_manager") /\
+  sg.(event_manager_stable).(htable) = &("__htable_k_event_id_manager") /\
+  sg.(event_list_head) = &("k_event_list").
+Definition event_idnode (e : EventAbs) : IdNodeAbs :=
+  let p := e.(event_addr) in
+  Build_IdNodeAbs e.(event_id) (&(p # "Event" ->ₛ "id")).
 
+(** 管理链与 ID 桶均头插，故从单一对象序列派生 ID 集合及各桶顺序。
+    bitmap 与懒桶形态交给已有 ID 模块，不增加第二份可变 manager 状态。 *)
+Definition event_manager (st : EventState) : VarIdmanager :=
+  Build_VarIdmanager (map event_id st)
+    (map (fun i => map event_idnode
+      (filter (fun e => Z.eqb (e.(event_id) mod 16) (Z.of_nat i)) st))
+      (seq 0 16)).
+Definition event_waiters (st : EventState) : list addr :=
+  List.concat (map event_pending_addrs st).
+
+(** Create 不拒绝任何 uint32 options：赋值到3位位域得到 options mod8。
+    memset 建立 events=0，等待哨兵初始化为空。 *)
+Definition event_created (p id options : Z) : EventAbs :=
+  {| event_addr := p; event_id := id; event_options := options mod 8;
+     event_events := 0; event_pending_addrs := nil |}.
+Definition event_publish (p id options : Z) (st : EventState) : EventState :=
+  event_created p id options :: st.
+(** BSS bitmap/桶清零，k_event_list 静态自环，对应空对象序列。 *)
+Definition event_initial : EventState := nil.

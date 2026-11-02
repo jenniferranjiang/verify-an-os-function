@@ -4,6 +4,10 @@
 当前内存模型为 `Arch32 LittleEndian`；各 trial 分别记录其源码配置及 ABI 适配范围。
 新 trial 显式导入共享库，函数专用定义使用自己的逻辑路径。
 
+2026-11-01 按用户要求移除全局 event/msgqueue 模型，待其专门验证时重新设计。
+随后 KEventCreate 新实验重新设计并接入 event；msgqueue 仍不在当前全局状态与不变量中。历史 trial 保持原样。
+范围及编译记录见 [全局库清理记录](../.docs/Report/2026-11-01-global-lib-prune.md)。
+
 ## Semaphore
 
 | 文件 | 职责 |
@@ -77,8 +81,32 @@ make -f Makefile.coq -j2 COQBIN=/home/xinra/.opam/pv-bench-8.20.1/bin/
 | `KMutexCreate.v` | 创建的失败/成功抽象操作；不是 C 实现证明 |
 
 `CrtosGlobState.v`、`CrtosInv.v` 和 `KTaskWakeup.v` 已接入 mutex 分量及其 frame。
-本次只完成创建设计审阅，记录见
+移除 event/msgqueue 之前，`KMutexCreate` / `_MutexCreate` 实现证明均已通过 controller final-check（done）。该历史结论对应当时的全局库版本；当前全局库已经改变，不能直接沿用该完成状态。原证明保存在 trial/VC，记录见
 [KMutexCreate 实验状态](../kmutexcreate-trial-261101-1/.docs/Report/status.md)。
 [源码缺陷报告](../kmutexcreate-trial-261101-1/.docs/Report/source-errors.md)
 记录其他 mutex API 的七项问题；其中删除竞争可能破坏真实共享堆。
-因此当前设计不能证明整个 mutex 模块或任意并发调用环境保持系统不变量。
+因此创建函数的模块化证明不表示整个 mutex 模块或任意并发调用环境保持系统不变量。
+
+## Event 创建设计（2026-11-01）
+
+`keventcreate-trial-261101-1` 的 predicate 与完整10-symbol调用闭包 spec
+均独立 **review-passed**。后续Process延时失败修复按用户要求仅保存在trial候选中，权威源码已恢复；候选16个主机场景通过且经独立增量复查；Create正文和formal revision未变。用户随后批准implement，KEventCreate与_EventCreate均已通过controller final-check并返回done。结论限定于报告记录的信任边界及运行范围；_EventProcess的trial候选不属于本轮证明目标。
+
+| 文件 | 职责 |
+| --- | --- |
+| `EventState.v` | 对象地址、ID、options低3位、events低29位、等待任务序列及派生ID管理状态 |
+| `EventInv.v` | 私有/清零/发布对象的完整资源、模型布局条件、初始化与字节转换待证义务 |
+| `EventOps.v` | 唤醒时只摘除事件等待者，保持其他字段 |
+| `KEventCreate.v` | 创建抽象操作、其他模块frame、发布恢复的类型化待证义务 |
+
+`CrtosGlobState`、`CrtosInv`、`KTaskWakeup` 已接入event状态、等待节点及frame。
+权威32位位域对象为32字节；按TrustBase展开位域后的验证模型为36字节，
+切片显式保留options截断。布局检查不等于C实现证明。
+
+审阅revision、共享迁移和根库编译证据见
+[Event实验状态](../keventcreate-trial-261101-1/.docs/Report/status.md)。
+[源码问题](../keventcreate-trial-261101-1/.docs/Report/source-errors.md)
+涉及创建闭包之外的Process无效ID、等待选项及查找后生命周期风险。
+新全局状态版本不自动继承历史trial的C证明结论；本次只重编译受影响共享库。
+
+`EventLayoutABI.v` 在实现阶段补齐已检查36字节Event模型的两条可信布局事实：`event_size_axiom`、`event_top_level_field_offset_axiom`。它们沿用TrustBase的结构体布局/位域适配，不证明内存所有权或字节转换；原始位域ABI仍为32字节。见[布局适配审阅](../keventcreate-trial-261101-1/.docs/Report/event-layout-review.md)。

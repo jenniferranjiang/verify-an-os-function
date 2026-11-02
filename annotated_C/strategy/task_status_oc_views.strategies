@@ -1,0 +1,34 @@
+#include "task_status_oc_views.h"
+
+// 原始字节读取按需经过 os_inv -> task_fields；不拆其它子不变量。
+id : 1
+priority : core(3)
+left : InsideCritical(?sg, ?st) at 0
+       os_inv(sg, st) at 1
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 2
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), U8, ?value) at 3
+check : infer(q == task);
+action : left_erase(1);
+         left_add(task_fields(sg, st));
+         left_add(os_task_fields_frame(sg, st));
+
+// 复用既有 stat 借用 frame；再由 task_status 策略展开到 raw 字节。
+id : 2
+priority : core(2)
+left : task_fields(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), U8, ?value) at 2
+check : infer(q == task);
+action : left_erase(0);
+         left_add(store_task_status(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), tsmStat(tdSchedMember(desc))));
+         left_add(store_ktask_suspend_sched_stat_frame(sg, st, task, desc));
+
+// 仅原字节解码与原 descriptor 状态一致时重建；随后既有 post 规则归还 os_inv。
+id : 3
+priority : post(1)
+left : store_ktask_suspend_sched_stat_frame(?sg, ?st, ?task, ?desc) at 0
+       store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), U8, ?raw) at 1
+       decode_task_status(raw) == tsmStat(tdSchedMember(desc)) at 2
+check : infer(q == task);
+action : left_erase(1);
+         left_add(store_task_status(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), tsmStat(tdSchedMember(desc))));

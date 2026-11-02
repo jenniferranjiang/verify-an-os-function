@@ -7,10 +7,10 @@ Require Export CRTOS_Verify.lib.dll CRTOS_Verify.lib.idnode.
 Require Export CRTOS_Verify.lib.TaskInv CRTOS_Verify.lib.AssignInv.
 Require Export CRTOS_Verify.lib.DelayInv CRTOS_Verify.lib.TickInv.
 Require Export CRTOS_Verify.lib.ExstatusInv CRTOS_Verify.lib.Bitmap.
-Require Export CRTOS_Verify.lib.EventInv.
-Require Export CRTOS_Verify.lib.MsgQueueInv CRTOS_Verify.lib.IsrManagerInv.
+Require Export CRTOS_Verify.lib.IsrManagerInv.
 Require Export CRTOS_Verify.lib.SemaphoreInv.
 Require Export CRTOS_Verify.lib.MutexInv.
+Require Export CRTOS_Verify.lib.EventInv.
 Import ListNotations DLL IDNode.
 Local Open Scope Z_scope.
 Local Open Scope string.
@@ -25,8 +25,8 @@ Definition os_sched_owners (st : VarGlobalState) : list addr :=
     (os_ready_nodes st.(os_assign).(assignReadyVector).(orvBuckets)) ++
   map (@getData addr) (zombie_nodes st.(zombie_queue)) ++
   semaphore_waiters st.(os_semaphores) ++
-  msgqueue_waiters st.(os_msgqueues) ++ event_waiters st.(os_events) ++
-  mutex_waiters st.(os_mutexes).
+  mutex_waiters st.(os_mutexes) ++
+  event_waiters st.(os_events).
 
 (** 同步 VRTOS：NoDup 表示调度所有者互斥，定义域对应表示已发布任务的
     完整覆盖；服务任务生命周期另由 service_slot_wf 约束。 *)
@@ -42,7 +42,8 @@ Record os_world_wf (sg : StableGlobalState) (st : VarGlobalState) : Prop := {
 
 (**
   当前范围内的资源组合（msg_buf 缓冲区暂缓）。包含统一任务字段和独立调度节点；每个
-  模块只出现一次，四个 IPC 模块固定使用同一 task map 的纯等待关联。
+  模块只出现一次，semaphore/mutex/event 使用同一 task map 的纯等待关联。
+  event 等待节点纳入统一排他和覆盖检查；msgqueue 尚不在当前建模范围内。
   Bitmap 表在此唯一持有；Assign padding 只在 assign_inv 内。
   ISR/exstatus 的普通锁外访问、静态函数表读取及锁外回收仍有协议义务。
 *)
@@ -58,12 +59,11 @@ Definition os_inv (sg : StableGlobalState) (st : VarGlobalState) : Assertion :=
     sg.(os_zombie_head) st.(zombie_queue) **
   sg.(os_recycler_slot) # Int |-> st.(os_recycle).(service_id) **
   IntArray.full sg.(os_idle_array) CORE_COUNT (map service_id st.(os_idle)) **
-  msgqueue_inv wait sg.(os_msgqueue_stable) st.(os_msgqueues) **
-  event_inv wait sg.(os_event_stable) st.(os_events) **
   isrmanager_inv sg.(os_isr_stable) st.(os_isr) **
   exstatus_inv sg st **
   semaphore_inv wait sg.(os_semaphore_stable) st.(os_semaphores) **
-  mutex_inv wait sg.(os_mutex_stable) st.(os_mutexes).
+  mutex_inv wait sg.(os_mutex_stable) st.(os_mutexes) **
+  event_inv wait sg.(os_event_stable) st.(os_events).
 
 (** 保留本地调用者使用的引理名；对应上游 Record 的两个投影。 *)
 Lemma os_sched_owners_domain : forall sg st task,
@@ -89,8 +89,8 @@ Qed.
 Lemma sched_owned_not_waiting : forall sg st task,
   os_world_wf sg st -> In task st.(os_tasks).(sched_owned_tasks) ->
   ~ In task (semaphore_waiters st.(os_semaphores) ++
-             msgqueue_waiters st.(os_msgqueues) ++
-             event_waiters st.(os_events) ++ mutex_waiters st.(os_mutexes)).
+             mutex_waiters st.(os_mutexes) ++
+             event_waiters st.(os_events)).
 Proof.
   intros sg st task Hwf Howned Hwait.
   pose proof (os_wf_sched_nodup sg st Hwf) as Hunique.

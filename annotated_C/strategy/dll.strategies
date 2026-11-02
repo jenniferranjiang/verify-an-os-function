@@ -1,0 +1,6 @@
+#include "m_double_linklist.h"
+id : 1
+priority : core(0)
+left : store_dll{?A}(?storeA, ?head, ?before) at 0
+right : store_dll{A}(storeA, head, ?after) at 1
+action : left_erase(0); right_erase(1); right_add(before == after);

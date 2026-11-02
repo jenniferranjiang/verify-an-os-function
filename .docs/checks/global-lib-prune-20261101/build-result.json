@@ -1,0 +1,11 @@
+{
+  "command": [
+    "make",
+    "-f",
+    "Makefile.coq",
+    "-j2",
+    "COQBIN=/home/xinra/.opam/pv-bench-8.20.1/bin/"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 186.09014010429382
+}

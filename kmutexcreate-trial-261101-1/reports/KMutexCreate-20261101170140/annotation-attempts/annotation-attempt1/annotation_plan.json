@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "_MutexCreate",
+      "meaning": "复用冻结的创建调用规格，返回-5或有效ID并返还OutsideCritical与同一continuation。"
+    },
+    {
+      "name": "KMutexCreate",
+      "meaning": "调用内部创建函数并原样返回其结果，保持冻结的创建抽象操作及临界区资源保证。"
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

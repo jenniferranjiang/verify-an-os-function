@@ -1,4 +1,4 @@
-#include "m_assign.h"
+#include "assign_ready_remove.h"
 #include "ktask_set_status.h"
 #include "monad.h"
 #include "task_name_view.h"
@@ -23,11 +23,7 @@
 /*@ Extern Coq
       (KERROR : Z)
       (task_addr_aligned : Z -> OsAssignReadyVectorAbs -> Prop)
-      (ready_task_node : Z -> DL_Node Z)
-      (assign_remove_member_step_ic :
-        (Z -> option TaskDescriptorAbs) -> Z -> TaskDescriptorAbs ->
-        OsAssignReadyVectorAbs -> list(DL_Node Z) -> list(DL_Node Z) ->
-        OsAssignReadyVectorAbs -> Prop)
+      (sched_link_node : Z -> DL_Node Z)
       (assign_insert_step_ic :
         (Z -> option TaskDescriptorAbs) -> Z -> TaskDescriptorAbs ->
         OsAssignReadyVectorAbs -> OsAssignReadyVectorAbs -> Prop)
@@ -63,30 +59,6 @@
  * KTaskStatGet is declared by the verified ktask_set_status.h.
  * CriticalAreaLock/UnLock retain the existing m_ktask.h contracts.
  */
-void KTaskOsAssignRemoveKTask(struct TaskDescriptor *task)
-/*@ linked_ic
-    With (sg : StableGlobalState)
-         (st : VarGlobalState)
-         (desc : TaskDescriptorAbs)
-         (before : OsAssignReadyVectorAbs)
-         (prefix suffix : list(DL_Node Z))
-    Require
-      st.os_tasks.task_desc_map(task) == Some(desc) &&
-      Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil) ==
-        app(prefix, cons(ready_task_node(task), suffix)) &&
-      task_fields(sg, st) *
-      store_os_assign_ready_vector(&(Assign.os_assign_ready_vector), before) *
-      store_prio_lookup_table
-    Ensure
-      exists removed,
-        assign_remove_member_step_ic(
-          st.os_tasks.task_desc_map, task, desc, before, prefix, suffix, removed) &&
-        task_fields(sg, st) *
-        store_os_assign_ready_vector(&(Assign.os_assign_ready_vector), removed) *
-        store_node_self_linked(sched_link_of(task)) *
-        store_prio_lookup_table
- */;
-
 void KTaskInsertToReadyVector(struct TaskDescriptor *task)
 /*@ With (sg : StableGlobalState)
          (st : VarGlobalState)
@@ -161,7 +133,7 @@ static inline void __BitmapSiteMask(struct TaskDescriptor *task)
  * @return EOK, -ERROR for an idle-name prefix, or -EINVALED for invalid state
  */
 x_err_t _KTaskPrioSet(KTaskDescriptorType task, uint8 prio)
-/*@ outside_critical
+/*@ prior_set_oc
     With LitMap (sg : StableGlobalState) (st_before : VarGlobalState) X
     Require
       safeExec(LastSeen(st_before), abs_ktask_prio_set(sg, task, prio), X) &&
@@ -246,17 +218,16 @@ x_err_t _KTaskPrioSet(KTaskDescriptorType task, uint8 prio)
                 which implies
                 exists prefix suffix,
                   Znth(desc.tdSchedMember.tsmCurPrio, st_lock.os_assign.assignReadyVector.orvBuckets, nil) ==
-                    app(prefix, cons(ready_task_node(task), suffix)) &&
+                    app(prefix, cons(sched_link_node(task), suffix)) &&
                   ktask_prio_set_frame(sg, st_lock)
              */
             /*@ Given prefix suffix */
 // #ifdef ARCH_SMP
 //             HwLockSpinlock(&AssignSpinLock);
 // #endif
-            KTaskOsAssignRemoveKTask(task) /*@ where (linked_ic) sg = sg, st = st_lock, desc = desc,
-                before = st_lock.os_assign.assignReadyVector,
-                prefix = prefix, suffix = suffix */;
-            /*@ Given removed */
+            KTaskOsAssignRemoveKTask(task) /*@ where (linked_ic) desc = desc,
+                before = st_lock.os_assign.assignReadyVector */;
+            /*@ Given after */
             task->task_dync_sched_member.cur_prio = prio;
             __BitmapSiteMask(task);
             /* The scalar update commits one descriptor; the ready container is
@@ -264,21 +235,22 @@ x_err_t _KTaskPrioSet(KTaskDescriptorType task, uint8 prio)
             /*@ 0 <= prio && prio <= 31 &&
                 assign_ready_vector_addr(sg) == &(Assign.os_assign_ready_vector) &&
                 st_lock.os_tasks.task_desc_map(task) == Some(desc) &&
-                assign_remove_member_step_ic(st_lock.os_tasks.task_desc_map, task, desc,
-                  st_lock.os_assign.assignReadyVector, prefix, suffix, removed) &&
+                assign_remove_from_ready_ic(task, desc, st_lock.os_assign.assignReadyVector, after) &&
                 task_fields_except_sched(sg, st_lock, task, desc) *
                 store_task_sched_member(sched_link_of(task),
                   mkTaskSchedMemberAbs(desc.tdSchedMember.tsmStat, desc.tdSchedMember.tsmAdvanceCnt,
                     prio, desc.tdSchedMember.tsmOriginTimeslice, desc.tdSchedMember.tsmRestTimeslice, 1 << prio)) *
                 ktask_prio_set_frame(sg, st_lock) *
-                store_os_assign_ready_vector(&(Assign.os_assign_ready_vector), removed) *
+                store_os_assign_ready_vector(&(Assign.os_assign_ready_vector), after) *
                 store_node_self_linked(sched_link_of(task))
                 which implies
                 exists updated,
+                  0 <= desc.tdSchedMember.tsmCurPrio &&
+                  desc.tdSchedMember.tsmCurPrio < PRIORITY_MAX &&
                   updated == ktask_prio_set_state(st_lock, task,
-                    update_sched_member(desc, set_sched_member_priority(desc.tdSchedMember, prio)), removed) &&
+                    update_sched_member(desc, set_sched_member_priority(desc.tdSchedMember, prio)), after) &&
                   updated.os_tasks.task_desc_map(task) == Some(update_sched_member(desc, set_sched_member_priority(desc.tdSchedMember, prio))) &&
-                  !In(ready_task_node(task), os_ready_nodes(removed.orvBuckets)) &&
+                  !In(sched_link_node(task), os_ready_nodes(after.orvBuckets)) &&
                   task_fields(sg, updated) * assign_ready_pending(sg, updated) *
                   occupy_dll_node(sched_link_of(task)) * ktask_prio_set_frame(sg, st_lock)
              */
@@ -306,17 +278,17 @@ x_err_t _KTaskPrioSet(KTaskDescriptorType task, uint8 prio)
             ret = -EINVALED;
             break;
     }
-    /*@ Assert exists after ret_saved task_stat_saved,
-        safeExec(LastSeen(after), return(ret_saved), X) &&
-        Crtos_GTrans(st_lock, after) &&
+    /*@ Assert exists final_after ret_saved task_stat_saved,
+        safeExec(LastSeen(final_after), return(ret_saved), X) &&
+        Crtos_GTrans(st_lock, final_after) &&
         store_ptr(&task, task@pre) * store_uchar(&prio, prio@pre) *
         store_uchar(&task_stat, task_stat_saved) *
         store_int(&lock, lock_saved) * store_int(&ret, ret_saved) *
-        InsideCritical(sg, st_lock) * os_inv(sg, after) *
+        InsideCritical(sg, st_lock) * os_inv(sg, final_after) *
         GlobalStrings(LitMap)
      */
-    /*@ Given after ret_saved */
-    CriticalAreaUnLock(lock) /*@ where (stable) sg = sg, st1 = st_lock, st2 = after */;
+    /*@ Given final_after ret_saved */
+    CriticalAreaUnLock(lock) /*@ where (stable) sg = sg, st1 = st_lock, st2 = final_after */;
 
     return ret;
 }

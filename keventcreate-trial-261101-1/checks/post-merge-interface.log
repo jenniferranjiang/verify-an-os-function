@@ -1,0 +1,107 @@
+OutsideCritical : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+InsideCritical : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+os_inv : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+Crtos_RTrans : VarGlobalState -> VarGlobalState -> Prop
+     : VarGlobalState -> VarGlobalState -> Prop
+Crtos_GTrans : VarGlobalState -> VarGlobalState -> Prop
+     : VarGlobalState -> VarGlobalState -> Prop
+LastSeen : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+     : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+abs_event_create
+:
+StableGlobalState -> Z -> program (VarGlobalState -> Prop) Z
+     : StableGlobalState -> Z -> program (VarGlobalState -> Prop) Z
+addr_aligned : Z -> Z -> Prop
+     : Z -> Z -> Prop
+EventRaw : addr -> Assertion
+     : addr -> Assertion
+store_idmanager : StableIdmanager -> VarIdmanager -> addr -> Assertion
+     : StableIdmanager -> VarIdmanager -> addr -> Assertion
+store_idnode_insert_ready : addr -> Assertion
+     : addr -> Assertion
+idmanager_min_free_id : StableIdmanager -> VarIdmanager -> Z -> Prop
+     : StableIdmanager -> VarIdmanager -> Z -> Prop
+idmanager_add : VarIdmanager -> Z -> VarIdmanager
+     : VarIdmanager -> Z -> VarIdmanager
+idmanager_link : StableIdmanager -> VarIdmanager -> Z -> addr -> VarIdmanager
+     : StableIdmanager -> VarIdmanager -> Z -> addr -> VarIdmanager
+CharArray.undef_full : Z -> Z -> Assertion
+     : Z -> Z -> Assertion
+CharArray.full : Z -> Z -> list Z -> Assertion
+     : Z -> Z -> list Z -> Assertion
+@repeat_Z : forall A : Type, A -> Z -> list A
+     : forall A : Type, A -> Z -> list A
+store_node_self_linked : addr -> Assertion
+     : addr -> Assertion
+@store_dll
+:
+forall A : Type,
+(addr -> A -> Assertion) -> addr -> list (DL_Node A) -> Assertion
+     : forall A : Type,
+       (addr -> A -> Assertion) -> addr -> list (DL_Node A) -> Assertion
+occupy_dll_node : addr -> Assertion
+     : addr -> Assertion
+@Build_DL_Node : forall A : Type, A -> addr -> DL_Node A
+     : forall A : Type, A -> addr -> DL_Node A
+@dll_insert_anchor
+:
+forall A : Type, addr -> list (DL_Node A) -> addr -> Prop
+     : forall A : Type, addr -> list (DL_Node A) -> addr -> Prop
+@dll_insert_after_dispatch
+:
+forall A : Type,
+addr -> list (DL_Node A) -> addr -> DL_Node A -> list (DL_Node A)
+     : forall A : Type,
+       addr -> list (DL_Node A) -> addr -> DL_Node A -> list (DL_Node A)
+sched_link_of : addr -> addr
+     : addr -> addr
+store_ready_dll_tail_view : addr -> list (DL_Node Z) -> addr -> Assertion
+     : addr -> list (DL_Node Z) -> addr -> Assertion
+store_priority_ready_bucket : addr -> list (DL_Node Z) -> Assertion
+     : addr -> list (DL_Node Z) -> Assertion
+@nil : forall A : Type, list A
+     : forall A : Type, list A
+@cons : forall A : Type, A -> list A -> list A
+     : forall A : Type, A -> list A -> list A
+app : forall A : Type, list A -> list A -> list A
+     : forall A : Type, list A -> list A -> list A
+map : forall A B : Type, (A -> B) -> list A -> list B
+     : forall A B : Type, (A -> B) -> list A -> list B
+os_event_stable : StableGlobalState -> EventStable
+     : StableGlobalState -> EventStable
+os_events : VarGlobalState -> EventState
+     : VarGlobalState -> EventState
+event_manager_stable : EventStable -> StableIdmanager
+     : EventStable -> StableIdmanager
+event_manager : EventState -> VarIdmanager
+     : EventState -> VarIdmanager
+event_created : Z -> Z -> Z -> EventAbs
+     : Z -> Z -> Z -> EventAbs
+event_publish : Z -> Z -> Z -> EventState -> EventState
+     : Z -> Z -> Z -> EventState -> EventState
+event_link_node : EventAbs -> DL_Node EventAbs
+     : EventAbs -> DL_Node EventAbs
+store_event : (addr -> addr -> Assertion) -> addr -> EventAbs -> Assertion
+     : (addr -> addr -> Assertion) -> addr -> EventAbs -> Assertion
+replace_events : EventState -> VarGlobalState -> VarGlobalState
+     : EventState -> VarGlobalState -> VarGlobalState
+os_tasks : VarGlobalState -> TaskState
+     : VarGlobalState -> TaskState
+task_desc_map : TaskState -> addr -> option TaskDescriptorAbs
+     : TaskState -> addr -> option TaskDescriptorAbs
+pure_suspend_sched_link
+:
+(addr -> option TaskDescriptorAbs) -> addr -> addr -> Assertion
+     : (addr -> option TaskDescriptorAbs) -> addr -> addr -> Assertion
+@safeExec
+:
+forall S A : Type, (S -> Prop) -> program S A -> (A -> S -> Prop) -> Prop
+     : forall S A : Type,
+       (S -> Prop) -> program S A -> (A -> S -> Prop) -> Prop
+@ret : forall S A : Type, A -> program S A
+     : forall S A : Type, A -> program S A
+tt : unit
+     : unit

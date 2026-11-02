@@ -1,0 +1,24 @@
+#include "task_registered_id.h"
+
+// 从已发布任务在注册表中的实际节点借出 ID；不展开 descriptor 或栈。
+id : 1
+priority : core(3)
+left : os_inv(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : store(field_addr(field_addr(?q, TaskDescriptor, id), IdNode, id), U16, ?value) at 2
+check : infer(q == task);
+action : left_erase(0);
+         left_exist_add(taskid : Z);
+         left_add(get_task_with_idnode_success(sg, st, taskid, task));
+         left_add(taskid < 65536);
+         left_add(store(field_addr(field_addr(task, TaskDescriptor, id), IdNode, id), U16, taskid));
+         left_add(os_task_id_frame(sg, st, task, taskid));
+
+// 只读原值归还；读取后的调用重新得到完整不变量。
+id : 2
+priority : post(3)
+left : os_task_id_frame(?sg, ?st, ?task, ?taskid) at 0
+       store(field_addr(field_addr(?q, TaskDescriptor, id), IdNode, id), U16, ?value) at 1
+check : infer(q == task); infer(value == taskid);
+action : left_erase(0); left_erase(1);
+         left_add(os_inv(sg, st));

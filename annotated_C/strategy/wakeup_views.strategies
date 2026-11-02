@@ -1,0 +1,61 @@
+#include "wakeup_views.h"
+
+id : 2
+priority : wakeup_unfold(1)
+left : os_inv(?sg, ?st) at 0
+       suspend_source_facts(sg, st, ?task) at 1
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(?desc) at 2
+       tsmStat(tdSchedMember(desc)) == TSK_SUSPEND() at 3
+       In{Z}(task, sched_owned_tasks(os_tasks(st))) at 4
+action : left_erase(0);
+         left_add(os_global_context(sg));
+         left_add(sched_link_of(task) != 0);
+         left_add(sched_link_of(task) == field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link));
+         left_add(wakeup_global_frame(sg, st));
+         left_add(delay_inv(sg, st));
+         left_add(task_fields(sg, st));
+         left_add(assign_ready_pending(sg, st));
+         left_add(store_node_self_linked(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link)));
+         left_add(suspend_source_restore(task_desc_map(os_tasks(st)), update_task_desc_map(task, set_task_desc_ready(desc), task_desc_map(os_tasks(st))), sg, st, task, dll_detached()));
+
+// 非自持的已发布 SUSPEND 任务必在一个等待 DLL；仅引入该 DLL 的见证。
+id : 3
+priority : wakeup_unfold(1)
+left : os_inv(?sg, ?st) at 0
+       suspend_source_facts(sg, st, ?task) at 1
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(?desc) at 2
+       tsmStat(tdSchedMember(desc)) == TSK_SUSPEND() at 3
+       !In{Z}(task, sched_owned_tasks(os_tasks(st))) at 4
+action : left_erase(0);
+         left_exist_add(head : Z);
+         left_exist_add(prefix : list{DL_Node{Z}});
+         left_exist_add(suffix : list{DL_Node{Z}});
+         left_add(os_global_context(sg));
+         left_add(sched_link_of(task) != 0);
+         left_add(sched_link_of(task) == field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link));
+         left_add(wakeup_global_frame(sg, st));
+         left_add(delay_inv(sg, st));
+         left_add(task_fields(sg, st));
+         left_add(assign_ready_pending(sg, st));
+         left_add(store_dll{Z}(pure_suspend_sched_link(task_desc_map(os_tasks(st))), head,
+           app{DL_Node{Z}}(prefix, cons{DL_Node{Z}}(Build_DL_Node{Z}(task, field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link)), suffix))));
+         left_add(suspend_source_restore(task_desc_map(os_tasks(st)), update_task_desc_map(task, set_task_desc_ready(desc), task_desc_map(os_tasks(st))), sg, st, task, dll_linked(head, prefix, suffix)));
+
+// READY 插入之后才恢复 os_inv；Delay 已由独立调用归还。
+id : 4
+priority : wakeup_fold_os(1)
+left : wakeup_global_frame(?sg, ?st) at 0
+       suspend_source_facts(sg, st, ?task) at 1
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(?desc) at 2
+       tsmStat(tdSchedMember(desc)) == TSK_SUSPEND() at 3
+       ktask_unset_delay_step(tdDelay(desc), ?before, st) at 4
+       task_fields(sg, ?inserted) at 5
+       assign_ready_pending(sg, inserted) at 6
+       suspend_sched_pool(update_task_desc_map(task, set_task_desc_ready(desc), task_desc_map(os_tasks(st))), sg, suspend_unlink_state(task, st)) at 7
+       assign_insert_step_ic(task_desc_map(os_tasks(st)), task, desc, ?old_ready, ?ready) at 8
+       old_ready == assignReadyVector(os_assign(st)) at 9
+       inserted == replace_global_ready_vector(ready, replace_task_desc_map(update_task_desc_map(task, set_task_desc_ready(desc), task_desc_map(os_tasks(st))), st)) at 10
+       delay_inv(sg, st) at 11
+action : left_erase(0); left_erase(5); left_erase(6); left_erase(7); left_erase(11);
+         left_add(ktask_wakeup_step(task, desc, before, wakeup_state(st, task, desc, ready)));
+         left_add(os_inv(sg, wakeup_state(st, task, desc, ready)));

@@ -1,0 +1,101 @@
+2026-11-01 14:10:32,723 INFO [qcp_mcp.server] starting qcp-mcp server on stdio transport
+2026-11-01 14:10:32,726 DEBUG [asyncio] Using selector: EpollSelector
+2026-11-01 14:10:32,732 DEBUG [mcp.server.lowlevel.server] Received message: root=InitializedNotification(method='notifications/initialized', params=None, jsonrpc='2.0')
+2026-11-01 14:10:32,733 DEBUG [mcp.server.lowlevel.server] Received message: <mcp.shared.session.RequestResponder object at 0x72f627f3a7b0>
+2026-11-01 14:10:32,733 INFO [mcp.server.lowlevel.server] Processing request of type CallToolRequest
+2026-11-01 14:10:32,733 DEBUG [mcp.server.lowlevel.server] Dispatching request of type CallToolRequest
+2026-11-01 14:10:32,733 DEBUG [mcp.server.lowlevel.server] Tool cache miss for load_target_file, refreshing cache
+2026-11-01 14:10:32,734 INFO [qcp_mcp.server] load_target_file tool invoked: file=/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r3/Smoke.c
+2026-11-01 14:10:32,734 DEBUG [qcp_mcp.server] setting qcp args: ['--input-file=/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r3/Smoke.c', '--goal-file=/tmp/qcp_goal_4sla97l9.v']
+2026-11-01 14:10:32,734 DEBUG [qcp_mcp.session_manager] session args set: ['--input-file=/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r3/Smoke.c', '--goal-file=/tmp/qcp_goal_4sla97l9.v']
+2026-11-01 14:10:32,735 INFO [qcp_mcp.session_manager] restarting qcp session
+2026-11-01 14:10:32,735 INFO [qcp_mcp.session_manager] spawning qcp process: ['/usr/bin/script', '-qf', '-E', 'never', '-c', '/home/xinra/qcp-binary-democases/linux-binary/mcp --input-file=/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r3/Smoke.c --goal-file=/tmp/qcp_goal_4sla97l9.v', '/dev/null']
+2026-11-01 14:10:32,746 DEBUG [qcp_mcp.session_manager] qcp process started pid=646243
+2026-11-01 14:10:32,747 DEBUG [qcp_mcp.session_manager] reader loop entered pid=646243
+2026-11-01 14:10:32,747 DEBUG [qcp_mcp.session_manager] reader thread started for pid=646243
+2026-11-01 14:10:32,747 DEBUG [qcp_mcp.session] start collecting output pid=646243 timeout=300.0s
+2026-11-01 14:10:32,757 DEBUG [qcp_mcp.session_manager] reader line pid=646243: 'Finish Parsing the input file /home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r3/Smoke.c, waiting for the command.'
+2026-11-01 14:10:32,757 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '(end)'
+2026-11-01 14:10:32,757 DEBUG [qcp_mcp.session] received end prompt pid=646243
+2026-11-01 14:10:32,757 DEBUG [qcp_mcp.session] collect finished pid=646243 chunks=2 elapsed=0.01s
+2026-11-01 14:10:32,757 DEBUG [qcp_mcp.session] is_alive pid=646243 -> True
+2026-11-01 14:10:32,757 DEBUG [qcp_mcp.session_manager] session startup state pid=646243 alive=True
+2026-11-01 14:10:32,757 DEBUG [qcp_mcp.session_manager] captured initial output pid=646243 chars=122
+2026-11-01 14:10:32,757 DEBUG [qcp_mcp.session_manager] initial collect finished for pid=646243
+2026-11-01 14:10:32,757 INFO [qcp_mcp.session_manager] qcp session restarted successfully
+2026-11-01 14:10:32,757 DEBUG [qcp_mcp.server] load_target_file collected output chars=122
+2026-11-01 14:10:32,759 DEBUG [mcp.server.lowlevel.server] Response sent
+2026-11-01 14:10:32,761 DEBUG [mcp.server.lowlevel.server] Received message: <mcp.shared.session.RequestResponder object at 0x72f6277b6060>
+2026-11-01 14:10:32,762 INFO [mcp.server.lowlevel.server] Processing request of type ListToolsRequest
+2026-11-01 14:10:32,762 DEBUG [mcp.server.lowlevel.server] Dispatching request of type ListToolsRequest
+2026-11-01 14:10:32,762 DEBUG [mcp.server.lowlevel.server] Response sent
+2026-11-01 14:10:32,766 DEBUG [mcp.server.lowlevel.server] Received message: <mcp.shared.session.RequestResponder object at 0x72f627827e60>
+2026-11-01 14:10:32,766 INFO [mcp.server.lowlevel.server] Processing request of type CallToolRequest
+2026-11-01 14:10:32,766 DEBUG [mcp.server.lowlevel.server] Dispatching request of type CallToolRequest
+2026-11-01 14:10:32,766 DEBUG [qcp_mcp.session] is_alive pid=646243 -> True
+2026-11-01 14:10:32,767 DEBUG [qcp_mcp.session_manager] returning current alive session
+2026-11-01 14:10:32,767 DEBUG [qcp_mcp.session] sending command to pid=646243: <symbolic>6</symbolic>
+2026-11-01 14:10:32,767 DEBUG [qcp_mcp.session] start collecting output pid=646243 timeout=300.0s
+2026-11-01 14:10:32,772 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '{'
+2026-11-01 14:10:32,772 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  "fileName": "/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r3/Smoke.c",'
+2026-11-01 14:10:32,772 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  "functionName": "unknown",'
+2026-11-01 14:10:32,772 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  "loaded_strategies": ['
+2026-11-01 14:10:32,772 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '    "common",'
+2026-11-01 14:10:32,772 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '    "string_literal"'
+2026-11-01 14:10:32,772 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  ],'
+2026-11-01 14:10:32,772 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  "result": "success",'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  "verificationStatus": "proved",'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  "has_manual_obligations": false,'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  "manual_obligation_count": 0,'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  "manual_obligations": null,'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  "errormessage": null,'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  "warningmessage": null,'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  "current_assertions": null,'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  "FunctionDerivation": null,'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  "WitnessList": ['
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '    {'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '      "functionName": "increment",'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '      "Witness": {'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '        "safety_checker_wit": {'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "total": 2,'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "auto_solved": 2,'
+2026-11-01 14:10:32,773 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "manual": 0,'
+2026-11-01 14:10:32,774 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "manual_witness": null'
+2026-11-01 14:10:32,774 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '        },'
+2026-11-01 14:10:32,774 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '        "entailment_checker_wit": {'
+2026-11-01 14:10:32,774 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "total": 0,'
+2026-11-01 14:10:32,774 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "auto_solved": 0,'
+2026-11-01 14:10:32,774 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "manual": 0,'
+2026-11-01 14:10:32,774 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "manual_witness": null'
+2026-11-01 14:10:32,774 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '        },'
+2026-11-01 14:10:32,774 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '        "return_checker_wit": {'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "total": 1,'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "auto_solved": 1,'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "manual": 0,'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "manual_witness": null'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '        },'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '        "partial_solve_wit": {'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "total": 0,'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "auto_solved": 0,'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "manual": 0,'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "manual_witness": null'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '        },'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '        "which_implies_wit": {'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "total": 0,'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "auto_solved": 0,'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "manual": 0,'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "manual_witness": null'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '        },'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '        "total_witness_count": {'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "auto_solved": 3,'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '          "manual": 0'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '        }'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '      }'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '    }'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '  ]'
+2026-11-01 14:10:32,775 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '}'
+2026-11-01 14:10:32,776 DEBUG [qcp_mcp.session_manager] reader line pid=646243: '(end)'
+2026-11-01 14:10:32,776 DEBUG [qcp_mcp.session] received end prompt pid=646243
+2026-11-01 14:10:32,776 DEBUG [qcp_mcp.session] collect finished pid=646243 chunks=59 elapsed=0.01s
+2026-11-01 14:10:32,776 DEBUG [qcp_mcp.session] command completed pid=646243 output_chars=1382
+2026-11-01 14:10:32,778 DEBUG [mcp.server.lowlevel.server] Response sent

@@ -54,9 +54,6 @@ Definition OS_ASSIGN_READY_NODE_SIZE : Z := 8.
 Definition OS_ASSIGN_READY_VECTOR_SIZE : Z := 264.
 Definition ID_NODE_MEM_SIZE : Z := 12.
 Definition MUTEX_MEM_SIZE : Z := 36.
-Definition EVENT_MEM_SIZE : Z := 36.
-Definition MSGQUEUE_MEM_SIZE : Z := 52.
-Definition MSGQUEUE_DONE_SIZE : Z := 24.
 Definition IRQ_DESC_SIZE : Z := 8.
 Definition ISR_DONE_SIZE : Z := 48.
 Definition ISR_MANAGER_SIZE : Z := 536.
@@ -272,33 +269,6 @@ Definition mutex_field_offset_ok (p : addr) : Prop :=
     &(node # "SysDoubleLinklistNode" ->ₛ "node_next") = node /\
     &(node # "SysDoubleLinklistNode" ->ₛ "node_prev") = node + 4).
 
-Definition event_field_offset_ok (p : addr) : Prop :=
-  ktask_id_node_offset_ok (&(p # "Event" ->ₛ "id")) p /\
-  &(p # "Event" ->ₛ "options") = p + 12 /\
-  &(p # "Event" ->ₛ "events") = p + 16 /\
-  ktask_link_field_offset_ok (&(p # "Event" ->ₛ "pend_list")) (p + 20) /\
-  ktask_link_field_offset_ok (&(p # "Event" ->ₛ "link")) (p + 28).
-
-Definition msgqueue_field_offset_ok (p : addr) : Prop :=
-  ktask_id_node_offset_ok (&(p # "MsgQueue" ->ₛ "id")) p /\
-  &(p # "MsgQueue" ->ₛ "msg_buf") = p + 12 /\
-  &(p # "MsgQueue" ->ₛ "index") = p + 16 /\
-  &(p # "MsgQueue" ->ₛ "num_msgs") = p + 18 /\
-  &(p # "MsgQueue" ->ₛ "each_len") = p + 20 /\
-  &(p # "MsgQueue" ->ₛ "max_msgs") = p + 22 /\
-  ktask_link_field_offset_ok (&(p # "MsgQueue" ->ₛ "send_pend_list")) (p + 24) /\
-  ktask_link_field_offset_ok (&(p # "MsgQueue" ->ₛ "recv_pend_list")) (p + 32) /\
-  ktask_link_field_offset_ok (&(p # "MsgQueue" ->ₛ "link")) (p + 40) /\
-  &(p # "MsgQueue" ->ₛ "Done") = p + 48.
-
-Definition msgqueue_done_field_offset_ok (p : addr) : Prop :=
-  &(p # "MsgQueueDone" ->ₛ "init") = p /\
-  &(p # "MsgQueueDone" ->ₛ "urgensend") = p + 4 /\
-  &(p # "MsgQueueDone" ->ₛ "send") = p + 8 /\
-  &(p # "MsgQueueDone" ->ₛ "recv") = p + 12 /\
-  &(p # "MsgQueueDone" ->ₛ "reinit") = p + 16 /\
-  &(p # "MsgQueueDone" ->ₛ "Delete") = p + 20.
-
 Definition irq_desc_field_offset_ok (p : addr) : Prop :=
   &(p # "IrqDesc" ->ₛ "handler") = p /\
   &(p # "IrqDesc" ->ₛ "param") = p + 4.
@@ -391,23 +361,6 @@ Axiom mutex_size_axiom : sizeof("Mutex") = MUTEX_MEM_SIZE.
 Axiom mutex_field_offset_axiom :
   forall p, addr_aligned p ALIGN_SIZE ->
     mutex_field_offset_ok p.
-
-Axiom event_size_axiom : sizeof("Event") = EVENT_MEM_SIZE.
-
-Axiom event_field_offset_axiom :
-  forall p, addr_aligned p ALIGN_SIZE ->
-    event_field_offset_ok p.
-
-Axiom msgqueue_size_axiom : sizeof("MsgQueue") = MSGQUEUE_MEM_SIZE.
-
-Axiom msgqueue_field_offset_axiom :
-  forall p, addr_aligned p ALIGN_SIZE ->
-    msgqueue_field_offset_ok p.
-
-Axiom msgqueue_done_size_axiom : sizeof("MsgQueueDone") = MSGQUEUE_DONE_SIZE.
-
-Axiom msgqueue_done_field_offset_axiom :
-  forall p, msgqueue_done_field_offset_ok p.
 
 Axiom irq_desc_size_axiom : sizeof("IrqDesc") = IRQ_DESC_SIZE.
 

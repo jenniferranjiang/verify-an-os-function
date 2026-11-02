@@ -256,3 +256,77 @@ priority : core(4)
 left : task_fields(?sg, replace_global_ready_vector(?ready, ?st)) at 0
 right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8, ?value) at 1
 action : left_erase(0); left_add(task_fields(sg, st));
+
+// 单个 descriptor 的只读借还；全局其他资源和该任务栈保存在 wand frame。
+id : 29
+priority : core(3)
+left : task_fields(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : store_task_descriptor(task, desc) at 2
+action : left_erase(0); right_erase(2);
+         left_add(task_fields_descriptor_frame(sg, st, task, desc));
+
+id : 30
+priority : post(3)
+left : task_fields_descriptor_frame(?sg, ?st, ?task, ?desc) at 0
+       store_task_descriptor(task, desc) at 1
+action : left_erase(0); left_erase(1);
+         left_add(task_fields(sg, st));
+
+id : 31
+priority : core(3)
+left : task_fields_descriptor_frame(?sg, ?st, ?task, ?desc) at 0
+       store_task_descriptor(task, desc) at 1
+right : task_fields(sg, st) at 2
+action : left_erase(0); left_erase(1); right_erase(2);
+
+// descriptor 只在实际字段需求出现时借出六标量层，复用已有单字段补集。
+id : 32
+priority : core(3)
+left : store_task_descriptor(?task, ?desc) at 0
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, cur_prio), U8, ?value) at 1
+check : infer(q == task);
+action : left_erase(0); right_erase(1);
+         left_add(task_descriptor_sched_frame(task, desc));
+         left_add(store_task_sched_except_cur_prio(task, tdSchedMember(desc)));
+         right_add(value == tsmCurPrio(tdSchedMember(desc)));
+
+id : 33
+priority : core(3)
+left : store_task_descriptor(?task, ?desc) at 0
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, bitmap_column), U32, ?value) at 1
+check : infer(q == task);
+action : left_erase(0); right_erase(1);
+         left_add(task_descriptor_sched_frame(task, desc));
+         left_add(store_task_sched_except_bitmap_column(task, tdSchedMember(desc)));
+         right_add(value == tsmBitmapColumn(tdSchedMember(desc)));
+
+// 标量组按原值归还后恢复 descriptor，再由外层规则恢复 task_fields。
+id : 34
+priority : post(3)
+left : task_descriptor_sched_frame(?task, ?desc) at 0
+       store_task_sched_member(?p, ?info) at 1
+check : infer(p == sched_link_of(task)); infer(info == tdSchedMember(desc));
+action : left_erase(0); left_erase(1);
+         left_add(store_task_descriptor(task, desc));
+
+id : 35
+priority : core(3)
+left : task_descriptor_sched_frame(?task, ?desc) at 0
+       store_task_sched_member(?p, ?info) at 1
+right : store_task_descriptor(task, desc) at 2
+check : infer(p == sched_link_of(task)); infer(info == tdSchedMember(desc));
+action : left_erase(0); left_erase(1); right_erase(2);
+
+// descriptor 现已拥有基址对齐；仅添加尚不存在的纯事实，避免重复触发。
+id : 36
+priority : post(1)
+left : store_task_descriptor(?task, ?desc) at 0
+check : absense(addr_aligned(task, ALIGN_SIZE()));
+action : left_add(addr_aligned(task, ALIGN_SIZE()));
+
+// 两字段只读归还可能重建原记录；先消去 eta 展开，避免后续更新积累嵌套构造器。
+id : 37
+priority : post(1)
+left : store_task_sched_member(?p, mkTaskSchedMemberAbs(tsmStat(?info:<TaskSchedMemberAbs>), tsmAdvanceCnt(info), tsmCurPrio(info), tsmOriginTimeslice(info), tsmRestTimeslice(info), tsmBitmapColumn(info))) at 0
+action : left_erase(0); left_add(store_task_sched_member(p, info));

@@ -16,40 +16,13 @@
 #include "critical_task_view.h"
 #include "task_stat_view.h"
 #include "task_exstatus_view.h"
+#include "timeout_views.h"
 /*@ include strategies "critical_task_view.strategies" */
 /*@ include strategies "task_stat_view.strategies" */
 /*@ include strategies "task_exstatus_view.strategies" */
+/*@ include strategies "sched_source_views.strategies" */
+/*@ include strategies "timeout_views.strategies" */
 /*@ Import Coq Require Import CRTOS_Verify.VC.code.kernel.thread.ktask_timeout_lib */
-/*@ Extern Coq
- (timeout_source :: *)
- */
-/*@ Extern Coq
- (timeout_detached : timeout_source)
- (timeout_linked : Z -> list(DL_Node Z) -> list(DL_Node Z) -> timeout_source)
- (timeout_source_pre : (Z -> option TaskDescriptorAbs) -> Z -> timeout_source -> Assertion)
- (timeout_source_post : (Z -> option TaskDescriptorAbs) -> timeout_source -> Assertion)
- (timeout_source_frame : StableGlobalState -> VarGlobalState -> Z -> TaskDescriptorAbs -> timeout_source -> Assertion)
- (timeout_global_frame : StableGlobalState -> VarGlobalState -> Z -> Assertion)
- (timeout_sched_pool : (Z -> option TaskDescriptorAbs) -> StableGlobalState -> VarGlobalState -> Assertion)
- (ktask_timeout_body : Z -> program (VarGlobalState -> Prop) unit)
- (ktask_timeout_descriptor : TaskDescriptorAbs -> TaskDescriptorAbs)
- (ktask_timeout_unlink_state : Z -> VarGlobalState -> VarGlobalState)
- (ktask_timeout_state : VarGlobalState -> Z -> TaskDescriptorAbs -> OsAssignReadyVectorAbs -> VarGlobalState)
- (pure_suspend_sched_link : (Z -> option TaskDescriptorAbs) -> Z -> Z -> Assertion)
- */
-
-/*@ Import Coq Require Import CRTOS_Verify.libai.KTaskTimeout */
-/*@ Extern Coq
-      (abs_ktask_timeout :
-        StableGlobalState -> Z -> program (VarGlobalState -> Prop) unit)
-      (set_task_desc_ready : TaskDescriptorAbs -> TaskDescriptorAbs)
-      (update_task_desc_map :
-        Z -> TaskDescriptorAbs -> (Z -> option TaskDescriptorAbs) ->
-        Z -> option TaskDescriptorAbs)
-      (assign_insert_step_ic :
-        (Z -> option TaskDescriptorAbs) -> Z -> TaskDescriptorAbs ->
-        OsAssignReadyVectorAbs -> OsAssignReadyVectorAbs -> Prop)
- */
 
 /*
  * 来源：../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c。
@@ -147,28 +120,14 @@ void KTaskTimeout(void *parameter)
     task = (struct TaskDescriptor *)parameter;
 
     if(RET_TRUE == JudgeKTaskStatIsSuspend(task)) {
-        /*@ st_lock.os_tasks.task_desc_map(task) == Some(desc) &&
-            desc.tdSchedMember.tsmStat == TSK_SUSPEND && os_inv(sg, st_lock)
-            which implies exists source,
-            os_global_context(sg) && sched_link_of(task) != 0 &&
-            timeout_global_frame(sg, st_lock, task) * task_fields(sg, st_lock) *
-            assign_ready_pending(sg, st_lock) *
-            timeout_source_pre(st_lock.os_tasks.task_desc_map, task, source) *
-            timeout_source_frame(sg, st_lock, task, desc, source)
+        /* 来源只在此分类；两个 unfold 规则均不再产生析取。 */
+        /*@ do suspend_source_facts */
+        /*@ Destruct with
+            timeout_detached_path: In(task, st_lock.os_tasks.sched_owned_tasks);
+            timeout_linked_path: !In(task, st_lock.os_tasks.sched_owned_tasks)
          */
-        /*@ Given source */
+        /*@ do timeout_unfold $ timeout_detached_path timeout_linked_path */
         task->exstatus = -ETIMEOUT;
-        /*@ timeout_source_pre(st_lock.os_tasks.task_desc_map, task, source)
-            which implies
-            ((exists head prefix suffix,
-              source == timeout_linked(head, prefix, suffix) && source != timeout_detached &&
-              store_dll(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), head,
-                app(prefix, cons(Build_DL_Node(task, &(task->task_dync_sched_member.sched_link)), suffix)))) ||
-             (source == timeout_detached && store_node_self_linked(&(task->task_dync_sched_member.sched_link))))
-         */
-        /*@ Branch name
-            timeout_linked_path: source != timeout_detached;
-            timeout_detached_path: source == timeout_detached */
         DoubleLinkListRmNode(&(task->task_dync_sched_member.sched_link))
           /*@ where (remove_member) storeA = pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), a = task;
                     A = Z $ timeout_linked_path
@@ -176,30 +135,8 @@ void KTaskTimeout(void *parameter)
         // #ifdef ARCH_SMP
         // HwLockSpinlock(&AssignSpinLock);
         // #endif
-        /*@ Assert
-            safeExec(LastSeen(before), ktask_timeout_body(parameter@pre), X) &&
-            st_lock.os_tasks.task_desc_map(parameter@pre) == Some(desc) &&
-            desc.tdSchedMember.tsmStat == TSK_SUSPEND &&
-            desc.tdSchedMember.tsmBitmapColumn == (1 << desc.tdSchedMember.tsmCurPrio) &&
-            Crtos_RTrans(before, st_lock) && os_global_context(sg) &&
-            store_ptr(&parameter, parameter@pre) * store_ptr(&task, parameter@pre) *
-            store(&lock, signed long, lock_saved) * InsideCritical(sg, st_lock) *
-            timeout_global_frame(sg, st_lock, parameter@pre) *
-            task_fields(sg, replace_task_desc_map(update_task_desc_map(parameter@pre, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)) * assign_ready_pending(sg, st_lock) *
-            timeout_source_post(st_lock.os_tasks.task_desc_map, source) *
-            store_node_self_linked(sched_link_of(parameter@pre)) *
-            timeout_source_frame(sg, st_lock, parameter@pre, desc, source)
-            $ timeout_linked_path timeout_detached_path
-         */
-        /*@ task_fields(sg, replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)) * assign_ready_pending(sg, st_lock) *
-            timeout_source_post(st_lock.os_tasks.task_desc_map, source) *
-            store_node_self_linked(sched_link_of(task)) *
-            timeout_source_frame(sg, st_lock, task, desc, source)
-            which implies
-            (replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)).os_tasks.task_desc_map(task) == Some(replace_descriptor_exstatus(-2, desc)) &&
-            task_fields(sg, replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)) * assign_ready_pending(sg, replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)) *
-            occupy_dll_node(sched_link_of(task)) * timeout_sched_pool(update_task_desc_map(task, set_task_desc_ready(ktask_timeout_descriptor(desc)), st_lock.os_tasks.task_desc_map), sg, ktask_timeout_unlink_state(task, st_lock))
-         */
+        /*@ do sched_source_fold */
+        /*@ do timeout_prepare_ready */
         // 原调用：Assign.ready_vector_done->insert(task);
         KTaskInsertToReadyVector(task)
           /*@ where sg = sg, st = replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock), desc = replace_descriptor_exstatus(-2, desc) */;
@@ -207,18 +144,17 @@ void KTaskTimeout(void *parameter)
         // #ifdef ARCH_SMP
         // HwUnlockSpinlock(&AssignSpinLock);
         // #endif
-        /*@ st_lock.os_tasks.task_desc_map(task) == Some(desc) &&
+        /* 插入后恢复完整不变量；抽象执行关系仍由调用点证明。 */
+        /*@ do timeout_fold_os */
+        /*@ suspend_source_facts(sg, st_lock, task) &&
+            st_lock.os_tasks.task_desc_map(task) == Some(desc) &&
             desc.tdSchedMember.tsmStat == TSK_SUSPEND &&
-            desc.tdSchedMember.tsmBitmapColumn == (1 << desc.tdSchedMember.tsmCurPrio) &&
             safeExec(LastSeen(before), ktask_timeout_body(task), X) && Crtos_RTrans(before, st_lock) &&
             insert_before == st_lock.os_assign.assignReadyVector &&
-            assign_insert_step_ic((replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)).os_tasks.task_desc_map, task, replace_descriptor_exstatus(-2, desc), insert_before, ready_after) &&
-            st_insert == replace_global_ready_vector(ready_after, replace_task_desc_map(update_task_desc_map(task, set_task_desc_ready(replace_descriptor_exstatus(-2, desc)), (replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)).os_tasks.task_desc_map), replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock))) &&
-            timeout_global_frame(sg, st_lock, task) * task_fields(sg, st_insert) *
-            assign_ready_pending(sg, st_insert) * timeout_sched_pool(update_task_desc_map(task, set_task_desc_ready(ktask_timeout_descriptor(desc)), st_lock.os_tasks.task_desc_map), sg, ktask_timeout_unlink_state(task, st_lock))
+            assign_insert_step_ic((replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(-2, desc), st_lock.os_tasks.task_desc_map), st_lock)).os_tasks.task_desc_map, task, replace_descriptor_exstatus(-2, desc), insert_before, ready_after) && emp
             which implies
             Crtos_GTrans(st_lock, ktask_timeout_state(st_lock, task, desc, ready_after)) &&
-            safeExec(LastSeen(ktask_timeout_state(st_lock, task, desc, ready_after)), abs_ktask_assign, X) && os_inv(sg, ktask_timeout_state(st_lock, task, desc, ready_after))
+            safeExec(LastSeen(ktask_timeout_state(st_lock, task, desc, ready_after)), abs_ktask_assign, X) && emp
          */
         CriticalAreaUnLock(lock) /*@ where (stable) st1 = st_lock, st2 = ktask_timeout_state(st_lock, task, desc, ready_after) */;
         // 原语句：DO_KTASK_ASSIGN;

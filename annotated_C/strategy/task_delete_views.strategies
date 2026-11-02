@@ -1,0 +1,66 @@
+#include "task_delete_views.h"
+
+// 只有 helper 请求其资源视图时才拆分 os_inv；旧观察和未访问资源留在 frame。
+id : 1
+priority : core(3)
+left : os_inv(?sg, ?before) at 0
+       task_desc_map(os_tasks(before), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : ktask_resource_delete_resources(?sg2, ?before2, task) at 2
+check : infer(sg2 == sg);
+        infer(before2 == before);
+action : left_erase(0);
+         left_add(os_world_wf(sg, before));
+         left_add(ktask_resource_delete_resources(sg, before, task));
+         left_add(delete_outer_frame(sg, before, task, desc));
+
+// helper 的真实后态与插入需求共同触发；只提出 zombie DLL、目标节点和恢复 wand。
+// 抽象入队关系由已有恢复引理证明，safeExec 和临界区协议仍由调用点处理。
+id : 2
+priority : core(3)
+left : delete_outer_frame(?sg, ?before, ?task, ?desc) at 0
+       ktask_resource_delete_resources(sg, ?removed, task) at 1
+       task_desc_map(os_tasks(before), task) == Some{TaskDescriptorAbs}(desc) at 2
+       ktask_delete_not_service(task, before) at 3
+       ktask_resource_delete_transition(task, desc, before, removed) at 4
+       os_world_wf(sg, removed) at 5
+       zombie_queue(before) == ZombieLinked(?initial) at 6
+right : store_dll{Z}(pure_close_sched_link(task_desc_map(os_tasks(removed))), ?head, ?wanted_nodes) at 7
+check : infer(head == KTaskZombie);
+action : left_erase(0); left_erase(1);
+         left_exist_add(queued : <VarGlobalState>);
+         left_exist_add(nodes : list{DL_Node{Z}});
+         left_add(ktask_delete_enqueue_transition(task, removed, queued));
+         left_add(os_recycle(queued) == os_recycle(before));
+         left_add(zombie_queue(queued) == ZombieLinked(cons{DL_Node{Z}}(sched_link_node(task), nodes)));
+         left_add(sched_link_of(task) != 0);
+         left_add(sched_link_of(task) == field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, sched_link));
+         left_add(dll_insert_anchor{Z}(head, nodes, head));
+         left_add(store_dll{Z}(pure_close_sched_link(task_desc_map(os_tasks(removed))), head, nodes));
+         left_add(pure_close_sched_link(task_desc_map(os_tasks(removed)), sched_link_of(task), task));
+         left_add(occupy_dll_node(sched_link_of(task)));
+         left_add(delete_enqueue_restore(sg, removed, queued, task, nodes));
+
+// dispatch_case 在表头插入后即恢复 canonical os_inv；未插入的旧 DLL 不能匹配。
+id : 3
+priority : post(3)
+left : delete_enqueue_restore(?sg, ?removed, ?queued, ?task, ?nodes) at 0
+       store_dll{Z}(pure_close_sched_link(task_desc_map(os_tasks(removed))), ?head,
+         dll_insert_after_dispatch{Z}(?anchor, nodes, ?point, Build_DL_Node{Z}(task, ?node))) at 1
+       os_world_wf(sg, removed) at 2
+check : infer(head == KTaskZombie);
+        infer(anchor == head);
+        infer(point == head);
+        infer(node == sched_link_of(task));
+action : left_erase(0); left_erase(1);
+         left_add(os_inv(sg, queued));
+
+// 同一恢复边界也接受 DLL 已经规范化为 cons 的接口。
+id : 4
+priority : post(3)
+left : delete_enqueue_restore(?sg, ?removed, ?queued, ?task, ?nodes) at 0
+       store_dll{Z}(pure_close_sched_link(task_desc_map(os_tasks(removed))), ?head,
+         cons{DL_Node{Z}}(sched_link_node(task), nodes)) at 1
+       os_world_wf(sg, removed) at 2
+check : infer(head == KTaskZombie);
+action : left_erase(0); left_erase(1);
+         left_add(os_inv(sg, queued));

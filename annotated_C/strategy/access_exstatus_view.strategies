@@ -1,0 +1,53 @@
+#include "access_exstatus_view.h"
+
+// 只借出 Assign 的 running 指针；回调表和就绪容器仍留在补集中。
+id : 1
+priority : core(2)
+left : assign_inv(?sg, ?st) at 0
+right : store(field_addr(?assign, Assign, os_running_task), PTR(struct TaskDescriptor), ?value) at 1
+check : infer(assign == sg.os_assign_stable.assign_ptr);
+action : left_erase(0); right_erase(1);
+         left_add(assign_running_frame(sg, st));
+         right_add(value == st.os_assign.assignRunningTask);
+
+id : 2
+priority : post(2)
+left : assign_running_frame(?sg, ?st) at 0
+       store(field_addr(?assign, Assign, os_running_task), PTR(struct TaskDescriptor), ?value) at 1
+check : infer(assign == sg.os_assign_stable.assign_ptr);
+        infer(value == st.os_assign.assignRunningTask);
+action : left_erase(0); left_erase(1);
+         left_add(assign_inv(sg, st));
+
+// 非空 running-task 的登记由 assign_inv 提供；只在请求其 exstatus 写权限时触发。
+id : 3
+priority : core(3)
+left : task_inv(?sg, ?st) at 0
+       assign_inv(sg, st) at 1
+right : undef_data_at(field_addr(?task, TaskDescriptor, exstatus), I32) at 2
+check : infer(task == st.os_assign.assignRunningTask);
+        infer(task != 0);
+action : left_erase(0);
+         left_exist_add(desc);
+         left_add(task_desc_map(st.os_tasks, task) == Some{TaskDescriptorAbs}(desc));
+         left_add(task_inv_exstatus_frame(sg, st, task, desc));
+         left_add(store(field_addr(task, TaskDescriptor, exstatus), I32, tdExstatus(desc)));
+
+id : 4
+priority : post(3)
+left : task_inv_exstatus_frame(?sg, ?st, ?task, ?desc) at 0
+       store(field_addr(?q, TaskDescriptor, exstatus), I32, ?value) at 1
+       task_desc_map(st.os_tasks, task) == Some{TaskDescriptorAbs}(desc) at 2
+check : infer(q == task);
+action : left_erase(0); left_erase(1);
+         left_add(task_inv(sg, replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(value, desc), task_desc_map(st.os_tasks)), st)));
+
+// 全局 invariant 仅有一个 Int 槽，裸槽即写后到返回之间的规范形式；
+// 后态快照和 exstatus_inv 的重建由返回 VC 完成，不引入空的补集包装。
+id : 5
+priority : core(3)
+left : exstatus_inv(?sg, ?st) at 0
+right : undef_data_at(?slot, I32) at 1
+check : infer(slot == os_exstatus_slot(sg));
+action : left_erase(0);
+         left_add(store(slot, I32, os_exstatus(st)));

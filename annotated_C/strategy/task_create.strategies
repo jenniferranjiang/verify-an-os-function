@@ -1,0 +1,119 @@
+#include "task_create_strategy.h"
+
+// 清零字节仅在 ID 节点插入需要时分解，私有字段保持为一个整体。
+id : 1
+priority : core(3)
+left : CharArray::full(?task, sizeof(struct TaskDescriptor), repeat_Z{Z}(0, sizeof(struct TaskDescriptor))) at 0
+       addr_aligned(task, ALIGN_SIZE()) at 1
+right : store_idnode_insert_ready(field_addr(task, TaskDescriptor, id)) at 2
+check : infer(0 < task);
+action : left_erase(0);
+         left_add(store_ktask_create_private_zeroed(task));
+         left_add(store_idnode_insert_ready(field_addr(task, TaskDescriptor, id)));
+         left_add(occupy_dll_node(field_addr(task, TaskDescriptor, link)));
+
+// Done 的首次写入同时准备初始化权限；其余零字段留在私有 frame。
+id : 2
+priority : core(3)
+left : store_ktask_create_private_zeroed(?task) at 0
+right : store(field_addr(task, TaskDescriptor, Done), PTR(struct KTaskDone), ?value) at 1
+action : left_erase(0);
+         left_add(undef_data_at(field_addr(task, TaskDescriptor, stack_point), PTR(void)));
+         left_add(has_permission_ktask_base_info(task));
+         left_add(has_permission_task_sched_member(task, TSK_INIT()));
+         left_add(undef_data_at(field_addr(task, TaskDescriptor, exstatus), I32));
+         left_add(store(field_addr(task, TaskDescriptor, Done), PTR(struct KTaskDone), 0));
+         left_add(store_ktask_create_init_frame(task));
+
+// ID 分配失败时，未发布的节点及私有字段重新组成释放视图。
+id : 3
+priority : core(3)
+left : store_ktask_create_private_zeroed(?task) at 0
+       store_idnode_insert_ready(field_addr(task, TaskDescriptor, id)) at 1
+       occupy_dll_node(field_addr(task, TaskDescriptor, link)) at 2
+right : store_task_descriptor_free_ready(task, ?status) at 3
+action : left_erase(0); left_erase(1); left_erase(2);
+         right_erase(3);
+         right_add(status == TSK_INIT());
+
+// 创建需要同时修改 ID manager 与管理链；只打开任务层，其他子系统留作 frame。
+id : 4
+priority : core(4)
+left : InsideCritical(?sg, ?token) at 0
+       os_inv(sg, ?st) at 1
+right : store_idmanager(?sm, ?m, ?manager) at 2
+check : infer(manager == k_task_id_manager);
+action : left_erase(1);
+         left_add(store_ktask_create_shared_open(sg, st));
+
+id : 5
+priority : core(3)
+left : store_ktask_create_shared_open(?sg, ?st) at 0
+right : store_idmanager(?sm, ?m, ?manager) at 1
+check : infer(manager == k_task_id_manager);
+action : left_erase(0);
+         left_add(task_world_wf(st));
+         left_add(store_idmanager(task_stable_ids(os_task_stable(sg)), task_idmanager_abs(os_tasks(st)), manager));
+         left_add(store_dll{Z}(pure_task_link_member(), xiaoshan_task_head, task_link_nodes(task_ptr_list(os_tasks(st)))));
+         left_add(store_map{Z, TaskDescriptorAbs}(store_published_task(), task_desc_map(os_tasks(st))));
+         left_add(store_task_done(task_done_ptr(os_task_stable(sg)), task_done_abs(os_task_stable(sg))));
+         left_add(os_task_fields_frame(sg, st));
+
+// 原状态的各部分只在目标要求完整不变量时收回；不自动折叠正在修改的资源。
+id : 6
+priority : core(4)
+left : InsideCritical(?sg, ?token) at 0
+       os_task_fields_frame(sg, ?st) at 5
+       store_idmanager(task_stable_ids(os_task_stable(sg)), task_idmanager_abs(os_tasks(st)), ?manager) at 1
+       store_dll{Z}(pure_task_link_member(), ?head, task_link_nodes(task_ptr_list(os_tasks(st)))) at 2
+       store_map{Z, TaskDescriptorAbs}(store_published_task(), task_desc_map(os_tasks(st))) at 3
+       store_task_done(task_done_ptr(os_task_stable(sg)), task_done_abs(os_task_stable(sg))) at 4
+       task_world_wf(st) at 6
+right : os_inv(sg, st) at 7
+check : infer(manager == k_task_id_manager);
+        infer(head == xiaoshan_task_head);
+action : left_erase(1); left_erase(2); left_erase(3); left_erase(4); left_erase(5);
+         right_erase(7);
+
+// 暴露权威 ID 契约已有的数值范围，不改变该契约或丢弃最小空闲 ID 信息。
+id : 7
+priority : post(1)
+left : idmanager_min_free_id(?sm, ?m, ?value) at 0
+check : absense(value >= 0);
+action : left_add(value >= 0);
+
+id : 8
+priority : post(1)
+left : idmanager_min_free_id(?sm, ?m, ?value) at 0
+check : absense(value < idmax(sm));
+action : left_add(value < idmax(sm));
+
+// 管理链 payload 仅保存嵌入节点与 task 的地址对应，不拥有额外字段。
+id : 9
+priority : core(1)
+right : pure_task_link_member(?link, ?task) at 0
+action : right_erase(0);
+         right_add(link == field_addr(task, TaskDescriptor, link));
+
+// 初始化的两个失败分支按需求收拢，保留原优先级分支条件。
+id : 10
+priority : core(3)
+left : undef_data_at(field_addr(?task, TaskDescriptor, stack_point), PTR(void)) at 0
+       has_permission_task_sched_member(task, ?status) at 1
+       undef_data_at(field_addr(task, TaskDescriptor, exstatus), I32) at 2
+       has_permission_ktask_base_info(task) at 3
+right : store_ktask_create_init_failure_private(task, status, ?prio) at 4
+check : infer(prio >= PRIORITY_MAX());
+action : left_erase(0); left_erase(1); left_erase(2); left_erase(3);
+         right_erase(4);
+
+id : 11
+priority : core(3)
+left : undef_data_at(field_addr(?task, TaskDescriptor, stack_point), PTR(void)) at 0
+       has_permission_task_sched_member(task, ?status) at 1
+       undef_data_at(field_addr(task, TaskDescriptor, exstatus), I32) at 2
+       has_permission_ktask_base_info_start0(task) at 3
+right : store_ktask_create_init_failure_private(task, status, ?prio) at 4
+check : infer(prio < PRIORITY_MAX());
+action : left_erase(0); left_erase(1); left_erase(2); left_erase(3);
+         right_erase(4);

@@ -101,12 +101,12 @@ void FifoReadyVectorInsert(struct TaskDescriptor *task, struct OsAssignReadyVect
         os_assign_ready_vector_replace_bucket(
           before, desc.tdSchedMember.tsmCurPrio,
           app(Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
-              cons(ready_task_node(task), nil))), st)) *
+              cons(sched_link_node(task), nil))), st)) *
       assign_ready_pending(sg, replace_global_ready_vector(
         os_assign_ready_vector_replace_bucket(
           before, desc.tdSchedMember.tsmCurPrio,
           app(Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
-              cons(ready_task_node(task), nil))), st))
+              cons(sched_link_node(task), nil))), st))
  */
 {
     /* 标量由 task_inv 局部取还；链表仅转移 sched_link。 */
@@ -152,18 +152,18 @@ void FifoReadyVectorInsert(struct TaskDescriptor *task, struct OsAssignReadyVect
           os_assign_ready_vector_replace_bucket(
             before, desc.tdSchedMember.tsmCurPrio,
             app(Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
-                cons(ready_task_node(task@pre), nil))))
+                cons(sched_link_node(task@pre), nil))))
         which implies
         task_fields(sg, replace_global_ready_vector(
           os_assign_ready_vector_replace_bucket(
             before, desc.tdSchedMember.tsmCurPrio,
             app(Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
-                cons(ready_task_node(task@pre), nil))), st)) *
+                cons(sched_link_node(task@pre), nil))), st)) *
         assign_ready_pending(sg, replace_global_ready_vector(
           os_assign_ready_vector_replace_bucket(
             before, desc.tdSchedMember.tsmCurPrio,
             app(Znth(desc.tdSchedMember.tsmCurPrio, before.orvBuckets, nil),
-                cons(ready_task_node(task@pre), nil))), st))
+                cons(sched_link_node(task@pre), nil))), st))
      */
 }
 

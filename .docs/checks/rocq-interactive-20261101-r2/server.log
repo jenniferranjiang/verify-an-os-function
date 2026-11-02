@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/xinra/qcp-binary-democases/mcp/rocq-mcp/src/rocq_mcp/server.py", line 1619, in <module>
+    from rocq_mcp.compile import (  # noqa: E402
+  File "/home/xinra/qcp-binary-democases/mcp/rocq-mcp/src/rocq_mcp/compile.py", line 42, in <module>
+    import rocq_mcp.server as _server
+  File "/home/xinra/qcp-binary-democases/mcp/rocq-mcp/src/rocq_mcp/server.py", line 1619, in <module>
+    from rocq_mcp.compile import (  # noqa: E402
+ImportError: cannot import name 'run_compile' from partially initialized module 'rocq_mcp.compile' (most likely due to a circular import) (/home/xinra/qcp-binary-democases/mcp/rocq-mcp/src/rocq_mcp/compile.py)

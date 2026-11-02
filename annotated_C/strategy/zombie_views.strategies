@@ -1,0 +1,48 @@
+#include "zombie_views.h"
+
+// 仅在调用方需要指定 zombie 队列视图时打开一层 os_inv。
+id : 1
+priority : core(3)
+left : os_inv(?sg, ?st) at 0
+right : store_zombie_queue(?T, ?head, ?queue) at 1
+check : infer(head == KTaskZombie);
+action : left_erase(0);
+         right_erase(1);
+         left_add(os_zombie_queue_frame(sg, st));
+         right_add(T == st.os_tasks.task_desc_map);
+         right_add(queue == zombie_queue(st));
+
+// 原队列归还后恢复 os_inv；无法用修改后的队列恢复旧状态。
+id : 2
+priority : post(3)
+left : os_zombie_queue_frame(?sg, ?st) at 0
+       store_zombie_queue(?T, ?head, ?queue) at 1
+check : infer(head == KTaskZombie);
+        infer(T == st.os_tasks.task_desc_map);
+        infer(queue == zombie_queue(st));
+action : left_erase(0); left_erase(1);
+         left_add(os_inv(sg, st));
+
+// 只借出 recycler ID 的 int 槽；不展开任务、IPC 或队列。
+id : 3
+priority : core(3)
+left : os_inv(?sg, ?st) at 0
+right : store(?slot, I32, ?value) at 1
+check : infer(slot == zombie_recycle);
+action : left_erase(0);
+         right_erase(1);
+         left_add(os_recycler_id_frame(sg, st));
+         right_add(value == service_id(os_recycle(st)));
+
+// 直接读取全局变量不会触发 QCP 的解引用规则，调用点用局部 cut 借出 ID。
+// 直到被调函数请求 os_inv 时才收回，避免 post 在实际读取前立刻折叠。
+id : 4
+priority : core(3)
+left : os_recycler_id_frame(?sg, ?st) at 0
+       store(?slot, I32, ?value) at 1
+right : os_inv(?sg2, ?st2) at 2
+check : infer(slot == zombie_recycle);
+        infer(value == service_id(os_recycle(st)));
+        infer(sg2 == sg);
+        infer(st2 == st);
+action : left_erase(0); left_erase(1); right_erase(2);

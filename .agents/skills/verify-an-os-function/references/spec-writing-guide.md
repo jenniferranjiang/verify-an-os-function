@@ -18,12 +18,13 @@ QCP parser/symbolic、VC 和 proof 在用户确认 review-passed revisions 后�
 
 1. [先固定模型和函数层次](#1-先固定模型和函数层次)
 2. [确定参数和 effect](#2-确定参数和-effect)
+   - [2.2 Local/Glob 在 Spec 中的使用](#22-localglob-在-spec-中的使用)
 3. [写每个函数的 Spec](#3-写每个函数的-spec)
    - [3.1 Spec 与注解位置](#31-spec-与注解位置)
    - [3.2 函数 Spec 的直接可审阅性](#32-函数-spec-的直接可审阅性)
    - [3.3 保持函数层次的抽象边界](#33-保持函数层次的抽象边界)
-   - [3.4 Predicate 接口不足时的处理](#34-predicate-接口不足时的处理)
-   - [3.5 Local/Glob 在 Contract 中的位置](#35-localglob-在-contract-中的位置)
+   - [3.4 Predicate 的展开、更新与恢复](#34-predicate-的展开更新与恢复)
+   - [3.5 Predicate 接口不足时的处理](#35-predicate-接口不足时的处理)
 4. [临界区调用链中的函数 Spec](#4-临界区调用链中的函数-spec)
 5. [覆盖所有结果路径](#5-覆盖所有结果路径)
 6. [Spec 审阅](#6-spec-审阅)
@@ -240,32 +241,60 @@ allocation、free 或 container membership 变化，应使用已有 object/conta
 `program` 表达，不要求在 `Ensure` 中重复展开同一套状态更新。注解仍须显式展示 C 返回值与抽象结果的
 对应、各结果分支、continuation 和资源交接；审阅时同时检查所引用的 program。具体分工见第 4 节。
 
+避免在 spec 与其引用的 predicate、效果关系中重复编码同一入口条件。例如，Require 已说明目标
+信号量存在、其 pending 等于 waiting，且 list 是该 pending 的链表头；空队列不执行任何更新时，
+效果关系可直接写 `after = before`，不必再次查找信号量并要求其 pending 为空。简化须在已声明的
+合法前态下保持语义，并检查该定义的其他使用处；不能把更新后的关联或必须返还的内存资源也当作重复项删去。
+
 
 ### 3.3 保持函数层次的抽象边界
 
 Canonical contract 还必须保持函数层次的抽象边界。模块和容器函数使用 reviewed predicate、abstract
 state 和按动作命名的 transition，不把 manager 字段、bitmap bytes、数组元素或链表指针作为 API
-沿调用链逐层传递。裸 `store` 属于表示层：通常只出现在 Rocq predicate 定义和函数体中为实际字段
-读写服务的局部 `which implies`；只有语义本身就是具体 memory shape 的底层内存原语，canonical
-contract 才可直接暴露最小 shape，且应优先用透明、按结构命名的 predicate 表达。
+沿调用链逐层传递。只有语义本身就是具体 memory shape 的底层内存原语，canonical contract 才可
+直接暴露最小 shape，且应优先用透明、按结构命名的 predicate 表达。函数体访问具体字段时的资源
+展开与恢复统一见 [第 3.4 节](#34-predicate-的展开更新与恢复)。
 
 这种封装的目的不是把内存变化藏掉，而是把相关字段组合成模块的真实状态。例如 semaphore create
 可以分别描述“刚分配”“已经清零”“ID 已登记但尚未发布”“已经发布”等状态；具体名称由项目风格和
 源码决定，不要求统一前缀。Callee 的 spec 只需说明它把哪个状态变成哪个状态，caller 就能直接使用
 这个结果继续调用下一个函数。Reviewer 也能从 contract 看出函数完成了哪一步，而不必先理解 manager
-字段、bitmap bytes 和链表指针的全部表示细节。底层裸 `store` 仍保留在这些 predicate 的定义或函数体
-局部展开中，因此内存 ownership 和实际写入仍然可追溯。
+字段、bitmap bytes 和链表指针的全部表示细节。
 
 Task 模块的 `OutsideCritical -> InsideCritical + invariant -> OutsideCritical` 展示了这种“按协议状态组织
 资源”的思路。其他模块可以借鉴命名状态、明确 ownership 转移和让 caller 组合 contract 的方法，但不能
 照搬 Task 的状态或临界区协议。例如 semaphore 的真实 C 如果没有相同的进入/退出路径，就应根据自己的
 lock、IRQ、生命周期和调用关系定义状态，只复用抽象方法，不虚构不存在的控制流或资源转换。
 
-### 3.4 Predicate 接口不足时的处理
+### 3.4 Predicate 的展开、更新与恢复
+
+Spec 使用抽象 predicate，不妨碍函数体访问具体内存。裸 `store` 等表示层资源保留在 predicate
+定义及实现证明的局部 view 中；通过拆分引理取得当前读写所需的字段、节点或容器资源，访问完成后
+再恢复相应 predicate。不要仅因 C 读取链表指针或写入字段，就把 canonical spec 改成字段级接口。
+锁 token、纯状态或成员关系本身不提供这些内存权限；资源必须来自实际持有的 predicate。
+
+展开时只借出当前操作需要的部分，其余资源由明确的 frame 或归还关系保留，不盲目展开整个
+`os_inv`。借出的资源不能同时留在完整 predicate 中重复拥有。可复用的表示层拆分、读写权限提取
+和重组，优先通过 QCP strategy 应用相应引理；依赖具体控制流、难以安全匹配的局部推理可保留
+`which implies`，状态转换及一致性推理由 Rocq 引理支撑。Strategy 是这些资源关系的自动应用机制，
+其生成的正确性义务仍须证明，不能用规则匹配成功代替证明。可以参考vrtos中strategy写法。
+
+只读访问在原资源归还后通常可恢复原 predicate；写入后必须更新抽象状态，并建立与新状态对应的
+predicate。若其他模块的 predicate 引用了被更新的 task map 等共享抽象状态，即使没有写入它们的
+内存，也要证明这些关联在新状态下仍成立。不能将新局部资源与任意旧 frame 拼接后直接 fold 成
+新 `os_inv`。复杂更新可用 restore 关系记录“交回什么局部后态才能恢复哪个整体后态”；使用分离
+蕴含 `-*` 时，该归还关系属于空间资源，不能当作可任意复制的纯事实。
+
+函数体中间步骤可以暂时不满足完整 invariant，用局部 view 或生命周期中间态描述实际资源即可。
+在调用要求完整 invariant 的 callee 前、返回承诺完整 invariant 的函数时，以及协议要求归还
+invariant 的交接点，必须恢复相应状态的 invariant。对于创建和删除，恢复还包含 ownership 转移：
+新发布对象并入 invariant，已撤销登记的对象由局部 predicate 接管，不能同时归全局和调用者所有。
+
+### 3.5 Predicate 接口不足时的处理
 
 验证闭包在 `write-spec` 中确定，因此展开新的可达函数时可能发现 predicate 层缺少对象表示、局部
-ownership view 或创建过程的中间状态。遇到这种情况应暂停当前 spec，退回 `slice-design` 增加按对象
-或动作命名的 predicate，再继续写 spec；不得把缺失抽象改写成一串裸 `store`。如果被修改的 predicate
+ownership view、更新后的恢复接口或创建/删除过程的中间状态。遇到这种情况应暂停当前 spec，退回
+`slice-design` 补齐相应 predicate 和引理接口，再继续写 spec；不得把缺失抽象改写成一串裸 `store`。如果被修改的 predicate
 revision 已经 `review-passed`，将其标记为 `invalidated`，固定新 revision 并重新完成 predicate review，
 之后才能进入 spec review。
 
@@ -320,18 +349,19 @@ Ensure
 
 ### 4.3 在临界区内更新
 
-临界区内的分步更新可能暂时破坏完整 `os_inv`，因此锁内辅助函数不要求维护完整 `os_inv`。
-各函数按自身抽象层次描述调用条件、操作行为和资源变化：
-通用链表等底层函数只描述相应数据结构的操作；上层函数负责组合这些操作，最终由负责退出临界区的函数
-在解锁前重建完整 `os_inv`。操作效果可以直接体现在前后资源谓词的参数变化中，不要求统一使用额外的效果关系或固定模板。
+临界区内函数入口能提供、出口能恢复 `os_inv` 时，可以在 `Require/Ensure` 中使用它；否则用局部
+predicate 描述相应资源和状态变化。例如，若 `os_inv` 要求 READY 任务位于 ready 队列，先摘链、
+再改为 RUNNING 的中间步骤就可能暂时不满足该一致性条件，应使用能描述摘链后资源的局部 view。
 
-对不进行临界区资源交接、仅操作已有局部资源的辅助函数，`InsideCritical` 不必写入其 spec，
-可以由调用者保留。这是指证明调用时只向 callee 提供其 spec 所需的资源，其余资源通过 frame rule
-留在 caller 的证明上下文中，并非 C 代码实际传递锁 token。
+不要求临界区内每条语句之后都恢复 `os_inv`，但恢复时机也不只由加锁、解锁决定：调用要求
+`os_inv` 的 callee 前和返回承诺 `os_inv` 的函数时同样必须恢复。局部展开、strategy 与更新后恢复
+的具体分工见 [第 3.4 节](#34-predicate-的展开更新与恢复)；锁操作的资源交接按第 4.2、4.4 节处理。
 
-期间锁没有释放；外层最终将保留的 `InsideCritical` 与重建的 `os_inv` 一起交给 Unlock。
+不进行临界区资源交接的辅助函数，其 `InsideCritical` 可由 caller 通过 frame rule 保留，不必写入 spec。
 
-如果更新由外层函数自己的 C 语句完成，这里没有额外函数 spec，只是外层函数 proof 中的内存更新步骤。
+临界区内批量操作的 spec 及其效果关系优先直接描述 `before`、`after` 的整体结果，不因 C 使用循环，
+就把接口写成逐个摘链、逐步转移的递归或 `Inductive` 关系。例如唤醒整条 pending，应描述等待链
+清空、任务状态改变、延时取消、就绪队列更新及其余状态保持。
 
 ### 4.4 调用 Unlock 函数
 

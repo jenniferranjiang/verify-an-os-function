@@ -22,3 +22,16 @@
 -R /home/xinra/crtos/vendor/qcp_strategy QCPCompat
 
 checks/SpecInterfaceCheck.v
+
+-R ./VC CRTOS_Verify.VC
+
+VC/KMutexCreate_goal.v
+VC/KMutexCreate_goal_check.v
+VC/KMutexCreate_lib.v
+VC/KMutexCreate_proof_auto.v
+VC/KMutexCreate_proof_manual.v
+VC/MutexCreate_goal.v
+VC/MutexCreate_goal_check.v
+VC/MutexCreate_lib.v
+VC/MutexCreate_proof_auto.v
+VC/MutexCreate_proof_manual.v

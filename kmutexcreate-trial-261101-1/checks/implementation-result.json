@@ -1,0 +1,57 @@
+{
+  "status": "completed",
+  "scope": "creation-only, under approved trusted and reused-spec contracts",
+  "runs": {
+    "_MutexCreate": {
+      "run_id": "MutexCreate-20261101164709",
+      "state_file": "reports/MutexCreate-20261101164709/controller_state.json",
+      "phase": "done",
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-11-01T11:30:20.147764Z",
+        "errors": [],
+        "cleanup_removed_count": 0
+      },
+      "final_apply": {
+        "status": "applied",
+        "applied_at": "2026-11-01T11:28:09.629683Z",
+        "files": [
+          "VC/MutexCreate_proof_manual.v",
+          "VC/MutexCreate_lib.v"
+        ]
+      }
+    },
+    "KMutexCreate": {
+      "run_id": "KMutexCreate-20261101170140",
+      "state_file": "reports/KMutexCreate-20261101170140/controller_state.json",
+      "phase": "done",
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-11-01T09:41:01.535381Z",
+        "errors": [],
+        "cleanup_removed_count": 0
+      },
+      "final_apply": {
+        "status": "applied",
+        "applied_at": "2026-11-01T09:39:28.877433Z",
+        "files": [
+          "VC/KMutexCreate_proof_manual.v",
+          "VC/KMutexCreate_lib.v"
+        ]
+      }
+    }
+  },
+  "source_consistency": "checks/implementation-source-audit.json",
+  "artifact_sha256": {
+    "VC/KMutexCreate_goal.v": "1ffea1b8e0b6bf3e61bc0fce4a685eb5415602307b10f442c4bd69b72d679f22",
+    "VC/KMutexCreate_goal_check.v": "ef0e20bc5004e5619eea4b5cd9aeb1adde67c3bf6d62c07e5330c0ea4ebe285b",
+    "VC/KMutexCreate_lib.v": "1ae1f7c6d5368048c57a13c91be9f64c58bfe84392fec929e2f575d75fd3d2be",
+    "VC/KMutexCreate_proof_auto.v": "5c00973b8dff38e34b57996ce28d480a073690b54ea60de7e06b1072b3fe2abe",
+    "VC/KMutexCreate_proof_manual.v": "e78b0818441157a637a13e0e5cfa736fe227da4c7ef2e10f8d441ed084bd6f43",
+    "VC/MutexCreate_goal.v": "b6f5501a322771a07fdd61e28b7826e270dff559a7eb553c2f3373c80b634456",
+    "VC/MutexCreate_goal_check.v": "221c46bbd1aa0ac09d6719f7939670a21d4c5f393a1be97c4a1f15b0ba975a12",
+    "VC/MutexCreate_lib.v": "dcb0383ddf287f4bcd22bbc3723d8847884d2afaf749eb6978fa7b69162039f0",
+    "VC/MutexCreate_proof_auto.v": "dccb584df64ba35560a1b7ed070a9ed89e7e43b545aaade89ce3ff966351ac74",
+    "VC/MutexCreate_proof_manual.v": "031c7fde3d112b2ae490aae27ab2821d339bc3784c58ea927576ff056ee02c7b"
+  }
+}

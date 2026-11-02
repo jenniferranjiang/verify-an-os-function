@@ -1,0 +1,90 @@
+{
+  "target": "KMutexCreate",
+  "reachable": {
+    "KMutexCreate": "body-target",
+    "_MutexCreate": "body-target",
+    "IdInsertObj": "reused-spec",
+    "InitDoubleLinkList": "reused-spec",
+    "DoubleLinkListInsertNodeAfter": "reused-spec",
+    "x_malloc": "TrustBase-primitive",
+    "memset": "TrustBase-primitive",
+    "x_free": "TrustBase-primitive",
+    "CriticalAreaLock": "TrustBase-primitive",
+    "CriticalAreaUnLock": "TrustBase-primitive"
+  },
+  "edges": {
+    "KMutexCreate": [
+      "_MutexCreate"
+    ],
+    "_MutexCreate": [
+      "CriticalAreaLock",
+      "CriticalAreaUnLock",
+      "DoubleLinkListInsertNodeAfter",
+      "IdInsertObj",
+      "InitDoubleLinkList",
+      "memset",
+      "x_free",
+      "x_malloc"
+    ]
+  },
+  "caller_contract_equality": true,
+  "original_body_equality_after_documented_adaptation": true,
+  "imported_contract_equality": true,
+  "c_structure": [
+    {
+      "file": "annotated_C/src/CriticalAreaLock.c",
+      "exit": 0
+    },
+    {
+      "file": "annotated_C/src/CriticalAreaUnLock.c",
+      "exit": 0
+    },
+    {
+      "file": "annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+      "exit": 0
+    },
+    {
+      "file": "annotated_C/src/IdInsertObj.c",
+      "exit": 0
+    },
+    {
+      "file": "annotated_C/src/InitDoubleLinkList.c",
+      "exit": 0
+    },
+    {
+      "file": "annotated_C/src/KMutexCreate.c",
+      "exit": 0
+    },
+    {
+      "file": "annotated_C/src/_MutexCreate.c",
+      "exit": 0
+    },
+    {
+      "file": "annotated_C/src/memset.c",
+      "exit": 0
+    },
+    {
+      "file": "annotated_C/src/x_free.c",
+      "exit": 0
+    },
+    {
+      "file": "annotated_C/src/x_malloc.c",
+      "exit": 0
+    }
+  ],
+  "kind": "post-annotation source and frozen-input consistency, not proof replay",
+  "source_hashes": {
+    "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c": "f78f31912d12ec76ff34823102d586aef574176377e1fce3c323d670c0f0f645",
+    "Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_mutex.h": "714bf24131f29d3f7b0f480525007b90d1f9e5ff63e8bf2526840e5e8f08c43f",
+    "Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_memory.h": "b899d05d63944144be3c4d6d42aed0b659bb6f65a0655d23f315fd1fe166edab",
+    "Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_id.h": "a44025ae2113ce756ddfb659556ba2211140284ba324907255e60fd515f8f42d",
+    "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/id.c": "189a94e7dc17d6c9da6f7992a232e4422c9dc11dea539b40452b0041546a9fca",
+    "annotated_C/src/include/xsconfig.h": "e961aea78700d6663cd040eb3caa5e4e85bd7f18858ca66ba6086c0213ad3e28",
+    "annotated_C/src/headers/id_module_spec.h": "cc688388f779c493f303f8347019b74d21ca0c1c51c1d09d2f1627ac48c5a025",
+    "annotated_C/src/InitDoubleLinkList.c": "9b64aea58b40fef8b205772844d978ed5fbfee73892198fd8dcb91f37db0c1ac",
+    "annotated_C/src/DoubleLinkListInsertNodeAfter.c": "66c9654dfb4faea731ccdf647a1b6fed57ef0acd2acf5c1ef5b746f618f0d0dd"
+  },
+  "predicate_files_checked": 36,
+  "predicate_revision_unchanged": "038457b98a07c2fa559a7ec4ea7d63e980af6b73b4a8d8782668ffd97640e036",
+  "result": "passed"
+}

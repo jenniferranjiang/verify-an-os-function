@@ -1,0 +1,6 @@
+{
+  "arch": 32,
+  "endian": "little",
+  "no_crules": true,
+  "preprocessor": "gcc"
+}

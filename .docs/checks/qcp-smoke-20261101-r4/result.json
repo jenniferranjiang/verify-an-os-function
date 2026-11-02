@@ -1,0 +1,178 @@
+{
+  "status": "passed",
+  "calls": [
+    {
+      "tool": "load_target_file",
+      "arguments": {
+        "file": "/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r4/Smoke.c"
+      },
+      "response": "Finish Parsing the input file /home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r4/Smoke.c, waiting for the command.\n(end)",
+      "isError": false
+    },
+    {
+      "tool": "symbolic",
+      "arguments": {
+        "line": 6
+      },
+      "response": "{\n  \"fileName\": \"/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r4/Smoke.c\",\n  \"functionName\": \"unknown\",\n  \"loaded_strategies\": [\n    \"common\",\n    \"string_literal\"\n  ],\n  \"result\": \"success\",\n  \"verificationStatus\": \"proved\",\n  \"has_manual_obligations\": false,\n  \"manual_obligation_count\": 0,\n  \"manual_obligations\": null,\n  \"errormessage\": null,\n  \"warningmessage\": null,\n  \"current_assertions\": null,\n  \"FunctionDerivation\": null,\n  \"WitnessList\": [\n    {\n      \"functionName\": \"increment\",\n      \"Witness\": {\n        \"safety_checker_wit\": {\n          \"total\": 2,\n          \"auto_solved\": 2,\n          \"manual\": 0,\n          \"manual_witness\": null\n        },\n        \"entailment_checker_wit\": {\n          \"total\": 0,\n          \"auto_solved\": 0,\n          \"manual\": 0,\n          \"manual_witness\": null\n        },\n        \"return_checker_wit\": {\n          \"total\": 1,\n          \"auto_solved\": 1,\n          \"manual\": 0,\n          \"manual_witness\": null\n        },\n        \"partial_solve_wit\": {\n          \"total\": 0,\n          \"auto_solved\": 0,\n          \"manual\": 0,\n          \"manual_witness\": null\n        },\n        \"which_implies_wit\": {\n          \"total\": 0,\n          \"auto_solved\": 0,\n          \"manual\": 0,\n          \"manual_witness\": null\n        },\n        \"total_witness_count\": {\n          \"auto_solved\": 3,\n          \"manual\": 0\n        }\n      }\n    }\n  ]\n}",
+      "isError": false
+    },
+    {
+      "tool": "close",
+      "arguments": {},
+      "response": "session closed",
+      "isError": false
+    }
+  ],
+  "scope": "tool diagnostic only",
+  "symbolic": {
+    "fileName": "/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r4/Smoke.c",
+    "functionName": "unknown",
+    "loaded_strategies": [
+      "common",
+      "string_literal"
+    ],
+    "result": "success",
+    "verificationStatus": "proved",
+    "has_manual_obligations": false,
+    "manual_obligation_count": 0,
+    "manual_obligations": null,
+    "errormessage": null,
+    "warningmessage": null,
+    "current_assertions": null,
+    "FunctionDerivation": null,
+    "WitnessList": [
+      {
+        "functionName": "increment",
+        "Witness": {
+          "safety_checker_wit": {
+            "total": 2,
+            "auto_solved": 2,
+            "manual": 0,
+            "manual_witness": null
+          },
+          "entailment_checker_wit": {
+            "total": 0,
+            "auto_solved": 0,
+            "manual": 0,
+            "manual_witness": null
+          },
+          "return_checker_wit": {
+            "total": 1,
+            "auto_solved": 1,
+            "manual": 0,
+            "manual_witness": null
+          },
+          "partial_solve_wit": {
+            "total": 0,
+            "auto_solved": 0,
+            "manual": 0,
+            "manual_witness": null
+          },
+          "which_implies_wit": {
+            "total": 0,
+            "auto_solved": 0,
+            "manual": 0,
+            "manual_witness": null
+          },
+          "total_witness_count": {
+            "auto_solved": 3,
+            "manual": 0
+          }
+        }
+      }
+    ]
+  },
+  "symexec_command": [
+    "/home/xinra/qcp-binary-democases/linux-binary/symexec",
+    "--input-file=/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r4/Smoke.c",
+    "--goal-file=/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r4/Smoke_goal.v",
+    "--proof-auto-file=/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r4/Smoke_proof_auto.v",
+    "--proof-manual-file=/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r4/Smoke_proof_manual.v",
+    "--coq-logic-path=QcpSmoke",
+    "--no-exec-info"
+  ],
+  "symexec_sha256": "79a68bc39680b3769424717479cfe76ac8da3a9855307d46010350116b8fefda",
+  "compile_command": [
+    "/home/xinra/crtos/tools/rocq/launch-mcp",
+    "run",
+    "coqc",
+    "-q",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/flocq/src",
+    "Flocq",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/SeparationLogic",
+    "SimpleC.SL",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/unifysl",
+    "Logic",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/sets",
+    "SetsClass",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/compcert_lib",
+    "compcert.lib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/auxlibs",
+    "AUXLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/examples",
+    "SimpleC.EE",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/stdlib",
+    "SimpleC.StdLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/StrategyLib",
+    "SimpleC.StrategyLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/Common",
+    "SimpleC.Common",
+    "-R",
+    "/home/xinra/crtos/vendor/fixedpoints",
+    "FP",
+    "-R",
+    "/home/xinra/crtos/vendor/MonadLib",
+    "MonadLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/listlib",
+    "ListLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/MaxMinLib",
+    "MaxMinLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/GraphLib",
+    "GraphLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/SumLib",
+    "SumLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/tracelib",
+    "TraceLib",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/coq-record-update/src",
+    "RecordUpdate",
+    "-Q",
+    "/home/xinra/qcp-binary-democases/Rocq/algorithms",
+    "Algorithms",
+    "-R",
+    "/home/xinra/qcp-binary-democases/Rocq/cdcllib",
+    "CDCLLib",
+    "-R",
+    "/home/xinra/crtos/lib",
+    "CRTOS_Verify.lib",
+    "-R",
+    "/home/xinra/crtos/vendor/qcp_strategy",
+    "QCPCompat",
+    "-R",
+    "/home/xinra/crtos/ksemaphoredelete-trial-261025-1/VC",
+    "CRTOS_Verify.VC",
+    "-R",
+    "/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r4",
+    "QcpSmoke",
+    "Smoke_goal.v"
+  ],
+  "generated_goal_compiled": true,
+  "generated_proof_templates_proved": false,
+  "note": "Generated proof templates are deliberately unproved; no target proof is certified."
+}

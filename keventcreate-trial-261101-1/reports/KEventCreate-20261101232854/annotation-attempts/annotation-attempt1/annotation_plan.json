@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "_EventCreate",
+      "meaning": "复用冻结创建调用规格，返回-5或有效ID，并返还OutsideCritical与同一continuation。"
+    },
+    {
+      "name": "KEventCreate",
+      "meaning": "将uint32 options原样传给内部创建并返回其结果，保持冻结的创建抽象操作及临界区资源保证。"
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

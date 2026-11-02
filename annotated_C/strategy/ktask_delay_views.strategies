@@ -1,0 +1,59 @@
+#include "ktask_delay_views.h"
+
+// 按调用需求借出 delay 槽及其子不变量；其余状态保持分层 frame。
+id : 1
+priority : core(3)
+left : os_inv(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, delay), PTR(struct Delay), ?value) at 2
+check : infer(q == task);
+action : left_erase(0);
+         left_add(os_global_context(sg));
+         left_add(store(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, delay), PTR(struct Delay), tdDelay(desc)));
+         left_add(delay_inv(sg, st));
+         left_add(tick_inv(sg, st));
+         left_add(ktask_set_delay_task_frame(sg, st, task, desc));
+         left_add(delay_global_frame(sg, st));
+
+// 精确的被调步骤与输出槽共同恢复完整不变量，不假定后态良构。
+id : 2
+priority : post(3)
+left : ktask_set_delay_task_frame(?sg, ?before, ?task, ?desc) at 0
+       delay_global_frame(sg, before) at 1
+       delay_inv(sg, ?after) at 2
+       tick_inv(sg, after) at 3
+       store(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, delay), PTR(struct Delay), ?delay) at 4
+       ktask_set_delay_step(task, desc, ?ticks, delay, before, ?result, after) at 5
+       task_desc_map(os_tasks(before), task) == Some{TaskDescriptorAbs}(desc) at 6
+       ktask_delete_not_service(task, before) at 7
+check : infer(q == task);
+action : left_erase(0); left_erase(1); left_erase(2); left_erase(3); left_erase(4);
+         left_add(os_inv(sg, after));
+
+// exstatus 只打开一个标量；原值归还优先恢复原观察。
+id : 3
+priority : core(3)
+left : os_inv(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : (store(field_addr(?q, TaskDescriptor, exstatus), I32, ?value) || undef_data_at(field_addr(?q, TaskDescriptor, exstatus), I32)) at 2
+check : infer(q == task);
+action : left_erase(0);
+         left_add(store(field_addr(task, TaskDescriptor, exstatus), I32, tdExstatus(desc)));
+         left_add(delay_exstatus_frame(sg, st, task, desc));
+
+id : 4
+priority : post(2)
+left : delay_exstatus_frame(?sg, ?st, ?task, ?desc) at 0
+       store(field_addr(?q, TaskDescriptor, exstatus), I32, ?value) at 1
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(desc) at 2
+check : infer(q == task); infer(value == tdExstatus(desc));
+action : left_erase(0); left_erase(1); left_add(os_inv(sg, st));
+
+id : 5
+priority : post(3)
+left : delay_exstatus_frame(?sg, ?st, ?task, ?desc) at 0
+       store(field_addr(?q, TaskDescriptor, exstatus), I32, ?value) at 1
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(desc) at 2
+check : infer(q == task);
+action : left_erase(0); left_erase(1);
+         left_add(os_inv(sg, replace_task_desc_map(update_task_desc_map(task, replace_descriptor_exstatus(value, desc), task_desc_map(os_tasks(st))), st)));

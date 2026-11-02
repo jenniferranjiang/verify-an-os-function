@@ -1,0 +1,69 @@
+{
+  "connection": "current chat MCP; predates config change",
+  "ready": false,
+  "requires_client_restart": true,
+  "diag": {
+    "success": true,
+    "server_version": "0.2.0",
+    "pet": {
+      "pid": 296389,
+      "uptime_seconds": 105387.21649575233,
+      "restarts": 0,
+      "generation": 0
+    },
+    "memory": {
+      "pet_rss_mb": 177.390625,
+      "peak_pet_rss_mb": 131,
+      "max_rss_mb_threshold": 12017,
+      "sample_status": "ok"
+    },
+    "live_states": [
+      {
+        "state_id": 1,
+        "parent": null,
+        "file": "<preamble>",
+        "theorem": "<preamble>",
+        "age_seconds": 105237.28531432152
+      }
+    ],
+    "live_states_total": 1,
+    "recent_errors": [
+      {
+        "tool": "rocq_query",
+        "message": "Coq: The reference semaphore_pending_nodes was not found in the current\nenvironment.",
+        "reason": "crashed",
+        "ago_seconds": 105385.50398898125
+      },
+      {
+        "tool": "rocq_start",
+        "message": "Theorem_not_found: [find_thm] Theorem not found!",
+        "reason": "not_found",
+        "ago_seconds": 105334.9491302967
+      },
+      {
+        "tool": "rocq_compile",
+        "message": "/home/xinra/crtos/StartupKTask/tools/qcp-coqc-wrapper not found or not executable: [Errno 2] No such file or directory: '/home/xinra/crtos/StartupKTask/tools/qcp-coqc-wrapper'",
+        "reason": "compile_error",
+        "ago_seconds": 105313.01436924934
+      },
+      {
+        "tool": "rocq_start",
+        "message": "No valid start mode. Provide file+theorem, file+line+character, or preamble.",
+        "reason": "validation",
+        "ago_seconds": 105275.88545703888
+      },
+      {
+        "tool": "rocq_check",
+        "message": "Coq: Error when parsing .vo (from file /home/xinra/crtos/lib/KSemaphoreDelete.vo) for library CRTOS_Verify.lib.KSemaphoreDelete: The file /home/xinra/crtos/lib/KSemaphoreDelete.vo was compiled with OCaml\n4.14.2 while this instance of Coq was compiled with OCaml 4.14.1.\nCoq object files need to be compiled with the same OCaml toolchain to be compatible.",
+        "reason": "tactic_failed",
+        "ago_seconds": 105223.2639374733
+      },
+      {
+        "tool": "rocq_compile",
+        "message": "<proof>, line 1, characters 37-53:\n     1 | From CRTOS_Verify.lib Require Import KSemaphoreDelete.\n                                              ^^^^^^^^^^^^^^^^\nError: Cannot find a physical path bound to logical path\nKSemaphoreDelete with prefix CRTOS_Verify.lib.",
+        "reason": "compile_error",
+        "ago_seconds": 105109.69831466675
+      }
+    ]
+  }
+}

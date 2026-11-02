@@ -1,0 +1,10 @@
+Program: `/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r4/Smoke.c`
+Start to parse strategies file common
+File Path: builtin/common.strategies
+Finish parsing strategies file common
+Start to parse strategies file string_literal
+File Path: builtin/string_literal.strategies
+Finish parsing strategies file string_literal
+Function `increment`
+End of function `increment`
+Successfully finished symbolic execution

@@ -1,0 +1,32 @@
+#include "sched_source_views.h"
+
+// 纯事实观察保留 os_inv；来源分类由调用点完成。
+id : 1
+priority : suspend_source_facts(1)
+left : os_inv(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+       tsmStat(tdSchedMember(desc)) == TSK_SUSPEND() at 2
+check : absense(suspend_source_facts(sg, st, task));
+action : left_add(suspend_source_facts(sg, st, task));
+
+
+// 两种来源分别归还；U 是实际调用方选择的任务映射。
+id : 2
+priority : sched_source_fold(1)
+left : suspend_source_restore(?T, ?U, ?sg, ?st, ?task, dll_detached()) at 0
+       store_node_self_linked(?node) at 1
+check : infer(node == sched_link_of(task));
+action : left_erase(0); left_erase(1);
+         left_add(occupy_dll_node(sched_link_of(task)));
+         left_add(suspend_sched_pool(U, sg, suspend_unlink_state(task, st)));
+
+id : 3
+priority : sched_source_fold(1)
+left : suspend_source_restore(?T, ?U, ?sg, ?st, ?task, dll_linked(?head, ?prefix, ?suffix)) at 0
+       store_dll{Z}(pure_suspend_sched_link(T), head, app{DL_Node{Z}}(prefix, suffix)) at 1
+       store_node_self_linked(?node) at 2
+       pure_suspend_sched_link(T, node, task) at 3
+check : infer(node == sched_link_of(task));
+action : left_erase(0); left_erase(1); left_erase(2); left_erase(3);
+         left_add(occupy_dll_node(sched_link_of(task)));
+         left_add(suspend_sched_pool(U, sg, suspend_unlink_state(task, st)));

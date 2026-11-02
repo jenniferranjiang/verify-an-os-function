@@ -1,0 +1,8 @@
+test_actual_case_obligation_conservation (__main__.Routing.test_actual_case_obligation_conservation) ... ok
+test_conflicting_statement_rejected (__main__.Routing.test_conflicting_statement_rejected) ... ok
+test_proved_auto_untouched (__main__.Routing.test_proved_auto_untouched) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.046s
+
+OK

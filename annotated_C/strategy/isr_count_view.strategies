@@ -1,0 +1,23 @@
+#include "isr_count_view_strategy.h"
+
+// 只借出 ISR 计数槽；原共享状态的所有其余资源保留在 frame。
+id : 1
+priority : core(2)
+left : os_inv(?sg, ?st) at 0
+right : store(field_addr(?manager, InterruptServiceRoutines, isr_count), U16, ?value) at 1
+check : infer(manager == isrManager);
+action : left_erase(0);
+         right_erase(1);
+         left_add(isr_count_frame(sg, st));
+         right_add(value == st.os_isr.isrCount);
+
+// 原计数归还后恢复 os_inv；不对修改过的字段恢复旧抽象状态。
+id : 2
+priority : post(2)
+left : isr_count_frame(?sg, ?st) at 0
+       store(field_addr(?manager, InterruptServiceRoutines, isr_count), U16, ?value) at 1
+check : infer(manager == isrManager);
+        infer(value == st.os_isr.isrCount);
+action : left_erase(0);
+         left_erase(1);
+         left_add(os_inv(sg, st));

@@ -1,0 +1,23 @@
+{
+  "status": "failed",
+  "calls": [
+    {
+      "tool": "load_target_file",
+      "arguments": {
+        "file": "/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r3/Smoke.c"
+      },
+      "response": "Finish Parsing the input file /home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r3/Smoke.c, waiting for the command.\n(end)",
+      "isError": false
+    },
+    {
+      "tool": "symbolic",
+      "arguments": {
+        "line": 6
+      },
+      "response": "{\n  \"fileName\": \"/home/xinra/crtos/.docs/checks/qcp-smoke-20261101-r3/Smoke.c\",\n  \"functionName\": \"unknown\",\n  \"loaded_strategies\": [\n    \"common\",\n    \"string_literal\"\n  ],\n  \"result\": \"success\",\n  \"verificationStatus\": \"proved\",\n  \"has_manual_obligations\": false,\n  \"manual_obligation_count\": 0,\n  \"manual_obligations\": null,\n  \"errormessage\": null,\n  \"warningmessage\": null,\n  \"current_assertions\": null,\n  \"FunctionDerivation\": null,\n  \"WitnessList\": [\n    {\n      \"functionName\": \"increment\",\n      \"Witness\": {\n        \"safety_checker_wit\": {\n          \"total\": 2,\n          \"auto_solved\": 2,\n          \"manual\": 0,\n          \"manual_witness\": null\n        },\n        \"entailment_checker_wit\": {\n          \"total\": 0,\n          \"auto_solved\": 0,\n          \"manual\": 0,\n          \"manual_witness\": null\n        },\n        \"return_checker_wit\": {\n          \"total\": 1,\n          \"auto_solved\": 1,\n          \"manual\": 0,\n          \"manual_witness\": null\n        },\n        \"partial_solve_wit\": {\n          \"total\": 0,\n          \"auto_solved\": 0,\n          \"manual\": 0,\n          \"manual_witness\": null\n        },\n        \"which_implies_wit\": {\n          \"total\": 0,\n          \"auto_solved\": 0,\n          \"manual\": 0,\n          \"manual_witness\": null\n        },\n        \"total_witness_count\": {\n          \"auto_solved\": 3,\n          \"manual\": 0\n        }\n      }\n    }\n  ]\n}",
+      "isError": false
+    }
+  ],
+  "scope": "tool diagnostic only",
+  "error": "unhandled errors in a TaskGroup (1 sub-exception)"
+}

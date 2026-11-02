@@ -19,6 +19,9 @@ predicate definition 和 lemma statement，
 
 Predicate/ownership 变化按 predicate review 条件处理；API 行为、Require/Ensure、路径或 effect 变化按 spec review 条件处理。只有相关结论受影响时才使 review 失效；proof-local lemma、strategy 或 tactic 调整不重新走设计审阅。
 
+进入证明前按 [Implement 环境准备](toolchain-preflight.md) 确认配置可用；同一环境复用已有成功结果，
+不重复完整验收。随后按 QCP agent 的 workflow/controller 推进证明；环境错误先修复。
+
 ## 2. 自底向上完成 proof
 
 不要预先给函数分层。直接建立 direct-callee graph，按拓扑顺序从没有未证明依赖的 leaf 向 wrapper 推进。
@@ -67,15 +70,20 @@ proof annotation、strategy 或 tactic 可以继续在本阶段修改。
 
 ## 4. 调用 Rocq-MCP 完成 lemma 与 VC proof
 
-优先使用 Rocq-MCP，而不是手写未经检查的 proof：
+环境可用后，按 QCP agent 的流程使用 Rocq-MCP 交互推进证明。以下是工具用途，不是每个目标必须逐项执行的清单：
 
 ```text
-rocq_toc / rocq_query：理解已有定义、lemma 和 notation
-rocq_compile：先编译完整候选文件并获得结构化错误
-rocq_step / rocq_step_multi / rocq_auto_solve：交互完成 proof
-rocq_compile：再次检查完整最终文件
-rocq_verify：核对原 statement、proof 和 assumptions
+rocq_start：在当前文件/lemma 或实际 imports 上建立会话并读取目标
+rocq_query：在该环境中查询定义、lemma 和 notation
+rocq_check(from_state=...)：执行步骤、检查目标变化并保存新 state_id
+rocq_step_multi(from_state=...)：按需探索候选 tactic；用 rocq_check 提交选中的步骤
+rocq_check：完成目标，确认 proof_finished 并用 Qed 关闭
+rocq_compile / rocq_compile_file：检查完成的文件
+rocq_verify 或项目等价审计：核对原 statement、proof 和 assumptions
 ```
+
+`rocq_compile` 不能替代交互式 proof。文件或依赖修改后按工具的状态失效提示重新建立会话；
+始终显式传递 state_id，不能依赖其他 agent 的隐式当前状态。
 
 `rocq_verify` 适用于可独立提供 original statement/problem 的目标；工程内组合文件若无法直接使用，至少运行
 `rocq_compile`，并用 `Print Assumptions` 或项目等价检查记录可信依赖。不得把 `proof_finished` 前的中间 tactic

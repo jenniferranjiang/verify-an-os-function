@@ -34,8 +34,6 @@ lib/CrtosInv.v
 lib/CrtosRules.v
 lib/DelayInv.v
 lib/DelayState.v
-lib/EventInv.v
-lib/EventState.v
 lib/ExstatusInv.v
 lib/IsrManagerInv.v
 lib/IsrState.v
@@ -48,8 +46,6 @@ lib/KTaskPure.v
 lib/KTaskSchedMember.v
 lib/KTaskStackSetup.v
 lib/KTaskStackSetupProofAux.v
-lib/MsgQueueInv.v
-lib/MsgQueueState.v
 lib/NodeSelfLinked.v
 lib/OsAssignReadyVector.v
 lib/StructFieldOffsetAxiom.v
@@ -88,3 +84,13 @@ lib/MutexInv.v
 lib/MutexOps.v
 
 lib/KMutexCreate.v
+
+lib/EventInv.v
+
+lib/EventOps.v
+
+lib/EventState.v
+
+lib/KEventCreate.v
+
+lib/EventLayoutABI.v

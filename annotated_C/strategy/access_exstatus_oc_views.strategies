@@ -1,0 +1,20 @@
+#include "access_exstatus_oc_views.h"
+
+// 仅在独立全局槽的访问需求下借出一个 Int，保持所有其他子不变量封装。
+id : 1
+priority : core(3)
+left : os_inv(?sg, ?st) at 0
+right : (store(?slot, I32, ?value) || undef_data_at(?slot, I32)) at 1
+check : infer(slot == os_exstatus_slot(sg));
+action : left_erase(0);
+         left_add(store(slot, I32, os_exstatus(st)));
+         left_add(global_exstatus_frameOC(sg, st));
+
+// 写后立即恢复规范形式；不是把新值归还到旧快照。
+id : 2
+priority : post(3)
+left : global_exstatus_frameOC(?sg, ?st) at 0
+       store(?slot, I32, ?value) at 1
+check : infer(slot == os_exstatus_slot(sg));
+action : left_erase(0); left_erase(1);
+         left_add(os_inv(sg, replace_global_exstatus(value, st)));

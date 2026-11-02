@@ -1,6 +1,6 @@
 # KMutexCreate 新实验结果（2026-11-01）
 
-本实验按 `verify-an-os-function` 完成设计和独立审阅。Predicate 与完整调用闭包 spec 均为 **review-passed**；该结论仅针对创建的模块化设计，不是 C 实现证明，也不是整个 mutex 模块正确性结论。
+本实验按 `verify-an-os-function` 完成设计、独立审阅及用户批准后的实现证明。Predicate 与完整调用闭包 spec 均为 **review-passed**；`KMutexCreate` 和 `_MutexCreate` 的 controller 均已通过 final-check 并返回 **done**。结论限定于既定信任边界下的创建函数，不是整个 mutex 模块正确性结论。
 
 | 产物 | 已审 revision SHA256 | 结论 |
 | --- | --- | --- |
@@ -31,6 +31,23 @@
 
 迁移后使用根项目配置重新编译全部36个受影响模块，退出码0，见 [root-build-result.json](../../checks/root-build-result.json) 与 [root-build.log](../../checks/root-build.log)。当前trial只引用全局库，接口再次类型检查成功，见 [post-merge-interface.log](../../checks/post-merge-interface.log)。未沿用trial旧编译产物作为根库检查结果。共享迁移与一致性检查已完成。
 
-## 停止边界
+## 实现证明已完成
 
-未启动 verification-orchestrator；未运行 QCP parser/symbolic，未生成 VC，未进行 C 实现证明。字节转换、初始化、发布资源重组等仍为明确的待证义务；没有用新增 Axiom、Parameter 或 Admitted 冒充证明。本轮不请求进入实现阶段。
+用户以“我通过了 你继续implement”批准上述两份 revision 后，沿用现有 trial 进入 verification-orchestrator。批准的 predicate/spec 语义未修改，权威 C 未修改；切片仅增加证明所需注解。设计阶段未运行 symbolic/VC 的停止边界已由本次明确批准解除。
+
+| 本轮实现目标 | Controller run | 证明规模 | 最终结果 |
+| --- | --- | --- | --- |
+| `_MutexCreate` | `MutexCreate-20261101164709` | 55 个顶层 VC，13 组 | final-check passed，done，errors=[] |
+| `KMutexCreate` | `KMutexCreate-20261101170140` | 4 个顶层 VC，2 组 | final-check passed，done，errors=[] |
+
+全部分组经过 Rocq MCP 交互证明、分组编译和 controller 正式接纳。合并后的完整 goal-check 编译通过；final-apply 发布正式证明，final-check 独立重新生成当前 C 的义务并检查完整证明、冻结合同、case library 和文件一致性。最后的内部函数终检完成于 2026-11-01 19:30:20（Asia/Shanghai）。本完整性审阅复用 controller 终检结果，没有另行重复执行证明检查。
+
+机器记录见 [implementation-result.json](../../checks/implementation-result.json)，包含两次终检状态及正式 VC 源文件 SHA256；原始 controller 状态见 [内部函数](../../reports/MutexCreate-20261101164709/controller_state.json) 和 [包装函数](../../reports/KMutexCreate-20261101170140/controller_state.json)。正式证明是 [MutexCreate_proof_manual.v](../../VC/MutexCreate_proof_manual.v) 与 [KMutexCreate_proof_manual.v](../../VC/KMutexCreate_proof_manual.v)，新增局部辅助引理在 [MutexCreate_lib.v](../../VC/MutexCreate_lib.v)。trial 项目文件已列入正式 VC 文件，编辑器使用同一 VC 逻辑路径；审阅快照不参与构建。
+
+生成器原来留在 auto 文件中的 49 个 Admitted 模板全部按原陈述转交证明流程并消除，未因文件名为 auto 就视作已证。没有新增信任公理或用 Admitted 绕过义务；未采用的生成 split 所保留的 Abort 不是漏证顶层 VC，顶层义务均由 controller 检查通过。工具适配和回归证据见 [controller-adaptation.md](controller-adaptation.md)。
+
+[实现后源码一致性检查](../../checks/implementation-source-audit.json) 通过：9 份权威源码、配置或复用来源 hash 未变；36 份已审库快照及其全局迁移对应一致；10 个闭包 symbol 分类完整；caller-local 合同等于所选 canonical 合同；剥除注解并执行已审适配后，创建函数 body 与权威 C 一致；10 份 C 切片通过 GCC 结构检查。GCC 检查不替代 QCP 或 Rocq 证明。
+
+本轮新完成的函数体证明只有上述两个创建函数。IdInsertObj、InitDoubleLinkList、DoubleLinkListInsertNodeAfter 仍是 reused-spec 边界；x_malloc、x_free、memset、CriticalAreaLock、CriticalAreaUnLock 仍依赖已有 TrustBase 合同，不计为本轮新证明。适用配置仍为非 SMP、32 位、小端，已审宏和 dispatch 适配保持原范围。
+
+前述七项源码问题仍未修复。特别是其他 API 的删除竞争可能破坏真实系统中的 os_inv；本证明依赖既有 Lock 合同提供有效 os_inv，未证明任意使用/删除操作都维持该条件。批准范围与具体合同见 [implementation-context.md](implementation-context.md)，缺陷证据及触发条件见 [source-errors.md](source-errors.md)。

@@ -1,0 +1,10 @@
+{
+  "trial_lib_unchanged": true,
+  "trial_files_checked": 174,
+  "mutex_global_equals_normalized_trial": {
+    "MutexInv": true,
+    "MutexState": true
+  },
+  "surviving_annotated_contracts_unchanged": true,
+  "LinklistResumeAll_executable_C_unchanged": true
+}

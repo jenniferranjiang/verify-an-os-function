@@ -1,0 +1,6 @@
+Command from /home/xinra/crtos:
+gcc -m32 -std=c11 -ffreestanding -fsyntax-only -I Ubiquitous/XiZi_IIoT_Macro/kernel/include -I annotated_C/src/include /tmp/kevent-abi-authoritative.c
+Exit: 0
+stdout/stderr: empty
+Fixture copied without changes to checks/source-abi/authoritative.c.
+Checks are authoritative 32-bit packed-bitfield ABI, not the adapted 36-byte verification ABI.

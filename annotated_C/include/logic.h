@@ -130,11 +130,7 @@
   (ktask_wakeup_detached_null_condition : StableGlobalState -> VarGlobalState -> Z -> Prop)
   (ktask_wakeup_detached_null_step : addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop)
  (semaphore_pending_nodes : Z -> VarGlobalState -> list(DL_Node Z) -> Prop)
- (msgqueue_send_pending_nodes : Z -> VarGlobalState -> list(DL_Node Z) -> Prop)
- (msgqueue_recv_pending_nodes : Z -> VarGlobalState -> list(DL_Node Z) -> Prop)
  (wakeup_semaphore_head : Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop)
- (wakeup_msgqueue_send_head : Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop)
- (wakeup_msgqueue_recv_head : Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop)
   (semaphore_pending_head : addr -> addr)
   (semaphore_resume_all_effect : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop)
  */

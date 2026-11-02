@@ -1,0 +1,104 @@
+#include "suspend_sched_views.h"
+
+id : 1
+priority : suspend_unfold(1)
+left : os_inv(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+       tsmStat(tdSchedMember(desc)) == TSK_READY() at 2
+action : left_erase(0);
+         left_add(tsmStat(tdSchedMember(desc)) != TSK_RUNNING());
+         left_add(0 <= tsmCurPrio(tdSchedMember(desc)));
+         left_add(tsmCurPrio(tdSchedMember(desc)) < PRIORITY_MAX());
+         left_add(task_fields(sg, st));
+         left_add(store_os_assign_ready_vector(field_addr(Assign, Assign, os_assign_ready_vector), assignReadyVector(os_assign(st))));
+         left_add(store_prio_lookup_table());
+         left_add(delay_inv(sg, st));
+         left_add(ktask_suspend_frame(sg, st, task));
+         left_add(In{DL_Node{Z}}(sched_link_node(task), Znth{list{DL_Node{Z}}}(tsmCurPrio(tdSchedMember(desc)), orvBuckets(assignReadyVector(os_assign(st))), nil{DL_Node{Z}}())));
+
+id : 2
+priority : suspend_unfold(1)
+left : os_inv(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+       tsmStat(tdSchedMember(desc)) == TSK_RUNNING() at 2
+action : left_erase(0);
+         left_add(0 <= tsmCurPrio(tdSchedMember(desc)));
+         left_add(tsmCurPrio(tdSchedMember(desc)) < PRIORITY_MAX());
+         left_add(task_fields(sg, st));
+         left_add(store_os_assign_ready_vector(field_addr(Assign, Assign, os_assign_ready_vector), assignReadyVector(os_assign(st))));
+         left_add(store_prio_lookup_table());
+         left_add(delay_inv(sg, st));
+         left_add(ktask_suspend_frame(sg, st, task));
+         left_add(!In{DL_Node{Z}}(sched_link_node(task), Znth{list{DL_Node{Z}}}(tsmCurPrio(tdSchedMember(desc)), orvBuckets(assignReadyVector(os_assign(st))), nil{DL_Node{Z}}())));
+         left_add(store_node_self_linked(sched_link_of(task)));
+
+id : 3
+priority : suspend_prepare_delay(1)
+left : ktask_suspend_frame(?sg, ?st, ?task) at 0
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(?desc) at 1
+       tsmStat(tdSchedMember(desc)) == TSK_READY() at 2
+       assign_remove_running_ready(task, desc, assignReadyVector(os_assign(st)), ?ready) at 3
+       store_task_status(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), TSK_SUSPEND()) at 4
+       store_ktask_suspend_sched_stat_frame(sg, st, task, desc) at 5
+       delay_inv(sg, st) at 6
+       store_os_assign_ready_vector(?ready_ptr, ready) at 7
+action : left_erase(0); left_erase(4); left_erase(5); left_erase(6); left_erase(7);
+         left_exist_add(staged : <VarGlobalState>);
+         left_add(staged == ktask_suspend_state(st, task, desc, ready));
+         left_add(ktask_suspend_sched_step(task, desc, st, staged));
+         left_add(task_desc_map(os_tasks(staged), task) == Some{TaskDescriptorAbs}(update_sched_member(desc, set_sched_member_status(tdSchedMember(desc), TSK_SUSPEND()))));
+         left_add(delay_head_ptr(sg) == xiaoshan_delay_head);
+         left_add(task_fields(sg, staged));
+         left_add(delay_inv(sg, staged));
+         left_add(ktask_suspend_frame(sg, st, task));
+         left_add(store_os_assign_ready_vector(ready_ptr, assignReadyVector(os_assign(staged))));
+
+id : 4
+priority : suspend_prepare_delay(1)
+left : ktask_suspend_frame(?sg, ?st, ?task) at 0
+       task_desc_map(os_tasks(st), task) == Some{TaskDescriptorAbs}(?desc) at 1
+       tsmStat(tdSchedMember(desc)) == TSK_RUNNING() at 2
+       assign_remove_running_ready(task, desc, assignReadyVector(os_assign(st)), ?ready) at 3
+       store_task_status(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), TSK_SUSPEND()) at 4
+       store_ktask_suspend_sched_stat_frame(sg, st, task, desc) at 5
+       delay_inv(sg, st) at 6
+       store_os_assign_ready_vector(?ready_ptr, ready) at 7
+action : left_erase(0); left_erase(4); left_erase(5); left_erase(6); left_erase(7);
+         left_exist_add(staged : <VarGlobalState>);
+         left_add(staged == ktask_suspend_state(st, task, desc, ready));
+         left_add(ktask_suspend_sched_step(task, desc, st, staged));
+         left_add(task_desc_map(os_tasks(staged), task) == Some{TaskDescriptorAbs}(update_sched_member(desc, set_sched_member_status(tdSchedMember(desc), TSK_SUSPEND()))));
+         left_add(delay_head_ptr(sg) == xiaoshan_delay_head);
+         left_add(task_fields(sg, staged));
+         left_add(delay_inv(sg, staged));
+         left_add(ktask_suspend_frame(sg, st, task));
+         left_add(store_os_assign_ready_vector(ready_ptr, assignReadyVector(os_assign(staged))));
+
+id : 5
+priority : suspend_fold_os(1)
+left : ktask_suspend_frame(?sg, ?before, ?task) at 0
+       ktask_suspend_sched_step(task, ?desc, before, ?staged) at 1
+       ktask_unset_delay_step(tdDelay(update_sched_member(desc, set_sched_member_status(tdSchedMember(desc), TSK_SUSPEND()))), staged, ?after) at 2
+       task_fields(sg, staged) at 3
+       delay_inv(sg, after) at 4
+       store_os_assign_ready_vector(field_addr(Assign, Assign, os_assign_ready_vector), assignReadyVector(os_assign(staged))) at 5
+       store_node_self_linked(sched_link_of(task)) at 6
+       store_prio_lookup_table() at 7
+action : left_erase(0); left_erase(3); left_erase(4); left_erase(5); left_erase(6); left_erase(7);
+         left_add(os_inv(sg, after));
+
+id : 6
+priority : suspend_fold_remove(1)
+left : ktask_suspend_frame(?sg, ?st, ?task) at 0
+       assign_remove_from_ready_ic(task, ?desc, assignReadyVector(os_assign(st)), ?ready) at 1
+       0 <= tsmCurPrio(tdSchedMember(desc)) at 2
+       tsmCurPrio(tdSchedMember(desc)) < PRIORITY_MAX() at 3
+action : left_erase(1);
+         left_add(assign_remove_running_ready(task, desc, assignReadyVector(os_assign(st)), ready));
+
+id : 7
+priority : suspend_fold_remove(1)
+left : assign_remove_beyond_ready_ic(?desc, ?old_ready, ?ready) at 0
+       !In{DL_Node{Z}}(sched_link_node(?task), Znth{list{DL_Node{Z}}}(tsmCurPrio(tdSchedMember(desc)), orvBuckets(old_ready), nil{DL_Node{Z}}())) at 1
+action : left_erase(0);
+         left_add(assign_remove_running_ready(task, desc, old_ready, ready));

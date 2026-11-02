@@ -104,7 +104,7 @@ Predicate 和 spec 分别 review-passed 后，请用户确认两份明确 revisi
 
 ### implement
 
-只有用户明确确认两份 review-passed revisions 后才进入。先确认源码、config、trusted 列表和批准 revisions 未变，再运行完整闭包检查。对闭包内每个 annotated C 执行 parser 和 symbolic，全部到达文件末尾后才生成 VC/strategy soundness goals 并完成 Rocq proof。
+只有用户明确确认两份 review-passed revisions 后才进入。先确认源码、config、trusted 列表和批准 revisions 未变，按[环境准备](references/toolchain-preflight.md)确认配置可用（同一环境复用已有成功结果），再按 QCP agent 流程运行完整闭包检查并推进证明。环境错误先修复。对闭包内每个 annotated C 执行 parser 和 symbolic，全部到达文件末尾后才生成 VC/strategy soundness goals 并完成 Rocq proof。
 
 项目适配后可运行：
 

@@ -1,179 +1,97 @@
-
 #include "m_ktask.h"
 
-/*@ Import Coq Require Import CRTOS_Verify.libai.KTaskSetDelay */
-/*@ Import Coq Import DLL */
-
-/*@ Extern Coq (DL_Node :: * => *)
-*/
-/*@ Extern Coq Record TaskDelayAbs {
-      tdTaskPtr: Z;
-      tdTicks: Z;
-      tdStatus: Z;
-    }
-*/
-/*@ Extern Coq
-      (store_delay_info : Z -> TaskDelayAbs -> Assertion)
-      (store_task_delay_opt :
-        Z -> Z -> list(DL_Node TaskDelayAbs) -> Assertion)
-      (store_delay_unlinked_info :
-        Z -> TaskDelayAbs -> Assertion)
-      (store_delay_dll_focus :
-        Z -> list(DL_Node TaskDelayAbs) -> DL_Node TaskDelayAbs ->
-        list(DL_Node TaskDelayAbs) -> Assertion)
-      (store_delay_dll_frame :
-        Z -> list(DL_Node TaskDelayAbs) -> DL_Node TaskDelayAbs ->
-        list(DL_Node TaskDelayAbs) -> Assertion)
-      (store_delay_dll_head_frame :
-        Z -> list(DL_Node TaskDelayAbs) -> Z -> Assertion)
-      (store_delay_dll_next_frame :
-        Z -> list(DL_Node TaskDelayAbs) -> DL_Node TaskDelayAbs ->
-        list(DL_Node TaskDelayAbs) -> Z -> Assertion)
-      (store_delay_scan :
-        Z -> Z -> list(DL_Node TaskDelayAbs) ->
-        list(DL_Node TaskDelayAbs) -> Assertion)
-      (delay_prefix_scanned :
-        Z -> list(DL_Node TaskDelayAbs) -> Prop)
-      (delay_nodes_wf : list(DL_Node TaskDelayAbs) -> Prop)
-      (mkTaskDelayAbs : Z -> Z -> Z -> TaskDelayAbs)
-      (delay_remove_old :
-        Z -> list(DL_Node TaskDelayAbs) ->
-        list(DL_Node TaskDelayAbs))
-      (delay_insert_by_ticks :
-        DL_Node TaskDelayAbs -> list(DL_Node TaskDelayAbs) ->
-        list(DL_Node TaskDelayAbs))
-      (TASK_DELAY_INACTIVE_VALUE : Z)
-      (TASK_DELAY_ACTIVE_VALUE : Z)
-      (heartbeat_ticks_addr : Z)
-*/
+/* 来源：../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/delay.c。
+ * Stage 1 只同步切片，暂不提供 KTaskSetDelay 的 OC 入口 Spec。
+ * 原有两处 lock/unlock 原样保留；新增 access_lock 对应原锁外的
+ * 单条共享访问。条件中的 delay 指针读取与 else 中的第二次读取仍然
+ * 分开，不能因常规单线程优化而跨解锁复用旧值。
+ * x_malloc / memset 操作尚未发布的新块；发布后的字段写入各自加锁。
+ * 旧局部资源 Spec、重复 Extern 声明及遗留 Given/where 已移除。
+ * 共享 Delay 谓词仍被 IC 和 UnSetDelay 证明使用，不能随 OC Spec 删除。
+ * 每次解锁所需的不变量恢复与对象保活协议仍待独立设计，不能把新增锁
+ * 本身当作内存安全或 OC 验证完成的证明。 */
 
 x_ticks_t CurrentTicksGain(void)
 /*@ With os_tick
     Require store_uint(heartbeat_ticks_addr, os_tick)
     Ensure __return == os_tick &&
            store_uint(heartbeat_ticks_addr, os_tick)
- */
-;
+ */;
 
 struct Delay *CONTAINER_OF_DELAY_LINK(DoubleLinklistType *link_ptr)
 /*@ With delay_ptr
     Require link_ptr == field_addr(delay_ptr, struct Delay, link) && emp
     Ensure __return == delay_ptr &&
            link_ptr == &(__return->link)
- */
-;
-
-// ** 当前为临界区内版本 **
-
-/* store_task_delay_opt有以下三种情况：
-  Let store(&(task -> ... .ₛ "delay"), delay_before) in 
-  
-  - delay_before = NONE;
-  - store(delay_before, node), node不在delay link list中；
-  - node在delay link list中；
-
-  三种情况在设置完ticks后，都会把一个node插入delay link list；
-*/
+ */;
 
 x_err_t KTaskSetDelay(KTaskDescriptorType task, x_ticks_t ticks)
-/*@ With (delay_nodes : list(DL_Node TaskDelayAbs))
-         (os_tick delay_before : Z)
-    Require task != 0 &&
-            0 <= ticks && ticks <= UINT_MAX &&
-            delay_nodes_wf(delay_nodes) &&
-            store_dll(
-              store_delay_info, &xiaoshan_delay_head, delay_nodes) *
-            store_uint(heartbeat_ticks_addr, os_tick) *
-            store_task_delay_opt(task, delay_before, delay_nodes)
-    Ensure store_uint(heartbeat_ticks_addr, os_tick) *
-           (
-             (__return == -NOMEMORY &&
-              delay_before == 0 &&
-              delay_nodes_wf(delay_nodes) &&
-              store_dll(
-                store_delay_info, &xiaoshan_delay_head, delay_nodes) *
-              store_task_delay_opt(task, delay_before, delay_nodes))
-             ||
-             (__return == KOK &&
-              exists delay_after delay_nodes_after,
-                delay_after != 0 &&
-                delay_nodes_after ==
-                  delay_insert_by_ticks(
-                    Build_DL_Node(
-                      mkTaskDelayAbs(
-                        task,
-                        unsigned_last_nbits(os_tick + ticks, 32),
-                        TASK_DELAY_ACTIVE_VALUE),
-                      field_addr(delay_after, struct Delay, link)),
-                    delay_remove_old(delay_before, delay_nodes)) &&
-                delay_nodes_wf(delay_nodes_after) &&
-                store_dll(
-                  store_delay_info,
-                  &xiaoshan_delay_head,
-                  delay_nodes_after) *
-                store_ptr(
-                  &(task->task_dync_sched_member.delay), delay_after))
-           )
- */
 {
-	x_base lock = 0;
+    x_base lock = 0;
+    x_base access_lock = 0;
     struct Delay *delay = NONE;
+    struct Delay *delay_for_test = NONE;
     struct Delay *dnode = NONE;
     DoubleLinklistType *nodelink = NONE;
 
     NULL_PARAM_CHECK_1(task);
 
-    if (task->task_dync_sched_member.delay == NONE) {
-	   delay = (struct Delay *)x_malloc(sizeof(struct Delay))
-           /*@ where (delay_object) */;
-       if (delay == NONE)
-       {
-           return -ENOMEMORY;
-       }
-       memset(delay, 0x0, sizeof(struct Delay));
-       task->task_dync_sched_member.delay = delay;
+    if (ticks >= (TICK_SIZE_MAX / 2))
+        return -EINVALED;
+
+    access_lock = CriticalAreaLock();
+    delay_for_test = task->task_dync_sched_member.delay;
+    CriticalAreaUnLock(access_lock);
+    if (delay_for_test == NONE) {
+        delay = (struct Delay *)x_malloc(sizeof(struct Delay));
+        if (delay == NONE) {
+            return -ENOMEMORY;
+        }
+        memset(delay, 0x0, sizeof(struct Delay));
+        access_lock = CriticalAreaLock();
+        task->task_dync_sched_member.delay = delay;
+        CriticalAreaUnLock(access_lock);
     } else {
+        access_lock = CriticalAreaLock();
         delay = task->task_dync_sched_member.delay;
-
+        CriticalAreaUnLock(access_lock);
+        /* 原源码的 active 摘链临界区。 */
         lock = CriticalAreaLock();
-        if(delay->status == TASK_DELAY_ACTIVE){
+        if (delay->status == TASK_DELAY_ACTIVE) {
             delay->status = TASK_DELAY_INACTIVE;
-
-            DoubleLinkListRmNode(&(delay->link))
-                /*@ where (remove_member); A = TaskDelayAbs */;
+            DoubleLinkListRmNode(&(delay->link));
         }
         CriticalAreaUnLock(lock);
     }
 
-	delay->ticks = CurrentTicksGain() + ticks;
+    access_lock = CriticalAreaLock();
+    delay->ticks = CurrentTicksGain() + ticks;
+    CriticalAreaUnLock(access_lock);
+    access_lock = CriticalAreaLock();
     delay->task = task;
+    CriticalAreaUnLock(access_lock);
+    access_lock = CriticalAreaLock();
     delay->status = TASK_DELAY_ACTIVE;
+    CriticalAreaUnLock(access_lock);
 
-	lock = CriticalAreaLock();
-
+    /* 原源码的有序插入临界区；continue 保留 for 的增量读取。 */
+    lock = CriticalAreaLock();
     for (nodelink = xiaoshan_delay_head.node_next;
          nodelink != &xiaoshan_delay_head;
          nodelink = nodelink->node_next) {
-
-        /*@ Given current_delay */
-        dnode = CONTAINER_OF_DELAY_LINK(nodelink)
-            /*@ where delay_ptr = current_delay */;
-        if (delay->ticks < dnode->ticks) {
-
+        dnode = CONTAINER_OF_DELAY_LINK(nodelink);
+        if ((dnode->ticks - delay->ticks) == 0)
+            continue;
+        if ((dnode->ticks - delay->ticks) < (TICK_SIZE_MAX / 2)) {
             DoubleLinkListInsertNodeBefore(nodelink, &delay->link);
-
             break;
         }
-
     }
 
     if (nodelink == &xiaoshan_delay_head) {
-
         DoubleLinkListInsertNodeBefore(&xiaoshan_delay_head, &(delay->link));
-
     }
-
     CriticalAreaUnLock(lock);
 
-	return EOK;
+    return EOK;
 }

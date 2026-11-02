@@ -1,0 +1,2 @@
+2026-11-01 14:07:53,728 INFO [qcp_mcp.server] starting qcp-mcp server on stdio transport
+2026-11-01 14:07:53,735 DEBUG [asyncio] Using selector: EpollSelector

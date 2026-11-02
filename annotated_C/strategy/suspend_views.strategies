@@ -1,0 +1,34 @@
+#include "suspend_views.h"
+
+// IC 的公开接口已经持有 os_inv；借还只读字段不额外要求锁 token。
+id : 1
+priority : core(3)
+left : os_inv(?sg, ?st) at 0
+right : store(field_addr(?assign, Assign, os_running_task), PTR(struct TaskDescriptor), ?value) at 1
+check : infer(assign == Assign);
+action : left_erase(0); right_erase(1);
+         left_add(get_ktask_descriptor_frame(sg, st));
+         right_add(value == assignRunningTask(os_assign(st)));
+
+id : 2
+priority : post(3)
+left : get_ktask_descriptor_frame(?sg, ?st) at 0
+       store(field_addr(?assign, Assign, os_running_task), PTR(struct TaskDescriptor), ?value) at 1
+check : infer(assign == Assign);
+        infer(value == assignRunningTask(os_assign(st)));
+action : left_erase(0); left_erase(1); left_add(os_inv(sg, st));
+
+id : 3
+priority : core(3)
+left : os_inv(?sg, ?st) at 0
+       task_desc_map(os_tasks(st), ?task) == Some{TaskDescriptorAbs}(?desc) at 1
+right : store_task_status(field_addr(field_addr(?q, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), ?value) at 2
+check : infer(q == task);
+action : left_erase(0); left_add(task_fields(sg, st));
+         left_add(os_task_fields_frame(sg, st));
+
+id : 4
+priority : post(4)
+left : task_fields(?sg, ?st) at 0
+       os_task_fields_frame(sg, st) at 1
+action : left_erase(0); left_erase(1); left_add(os_inv(sg, st));

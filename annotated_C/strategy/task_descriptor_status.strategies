@@ -1,0 +1,55 @@
+#include "task_descriptor_status.h"
+
+// A semantic status request borrows only stat; all other descriptor fields stay framed.
+id : 0
+priority : core(1)
+left : store_task_descriptor(?task, ?desc) at 0
+right : store_task_status(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), ?value) at 1
+action : left_erase(0);
+         right_erase(1);
+         left_add(task_descriptor_status_frame(task, desc));
+         right_add(value == desc.tdSchedMember.tsmStat);
+
+// Direct writes need only the byte permission and retain the same writable frame.
+id : 1
+priority : core(1)
+left : store_task_descriptor(?task, ?desc) at 0
+right : undef_data_at(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), U8) at 1
+action : left_erase(0);
+         right_erase(1);
+         left_add(task_descriptor_status_frame(task, desc));
+
+// Preserve the original descriptor expression after an unchanged semantic read.
+id : 2
+priority : post(1)
+left : task_descriptor_status_frame(?task, ?desc) at 0
+       store_task_status(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), desc.tdSchedMember.tsmStat) at 1
+action : left_erase(0);
+         left_erase(1);
+         left_add(store_task_descriptor(task, desc));
+
+id : 3
+priority : post(2)
+left : task_descriptor_status_frame(?task, ?desc) at 0
+       store_task_status(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), ?value) at 1
+action : left_erase(0);
+         left_erase(1);
+         left_add(store_task_descriptor(task, update_sched_member(desc, set_sched_member_status(desc.tdSchedMember, value))));
+
+// A direct C write supplies a raw byte; decoding preserves the existing status abstraction.
+id : 4
+priority : post(2)
+left : task_descriptor_status_frame(?task, ?desc) at 0
+       store(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), U8, ?raw) at 1
+action : left_erase(0);
+         left_erase(1);
+         left_add(store_task_descriptor(task, update_sched_member(desc, set_sched_member_status(desc.tdSchedMember, decode_task_status(raw)))));
+
+// Raw reads descend through the established store_task_status strategy layer.
+id : 5
+priority : core(1)
+left : store_task_descriptor(?task, ?desc) at 0
+right : store(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), U8, ?raw) at 1
+action : left_erase(0);
+         left_add(task_descriptor_status_frame(task, desc));
+         left_add(store_task_status(field_addr(field_addr(task, TaskDescriptor, task_dync_sched_member), TaskDyncSchedMember, stat), desc.tdSchedMember.tsmStat));

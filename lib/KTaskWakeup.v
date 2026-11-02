@@ -4,6 +4,7 @@
 Require Export CRTOS_Verify.lib.KTaskUnSetDelay CRTOS_Verify.lib.RemoveFound.
 Require Export CRTOS_Verify.lib.SemaphoreOps.
 Require Export CRTOS_Verify.lib.MutexOps.
+Require Export CRTOS_Verify.lib.EventOps.
 From QCPCompat Require Import Mapping.
 From Logic.lib Require Import Coqlib.
 Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.
@@ -53,23 +54,21 @@ Definition assign_ready_vector_addr (sg : StableGlobalState) : addr :=
 (** 就绪表更新保持 running/current-priority 以及所有其他模块。 *)
 Definition replace_global_ready_vector (ready : OsAssignReadyVectorAbs)
     (st : VarGlobalState) : VarGlobalState :=
-  {| os_mutexes := st.(os_mutexes); os_semaphores := st.(os_semaphores); os_tasks := st.(os_tasks);
+  {| os_events := st.(os_events); os_mutexes := st.(os_mutexes); os_semaphores := st.(os_semaphores); os_tasks := st.(os_tasks);
      os_tick := st.(os_tick); os_delays := st.(os_delays);
      os_assign := mkVarAssignAbs ready st.(os_assign).(assignRunningTask)
        st.(os_assign).(assignCurrentPriority);
      zombie_queue := st.(zombie_queue); os_recycle := st.(os_recycle);
      os_idle := st.(os_idle);
-     os_msgqueues := st.(os_msgqueues); os_events := st.(os_events);
      os_isr := st.(os_isr); os_exstatus := st.(os_exstatus) |}.
 
 (** 延时取消仅替换 delay 分区；task.delay 指针不变，也没有释放对象。 *)
 Definition replace_global_delays (delays : DelayState) (st : VarGlobalState)
     : VarGlobalState :=
-  {| os_mutexes := st.(os_mutexes); os_semaphores := st.(os_semaphores); os_tasks := st.(os_tasks);
+  {| os_events := st.(os_events); os_mutexes := st.(os_mutexes); os_semaphores := st.(os_semaphores); os_tasks := st.(os_tasks);
      os_tick := st.(os_tick); os_delays := delays; os_assign := st.(os_assign);
      zombie_queue := st.(zombie_queue); os_recycle := st.(os_recycle);
      os_idle := st.(os_idle);
-     os_msgqueues := st.(os_msgqueues); os_events := st.(os_events);
      os_isr := st.(os_isr); os_exstatus := st.(os_exstatus) |}.
 
 (** 按序扫描当前优先级桶，插在第一个 rest_timeslice 严格较大的节点前；
@@ -240,10 +239,9 @@ Record unset_linked_delay_step
   unset_delay_zombie : st_after.(zombie_queue) = st_before.(zombie_queue);
   unset_delay_recycle : st_after.(os_recycle) = st_before.(os_recycle);
   unset_delay_idle : st_after.(os_idle) = st_before.(os_idle);
+  unset_delay_events : st_after.(os_events) = st_before.(os_events);
   unset_delay_mutexes : st_after.(os_mutexes) = st_before.(os_mutexes);
   unset_delay_semaphores : st_after.(os_semaphores) = st_before.(os_semaphores);
-  unset_delay_msgqueues : st_after.(os_msgqueues) = st_before.(os_msgqueues);
-  unset_delay_events : st_after.(os_events) = st_before.(os_events);
   unset_delay_isr : st_after.(os_isr) = st_before.(os_isr);
   unset_delay_exstatus : st_after.(os_exstatus) = st_before.(os_exstatus)
 }.
@@ -459,33 +457,9 @@ Definition semaphore_remove_waiter_step (task : addr)
     remove_found_prop task old.(semaphore_pending_addrs) new.(semaphore_pending_addrs))
     before after.
 
-Definition msgqueue_remove_waiter_step task (before after : MsgQueueState) : Prop :=
-  after.(msgqueue_ptrs) = before.(msgqueue_ptrs) /\
-  after.(msgqueue_ids) = before.(msgqueue_ids) /\
-  forall p, match before.(msgqueue_objects) p, after.(msgqueue_objects) p with
-  | None, None => True
-  | Some old, Some new =>
-      new.(mqBuffer) = old.(mqBuffer) /\ new.(mqIndex) = old.(mqIndex) /\
-      new.(mqNumMsgs) = old.(mqNumMsgs) /\ new.(mqEachLen) = old.(mqEachLen) /\
-      new.(mqMaxMsgs) = old.(mqMaxMsgs) /\ new.(mqDone) = old.(mqDone) /\
-      remove_found_prop (sched_link_node task) old.(mqSendWaitNodes) new.(mqSendWaitNodes) /\
-      remove_found_prop (sched_link_node task) old.(mqRecvWaitNodes) new.(mqRecvWaitNodes)
-  | _, _ => False
-  end.
-
-Definition event_remove_waiter_step task (before after : EventState) : Prop :=
-  after.(event_ptrs) = before.(event_ptrs) /\
-  after.(event_ids) = before.(event_ids) /\
-  forall p, match before.(event_objects) p, after.(event_objects) p with
-  | None, None => True
-  | Some old, Some new =>
-      new.(evOptions) = old.(evOptions) /\ new.(evEvents) = old.(evEvents) /\
-      remove_found_prop (sched_link_node task) old.(evWaitNodes) new.(evWaitNodes)
-  | _, _ => False
-  end.
-
 (** 同步 VRTOS KTaskWakeupSpec 的成功转移：更新 READY、取消 Delay，
-    从自持表或 IPC 等待队列摘除来源节点，并保持其余全局分量。
+    从自持表或当前建模的 semaphore/mutex/event 等待队列摘除来源节点，
+    并保持其余全局分量；msgqueue 不在此关系的当前范围内。
     不修改 exstatus；写 -ERROR 是 LinklistResumeAll 的前一步动作。 *)
 Record ktask_wakeup_step (task : addr) (desc : TaskDescriptorAbs)
     (before after : VarGlobalState) : Prop := {
@@ -505,10 +479,9 @@ Record ktask_wakeup_step (task : addr) (desc : TaskDescriptorAbs)
   wakeup_delays : exists delay_after,
     ktask_unset_delay_step desc.(tdDelay) before delay_after /\
     after.(os_delays) = delay_after.(os_delays);
+  wakeup_events : event_remove_waiter_step task before.(os_events) after.(os_events);
   wakeup_mutexes : mutex_remove_waiter_step task before.(os_mutexes) after.(os_mutexes);
   wakeup_semaphores : semaphore_remove_waiter_step task before.(os_semaphores) after.(os_semaphores);
-  wakeup_msgqueues : msgqueue_remove_waiter_step task before.(os_msgqueues) after.(os_msgqueues);
-  wakeup_events : event_remove_waiter_step task before.(os_events) after.(os_events);
   wakeup_tick : after.(os_tick) = before.(os_tick);
   wakeup_zombie : after.(zombie_queue) = before.(zombie_queue);
   wakeup_recycle : after.(os_recycle) = before.(os_recycle);
@@ -517,8 +490,8 @@ Record ktask_wakeup_step (task : addr) (desc : TaskDescriptorAbs)
   wakeup_exstatus : after.(os_exstatus) = before.(os_exstatus)
 }.
 
-(** VRTOS 162a5e7 新增的已知队首接口。公共 frame 与 MsgQueue 关系沿用
-    上游语义；Semaphore 的 map 更新适配为本地对象序列更新，保留管理次序、
+(** VRTOS 162a5e7 的已知队首接口，目前只保留 Semaphore 分支。
+    Semaphore 的 map 更新适配为本地对象序列更新，保留管理次序、
     ID/value 和其他对象。本地只导入契约，未迁移或宣称其实现证明。 *)
 (** 本地 SemaphoreState 保存对象序列及任务地址序列；nodes 是同一等待链
     的规范 DLL 节点投影。纯关联不重复拥有 pend_list 或任务字段。 *)
@@ -527,21 +500,11 @@ Definition semaphore_pending_nodes (sem : addr) (st : VarGlobalState)
   exists obj, In obj st.(os_semaphores) /\ obj.(semaphore_addr) = sem /\
     map sched_link_node obj.(semaphore_pending_addrs) = nodes.
 
-Definition msgqueue_send_pending_nodes (mq : addr) (st : VarGlobalState)
-    (nodes : list (DL_Node addr)) : Prop :=
-  exists obj, st.(os_msgqueues).(msgqueue_objects) mq = Some obj /\
-    obj.(mqSendWaitNodes) = nodes.
-
-Definition msgqueue_recv_pending_nodes (mq : addr) (st : VarGlobalState)
-    (nodes : list (DL_Node addr)) : Prop :=
-  exists obj, st.(os_msgqueues).(msgqueue_objects) mq = Some obj /\
-    obj.(mqRecvWaitNodes) = nodes.
-
-(** 三类已知 pend_list 共用的调度/Delay 效果。节点从等待链直接转入
+(** Semaphore pend_list 的调度/Delay 效果。节点从等待链直接转入
     READY，自持列表不变。保留原有 RRR 插入和 UnSetDelay 的 N/U/L 分支；
     desc 的 exstatus、优先级、时间片及 Delay 指针由 set_task_desc_ready
-    保持。EventState 整体相等，不再对它做可选摘链。
-    Semaphore/MsgQueue 的具体来源由下面三个关系分别补齐；Mutex分量作为frame保持。 *)
+    保持。Semaphore 的具体来源由 wakeup_semaphore_head 补齐；
+    Mutex/Event 分量作为 frame 保持。 *)
 Record ktask_wakeup_pending_frame (task : addr) (desc : TaskDescriptorAbs)
     (before after : VarGlobalState) : Prop := {
   pending_wakeup_ready : assign_insert_step_ic
@@ -562,8 +525,8 @@ Record ktask_wakeup_pending_frame (task : addr) (desc : TaskDescriptorAbs)
   pending_wakeup_delays : exists delay_after,
     ktask_unset_delay_step desc.(tdDelay) before delay_after /\
     after.(os_delays) = delay_after.(os_delays);
-  pending_wakeup_mutexes : after.(os_mutexes) = before.(os_mutexes);
   pending_wakeup_events : after.(os_events) = before.(os_events);
+  pending_wakeup_mutexes : after.(os_mutexes) = before.(os_mutexes);
   pending_wakeup_tick : after.(os_tick) = before.(os_tick);
   pending_wakeup_zombie : after.(zombie_queue) = before.(zombie_queue);
   pending_wakeup_recycle : after.(os_recycle) = before.(os_recycle);
@@ -577,52 +540,10 @@ Record ktask_wakeup_pending_frame (task : addr) (desc : TaskDescriptorAbs)
 Definition wakeup_semaphore_head (sem task : addr)
     (desc : TaskDescriptorAbs) (before after : VarGlobalState) : Prop :=
   ktask_wakeup_pending_frame task desc before after /\
-  after.(os_msgqueues) = before.(os_msgqueues) /\
   exists old rest,
     In old before.(os_semaphores) /\ old.(semaphore_addr) = sem /\
     old.(semaphore_pending_addrs) = task :: rest /\
     after.(os_semaphores) = semaphore_set_pending sem rest before.(os_semaphores).
-
-(** 只摘 send_pend_list 队首；同一 mq 的 recv_pend_list 原样保持。
-    消息缓冲区指针、索引、计数、容量和回调表也保持。 *)
-Definition wakeup_msgqueue_send_head (mq task : addr)
-    (desc : TaskDescriptorAbs) (before after : VarGlobalState) : Prop :=
-  ktask_wakeup_pending_frame task desc before after /\
-  after.(os_semaphores) = before.(os_semaphores) /\
-  after.(os_msgqueues).(msgqueue_ptrs) = before.(os_msgqueues).(msgqueue_ptrs) /\
-  after.(os_msgqueues).(msgqueue_ids) = before.(os_msgqueues).(msgqueue_ids) /\
-  (forall p, p <> mq ->
-    after.(os_msgqueues).(msgqueue_objects) p =
-    before.(os_msgqueues).(msgqueue_objects) p) /\
-  exists old new rest,
-    before.(os_msgqueues).(msgqueue_objects) mq = Some old /\
-    after.(os_msgqueues).(msgqueue_objects) mq = Some new /\
-    old.(mqSendWaitNodes) = sched_link_node task :: rest /\
-    new.(mqSendWaitNodes) = rest /\
-    new.(mqRecvWaitNodes) = old.(mqRecvWaitNodes) /\
-    new.(mqBuffer) = old.(mqBuffer) /\ new.(mqIndex) = old.(mqIndex) /\
-    new.(mqNumMsgs) = old.(mqNumMsgs) /\ new.(mqEachLen) = old.(mqEachLen) /\
-    new.(mqMaxMsgs) = old.(mqMaxMsgs) /\ new.(mqDone) = old.(mqDone).
-
-(** 只摘 recv_pend_list 队首；send_pend_list 和其余字段不变。 *)
-Definition wakeup_msgqueue_recv_head (mq task : addr)
-    (desc : TaskDescriptorAbs) (before after : VarGlobalState) : Prop :=
-  ktask_wakeup_pending_frame task desc before after /\
-  after.(os_semaphores) = before.(os_semaphores) /\
-  after.(os_msgqueues).(msgqueue_ptrs) = before.(os_msgqueues).(msgqueue_ptrs) /\
-  after.(os_msgqueues).(msgqueue_ids) = before.(os_msgqueues).(msgqueue_ids) /\
-  (forall p, p <> mq ->
-    after.(os_msgqueues).(msgqueue_objects) p =
-    before.(os_msgqueues).(msgqueue_objects) p) /\
-  exists old new rest,
-    before.(os_msgqueues).(msgqueue_objects) mq = Some old /\
-    after.(os_msgqueues).(msgqueue_objects) mq = Some new /\
-    old.(mqRecvWaitNodes) = sched_link_node task :: rest /\
-    new.(mqRecvWaitNodes) = rest /\
-    new.(mqSendWaitNodes) = old.(mqSendWaitNodes) /\
-    new.(mqBuffer) = old.(mqBuffer) /\ new.(mqIndex) = old.(mqIndex) /\
-    new.(mqNumMsgs) = old.(mqNumMsgs) /\ new.(mqEachLen) = old.(mqEachLen) /\
-    new.(mqMaxMsgs) = old.(mqMaxMsgs) /\ new.(mqDone) = old.(mqDone).
 
 Definition ktask_wakeup_detached_null_condition
     (sg : StableGlobalState) (before : VarGlobalState) (id : Z) : Prop :=
@@ -650,10 +571,9 @@ Record ktask_wakeup_detached_null_step (task : addr) (desc : TaskDescriptorAbs)
   wakeup_detached_running : after.(os_assign).(assignRunningTask) = before.(os_assign).(assignRunningTask);
   wakeup_detached_priority : after.(os_assign).(assignCurrentPriority) = before.(os_assign).(assignCurrentPriority);
   wakeup_detached_delays : after.(os_delays) = before.(os_delays);
+  wakeup_detached_events : after.(os_events) = before.(os_events);
   wakeup_detached_mutexes : after.(os_mutexes) = before.(os_mutexes);
   wakeup_detached_semaphores : after.(os_semaphores) = before.(os_semaphores);
-  wakeup_detached_msgqueues : after.(os_msgqueues) = before.(os_msgqueues);
-  wakeup_detached_events : after.(os_events) = before.(os_events);
   wakeup_detached_tick : after.(os_tick) = before.(os_tick);
   wakeup_detached_zombie : after.(zombie_queue) = before.(zombie_queue);
   wakeup_detached_recycle : after.(os_recycle) = before.(os_recycle);

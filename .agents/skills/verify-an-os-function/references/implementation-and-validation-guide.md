@@ -4,6 +4,13 @@
 `/home/xinra/qcp-binary-democases/AGENTS.md`，沿用现有 trial 工程，从它指定的
 `verification-orchestrator` 入口启动 QCP workflow，并把批准的 predicate/spec 当作冻结输入。
 
+## 证明前的工具就绪条件
+
+确认 QCP、Rocq MCP 和项目依赖已配置可用，具体见
+[Implement 环境准备](../../verify-c-function-with-qcp/references/toolchain-preflight.md)。
+同一环境复用已有成功结果，不在每次证明前重复完整验收；环境错误先修复。
+环境可用后直接按 QCP agent 的 workflow/controller 完成证明，不额外增加一套验证流程。
+
 ## QCP工具适配
 
 设计与审阅阶段已有的 trial 文件结构是 implement 必须遵循的工程格式。验证继续使用现有 annotated C、库文件、`_CoqProject` 和其中的外部库引用，文件组织与库引用按[工程配置指南](project-configuration-guide.md#trial-与全局库)保持不变，不重新配置为 QCP 示例仓库的结构，不复制整套依赖或示例，也不改写已有逻辑命名空间。

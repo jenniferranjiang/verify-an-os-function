@@ -41,7 +41,7 @@ CRTOS 任务开始时完整读取用户维护的 [TrustBase.md](/home/xinra/Trus
 
 ### C 源码分析
 
-Main agent 将源码分析交给 C analysis agent，按 [Predicate 指南第 1 节](references/predicate-lemma-design-guide.md#1-确认源码与范围)执行，分析结果用于后续 predicate 设计。
+Main agent 将源码分析交给 C analysis agent，按 [Predicate 指南第 1 节](references/predicate-lemma-design-guide.md#1-确认源码与范围)执行，分析结果用于后续 predicate 设计。源码问题的处理与设计前门禁见[验证记录指南](references/reporting-guide.md#源码问题门禁)。
 
 ### Predicate 设计
 
@@ -188,8 +188,10 @@ Rocq predicate 文件通过 compile/typecheck，annotated C 已完成人工结�
 ## `implement`
 
 只有用户明确确认 review-passed predicate/spec revisions 后才能进入。Main agent 在这里读取
-`/home/xinra/qcp-binary-democases/AGENTS.md`，按[沿用现有工程](references/implementation-and-validation-guide.md#沿用现有工程)要求由 QCP 工具适配本 OS 的 trial 格式，从其中指定的 `verification-orchestrator` 启动 QCP workflow，
+`/home/xinra/qcp-binary-democases/AGENTS.md`，按[QCP工具适配](references/implementation-and-validation-guide.md#qcp工具适配)要求由 QCP 工具适配本 OS 的 trial 格式，从其中指定的 `verification-orchestrator` 启动 QCP workflow，
 把已批准 predicate/spec 作为冻结输入，然后只执行 controller 返回的 action，直到 `done` 或明确 blocker。
+
+开始目标证明前，按[工具就绪条件](references/implementation-and-validation-guide.md#证明前的工具就绪条件)确认环境已配置可用；同一环境复用已有成功结果，之后按 QCP workflow 推进。环境错误先修复。
 
 交接时提供 TrustBase 文件路径，并明确本轮实现证明目标与 `reused-spec` 清单；导入复用函数不提交为 VC/函数体证明目标。trusted 和 reused-spec contract 均不作为本轮新完成的实现证明计数。
 

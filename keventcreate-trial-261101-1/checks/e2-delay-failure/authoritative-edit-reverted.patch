@@ -1,0 +1,19 @@
+--- authoritative/event.c
++++ previously-edited/event.c
+@@ -181,8 +181,14 @@
+ 
+         LinklistSuspend(&(event->pend_list), task, event->options);
+ 
+-        if (timeout > 0)
+-            KTaskSetDelay(task,timeout);
++        if (timeout > 0) {
++            status = KTaskSetDelay(task,timeout);
++            if (status != EOK) {
++                /* Cancel the wait if its timeout could not be established. */
++                task->exstatus = status;
++                KTaskWakeup(task->id.id);
++            }
++        }
+ 
+         CriticalAreaUnLock(lock);
+ 

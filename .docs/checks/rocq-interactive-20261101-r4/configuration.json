@@ -1,0 +1,27 @@
+{
+  "status": "independent-services-passed-client-reload-required",
+  "current_chat_ready": false,
+  "config_path": "/home/xinra/.codex/config.toml",
+  "config_sha256": "85c3cd22a3e2402c75dced9f3223dd7883e6fde63cae04ed1ec5f8381350bc31",
+  "server_launch": {
+    "qcp": {
+      "command": "/home/xinra/crtos/tools/rocq/launch-mcp",
+      "args": [
+        "qcp"
+      ],
+      "cwd": "/home/xinra/crtos"
+    },
+    "rocq-mcp": {
+      "command": "/home/xinra/crtos/tools/rocq/launch-mcp",
+      "args": [
+        "rocq"
+      ],
+      "cwd": "/home/xinra/crtos"
+    }
+  },
+  "rocq_evidence": ".docs/checks/rocq-interactive-20261101-r4/result.json",
+  "qcp_evidence": ".docs/checks/qcp-smoke-20261101-r4/result.json",
+  "config_backup": "/home/xinra/.codex/config.toml.before-qcp-interactive-20261101",
+  "default_switch": "pv-bench-8.20.1",
+  "skills_validation": "both quick_validate passed; relative guide links passed"
+}

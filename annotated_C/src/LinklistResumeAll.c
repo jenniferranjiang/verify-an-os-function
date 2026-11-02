@@ -61,32 +61,6 @@ x_err_t KTaskWakeup(int32 id)
       wakeup_semaphore_head(sem, task, desc, before, after) &&
       semaphore_pending_nodes(sem, after, rest) && os_inv(sg, after)
  */
-/*@ msgqueue_send_pending_head_ic <= wakeup_by_id_ic
-    With (sg : StableGlobalState) (before : VarGlobalState)
-      (mq task : Z) (rest : list(DL_Node Z))
-    Require id < 65536 && get_task_with_idnode_success(sg, before, id, task) &&
-      msgqueue_send_pending_nodes(mq, before, cons(sched_link_node(task), rest)) &&
-      os_inv(sg, before)
-    Ensure exists (desc : TaskDescriptorAbs) (after : VarGlobalState),
-      __return == 0 && task != 0 &&
-      before.os_tasks.task_desc_map(task) == Some(desc) &&
-      desc.tdSchedMember.tsmStat == TSK_SUSPEND &&
-      wakeup_msgqueue_send_head(mq, task, desc, before, after) &&
-      msgqueue_send_pending_nodes(mq, after, rest) && os_inv(sg, after)
- */
-/*@ msgqueue_recv_pending_head_ic <= wakeup_by_id_ic
-    With (sg : StableGlobalState) (before : VarGlobalState)
-      (mq task : Z) (rest : list(DL_Node Z))
-    Require id < 65536 && get_task_with_idnode_success(sg, before, id, task) &&
-      msgqueue_recv_pending_nodes(mq, before, cons(sched_link_node(task), rest)) &&
-      os_inv(sg, before)
-    Ensure exists (desc : TaskDescriptorAbs) (after : VarGlobalState),
-      __return == 0 && task != 0 &&
-      before.os_tasks.task_desc_map(task) == Some(desc) &&
-      desc.tdSchedMember.tsmStat == TSK_SUSPEND &&
-      wakeup_msgqueue_recv_head(mq, task, desc, before, after) &&
-      msgqueue_recv_pending_nodes(mq, after, rest) && os_inv(sg, after)
- */
 ;
 
 /* waiting 是调用前的挂起任务序列。正常返回时原等待任务均为 READY、

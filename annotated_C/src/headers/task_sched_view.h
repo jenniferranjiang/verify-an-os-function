@@ -5,6 +5,9 @@
 /*@ Import Coq Require Import CRTOS_Verify.libai.TaskSchedViews */
 /*@ Import Coq Require Import CRTOS_Verify.libai.AssignInCritical */
 /*@ Extern Coq
+      (store_task_descriptor : Z -> TaskDescriptorAbs -> Assertion)
+      (task_fields_descriptor_frame : StableGlobalState -> VarGlobalState -> Z -> TaskDescriptorAbs -> Assertion)
+      (task_descriptor_sched_frame : Z -> TaskDescriptorAbs -> Assertion)
       (store_assign_remove_sched_frame : Z -> TaskSchedMemberAbs -> Assertion)
       (task_fields_except_sched : StableGlobalState -> VarGlobalState -> Z -> TaskDescriptorAbs -> Assertion)
       (store_task_sched_except_cur_prio : Z -> TaskSchedMemberAbs -> Assertion)
