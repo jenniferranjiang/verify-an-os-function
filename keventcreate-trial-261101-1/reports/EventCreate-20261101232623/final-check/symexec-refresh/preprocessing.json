@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "gcc",
+    "-E",
+    "-CC",
+    "-dD",
+    "-undef",
+    "-nostdinc",
+    "-ffreestanding",
+    "-m32",
+    "-Iannotated_C/src/",
+    "-Iannotated_C/include/",
+    "/home/xinra/crtos/keventcreate-trial-261101-1/annotated_C/src/_EventCreate.c",
+    "-o",
+    "/home/xinra/crtos/keventcreate-trial-261101-1/reports/EventCreate-20261101232623/final-check/symexec-refresh/preprocessed/_EventCreate.c"
+  ],
+  "output": "/home/xinra/crtos/keventcreate-trial-261101-1/reports/EventCreate-20261101232623/final-check/symexec-refresh/preprocessed/_EventCreate.c",
+  "source": "/home/xinra/crtos/keventcreate-trial-261101-1/annotated_C/src/_EventCreate.c",
+  "preprocessed_sha256": "9e8517d2bdb11c979d0badfd16a83cb6c0aa7af5bf3e39616d166ded206c3529",
+  "semantics": "GCC preprocessing with annotations, macro definitions and source line markers preserved"
+}

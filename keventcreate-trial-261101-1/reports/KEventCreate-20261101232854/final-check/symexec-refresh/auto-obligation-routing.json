@@ -1,0 +1,11 @@
+{
+  "promoted": [
+    "proof_of_KEventCreate_return_wit_1",
+    "proof_of_KEventCreate_return_wit_2",
+    "proof_of_KEventCreate_partial_solve_wit_1_pure",
+    "proof_of_KEventCreate_partial_solve_wit_1"
+  ],
+  "generator_auto_sha256": "c1eed460a077c84b113e69e560105a12c0af0d70e65cecc209d565e5cf8208b8",
+  "generator_manual_sha256": "e0b50bd091d0a269206f251f6ac3e5b74d0f98c771929cabf1f2e719b5e4453d",
+  "statements_preserved": true
+}

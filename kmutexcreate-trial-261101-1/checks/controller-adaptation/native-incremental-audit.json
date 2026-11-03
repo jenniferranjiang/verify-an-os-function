@@ -1,0 +1,11 @@
+{
+  "targets_checked": 191,
+  "stale": [
+    {
+      "target": "/home/xinra/crtos/lib/DelayState.vo",
+      "newer_dependencies": [
+        "/home/xinra/crtos/lib/KTaskDelay.vo"
+      ]
+    }
+  ]
+}

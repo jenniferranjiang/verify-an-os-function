@@ -1,0 +1,118 @@
+[
+  {
+    "file": "lib/AssignInv.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/Bitmap.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/CrtosGlobState.v",
+    "kind": "semantic"
+  },
+  {
+    "file": "lib/CrtosInv.v",
+    "kind": "semantic"
+  },
+  {
+    "file": "lib/CrtosRules.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/DelayInv.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/DoubleLinkListSpec.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/EventInv.v",
+    "kind": "new"
+  },
+  {
+    "file": "lib/EventOps.v",
+    "kind": "new"
+  },
+  {
+    "file": "lib/EventState.v",
+    "kind": "new"
+  },
+  {
+    "file": "lib/ExstatusInv.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/IdModuleSpec.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/IsrManagerInv.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/KEventCreate.v",
+    "kind": "new"
+  },
+  {
+    "file": "lib/KTaskDelayMem.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/KTaskSchedMember.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/KTaskStackSetup.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/KTaskUnSetDelay.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/KTaskWakeup.v",
+    "kind": "semantic"
+  },
+  {
+    "file": "lib/MutexInv.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/NodeSelfLinked.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/OsAssignReadyVector.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/SemaphoreInv.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/ServiceSlotWf.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/TaskInv.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/TaskStatusMemory.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/TickInv.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/dll.v",
+    "kind": "imports-only"
+  },
+  {
+    "file": "lib/idnode.v",
+    "kind": "imports-only"
+  }
+]

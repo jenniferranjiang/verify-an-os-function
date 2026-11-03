@@ -1,10 +1,12 @@
 {
-  "date": "2026-11-01",
+  "date": "2026-11-03",
   "branch": "trial-archive",
   "base_commit": "f96dd2e20249ed8f55d8a33097de411a97aab9ab",
   "trial_directories": [
     "keventcreate-trial-260928-2",
+    "keventcreate-trial-261101-1",
     "kmutexcreate-trial-260928-2",
+    "kmutexcreate-trial-261101-1",
     "ksemaphorecreate-trial-260928-1",
     "ksemaphorecreate-trial-261012-1",
     "ksemaphorecreate-trial-261019-1",
@@ -239,5 +241,17 @@
       "local_disk_kib": 13620
     }
   ],
-  "scope": "Archive existing trial sources and evidence; no new verification claims. Compiled caches omitted."
+  "scope": "Archive existing trial sources and evidence; no new verification claims. Compiled caches omitted.",
+  "archive_updates": [
+    {
+      "date": "2026-11-03",
+      "source_commit": "744a8de96c742cf587e2f3fd8a49cb134808c29b",
+      "trial_directories": [
+        "keventcreate-trial-261101-1",
+        "kmutexcreate-trial-261101-1"
+      ],
+      "tracked_files": 790,
+      "scope": "Exact tracked trial snapshots; no new verification claims or compiled caches."
+    }
+  ]
 }

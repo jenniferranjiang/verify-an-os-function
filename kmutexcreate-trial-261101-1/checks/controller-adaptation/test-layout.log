@@ -1,0 +1,12 @@
+test_coqdep_external_boundary (__main__.LayoutChecks.test_coqdep_external_boundary) ... ok
+test_driver_is_tool_owned (__main__.LayoutChecks.test_driver_is_tool_owned) ... ok
+test_escapes_and_missing_project (__main__.LayoutChecks.test_escapes_and_missing_project) ... ok
+test_external_library_mapping (__main__.LayoutChecks.test_external_library_mapping) ... ok
+test_legacy_topology (__main__.LayoutChecks.test_legacy_topology) ... ok
+test_loadpaths_do_not_copy_dependencies (__main__.LayoutChecks.test_loadpaths_do_not_copy_dependencies) ... ok
+test_trial_topology (__main__.LayoutChecks.test_trial_topology) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.051s
+
+OK

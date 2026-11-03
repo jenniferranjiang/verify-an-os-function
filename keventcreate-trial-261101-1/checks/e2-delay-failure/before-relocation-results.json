@@ -1,0 +1,60 @@
+[
+  {
+    "variant": "before",
+    "command": [
+      "gcc",
+      "-std=c11",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-unused-variable",
+      "-fsanitize=undefined",
+      "-fno-sanitize-recover=all",
+      "harness.c",
+      "-o",
+      "regression"
+    ],
+    "compile_exit": 0,
+    "run_exit": 20,
+    "output": "REGRESSION: task still suspended without a timeout at schedule\n",
+    "sources": {
+      "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c": "fb114fe11fed1eb2dd717c81e95a1fb8675277b65f1d1009349e56b473846352",
+      "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/CriticalArea.c": "946b214eb678c1202c96dc6fd5272fd2c8d2dd245736888a0ea4114fdd6f113a",
+      "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/delay.c": "96bae0517d57db4dd5b960a0bc88fa1b096b15eca5d0c69224d6b93f309e0961",
+      "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c": "dbf27468d0e386cc54c9aeb28219662aa6248bfd8292120423b4d2fa4f8bf3d1",
+      "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/linklist.c": "d64d3275b6d936f46352bc4625fc11efc9e0b113ca838f60a98eabaa09a7342c",
+      "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/tick.c": "4db5cceacbf0f7a6c4d72151c9e66cdf30bdfa0eb455820cdf5048365456323d",
+      "keventcreate-trial-261101-1/checks/e2-delay-failure/before-event.c": "1351dfb28f28413e50790fd4390777e647c6d60f1fe9debf850367c902841d64"
+    }
+  },
+  {
+    "variant": "after",
+    "command": [
+      "gcc",
+      "-std=c11",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-Wno-unused-variable",
+      "-fsanitize=undefined",
+      "-fno-sanitize-recover=all",
+      "harness.c",
+      "-o",
+      "regression"
+    ],
+    "compile_exit": 0,
+    "run_exit": 0,
+    "output": "PASS: 16 scenarios, real Process/Delay/Suspend/Wakeup/DLL bodies, modeled scheduler\n",
+    "sources": {
+      "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c": "fb114fe11fed1eb2dd717c81e95a1fb8675277b65f1d1009349e56b473846352",
+      "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/CriticalArea.c": "946b214eb678c1202c96dc6fd5272fd2c8d2dd245736888a0ea4114fdd6f113a",
+      "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/delay.c": "96bae0517d57db4dd5b960a0bc88fa1b096b15eca5d0c69224d6b93f309e0961",
+      "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c": "dbf27468d0e386cc54c9aeb28219662aa6248bfd8292120423b4d2fa4f8bf3d1",
+      "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/linklist.c": "d64d3275b6d936f46352bc4625fc11efc9e0b113ca838f60a98eabaa09a7342c",
+      "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/tick.c": "4db5cceacbf0f7a6c4d72151c9e66cdf30bdfa0eb455820cdf5048365456323d",
+      "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/event.c": "1816cddc807d26e10cfbc1016b4e33a3f2486bc57ac007ae3773cfb54435ed86"
+    }
+  }
+]

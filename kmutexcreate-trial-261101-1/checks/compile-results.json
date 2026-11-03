@@ -1,0 +1,218 @@
+[
+  {
+    "module": "MutexState",
+    "exit": 0,
+    "seconds": 2.44,
+    "log": "checks/compile-MutexState.log"
+  },
+  {
+    "module": "CrtosGlobState",
+    "exit": 0,
+    "seconds": 2.146,
+    "log": "checks/compile-CrtosGlobState.log"
+  },
+  {
+    "module": "CrtosRules",
+    "exit": 0,
+    "seconds": 4.966,
+    "log": "checks/compile-CrtosRules.log"
+  },
+  {
+    "module": "ServiceSlotWf",
+    "exit": 0,
+    "seconds": 2.315,
+    "log": "checks/compile-ServiceSlotWf.log"
+  },
+  {
+    "module": "Bitmap",
+    "exit": 0,
+    "seconds": 3.355,
+    "log": "checks/compile-Bitmap.log"
+  },
+  {
+    "module": "ExstatusInv",
+    "exit": 0,
+    "seconds": 4.011,
+    "log": "checks/compile-ExstatusInv.log"
+  },
+  {
+    "module": "KTaskDelayMem",
+    "exit": 0,
+    "seconds": 3.749,
+    "log": "checks/compile-KTaskDelayMem.log"
+  },
+  {
+    "module": "KTaskOsAssign",
+    "exit": 0,
+    "seconds": 3.7,
+    "log": "checks/compile-KTaskOsAssign.log"
+  },
+  {
+    "module": "KTaskStackSetup",
+    "exit": 0,
+    "seconds": 3.466,
+    "log": "checks/compile-KTaskStackSetup.log"
+  },
+  {
+    "module": "TaskStatusMemory",
+    "exit": 0,
+    "seconds": 2.788,
+    "log": "checks/compile-TaskStatusMemory.log"
+  },
+  {
+    "module": "TickInv",
+    "exit": 0,
+    "seconds": 2.808,
+    "log": "checks/compile-TickInv.log"
+  },
+  {
+    "module": "dll",
+    "exit": 0,
+    "seconds": 11.048,
+    "log": "checks/compile-dll.log"
+  },
+  {
+    "module": "DoubleLinkListSpec",
+    "exit": 0,
+    "seconds": 2.564,
+    "log": "checks/compile-DoubleLinkListSpec.log"
+  },
+  {
+    "module": "KTaskSchedMember",
+    "exit": 0,
+    "seconds": 3.121,
+    "log": "checks/compile-KTaskSchedMember.log"
+  },
+  {
+    "module": "KTaskStackSetupProofAux",
+    "exit": 0,
+    "seconds": 44.638,
+    "log": "checks/compile-KTaskStackSetupProofAux.log"
+  },
+  {
+    "module": "NodeSelfLinked",
+    "exit": 0,
+    "seconds": 3.019,
+    "log": "checks/compile-NodeSelfLinked.log"
+  },
+  {
+    "module": "KTaskParseInfo",
+    "exit": 0,
+    "seconds": 3.539,
+    "log": "checks/compile-KTaskParseInfo.log"
+  },
+  {
+    "module": "idnode",
+    "exit": 0,
+    "seconds": 5.823,
+    "log": "checks/compile-idnode.log"
+  },
+  {
+    "module": "AssignInv",
+    "exit": 0,
+    "seconds": 4.87,
+    "log": "checks/compile-AssignInv.log"
+  },
+  {
+    "module": "DelayInv",
+    "exit": 0,
+    "seconds": 1.549,
+    "log": "checks/compile-DelayInv.log"
+  },
+  {
+    "module": "EventInv",
+    "exit": 0,
+    "seconds": 4.876,
+    "log": "checks/compile-EventInv.log"
+  },
+  {
+    "module": "IdModuleSpec",
+    "exit": 0,
+    "seconds": 3.16,
+    "log": "checks/compile-IdModuleSpec.log"
+  },
+  {
+    "module": "IsrManagerInv",
+    "exit": 0,
+    "seconds": 4.385,
+    "log": "checks/compile-IsrManagerInv.log"
+  },
+  {
+    "module": "KTaskDescriptor",
+    "exit": 0,
+    "seconds": 35.772,
+    "log": "checks/compile-KTaskDescriptor.log"
+  },
+  {
+    "module": "MsgQueueInv",
+    "exit": 0,
+    "seconds": 5.076,
+    "log": "checks/compile-MsgQueueInv.log"
+  },
+  {
+    "module": "SemaphoreInv",
+    "exit": 0,
+    "seconds": 51.51,
+    "log": "checks/compile-SemaphoreInv.log"
+  },
+  {
+    "module": "TaskInv",
+    "exit": 0,
+    "seconds": 2.733,
+    "log": "checks/compile-TaskInv.log"
+  },
+  {
+    "module": "KTaskUnSetDelay",
+    "exit": 0,
+    "seconds": 2.769,
+    "log": "checks/compile-KTaskUnSetDelay.log"
+  },
+  {
+    "module": "MutexInv",
+    "exit": 0,
+    "seconds": 2.971,
+    "log": "checks/compile-MutexInv.log"
+  },
+  {
+    "module": "OsAssignReadyVector",
+    "exit": 0,
+    "seconds": 2.713,
+    "log": "checks/compile-OsAssignReadyVector.log"
+  },
+  {
+    "module": "CrtosInv",
+    "exit": 0,
+    "seconds": 3.74,
+    "log": "checks/compile-CrtosInv.log"
+  },
+  {
+    "module": "KMutexCreate",
+    "exit": 0,
+    "seconds": 2.548,
+    "log": "checks/compile-KMutexCreate.log"
+  },
+  {
+    "module": "KSemaphoreCreate",
+    "exit": 0,
+    "seconds": 2.499,
+    "log": "checks/compile-KSemaphoreCreate.log"
+  },
+  {
+    "module": "KTaskWakeup",
+    "exit": 0,
+    "seconds": 2.998,
+    "log": "checks/compile-KTaskWakeup.log"
+  },
+  {
+    "module": "KSemaphoreDelete",
+    "exit": 0,
+    "seconds": 3.124,
+    "log": "checks/compile-KSemaphoreDelete.log"
+  },
+  {
+    "module": "MutexOps",
+    "exit": 0,
+    "log": "checks/compile-MutexOps.log",
+    "note": "compiled separately before KTaskWakeup; coqc exit 0"
+  }
+]

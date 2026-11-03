@@ -1,0 +1,152 @@
+[
+  {
+    "file": "kmutexcreate-trial-261101-1/annotated_C/src/CriticalAreaLock.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "kmutexcreate-trial-261101-1/annotated_C/src/CriticalAreaLock.c"
+    ],
+    "returncode": 0,
+    "stderr": "In file included from kmutexcreate-trial-261101-1/annotated_C/src/CriticalAreaLock.c:2:\nkmutexcreate-trial-261101-1/annotated_C/src/../include/logic.h:3:69: warning: \"/*\" within comment [-Wcomment]\n    3 | /* Only logic declarations: canonical function contracts live in src/*.c. */\n      |                                                                      \n"
+  },
+  {
+    "file": "kmutexcreate-trial-261101-1/annotated_C/src/CriticalAreaUnLock.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "kmutexcreate-trial-261101-1/annotated_C/src/CriticalAreaUnLock.c"
+    ],
+    "returncode": 0,
+    "stderr": "In file included from kmutexcreate-trial-261101-1/annotated_C/src/CriticalAreaUnLock.c:2:\nkmutexcreate-trial-261101-1/annotated_C/src/../include/logic.h:3:69: warning: \"/*\" within comment [-Wcomment]\n    3 | /* Only logic declarations: canonical function contracts live in src/*.c. */\n      |                                                                      \n"
+  },
+  {
+    "file": "kmutexcreate-trial-261101-1/annotated_C/src/DoubleLinkListInsertNodeAfter.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "kmutexcreate-trial-261101-1/annotated_C/src/DoubleLinkListInsertNodeAfter.c"
+    ],
+    "returncode": 0,
+    "stderr": "In file included from kmutexcreate-trial-261101-1/annotated_C/src/DoubleLinkListInsertNodeAfter.c:2:\nkmutexcreate-trial-261101-1/annotated_C/src/../include/logic.h:3:69: warning: \"/*\" within comment [-Wcomment]\n    3 | /* Only logic declarations: canonical function contracts live in src/*.c. */\n      |                                                                      \n"
+  },
+  {
+    "file": "kmutexcreate-trial-261101-1/annotated_C/src/IdInsertObj.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "kmutexcreate-trial-261101-1/annotated_C/src/IdInsertObj.c"
+    ],
+    "returncode": 0,
+    "stderr": "In file included from kmutexcreate-trial-261101-1/annotated_C/src/IdInsertObj.c:2:\nkmutexcreate-trial-261101-1/annotated_C/src/../include/logic.h:3:69: warning: \"/*\" within comment [-Wcomment]\n    3 | /* Only logic declarations: canonical function contracts live in src/*.c. */\n      |                                                                      \n"
+  },
+  {
+    "file": "kmutexcreate-trial-261101-1/annotated_C/src/InitDoubleLinkList.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "kmutexcreate-trial-261101-1/annotated_C/src/InitDoubleLinkList.c"
+    ],
+    "returncode": 0,
+    "stderr": "In file included from kmutexcreate-trial-261101-1/annotated_C/src/InitDoubleLinkList.c:2:\nkmutexcreate-trial-261101-1/annotated_C/src/../include/logic.h:3:69: warning: \"/*\" within comment [-Wcomment]\n    3 | /* Only logic declarations: canonical function contracts live in src/*.c. */\n      |                                                                      \n"
+  },
+  {
+    "file": "kmutexcreate-trial-261101-1/annotated_C/src/KMutexCreate.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "kmutexcreate-trial-261101-1/annotated_C/src/KMutexCreate.c"
+    ],
+    "returncode": 0,
+    "stderr": "In file included from kmutexcreate-trial-261101-1/annotated_C/src/KMutexCreate.c:2:\nkmutexcreate-trial-261101-1/annotated_C/src/../include/logic.h:3:69: warning: \"/*\" within comment [-Wcomment]\n    3 | /* Only logic declarations: canonical function contracts live in src/*.c. */\n      |                                                                      \n"
+  },
+  {
+    "file": "kmutexcreate-trial-261101-1/annotated_C/src/_MutexCreate.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "kmutexcreate-trial-261101-1/annotated_C/src/_MutexCreate.c"
+    ],
+    "returncode": 0,
+    "stderr": "In file included from kmutexcreate-trial-261101-1/annotated_C/src/_MutexCreate.c:2:\nkmutexcreate-trial-261101-1/annotated_C/src/../include/logic.h:3:69: warning: \"/*\" within comment [-Wcomment]\n    3 | /* Only logic declarations: canonical function contracts live in src/*.c. */\n      |                                                                      \n"
+  },
+  {
+    "file": "kmutexcreate-trial-261101-1/annotated_C/src/memset.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "kmutexcreate-trial-261101-1/annotated_C/src/memset.c"
+    ],
+    "returncode": 0,
+    "stderr": "In file included from kmutexcreate-trial-261101-1/annotated_C/src/memset.c:2:\nkmutexcreate-trial-261101-1/annotated_C/src/../include/logic.h:3:69: warning: \"/*\" within comment [-Wcomment]\n    3 | /* Only logic declarations: canonical function contracts live in src/*.c. */\n      |                                                                      \n"
+  },
+  {
+    "file": "kmutexcreate-trial-261101-1/annotated_C/src/x_free.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "kmutexcreate-trial-261101-1/annotated_C/src/x_free.c"
+    ],
+    "returncode": 0,
+    "stderr": "In file included from kmutexcreate-trial-261101-1/annotated_C/src/x_free.c:2:\nkmutexcreate-trial-261101-1/annotated_C/src/../include/logic.h:3:69: warning: \"/*\" within comment [-Wcomment]\n    3 | /* Only logic declarations: canonical function contracts live in src/*.c. */\n      |                                                                      \n"
+  },
+  {
+    "file": "kmutexcreate-trial-261101-1/annotated_C/src/x_malloc.c",
+    "command": [
+      "gcc",
+      "-m32",
+      "-std=c11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-Wall",
+      "-Wextra",
+      "kmutexcreate-trial-261101-1/annotated_C/src/x_malloc.c"
+    ],
+    "returncode": 0,
+    "stderr": "In file included from kmutexcreate-trial-261101-1/annotated_C/src/x_malloc.c:2:\nkmutexcreate-trial-261101-1/annotated_C/src/../include/logic.h:3:69: warning: \"/*\" within comment [-Wcomment]\n    3 | /* Only logic declarations: canonical function contracts live in src/*.c. */\n      |                                                                      \n"
+  }
+]

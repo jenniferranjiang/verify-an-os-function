@@ -1,0 +1,23 @@
+# 本轮 QCP 工程适配
+
+原controller的init-run拒绝本trial的annotated_C/src输入，要求QCP_examples；它也固定Rocq/examples输出和仓库内部依赖。按verify-an-os-function的工具侧适配要求，在QCP工具源码做局部支持，保留本trial的目录和外部库引用，不复制依赖或改已有逻辑命名空间。
+
+增加的适配读取现有_CoqProject，接受annotated_C/src，将新产物放显式配置的VC目录（CRTOS_Verify.VC）。既有QCP_examples布局保持。所有正式输出仍受trial内写入边界控制；外部依赖仅可来自项目声明的映射，路径逃逸、符号链接检查继续执行。外部库按相同配置由native Make真实编译，编译结束重新检查vo相对于source的新鲜度。没有通过修改controller state伪造接纳。
+
+初次target symexec报内置预处理器Unsupported token in #if expression；工具采用TrustBase已覆盖的GCC预处理，保留-CC注释、-dD宏定义和source line markers，不修改权威C、切片算法或冻结contract。qcp-project.json明确Arch32/LittleEndian和no-CRules，使用注解已经导入的CRTOS统一断言模型。preprocessing、一次driver执行和final replay均走同一controller路径、同一预算及取消控制。各次生成目录记录预处理命令和结果hash。
+
+工具适配中曾提出取消外部库mtime门禁，以复用源树迁移前的预编译库。自动审批拒绝该动作，理由是可能削弱验证完整性；该补丁没有执行。已改为保留检查并实际重编译所需依赖，替代方案获准。
+
+工具修改前文件、最终候选及hash保存在checks/controller-adaptation；test-layout.log记录7项路径/旧布局/外部映射/拒绝逃逸/driver选择回归检查。它们只是工具测试，不代替任何controller阶段接纳或C证明。实际case的formal-case-lib检查和symexec仍由annotation owner通过controller执行。
+
+## 未证明的 auto 模板
+
+实际生成器将“自动求解”义务写成Admitted模板：内部创建45项、外层包装4项。不能把文件名auto或symbolic成功当作Rocq证明。工具在发布新生成产物前，将这些原始lemma机械转交既有manual流程；全部陈述和义务集合保持不变，未加入任何证明或信任假设。goal-check仍要求完整VC_Correct模块，由后续VC checking、group proving和final-check消除义务。
+
+该处理仅作用于controller临时目录的新生成文件，独立replay执行同一规则。实际两case的陈述守恒、已证auto保持、冲突陈述拒绝三项回归检查均通过（test_auto_routing.py），没有手改canonical generated模板来伪造通过。
+
+## 证明分组与交互路径
+
+vc-proving-preparing原先也硬编码manual必须位于Rocq目录，现改为按当前trial项目的明确VC映射检查同一case family；原文件名对应、路径归属和计划检查保留。
+
+group-development/coq-debug的staging目录现在由controller写出与实际coqc一致的_CoqProject：共享库仍直接引用原路径，当前case映射到本组staged VC。MCP只需使用该build workspace。已通过实际rocq_query加载staged KMutexCreate_goal并检查KMutexCreate_return_wit_1类型为Prop，确认不是仅编译端可用。没有复制共享库或更改逻辑命名空间。

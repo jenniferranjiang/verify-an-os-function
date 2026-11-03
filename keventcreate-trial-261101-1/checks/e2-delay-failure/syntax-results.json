@@ -1,0 +1,22 @@
+{
+  "host_trial_candidate": {
+    "command": [
+      "gcc",
+      "-std=gnu11",
+      "-ffreestanding",
+      "-fsyntax-only",
+      "-I",
+      "Ubiquitous/XiZi_IIoT_Macro/kernel/include",
+      "-I",
+      "annotated_C/src/include",
+      "keventcreate-trial-261101-1/source_fixes/_EventProcess.c"
+    ],
+    "exit_code": 0,
+    "log": "trial-host-syntax.log"
+  },
+  "ilp32": {
+    "status": "not-run-after-relocation",
+    "reason": "previous whole-TU attempt lacked 32bit libc headers; no target build claim",
+    "prior_record": "before-relocation-syntax-results.json"
+  }
+}

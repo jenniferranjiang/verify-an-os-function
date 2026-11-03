@@ -1,0 +1,20 @@
+# KEventCreate implement 授权与边界
+
+用户明确指令：“ok我们来implement吧”。这是对当前review-passed revisions及其共享迁移的批准，解除先前仅设计、不运行symbolic/VC/证明的阶段限制。
+Predicate revision bc9e9bde2236e66d076beac531d82c6ad1175d71225e1f8477f0f46e6c2c61ca；spec revision 1c4a7b5920e164a40891b6d64dc6f18be0debede36a1c79946dd82dad5138f00。来源见checks/predicate-manifest.json、spec-manifest.json及migration.json。
+
+工程沿用本trial的annotated_C/src、include和_CoqProject；共享定义直接引用/home/xinra/crtos/lib（CRTOS_Verify.lib），trial/lib和checks/review-inputs是只读审阅快照，不参与当前构建。新增证明产物位于trial/VC，唯一映射CRTOS_Verify.VC；case辅助库可导入共享定义并补充证明，不复制或重定义冻结predicate，不新增Axiom/Parameter或用Admitted冒充证明。
+
+证明目标只有_EventCreate（case EventCreate，先完成）及KEventCreate（随后独立case）。必须验证两个真实active body。三个reused-spec边界不生成本轮VC或重证body：IdInsertObj来自根annotated_C/src/headers/id_module_spec.h；InitDoubleLinkList、DoubleLinkListInsertNodeAfter来自根同名C文件（选择dispatch_case）。每个caller-local合同须与采用的canonical一致；来源版本见source-manifest.json与spec-review.md。
+
+TrustBase路径/home/xinra/TrustBase.md，只读。CriticalAreaLock/UnLock、x_malloc/x_free对应KERNEL_MALLOC/FREE宏及memset为已有TrustBase边界；event_object free消费完整EventRaw且必须来自本次malloc的原基址。不得扩大trusted symbol或合同。无依据的布局事实不得作为已证lemma使用；EventInv中的event_byte_layout及各obligation是明确待证命题，须通过实际QCP布局接口/既有可信布局机制或有效证明处理，发现需要新的信任假设则报告main。
+
+位域适配已审：非SMP、Arch32、LittleEndian；权威Event位域对象32字节，模型展开options/events为独立uint32后36字节，slice显式options & 7U保持低3位。不能把两种布局声称为相同ABI。Create仍接受uint32全域，禁止将Require收窄到FIFO/PRIO。三条返回路径均需证明：malloc失败锁外-5；ID失败原manager+未知insert_ready恢复完整私有对象，unlock后free原基址返回-5；成功最小空闲ID，events=0、options低3位、空pending、ID与管理链头插，恢复os_inv后unlock返回ID。复用ID失败合同不保证已满。
+
+OS Annotation阶段允许在函数体中新增/修正by local、where、branch-control、Inv/multi-inv等合法QCP注解；范围事实、调用前提仍须证明，不得增加无据假设、改可执行算法或遗漏路径/资源。冻结spec/predicate若需语义变更先停止并提出具体方案，经用户确认后才unfreeze；普通proof-local注解可在本attempt内完善。
+
+源码问题已经按用户选择处理：E1及E2非法策略按后续API合法输入范围说明；用户明确E3使用期间不会删除。E2合法参数下的延时分配失败已修复为trial/source_fixes/_EventProcess.c候选，16主机场景通过，权威event.c保持原样。该修复候选不在Create调用闭包，不属于本轮证明目标；不得以本证明声称权威Event模块已修复或任意使用/删除均保持os_inv。保留source-errors.md及e2-fix-review.md的适用范围。用户要求今后源码修复保存在trial并注释，不改权威C。
+
+当前环境沿用已成功验证MutexCreate的QCP工具适配和Coq8.20.1工具链；配置为GCC预处理、Arch32、小端、no_crules。按现有controller实现识别annotated_C/src与外部_CoqProject路径，不复制库、不另换目录布局。Rocq证明须按owner角色要求使用MCP交互；若环境出现实际错误先修复，不能静默用批量编译替代交互。历史mutex实现证明可只读参考，不能假定旧完整OS状态证明适用于当前含Event的状态；新的goal检查须实际成功。
+
+实现阶段ABI补齐：实际VC确认缺少Event大小/偏移接口后，按既有TrustBase结构体布局/位域适配具体化，经独立设计、ABI检查、Rocq编译与独立review-passed，增加共享CRTOS_Verify.lib.EventLayoutABI。仅event_size_axiom及event_top_level_field_offset_axiom两条具体可信ABI事实；见event-layout-review.md及checks/event-layout-migration.json。它们不是新的函数trusted合同，不改变冻结predicate或With/Require/Ensure。Owner可在case lib导入该已审共享模块，仍不得自行新增Axiom或把生成VC/字节转换当作公理。最终报告应明确列出这两条ABI依赖。

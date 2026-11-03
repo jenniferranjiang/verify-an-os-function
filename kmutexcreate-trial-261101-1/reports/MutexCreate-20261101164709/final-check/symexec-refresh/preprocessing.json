@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "gcc",
+    "-E",
+    "-CC",
+    "-dD",
+    "-undef",
+    "-nostdinc",
+    "-ffreestanding",
+    "-m32",
+    "-Iannotated_C/src/",
+    "-Iannotated_C/include/",
+    "/home/xinra/crtos/kmutexcreate-trial-261101-1/annotated_C/src/_MutexCreate.c",
+    "-o",
+    "/home/xinra/crtos/kmutexcreate-trial-261101-1/reports/MutexCreate-20261101164709/final-check/symexec-refresh/preprocessed/_MutexCreate.c"
+  ],
+  "output": "/home/xinra/crtos/kmutexcreate-trial-261101-1/reports/MutexCreate-20261101164709/final-check/symexec-refresh/preprocessed/_MutexCreate.c",
+  "source": "/home/xinra/crtos/kmutexcreate-trial-261101-1/annotated_C/src/_MutexCreate.c",
+  "preprocessed_sha256": "de5535d565b25847552dc16fffe6d81c4eb5a3348d4149523ac9ee27264fee0c",
+  "semantics": "GCC preprocessing with annotations, macro definitions and source line markers preserved"
+}

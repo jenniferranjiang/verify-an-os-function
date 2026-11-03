@@ -1,0 +1,126 @@
+ M .agents/skills/verify-an-os-function/SKILL.md
+ M .agents/skills/verify-an-os-function/references/implementation-and-validation-guide.md
+ M .agents/skills/verify-an-os-function/references/predicate-lemma-design-guide.md
+ M .agents/skills/verify-an-os-function/references/reporting-guide.md
+ M .agents/skills/verify-an-os-function/references/spec-experience.md
+ M .agents/skills/verify-an-os-function/references/spec-writing-guide.md
+ M .agents/skills/verify-c-function-with-qcp/SKILL.md
+ M .agents/skills/verify-c-function-with-qcp/references/implementation-and-validation-guide.md
+ M _CoqProject
+ M annotated_C/include/logic.h
+ M annotated_C/src/LinklistResumeAll.c
+ M annotated_C/src/headers/ktask_wakeup.h
+ M annotated_C/src/headers/task_sched_view.h
+ M annotated_C/src/kernel/thread/assign_fifo.c
+ M annotated_C/src/kernel/thread/assign_ready_remove.c
+ M annotated_C/src/kernel/thread/assign_roundrobin.c
+ M annotated_C/src/kernel/thread/ktask_create.c
+ M annotated_C/src/kernel/thread/ktask_init.c
+ M annotated_C/src/kernel/thread/ktask_prior_set.c
+ M annotated_C/src/kernel/thread/ktask_suspend.c
+ M annotated_C/src/kernel/thread/ktask_timeout.c
+ M annotated_C/src/outside_critical/ktask_set_delay_oc.c
+ M annotated_C/src/outside_critical/ktask_suspend_oc.c
+ M annotated_C/strategy/critical_task_view.strategies
+ M annotated_C/strategy/task_sched_view.strategies
+ M kmutexcreate-trial-261101-1/.docs/Report/status.md
+ M kmutexcreate-trial-261101-1/_CoqProject
+ M kmutexcreate-trial-261101-1/annotated_C/src/_MutexCreate.c
+ M kmutexcreate-trial-261101-1/checks/review-status.json
+ M lib/CrtosGlobState.v
+ M lib/CrtosInv.v
+ D lib/EventInv.v
+ D lib/EventState.v
+ M lib/KTaskWakeup.v
+ D lib/MsgQueueInv.v
+ D lib/MsgQueueState.v
+ M lib/StructFieldOffsetAxiom.v
+ M lib/index.md
+?? .agents/skills/verify-c-function-with-qcp/references/toolchain-preflight.md
+?? .docs/Report/2026-10-30-os-inv-semaphore-strategy.md
+?? .docs/Report/2026-11-01-global-lib-prune.md
+?? .docs/Report/2026-11-01-rocq-interactive-setup.md
+?? .docs/checks/global-lib-prune-20261101/
+?? .docs/checks/qcp-smoke-20261101-r2/
+?? .docs/checks/qcp-smoke-20261101-r3/
+?? .docs/checks/qcp-smoke-20261101-r4/
+?? .docs/checks/qcp-smoke-20261101/
+?? .docs/checks/rocq-interactive-20261101-r2/
+?? .docs/checks/rocq-interactive-20261101-r3/
+?? .docs/checks/rocq-interactive-20261101-r4/
+?? .docs/checks/rocq-interactive-20261101/
+?? annotated_C/src/headers/access_exstatus_oc_views.h
+?? annotated_C/src/headers/access_exstatus_view.h
+?? annotated_C/src/headers/assign_ready_remove.h
+?? annotated_C/src/headers/get_isr_counter_oc.h
+?? annotated_C/src/headers/get_ktask_descriptor_oc.h
+?? annotated_C/src/headers/get_task_with_idnode_oc.h
+?? annotated_C/src/headers/isr_count_view_strategy.h
+?? annotated_C/src/headers/kdebug_not_in_interrupt.h
+?? annotated_C/src/headers/ktask_create.h
+?? annotated_C/src/headers/ktask_delay_views.h
+?? annotated_C/src/headers/ktask_delete_name.h
+?? annotated_C/src/headers/ktask_delete_resource.h
+?? annotated_C/src/headers/ktask_init.h
+?? annotated_C/src/headers/ktask_status_oc.h
+?? annotated_C/src/headers/ktask_zombie_nonempty.h
+?? annotated_C/src/headers/m_isr.h
+?? annotated_C/src/headers/sched_source_views.h
+?? annotated_C/src/headers/suspend_sched_views.h
+?? annotated_C/src/headers/suspend_views.h
+?? annotated_C/src/headers/task_create_strategy.h
+?? annotated_C/src/headers/task_delete_views.h
+?? annotated_C/src/headers/task_descriptor_status.h
+?? annotated_C/src/headers/task_registered_id.h
+?? annotated_C/src/headers/task_status_oc_views.h
+?? annotated_C/src/headers/timeout_views.h
+?? annotated_C/src/headers/wakeup_views.h
+?? annotated_C/src/headers/zombie_views.h
+?? annotated_C/src/kernel/thread/access_exstatus.c
+?? annotated_C/src/kernel/thread/kdebug_not_in_interrupt.c
+?? annotated_C/src/kernel/thread/ktask_delay.c
+?? annotated_C/src/kernel/thread/ktask_delete_by_id.c
+?? annotated_C/src/kernel/thread/ktask_delete_name.c
+?? annotated_C/src/kernel/thread/ktask_delete_oc.c
+?? annotated_C/src/kernel/thread/ktask_delete_resource.c
+?? annotated_C/src/kernel/thread/ktask_id_delete.c
+?? annotated_C/src/kernel/thread/ktask_mdelay.c
+?? annotated_C/src/kernel/thread/ktask_prior_set_by_id.c
+?? annotated_C/src/kernel/thread/ktask_quit.c
+?? annotated_C/src/kernel/thread/ktask_startup_by_id.c
+?? annotated_C/src/kernel/thread/ktask_zombie_nonempty.c
+?? annotated_C/src/outside_critical/access_exstatus_oc.c
+?? annotated_C/src/outside_critical/get_isr_counter_oc.c
+?? annotated_C/src/outside_critical/ktask_status_oc.c
+?? annotated_C/strategy/access_exstatus_oc_views.strategies
+?? annotated_C/strategy/access_exstatus_view.strategies
+?? annotated_C/strategy/dll.strategies
+?? annotated_C/strategy/isr_count_view.strategies
+?? annotated_C/strategy/ktask_delay_views.strategies
+?? annotated_C/strategy/sched_source_views.strategies
+?? annotated_C/strategy/suspend_sched_views.strategies
+?? annotated_C/strategy/suspend_views.strategies
+?? annotated_C/strategy/task_create.strategies
+?? annotated_C/strategy/task_delete_views.strategies
+?? annotated_C/strategy/task_descriptor_status.strategies
+?? annotated_C/strategy/task_registered_id.strategies
+?? annotated_C/strategy/task_status_oc_views.strategies
+?? annotated_C/strategy/timeout_views.strategies
+?? annotated_C/strategy/wakeup_views.strategies
+?? annotated_C/strategy/zombie_views.strategies
+?? keventcreate-trial-261101-1/
+?? kmutexcreate-trial-261101-1/.docs/Report/controller-adaptation.md
+?? kmutexcreate-trial-261101-1/.docs/Report/implementation-context.md
+?? kmutexcreate-trial-261101-1/.nra.cache
+?? kmutexcreate-trial-261101-1/VC/
+?? kmutexcreate-trial-261101-1/checks/controller-adaptation/
+?? kmutexcreate-trial-261101-1/checks/controller-owners.json
+?? kmutexcreate-trial-261101-1/checks/implementation-result.json
+?? kmutexcreate-trial-261101-1/checks/implementation-source-audit.json
+?? kmutexcreate-trial-261101-1/qcp-project.json
+?? kmutexcreate-trial-261101-1/reports/
+?? kmutexcreate-trial-261101-1/verification_runs/
+?? tools/rocq/README.md
+?? tools/rocq/build-backend.py
+?? tools/rocq/check-interactive.py
+?? tools/rocq/check-qcp.py

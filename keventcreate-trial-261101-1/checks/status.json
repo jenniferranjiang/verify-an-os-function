@@ -1,0 +1,88 @@
+{
+  "predicate_status": "review-passed",
+  "predicate_revision": "bc9e9bde2236e66d076beac531d82c6ad1175d71225e1f8477f0f46e6c2c61ca",
+  "spec_status": "review-passed",
+  "spec_revision": "1c4a7b5920e164a40891b6d64dc6f18be0debede36a1c79946dd82dad5138f00",
+  "predicate_review": ".docs/Report/predicate-review.md",
+  "spec_review": ".docs/Report/spec-review.md",
+  "implementation": "complete for KEventCreate and _EventCreate under recorded scope",
+  "status": "verified",
+  "global_merge": "complete",
+  "root_compiled_modules": 36,
+  "interface_checks": 45,
+  "qcp_started": true,
+  "symbolic_run": true,
+  "vc_generated": true,
+  "c_implementation_proved": true,
+  "source_modified": false,
+  "final_consistency_check": "checks/migration-check.json",
+  "implementation_readiness": "completed",
+  "source_issues_pending": [],
+  "review_scope": "KEventCreate original design unchanged; E2 repair applies only to trial candidate; downstream valid-input and no-deletion scope; not whole-OS correctness",
+  "source_issue_dispositions": {
+    "E1": "interface-input limitation; not patched; valid event IDs required for downstream APIs",
+    "E2-invalid-strategy": "interface-input limitation; not patched; FIFO/PRIO required for downstream waits; Create spec still uint32 full domain",
+    "E2-delay-failure": "fixed and tested in trial candidate only; authoritative source restored and defect remains",
+    "E3": "excluded by user-stated no-deletion-during-use condition; no source lifetime protection added"
+  },
+  "incremental_review": ".docs/Report/e2-fix-review.md",
+  "source_fix": "checks/e2-delay-failure/repair.json",
+  "source_regression_scenarios": 16,
+  "authoritative_source_modified": false,
+  "trial_source_modified": true,
+  "trial_source_fix": "source_fixes/_EventProcess.c",
+  "authoritative_defects_remaining": [
+    "E2-delay-failure"
+  ],
+  "implementation_approval": "ok我们来implement吧",
+  "implementation_context": ".docs/Report/implementation-context.md",
+  "runs": {
+    "_EventCreate": "EventCreate-20261101232623",
+    "KEventCreate": "KEventCreate-20261101232854"
+  },
+  "implementation_targets": {
+    "_EventCreate": {
+      "run": "EventCreate-20261101232623",
+      "phase": "done",
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-11-01T16:52:00.459549Z",
+        "errors": [],
+        "cleanup_removed_count": 0
+      },
+      "proof_manual": "VC/EventCreate_proof_manual.v",
+      "proof_sha256": "1e800054068f5a56a788f6cd591b2814e370f66a469a422336fa86e75ef92df0",
+      "case_library": "VC/EventCreate_lib.v",
+      "case_library_sha256": "57cd61ac2da49c5afa80f023fdb714b0e3b37dafbc25ce41f0d018feb4c77a57",
+      "top_level_vcs": 52,
+      "group_count": 13
+    },
+    "KEventCreate": {
+      "run": "KEventCreate-20261101232854",
+      "phase": "done",
+      "final_check": {
+        "status": "passed",
+        "checked_at": "2026-11-01T15:43:41.094392Z",
+        "errors": [],
+        "cleanup_removed_count": 0
+      },
+      "proof_manual": "VC/KEventCreate_proof_manual.v",
+      "proof_sha256": "44b63f8989bdac7299aed7dd5e95fc48d88da176e88c0dc89600819a6f6c51bb",
+      "case_library": "VC/KEventCreate_lib.v",
+      "case_library_sha256": "1f611c42c491266e492f750d7262c7c793835a5bb38dd7295002ea70b7b9be00",
+      "top_level_vcs": 4,
+      "group_count": 2
+    }
+  },
+  "trusted_abi_supplement": "checks/event-layout-migration.json",
+  "implementation_result": "checks/implementation-result.json",
+  "verified_functions": [
+    "KEventCreate",
+    "_EventCreate"
+  ],
+  "trial_source_fix_proved": false,
+  "trusted_abi_symbols": [
+    "event_size_axiom",
+    "event_top_level_field_offset_axiom"
+  ]
+}

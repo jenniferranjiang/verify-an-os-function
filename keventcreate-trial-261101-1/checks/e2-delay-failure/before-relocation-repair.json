@@ -1,0 +1,14 @@
+{
+  "changed_source": "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/event.c",
+  "before_sha256": "1351dfb28f28413e50790fd4390777e647c6d60f1fe9debf850367c902841d64",
+  "after_sha256": "1816cddc807d26e10cfbc1016b4e33a3f2486bc57ac007ae3773cfb54435ed86",
+  "changed_functions": [
+    "_EventProcess"
+  ],
+  "change": "check KTaskSetDelay failure; restore READY using KTaskWakeup under original lock; reuse original unlock/schedule/error return",
+  "new_create_contract": false,
+  "host_regression": "16 scenarios passed; baseline exit20",
+  "host_whole_tu_syntax": "passed",
+  "ilp32_whole_tu_syntax": "blocked by missing 32bit libc headers; not claimed passed",
+  "qcp_started": false
+}

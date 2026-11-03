@@ -1,0 +1,399 @@
+{
+  "groups": [
+    {
+      "id": "zero_layout",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of__EventCreate_which_implies_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__EventCreate_which_implies_wit_1_split_goal_1": "Use the Event top-level ABI offset link=p+28 under the explicit addr_aligned p 4 premise. Since p>0, link is nonzero; retain no spatial target.",
+            "proof_of__EventCreate_which_implies_wit_1_split_goal_2": "Use the Event top-level ABI offset pend_list=p+20 under explicit alignment. Since p>0, the sentinel is nonzero.",
+            "proof_of__EventCreate_which_implies_wit_1_split_goal_spatial": "Apply event_zero_bytes__zero_layout to the exact 36-byte zero array after rewriting sizeof(Event)=36. Explicit premises supply positivity, upper address bound and alignment. Split bytes into ID scalar [0,2), padding [2,4), ID links [4,12), options [12,16), events [16,20), pending links [20,28), management links [28,36). Use typed byte-store conversion and fold ZeroIdNode/NodeZero/EventPadding/EventZero; retain all 36 bytes exactly."
+          }
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_1_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the witness; introduce all quantified values and pure premises. Use EventLayoutABI.event_size_axiom and EVENT_MEM_SIZE=36, then integer bounds (UINT_MAX=4294967295). The spatial frame is irrelevant to this pure conclusion; no input range restriction is added."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_2_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the witness; introduce all quantified values and pure premises. Use EventLayoutABI.event_size_axiom and EVENT_MEM_SIZE=36, then integer bounds (UINT_MAX=4294967295). The spatial frame is irrelevant to this pure conclusion; no input range restriction is added. The extra memset zero-byte range goals are 0<=0 and 0<=127."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "event_byte_layout__zero_layout",
+          "strategy": "Prove forall p, addr_aligned p 4 -> event_byte_layout p. Combine the reviewed EventLayoutABI.event_top_level_field_offset_axiom with the existing StructFieldOffsetAxiom.mutex_field_offset_axiom for IdNode and DLL offsets at p+4,p+20,p+28; normalize ALIGN_SIZE=4. This is a derived layout lemma, not a new trusted assumption.",
+          "visibility": "public"
+        },
+        {
+          "name": "event_zero_bytes__zero_layout",
+          "strategy": "Prove forall p, 0<p -> p<=UINT_MAX-36 -> addr_aligned p 4 -> CharArray.full p 36 (repeat_Z 0 36) |-- EventZero p. Derive layout from the preceding current-group lemma, split the byte array at offsets 2,4,12,16,20,28,36 and use typed store conversion. Scalar widths/alignment and address validity follow from the supplied bounds; pure nonnull/alignment fold directly. No EventZero or whole VC assumption may be introduced.",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "open_event_state",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of__EventCreate_which_implies_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__EventCreate_which_implies_wit_2_split_goal_1": "Prove event_fresh__open_event_state from disjoint os_inv and EventZero. If p occurs in map event_addr, extract its store_event payload from the manager DLL; both it and EventZero own the options UInt cell at the same address. Separation exclusion yields contradiction. This uses spatial ownership, not a malloc freshness axiom.",
+            "proof_of__EventCreate_which_implies_wit_2_split_goal_2": "Unfold os_inv and event_inv (or os_world_wf.os_wf_context followed by os_global_context) to extract event_context; frame the owned resources.",
+            "proof_of__EventCreate_which_implies_wit_2_split_goal_3": "Unfold EventZero and extract its pure addr_aligned p 4 conjunct under the separating frame.",
+            "proof_of__EventCreate_which_implies_wit_2_split_goal_4": "Unfold EventZero and extract p<>0 under the separating frame.",
+            "proof_of__EventCreate_which_implies_wit_2_split_goal_spatial": "Unfold os_inv and event_create_frame, isolate event_inv and rewrite event_context pointer/head equalities to the C global symbols. Unfold EventZero, convert ZeroIdNode to insert-ready unknown scalar/node storage, keep EventPadding and both NodeZero resources, and cancel/reassociate all other OS resources. Do not duplicate any ID/link or scheduler ownership."
+          }
+        },
+        {
+          "name": "proof_of__EventCreate_entail_wit_2_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the left separation disjunct, keeping retval_4=-1 and every resource. Derive lock signed bounds from its Int store. Derive the conditional minimum-ID bound from idmanager_min_free_id and event_context idmax=128 (independent of whether the antecedent minimum-ID condition holds). All other pure facts are copied; reorder the id local cell."
+        },
+        {
+          "name": "proof_of__EventCreate_entail_wit_2_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the right disjunct and retain successful retval_5. Minimum-free-ID plus event_context gives 0<=retval_5<128; the lock Int store yields lock bounds. Reassociate/cancel all unchanged manager, object, frame and local resources."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "event_fresh__open_event_state",
+          "strategy": "Prove forall sg st p, os_inv sg st ** EventZero p |-- !!(~ In p (map event_addr (os_events st))). Unfold the event DLL and use membership to expose the corresponding store_event. Its options UInt cell and the separately held zero object options cell coincide if event_addr=p; apply disjoint store conflict. Preserve arbitrary DLL prefix/suffix in the induction.",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "publish_world",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of__EventCreate_which_implies_wit_6",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__EventCreate_which_implies_wit_6_split_goal_1": "Crtos_GTrans uses the existing permissive CriticalSTS transition; unfold the wrapper and establish its reflexive/transitive True transition for st_lock to replace_events(new::old) st_lock. No heap resource changes are needed for this pure fact.",
+            "proof_of__EventCreate_which_implies_wit_6_split_goal_2": "Consume safeExec abs_event_create by selecting the task_atomic_cmd branch. LastSeen before admits st_lock via the explicit Crtos_RTrans. For abs_event_create_locked choose the success alternative with witness event and exact after=replace_events(event_publish event id options old) st_lock; use nonnull, alignment, freshness and minimum-ID premises. The atomic output set is LastSeen after; derive safeExec(ret id) X at that set. Keep the actual existential initial-state witness carried by safeExec.",
+            "proof_of__EventCreate_which_implies_wit_6_split_goal_3": "Unfold minimum-free-ID and event_context: idmax=128 supplies id<128.",
+            "proof_of__EventCreate_which_implies_wit_6_split_goal_4": "Unfold minimum-free-ID: extract 0<=id.",
+            "proof_of__EventCreate_which_implies_wit_6_split_goal_spatial": "Use event_publish_manager__publish_world to rewrite the inserted ID manager as event_manager(new::old); use event_context to rewrite manager/head globals. Reduce dll_insert_after_dispatch at the head to cons and identify Build_DL_Node with event_link_node(event_created...). Establish os_world_wf of replace_events by event_publish_world__publish_world: new event has no waiters and every other state component is unchanged. Rebuild event_inv and os_inv from the exact frame, manager and extended management DLL. Do not recover old event_inv by discarding the new node."
+          }
+        }
+      ],
+      "helpers": [
+        {
+          "name": "event_publish_manager__publish_world",
+          "strategy": "Prove event_publish_manager_obligation under event_context and idmanager_min_free_id. Unfold event_manager/event_publish and idmanager_link/add; show IDs cons agrees with add and each of the 16 filtered buckets agrees with insertion at id mod 16. Use 0<=id<128 and hoffset=16; prove seq/map bucket update equality by nth/extensionality and split equality of the bucket index. Statement must retain every premise required by idmanager operations; current VC supplies them.",
+          "visibility": "public"
+        },
+        {
+          "name": "event_publish_world__publish_world",
+          "strategy": "Prove event_publish_world_obligation. Unfold os_world_wf, replace_events and event_publish; event_waiters of the new singleton prefix is []; os_sched_owners is unchanged. All service slots, task descriptions, global stable context, NoDup and domain equivalence transport by definitional equality. No freshness or valid-options restriction is needed for this pure world fact.",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "rollback_restore",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of__EventCreate_which_implies_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__EventCreate_which_implies_wit_3_split_goal_1": "Unfold Crtos_GTrans/CriticalSTS; establish the st_lock self transition. Resources remain irrelevant to the pure target.",
+            "proof_of__EventCreate_which_implies_wit_3_split_goal_2": "Use safeExec choice/task_atomic_cmd: LastSeen before contains st_lock by the explicit RTrans premise; select locked failure result -5 and after=st_lock. The atomic result set is LastSeen st_lock, yielding safeExec(ret -5) X. This branch requires no full-manager claim.",
+            "proof_of__EventCreate_which_implies_wit_3_split_goal_spatial": "Unfold event_create_frame. Obtain event_context from os_world_wf/os_global_context; its global addresses reconnect the unchanged manager and DLL to event_inv. Reassemble os_inv at st_lock. Fold EventRaw from insert-ready ID ownership, forgetting options/events zero values, converting NodeZero to NodeStorage and EventPadding to undef bytes. Nonnull/alignment are explicit premises. Do not claim the ID scalar is still zero after failed insertion."
+          }
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_8_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The required Crtos_GTrans st_lock st_lock is already PreH2; lift it to a pure assertion under the unchanged heap."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the _pure implication premise, unfold the aux and cancel/reorder os_inv, EventRaw and InsideCritical. Every requested pure assertion, including the self transition and safeExec ret(-5), is already an explicit PreH; do not instantiate absent local cells."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "All pure facts are explicit. Commute EventRaw and OutsideCritical and cancel; the full original object remains available for the free call."
+        }
+      ]
+    },
+    {
+      "id": "payload_init",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of__EventCreate_which_implies_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the first disjunct. Unfold NodeZero at the pending sentinel, use the nested-field address identity for SysDoubleLinklistNode fields, forget the zero values to Ptr undef and commute next/prev. Alternatively the second disjunct witnesses are both 0. No new event alignment assumption is required; this is field-resource unfolding."
+        },
+        {
+          "name": "proof_of__EventCreate_which_implies_wit_5",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__EventCreate_which_implies_wit_5_split_goal_spatial": "Normalize Z.land options_pre 7 = options_pre mod 8 (7=2^3-1), valid for every integer. Fold event_created/store_event with pending_addrs=[]; turn store_node_self_linked into the empty store_dll using the sentinel nonzero/resource fact. Keep EventPadding and options/events stores exactly; bounds are 0<=options mod8<8 and 0<=0<536870912. Convert the separate management NodeZero to occupy_dll_node. The ID manager is not owned by store_event."
+          }
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "All pure facts are copied from PreH; move pending NodeZero to the front and cancel the exact remaining manager, frame, DLL, fields, padding and InsideCritical resources."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The consequent has the same two pending pointer undef cells and remaining resources as the antecedent. Introduce existing pure facts and cancel; no reinitialization or loss of pointer permission is needed."
+        }
+      ]
+    },
+    {
+      "id": "allocation_calls",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the implication/aux; establish sizeof(Event)=36 bounds via reviewed ABI, retain OutsideCritical and all explicit pure premises. The aux has no local cells, so prove arithmetic independently rather than trying to construct the full premise of the supplied _pure VC."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the _pure premise; unfold aux and rewrite sizeof(Event)=36. Copy pointer/alignment/options/safeExec facts, establish constant memset bounds, and cancel undef byte-array plus OutsideCritical."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_3_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The pointer positivity, upper malloc bound and alignment are explicit PreH3/4/5. Lift them under the byte-array/local/OutsideCritical frame."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the _pure premise and unfold aux. Copy the existing pointer/alias/options/safeExec premises and cancel the same zero-byte array and OutsideCritical; retval_2=retval is present."
+        }
+      ]
+    },
+    {
+      "id": "allocation_safety",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of__EventCreate_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce all values and premises. The target only asserts 0 is within signed int bounds; unfold INT_MIN/INT_MAX and use arithmetic. Heap contents and aliases can be framed away for this pure result."
+        },
+        {
+          "name": "proof_of__EventCreate_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce all values and premises. The target only asserts 0 is within signed int bounds; unfold INT_MIN/INT_MAX and use arithmetic. Heap contents and aliases can be framed away for this pure result."
+        },
+        {
+          "name": "proof_of__EventCreate_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce all values and premises. The target only asserts 0 is within signed int bounds; unfold INT_MIN/INT_MAX and use arithmetic. Heap contents and aliases can be framed away for this pure result."
+        },
+        {
+          "name": "proof_of__EventCreate_safety_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce all values and premises. The target only asserts 0 is within signed int bounds; unfold INT_MIN/INT_MAX and use arithmetic. Heap contents and aliases can be framed away for this pure result."
+        },
+        {
+          "name": "proof_of__EventCreate_safety_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce all values and premises. The target only asserts 0 is within signed int bounds; unfold INT_MIN/INT_MAX and use arithmetic. Heap contents and aliases can be framed away for this pure result."
+        },
+        {
+          "name": "proof_of__EventCreate_safety_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce all values and premises. The target only asserts 0 is within signed int bounds; unfold INT_MIN/INT_MAX and use arithmetic. Heap contents and aliases can be framed away for this pure result."
+        }
+      ]
+    },
+    {
+      "id": "branch_safety",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of__EventCreate_safety_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use retval<>0 and retval=0 to derive False; the heap is irrelevant."
+        },
+        {
+          "name": "proof_of__EventCreate_safety_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use retval=0 and 0<retval to derive False; the heap is irrelevant."
+        },
+        {
+          "name": "proof_of__EventCreate_safety_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold INT_MIN; prove 5<>INT_MIN by arithmetic under the frame."
+        },
+        {
+          "name": "proof_of__EventCreate_safety_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold signed bounds and prove INT_MIN<=5<=INT_MAX."
+        },
+        {
+          "name": "proof_of__EventCreate_safety_wit_15",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold INT_MIN; prove 5<>INT_MIN. All rollback resources remain a frame."
+        },
+        {
+          "name": "proof_of__EventCreate_safety_wit_16",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold signed bounds and prove INT_MIN<=5<=INT_MAX under OutsideCritical and locals."
+        }
+      ]
+    },
+    {
+      "id": "id_safety",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of__EventCreate_safety_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is the signed representability of 0; unfold integer bounds and prove arithmetically, leaving the failed ID branch resources irrelevant."
+        },
+        {
+          "name": "proof_of__EventCreate_safety_wit_12",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is the signed representability of 0; prove arithmetically, independent of the successful inserted manager."
+        },
+        {
+          "name": "proof_of__EventCreate_safety_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Combine retval_4>=0 with retval_4=-1 to derive False."
+        },
+        {
+          "name": "proof_of__EventCreate_safety_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Apply the explicit conditional minimum-free-ID range premise to the explicit minimum-free-ID premise; contradiction with retval_4<0."
+        },
+        {
+          "name": "proof_of__EventCreate_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Extract 0<=options_pre<=UINT_MAX from the owned UInt local cell, not from a strengthened function precondition. Reintroduce duplicate/reversed bounds and original safeExec and cancel the same UInt cell plus OutsideCritical."
+        }
+      ]
+    },
+    {
+      "id": "lock_and_id_calls",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Copy all explicit pure premises and commute EventZero with OutsideCritical. No new state witness is needed."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The observed lock state st_lock and RTrans from before are explicit. Copy them, reorder os_inv/EventZero/InsideCritical and cancel without equating before to st_lock."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Copy nonnull/alignment/context/freshness/RTrans/alias/options/safeExec facts; reorder manager and insert-ready ID to satisfy IdInsertObj, retaining the complete frame and field resources."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_7_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Project explicit nonnull, alignment, sentinel nonzero, safeExec original command and RTrans facts from the failed ID branch."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the implication/aux. All pure requirements are explicit; reorder the event_create_frame, unchanged manager/DLL and private object resources. The ID remains insert-ready rather than zero."
+        }
+      ]
+    },
+    {
+      "id": "publish_calls",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_12_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Project event nonnull/alignment/link nonzero and minimum-free-ID from explicit premises; retain the initialized sentinel as frame."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_12",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold aux after introducing _pure. Copy pure premises, move options/events and self-linked pending sentinel to the front, and cancel the exact unchanged frame/manager/DLL/object resources."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold aux and independently establish dll_insert_anchor at the head from the store_dll (including head nonzero), keeping the DLL for the call. Copy explicit pure facts and cancel/reorder store_event, occupy_dll_node, inserted manager, event_create_frame and InsideCritical. Do not try to use an unavailable local-cell premise from _pure."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_13_pure",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__EventCreate_partial_solve_wit_13_pure_split_goal_1": "Unfold dll_insert_anchor and select the head anchor alternative. Obtain the required head validity/nonzero fact by exposing the existing store_dll; the anchor argument equals the head syntactically. Frame every other resource; no list membership of the newly allocated event is required."
+          }
+        }
+      ]
+    },
+    {
+      "id": "success_unlock",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_14_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Project nonnull/alignment/event_context/minimum-ID/freshness/original safeExec/RTrans from explicit premises after management insertion."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce _pure, unfold aux, copy all explicit premises and reorder event_create_frame, inserted manager, extended DLL and InsideCritical. Keep dll_insert_after_dispatch unchanged here; publication normalization belongs to which_implies_6."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_15_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The exact success Crtos_GTrans is already PreH4. Lift it under the updated os_inv and local/token frame."
+        },
+        {
+          "name": "proof_of__EventCreate_partial_solve_wit_15",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce _pure, unfold aux, copy ID bounds, exact post safeExec and success transition; reorder InsideCritical and updated os_inv for unlock. Keep InsideCritical indexed by st_lock and os_inv indexed by the published after state."
+        }
+      ]
+    },
+    {
+      "id": "returns",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of__EventCreate_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose after_2=replace_events(event_publish retval_2 retval options_pre (os_events st_lock)) st_lock. Bounds and safeExec(ret retval) are explicit; cancel OutsideCritical at precisely that state."
+        },
+        {
+          "name": "proof_of__EventCreate_return_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose after=st_lock. The -5 equality is reflexive and safeExec(ret -5) is explicit; cancel OutsideCritical."
+        },
+        {
+          "name": "proof_of__EventCreate_return_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__EventCreate_return_wit_3_split_goal_1": "Unfold abs_event_create and use the left-choice safeExec consequence to derive safeExec(ret -5) X with the unchanged LastSeen before. This is the malloc-NULL branch before any lock transition, so preserve the original state set exactly."
+          }
+        }
+      ]
+    }
+  ]
+}

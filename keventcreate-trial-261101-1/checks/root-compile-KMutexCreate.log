@@ -1,0 +1,11 @@
+@safeExec
+     : forall Σ A : Type,
+       (Σ -> Prop) -> program Σ A -> (A -> Σ -> Prop) -> Prop
+LastSeen
+     : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+abs_mutex_create
+     : StableGlobalState -> program (VarGlobalState -> Prop) Z
+MutexRaw
+     : CNotation.addr -> Assertion
+MutexZero
+     : CNotation.addr -> Assertion

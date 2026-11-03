@@ -1,0 +1,36 @@
+{
+  "groups": [
+    {
+      "id": "wrapper_returns",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_KMutexCreate_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold KMutexCreate_return_wit_1 and introduce all quantified variables and hypotheses. The antecedent owns OutsideCritical sg_outside_critical after_3. Choose after := after_3 in the consequent. Discharge retval = -5 with PreH1 and safeExec(LastSeen after_3, ret retval, X_outside_critical) with PreH2; preserve/cancel the identical OutsideCritical resource by entailment reflexivity. Pure-conjunction introduction and existential introduction suffice (the standard Exists/entailer route). PreH3 is an unused earlier abstract-operation premise. Do not unfold OutsideCritical, LastSeen or safeExec: there is no new state transition or helper obligation."
+        },
+        {
+          "name": "proof_of_KMutexCreate_return_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold KMutexCreate_return_wit_2 and introduce variables and premises. Instantiate after_2 := after_3. The identical OutsideCritical sg_outside_critical after_3 resource is retained. Introduce the pure conjunctions from PreH1 (0 <= retval), PreH2 (retval < 128), and PreH3 (safeExec at after_3 with ret retval and the same X). Close resource identity by reflexivity/cancellation. The bounds are already assumptions; no arithmetic derivation or new refinement transition is needed. PreH4 need not be unfolded. Follow the same existential/pure introduction pattern as return_wit_1."
+        }
+      ]
+    },
+    {
+      "id": "wrapper_call_premises",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_KMutexCreate_partial_solve_wit_1_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold KMutexCreate_partial_solve_wit_1_pure and introduce variables and PreH1. The RHS is the pure proposition safeExec(LastSeen before_outside_critical, abs_mutex_create sg_outside_critical, X_outside_critical), exactly PreH1. Introduce the pure assertion using that hypothesis (entailer/pure-right); the pure assertion places no extra spatial demand. No existential, state transition, or predicate unfolding is required."
+        },
+        {
+          "name": "proof_of_KMutexCreate_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold KMutexCreate_partial_solve_wit_1; introduce its implication premise, then unfold KMutexCreate_partial_solve_wit_1_aux and introduce variables and PreH1. Its consequent has two copies of the same pure safeExec proposition together with OutsideCritical sg_outside_critical before_outside_critical. Use PreH1 for both pure conjuncts and entailment reflexivity for the unchanged spatial resource. The implication premise can remain unused; pure facts can be duplicated without duplicating spatial ownership. This establishes the helper-call precondition for exactly the input abstract state and continuation, without expanding abs_mutex_create or adding assumptions."
+        }
+      ]
+    }
+  ]
+}
