@@ -1,9 +1,0 @@
-{
-  "predicate_revision": "038457b98a07c2fa559a7ec4ea7d63e980af6b73b4a8d8782668ffd97640e036",
-  "spec_revision": "55bbd4bac08ceb62317b2e176f7ce83d5bc6a46314248abfd8a89f9edc497929",
-  "library_files_checked": 36,
-  "spec_files_checked": 13,
-  "semantic_delta_during_migration": false,
-  "trial_snapshots_excluded_from_build": true,
-  "new_axiom_or_admitted": false
-}

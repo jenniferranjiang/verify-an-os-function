@@ -1,9 +1,0 @@
-{
-  "lib/IdModuleSpec.v": "checks/review-inputs/lib/IdModuleSpec.v",
-  "lib/KSemaphoreCreate.v": "checks/review-inputs/lib/KSemaphoreCreate.v",
-  "lib/KSemaphoreDelete.v": "checks/review-inputs/lib/KSemaphoreDelete.v",
-  "lib/KTaskDescriptor.v": "checks/review-inputs/lib/KTaskDescriptor.v",
-  "lib/KTaskOsAssign.v": "checks/review-inputs/lib/KTaskOsAssign.v",
-  "lib/KTaskParseInfo.v": "checks/review-inputs/lib/KTaskParseInfo.v",
-  "lib/KTaskStackSetupProofAux.v": "checks/review-inputs/lib/KTaskStackSetupProofAux.v"
-}

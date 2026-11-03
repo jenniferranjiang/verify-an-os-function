@@ -1,6 +1,0 @@
-In file included from Ubiquitous/XiZi_IIoT_Macro/kernel/include/xizi.h:36,
-                 from Ubiquitous/XiZi_IIoT_Macro/kernel/thread/event.c:22:
-/usr/include/string.h:26:10: fatal error: bits/libc-header-start.h: No such file or directory
-   26 | #include <bits/libc-header-start.h>
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.

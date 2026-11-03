@@ -21,7 +21,7 @@ git fetch origin trial-archive
 git restore --source=f96dd2e20249ed8f55d8a33097de411a97aab9ab -- ksemaphoredelete-trial-261025-1
 ```
 
-全部 9 个历史 trial 已集中保存在该分支，当前归档提交为 `8d5877b8d9b27bfc51744723b357876b9a8eacda`。
+此前 9 个历史 trial 已集中保存在该分支，当时归档提交为 `8d5877b8d9b27bfc51744723b357876b9a8eacda`。
 其中包含 event-create、mutex-create、6 个 semaphore-create 和 semaphore-delete trial；补存了旧临时目录中 150 份源码/脚本快照，保持原相对路径。
 归档分支的 `TRIALS.md` 和 `.docs/trial-archive-index.json` 提供完整目录清单。需要恢复其他 trial 时，将上方 `git restore` 的 source 换为该归档提交或 `origin/trial-archive`，并指定对应目录名。
 上述 9 个已归档的历史 trial 目录已从本地移除；正在进行的新 trial 仍保留在本地。删除目录释放工作文件空间，Git 历史仍保存在本地 `.git` 中。
@@ -34,3 +34,10 @@ git restore --source=f96dd2e20249ed8f55d8a33097de411a97aab9ab -- ksemaphoredelet
 - [全部历史 trial 集中归档及本地移除记录](checks/all-trials-archive-20261101.json)
 
 上述记录是文件、契约及既有最终检查证据的核对，没有重新运行 QCP 或重新证明函数。需要重跑时，按 trial 中保留的工具链和验证流程重建编译产物。
+
+2026-11-03：`keventcreate-trial-261101-1` 和 `kmutexcreate-trial-261101-1` 的 790 个已跟踪文件已逐文件核对并保存到远程 `trial-archive`，固定提交为 `764bd5919b1b8b301de7c94755cde510bed60d9b`。归档现有 11 个 trial。确认推送成功后，以上两个目录及可重建缓存已从本地移除；全局 `lib/` 的未提交修改保留。需要恢复时执行：
+
+```sh
+git fetch origin trial-archive
+git restore --source=764bd5919b1b8b301de7c94755cde510bed60d9b -- keventcreate-trial-261101-1 kmutexcreate-trial-261101-1
+```
