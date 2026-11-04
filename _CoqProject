@@ -94,3 +94,7 @@ lib/EventState.v
 lib/KEventCreate.v
 
 lib/EventLayoutABI.v
+
+lib/KMutexDelete.v
+
+lib/KEventDelete.v

@@ -110,3 +110,19 @@ make -f Makefile.coq -j2 COQBIN=/home/xinra/.opam/pv-bench-8.20.1/bin/
 新全局状态版本不自动继承历史trial的C证明结论；本次只重编译受影响共享库。
 
 `EventLayoutABI.v` 在实现阶段补齐已检查36字节Event模型的两条可信布局事实：`event_size_axiom`、`event_top_level_field_offset_axiom`。它们沿用TrustBase的结构体布局/位域适配，不证明内存所有权或字节转换；原始位域ABI仍为32字节。见[布局适配审阅](../keventcreate-trial-261101-1/.docs/Report/event-layout-review.md)。
+
+## Mutex 删除的条件化设计（2026-11-03）
+
+`KMutexDelete.v` 提供原三段临界区的删除操作、等待队列批量唤醒、完整退休对象和类型化待证资源桥。Predicate 与12-symbol闭包spec均已独立review-passed，尚未做C实现证明。结论只适用于用户批准的A1（查询命中的同一分配对象直到本次注销不被他人删除/回收/复用）及A2（排空到注销无新waiter）；源码两个窗口没有修复。具名mutex_live/mutex_drained锁合同只用于该受限调用链，不能当作无条件通用锁接口。
+
+规格入口为 `annotated_C/src/KMutexDelete.c`、`_MutexDelete.c`；Mutex的锁外 `LinklistResumeAll` 位于 `annotated_C/src/outside_critical/LinklistResumeAll.c`。原锁内Semaphore版本保持不变，两个同名切片按调用场景独立使用，不一起链接。独立types/logic头只提供ABI与语义词汇，不集中放函数规格。
+
+审阅版本、用户假设与共享迁移见 [KMutexDelete 实验记录](../kmutexdelete-trial-261103-1/.docs/Report/status.md)。这些设计定义不改变此前其他模块的语义或证明状态。
+
+## Event 删除的条件化设计（2026-11-03）
+
+`keventdelete-predicate-r1` 与完整15-symbol闭包的 `keventdelete-spec-r1` 均独立 **review-passed**。公开规格限制 `0 <= id < 65536`，保持原int32 C接口；128..65535允许查找未命中后返回。用户另批准D1（命中的同一分配对象到本次注销不被他人回收/复用）和D2（观察/清空pending后到注销仍为空）的环境条件。原源码未修复，具名 `event_delete_gap` Lock合同仅适用于该受限调用链，不是普通锁的无条件保证。
+
+`EventInv.v`增补完整退休对象，`EventOps.v`增补pending更新和注销；`KEventDelete.v`描述原始多段临界区、批量唤醒、查空/查非空路径与类型化待证资源桥。没有改变已有定义或全局协议的含义。共享编译和接口检查不是C实现证明。
+
+完整新场景输入位于 `annotated_C/scenarios/event-delete/`，包括4个active目标和11个模型/复用边界。Event的锁外ResumeAll与既有Semaphore锁内、Mutex锁外场景分开保存，不共同链接；原场景保持不变。版本、用户批准、审阅和合并检查见 [KEventDelete实验记录](../keventdelete-trial-261103-1/.docs/Report/status.md)。

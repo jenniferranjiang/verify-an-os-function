@@ -96,6 +96,24 @@ Definition event_initial_memory (sg : EventStable) : Assertion :=
   PtrArray.full sidm.(htable) 32 (repeat_Z 0 32) **
   store_node_self_linked sg.(event_list_head).
 
+(** ID 注销且管理 link 摘除后独占的完整 Event 对象。ID 已写成65535，
+    ID link、pending 哨兵和管理 link 都自环；options/events/padding 保持。
+    资源不再归 event_inv，允许跨解锁携带至 x_free；p 必须是原分配基址。
+    不拥有任何已唤醒任务的 sched_link 或 task 字段。 *)
+Definition EventRetired (p options events : Z) : Assertion :=
+  “ p <> 0 /\ addr_aligned p 4 /\
+    &(p # "Event" ->ₛ "id" .ₛ "link") <> 0 /\
+    &(p # "Event" ->ₛ "pend_list") <> 0 /\
+    &(p # "Event" ->ₛ "link") <> 0 /\
+    0 <= options < 8 /\ 0 <= events < 536870912 ” &&
+  store_idnode (&(p # "Event" ->ₛ "id" .ₛ "link"))
+    (Build_IdNodeAbs 65535 (&(p # "Event" ->ₛ "id"))) **
+  store_node_self_linked (&(p # "Event" ->ₛ "id" .ₛ "link")) **
+  &(p # "Event" ->ₛ "options") # UInt |-> options **
+  &(p # "Event" ->ₛ "events") # UInt |-> events **
+  store_node_self_linked (&(p # "Event" ->ₛ "pend_list")) **
+  store_node_self_linked (&(p # "Event" ->ₛ "link")) ** EventPadding p.
+
 (** 以下仅是类型检查过的待证陈述，不是公理或已证明结论。
     字节转换显式依赖模型布局；后续实现阶段须完成转换证明。 *)
 Definition event_zero_bytes_obligation : Prop :=
@@ -110,3 +128,9 @@ Definition event_reclaim_bytes_obligation : Prop :=
 Definition event_initialization_obligation : Prop :=
   forall wait sg,
     event_initial_memory sg |-- event_inv wait sg event_initial.
+
+(** 删除回收桥仅是待证命题，不是已证明事实。遗忘字段值后恰好覆盖
+    EventRaw；其后再使用已有36模型字节重组义务交给可信 x_free。 *)
+Definition event_retired_raw_obligation : Prop :=
+  forall p options events,
+    EventRetired p options events |-- EventRaw p.
