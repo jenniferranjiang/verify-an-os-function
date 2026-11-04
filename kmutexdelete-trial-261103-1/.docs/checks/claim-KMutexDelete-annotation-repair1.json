@@ -1,0 +1,28 @@
+{
+  "status": "claimed",
+  "attempt": "KMutexDelete-annotation-r1",
+  "owner": "annotation/KMutexDelete-20261103170333",
+  "handoff": {
+    "role": "annotation-subagent",
+    "owner": "annotation/KMutexDelete-20261103170333",
+    "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+    "claim_message": "Read /home/xinra/crtos/kmutexdelete-trial-261103-1/reports/KMutexDelete-20261103170333/annotation-attempts/annotation-attempt1/agent_input.md completely and follow its role skill and current assignment. Write the terminal report to /home/xinra/crtos/kmutexdelete-trial-261103-1/reports/KMutexDelete-20261103170333/annotation-attempts/annotation-attempt1/agent_report.json and stop writing before main finalizes.",
+    "prompt": "Role: annotation-subagent\nOwner: annotation/KMutexDelete-20261103170333\nCWD: /home/xinra/crtos/kmutexdelete-trial-261103-1\nRead /home/xinra/crtos/kmutexdelete-trial-261103-1/reports/KMutexDelete-20261103170333/annotation-attempts/annotation-attempt1/agent_input.md completely and follow its role skill and current assignment. Write the terminal report to /home/xinra/crtos/kmutexdelete-trial-261103-1/reports/KMutexDelete-20261103170333/annotation-attempts/annotation-attempt1/agent_report.json and stop writing before main finalizes."
+  },
+  "finalize_invocation": {
+    "argv": [
+      "/usr/bin/python3",
+      "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+      "--main-root",
+      "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+      "finalize-delivery",
+      "--run",
+      "KMutexDelete-20261103170333",
+      "--attempt",
+      "KMutexDelete-annotation-r1",
+      "--owner",
+      "annotation/KMutexDelete-20261103170333"
+    ],
+    "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+  }
+}

@@ -1,0 +1,336 @@
+{
+  "groups": [
+    {
+      "id": "retire_state",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of__MutexDelete_entail_wit_3_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__MutexDelete_entail_wit_3_2_split_goal_1": "For after := replace_mutexes (mutex_delete_unpublish p st_lock.os_mutexes) st_lock, unfold the existing Crtos_GTrans/Crtos_CS relation (True). The remaining heap is irrelevant to this pure goal.",
+            "proof_of__MutexDelete_entail_wit_3_2_split_goal_2": "Use safeExec(LastSeen drained, abs_mutex_retire p id, X), Crtos_RTrans drained st_lock, and mutex_delete_drained p id st_lock. In the guarded atomic nrm choose actual st_lock and the displayed unpublish after; choose output observation Crtos_RTrans after. Apply the safeExec weakest-precondition normal-execution clause and package safeExec(LastSeen after, ret tt, X). This uses the approved guard already present, not a stronger rely or an unproved obligation.",
+            "proof_of__MutexDelete_entail_wit_3_2_split_goal_spatial": "Preserve InsideCritical. Recover idnode = &(current.addr # Mutex->id) from idmanager_contains of the original derived manager plus NoDup old IDs and current membership. Using old address and ID NoDup and mutex_context, prove filter/unpublish removes exactly current and its derived manager equals the returned idmanager_remove; rewrite remaining DLL to that object sequence. Since current.pending=nil, unpublishing it preserves os_sched_owners and os_world_wf; all non-Mutex spatial components from mutex_create_frame remain unchanged. Normalize returned IdNode fields/self-links, combine detached payload and management self-link into MutexRetired, and fold the residual manager/DLL/frame into os_inv(after). Derive required nonzero/alignment facts from payload, valid typed fields and established layout facts; never apply mutex_delete_restore_obligation as a proved lemma."
+          }
+        }
+      ],
+      "helpers": [
+        {
+          "name": "current_idnode__retire_state",
+          "strategy": "Prove: mutex_context ms, NoDup(map mutex_id xs), In m xs and idmanager_contains ms.manager_stable (mutex_manager xs) m.id idnode imply idnode=&(m.addr # Mutex->id). Unfold the fixed 16-bucket derived map, recover an object from map/filter membership, and use NoDup of ID projections to identify it with m. These premises are all retained in the successful retirement VC.",
+          "visibility": "local"
+        },
+        {
+          "name": "unpublish_manager__retire_state",
+          "strategy": "Prove under mutex_context, old address/ID NoDup and In m xs that mutex_manager(mutex_delete_unpublish m.addr xs)=idmanager_remove ms.manager_stable (mutex_manager xs) m.id. Identify the unique removed object in the ID projection and each bucket; preserve ordering and the other 15 buckets. No old heap may be assumed after deletion; use exactly the pure facts retained by the VC.",
+          "visibility": "local"
+        },
+        {
+          "name": "retire_world__retire_state",
+          "strategy": "Prove from old os_world_wf, In m xs, NoDup(map mutex_addr xs), m.pending=nil, xs=st.os_mutexes that os_world_wf holds after replacing Mutexes with unpublish m.addr xs. Show mutex_waiters and therefore os_sched_owners unchanged, then preserve recycler/idle/context/task-domain fields. These facts come from the old non-Mutex frame and retained pure context.",
+          "visibility": "local"
+        },
+        {
+          "name": "retire_resources__retire_state",
+          "strategy": "Prove the spatial reconstruction from current payload, management self-link, returned IdNode ID=65535 and its self-links, returned removed manager, remaining DLL, exact mutex_create_frame, old address/ID NoDup and empty current pending. Use current_idnode/unpublish/world helpers; normalize addresses and fold os_inv(after) ** MutexRetired m. The input shape is the real successful post-callee heap, never old os_inv itself.",
+          "visibility": "local"
+        },
+        {
+          "name": "retire_continuation__retire_state",
+          "strategy": "For safeExec(LastSeen drained,abs_mutex_retire p id,X), RTrans drained locked and drained(p,id,locked), derive safeExec(LastSeen(replace_mutexes(unpublish p locked.os_mutexes)locked),ret tt,X). Construct the scoped atomic normal execution at locked and apply weakestpre. Prove with the existing monad definitions; no additional rely assumption.",
+          "visibility": "local"
+        }
+      ]
+    },
+    {
+      "id": "borrow_id",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of__MutexDelete_which_implies_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Select the Mutex object supplied by mutex_delete_drained, then use In/in_split for prefix/current/suffix. From the actual old os_inv derive NoDup(map mutex_id) through store_idmanager/idbuckets_ok/idlist_ok, and NoDup(map mutex_addr) through disjoint store_mutex payload fields. Derive query=true from In current and the derived manager ID list. Locate the matching embedded IdNode in its derived hash bucket, split just its UShort ID cell, and introduce a spatial wand that restores the unchanged whole os_inv when that exact cell/value is returned. Normalize nested field addressing, retain all other bytes in the wand, and output the current acquired-state object, not an earlier snapshot. Prove the needed resource view helpers; the existing *_obligation Prop definitions are not theorems."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "mutex_addresses_unique__borrow_id",
+          "strategy": "Prove os_inv sg st entails NoDup(map mutex_addr st.os_mutexes) by induction on the management DLL and exclusivity of an owned store_mutex scalar/pointer field when two payloads have the same base. Refold the entire original heap afterward; no new invariant assumption.",
+          "visibility": "local"
+        },
+        {
+          "name": "idmanager_member_id_field__borrow_id",
+          "strategy": "For idmanager_contains sm im id p, split store_idmanager sm im manager into p.IdNode.id # UShort |-> id and a wand returning that exact manager when the cell is supplied. Bounds/bucket membership and existing ID/DLL splitting provide the field; retain all manager fields, bitmap, bucket heads, links and other payloads in the wand.",
+          "visibility": "local"
+        },
+        {
+          "name": "drained_id_read_view__borrow_id",
+          "strategy": "Using a drained(p,id,st) witness and os_inv, choose prefix/current/suffix via In/in_split; obtain ID NoDup from idbuckets_ok, address NoDup from the disjoint payload proof, and query=true from current membership in the derived ID list. Apply the ID-manager field view to the embedded IdNode and frame the other modules into mutex_delete_id_restore sg st p id. Establish exactly the which_implies_wit_3 output without changing the current state.",
+          "visibility": "local"
+        }
+      ]
+    },
+    {
+      "id": "continuations",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of__MutexDelete_which_implies_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__MutexDelete_which_implies_wit_1_split_goal_1": "Unfold abs_mutex_delete_object and mutex_delete_after_resume. The precondition is safeExec of bind(resume, retire); derive safeExec of resume with its weakestpre(retire,X) continuation using the existing MonadErr bind/WP laws. There is no heap in this split and no new state restriction."
+          }
+        },
+        {
+          "name": "proof_of__MutexDelete_which_implies_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__MutexDelete_which_implies_wit_2_split_goal_1": "Unfold mutex_delete_after_resume. A safeExec(ret tt, fun _ states => weakestpre(retire,X) states) witness gives the same LastSeen state satisfying weakestpre(retire,X); package it as safeExec(retire,X). No program outcome is assumed."
+          }
+        }
+      ]
+    },
+    {
+      "id": "module_views",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of__MutexDelete_which_implies_wit_4",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__MutexDelete_which_implies_wit_4_split_goal_spatial": "Unfold mutex_delete_id_restore and apply the separation-wand elimination law to the exact UShort cell and its restore wand. Address and value are identical on both sides; the result is the original os_inv."
+          }
+        },
+        {
+          "name": "proof_of__MutexDelete_which_implies_wit_5",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__MutexDelete_which_implies_wit_5_split_goal_spatial": "Unfold os_inv and mutex_inv only enough to isolate the Mutex manager. Use mutex_context to rewrite its stable manager pointer to &k_mutex_id_manager; put the unchanged management DLL and all non-Mutex components into mutex_delete_manager_frame. Pure os_world_wf is retained in the existing mutex_create_frame. No duplication of heap resources."
+          }
+        },
+        {
+          "name": "proof_of__MutexDelete_which_implies_wit_6",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__MutexDelete_which_implies_wit_6_split_goal_1": "Unfold mutex_delete_manager_frame and extract its explicit mutex_context pure conjunct while discarding/retaining spatial context as required by the pure entailment.",
+            "proof_of__MutexDelete_which_implies_wit_6_split_goal_spatial": "Unfold the manager frame. Rewrite os_mutexes using prefix++current::suffix, map_app/map_cons, and current.addr=mutex_pre; unfold mutex_link_node for the center node and rewrite stable head via mutex_context. Cancel the exact non-Mutex frame and whole management DLL; this is only a view change."
+          }
+        }
+      ]
+    },
+    {
+      "id": "reclaim_exit",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of__MutexDelete_which_implies_wit_7",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__MutexDelete_which_implies_wit_7_split_goal_spatial": "Unfold MutexRetired and MutexRaw. Preserve p<>0/alignment and obtain embedded ID/link nonzero from the retired pure facts and store_idnode. Normalize nested IdNode addresses; forget known ushort/uchar/pointer values into undef stores, convert the two detached self-links and empty pending head to the corresponding NodeStorage/insert-ready resources, and forget the two zero padding bytes to CharArray.undef_full. All 36 object bytes are retained exactly once; no task node or external resource is consumed."
+          }
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Rearrange OutsideCritical(after) ** MutexRetired(current) to the opposite order, preserving all existing pure facts. The retired object is private across unlock; no os_inv is reclaimed here."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_15",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Rewrite mutex_pre=current.mutex_addr and cancel MutexRaw plus OutsideCritical. The equality is explicit; no stale lookup scalar or ownership assumption is needed."
+        },
+        {
+          "name": "proof_of__MutexDelete_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose after := after_2. The exact safeExec LastSeen(after_2) ret tt X fact is PreH3 and the sole OutsideCritical resource is unchanged. Cancel it; no state relation stronger than the given one is needed."
+        }
+      ]
+    },
+    {
+      "id": "absent_id_branch",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of__MutexDelete_entail_wit_3_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__MutexDelete_entail_wit_3_1_split_goal_1": "Both idmanager_query(...)=false and =true are explicit PreH4/PreH11. Derive False by congruence; hence the GTrans conclusion is immediate without unfolding spatial resources.",
+            "proof_of__MutexDelete_entail_wit_3_1_split_goal_2": "The identical query=false/query=true contradiction entails the requested safeExec continuation. Do not fabricate a normal retire witness for this unreachable branch.",
+            "proof_of__MutexDelete_entail_wit_3_1_split_goal_spatial": "The contradictory query booleans close the spatial entailment as well; the branch does not supply detached ID cells, and those must not be manufactured on a feasible path."
+          }
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_10_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The ID-absence branch carries both query=false and query=true; congruence closes the whole entailment. Alternatively its two requested facts are displayed premises, but the contradiction is the simplest complete route."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The same query=false/query=true contradiction persists in the pure-to-aux wrapper; close it by contradiction. It is not necessary or sound to recover ID cells that this branch does not return."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "This DLL-call frame on the absent-ID branch retains contradictory query booleans. Use that contradiction; do not invent a detached ID node to support the later retirement state."
+        }
+      ]
+    },
+    {
+      "id": "entry_safety",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of__MutexDelete_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the available context; spatial resources are irrelevant to the constant C-int bounds. Prove INT_MIN <= 0 <= INT_MAX by unfolding the shared numeric constants/int_auto. Do not change or consume OutsideCritical."
+        },
+        {
+          "name": "proof_of__MutexDelete_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "As for safety_wit_1, now lock is initialized to 0 rather than undefined. Only the constant 0 C-int bounds are demanded; the mutex parameter cell and OutsideCritical are a frame."
+        },
+        {
+          "name": "proof_of__MutexDelete_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Prove the constant bounds INT_MIN <= 1 <= INT_MAX; alternatively the current mutex=0 fact contradicts mutex_delete_live. No field ownership or future-state premise is needed."
+        },
+        {
+          "name": "proof_of__MutexDelete_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The NULL branch has both mutex_pre=0 and mutex_delete_live mutex_pre id before, whose first conjunct is mutex_pre<>0. Derive False and close the entire entailment. This uses the existing entry fact, not a new unreachable-path assumption."
+        },
+        {
+          "name": "proof_of__MutexDelete_entail_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The same NULL-loop context is contradictory by the nonzero component of mutex_delete_live; discharge the whole goal. The identical OutsideCritical could otherwise be framed; no shared memory is manufactured."
+        }
+      ]
+    },
+    {
+      "id": "call_guards",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_2_pure",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__MutexDelete_partial_solve_wit_2_pure_split_goal_1": "Unfold mutex_pending_head; the C pending-list address and its abstract head are definitionally the same. All other spatial/pure context is frame."
+          }
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_4_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Project mutex_delete_drained p id drained directly from the premise. The local C cells and OutsideCritical remain a frame."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_5_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Project the new acquisition fact mutex_delete_drained p id st_lock. The InsideCritical token and os_inv belong to this freshly acquired state, so no current/@pre bridge is missing."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_8_pure",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__MutexDelete_partial_solve_wit_8_pure_split_goal_1": "The address is the named C global &k_mutex_id_manager. Use the existing CNotation.addr_of_LE_var_not_zero fact, not an invented manager-pointer hypothesis.",
+            "proof_of__MutexDelete_partial_solve_wit_8_pure_split_goal_2": "Destruct the existing mutex_delete_drained p id st_lock (or its historical live counterpart) to obtain 0<=id; alternatively use the UShort local typed-store range. Keep resources as frame.",
+            "proof_of__MutexDelete_partial_solve_wit_8_pure_split_goal_3": "The same drained relation includes id<65536, exactly the required upper bound; no restriction to id<128 needs to be added."
+          }
+        }
+      ]
+    },
+    {
+      "id": "drain_passthrough",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_1_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The goal is exactly the safeExec(abs_mutex_delete_object) premise. Retain local cells/OutsideCritical as unused frame while extracting that pure fact."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "This is a pure-obligation-to-aux wrapper. After LLM preprocessing, reconstruct every displayed pure fact from the original premises and cancel the unchanged OutsideCritical. The aux antecedent has no local cells, so do not try to fabricate them in order to call its pure-obligation argument."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Reconstruct live and safeExec(abs_mutex_resume_all, mutex_delete_after_resume) from the displayed premises, and unfold mutex_pending_head for the field-address equality. Preserve/cancel OutsideCritical. This establishes aux directly without assuming local lock/mutex cells which are absent from aux."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_3_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The post-ResumeAll safeExec ret tt (mutex_delete_after_resume p id X) is already a pure premise. Its return-code and drained facts do not need any transformation."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Reinsert the existing retval=KOK, drained and three continuation/entry facts; cancel OutsideCritical(drained). The pure-to-aux wrapper needs no fresh state or cell witness."
+        }
+      ]
+    },
+    {
+      "id": "locked_passthrough",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "All aux facts are preexisting drained/continuation/entry facts; return the same OutsideCritical(drained). Do not use the pure argument by supplying nonexistent local cells; the facts can be proved directly."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Return all given pure facts and rearrange InsideCritical(sg,st_lock) ** os_inv(sg,st_lock). These are unchanged resources; no transfer or new abstract state is performed."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure-context passthrough after the ID view is exposed. Reuse the list split, current address/ID/empty pending, both NoDup facts, query=true, rely and continuation premises. Cancel the exact UShort field at mutex_pre.id.id, its mutex_delete_id_restore wand and the lock token."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The same stored pure context is reasserted with full os_inv restored. Every pure output is a premise, and os_inv plus InsideCritical cancel unchanged. No resource conversion is needed in this wrapper."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Prove the aux guard directly: id bounds follow from mutex_delete_drained (not from a local delete_mutex_id cell absent in aux); the named global manager address is nonzero by the existing addr_of_LE_var_not_zero fact. Reinsert all old pure facts and cancel manager ** manager_frame ** InsideCritical."
+        }
+      ]
+    },
+    {
+      "id": "removed_passthrough",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_9_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The output is only the old list split and current.addr=mutex_pre, both explicit premises. Post-IdRemoveObj manager/node resources are frame and must not be used to infer old uniqueness."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Return the explicitly retained old list split, current identity, NoDup facts and query=true, plus the callee-provided idmanager_contains/nonzero facts. Reorder the unchanged removed-manager, three detached IdNode stores, manager_frame and InsideCritical. All old-state facts are already premises."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_12",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Successful DLL-call frame: all pure outputs are retained premises; reorder the unchanged full management DLL, exact non-Mutex frame, removed manager, detached IdNode stores and InsideCritical. No list mutation is performed by this VC itself."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_13_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The required Crtos_GTrans(st_lock,after) is an explicit premise. All local cells, os_inv(after), token and MutexRetired are frame."
+        },
+        {
+          "name": "proof_of__MutexDelete_partial_solve_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Reassert the existing after=replace_mutexes(...), current.addr identity, safeExec and GTrans facts; cancel InsideCritical(st_lock) ** os_inv(after) ** MutexRetired(current) unchanged. This is the Unlock-call wrapper, not the retirement proof."
+        }
+      ]
+    }
+  ]
+}

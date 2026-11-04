@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "returncode": 0,
+  "build_mode": "makefile",
+  "target": "VC/MutexDelete_goal_check.vo",
+  "base_artifact_count": 201,
+  "current_source_count": 5,
+  "elapsed_seconds": 3.347727,
+  "snapshot": "verification_runs/MutexDelete-20261103170333/dependency_plan.json",
+  "phase": "vc-checking",
+  "next_actions": [
+    {
+      "id": "deliver:MutexDelete-vc-checking-r1:0",
+      "kind": "spawn-attempt",
+      "attempt_id": "MutexDelete-vc-checking-r1",
+      "phase": "vc-checking",
+      "round": "MutexDelete-vc-checking-r1",
+      "owner": "vc-checking/MutexDelete-vc-checking-r1",
+      "role": "vc-checking-subagent",
+      "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+      "input": "/home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexDelete-20261103170333/rounds/MutexDelete-vc-checking-r1/agent_input.md",
+      "report": "/home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexDelete-20261103170333/rounds/MutexDelete-vc-checking-r1/agent_report.json",
+      "claim_invocation": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+          "--main-root",
+          "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+          "claim-attempt",
+          "--run",
+          "MutexDelete-20261103170333",
+          "--next-action",
+          "deliver:MutexDelete-vc-checking-r1:0",
+          "--owner",
+          "vc-checking/MutexDelete-vc-checking-r1"
+        ],
+        "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+      }
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "caller": "KEventDelete",
+    "callee": "FindEventById",
+    "same_contracts": true,
+    "canonical_blocks": 1
+  },
+  {
+    "caller": "KEventDelete",
+    "callee": "_EventDelete",
+    "same_contracts": true,
+    "canonical_blocks": 1
+  },
+  {
+    "caller": "FindEventById",
+    "callee": "CriticalAreaLock",
+    "same_contracts": true,
+    "canonical_blocks": 2
+  },
+  {
+    "caller": "FindEventById",
+    "callee": "CriticalAreaUnLock",
+    "same_contracts": true,
+    "canonical_blocks": 1
+  },
+  {
+    "caller": "FindEventById",
+    "callee": "IdGetObj",
+    "same_contracts": true,
+    "canonical_blocks": 1
+  },
+  {
+    "caller": "FindEventById",
+    "callee": "CONTAINER_OF_EVENT_ID",
+    "same_contracts": true,
+    "canonical_blocks": 1
+  },
+  {
+    "caller": "_EventDelete",
+    "callee": "CriticalAreaLock",
+    "same_contracts": true,
+    "canonical_blocks": 2
+  },
+  {
+    "caller": "_EventDelete",
+    "callee": "CriticalAreaUnLock",
+    "same_contracts": true,
+    "canonical_blocks": 1
+  },
+  {
+    "caller": "_EventDelete",
+    "callee": "IsDoubleLinkListEmpty",
+    "same_contracts": true,
+    "canonical_blocks": 1
+  },
+  {
+    "caller": "_EventDelete",
+    "callee": "LinklistResumeAll",
+    "same_contracts": true,
+    "canonical_blocks": 1
+  },
+  {
+    "caller": "_EventDelete",
+    "callee": "IdRemoveObj",
+    "same_contracts": true,
+    "canonical_blocks": 2
+  },
+  {
+    "caller": "_EventDelete",
+    "callee": "DoubleLinkListRmNode",
+    "same_contracts": true,
+    "canonical_blocks": 5
+  },
+  {
+    "caller": "_EventDelete",
+    "callee": "x_free",
+    "same_contracts": true,
+    "canonical_blocks": 1
+  },
+  {
+    "caller": "_EventDelete",
+    "callee": "KTASK_ASSIGN",
+    "same_contracts": true,
+    "canonical_blocks": 1
+  },
+  {
+    "caller": "LinklistResumeAll",
+    "callee": "CriticalAreaLock",
+    "same_contracts": true,
+    "canonical_blocks": 2
+  },
+  {
+    "caller": "LinklistResumeAll",
+    "callee": "CriticalAreaUnLock",
+    "same_contracts": true,
+    "canonical_blocks": 1
+  },
+  {
+    "caller": "LinklistResumeAll",
+    "callee": "CONTAINER_OF_TASK_SCHED",
+    "same_contracts": true,
+    "canonical_blocks": 1
+  },
+  {
+    "caller": "LinklistResumeAll",
+    "callee": "KTaskWakeup",
+    "same_contracts": true,
+    "canonical_blocks": 3
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "predicate_revision": "keventdelete-predicate-r1",
+  "predicate_status": "review-passed",
+  "spec_revision": "keventdelete-spec-r1",
+  "spec_status": "review-passed",
+  "shared_build_command": "make -f Makefile.coq real-all -j2 COQBIN=/home/xinra/.opam/pv-bench-8.20.1/bin/",
+  "shared_build_exit_code": 0,
+  "recompiled_shared_files": [
+    "lib/EventInv.v",
+    "lib/EventOps.v",
+    "lib/EventLayoutABI.v",
+    "lib/CrtosInv.v",
+    "lib/KSemaphoreCreate.v",
+    "lib/KTaskWakeup.v",
+    "lib/KMutexCreate.v",
+    "lib/KEventCreate.v",
+    "lib/KMutexDelete.v",
+    "lib/KEventDelete.v",
+    "lib/KSemaphoreDelete.v"
+  ],
+  "migrated_interface_exit_code": 0,
+  "shared_scenario_c_syntax_exit_code": 0,
+  "normalized_migration_equivalence": true,
+  "source_evidence_changes": [],
+  "qcp_started": false,
+  "symbolic_run": false,
+  "vc_generated": false,
+  "c_implementation_proved": false
+}

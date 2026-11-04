@@ -1,0 +1,11 @@
+x_base CriticalAreaLock(void)
+/*@ ordinary
+    With (sg : StableGlobalState) (st1 : VarGlobalState)
+    Require
+      OutsideCritical(sg, st1)
+    Ensure
+      exists st_lock,
+        Crtos_RTrans(st1, st_lock) &&
+        InsideCritical(sg, st_lock) *
+        os_inv(sg, st_lock)
+ */

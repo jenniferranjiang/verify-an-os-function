@@ -1,0 +1,85 @@
+event_delete_guard : Z -> addr -> bool -> VarGlobalState -> Prop
+     : Z -> addr -> bool -> VarGlobalState -> Prop
+event_delete_gap
+:
+Z -> addr -> bool -> VarGlobalState -> VarGlobalState -> Prop
+     : Z -> addr -> bool -> VarGlobalState -> VarGlobalState -> Prop
+event_pending_head : addr -> addr
+     : addr -> addr
+abs_find_event : Z -> program (VarGlobalState -> Prop) addr
+     : Z -> program (VarGlobalState -> Prop) addr
+abs_event_resume_all : Z -> addr -> program (VarGlobalState -> Prop) unit
+     : Z -> addr -> program (VarGlobalState -> Prop) unit
+abs_event_delete_at : Z -> addr -> program (VarGlobalState -> Prop) unit
+     : Z -> addr -> program (VarGlobalState -> Prop) unit
+abs_event_delete : Z -> program (VarGlobalState -> Prop) unit
+     : Z -> program (VarGlobalState -> Prop) unit
+abs_ktask_assign : program (VarGlobalState -> Prop) unit
+     : program (VarGlobalState -> Prop) unit
+EventRaw : addr -> Assertion
+     : addr -> Assertion
+EventRetired : addr -> Z -> Z -> Assertion
+     : addr -> Z -> Z -> Assertion
+LastSeen : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+     : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+@safeExec
+:
+forall Sigma A : Type,
+(Sigma -> Prop) -> program Sigma A -> (A -> Sigma -> Prop) -> Prop
+     : forall Sigma A : Type,
+       (Sigma -> Prop) -> program Sigma A -> (A -> Sigma -> Prop) -> Prop
+@ret : forall Sigma A : Type, A -> program Sigma A
+     : forall Sigma A : Type, A -> program Sigma A
+OutsideCritical : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+InsideCritical : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+os_inv : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+store_idmanager : StableIdmanager -> VarIdmanager -> addr -> Assertion
+     : StableIdmanager -> VarIdmanager -> addr -> Assertion
+store_idmanager_found
+:
+StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion
+     : StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion
+idmanager_contains : StableIdmanager -> VarIdmanager -> Z -> Z -> Prop
+     : StableIdmanager -> VarIdmanager -> Z -> Z -> Prop
+idmanager_link : StableIdmanager -> VarIdmanager -> Z -> addr -> VarIdmanager
+     : StableIdmanager -> VarIdmanager -> Z -> addr -> VarIdmanager
+idmanager_remove : StableIdmanager -> VarIdmanager -> Z -> VarIdmanager
+     : StableIdmanager -> VarIdmanager -> Z -> VarIdmanager
+@store_dll
+:
+forall A : Type,
+(addr -> A -> Assertion) -> addr -> list (DL_Node A) -> Assertion
+     : forall A : Type,
+       (addr -> A -> Assertion) -> addr -> list (DL_Node A) -> Assertion
+store_priority_ready_bucket : addr -> list (DL_Node addr) -> Assertion
+     : addr -> list (DL_Node addr) -> Assertion
+store_task_sched_member : addr -> TaskSchedMemberAbs -> Assertion
+     : addr -> TaskSchedMemberAbs -> Assertion
+get_task_with_idnode_success
+:
+StableGlobalState -> VarGlobalState -> Z -> addr -> Prop
+     : StableGlobalState -> VarGlobalState -> Z -> addr -> Prop
+ktask_wakeup_step
+:
+addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+     : addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+ktask_wakeup_detached_null_condition
+:
+StableGlobalState -> VarGlobalState -> Z -> Prop
+     : StableGlobalState -> VarGlobalState -> Z -> Prop
+ktask_wakeup_detached_null_step
+:
+addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+     : addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+semaphore_pending_nodes
+:
+addr -> VarGlobalState -> list (DL_Node addr) -> Prop
+     : addr -> VarGlobalState -> list (DL_Node addr) -> Prop
+wakeup_semaphore_head
+:
+addr -> addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+     : addr ->
+       addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop

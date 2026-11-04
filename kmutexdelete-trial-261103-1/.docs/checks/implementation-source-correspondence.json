@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "files": [
+    {
+      "file": "KMutexDelete.c",
+      "reviewed_sha256": "6f0749195f4268c0c02acaddcfa640c24aa9886d5239938883c145689549e612",
+      "current_sha256": "d3481c313a14ced0f30af0892a9e5b487de1e197c4a7d3b8fe109bc867a562e8",
+      "normalized_executable_tokens_equal": true,
+      "approved_adaptations": []
+    },
+    {
+      "file": "_MutexDelete.c",
+      "reviewed_sha256": "145e83b9a8dd08e7dab25032a1d3359410e63cf8ae3025f39bf8ed8df16b5794",
+      "current_sha256": "a842016ebcafa1ef0f541d788d22e13216407993b64405fa0978900cc8adbb3c",
+      "normalized_executable_tokens_equal": true,
+      "approved_adaptations": [
+        "single uint16 ID read split, same critical section and call"
+      ]
+    },
+    {
+      "file": "LinklistResumeAll.c",
+      "reviewed_sha256": "d08702d5a60b09b4b7d792118eba6f55ce04e0c7d46507c6e5dd82f86f1c12e2",
+      "current_sha256": "ea2c1b546c0e5ae13c8555a15c8a8d182543bdb17d27bdbb97f25f276d9873fe",
+      "normalized_executable_tokens_equal": true,
+      "approved_adaptations": [
+        "single promoted task ID read split",
+        "for(;;) to while(1), same break/body/lock boundaries"
+      ]
+    }
+  ],
+  "note": "Compares executable tokens with reviewed slices after only explicitly approved normalizations; manual original-source/config correspondence remains separately checked.",
+  "original_source_config_trustbase_unchanged": {
+    "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c": true,
+    "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/linklist.c": true,
+    "/home/xinra/TrustBase.md": true,
+    "annotated_C/src/include/xsconfig.h": true
+  }
+}

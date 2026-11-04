@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "FindEventById",
+      "meaning": "冻结的锁外查询接口返回空指针或带删除guard的事件指针，并推进调用者continuation。"
+    },
+    {
+      "name": "_EventDelete",
+      "meaning": "冻结的锁外删除接口在D1/D2范围内执行指定事件的抽象删除并归还锁外状态。"
+    },
+    {
+      "name": "KEventDelete",
+      "meaning": "在0<=id<65536及获批环境范围内，未命中直接返回，命中后完成抽象删除，并归还OutsideCritical。"
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [
+    {
+      "name": "kevent_delete_lookup_cont",
+      "meaning": "查询返回指针之后，空指针对应unit返回，非空指针对应abs_event_delete_at的最弱前条件。",
+      "why_needed": "跨FindEventById接口把指针返回类型与公开删除接口unit返回类型及后续删除效果正确衔接。"
+    }
+  ],
+  "vc_comparisons": []
+}

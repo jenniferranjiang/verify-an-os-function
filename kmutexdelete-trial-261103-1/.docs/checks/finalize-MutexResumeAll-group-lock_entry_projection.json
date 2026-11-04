@@ -1,0 +1,88 @@
+{
+  "status": "accepted",
+  "phase": "vc-proving",
+  "attempt": "MutexResumeAll-vc-proving-r1:lock_entry_projection",
+  "next_actions": [
+    {
+      "id": "deliver:MutexResumeAll-vc-proving-r1:loop_head_projection:0",
+      "kind": "spawn-group-worker",
+      "attempt_id": "MutexResumeAll-vc-proving-r1:loop_head_projection",
+      "phase": "vc-proving",
+      "round": "MutexResumeAll-vc-proving-r1",
+      "group_id": "loop_head_projection",
+      "owner": "group-worker/MutexResumeAll-vc-proving-r1:loop_head_projection",
+      "role": "group-worker",
+      "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+      "input": "/home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexResumeAll-20261103170225/rounds/MutexResumeAll-vc-proving-r1/groups/group_11__loop_head_projection/group_worker_input.md",
+      "report": "/home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexResumeAll-20261103170225/rounds/MutexResumeAll-vc-proving-r1/groups/group_11__loop_head_projection/group_worker_report.json",
+      "claim_invocation": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+          "--main-root",
+          "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+          "claim-attempt",
+          "--run",
+          "MutexResumeAll-20261103170225",
+          "--next-action",
+          "deliver:MutexResumeAll-vc-proving-r1:loop_head_projection:0",
+          "--owner",
+          "group-worker/MutexResumeAll-vc-proving-r1:loop_head_projection"
+        ],
+        "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+      }
+    },
+    {
+      "id": "deliver:MutexResumeAll-vc-proving-r1:task_guard_projection:0",
+      "kind": "spawn-group-worker",
+      "attempt_id": "MutexResumeAll-vc-proving-r1:task_guard_projection",
+      "phase": "vc-proving",
+      "round": "MutexResumeAll-vc-proving-r1",
+      "group_id": "task_guard_projection",
+      "owner": "group-worker/MutexResumeAll-vc-proving-r1:task_guard_projection",
+      "role": "group-worker",
+      "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+      "input": "/home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexResumeAll-20261103170225/rounds/MutexResumeAll-vc-proving-r1/groups/group_12__task_guard_projection/group_worker_input.md",
+      "report": "/home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexResumeAll-20261103170225/rounds/MutexResumeAll-vc-proving-r1/groups/group_12__task_guard_projection/group_worker_report.json",
+      "claim_invocation": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+          "--main-root",
+          "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+          "claim-attempt",
+          "--run",
+          "MutexResumeAll-20261103170225",
+          "--next-action",
+          "deliver:MutexResumeAll-vc-proving-r1:task_guard_projection:0",
+          "--owner",
+          "group-worker/MutexResumeAll-vc-proving-r1:task_guard_projection"
+        ],
+        "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+      }
+    }
+  ],
+  "waiting_for": [
+    {
+      "attempt_id": "MutexResumeAll-vc-proving-r1:entry_facts",
+      "owner": "group-worker/MutexResumeAll-vc-proving-r1:entry_facts",
+      "status": "running",
+      "finalize_invocation": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+          "--main-root",
+          "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+          "finalize-delivery",
+          "--run",
+          "MutexResumeAll-20261103170225",
+          "--attempt",
+          "MutexResumeAll-vc-proving-r1:entry_facts",
+          "--owner",
+          "group-worker/MutexResumeAll-vc-proving-r1:entry_facts"
+        ],
+        "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+      }
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+@Some : forall A : Type, A -> option A
+     : forall A : Type, A -> option A
+@None : forall A : Type, option A
+     : forall A : Type, option A
+tt : unit
+     : unit
+true : bool
+     : bool
+false : bool
+     : bool
+Build_IdNodeAbs : Z -> addr -> IdNodeAbs
+     : Z -> addr -> IdNodeAbs
+@Build_DL_Node : forall A : Type, A -> addr -> DL_Node A
+     : forall A : Type, A -> addr -> DL_Node A
+store_idmanager : StableIdmanager -> VarIdmanager -> addr -> Assertion
+     : StableIdmanager -> VarIdmanager -> addr -> Assertion
+store_idmanager_found
+:
+StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion
+     : StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion
+store_idmanager_remove_ready
+:
+StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion
+     : StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion
+store_idmanager_removeobj_post
+:
+StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion
+     : StableIdmanager -> VarIdmanager -> addr -> addr -> Z -> Assertion
+store_idnode : addr -> IdNodeAbs -> Assertion
+     : addr -> IdNodeAbs -> Assertion
+idmanager_query : VarIdmanager -> Z -> bool
+     : VarIdmanager -> Z -> bool
+idmanager_remove : StableIdmanager -> VarIdmanager -> Z -> VarIdmanager
+     : StableIdmanager -> VarIdmanager -> Z -> VarIdmanager
+idmanager_add : VarIdmanager -> Z -> VarIdmanager
+     : VarIdmanager -> Z -> VarIdmanager
+idmanager_link : StableIdmanager -> VarIdmanager -> Z -> addr -> VarIdmanager
+     : StableIdmanager -> VarIdmanager -> Z -> addr -> VarIdmanager
+@store_dll
+:
+forall A : Type,
+(addr -> A -> Assertion) -> addr -> list (DL_Node A) -> Assertion
+     : forall A : Type,
+       (addr -> A -> Assertion) -> addr -> list (DL_Node A) -> Assertion
+map : forall A B : Type, (A -> B) -> list A -> list B
+     : forall A B : Type, (A -> B) -> list A -> list B
+pure_suspend_sched_link
+:
+(addr -> option TaskDescriptorAbs) -> addr -> addr -> Assertion
+     : (addr -> option TaskDescriptorAbs) -> addr -> addr -> Assertion
+semaphore_wait_node : addr -> DL_Node addr
+     : addr -> DL_Node addr
+occupy_dll_node : addr -> Assertion
+     : addr -> Assertion
+store_node_self_linked : addr -> Assertion
+     : addr -> Assertion
+store_task_sched_member : addr -> TaskSchedMemberAbs -> Assertion
+     : addr -> TaskSchedMemberAbs -> Assertion
+store_priority_ready_bucket : addr -> list (DL_Node addr) -> Assertion
+     : addr -> list (DL_Node addr) -> Assertion
+store_ready_dll_tail_view : addr -> list (DL_Node addr) -> addr -> Assertion
+     : addr -> list (DL_Node addr) -> addr -> Assertion
+@dll_insert_anchor
+:
+forall A : Type, addr -> list (DL_Node A) -> addr -> Prop
+     : forall A : Type, addr -> list (DL_Node A) -> addr -> Prop
+@dll_insert_after_dispatch
+:
+forall A : Type,
+addr -> list (DL_Node A) -> addr -> DL_Node A -> list (DL_Node A)
+     : forall A : Type,
+       addr -> list (DL_Node A) -> addr -> DL_Node A -> list (DL_Node A)
+@dll_insert_before_dispatch
+:
+forall A : Type,
+addr -> list (DL_Node A) -> addr -> DL_Node A -> list (DL_Node A)
+     : forall A : Type,
+       addr -> list (DL_Node A) -> addr -> DL_Node A -> list (DL_Node A)
+ALIGN_SIZE : Z
+     : Z
+addr_aligned : addr -> Z -> Prop
+     : addr -> Z -> Prop
+KOK : Z
+     : Z
+KERROR : Z
+     : Z
+PRIORITY_MAX : Z
+     : Z
+TSK_SUSPEND : TaskStatus
+     : TaskStatus
+TSK_READY : TaskStatus
+     : TaskStatus
+decode_task_status : Z -> TaskStatus
+     : Z -> TaskStatus
+store_task_status : addr -> TaskStatus -> Assertion
+     : addr -> TaskStatus -> Assertion
+os_global_context : StableGlobalState -> Prop
+     : StableGlobalState -> Prop
+task_world_wf : VarGlobalState -> Prop
+     : VarGlobalState -> Prop
+task_fields : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+task_wakeup_inv : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+tasks_ready_with_exstatus : VarGlobalState -> list addr -> Z -> Prop
+     : VarGlobalState -> list addr -> Z -> Prop
+delay_inv : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+assign_ready_pending : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+sched_link_of : addr -> addr
+     : addr -> addr
+ready_task_node : addr -> DL_Node addr
+     : addr -> DL_Node addr
+task_addr_aligned : addr -> OsAssignReadyVectorAbs -> Prop
+     : addr -> OsAssignReadyVectorAbs -> Prop
+assign_ready_vector_addr : StableGlobalState -> addr
+     : StableGlobalState -> addr
+get_task_with_idnode_success
+:
+StableGlobalState -> VarGlobalState -> Z -> addr -> Prop
+     : StableGlobalState -> VarGlobalState -> Z -> addr -> Prop
+set_task_desc_ready : TaskDescriptorAbs -> TaskDescriptorAbs
+     : TaskDescriptorAbs -> TaskDescriptorAbs
+update_task_desc_map
+:
+addr ->
+TaskDescriptorAbs ->
+(addr -> option TaskDescriptorAbs) -> addr -> option TaskDescriptorAbs
+     : addr ->
+       TaskDescriptorAbs ->
+       (addr -> option TaskDescriptorAbs) -> addr -> option TaskDescriptorAbs
+replace_task_desc_map
+:
+(addr -> option TaskDescriptorAbs) -> VarGlobalState -> VarGlobalState
+     : (addr -> option TaskDescriptorAbs) -> VarGlobalState -> VarGlobalState
+replace_global_ready_vector
+:
+OsAssignReadyVectorAbs -> VarGlobalState -> VarGlobalState
+     : OsAssignReadyVectorAbs -> VarGlobalState -> VarGlobalState
+os_assign_ready_vector_replace_bucket
+:
+OsAssignReadyVectorAbs -> Z -> list (DL_Node addr) -> OsAssignReadyVectorAbs
+     : OsAssignReadyVectorAbs ->
+       Z -> list (DL_Node addr) -> OsAssignReadyVectorAbs
+rrr_bucket_insert
+:
+(addr -> option TaskDescriptorAbs) ->
+TaskSchedMemberAbs ->
+DL_Node addr -> list (DL_Node addr) -> list (DL_Node addr) -> Prop
+     : (addr -> option TaskDescriptorAbs) ->
+       TaskSchedMemberAbs ->
+       DL_Node addr -> list (DL_Node addr) -> list (DL_Node addr) -> Prop
+assign_policy_insert_ready_vector
+:
+OsAssignReadyVectorAbs ->
+TaskSchedMemberAbs -> list (DL_Node addr) -> OsAssignReadyVectorAbs
+     : OsAssignReadyVectorAbs ->
+       TaskSchedMemberAbs -> list (DL_Node addr) -> OsAssignReadyVectorAbs
+assign_insert_step_ic
+:
+(addr -> option TaskDescriptorAbs) ->
+addr ->
+TaskDescriptorAbs -> OsAssignReadyVectorAbs -> OsAssignReadyVectorAbs -> Prop
+     : (addr -> option TaskDescriptorAbs) ->
+       addr ->
+       TaskDescriptorAbs ->
+       OsAssignReadyVectorAbs -> OsAssignReadyVectorAbs -> Prop
+ktask_unset_delay_step : addr -> VarGlobalState -> VarGlobalState -> Prop
+     : addr -> VarGlobalState -> VarGlobalState -> Prop
+unset_linked_delay_step
+:
+addr -> TaskDelayAbs -> VarGlobalState -> VarGlobalState -> Prop
+     : addr -> TaskDelayAbs -> VarGlobalState -> VarGlobalState -> Prop
+In : forall A : Type, A -> list A -> Prop
+     : forall A : Type, A -> list A -> Prop
+vDelayNull : vDelayView
+     : vDelayView
+vDelayInactive : addr -> TaskDelayAbs -> vDelayView
+     : addr -> TaskDelayAbs -> vDelayView
+vDelayActive
+:
+addr ->
+TaskDelayAbs ->
+list (DL_Node TaskDelayAbs) -> list (DL_Node TaskDelayAbs) -> vDelayView
+     : addr ->
+       TaskDelayAbs ->
+       list (DL_Node TaskDelayAbs) ->
+       list (DL_Node TaskDelayAbs) -> vDelayView
+store_ktask_unset_delay_pre : addr -> vDelayView -> Assertion
+     : addr -> vDelayView -> Assertion
+store_ktask_unset_delay_post : addr -> vDelayView -> Assertion
+     : addr -> vDelayView -> Assertion
+vSchedLinked
+:
+addr -> list (DL_Node addr) -> list (DL_Node addr) -> vSchedView
+     : addr -> list (DL_Node addr) -> list (DL_Node addr) -> vSchedView
+vSchedDetached : vSchedView
+     : vSchedView
+store_ktask_wakeup_sched_pre
+:
+(addr -> option TaskDescriptorAbs) -> addr -> vSchedView -> Assertion
+     : (addr -> option TaskDescriptorAbs) -> addr -> vSchedView -> Assertion
+store_ktask_wakeup_source_post
+:
+(addr -> option TaskDescriptorAbs) -> vSchedView -> Assertion
+     : (addr -> option TaskDescriptorAbs) -> vSchedView -> Assertion
+LastSeen : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+     : VarGlobalState -> (VarGlobalState -> Prop) -> Prop
+@safeExec
+:
+forall Sigma A : Type,
+(Sigma -> Prop) -> program Sigma A -> (A -> Sigma -> Prop) -> Prop
+     : forall Sigma A : Type,
+       (Sigma -> Prop) -> program Sigma A -> (A -> Sigma -> Prop) -> Prop
+@MonadErr.ret : forall Sigma A : Type, A -> program Sigma A
+     : forall Sigma A : Type, A -> program Sigma A
+OutsideCritical : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+InsideCritical : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+Crtos_RTrans : VarGlobalState -> VarGlobalState -> Prop
+     : VarGlobalState -> VarGlobalState -> Prop
+Crtos_GTrans : VarGlobalState -> VarGlobalState -> Prop
+     : VarGlobalState -> VarGlobalState -> Prop
+os_inv : StableGlobalState -> VarGlobalState -> Assertion
+     : StableGlobalState -> VarGlobalState -> Assertion
+SemaphoreRaw : addr -> Assertion
+     : addr -> Assertion
+idmanager_contains : StableIdmanager -> VarIdmanager -> Z -> Z -> Prop
+     : StableIdmanager -> VarIdmanager -> Z -> Z -> Prop
+sched_link_node : addr -> DL_Node addr
+     : addr -> DL_Node addr
+ktask_wakeup_step
+:
+addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+     : addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+ktask_wakeup_detached_null_condition
+:
+StableGlobalState -> VarGlobalState -> Z -> Prop
+     : StableGlobalState -> VarGlobalState -> Z -> Prop
+ktask_wakeup_detached_null_step
+:
+addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+     : addr -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+semaphore_pending_nodes : Z -> VarGlobalState -> list (DL_Node Z) -> Prop
+     : Z -> VarGlobalState -> list (DL_Node Z) -> Prop
+wakeup_semaphore_head
+:
+Z -> Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+     : Z ->
+       Z -> TaskDescriptorAbs -> VarGlobalState -> VarGlobalState -> Prop
+os_mutex_stable : StableGlobalState -> MutexStable
+     : StableGlobalState -> MutexStable
+os_mutexes : VarGlobalState -> MutexState
+     : VarGlobalState -> MutexState
+mutex_manager_stable : MutexStable -> StableIdmanager
+     : MutexStable -> StableIdmanager
+mutex_manager : MutexState -> VarIdmanager
+     : MutexState -> VarIdmanager
+MutexRaw : addr -> Assertion
+     : addr -> Assertion
+MutexRetired : MutexAbs -> Assertion
+     : MutexAbs -> Assertion
+mutex_pending_head : addr -> addr
+     : addr -> addr
+mutex_delete_live : addr -> Z -> VarGlobalState -> Prop
+     : addr -> Z -> VarGlobalState -> Prop
+mutex_delete_drained : addr -> Z -> VarGlobalState -> Prop
+     : addr -> Z -> VarGlobalState -> Prop
+mutex_pending_nodes : addr -> VarGlobalState -> list (DL_Node addr) -> Prop
+     : addr -> VarGlobalState -> list (DL_Node addr) -> Prop
+mutex_resume_all_effect
+:
+addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop
+     : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop
+abs_mutex_resume_all : addr -> Z -> program (VarGlobalState -> Prop) unit
+     : addr -> Z -> program (VarGlobalState -> Prop) unit
+abs_mutex_retire : addr -> Z -> program (VarGlobalState -> Prop) unit
+     : addr -> Z -> program (VarGlobalState -> Prop) unit
+abs_mutex_delete_object : addr -> Z -> program (VarGlobalState -> Prop) unit
+     : addr -> Z -> program (VarGlobalState -> Prop) unit
+abs_mutex_delete : Z -> program (VarGlobalState -> Prop) unit
+     : Z -> program (VarGlobalState -> Prop) unit
+eq_refl : KOK = 0%Z
+     : KOK = 0%Z

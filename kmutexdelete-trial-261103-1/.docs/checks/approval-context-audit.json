@@ -1,0 +1,10 @@
+{
+  "scope": "KMutexDelete implementation only",
+  "explicit_user_authorization": "你implement吧",
+  "subsequent_instruction": "继续",
+  "normalization_approval": "批准这次等价规范化并继续",
+  "prior_restriction": "Design-only applied to earlier completed design stage; superseded by explicit implement request",
+  "rejected_action": "extra rocq_check recheck in borrow_id group after successful development and while exact group-check was already running",
+  "reason_reported": "Automatic reviewer cited earlier design-only restriction",
+  "handling": "No retry of that extra call. Verified explicit root-thread implementation authorization; preserve report and continue required controller acceptance against completed proof artifacts."
+}

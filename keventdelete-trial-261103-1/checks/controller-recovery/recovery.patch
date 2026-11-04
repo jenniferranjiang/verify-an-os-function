@@ -1,0 +1,84 @@
+--- /home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller_control.py
++++ /home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller_control.py
+@@ -62,15 +62,50 @@
+     return _pause(args, args.action)
+ 
+ 
++def _reopen_infrastructure_group(state: dict, identifier: str, reason: str):
++    """Requeue exactly one resolved infrastructure failure for its original owner.
++
++    This never accepts a proof or clears semantic blockers. The caller supplies
++    the resolution evidence; normal claim and full acceptance remain mandatory.
++    """
++    from controller_attempts import _task
++    if not reason.strip():
++        raise SystemExit("--resolved-attempt requires a non-empty --resolution-reason")
++    attempt, record, group = _task(state, identifier, assignment=False)
++    if (group is None or state["phase"] != "vc-proving"
++            or state["current"].get("vc-proving") != attempt["attempt_id"]):
++        raise SystemExit("resolution must name a group in the current proving attempt")
++    blocker = record.get("blocker", {})
++    if record["status"] != "blocked" or blocker.get("failure_class") != "infrastructure":
++        raise SystemExit("only a blocked infrastructure group can be reopened")
++    record.update(status="prepared", repair_index=record.get("repair_index", 0) + 1,
++                  feedback="Infrastructure resolution: " + reason.strip(), claimed_action=None)
++    for field in ("started_at", "returned_at", "finished_at", "blocker"):
++        record.pop(field, None)
++    state["current_blockers"] = [item for item in state.get("current_blockers", []) if item != blocker]
++    return attempt, group, blocker
++
++
+ def resume_run(args) -> int:
+     from controller_rounds import derive_actions
+     state = load_run(args)
++    resolution = getattr(args, "resolved_attempt", None)
++    reason = getattr(args, "resolution_reason", "")
++    if reason and not resolution:
++        raise SystemExit("--resolution-reason requires --resolved-attempt")
++    if resolution:
++        from controller_rounds import render_handoff
++        attempt, group, prior_blocker = _reopen_infrastructure_group(state, resolution, reason)
++        render_handoff(state, attempt, group_id=group["id"],
++                       feedback=attempt["groups"][group["id"]]["feedback"])
+     control = state["run_control"]
+     already = control["status"] == "active"
+     state["run_control"] = {"status": "active", "updated_at": _utc(), "pause_count": control.get("pause_count", 0)}
+     _write_control_signal(state)
+     _save_state(Path(state["run_root"]), state)
+-    _append_event(Path(state["run_root"]), state, "resumed")
++    _append_event(Path(state["run_root"]), state, "resumed", **(
++        {"resolved_attempt": resolution, "resolution_reason": reason,
++         "prior_blocker": prior_blocker} if resolution else {}))
+     print(json.dumps({"status": "already-active" if already else "active", "run": state["run_id"],
+                       "next_actions": derive_actions(state)}, indent=2))
+     return 0
+--- /home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller_cli.py
++++ /home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller_cli.py
+@@ -51,6 +51,10 @@
+         init.add_argument("--" + option, action="append", default=[])
+     for name in ("pause-run", "cancel-action"):
+         commands[name].add_argument("--reason", required=True)
++    commands["resume-run"].add_argument("--resolved-attempt",
++        help="Exact current group whose infrastructure blocker has been resolved; keeps its owner and proofs.")
++    commands["resume-run"].add_argument("--resolution-reason", default="",
++        help="Resolution evidence; required with --resolved-attempt. Does not approve specs or bypass checks.")
+     commands["cancel-action"].add_argument("--action", required=True)
+     commands["claim-attempt"].add_argument("--next-action", required=True)
+     commands["claim-attempt"].add_argument("--owner", required=True)
+--- /home/xinra/qcp-binary-democases/.agents/skills/verification-orchestrator/docs/controller-cli.md
++++ /home/xinra/qcp-binary-democases/.agents/skills/verification-orchestrator/docs/controller-cli.md
+@@ -49,7 +49,7 @@
+ | `final-check` | 无 | 检查实际文件、独立 replay 与清理；通过后 done |
+ | `pause-run` | `--reason` | 暂停 run，保留任务事实 |
+ | `cancel-action` | `--action --reason` | 验证当前/已领取 action id 后暂停 run |
+-| `resume-run` | 无 | 明确恢复后重新派生动作 |
++| `resume-run` | 可选 `--resolved-attempt --resolution-reason` | 明确恢复后重新派生动作；有证据时重开指定的基础设施阻塞组 |
+ | `validate-artifact` | `--kind --path`，不需 `--run` | 用运行时 validator 校验指定文件 |
+ 
+ `coq-check --target-kind` 仅支持 `formal-case-lib-design`、`formal-case-lib`、`group-development`、
+@@ -68,3 +68,5 @@
+ 
+ 当前接口没有独立 annotation/VC acceptance 命令。旧 schema run 不迁移，也不应手改 schema
+ 后继续；使用原代码恢复或初始化新 run。用户暂停后只有明确恢复授权才能执行 `resume-run`。
++
++已解决的基础设施阻塞组可用 `resume-run --resolved-attempt <round>:<group> --resolution-reason <实际解决依据>` 交回原owner。该入口仅接受当前proving round中状态为blocked且failure_class为infrastructure的组；不处理语义缺口、不批准spec、不标记证明通过。保留旧blocker与解决依据到运行日志，增加repair_index并派生append action，后续仍须claim和完整接纳。未明确解决审批拒绝时不得以此入口绕过拒绝。

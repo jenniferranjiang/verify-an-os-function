@@ -1,0 +1,7 @@
+{
+  "user_instruction": "继续",
+  "runs": "implement-runs.json",
+  "controller_state": "all three still active/annotation, same owner and round, reports pending",
+  "owner_action": "followup_task sent to original ann_resume/ann_delete/ann_root targets; no reinitialization, no replacement owners",
+  "resume_run_needed": false
+}

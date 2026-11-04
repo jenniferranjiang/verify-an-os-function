@@ -1,0 +1,95 @@
+{
+  "status": "accepted",
+  "phase": "vc-proving",
+  "attempt": "KMutexDelete-vc-proving-r1:query_context",
+  "next_actions": [
+    {
+      "id": "deliver:KMutexDelete-vc-proving-r1:branch_contradictions:0",
+      "kind": "spawn-group-worker",
+      "attempt_id": "KMutexDelete-vc-proving-r1:branch_contradictions",
+      "phase": "vc-proving",
+      "round": "KMutexDelete-vc-proving-r1",
+      "group_id": "branch_contradictions",
+      "owner": "group-worker/KMutexDelete-vc-proving-r1:branch_contradictions",
+      "role": "group-worker",
+      "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+      "input": "/home/xinra/crtos/kmutexdelete-trial-261103-1/reports/KMutexDelete-20261103170333/rounds/KMutexDelete-vc-proving-r1/groups/group_05__branch_contradictions/group_worker_input.md",
+      "report": "/home/xinra/crtos/kmutexdelete-trial-261103-1/reports/KMutexDelete-20261103170333/rounds/KMutexDelete-vc-proving-r1/groups/group_05__branch_contradictions/group_worker_report.json",
+      "claim_invocation": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+          "--main-root",
+          "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+          "claim-attempt",
+          "--run",
+          "KMutexDelete-20261103170333",
+          "--next-action",
+          "deliver:KMutexDelete-vc-proving-r1:branch_contradictions:0",
+          "--owner",
+          "group-worker/KMutexDelete-vc-proving-r1:branch_contradictions"
+        ],
+        "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+      }
+    },
+    {
+      "id": "deliver:KMutexDelete-vc-proving-r1:unlock_context:0",
+      "kind": "spawn-group-worker",
+      "attempt_id": "KMutexDelete-vc-proving-r1:unlock_context",
+      "phase": "vc-proving",
+      "round": "KMutexDelete-vc-proving-r1",
+      "group_id": "unlock_context",
+      "owner": "group-worker/KMutexDelete-vc-proving-r1:unlock_context",
+      "role": "group-worker",
+      "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+      "input": "/home/xinra/crtos/kmutexdelete-trial-261103-1/reports/KMutexDelete-20261103170333/rounds/KMutexDelete-vc-proving-r1/groups/group_06__unlock_context/group_worker_input.md",
+      "report": "/home/xinra/crtos/kmutexdelete-trial-261103-1/reports/KMutexDelete-20261103170333/rounds/KMutexDelete-vc-proving-r1/groups/group_06__unlock_context/group_worker_report.json",
+      "claim_invocation": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+          "--main-root",
+          "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+          "claim-attempt",
+          "--run",
+          "KMutexDelete-20261103170333",
+          "--next-action",
+          "deliver:KMutexDelete-vc-proving-r1:unlock_context:0",
+          "--owner",
+          "group-worker/KMutexDelete-vc-proving-r1:unlock_context"
+        ],
+        "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+      }
+    },
+    {
+      "id": "deliver:KMutexDelete-vc-proving-r1:found_result_frame:0",
+      "kind": "spawn-group-worker",
+      "attempt_id": "KMutexDelete-vc-proving-r1:found_result_frame",
+      "phase": "vc-proving",
+      "round": "KMutexDelete-vc-proving-r1",
+      "group_id": "found_result_frame",
+      "owner": "group-worker/KMutexDelete-vc-proving-r1:found_result_frame",
+      "role": "group-worker",
+      "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+      "input": "/home/xinra/crtos/kmutexdelete-trial-261103-1/reports/KMutexDelete-20261103170333/rounds/KMutexDelete-vc-proving-r1/groups/group_07__found_result_frame/group_worker_input.md",
+      "report": "/home/xinra/crtos/kmutexdelete-trial-261103-1/reports/KMutexDelete-20261103170333/rounds/KMutexDelete-vc-proving-r1/groups/group_07__found_result_frame/group_worker_report.json",
+      "claim_invocation": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+          "--main-root",
+          "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+          "claim-attempt",
+          "--run",
+          "KMutexDelete-20261103170333",
+          "--next-action",
+          "deliver:KMutexDelete-vc-proving-r1:found_result_frame:0",
+          "--owner",
+          "group-worker/KMutexDelete-vc-proving-r1:found_result_frame"
+        ],
+        "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+      }
+    }
+  ],
+  "waiting_for": []
+}

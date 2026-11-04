@@ -1,0 +1,29 @@
+{
+  "status": "accepted",
+  "phase": "vc-proving",
+  "attempt": "MutexDelete-vc-proving-r1:locked_passthrough",
+  "next_actions": [],
+  "waiting_for": [
+    {
+      "attempt_id": "MutexDelete-vc-proving-r1:removed_passthrough",
+      "owner": "group-worker/MutexDelete-vc-proving-r1:removed_passthrough",
+      "status": "running",
+      "finalize_invocation": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+          "--main-root",
+          "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+          "finalize-delivery",
+          "--run",
+          "MutexDelete-20261103170333",
+          "--attempt",
+          "MutexDelete-vc-proving-r1:removed_passthrough",
+          "--owner",
+          "group-worker/MutexDelete-vc-proving-r1:removed_passthrough"
+        ],
+        "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+      }
+    }
+  ]
+}

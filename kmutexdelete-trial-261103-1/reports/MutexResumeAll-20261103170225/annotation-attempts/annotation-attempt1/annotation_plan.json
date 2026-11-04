@@ -1,0 +1,59 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "CriticalAreaLock",
+      "meaning": "A1限定的重新加锁，取得当前同一mutex及共享资源"
+    },
+    {
+      "name": "CriticalAreaUnLock",
+      "meaning": "交回当前共享资源并保留锁外观察"
+    },
+    {
+      "name": "CONTAINER_OF_TASK_SCHED",
+      "meaning": "调度节点地址转换，不产生任务字段权限"
+    },
+    {
+      "name": "KTaskWakeup",
+      "meaning": "复用原锁内唤醒合同，不验证callee实现"
+    },
+    {
+      "name": "LinklistResumeAll",
+      "meaning": "在真实单个drain临界区内排空mutex等待队列，恢复OutsideCritical并保留后续safeExec"
+    }
+  ],
+  "loop_invariants": [
+    {
+      "location": "LinklistResumeAll: NULL non-returning loop",
+      "progress": "保留入口资源，NULL错误路径持续不返回"
+    },
+    {
+      "location": "LinklistResumeAll: pending drain loop",
+      "progress": "当前remaining队列的完成效果仍等于原drain观察队列的整体效果，当前资源与锁token唯一持有"
+    }
+  ],
+  "new_predicates": [
+    {
+      "name": "mutex_resume_remaining_effect",
+      "meaning": "剩余队列的完成关系连接原批量效果",
+      "why_needed": "循环在当前队列上推进而公开spec固定drain入口效果"
+    },
+    {
+      "name": "mutex_resume_next_restore",
+      "meaning": "等待哨兵next只读字段的空间归还条件",
+      "why_needed": "精确借出字段并恢复os_inv"
+    },
+    {
+      "name": "mutex_resume_exstatus_restore",
+      "meaning": "exstatus写入后的全局空间归还条件",
+      "why_needed": "Task map改变后重组资源索引"
+    },
+    {
+      "name": "mutex_resume_id_restore",
+      "meaning": "任务ID只读字段的空间归还条件",
+      "why_needed": "在Wakeup调用前恢复完整os_inv"
+    }
+  ],
+  "vc_comparisons": []
+}

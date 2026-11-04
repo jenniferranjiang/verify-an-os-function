@@ -1,0 +1,14 @@
+#include "../include/slice_types.h"
+#include "../include/logic.h"
+
+/* Imported contract boundary; source/revision: checks/source-slices/manifest.json. */
+struct TaskDescriptor *CONTAINER_OF_TASK_SCHED(DoubleLinklistType *sched_link_ptr)
+/*@ With task_ptr
+    Require addr_aligned(task_ptr, ALIGN_SIZE) &&
+            sched_link_ptr == sched_link_of(task_ptr) &&
+            emp
+    Ensure __return == task_ptr &&
+           addr_aligned(__return, ALIGN_SIZE) &&
+           sched_link_ptr ==
+             &(__return->task_dync_sched_member.sched_link)
+ */;

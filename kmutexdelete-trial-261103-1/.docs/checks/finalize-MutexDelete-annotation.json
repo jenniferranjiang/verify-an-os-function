@@ -1,0 +1,22 @@
+{
+  "status": "blocked",
+  "phase": "annotation",
+  "blocker": {
+    "failure_class": "infrastructure",
+    "kind": "ambiguous-ghost-struct-field",
+    "vcs": [],
+    "message": "QCP rejects frozen IdRemoveObj high_level_spec at annotated_C/src/_MutexDelete.c:73:26: idnode->id inferred RecordIdNode versus Z in equality with 65535. Logical addr binder cannot disambiguate C struct. No generated VCs. Explicit IdNode field_addr/store normalization is documented in notes and repository precedents, but changes frozen tokens and requires coordinated reused canonical/caller repair beyond owner boundary.",
+    "repair_boundary": "Main approval/freeze handling for syntax-equivalent IdRemoveObj contracts in annotated_C/src/_MutexDelete.c and annotated_C/src/IdRemoveObj.c; do not change their semantics."
+  },
+  "next_actions": [],
+  "waiting_for": [],
+  "current_blockers": [
+    {
+      "failure_class": "infrastructure",
+      "kind": "ambiguous-ghost-struct-field",
+      "vcs": [],
+      "message": "QCP rejects frozen IdRemoveObj high_level_spec at annotated_C/src/_MutexDelete.c:73:26: idnode->id inferred RecordIdNode versus Z in equality with 65535. Logical addr binder cannot disambiguate C struct. No generated VCs. Explicit IdNode field_addr/store normalization is documented in notes and repository precedents, but changes frozen tokens and requires coordinated reused canonical/caller repair beyond owner boundary.",
+      "repair_boundary": "Main approval/freeze handling for syntax-equivalent IdRemoveObj contracts in annotated_C/src/_MutexDelete.c and annotated_C/src/IdRemoveObj.c; do not change their semantics."
+    }
+  ]
+}

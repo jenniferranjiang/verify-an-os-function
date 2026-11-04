@@ -1,0 +1,19 @@
+{
+  "trial": "kmutexdelete-trial-261103-1",
+  "date": "2026-11-03",
+  "scope": "design and review only; no QCP parser/symbolic/VC/implementation proof",
+  "head": "0943b5389b541d3217b61596a381ac9383fa2e11",
+  "sha256": {
+    "lib/CrtosInv.v": "83933aad0a8dd5f61d57cb2545b2d8de3d1ca6346758015c80273b0ae59755e8",
+    "lib/KEventCreate.v": "a2dd90cabeb320aed4e00bf719217f12653007c9b61b19b8556c373cafa39d1f",
+    "lib/MutexState.v": "7a3ee9b6c988603da028aee1fd049ab5c484dfba1f12283a3cc412a653b34f05",
+    "lib/MutexInv.v": "0d64414764c4d2bed396fc2e858bc1cd69df7fe5f5c2b650f4e4df24dad7867c",
+    "lib/MutexOps.v": "104b974d108b89252b30603e9ddec80dc4ce8ced2f5b980ff98271bca40ff5ba",
+    "lib/CrtosRules.v": "9338d39d287890070e3d242fbfc36f8006ff41aec533ec757d32e9769d3de72c",
+    "_CoqProject": "02709d6cb02996f64786e713660b87e242ad12ce1541f8fc763331999113390c",
+    "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c": "f78f31912d12ec76ff34823102d586aef574176377e1fce3c323d670c0f0f645",
+    "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/linklist.c": "d64d3275b6d936f46352bc4625fc11efc9e0b113ca838f60a98eabaa09a7342c",
+    "annotated_C/src/include/xsconfig.h": "e961aea78700d6663cd040eb3caa5e4e85bd7f18858ca66ba6086c0213ad3e28",
+    "/home/xinra/TrustBase.md": "a2201e7277938c1c45f3570c4224fa26724bc7d4f27027077f00d6d384ad35f7"
+  }
+}

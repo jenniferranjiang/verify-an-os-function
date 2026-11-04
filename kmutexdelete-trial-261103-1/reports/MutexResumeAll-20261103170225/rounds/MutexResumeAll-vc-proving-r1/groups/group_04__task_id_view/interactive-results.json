@@ -1,0 +1,45 @@
+{
+  "authorization": ".docs/checks/explicit-implementation-approval-20261104.json",
+  "workspace": "verification_runs/MutexResumeAll-20261103170225/_coq_builds/MutexResumeAll-vc-proving-r1/group_04/dev",
+  "results": [
+    {
+      "name": "proof_of_LinklistResumeAll_which_implies_wit_7",
+      "start_state": 1,
+      "end_state": 48,
+      "success": true,
+      "proof_finished": true
+    },
+    {
+      "name": "proof_of_LinklistResumeAll_which_implies_wit_8_split_goal_spatial",
+      "start_state": 49,
+      "end_state": 53,
+      "success": true,
+      "proof_finished": true,
+      "goals": "No goals remaining."
+    },
+    {
+      "name": "proof_of_LinklistResumeAll_which_implies_wit_8",
+      "start_state": 54,
+      "end_state": 57,
+      "success": true,
+      "proof_finished": true,
+      "goals": "No goals remaining."
+    },
+    {
+      "name": "proof_of_LinklistResumeAll_partial_solve_wit_12",
+      "start_state": 58,
+      "end_state": 62,
+      "success": true,
+      "proof_finished": true,
+      "goals": "No goals remaining."
+    },
+    {
+      "name": "proof_of_LinklistResumeAll_partial_solve_wit_13",
+      "start_state": 63,
+      "end_state": 67,
+      "success": true,
+      "proof_finished": true,
+      "goals": "No goals remaining."
+    }
+  ]
+}

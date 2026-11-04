@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "gcc",
+    "-E",
+    "-CC",
+    "-dD",
+    "-undef",
+    "-nostdinc",
+    "-ffreestanding",
+    "-m32",
+    "-Iannotated_C/src/",
+    "/home/xinra/crtos/kmutexdelete-trial-261103-1/annotated_C/src/LinklistResumeAll.c",
+    "-o",
+    "/home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexResumeAll-20261103170225/final-check/symexec-refresh/preprocessed/LinklistResumeAll.c"
+  ],
+  "output": "/home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexResumeAll-20261103170225/final-check/symexec-refresh/preprocessed/LinklistResumeAll.c",
+  "source": "/home/xinra/crtos/kmutexdelete-trial-261103-1/annotated_C/src/LinklistResumeAll.c",
+  "preprocessed_sha256": "e3e5a01a07ade8bf706b141a6e1e24f3ecf5063bb22ed02760b5596e9794fb2a",
+  "semantics": "GCC preprocessing with annotations, macro definitions and source line markers preserved"
+}

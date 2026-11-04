@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "FindEventById",
+      "meaning": "在用户冻结的uint16范围内按ID查询，返回NULL或对应Event基址；恢复临界区外资源并推进同一safeExec continuation。"
+    },
+    {
+      "name": "CriticalAreaLock",
+      "meaning": "取得共享os_inv及临界区资源；本函数只用ordinary。"
+    },
+    {
+      "name": "CriticalAreaUnLock",
+      "meaning": "归还重组后的os_inv和临界区资源。"
+    },
+    {
+      "name": "IdGetObj",
+      "meaning": "复用已有ID查询接口，命中时借出对应节点视图。"
+    },
+    {
+      "name": "CONTAINER_OF_EVENT_ID",
+      "meaning": "可信模型仅把内嵌ID地址转换成Event基址。"
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [
+    {
+      "name": "find_event_manager_frame",
+      "meaning": "查询借出Event ID manager时，保留其余系统模块与事件管理DLL/payload资源。",
+      "why_needed": "调用IdGetObj需要局部manager资源；该组合view明确借还边界，不复制manager或Task状态，也不改变冻结规格。"
+    }
+  ],
+  "vc_comparisons": []
+}

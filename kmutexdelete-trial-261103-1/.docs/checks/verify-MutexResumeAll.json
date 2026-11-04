@@ -1,0 +1,645 @@
+{
+  "status": "passed",
+  "candidate": {
+    "proof_manual": "/home/xinra/crtos/kmutexdelete-trial-261103-1/verification_runs/MutexResumeAll-20261103170225/MutexResumeAll-vc-proving-r1/proving_merged/MutexResumeAll_proof_manual.v",
+    "formal_case_lib": "/home/xinra/crtos/kmutexdelete-trial-261103-1/verification_runs/MutexResumeAll-20261103170225/MutexResumeAll-vc-proving-r1/proving_merged/MutexResumeAll_lib.v"
+  },
+  "group_count": 15,
+  "group_errors": {},
+  "added_declarations": [
+    {
+      "name": "From Coq Require Import Logic.FunctionalExtensionality Logic.Classical Sorting.Permutation micromega.Lia.",
+      "kind": "Import",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "step_task_map__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "steps_task_facts__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "rest_transfer__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "rrr_transfer__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "assign_transfer__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "normalized_lookup__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "normalized_rest__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "ready_fold_transfer__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "normalized_update__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "steps_ready__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "dllseg_conflict__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "dllseg_nodup__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "dll_nodup__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "dll_conflict__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "delay_disjoint__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "ptr_unique__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "filter_all__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "remove_ptr_filter__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "filter_nodup_ptr__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "unset_summary__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "selected_normalized__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "filter_selected_cons__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "steps_delays_summary__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "steps_delays__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "nodup_app_disjoint__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "remove_in__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "remove_absent_eq__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "remove_nodup__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "concat_member__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "concat_nodup_member__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "concat_nodup_disjoint__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "nodup_map_injective__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "sem_absent_step__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "event_absent_step__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "mutex_waiters_subset__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "mutex_waiters_nodup__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "mutex_step_map__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "step_mutexes__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "mutex_pending_addresses__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "mutex_pending_twice__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "steps_mutexes__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "scheduler_parts__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "os_shapes__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "steps_preserved__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "steps_global_state__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "resume_steps_bulk__bulk_initialization",
+      "kind": "Lemma",
+      "group_id": "bulk_initialization"
+    },
+    {
+      "name": "From Coq Require Import Lia Sorting.Permutation.",
+      "kind": "Import",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "map_key_unique__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "task_id_offset__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "sched_nodes_injective__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "remove_head_exact__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "os_id_facts__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "lookup_unique_from_os__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "marked_descriptor__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "dllseg_payload_forall__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "dll_payload_forall__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "suspend_payload_fact__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "mutex_waiters_fact__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "os_mutex_waiters_fact__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "mutex_member_after__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "mutex_live_after__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "mutex_pending_tail__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "wakeup_map_self__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "remaining_step__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "nonsuspend_impossible__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "wakeup_head_facts__loop_step",
+      "kind": "Lemma",
+      "group_id": "loop_step"
+    },
+    {
+      "name": "dllseg_payload__head_view",
+      "kind": "Lemma",
+      "group_id": "head_view"
+    },
+    {
+      "name": "dll_payload__head_view",
+      "kind": "Lemma",
+      "group_id": "head_view"
+    },
+    {
+      "name": "pending_borrow__head_view",
+      "kind": "Lemma",
+      "group_id": "head_view"
+    },
+    {
+      "name": "pending_desc__head_view",
+      "kind": "Lemma",
+      "group_id": "head_view"
+    },
+    {
+      "name": "task_alignment__head_view",
+      "kind": "Lemma",
+      "group_id": "head_view"
+    },
+    {
+      "name": "From Coq Require Import Logic.FunctionalExtensionality Logic.PropExtensionality.",
+      "kind": "Import",
+      "group_id": "exstatus_update"
+    },
+    {
+      "name": "lookup_new__exstatus_update",
+      "kind": "Lemma",
+      "group_id": "exstatus_update"
+    },
+    {
+      "name": "lookup_old__exstatus_update",
+      "kind": "Lemma",
+      "group_id": "exstatus_update"
+    },
+    {
+      "name": "task_wf_mark__exstatus_update",
+      "kind": "Lemma",
+      "group_id": "exstatus_update"
+    },
+    {
+      "name": "service_wf_mark__exstatus_update",
+      "kind": "Lemma",
+      "group_id": "exstatus_update"
+    },
+    {
+      "name": "os_wf_mark__exstatus_update",
+      "kind": "Lemma",
+      "group_id": "exstatus_update"
+    },
+    {
+      "name": "delay_wf_mark__exstatus_update",
+      "kind": "Lemma",
+      "group_id": "exstatus_update"
+    },
+    {
+      "name": "ready_wf_mark__exstatus_update",
+      "kind": "Lemma",
+      "group_id": "exstatus_update"
+    },
+    {
+      "name": "assign_wf_mark__exstatus_update",
+      "kind": "Lemma",
+      "group_id": "exstatus_update"
+    },
+    {
+      "name": "published_slink_mark__exstatus_update",
+      "kind": "Lemma",
+      "group_id": "exstatus_update"
+    },
+    {
+      "name": "detached_slink_mark__exstatus_update",
+      "kind": "Lemma",
+      "group_id": "exstatus_update"
+    },
+    {
+      "name": "zombie_mark__exstatus_update",
+      "kind": "Lemma",
+      "group_id": "exstatus_update"
+    },
+    {
+      "name": "cell_focus__exstatus_update",
+      "kind": "Lemma",
+      "group_id": "exstatus_update"
+    },
+    {
+      "name": "exstatus_focus__exstatus_update",
+      "kind": "Lemma",
+      "group_id": "exstatus_update"
+    },
+    {
+      "name": "Require Import Coq.micromega.Lia Coq.Sorting.Permutation.",
+      "kind": "Import",
+      "group_id": "task_id_view"
+    },
+    {
+      "name": "dll_focus__task_id_view",
+      "kind": "Lemma",
+      "group_id": "task_id_view"
+    },
+    {
+      "name": "bucket_focus__task_id_view",
+      "kind": "Lemma",
+      "group_id": "task_id_view"
+    },
+    {
+      "name": "buckets_focus__task_id_view",
+      "kind": "Lemma",
+      "group_id": "task_id_view"
+    },
+    {
+      "name": "in_Znth__task_id_view",
+      "kind": "Lemma",
+      "group_id": "task_id_view"
+    },
+    {
+      "name": "bucket_pure__task_id_view",
+      "kind": "Lemma",
+      "group_id": "task_id_view"
+    },
+    {
+      "name": "pending_member__task_id_view",
+      "kind": "Lemma",
+      "group_id": "task_id_view"
+    },
+    {
+      "name": "id_addr__task_id_view",
+      "kind": "Lemma",
+      "group_id": "task_id_view"
+    },
+    {
+      "name": "node_close__task_id_view",
+      "kind": "Lemma",
+      "group_id": "task_id_view"
+    },
+    {
+      "name": "resume_effect_keeps_drained_identity__drain_exit",
+      "kind": "Lemma",
+      "group_id": "drain_exit"
+    },
+    {
+      "name": "scoped_resume_safe_continuation__drain_exit",
+      "kind": "Lemma",
+      "group_id": "drain_exit"
+    },
+    {
+      "name": "dllseg_conflict__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "dllseg_nodup__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "dll_nodup__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "dllseg_payload__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "dll_payload__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "pending_desc__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "From Coq Require Import Sorting.Permutation micromega.Lia.",
+      "kind": "Import",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "absent_remove__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "app_disjoint__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "map_unique__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "nth_concat__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "same_id__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "source_facts__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "os_pure__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "sem_absent__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "mutex_absent__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "event_absent__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "general_wakeup_detached_refinement__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "sem_member__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "sem_set_absent__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "sem_remove_exact__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    },
+    {
+      "name": "general_wakeup_semaphore_refinement__wakeup_refinements",
+      "kind": "Lemma",
+      "group_id": "wakeup_refinements"
+    }
+  ],
+  "coq_check": {
+    "target_file": "VC/MutexResumeAll_goal_check.v",
+    "target_kind": "parent",
+    "build_workspace": "/home/xinra/crtos/kmutexdelete-trial-261103-1/verification_runs/MutexResumeAll-20261103170225/_coq_builds/MutexResumeAll-vc-proving-r1/parent/src",
+    "dependency_mode": "makefile",
+    "status": "passed",
+    "returncode": 0,
+    "recompiled_target_files": [
+      "VC/MutexResumeAll_lib.v",
+      "VC/MutexResumeAll_goal.v",
+      "VC/MutexResumeAll_proof_auto.v",
+      "VC/MutexResumeAll_proof_manual.v",
+      "VC/MutexResumeAll_goal_check.v"
+    ],
+    "staged_current_source_count": 5,
+    "reused_base_vo_count": 201,
+    "elapsed_seconds": 222.889962
+  },
+  "phase": "final-apply",
+  "next_actions": [
+    {
+      "id": "final-apply:",
+      "kind": "main-owned-action",
+      "action": "final-apply",
+      "invocation": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+          "--main-root",
+          "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+          "final-apply",
+          "--run",
+          "MutexResumeAll-20261103170225"
+        ],
+        "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+      }
+    }
+  ],
+  "waiting_for": []
+}

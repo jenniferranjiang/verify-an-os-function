@@ -1,0 +1,240 @@
+{
+  "status": "passed",
+  "candidate": {
+    "proof_manual": "/home/xinra/crtos/kmutexdelete-trial-261103-1/verification_runs/MutexDelete-20261103170333/MutexDelete-vc-proving-r1/proving_merged/MutexDelete_proof_manual.v",
+    "formal_case_lib": "/home/xinra/crtos/kmutexdelete-trial-261103-1/verification_runs/MutexDelete-20261103170333/MutexDelete-vc-proving-r1/proving_merged/MutexDelete_lib.v"
+  },
+  "group_count": 11,
+  "group_errors": {},
+  "added_declarations": [
+    {
+      "name": "From Coq Require Import Lia.",
+      "kind": "Import",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "mapped_nodup_injective__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "selected_bucket_member__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "deleted_id_node_unique__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "unpublish_current__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "task_world_reindex__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "service_reindex__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "world_reindex__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "task_inv_reindex__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "global_frame_reindex__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "empty_dll_self__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "idnodes_remove_app__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "idnodes_remove_absent__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "filtered_remove_absent__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "map_seq_nth__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "replace_map_seq__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "idlist_remove_current__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "idnodes_remove_current_cons__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "bucket_remove_current__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "other_bucket_current__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "manager_remove_current__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "inv_recompose__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "waiters_remove_empty__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "embedded_field_addr__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "retired_payload__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "retire_continuation__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "retire_empty_mutex_memory__retire_state",
+      "kind": "Lemma",
+      "group_id": "retire_state"
+    },
+    {
+      "name": "dllseg_focus__borrow_id",
+      "kind": "Lemma",
+      "group_id": "borrow_id"
+    },
+    {
+      "name": "dll_focus__borrow_id",
+      "kind": "Lemma",
+      "group_id": "borrow_id"
+    },
+    {
+      "name": "idbucket_focus__borrow_id",
+      "kind": "Lemma",
+      "group_id": "borrow_id"
+    },
+    {
+      "name": "idbuckets_focus__borrow_id",
+      "kind": "Lemma",
+      "group_id": "borrow_id"
+    },
+    {
+      "name": "mutex_idnode_in_buckets__borrow_id",
+      "kind": "Lemma",
+      "group_id": "borrow_id"
+    },
+    {
+      "name": "idnode_scalar_focus__borrow_id",
+      "kind": "Lemma",
+      "group_id": "borrow_id"
+    },
+    {
+      "name": "os_id_cell_focus__borrow_id",
+      "kind": "Lemma",
+      "group_id": "borrow_id"
+    },
+    {
+      "name": "payload_neq__borrow_id",
+      "kind": "Lemma",
+      "group_id": "borrow_id"
+    },
+    {
+      "name": "dllseg_addresses_unique__borrow_id",
+      "kind": "Lemma",
+      "group_id": "borrow_id"
+    },
+    {
+      "name": "mutex_addresses_unique__borrow_id",
+      "kind": "Lemma",
+      "group_id": "borrow_id"
+    },
+    {
+      "name": "mutex_ids_unique__borrow_id",
+      "kind": "Lemma",
+      "group_id": "borrow_id"
+    }
+  ],
+  "coq_check": {
+    "target_file": "VC/MutexDelete_goal_check.v",
+    "target_kind": "parent",
+    "build_workspace": "/home/xinra/crtos/kmutexdelete-trial-261103-1/verification_runs/MutexDelete-20261103170333/_coq_builds/MutexDelete-vc-proving-r1/parent/src",
+    "dependency_mode": "makefile",
+    "status": "passed",
+    "returncode": 0,
+    "recompiled_target_files": [
+      "VC/MutexDelete_lib.v",
+      "VC/MutexDelete_goal.v",
+      "VC/MutexDelete_proof_auto.v",
+      "VC/MutexDelete_proof_manual.v",
+      "VC/MutexDelete_goal_check.v"
+    ],
+    "staged_current_source_count": 5,
+    "reused_base_vo_count": 201,
+    "elapsed_seconds": 216.482207
+  },
+  "phase": "final-apply",
+  "next_actions": [
+    {
+      "id": "final-apply:",
+      "kind": "main-owned-action",
+      "action": "final-apply",
+      "invocation": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+          "--main-root",
+          "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+          "final-apply",
+          "--run",
+          "MutexDelete-20261103170333"
+        ],
+        "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+      }
+    }
+  ],
+  "waiting_for": []
+}

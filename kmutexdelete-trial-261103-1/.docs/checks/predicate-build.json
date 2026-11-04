@@ -1,0 +1,22 @@
+{
+  "predicate_revision": "kmutexdelete-predicate-r1",
+  "status": "review-ready",
+  "files": {
+    "lib/KMutexDelete.v": "7a4fe9106548d5f07aca0fa278e182b37535b9d346654e7c4d30ae041da63d50"
+  },
+  "compile": {
+    "command": "/home/xinra/crtos/tools/rocq/coqc lib/KMutexDelete.v",
+    "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+    "exit_code": 0,
+    "log": "predicate-compile.log"
+  },
+  "new_axioms": false,
+  "new_admitted": false,
+  "new_parameters": false,
+  "c_implementation_proof_started": false,
+  "assumptions": [
+    "A1: same allocation survives lookup through this removal, no free/reuse by environment",
+    "A2: no new waiter joins after this drain through removal"
+  ],
+  "design_report": ".docs/Report/predicate-design.md"
+}

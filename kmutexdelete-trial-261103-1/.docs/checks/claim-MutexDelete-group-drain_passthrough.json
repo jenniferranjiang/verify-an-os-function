@@ -1,0 +1,28 @@
+{
+  "status": "claimed",
+  "attempt": "MutexDelete-vc-proving-r1:drain_passthrough",
+  "owner": "group-worker/MutexDelete-vc-proving-r1:drain_passthrough",
+  "handoff": {
+    "role": "group-worker",
+    "owner": "group-worker/MutexDelete-vc-proving-r1:drain_passthrough",
+    "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+    "claim_message": "Read /home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexDelete-20261103170333/rounds/MutexDelete-vc-proving-r1/groups/group_08__drain_passthrough/group_worker_input.md completely and follow its role skill and current assignment. Write the terminal report to /home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexDelete-20261103170333/rounds/MutexDelete-vc-proving-r1/groups/group_08__drain_passthrough/group_worker_report.json and stop writing before main finalizes.",
+    "prompt": "Role: group-worker\nOwner: group-worker/MutexDelete-vc-proving-r1:drain_passthrough\nCWD: /home/xinra/crtos/kmutexdelete-trial-261103-1\nRead /home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexDelete-20261103170333/rounds/MutexDelete-vc-proving-r1/groups/group_08__drain_passthrough/group_worker_input.md completely and follow its role skill and current assignment. Write the terminal report to /home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexDelete-20261103170333/rounds/MutexDelete-vc-proving-r1/groups/group_08__drain_passthrough/group_worker_report.json and stop writing before main finalizes."
+  },
+  "finalize_invocation": {
+    "argv": [
+      "/usr/bin/python3",
+      "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+      "--main-root",
+      "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+      "finalize-delivery",
+      "--run",
+      "MutexDelete-20261103170333",
+      "--attempt",
+      "MutexDelete-vc-proving-r1:drain_passthrough",
+      "--owner",
+      "group-worker/MutexDelete-vc-proving-r1:drain_passthrough"
+    ],
+    "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+  }
+}

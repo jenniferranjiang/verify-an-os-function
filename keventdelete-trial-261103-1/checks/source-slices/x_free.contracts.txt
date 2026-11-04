@@ -1,0 +1,4 @@
+void x_free(void *ptr)
+/*@ Require SemaphoreRaw(ptr)
+    Ensure emp
+ */

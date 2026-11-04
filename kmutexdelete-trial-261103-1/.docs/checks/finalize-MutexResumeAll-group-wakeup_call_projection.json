@@ -1,0 +1,29 @@
+{
+  "status": "accepted",
+  "phase": "vc-proving",
+  "attempt": "MutexResumeAll-vc-proving-r1:wakeup_call_projection",
+  "next_actions": [],
+  "waiting_for": [
+    {
+      "attempt_id": "MutexResumeAll-vc-proving-r1:unlock_projection",
+      "owner": "group-worker/MutexResumeAll-vc-proving-r1:unlock_projection",
+      "status": "running",
+      "finalize_invocation": {
+        "argv": [
+          "/usr/bin/python3",
+          "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+          "--main-root",
+          "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+          "finalize-delivery",
+          "--run",
+          "MutexResumeAll-20261103170225",
+          "--attempt",
+          "MutexResumeAll-vc-proving-r1:unlock_projection",
+          "--owner",
+          "group-worker/MutexResumeAll-vc-proving-r1:unlock_projection"
+        ],
+        "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+      }
+    }
+  ]
+}

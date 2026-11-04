@@ -1,0 +1,75 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "LinklistResumeAll",
+      "meaning": "冻结event_waiters_oc：在用户D1/D2环境范围下取得当前事件等待队列，批量唤醒并以同一continuation和空pending交回OutsideCritical。"
+    },
+    {
+      "name": "CriticalAreaLock",
+      "meaning": "保留ordinary及本轮受限event_delete_gap可信接口；后者只在批准的删除调用链使用。"
+    },
+    {
+      "name": "CriticalAreaUnLock",
+      "meaning": "归还当前os_inv并离开临界区；冻结stable合同不变。"
+    },
+    {
+      "name": "CONTAINER_OF_TASK_SCHED",
+      "meaning": "可信container模型只建立sched_link到task基址关系，不提供字段权限。"
+    },
+    {
+      "name": "KTaskWakeup",
+      "meaning": "复用通用wakeup_by_id_ic；两个未使用的既有<=派生合同保持冻结原文，生成的derive义务仅为导入规格兼容性，不是本轮函数体证明。"
+    }
+  ],
+  "loop_invariants": [
+    {
+      "location": "LinklistResumeAll: NULL_PARAM_CHECK while(1)",
+      "progress": "保留入口OutsideCritical、冻结safeExec及全部局部权限；NULL错误分支不返回。"
+    },
+    {
+      "location": "LinklistResumeAll: pending head while(1)",
+      "progress": "当前remaining队列完成后足以完成实际锁内原waiting整体效果；保持目标成员、原locked观察、受限gap、safeExec、InsideCritical及当前os_inv。"
+    }
+  ],
+  "new_predicates": [
+    {
+      "name": "event_resume_next_restore",
+      "meaning": "等待哨兵next单元的空间归还wand。",
+      "why_needed": "循环读取一个共享单元后需恢复完整os_inv；不复制公共DLL表示。"
+    },
+    {
+      "name": "event_resume_exstatus_restore",
+      "meaning": "更新任务exstatus后恢复新状态os_inv的空间归还wand。",
+      "why_needed": "只借出被写字段，并明确写入值与新任务状态的对应。"
+    },
+    {
+      "name": "event_resume_id_restore",
+      "meaning": "任务ID只读单元的空间归还wand。",
+      "why_needed": "读取ID后重组os_inv，供通用KTaskWakeup使用。"
+    },
+    {
+      "name": "event_resume_remaining_effect",
+      "meaning": "完成当前剩余队列的整体效果足以完成原waiting整体效果的数学进度。",
+      "why_needed": "直接引用冻结event_resume_all_effect，不重写循环或批量更新算法。"
+    }
+  ],
+  "vc_comparisons": [
+    {
+      "source": {
+        "attempt": "EventLinklistResumeAll-vc-checking-r1",
+        "name": "proof_of_LinklistResumeAll_entail_wit_4_2",
+        "annotation_location": "LinklistResumeAll: successful KTaskWakeup return / loop-invariant backedge"
+      },
+      "current": [
+        "proof_of_LinklistResumeAll_entail_wit_4_2",
+        "proof_of_LinklistResumeAll_which_implies_wit_4",
+        "proof_of_LinklistResumeAll_which_implies_wit_7"
+      ],
+      "old_gap": "旧os_inv被Wakeup消费后只剩os_inv(after)，丢失旧sched-owner互斥事实，允许旧task同时挂Event和Semaphore的反例。",
+      "change": "从既有current os_inv在which_implies_wit_4导出os_world_wf/task_world_wf，从marked os_inv在which_implies_wit_7同样导出并保留纯事实；冻结函数合同、纯step及整体effect均不改。",
+      "result": "resolved"
+    }
+  ]
+}

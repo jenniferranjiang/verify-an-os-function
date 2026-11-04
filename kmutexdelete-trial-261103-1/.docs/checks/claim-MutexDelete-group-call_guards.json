@@ -1,0 +1,28 @@
+{
+  "status": "claimed",
+  "attempt": "MutexDelete-vc-proving-r1:call_guards",
+  "owner": "group-worker/MutexDelete-vc-proving-r1:call_guards",
+  "handoff": {
+    "role": "group-worker",
+    "owner": "group-worker/MutexDelete-vc-proving-r1:call_guards",
+    "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+    "claim_message": "Read /home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexDelete-20261103170333/rounds/MutexDelete-vc-proving-r1/groups/group_07__call_guards/group_worker_input.md completely and follow its role skill and current assignment. Write the terminal report to /home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexDelete-20261103170333/rounds/MutexDelete-vc-proving-r1/groups/group_07__call_guards/group_worker_report.json and stop writing before main finalizes.",
+    "prompt": "Role: group-worker\nOwner: group-worker/MutexDelete-vc-proving-r1:call_guards\nCWD: /home/xinra/crtos/kmutexdelete-trial-261103-1\nRead /home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexDelete-20261103170333/rounds/MutexDelete-vc-proving-r1/groups/group_07__call_guards/group_worker_input.md completely and follow its role skill and current assignment. Write the terminal report to /home/xinra/crtos/kmutexdelete-trial-261103-1/reports/MutexDelete-20261103170333/rounds/MutexDelete-vc-proving-r1/groups/group_07__call_guards/group_worker_report.json and stop writing before main finalizes."
+  },
+  "finalize_invocation": {
+    "argv": [
+      "/usr/bin/python3",
+      "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+      "--main-root",
+      "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+      "finalize-delivery",
+      "--run",
+      "MutexDelete-20261103170333",
+      "--attempt",
+      "MutexDelete-vc-proving-r1:call_guards",
+      "--owner",
+      "group-worker/MutexDelete-vc-proving-r1:call_guards"
+    ],
+    "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+  }
+}

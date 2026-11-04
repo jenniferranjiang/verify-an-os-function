@@ -1,0 +1,3 @@
+Completed assigned safety witnesses 7–11 using `LLM_pre_process ltac:(lia || int_auto)`. Witnesses 7–8 close from contradictory branch facts; witnesses 9–11 close from fixed integer-literal bounds. No helper, seed, statement, prelude, or unassigned proof changes.
+
+Validation: controller group-development exited 0 with JSON status passed. Required interactive Rocq MCP used the controller-generated group_08/dev workspace and its official load-path mappings; witness 7 returned proof_finished=true with no remaining goals. Forbidden-lemma scan found no matches. Terminal delivery is ready for main finalize-delivery; no redundant exact check was run.

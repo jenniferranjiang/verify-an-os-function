@@ -1,0 +1,13 @@
+# exstatus_update
+
+Assigned proof coverage: four top-level VCs and their two aggressive spatial splits. Both which_implies parents use aggressive_pre_process followed only by their Goal_apply split; the two partial_solve goals and both split goals begin with the required LLM_pre_process.
+
+The group-local helper closure extracts only the target TaskDescriptor.exstatus cell using the actual task_desc_map lookup. store_map_split and a descriptor field-focus wand retain all other descriptor bytes, task stack, the missing-map frame, and other OS resources. The replacement descriptor changes only exstatus. Lookup-preservation lemmas establish unchanged scheduler/base/delay fields and unchanged domain, so Task, service-slot, Delay, ready/Assign and os_world_wf conditions hold for the exact updated task map. Equality of the pure published/detached scheduling predicates permits reindexing all task-map-sensitive resources, including Semaphore, Mutex and Event waiting payloads. Returning the new field cell reconstructs the new os_inv; no old os_inv is assumed to persist through the write.
+
+For the write-site VC, retval=target identifies the same address, the original Int value is forgotten with the existing store_int_undef_store_int theorem, and the restore wand plus InsideCritical stay framed. The following VC returns the new -1 field unchanged. No C annotation, shared predicate, specification, seed declaration, prelude or unassigned proof was modified. All 13 adapted complete helpers use __exstatus_update; only official Coq extensionality imports were added. No new assumption/Axiom/Parameter or unproved obligation is used.
+
+Historical reuse was selective: the generic exstatus_focus family from the local archived Semaphore LinklistResumeAll library was adapted to current definitions and rechecked, with obsolete os_msgqueues projections removed. No current-round sibling was read or imported.
+
+All six assigned spans reached Qed via current Rocq MCP (states 1 through 38). A transient tactic timeout was recovered using the returned valid state. The core helper and its complete dependency closure compiled in the controller checks. An additional helper session had been opened before main asked to avoid extra rechecking; no further redundant proof call was made.
+
+Final group-development passed with exit 0/status passed, 93.399665 seconds; actual group lib/goal/auto/manual sources were compiled. Assigned proof/helper forbidden scan was clear. Exact group-check also passed with exit 0/status passed, 77.538812 seconds; its assigned-witness wrapper and all four current dependencies were actually compiled.
