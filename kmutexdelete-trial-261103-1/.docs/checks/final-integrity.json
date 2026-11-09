@@ -1,0 +1,87 @@
+{
+  "date": "2026-11-04",
+  "applies_to": "historical predicate/spec r1 only; current r3 has not been re-implemented",
+  "overall": "verified-under-approved-assumptions",
+  "controller_results": {
+    "KMutexDelete": {
+      "run_id": "KMutexDelete-20261103170333",
+      "phase": "done",
+      "final_check": {
+        "status": "passed",
+        "phase": "done",
+        "errors": []
+      },
+      "groups_accepted": 8,
+      "evidence": ".docs/checks/final-check-KMutexDelete.json"
+    },
+    "MutexDelete": {
+      "run_id": "MutexDelete-20261103170333",
+      "phase": "done",
+      "final_check": {
+        "status": "passed",
+        "phase": "done",
+        "errors": []
+      },
+      "groups_accepted": 11,
+      "evidence": ".docs/checks/final-check-MutexDelete.json"
+    },
+    "MutexResumeAll": {
+      "run_id": "MutexResumeAll-20261103170225",
+      "phase": "done",
+      "final_check": {
+        "status": "passed",
+        "phase": "done",
+        "errors": []
+      },
+      "groups_accepted": 15,
+      "evidence": ".docs/checks/final-check-MutexResumeAll.json"
+    }
+  },
+  "source_correspondence_reused": ".docs/checks/implementation-source-correspondence.json",
+  "annotated_inputs_unchanged_since_correspondence": {
+    "KMutexDelete.c": true,
+    "_MutexDelete.c": true,
+    "LinklistResumeAll.c": true
+  },
+  "original_source_config_trustbase_unchanged": {
+    "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c": true,
+    "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/linklist.c": true,
+    "annotated_C/src/include/xsconfig.h": true,
+    "/home/xinra/TrustBase.md": true
+  },
+  "assumptions": [
+    "A1: same allocation survives lookup until unpublish; no competing delete/free/reuse",
+    "A2: no new waiter between completed drain and unpublish"
+  ],
+  "reused_spec_boundaries": [
+    "IdGetObj",
+    "IdRemoveObj",
+    "DoubleLinkListRmNode",
+    "KTaskWakeup"
+  ],
+  "model_trust_boundaries": [
+    "CriticalAreaLock",
+    "CriticalAreaUnLock",
+    "CONTAINER_OF_MUTEX_ID",
+    "CONTAINER_OF_TASK_SCHED",
+    "x_free"
+  ],
+  "formal_artifact_sha256": {
+    "KMutexDelete_goal.v": "3df876a58e67a393d977518b1c9e8fde38984933279347dbe75c3128d1177dd7",
+    "KMutexDelete_goal_check.v": "920c7907232fc0dbe150aebf8bd04f11ad97a0c7f7334c1fb463f5771f6da587",
+    "KMutexDelete_lib.v": "757b3612e6c9dc1a2314e50d79c16573ed6d7a40dfdec5676ece8f80be9200f5",
+    "KMutexDelete_proof_auto.v": "0a7ddd96a2b3f32a52748364c231bd404bcc3b17a6fece2d1f8e174c9c4806d1",
+    "KMutexDelete_proof_manual.v": "c9238a184de18e044e3b2eca25d533de5e649bfcb356f223210548c78b18c39b",
+    "MutexDelete_goal.v": "f9b372f5f55139e15be737efafc66843bcb435d9fc0e9f3b929c99bad8336f7c",
+    "MutexDelete_goal_check.v": "35f993d6fea7498c2d8129311d1b8cf156bedf8c12ae43ed4227cd9f5a42738e",
+    "MutexDelete_lib.v": "4dcda199dc6cfccdfe3955c0c6b2d7d3bfe6a2f7c685f4e5e7458d76b29dcbf7",
+    "MutexDelete_proof_auto.v": "a0de5d174a66d0e45b786dfd8b7c00dff8ebcc056b6b5cc28d13d75dc5066b72",
+    "MutexDelete_proof_manual.v": "fb403fb603c09e605fc3312cf006e77a257abe639b16350d1a7ebc78a1018d08",
+    "MutexResumeAll_goal.v": "fa35d5a1263bc649d30d147c82bc46ff6698861d69658d9e4d586d31f81f98f6",
+    "MutexResumeAll_goal_check.v": "5f9fb064bd352c4ef0f4d9b8f5c768602f6c4e0c8d670c469594c2938ff6bf66",
+    "MutexResumeAll_lib.v": "465b233eede7d2230ca895524612960995a78fbda2248a44e5d5dff1c554a02d",
+    "MutexResumeAll_proof_auto.v": "e1856b4cf5615e16859c5625f20d5739459297decc222500f4b6cbb1f81512c2",
+    "MutexResumeAll_proof_manual.v": "9149e744f43e9d699eec69d606176a9e16dc3b016f944fc55fec60b025bb61a2"
+  },
+  "proof_checks_reused_from_controller": true
+}

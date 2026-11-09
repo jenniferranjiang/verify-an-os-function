@@ -1,0 +1,16 @@
+{
+  "revision": "keventdelete-spec-r2-11db06d3cde5",
+  "status": "review-passed",
+  "reviewer": "/root/event_r2_review",
+  "active_targets": ["FindEventById", "LinklistResumeAll", "_EventDelete", "KEventDelete"],
+  "files": {
+    "annotated_C/include/logic.h": "4da2d3d7b8a621d7551704a6916f123c4dd7617e1a4383e7c6e18a4a9cc46417",
+    "annotated_C/src/FindEventById.c": "dc829047e473c2b85e3da1644cf11063eb83cb789a7e17bd3b1e7783f997855b",
+    "annotated_C/src/LinklistResumeAll.c": "da346b16a6eff6e39c9b37444fe563917e390f914dd5a8341e124d75d698e12a",
+    "annotated_C/src/_EventDelete.c": "58bd8e7ee5a2c0f10e724b628bc321fa2e25d7825523d77edeaddd53512267cc",
+    "annotated_C/src/KEventDelete.c": "150e8120c4097a9dd8772cbd33f1ce2cb0e4dd8e14f11da4db00a482014d9bf0"
+  },
+  "gcc_ilp32_syntax": "passed",
+  "qcp_started": false,
+  "global_sync": false
+}

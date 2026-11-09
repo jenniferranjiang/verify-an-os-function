@@ -1,0 +1,19 @@
+{
+  "target_file": "VC/MutexResumeAll_group_04_task_id_view_check.v",
+  "target_kind": "group-check",
+  "build_workspace": "/home/xinra/crtos/kmutexdelete-trial-261103-1/verification_runs/MutexResumeAll-20261103170225/_coq_builds/MutexResumeAll-vc-proving-r1/group_04/src",
+  "dependency_mode": "makefile",
+  "status": "passed",
+  "returncode": 0,
+  "recompiled_target_files": [
+    "VC/MutexResumeAll_lib.v",
+    "VC/MutexResumeAll_goal.v",
+    "VC/MutexResumeAll_proof_auto.v",
+    "VC/MutexResumeAll_proof_manual.v",
+    "VC/MutexResumeAll_group_04_task_id_view_check.v"
+  ],
+  "staged_current_source_count": 5,
+  "reused_base_vo_count": 201,
+  "elapsed_seconds": 84.967254,
+  "recoverable": true
+}

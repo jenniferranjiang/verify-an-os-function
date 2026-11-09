@@ -1,0 +1,12 @@
+{
+  "patch_dry_run": {
+    "command": "patch --dry-run -p1 < keventdelete-trial-261103-1/.docs/Report/proposed-event-delete-fix.patch",
+    "exit_code": 0
+  },
+  "changed_body_syntax": {
+    "command": "gcc -m32 -std=c11 -Wall -Wextra -Werror -fsyntax-only -I keventdelete-trial-261103-1/checks/proposed-fix -I Ubiquitous/XiZi_IIoT_Macro/kernel/include -I annotated_C/src/include keventdelete-trial-261103-1/checks/proposed-fix/delete-syntax.c",
+    "exit_code": 0,
+    "limits": "Only changed function bodies and proposed real header signature; debug macro removed and scheduler macro represented by declared call. Not a whole-kernel build or behavioral proof."
+  },
+  "authoritative_sources_changed": []
+}

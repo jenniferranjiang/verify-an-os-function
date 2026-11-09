@@ -1,0 +1,20 @@
+{
+  "revision": "kmutexdelete-spec-r3-80bf19fe04c7",
+  "status": "review-passed",
+  "reviewer": "/root/mutex_linklist_spec_review_r3",
+  "active_targets": ["KMutexDelete", "_MutexDelete", "LinklistResumeAll"],
+  "canonical_linklist_spec": "outside_critical",
+  "mutex_target": "PendMutex(mutex,id)",
+  "files": {
+    "annotated_C/include/logic.h": "f1e0cf0d64e0ecb11b0ae4aabb322d615fec9d02208a988ec189312c778da25f",
+    "annotated_C/src/LinklistResumeAll.c": "80bf19fe04c78f2e7fc4f71f9fc465e62a2549720951f2e9e7584d99806f481d",
+    "annotated_C/src/_MutexDelete.c": "dee7e68c446b9bbf0d1c1a1c713eca0aa1ba2969d18a67bebd089864e42fb626",
+    "annotated_C/src/KMutexDelete.c": "460b7eeb8430db4a0c2fb5e853f2abd3518de301f959a25dbd3de20f1bc73c0c"
+  },
+  "gcc_ilp32_syntax": "passed",
+  "caller_canonical_contract_match": "passed",
+  "legacy_mutex_waiters_oc_present": false,
+  "implementation_annotations": "pending-regeneration",
+  "qcp_started": false,
+  "global_sync": false
+}

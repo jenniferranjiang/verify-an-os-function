@@ -1,0 +1,31 @@
+{
+  "promoted": [
+    "proof_of_KMutexDelete_safety_wit_1",
+    "proof_of_KMutexDelete_safety_wit_2",
+    "proof_of_KMutexDelete_safety_wit_3",
+    "proof_of_KMutexDelete_safety_wit_4",
+    "proof_of_KMutexDelete_safety_wit_5",
+    "proof_of_KMutexDelete_safety_wit_6",
+    "proof_of_KMutexDelete_safety_wit_7",
+    "proof_of_KMutexDelete_safety_wit_8",
+    "proof_of_KMutexDelete_safety_wit_9",
+    "proof_of_KMutexDelete_safety_wit_10",
+    "proof_of_KMutexDelete_entail_wit_1",
+    "proof_of_KMutexDelete_return_wit_4",
+    "proof_of_KMutexDelete_partial_solve_wit_1",
+    "proof_of_KMutexDelete_partial_solve_wit_2",
+    "proof_of_KMutexDelete_partial_solve_wit_3",
+    "proof_of_KMutexDelete_partial_solve_wit_4",
+    "proof_of_KMutexDelete_partial_solve_wit_5",
+    "proof_of_KMutexDelete_partial_solve_wit_6",
+    "proof_of_KMutexDelete_partial_solve_wit_7",
+    "proof_of_KMutexDelete_partial_solve_wit_8",
+    "proof_of_KMutexDelete_partial_solve_wit_9_pure",
+    "proof_of_KMutexDelete_partial_solve_wit_9",
+    "proof_of_KMutexDelete_partial_solve_wit_10",
+    "proof_of_KMutexDelete_partial_solve_wit_11"
+  ],
+  "generator_auto_sha256": "362394a9cba9b076e322b330a166ea43149623e674db097cfe564f8b34455f8d",
+  "generator_manual_sha256": "137d363c2ba9bea87281c8901f6fc266eb8093518d67efa269a9d2e60d82422d",
+  "statements_preserved": true
+}

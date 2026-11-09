@@ -1,0 +1,21 @@
+{
+  "revision": "kmutexdelete-predicate-r3-2f93718dada8",
+  "status": "review-passed",
+  "reviewer": "/root/mutex_linklist_spec_review_r3",
+  "files": {
+    "lib/Pendlist.v": "2f93718dada8f0e0f55bf707972d60c7fcfef6c9ea254392d51f7be81930eedd",
+    "lib/KMutexDelete.v": "a378beb942f43cb22616fa0b1fa4c0f129cb3302acea8c1b027d85c9da1161c5",
+    ".docs/checks/LogicInterfaces.v": "622edd74f5964ca6cecd99d6237ae8e12450f6e64b5d9d64021c6a7a9f0d8788"
+  },
+  "shared_symbols": [
+    "PendlistTarget",
+    "pendlist_head",
+    "pendlist_nodes",
+    "linklist_resume_all_step",
+    "linklist_resume_all_entry_condition",
+    "abs_linklist_resume_all"
+  ],
+  "rocq_mcp_compile": "passed",
+  "qcp_started": false,
+  "global_sync": false
+}

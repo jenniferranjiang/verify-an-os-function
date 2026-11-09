@@ -1,0 +1,18 @@
+{
+  "target_file": "VC/MutexDelete_proof_manual.v",
+  "target_kind": "group-development",
+  "build_workspace": "/home/xinra/crtos/kmutexdelete-trial-261103-1/verification_runs/MutexDelete-20261103170333/_coq_builds/MutexDelete-vc-proving-r1/group_03/dev",
+  "dependency_mode": "makefile",
+  "status": "passed",
+  "returncode": 0,
+  "recompiled_target_files": [
+    "VC/MutexDelete_lib.v",
+    "VC/MutexDelete_goal.v",
+    "VC/MutexDelete_proof_auto.v",
+    "VC/MutexDelete_proof_manual.v"
+  ],
+  "staged_current_source_count": 5,
+  "reused_base_vo_count": 201,
+  "elapsed_seconds": 49.66195,
+  "recoverable": true
+}

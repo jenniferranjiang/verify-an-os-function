@@ -1,0 +1,68 @@
+{
+  "MutexResumeAll": {
+    "run_id": "MutexResumeAll-20261103170225",
+    "annotation_owner": "annotation/MutexResumeAll-20261103170225",
+    "agent_target": "/root/ann_resume",
+    "claim_record": ".docs/checks/claim-MutexResumeAll-annotation.json",
+    "finalize_invocation": {
+      "argv": [
+        "/usr/bin/python3",
+        "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+        "--main-root",
+        "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+        "finalize-delivery",
+        "--run",
+        "MutexResumeAll-20261103170225",
+        "--attempt",
+        "MutexResumeAll-annotation-r1",
+        "--owner",
+        "annotation/MutexResumeAll-20261103170225"
+      ],
+      "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+    }
+  },
+  "MutexDelete": {
+    "run_id": "MutexDelete-20261103170333",
+    "annotation_owner": "annotation/MutexDelete-20261103170333",
+    "agent_target": "/root/ann_delete",
+    "claim_record": ".docs/checks/claim-MutexDelete-annotation.json",
+    "finalize_invocation": {
+      "argv": [
+        "/usr/bin/python3",
+        "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+        "--main-root",
+        "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+        "finalize-delivery",
+        "--run",
+        "MutexDelete-20261103170333",
+        "--attempt",
+        "MutexDelete-annotation-r1",
+        "--owner",
+        "annotation/MutexDelete-20261103170333"
+      ],
+      "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+    }
+  },
+  "KMutexDelete": {
+    "run_id": "KMutexDelete-20261103170333",
+    "annotation_owner": "annotation/KMutexDelete-20261103170333",
+    "agent_target": "/root/ann_root",
+    "claim_record": ".docs/checks/claim-KMutexDelete-annotation.json",
+    "finalize_invocation": {
+      "argv": [
+        "/usr/bin/python3",
+        "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/controller.py",
+        "--main-root",
+        "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+        "finalize-delivery",
+        "--run",
+        "KMutexDelete-20261103170333",
+        "--attempt",
+        "KMutexDelete-annotation-r1",
+        "--owner",
+        "annotation/KMutexDelete-20261103170333"
+      ],
+      "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1"
+    }
+  }
+}

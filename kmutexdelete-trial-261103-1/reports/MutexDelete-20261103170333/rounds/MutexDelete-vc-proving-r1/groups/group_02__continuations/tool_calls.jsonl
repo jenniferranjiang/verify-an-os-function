@@ -1,0 +1,7 @@
+{"call_id": "7e457941f10949f78299ea0f769da671", "command": "coq-check", "round": "MutexDelete-vc-proving-r1", "group": "continuations", "target_kind": "group-development", "started_at": "2026-11-03T14:19:42.307168+00:00", "event": "started"}
+{"call_id": "7e457941f10949f78299ea0f769da671", "command": "coq-check", "round": "MutexDelete-vc-proving-r1", "group": "continuations", "target_kind": "group-development", "started_at": "2026-11-03T14:19:42.307168+00:00", "event": "finished", "finished_at": "2026-11-03T14:20:16.843060+00:00", "elapsed_seconds": 35.975637, "exit_code": 0, "status": "passed", "returncode": 0}
+{"tool": "rocq_start/rocq_check", "workspace": "group_02/dev", "states": [1, 10, 30], "assigned_proofs": 4, "result": "all Qed; no helper/import/seed edits"}
+{"check": "forbidden lemma/tactic scan", "status": "passed"}
+{"call_id": "cf80e77ca0bd4b3d9a1eb9edc06eba33", "command": "coq-check", "round": "MutexDelete-vc-proving-r1", "group": "continuations", "target_kind": "group-check", "started_at": "2026-11-03T14:22:17.128988+00:00", "event": "started"}
+{"call_id": "cf80e77ca0bd4b3d9a1eb9edc06eba33", "command": "coq-check", "round": "MutexDelete-vc-proving-r1", "group": "continuations", "target_kind": "group-check", "started_at": "2026-11-03T14:22:17.128988+00:00", "event": "finished", "finished_at": "2026-11-03T14:22:48.859616+00:00", "elapsed_seconds": 33.063118, "exit_code": 0, "status": "passed", "returncode": 0}
+{"command": "controller group-check", "status": "passed", "exit_code": 0, "elapsed_seconds": 33.030661}

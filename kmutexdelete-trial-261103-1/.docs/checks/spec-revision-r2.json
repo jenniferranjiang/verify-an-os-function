@@ -1,0 +1,17 @@
+{
+  "revision": "kmutexdelete-spec-r2-da69d36af730",
+  "status": "invalidated",
+  "invalidated_by": "kmutexdelete-spec-r3-80bf19fe04c7",
+  "invalidation_reason": "The mutex_waiters_oc contract was replaced by the canonical target-parameterized outside_critical contract.",
+  "reviewer": "/root/mutex_r2_review",
+  "active_targets": ["KMutexDelete", "_MutexDelete", "LinklistResumeAll"],
+  "files": {
+    "annotated_C/include/logic.h": "ae91c9e4f0821756f5c3c41795fd63c0809c26eb61ba1785165ab5c8da01ff63",
+    "annotated_C/src/LinklistResumeAll.c": "ea2c1b546c0e5ae13c8555a15c8a8d182543bdb17d27bdbb97f25f276d9873fe",
+    "annotated_C/src/_MutexDelete.c": "5ccedb4cceb61b9548bf573b47e8acd34bc30673b9499666eccd6879ac3c8d11",
+    "annotated_C/src/KMutexDelete.c": "460b7eeb8430db4a0c2fb5e853f2abd3518de301f959a25dbd3de20f1bc73c0c"
+  },
+  "gcc_ilp32_syntax": "passed",
+  "qcp_started": false,
+  "global_sync": false
+}

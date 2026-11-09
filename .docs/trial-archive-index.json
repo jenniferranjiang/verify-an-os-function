@@ -1,12 +1,14 @@
 {
-  "date": "2026-11-03",
+  "date": "2026-11-09",
   "branch": "trial-archive",
   "base_commit": "f96dd2e20249ed8f55d8a33097de411a97aab9ab",
   "trial_directories": [
     "keventcreate-trial-260928-2",
     "keventcreate-trial-261101-1",
+    "keventdelete-trial-261103-1",
     "kmutexcreate-trial-260928-2",
     "kmutexcreate-trial-261101-1",
+    "kmutexdelete-trial-261103-1",
     "ksemaphorecreate-trial-260928-1",
     "ksemaphorecreate-trial-261012-1",
     "ksemaphorecreate-trial-261019-1",
@@ -252,6 +254,18 @@
       ],
       "tracked_files": 790,
       "scope": "Exact tracked trial snapshots; no new verification claims or compiled caches."
+    },
+    {
+      "date": "2026-11-09",
+      "source_commit": "9a211c61e96bfcd3ca447ecbfa4e5e7d94fe4b8e",
+      "source_state": "main working tree with uncommitted trial changes",
+      "trial_directories": [
+        "keventdelete-trial-261103-1",
+        "kmutexdelete-trial-261103-1"
+      ],
+      "archived_files": 1059,
+      "omitted_ignored_cache_files": 23,
+      "scope": "Snapshot of currently present tracked files and non-ignored untracked files; no new verification claims or compiled caches."
     }
   ]
 }

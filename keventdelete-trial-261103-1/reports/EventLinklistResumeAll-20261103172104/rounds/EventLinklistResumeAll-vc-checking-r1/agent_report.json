@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-old-state-exclusivity",
+    "vcs": [
+      {
+        "name": "proof_of_LinklistResumeAll_entail_wit_4_2",
+        "parent": null,
+        "annotation_location": "LinklistResumeAll: successful KTaskWakeup return / loop-invariant backedge"
+      }
+    ],
+    "message": "The successful Wakeup backedge owns only os_inv(after), not old os_inv/current exclusivity. Its pure generic ktask_wakeup_step admits an old SUSPEND task simultaneously in the target Event and a Semaphore pending queue, removes it from both, and reaches a valid after state. With waiting=remaining=[task] and locked=current, old progress is reflexive, but new empty-remainder progress demands an Event-only batch effect that preserves the changed Semaphore, so the consequent fails. Extract and retain old sched-owner NoDup/world facts from the pre-call invariant across the call.",
+    "repair_boundary": "C annotation"
+  }
+}

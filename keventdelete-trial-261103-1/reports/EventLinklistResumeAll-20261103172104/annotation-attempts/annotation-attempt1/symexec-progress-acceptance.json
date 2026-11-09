@@ -1,0 +1,31 @@
+{
+  "status": "passed",
+  "updated_at": "2026-11-03T09:30:18.429621Z",
+  "elapsed_seconds": 1.089,
+  "timeout_seconds": 3600.0,
+  "profile": "standard",
+  "last_output_line": "Successfully finished symbolic execution",
+  "generated_files": [
+    {
+      "role": "goal_file",
+      "state": "present",
+      "size": 144212
+    },
+    {
+      "role": "proof_auto_file",
+      "state": "present",
+      "size": 960
+    },
+    {
+      "role": "proof_manual_file",
+      "state": "present",
+      "size": 8127
+    },
+    {
+      "role": "goal_check_file",
+      "state": "present",
+      "size": 284
+    }
+  ],
+  "generated_bytes": 153583
+}

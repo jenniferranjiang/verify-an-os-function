@@ -1,0 +1,11 @@
+x_err_t LinklistResumeAll(DoubleLinklistType *list)
+/*@ semaphore_waiters
+    With (sg : StableGlobalState) (before : VarGlobalState)
+         (sem : addr) (waiting : list addr)
+    Require list == semaphore_pending_head(sem) &&
+      semaphore_pending_nodes(sem, before, map(sched_link_node, waiting)) &&
+      os_inv(sg, before)
+    Ensure __return == KOK && exists after,
+      semaphore_resume_all_effect(sem, waiting, before, after) &&
+      semaphore_pending_nodes(sem, after, nil) && os_inv(sg, after)
+ */

@@ -1,0 +1,17 @@
+{
+  "overall": "verified-under-approved-assumptions",
+  "waiting_for": null,
+  "KMutexDelete": "controller done; final-check passed; 8/8 groups accepted",
+  "MutexResumeAll": "controller done; final-check passed; 15/15 groups accepted",
+  "MutexDelete": "controller done; final-check passed; 11/11 groups accepted",
+  "original_C_changed": false,
+  "assumptions": [
+    "A1",
+    "A2"
+  ],
+  "controller_states_manually_edited": false,
+  "explicit_approval": "explicit-implementation-approval-20261104.json",
+  "retry_without_new_authorization": false,
+  "required_mcp_resumed_after_explicit_approval": true,
+  "final_integrity": "final-integrity.json"
+}

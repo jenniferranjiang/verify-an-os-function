@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "gcc",
+    "-E",
+    "-CC",
+    "-dD",
+    "-undef",
+    "-nostdinc",
+    "-ffreestanding",
+    "-m32",
+    "-Iannotated_C/src/",
+    "/home/xinra/crtos/keventdelete-trial-261103-1/annotated_C/src/FindEventById.c",
+    "-o",
+    "/home/xinra/crtos/keventdelete-trial-261103-1/reports/FindEventById-20261103170357/final-check/symexec-refresh/preprocessed/FindEventById.c"
+  ],
+  "output": "/home/xinra/crtos/keventdelete-trial-261103-1/reports/FindEventById-20261103170357/final-check/symexec-refresh/preprocessed/FindEventById.c",
+  "source": "/home/xinra/crtos/keventdelete-trial-261103-1/annotated_C/src/FindEventById.c",
+  "preprocessed_sha256": "7a705e92c4f89d38e01fa961079214957e8ac52934d2adb81a51f61f4c0a79c7",
+  "semantics": "GCC preprocessing with annotations, macro definitions and source line markers preserved"
+}

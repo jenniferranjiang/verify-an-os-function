@@ -1,0 +1,68 @@
+{
+  "predicate_revision": "kmutexdelete-predicate-r1",
+  "spec_review_revision": "S2-19632ed3e5482b4086f38e90555d504a40f14a9eb89a23fc04ccf5d377ad4271",
+  "review_snapshot": ".docs/reviewed",
+  "new_shared_files": {
+    "lib/KMutexDelete.v": "7a4fe9106548d5f07aca0fa278e182b37535b9d346654e7c4d30ae041da63d50",
+    "annotated_C/include/mutex_delete_types.h": "def1394936c884bca21b83beca8f8bb3d59f5a2e793909173b40c015e1b6902b",
+    "annotated_C/include/mutex_delete_logic.h": "a8d4937a3303cbde71adfa0ef1917c6c575f1d68e5a9fab7596579a40a311b92",
+    "annotated_C/src/KMutexDelete.c": "84a41ac180502edff1f9903a93ead38688f803227c7b9917efce5f8eef0dfa74",
+    "annotated_C/src/_MutexDelete.c": "9bdf5568d7da549ff40b2d490adc0e109d159b505e46e6200b1e52c0ab486172",
+    "annotated_C/src/outside_critical/LinklistResumeAll.c": "eb13cba5b9095e2de71388b5cc55f32e020156dac4c43634bd77c733ba9c2079"
+  },
+  "preserved_files": {
+    "annotated_C/src/LinklistResumeAll.c": "876f37e6b9377872aba575e0564957178abbfe4da21ad7081f58ee71ebf1af42",
+    "annotated_C/include/logic.h": "ae7e01b74d9deaab049b8d3aa20e5cf9e0deb0c33649efad73c9a4ad01a50024",
+    "annotated_C/include/slice_types.h": "9c41a5e64e718f921cef058145c80d0d6dd0a946e068d91d3830d08f8b133777",
+    "lib/CrtosInv.v": "83933aad0a8dd5f61d57cb2545b2d8de3d1ca6346758015c80273b0ae59755e8",
+    "lib/KEventCreate.v": "a2dd90cabeb320aed4e00bf719217f12653007c9b61b19b8556c373cafa39d1f",
+    "/home/xinra/TrustBase.md": "a2201e7277938c1c45f3570c4224fa26724bc7d4f27027077f00d6d384ad35f7",
+    "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c": "f78f31912d12ec76ff34823102d586aef574176377e1fce3c323d670c0f0f645",
+    "Ubiquitous/XiZi_IIoT_Macro/kernel/thread/linklist.c": "d64d3275b6d936f46352bc4625fc11efc9e0b113ca838f60a98eabaa09a7342c"
+  },
+  "semantic_change": false,
+  "changes": "Only import/include paths; root library byte-identical; reused root specs untouched; outside-critical ResumeAll stored separately.",
+  "status": "complete",
+  "checks": [
+    {
+      "name": "root project predicate compile",
+      "command": "/home/xinra/crtos/tools/rocq/coqc lib/KMutexDelete.v",
+      "exit_code": 0,
+      "log": "shared-predicate-compile.log"
+    },
+    {
+      "name": "root project configuration",
+      "command": "/home/xinra/.opam/pv-bench-8.20.1/bin/coq_makefile -f _CoqProject -o Makefile.coq",
+      "exit_code": 0,
+      "log": "shared-project-config.log"
+    },
+    {
+      "name": "trial logical interface checks using global library",
+      "command": "/home/xinra/crtos/tools/rocq/coqc .docs/checks/LogicInterfaces.v",
+      "cwd": "/home/xinra/crtos/kmutexdelete-trial-261103-1",
+      "exit_code": 0,
+      "log": "shared-logic-interfaces.log"
+    },
+    {
+      "name": "shared C structure check",
+      "command": "gcc -m32 -std=c11 -fsyntax-only annotated_C/src/KMutexDelete.c annotated_C/src/_MutexDelete.c annotated_C/src/outside_critical/LinklistResumeAll.c",
+      "exit_code": 0,
+      "log": "shared-c-structure.log"
+    },
+    {
+      "name": "reviewed/global content correspondence and existing-file preservation",
+      "exit_code": 0
+    }
+  ],
+  "active_trial_spec_hashes": {
+    "annotated_C/include/logic.h": "a8d4937a3303cbde71adfa0ef1917c6c575f1d68e5a9fab7596579a40a311b92",
+    "annotated_C/include/slice_types.h": "def1394936c884bca21b83beca8f8bb3d59f5a2e793909173b40c015e1b6902b",
+    "annotated_C/src/DoubleLinkListRmNode.c": "fecaae1c64e5dbbb603a9fd6f4940820a97051664c507786e243a7321865fb2a",
+    "annotated_C/src/IdGetObj.c": "e3c81f38bc18cd95671d64d50bc5454c0b506a8c85a7aff4034c1f52da44e3d8",
+    "annotated_C/src/IdRemoveObj.c": "690d8789967fa4f704153597ea79f0741e839dc47dbe39c0869ee44a2c1bbbe3",
+    "annotated_C/src/KMutexDelete.c": "6f0749195f4268c0c02acaddcfa640c24aa9886d5239938883c145689549e612",
+    "annotated_C/src/KTaskWakeup.c": "5c409959aa0acde2c0ef3e32d9518f111928e74b0fdedc6eed39300880c35f49",
+    "annotated_C/src/LinklistResumeAll.c": "d08702d5a60b09b4b7d792118eba6f55ce04e0c7d46507c6e5dd82f86f1c12e2",
+    "annotated_C/src/_MutexDelete.c": "145e83b9a8dd08e7dab25032a1d3359410e63cf8ae3025f39bf8ed8df16b5794"
+  }
+}

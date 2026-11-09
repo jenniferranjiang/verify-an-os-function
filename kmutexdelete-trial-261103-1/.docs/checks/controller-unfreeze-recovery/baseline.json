@@ -1,0 +1,6 @@
+{
+  "target": "/home/xinra/qcp-binary-democases/.agents/scripts/verification-orchestrator/annotation_design.py",
+  "before_sha256": "e8a6667aecde230a9cdb6a937ebb4bf3b6a3f1105b1ef7764f651eefac8cad57",
+  "after_sha256": "57ebe0850795cbd4b29fe2785ec7beb3240e85ca02e87f6372513b7ad63c789e",
+  "authorization": "User approved IdNode syntax-equivalent frozen spec normalization and continuing same run; controller recovery only, no manual state edits."
+}

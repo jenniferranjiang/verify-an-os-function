@@ -1,0 +1,442 @@
+{
+  "groups": [
+    {
+      "id": "bulk_initialization",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_entail_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use the full spatial disjunct. Instantiate remaining with original.mutex_pending_addrs and current with st_lock. Retain os_inv and InsideCritical, weaken task/node local cells to unknown, and copy the listed pure entry facts. The only new semantic obligation is remaining_effect: prove the forward steps-to-bulk-effect bridge from the currently owned os_inv and original membership, then unfold mutex_resume_remaining_effect. Do not apply the *_obligation Prop definition as a theorem. This is a finite-list induction with map/update, ready-fold and delay-cancellation composition; keep its validity premises obtained from the initial spatial invariant."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "resume_steps_bulk__bulk_initialization",
+          "strategy": "Prove: for sg,before,m, In m before.os_mutexes -> os_inv sg before |-- pure(forall final, mutex_resume_all_steps m.mutex_addr m.mutex_pending_addrs before final -> mutex_resume_all_effect m.mutex_addr m.mutex_pending_addrs before final). Extract initial unique scheduler ownership, SUSPEND map/pending facts and delay validity. Induct on finite waiting; use ktask_wakeup_step projections to compose exact task-map READY/exstatus updates, source removal, unchanged module fields, RRR ready fold and active/inactive delay update. Derive and preserve the pure well-formedness needed for the tail; no unproved spatial state update is assumed. Empty list uses identity, nonempty obtains NoDup and Forall from the original invariant. Only the forward bridge is needed.",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "loop_step",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_entail_wit_4_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Select the full spatial disjunct. after=marked gives os_inv marked. Task ID manager uniqueness identifies task=target from the two get_task_with_idnode_success facts. Rewrite marked.task_desc_map(target) to Some(set_task_desc_exstatus desc (-1)); it preserves SUSPEND, contradicting the returned non-SUSPEND branch. Discharge the whole entailment by this contradiction; no fictitious wakeup transition is needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_entail_wit_4_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Select the full spatial disjunct and instantiate current=after and remaining=rest. Frame InsideCritical and weaken task/node local cells. Use unchanged task ID manager in ktask_wakeup_step plus os_inv after to identify the returned task with target and returned desc with set_task_desc_exstatus desc (-1). Build mutex_resume_one from old pending/task-map facts. Prepend this step to any future tail steps to discharge mutex_resume_remaining_effect. Forall2 Mutex removal preserves object address/id; infer the exact target tail by remove_found_prop and post-invariant READY-versus-SUSPEND exclusion (duplicate surviving target waiters are impossible), yielding live and pending(rest). Do not assume old os_inv is still owned after the call."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "wakeup_known_mutex_head__loop_step",
+          "strategy": "Establish the exact facts required after a general wakeup: two successful same-ID lookups in marked, current target map/desc, marked=exstatus update, old pending target::rest, and os_inv after plus the normal ktask_wakeup_step imply task=target, desc2=set_task_desc_exstatus desc(-1), preserved mutex identity and pending rest. Derive lookup uniqueness using the unchanged ID manager and the actual post invariant; derive exact source removal using Forall2/remove_found and post READY/SUSPEND exclusion. Preserve all old logical relations, but do not require old heap ownership which is absent here. Prove pure helpers for Forall2 identity/pending and step-prepending as needed under this group suffix.",
+          "visibility": "local"
+        }
+      ]
+    },
+    {
+      "id": "head_view",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "From os_inv and mutex_pending_nodes locate the Mutex payload in the management DLL. Map sched_link_node equality recovers the same pending task sequence. Split the pending DLL head.next field, branch on remaining nil/cons, and retain the exact rest in a wand that reconstructs the original os_inv when the field is returned. Empty gives next=head; nonempty gives next=sched_link_of first and next<>head from exclusive sentinel/node ownership. Choose the corresponding assertion disjunction and exact first/tail witnesses."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistResumeAll_which_implies_wit_3_split_goal_spatial": "Unfold mutex_resume_next_restore and eliminate the wand using its adjacent head.next cell; the consequent is exactly the original os_inv, with no state change."
+          }
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use the spatial disjunct, not the pure-only alternative. Expand the Mutex pending DLL payload and shared task map just enough to derive a registered SUSPEND descriptor for target and its alignment. Choose that desc, rewrite remaining=target::rest and next=sched_link_of target, and return the unchanged os_inv. Membership alone supplies no memory; both the wait predicate and task representation must be used."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "mutex_pending_head_focus__head_view",
+          "strategy": "For os_inv sg current with matching pure mutex_pending_nodes p current(map sched_link_node remaining), derive the empty/nonempty head.next value and a return wand to the same os_inv. Use generic DLL split/fold and map projection injectivity; prove nonempty next differs from sentinel via separation conflict rather than adding an address premise.",
+          "visibility": "local"
+        },
+        {
+          "name": "mutex_waiter_descriptor__head_view",
+          "strategy": "From os_inv sg st and mutex_pending_nodes p st(sched_link_node task::rest), derive exists desc, st.task_desc_map task=Some desc /\\ stat desc=SUSPEND /\\ addr_aligned task ALIGN_SIZE while preserving os_inv. The pure wait relation locates the map entry and Task representation yields alignment; reconstruct any borrowed payload.",
+          "visibility": "local"
+        }
+      ]
+    },
+    {
+      "id": "exstatus_update",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_5",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistResumeAll_which_implies_wit_5_split_goal_spatial": "Extract the registered target descriptor exstatus field from os_inv using the explicit map lookup. Introduce the wand for returning the field with -1 and proving os_inv at replace_task_desc_map(update target (set_task_desc_exstatus desc (-1))) current. All other bytes stay framed. Show cross-module pure associations depend on unchanged scheduler/delay/id/domain fields, not exstatus. This is a real field-update restoration lemma, not a pure-state cast."
+          }
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_6",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistResumeAll_which_implies_wit_6_split_goal_spatial": "Unfold mutex_resume_exstatus_restore; supply the adjacent target.exstatus=-1 cell to wand elimination. Numeric bounds are already hypotheses and are irrelevant to the frame restoration."
+          }
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "All required pure facts are existing PreH facts. Rewrite retval=target so the exstatus address agrees, forget the old typed value to produce the undef Int cell, and cancel the restore wand and InsideCritical frame."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Rewrite retval=target, copy existing pure facts, and cancel the new exstatus=-1 cell, restore wand, and InsideCritical exactly. No new state relation is introduced."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "task_exstatus_focus__exstatus_update",
+          "strategy": "For a known task map entry, prove os_inv sg st |-- old exstatus cell ** (new exstatus cell -* os_inv sg marked), marked being the exact map update and new value=-1. Split store_map/task payload; establish descriptor-update equalities and unchanged domain/scheduler/delay/ID/module facts; reconstruct all task-map-indexed resources. Every premise is the actual VC map fact plus os_inv.",
+          "visibility": "local"
+        }
+      ]
+    },
+    {
+      "id": "task_id_view",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the actual uint16 task ID owned by the task ID manager in os_inv marked. Since replace_task_desc_map preserves os_mutexes, old pending membership gives current marked pending membership. Use the shared task representation/ID correspondence for get_task_with_idnode_success and typed UShort bounds. Split the ID field and build a wand returning unchanged os_inv marked; carry the prior remaining/marked equalities as pure facts."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_8",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistResumeAll_which_implies_wit_8_split_goal_spatial": "Unfold mutex_resume_id_restore and apply wand elimination to the exact target.id.id UShort cell. The ID is unchanged, so the same marked invariant is returned."
+          }
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_12",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Rewrite retval=target to equate the read ID-cell address; every scalar bound, lookup and membership is already a hypothesis. Cancel typed ID cell, ID restore wand and InsideCritical."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Same address bridge retval=target in the reverse orientation; copy existing facts and cancel exactly. Do not consume the ID cell before the following restoration."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "task_id_focus__task_id_view",
+          "strategy": "From os_inv sg marked and the known task being a Mutex waiter, derive exists id in [0,65536), get_task_with_idnode_success sg marked id task, and the ID UShort cell ** (same cell -* os_inv sg marked). Derive ID-manager/list/map correspondence from task_inv; use actual owned UShort for bounds. The pure pending relation is preserved by the earlier exstatus-only update.",
+          "visibility": "local"
+        }
+      ]
+    },
+    {
+      "id": "drain_exit",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_9",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistResumeAll_which_implies_wit_9_split_goal_1": "Unfold mutex_resume_remaining_effect, use remaining=nil and reflexive nil steps to obtain the actual aggregate effect from st_lock to current. original membership/address/id and the live guard at st_lock witness a normal abs_mutex_resume_all_locked execution. With Crtos_RTrans before st_lock, lift it through mutex_delete_scoped_atomic and specialize the entry safeExec to establish safeExec(LastSeen current, ret tt, X). Preserve the original continuation; do not assume the Prop obligation as a lemma.",
+            "proof_of_LinklistResumeAll_which_implies_wit_9_split_goal_2": "Unfold the existing Crtos_GTrans/Crtos_CS relation, which is True; discharge directly. No state equality or extra environment freezing is required.",
+            "proof_of_LinklistResumeAll_which_implies_wit_9_split_goal_3": "Use remaining_effect at nil to obtain aggregate effect. Case split original.pending: empty gives current=st_lock and choose original; nonempty gives current Mutex sequence=mutex_delete_set_pending p nil st_lock.os_mutexes, so choose the mapped original retaining its ID and address. Combine p<>0/id range from live current or live st_lock. This avoids relying on a potentially different object witnessing pending_nodes in pure malformed states."
+          }
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_return_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistResumeAll_return_wit_1_split_goal_1": "The generated split target is only 0=KOK. Unfold KOK (0) and use reflexivity. Parent regeneration supplies the current after witness and preserves OutsideCritical from the stated post-lock facts."
+          }
+        }
+      ],
+      "helpers": [
+        {
+          "name": "resume_effect_keeps_drained_identity__drain_exit",
+          "strategy": "Pure lemma: original in before.os_mutexes, address p, ID id, live p id before, and mutex_resume_all_effect p original.pending before after imply mutex_delete_drained p id after. Prove by nil/nonempty pending and membership of mapped original; it does not require a new uniqueness premise.",
+          "visibility": "public"
+        },
+        {
+          "name": "scoped_resume_safe_continuation__drain_exit",
+          "strategy": "Prove safeExec continuation transfer for the concrete normal scoped execution witnessed by st_lock, original and current, with RTrans before st_lock, live guard and aggregate effect. Unfold safeExec/LastSeen/scoped atomic or use their actual normal-execution rules; quantify X unchanged and construct exactly the next observation set Crtos_RTrans current.",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "wakeup_refinements",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_KTaskWakeup_derive_semaphore_pending_head_ic_by_wakeup_by_id_ic",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose source sg/before equal to target sg/before. Before transferring os_inv, extract pure ID uniqueness, SUSPEND descriptor/source membership and exclusive scheduler ownership. Introduce the wand and destruct the general post alternatives. The non-SUSPEND branch is impossible by same-ID/task-map uniqueness. In the success branch instantiate the specialized desc/after/retval; use ktask_wakeup_step and old unique source membership to show exact semaphore head removal, unchanged other queues and pending(rest), hence wakeup_semaphore_head. Preserve returned os_inv. This proves a declared refinement; it is not a body proof of KTaskWakeup."
+        },
+        {
+          "name": "proof_of_KTaskWakeup_derive_detached_sched_null_delay_by_wakeup_by_id_ic",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose identical sg/before and transfer os_inv with a wand. The explicit ktask_wakeup_detached_null_condition yields desc.delay=0 for the returned successful lookup, and self-owned sched membership when SUSPEND. Failure branch keeps before and the same descriptor. Success uses zero-delay identity, removal from the unique self-owned list, no membership in any other queue, and unchanged module/ID/running projections to construct ktask_wakeup_detached_null_step. Preserve the returned os_inv and all general post witnesses."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "general_wakeup_semaphore_refinement__wakeup_refinements",
+          "strategy": "Under actual source os_inv pure consistency, same-ID lookup and semaphore head membership, derive specialized wakeup_semaphore_head from ktask_wakeup_step. Extract all required uniqueness/source facts before consuming source heap; preserve a pure record across the post wand. Prove cross-module remove_found identities using absence and target queue exact tail using NoDup.",
+          "visibility": "local"
+        },
+        {
+          "name": "general_wakeup_detached_refinement__wakeup_refinements",
+          "strategy": "From actual source os_inv consistency, detached-null condition, returned lookup/map facts and ktask_wakeup_step derive ktask_wakeup_detached_null_step. Prove self-owned-list split/removal and all other queues absent, plus ktask_unset_delay_step 0 identity. Preserve result and task descriptor witnesses.",
+          "visibility": "local"
+        }
+      ]
+    },
+    {
+      "id": "literal_bounds",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The consequent only asserts fixed integer-literal bounds. Introduce quantified facts, discard irrelevant framed heap for the pure conclusion, unfold INT_MIN/INT_MAX and solve arithmetic; no helper or stronger precondition is needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The consequent only asserts fixed integer-literal bounds. Introduce quantified facts, discard irrelevant framed heap for the pure conclusion, unfold INT_MIN/INT_MAX and solve arithmetic; no helper or stronger precondition is needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The consequent only asserts fixed integer-literal bounds. Introduce quantified facts, discard irrelevant framed heap for the pure conclusion, unfold INT_MIN/INT_MAX and solve arithmetic; no helper or stronger precondition is needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The consequent only asserts fixed integer-literal bounds. Introduce quantified facts, discard irrelevant framed heap for the pure conclusion, unfold INT_MIN/INT_MAX and solve arithmetic; no helper or stronger precondition is needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The consequent only asserts fixed integer-literal bounds. Introduce quantified facts, discard irrelevant framed heap for the pure conclusion, unfold INT_MIN/INT_MAX and solve arithmetic; no helper or stronger precondition is needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The consequent only asserts fixed integer-literal bounds. Introduce quantified facts, discard irrelevant framed heap for the pure conclusion, unfold INT_MIN/INT_MAX and solve arithmetic; no helper or stronger precondition is needed."
+        }
+      ]
+    },
+    {
+      "id": "branch_safety",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Antecedent contains both next<>list_pre and next=list_pre. Use contradiction; all resources remain irrelevant."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Antecedent contains next=list_pre and next<>list_pre from the nonempty DLL branch. Use contradiction."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The only goal is 1<>INT_MIN. Unfold the constant and use arithmetic, irrespective of the framed update state."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The consequent only asserts fixed integer-literal bounds. Introduce quantified facts, discard irrelevant framed heap for the pure conclusion, unfold INT_MIN/INT_MAX and solve arithmetic; no helper or stronger precondition is needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The consequent only asserts fixed integer-literal bounds. Introduce quantified facts, discard irrelevant framed heap for the pure conclusion, unfold INT_MIN/INT_MAX and solve arithmetic; no helper or stronger precondition is needed."
+        }
+      ]
+    },
+    {
+      "id": "entry_facts",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Copy the four existing entry/NULL facts, weaken initialized local Ptr/UInt cells to their undef versions and cancel OutsideCritical. No proof that this NULL branch is reachable or unreachable is needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_entail_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The spin-loop invariant is unchanged. Reuse all existing pure hypotheses and cancel OutsideCritical."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Either the pure-only or full spatial disjunct is available; use the full one to retain os_inv. Unfold mutex_delete_live and choose its existing Mutex witness original. Build mutex_pending_nodes by that witness and reflexive map equality; copy original address/id and live facts."
+        }
+      ]
+    },
+    {
+      "id": "lock_entry_projection",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_1_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Projection pattern: Live guard and OutsideCritical entry. All requested pure conjuncts occur verbatim among PreH hypotheses (or by trivial equality substitution); introduce and select them without consuming owned resources."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Frame-copy pattern: unfold the implication/aux definition, retain the supplied pure-witness premise, copy existing PreH facts and cancel the unchanged resource conjunction, modulo associativity/commutativity. Live guard and OutsideCritical entry."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_2_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Projection pattern: Returned st_lock/live/RTrans; os_inv and InsideCritical remain the same. All requested pure conjuncts occur verbatim among PreH hypotheses (or by trivial equality substitution); introduce and select them without consuming owned resources."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Frame-copy pattern: unfold the implication/aux definition, retain the supplied pure-witness premise, copy existing PreH facts and cancel the unchanged resource conjunction, modulo associativity/commutativity. Returned st_lock/live/RTrans; os_inv and InsideCritical remain the same."
+        }
+      ]
+    },
+    {
+      "id": "loop_head_projection",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_3_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Projection pattern: Loop list_pre=head(p), nonzero and pending(remaining). All requested pure conjuncts occur verbatim among PreH hypotheses (or by trivial equality substitution); introduce and select them without consuming owned resources."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Frame-copy pattern: unfold the implication/aux definition, retain the supplied pure-witness premise, copy existing PreH facts and cancel the unchanged resource conjunction, modulo associativity/commutativity. Loop list_pre=head(p), nonzero and pending(remaining)."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Copy the existing nonempty branch facts, live/remaining-effect/entry continuation facts, and cancel head.next cell, its restore wand and InsideCritical unchanged."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Copy the existing empty branch facts, live/remaining-effect/entry continuation facts, and cancel the same head.next cell, restore wand and InsideCritical unchanged."
+        }
+      ]
+    },
+    {
+      "id": "task_guard_projection",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_6_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Projection pattern: Nonempty remaining and next=sched_link_of target; current invariant unchanged. All requested pure conjuncts occur verbatim among PreH hypotheses (or by trivial equality substitution); introduce and select them without consuming owned resources."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Frame-copy pattern: unfold the implication/aux definition, retain the supplied pure-witness premise, copy existing PreH facts and cancel the unchanged resource conjunction, modulo associativity/commutativity. Nonempty remaining and next=sched_link_of target; current invariant unchanged."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_7_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Projection pattern: Target alignment and sched-link address already established by which_implies_4; current invariant unchanged. All requested pure conjuncts occur verbatim among PreH hypotheses (or by trivial equality substitution); introduce and select them without consuming owned resources."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Frame-copy pattern: unfold the implication/aux definition, retain the supplied pure-witness premise, copy existing PreH facts and cancel the unchanged resource conjunction, modulo associativity/commutativity. Target alignment and sched-link address already established by which_implies_4; current invariant unchanged."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_8_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Projection pattern: Returned container base equals target and the map lookup desc is already present; current invariant unchanged. All requested pure conjuncts occur verbatim among PreH hypotheses (or by trivial equality substitution); introduce and select them without consuming owned resources."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Frame-copy pattern: unfold the implication/aux definition, retain the supplied pure-witness premise, copy existing PreH facts and cancel the unchanged resource conjunction, modulo associativity/commutativity. Returned container base equals target and the map lookup desc is already present; current invariant unchanged."
+        }
+      ]
+    },
+    {
+      "id": "wakeup_call_projection",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_11_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Projection pattern: marked is exactly the exstatus update, remaining is target::rest, original source membership is retained; os_inv marked is the resource. All requested pure conjuncts occur verbatim among PreH hypotheses (or by trivial equality substitution); introduce and select them without consuming owned resources."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Frame-copy pattern: unfold the implication/aux definition, retain the supplied pure-witness premise, copy existing PreH facts and cancel the unchanged resource conjunction, modulo associativity/commutativity. marked is exactly the exstatus update, remaining is target::rest, original source membership is retained; os_inv marked is the resource."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_14_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Projection pattern: task_id<65536 is the existing UShort bound; the callee receives os_inv marked, with InsideCritical framed. All requested pure conjuncts occur verbatim among PreH hypotheses (or by trivial equality substitution); introduce and select them without consuming owned resources."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Frame-copy pattern: unfold the implication/aux definition, retain the supplied pure-witness premise, copy existing PreH facts and cancel the unchanged resource conjunction, modulo associativity/commutativity. task_id<65536 is the existing UShort bound; the callee receives os_inv marked, with InsideCritical framed."
+        }
+      ]
+    },
+    {
+      "id": "unlock_projection",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_15_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Projection pattern: Empty pending and all drain-exit pure inputs are already in the invariant; os_inv current and InsideCritical are unchanged. All requested pure conjuncts occur verbatim among PreH hypotheses (or by trivial equality substitution); introduce and select them without consuming owned resources."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_15",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Frame-copy pattern: unfold the implication/aux definition, retain the supplied pure-witness premise, copy existing PreH facts and cancel the unchanged resource conjunction, modulo associativity/commutativity. Empty pending and all drain-exit pure inputs are already in the invariant; os_inv current and InsideCritical are unchanged."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_16_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Projection pattern: Crtos_GTrans st_lock current is already in the precondition; swap/cancel os_inv and InsideCritical to match unlock API. All requested pure conjuncts occur verbatim among PreH hypotheses (or by trivial equality substitution); introduce and select them without consuming owned resources."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_16",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Frame-copy pattern: unfold the implication/aux definition, retain the supplied pure-witness premise, copy existing PreH facts and cancel the unchanged resource conjunction, modulo associativity/commutativity. Crtos_GTrans st_lock current is already in the precondition; swap/cancel os_inv and InsideCritical to match unlock API."
+        }
+      ]
+    }
+  ]
+}

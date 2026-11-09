@@ -1,0 +1,38 @@
+--- a/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c
++++ b/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c
+@@ -59,19 +59,15 @@
+     return id;
+ }
+ 
++/* Caller holds the lookup critical section through draining and unpublishing.
++ * The caller releases the detached allocation after leaving that section. */
+ static void _MutexDelete(struct Mutex *mutex)
+ {
+-	x_base lock = 0;
+-
+     NULL_PARAM_CHECK(mutex);
+ 
+-	LinklistResumeAll(&mutex->pend_list);
+-	lock = CriticalAreaLock();
++    LinklistResumeAll(&mutex->pend_list);
+     IdRemoveObj(&k_mutex_id_manager, mutex->id.id);
+-	
+-	DoubleLinkListRmNode(&(mutex->link));
+-    CriticalAreaUnLock(lock);
+-	x_free(mutex);
++    DoubleLinkListRmNode(&(mutex->link));
+ }
+ 
+ static int32 _MutexObtain(struct Mutex *mutex, int32 msec)
+@@ -251,9 +247,9 @@
+     }
+         
+     mutex =CONTAINER_OF(idnode, struct Mutex, id);
+-    CriticalAreaUnLock(lock);
+-
+     done.MutexDelete(mutex);
++    CriticalAreaUnLock(lock);
++    x_free(mutex);
+ }
+ 
+ /**

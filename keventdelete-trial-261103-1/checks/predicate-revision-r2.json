@@ -1,0 +1,10 @@
+{
+  "revision": "keventdelete-predicate-r2-65a2bb90f38a",
+  "status": "review-passed",
+  "reviewer": "/root/event_r2_review",
+  "files": {
+    "lib/KEventDelete.v": "8c97342f791aad23eb78fc7c097d3465cbd0025f262a27bf0030408cc5198f32"
+  },
+  "rocq_mcp_compile": "passed",
+  "global_sync": false
+}

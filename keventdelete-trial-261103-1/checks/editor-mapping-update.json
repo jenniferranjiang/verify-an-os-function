@@ -1,0 +1,11 @@
+{
+  "removed_nonexistent_archived_trial_mappings": [
+    [
+      "-R",
+      "/home/xinra/crtos/keventcreate-trial-261101-1/VC",
+      "CRTOS_Verify.VC"
+    ]
+  ],
+  "shared_library_mapping": "/home/xinra/crtos/lib -> CRTOS_Verify.lib",
+  "new_trial_mapping_required": false
+}

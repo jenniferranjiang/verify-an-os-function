@@ -1,0 +1,34 @@
+{
+  "kind": "semantics-preserving imported-contract type disambiguation",
+  "canonical": "annotated_C/src/IdRemoveObj.c",
+  "caller": "annotated_C/src/_EventDelete.c",
+  "old_sha256": "b2cc21f1bf94103bbb367152524e2468b744d7e55c737d37a1da28e6df3c6d61",
+  "new_sha256": "beb8229ed291f23467237742da04614032e114393c34862792b537eead4b7c94",
+  "named_specs": [
+    "high_level_spec",
+    "low_level_spec"
+  ],
+  "exact_normalization_check": true,
+  "generated_evidence": "VC/EventDelete_goal.v: IdNode.id UShort and IdNode.link.node_prev/node_next Ptr",
+  "public_EventDelete_spec_changed": false,
+  "unfreeze_used": false,
+  "shared_scenario_merge": [
+    {
+      "path": "annotated_C/scenarios/event-delete/src/IdRemoveObj.c",
+      "before_sha256": "b2cc21f1bf94103bbb367152524e2468b744d7e55c737d37a1da28e6df3c6d61",
+      "after_sha256": "beb8229ed291f23467237742da04614032e114393c34862792b537eead4b7c94",
+      "canonical_and_caller_match_active_trial": true
+    },
+    {
+      "path": "annotated_C/scenarios/event-delete/src/_EventDelete.c",
+      "before_sha256": "a884746f9a08422d6bb4d244b67eea76e4ce0d02a9f2808d88ca44d5bc0747cd",
+      "after_sha256": "b7fe332a95a8bcc4709b27c30fb4e41feda8ce28ad0fe98299d9f59fd3e55630",
+      "canonical_and_caller_match_active_trial": true
+    }
+  ],
+  "shared_merge_scope": "Only equivalent IdRemoveObj contract spelling; no trial proof annotations, implementation changes, or logical imports copied.",
+  "shared_merge_c_syntax_check": {
+    "command": "gcc -m32 -fsyntax-only annotated_C/scenarios/event-delete/src/IdRemoveObj.c annotated_C/scenarios/event-delete/src/_EventDelete.c",
+    "exit_code": 0
+  }
+}

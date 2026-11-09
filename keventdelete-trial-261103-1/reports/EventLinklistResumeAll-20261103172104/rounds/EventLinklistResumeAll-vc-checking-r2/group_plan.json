@@ -1,0 +1,422 @@
+{
+  "groups": [
+    {
+      "id": "event_batch_step",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_entail_wit_4_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Select the spatial first disjunct. Use the post os_inv(after), preserved old os_world_wf/task_world_wf(current_2 and marked), both marked-state ID lookups, and unchanged task ID-manager in ktask_wakeup_step to identify returned task with target and desc_2 with set_task_desc_exstatus desc (-1). Apply event_batch_after_head__event_batch_step with remaining_2=target::rest. It gives pending_at id p rest after and the one-head/batch composition implication. Instantiate consequent remaining=rest,current=after. Unfold event_resume_remaining_effect and compose this implication with PreH40. Forget task/node local values to undef and cancel os_inv(after) and InsideCritical(locked). Do not assume old os_inv: it is absent from this VC."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Select the spatial first disjunct. From event_pending_at and os_inv(current), use event_pending_task_info__event_batch_step to obtain the registered SUSPEND descriptor, target alignment, os_world_wf and task_world_wf; instantiate desc with this descriptor. Reassert existing remaining/next/pending equalities and return the unchanged os_inv. This is a source VC for the historical pure premises used by the corrected backedge."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use marked=replace_task_desc_map(exstatus update,current) to carry event_pending_at to marked, since this update leaves os_events unchanged. Obtain the head task ID/registration and both marked-state world facts from event_pending_task_info__event_batch_step over os_inv(marked); no pre-state heap is assumed. Apply task_id_borrow__event_batch_step to split the ushort ID cell with event_resume_id_restore wand. Instantiate task_id with that concrete ID, preserve all pure input facts, and retain the precise field resource. This establishes the second source of old world facts across Wakeup."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "event_pending_task_info__event_batch_step",
+          "strategy": "Prove a generic pure-extraction entailment: event_pending_at id p (t::rest) st -> os_inv sg st |-- pure(exists desc tid, task_desc_map(os_tasks st)t=Some desc /\\ stat(desc)=TSK_SUSPEND /\\ addr_aligned t ALIGN_SIZE /\\ 0<=tid<65536 /\\ get_task_with_idnode_success sg st tid t /\\ os_world_wf sg st /\\ task_world_wf st) && os_inv sg st. Open the selected Event pending DLL, its pure_suspend_sched_link payload and Task registration/ID manager, extract the ID-node membership and typed ushort range, then reassemble all resources. Source premises are the actual os_inv and nonempty pending relation in the two assigned which-implies VCs.",
+          "visibility": "local"
+        },
+        {
+          "name": "task_id_borrow__event_batch_step",
+          "strategy": "From get_task_with_idnode_success sg st tid t and os_inv sg st, derive the TaskDescriptor.id.id ushort cell at tid separated from its event_resume_id_restore sg st t tid wand. Locate the task ID payload in the manager bucket using its membership relation, borrow only its scalar field, and introduce the wand by reassembly of the same manager/os_inv. Relate nested field addresses with existing ABI/address lemmas, without new layout axioms.",
+          "visibility": "local"
+        },
+        {
+          "name": "event_batch_after_head__event_batch_step",
+          "strategy": "Prove the spatial-to-pure one-head composition used by entail_wit_4_2, with exactly its premises: event_pending_at id p (t::rest) current; map current t=Some desc with SUSPEND; marked equals the exstatus=-1 map update; os_world_wf/task_world_wf for current and marked; two get_task_with_idnode_success marked tid lookups (t and the generic returned task); generic ktask_wakeup_step returned_task returned_desc marked after; and owned os_inv sg after. Conclude event_pending_at id p rest after and forall final, event_resume_all_effect p rest after final -> event_resume_all_effect p (t::rest) current final. First derive old ID lookup uniqueness from the unchanged ID manager represented by post os_inv, and identify descriptors. Use old sched-owner NoDup to exclude t from every other queue/self-list and remove exactly the Event head. Recover object/ID representation uniqueness and delay shape restrictions needed for equality from preserved components of post os_inv and the explicit step frame; never add old os_inv as a premise. Prove task-map update composition by extensionality, ready-fold composition preserving all insertion-observed descriptor fields, and selected-delay filtering/map-update composition for NULL/inactive/active cases. This is the high-risk mathematical work; if a required premise cannot be obtained, report the exact counterexample rather than assume it.",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "import_sem_refinement",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_KTaskWakeup_derive_semaphore_pending_head_ic_by_wakeup_by_id_ic",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the strong source contract and choose sg_wakeup_by_id_ic=sg_semaphore_pending_head_ic,before_wakeup_by_id_ic=before_semaphore_pending_head_ic. Before passing os_inv to the generic precondition, extract pure task-ID uniqueness, SUSPEND-at-head, queue ownership NoDup and source-head membership from it. Prove the residual wand by introducing each generic post branch. The non-SUSPEND branch contradicts the identified head descriptor; in success identify task/desc, use generic_wakeup_sem_head__import_sem_refinement to obtain exact source-head removal and full frame, instantiate after/desc/retval=0 and cancel os_inv(after). This is an imported-contract refinement obligation, not KTaskWakeup body verification."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "generic_wakeup_sem_head__import_sem_refinement",
+          "strategy": "Derive from a valid os_inv before with semaphore_pending_nodes sem before (sched_link_node task::rest) and matching get_task_with_idnode_success the pure facts sufficient to refine any generic successful ktask_wakeup_step for that ID to wakeup_semaphore_head sem task desc before after and semaphore_pending_nodes sem after rest. Extract old exclusive queue ownership and ID uniqueness while before resources are available, then unfold generic record: remove_found on the source head is deterministic, other event/mutex/semaphore queues and self-owned list are unchanged by absence; ready/map/delay and remaining fields are exact projections. Package this as a pure fact retained when constructing the wand, not as an extra assumed precondition.",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "import_detached_refinement",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_KTaskWakeup_derive_detached_sched_null_delay_by_wakeup_by_id_ic",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Instantiate generic sg/before with the source sg/before and frame the specialization as a wand. Extract old ownership uniqueness from source os_inv before relinquishing it. On either generic post branch apply ktask_wakeup_detached_null_condition to the returned task/desc lookup to obtain tdDelay=0; failure returns the same state directly. In SUSPEND success, the same condition gives task in sched_owned_tasks; old global NoDup excludes it from all modeled pending queues, so generic removal only changes the self-owned sequence. Use the helper to assemble ktask_wakeup_detached_null_step, with unchanged delays from the NULL branch. Instantiate all returned existential values from the generic post and cancel os_inv(after)."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "generic_wakeup_detached_null__import_detached_refinement",
+          "strategy": "From the pure consequences of an owned old os_inv, a matching returned task/desc, tdDelay=0, SUSPEND, task in sched_owned_tasks, and ktask_wakeup_step task desc before after, prove ktask_wakeup_detached_null_step task desc before after. NoDup yields a unique owned-list removal and target absence from all event/mutex/semaphore pending lists. In ktask_unset_delay_step the nonzero alternatives contradict tdDelay=0, giving unchanged delays; remaining fields are the exact generic frame. Establish needed old pure consequences from source os_inv in the main wand proof before it is transferred.",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "pending_head_access",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Select the pure second disjunct. Unfold event_delete_gap/event_delete_guard, obtain the published Event and choose waiting=its event_pending_addrs. Construct event_pending_at from the same membership/address/ID. No heap permission is invented."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use pending_head_borrow__pending_head_access to locate the selected Event in event_inv and open only its waiting DLL sentinel. Case remaining=nil: choose next=list_pre and return the first disjunct. Case first::tail: choose next=sched_link_of first,first,tail; derive next<>list_pre from separation of head/node cells. Keep the exact head-next cell and the reassembly wand; no other os_inv resource is lost."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "pending_head_borrow__pending_head_access",
+          "strategy": "Prove the exact empty/nonempty head-next view for event_pending_at id p remaining st and list=event_pending_head p under os_inv sg st. Split the outer Event DLL at its member and then the inner waiting DLL; establish head distinctness from owned pointer cells. Introduce event_resume_next_restore as a wand that reinstates the same next value and reassembles both DLLs, manager and all OS frames.",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "exstatus_write_view",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_5",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistResumeAll_which_implies_wit_5_split_goal_spatial": "Given current.task_map target=Some desc, apply exstatus_borrow_update__exstatus_write_view to os_inv(current). The split goal has the explicit updated state, so no existential choice remains. Borrow the old exstatus Int field and produce the wand to os_inv with only that task descriptor exstatus changed; preserve all other ownership."
+          }
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_8_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Project the existing descriptor-map equality from the pure context; all spatial resources may remain as frame."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the pure premise theorem, then unfold the auxiliary goal; every reasserted fact is already a PreH. Cancel the same os_inv(current) and InsideCritical(locked), with no state transition."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Substitute retval=target, forget the old Int exstatus value to undef for the store, and cancel the unchanged exstatus-update wand and InsideCritical. Reassert the pure state relations verbatim."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Substitute retval=target to align field addresses after the write; the two sides own exactly the same Int -1 field, reassembly wand and InsideCritical. Cancel and preserve all pure historical facts."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "exstatus_borrow_update__exstatus_write_view",
+          "strategy": "For current.task_desc_map target=Some desc, prove os_inv sg current entails the old target exstatus Int cell separated from a wand accepting Int -1 and restoring os_inv sg (replace_task_desc_map (update_task_desc_map target (set_task_desc_exstatus desc (-1)) old_map) current). Split store_map at target; exstatus is the only changed descriptor field. Show task/world/pending and service-slot pure links are insensitive to exstatus; use -1 representability and frame every unchanged module. No new validity premise beyond old os_inv and map lookup.",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "atomic_exit",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_9",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistResumeAll_which_implies_wit_9_split_goal_1": "Use remaining=nil and event_resume_remaining_effect to obtain event_resume_all_effect p waiting locked current by supplying the empty remaining effect current=current. Unfold the guarded atomic program in the original safeExec; gap provides allowed locked observation and initial pending. Instantiate its normal transition with locked,current to derive safeExec(LastSeen current,ret tt,X). The helper guarded_resume_commit__atomic_exit may package this pure bridge.",
+            "proof_of_LinklistResumeAll_which_implies_wit_9_split_goal_2": "Unfold Crtos_GTrans and the existing universal transition; the result holds for locked/current without a state-equality premise.",
+            "proof_of_LinklistResumeAll_which_implies_wit_9_split_goal_3": "Unfold the old live gap to retain p<>0. Combine it with event_pending_at id p nil current (from remaining=nil) to build the empty guard. Do not use an unavailable post-state heap or assume pointer nonzero from a pure address alone."
+          }
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_15_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "All six required exit facts are explicit PreHs: current pending, remaining-progress, nil remaining, original gap, locked waiting and original safeExec. Project them without unfolding the loop effect."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_15",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the pure helper premise; unfold auxiliary goal and cancel unchanged os_inv(current)/InsideCritical(locked). Reassert all listed exit facts, with next=list_pre and remaining=nil from the branch."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_16_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Project Crtos_GTrans locked current already established at the commit which-implies step; spatial resources are framed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_16",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the auxiliary goal after introducing its pure theorem argument; retain the same current os_inv and locked critical token, reordering separating conjunction as required. All post pure facts are already premises."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose after=current. Use the empty guard and completed continuation already in context; 0=0 is reflexive. Return the existing OutsideCritical sg current unchanged."
+        }
+      ],
+      "helpers": [
+        {
+          "name": "guarded_resume_commit__atomic_exit",
+          "strategy": "Pure bridge: event_delete_gap id p false before locked, event_pending_at id p waiting locked, event_resume_all_effect p waiting locked current, and safeExec(LastSeen before,abs_event_resume_all id p,X) imply safeExec(LastSeen current,ret tt,X). Unfold LastSeen/guarded atomic normal relation, use the actual locked/current transition and the same allowed state-set witness; use weakest-precondition/normal-step safeExec elimination. No added transition, heap or environmental assumption.",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "id": "wand_returns",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistResumeAll_which_implies_wit_3_split_goal_spatial": "Unfold event_resume_next_restore and apply separating implication elimination to the exact next cell and wand; return os_inv(current)."
+          }
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_6",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistResumeAll_which_implies_wit_6_split_goal_spatial": "Unfold event_resume_exstatus_restore and apply wand elimination to the Int -1 cell; the scalar bounds are already premises and no other resource is needed."
+          }
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_which_implies_wit_8",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistResumeAll_which_implies_wit_8_split_goal_spatial": "Unfold event_resume_id_restore and eliminate its wand using the exact ushort task_id cell; return os_inv(marked)."
+          }
+        }
+      ]
+    },
+    {
+      "id": "wakeup_failure",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_entail_wit_4_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Select the spatial first arm. Rewrite after=marked and use os_inv(marked) to establish ID-query uniqueness for the two equal task_id lookups, hence returned task=target. Rewrite the exstatus-only marked-map update and original target descriptor equality; returned desc_2 is set_task_desc_exstatus desc (-1), whose status remains SUSPEND. This contradicts the generic failure branch non-SUSPEND premise, so the entire branch entailment follows. Do not attempt to establish remaining-progress in a genuine failure state."
+        }
+      ]
+    },
+    {
+      "id": "entry_and_null_loop",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The null branch preserves OutsideCritical and the same pure parameters. Forget the initialized local node/task/lock values to their undef stores and cancel these cells; list ownership is outside this goal frame."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_entail_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The null-loop invariant is unchanged across its empty body. Reassert the four pure assumptions and cancel OutsideCritical."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_entail_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the pure second arm and remaining=waiting. The locked pending fact is present; event_resume_remaining_effect p waiting locked waiting locked is reflexive by its implication definition. Reuse the gap; no new heap or state is constructed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_1_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Project the live event_delete_guard required by the named lock from PreH3. Do not strengthen it to an empty guard."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the pure premise theorem and cancel OutsideCritical before; every reasserted guard/equality/safeExec is already present."
+        }
+      ]
+    },
+    {
+      "id": "lock_and_read_frames",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_2_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Project the live gap returned by the trusted scoped lock; local cells and shared invariant are untouched."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After the pure premise theorem, reorder os_inv(locked) and InsideCritical(locked), retaining the same gap and original continuation facts."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_3_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Project list_pre=event_pending_head p and current pending relation directly from the loop invariant premises."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Cancel os_inv(current) and InsideCritical(locked); retain the exact list/head/pending/progress/continuation facts without changing any logical state."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "This nonempty branch is a pure-fact propagation around an already borrowed sentinel next cell. Cancel the identical pointer store, next-restore wand and saved critical token; all output facts are existing PreHs."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Empty counterpart of partial_solve_wit_4: remaining=nil and next=list_pre are present. Cancel the same borrowed pointer cell, wand and critical frame."
+        }
+      ]
+    },
+    {
+      "id": "container_and_branch",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_6_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Project remaining=target::rest, next=sched_link_of target and the pending relation from the nonempty branch assumptions."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Reassert the nonempty branch facts and cancel os_inv(current)/InsideCritical(locked); no new existential or memory view is needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_7_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The head-descriptor extraction already supplies alignment and sched-link equality; project these two facts for CONTAINER_OF_TASK_SCHED."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve current os_inv and locked token across the pure container-address contract preparation; all target descriptor/world facts are already PreHs."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The branch has next<>list_pre and next=list_pre. Derive False directly; no predicate unfolding is needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The symmetric branch has next=list_pre and next<>list_pre. Derive False from these premises."
+        }
+      ]
+    },
+    {
+      "id": "task_id_frames",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_11_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Project remaining=target::rest, current pending and the marked-map equation after exstatus store restoration."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Cancel os_inv(marked) and InsideCritical(locked), preserving the older current snapshot facts as pure assumptions; no old heap is required."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_12",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Substitute retval=target to align nested TaskDescriptor.id.id addresses before reading. Cancel the same ushort task_id cell, id-restore wand and critical token, reasserting marked world facts."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Substitute retval=target in the reverse address direction after reading. The resource remains the same ushort cell and exact id-restore wand; pure bounds/ID lookup are unchanged."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_14_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Project task_id<65536 from the ID-view range; the local int resume_task_id carries the same value, so no narrowing occurs."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_partial_solve_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Cancel os_inv(marked)/InsideCritical(locked) and preserve all historical world/lookup/pending relations before the generic Wakeup contract consumes the invariant. In particular do not drop the marked/current os_world_wf facts."
+        }
+      ]
+    },
+    {
+      "id": "initial_scalar_bounds",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure 32-bit literal representability: unfold INT_MIN/INT_MAX and discharge the stated bounds for 0 by arithmetic; no application-specific heap facts are needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure 32-bit literal representability: unfold INT_MIN/INT_MAX and discharge the stated bounds for 0 by arithmetic; no application-specific heap facts are needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure 32-bit literal representability: unfold INT_MIN/INT_MAX and discharge the stated bounds for 0 by arithmetic; no application-specific heap facts are needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure 32-bit literal representability: unfold INT_MIN/INT_MAX and discharge the stated bounds for 0 by arithmetic; no application-specific heap facts are needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure 32-bit literal representability: unfold INT_MIN/INT_MAX and discharge the stated bounds for 1 by arithmetic; no application-specific heap facts are needed."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure 32-bit literal representability: unfold INT_MIN/INT_MAX and discharge the stated bounds for 1 by arithmetic; no application-specific heap facts are needed."
+        }
+      ]
+    },
+    {
+      "id": "store_and_return_bounds",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold signed 32-bit INT_MIN; 1<>INT_MIN is arithmetic. Existing exstatus store/wand and critical token need not be opened."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold INT_MIN/INT_MAX and prove the literal 1 bounds before unary negation; the assignment value -1 remains representable."
+        },
+        {
+          "name": "proof_of_LinklistResumeAll_safety_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The return literal 0 is within signed 32-bit range; use arithmetic while leaving OutsideCritical unchanged."
+        }
+      ]
+    }
+  ]
+}

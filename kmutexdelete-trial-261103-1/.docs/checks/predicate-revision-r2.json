@@ -1,0 +1,12 @@
+{
+  "revision": "kmutexdelete-predicate-r2-8e89a963fced",
+  "status": "invalidated",
+  "invalidated_by": "kmutexdelete-predicate-r3-2f93718dada8",
+  "invalidation_reason": "LinklistResumeAll moved from a mutex-only effect/program to the shared PendlistTarget interface required by the updated skill.",
+  "reviewer": "/root/mutex_r2_review",
+  "files": {
+    "lib/KMutexDelete.v": "dc6e92b570ed3ea08508a7cc086212de02389f05651f986ebc05403306621ee3"
+  },
+  "rocq_mcp_compile": "passed",
+  "global_sync": false
+}
