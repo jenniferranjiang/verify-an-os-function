@@ -1,6 +1,0 @@
-{"tool": "rocq_check", "theorem": "proof_of_KMutexDelete_safety_wit_8", "from_state": 2, "state_id": 4, "commands": ["LLM_pre_process ltac:(lia || int_auto).", "Qed."], "success": true}
-{"tool": "rocq_check", "theorem": "proof_of_KMutexDelete_safety_wit_9", "from_state": 5, "state_id": 7, "commands": ["LLM_pre_process ltac:(lia || int_auto).", "Qed."], "success": true}
-{"tool": "rocq_check", "theorem": "proof_of_KMutexDelete_safety_wit_10", "from_state": 8, "state_id": 10, "commands": ["LLM_pre_process ltac:(lia || int_auto).", "Qed."], "success": true}
-{"tool": "rocq_check", "theorem": "proof_of_KMutexDelete_partial_solve_wit_8", "from_state": 11, "state_id": 13, "commands": ["LLM_pre_process ltac:(lia || int_auto).", "Qed."], "success": true}
-{"tool": "controller coq-check", "target_kind": "group-development", "exit_code": 0, "status": "passed", "elapsed_seconds": 21.973644}
-{"tool": "controller coq-check", "target_kind": "group-check", "exit_code": 0, "status": "passed", "elapsed_seconds": 25.629003}

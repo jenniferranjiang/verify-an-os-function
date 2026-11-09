@@ -1,9 +1,0 @@
-{
-  "applied": false,
-  "inputs": {
-    "kmutexdelete-trial-261103-1/annotated_C/src/_MutexDelete.c": "16a478384d55ae96f0eeba4f22d6f48c78715d4c53cdc58ddf0d5d8c54f70922",
-    "kmutexdelete-trial-261103-1/annotated_C/src/IdRemoveObj.c": "690d8789967fa4f704153597ea79f0741e839dc47dbe39c0869ee44a2c1bbbe3"
-  },
-  "patch": ".docs/Report/proposed-idnode-spec-normalization.patch",
-  "reason": "Explicit IdNode field_addr/store disambiguation; no C executable or intended spec semantics change; frozen token edit needs user approval"
-}

@@ -1,6 +1,0 @@
-{"tool": "rocq_start", "mode": "preamble", "workspace": "group_04/dev", "state_id": 1, "success": true}
-{"tool": "rocq_check", "from_state": 1, "state_id": 25, "commands_run": 24, "success": true, "proof_finished": true, "checked": ["safety_wit_5", "safety_wit_6", "safety_wit_7", "partial_solve_wit_2", "partial_solve_wit_4", "partial_solve_wit_5"], "proof": "LLM_pre_process ltac:(lia || int_auto). Qed."}
-{"call_id": "2d52f107d7a342fb828cb1e04d806f6d", "command": "coq-check", "round": "KMutexDelete-vc-proving-r1", "group": "query_context", "target_kind": "group-check", "started_at": "2026-11-03T13:31:33.844526+00:00", "event": "started"}
-{"call_id": "2d52f107d7a342fb828cb1e04d806f6d", "command": "coq-check", "round": "KMutexDelete-vc-proving-r1", "group": "query_context", "target_kind": "group-check", "started_at": "2026-11-03T13:31:33.844526+00:00", "event": "finished", "finished_at": "2026-11-03T13:31:57.988729+00:00", "elapsed_seconds": 25.81283, "exit_code": 0, "status": "passed", "returncode": 0}
-{"command": "coq-check group-development", "exit_code": 0, "status": "passed", "elapsed_seconds": 22.919434}
-{"command": "coq-check group-check", "exit_code": 0, "status": "passed", "elapsed_seconds": 25.774979}

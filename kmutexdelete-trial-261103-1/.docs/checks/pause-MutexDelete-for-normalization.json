@@ -1,5 +1,0 @@
-{
-  "status": "paused",
-  "reason": "Frozen IdRemoveObj contract needs syntax-equivalent field_addr/store disambiguation; pending user approval of concrete proposal.",
-  "run": "MutexDelete-20261103170333"
-}

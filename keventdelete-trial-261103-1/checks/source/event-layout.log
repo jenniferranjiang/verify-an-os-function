@@ -1,3 +1,0 @@
-cwd: /home/xinra/crtos
-command: gcc -m32 -std=c11 -fsyntax-only -I Ubiquitous/XiZi_IIoT_Macro/kernel/include -I annotated_C/src/include keventdelete-trial-261103-1/checks/source/event-layout.c
-exit: 0

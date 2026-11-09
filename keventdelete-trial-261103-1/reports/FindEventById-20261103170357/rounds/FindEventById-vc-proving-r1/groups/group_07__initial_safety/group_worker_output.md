@@ -1,1 +1,0 @@
-Completed the five assigned initial safety witnesses using `LLM_pre_process ltac:(lia || int_auto)`. Witnesses 1–4 discharge constant signed integer bounds; witness 5 uses the contradictory input bounds. No helpers or library changes were required. Forbidden-token scan passed. Controller group-check completed with exit code 0 and JSON status `passed` (25.53 seconds).

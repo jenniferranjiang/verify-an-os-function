@@ -1,3 +1,0 @@
-Completed all five assigned witnesses using LLM_pre_process with explicit assumption/reflexivity/lia/int_auto closers. The pure-to-aux wrappers in partial_solve_wit_9 and partial_solve_wit_13 use a second preprocessing step for the auxiliary entailment. Existing pure facts and unchanged spatial resources discharge every goal; no helper, specification, seed-library, or unassigned proof changes were needed.
-
-Validation: controller coq-check --target-kind group-check --group removed_passthrough exited 0 with JSON status passed (61.340274 seconds). Forbidden-lemma/tactic scan found no matches in the copied manual or group library.

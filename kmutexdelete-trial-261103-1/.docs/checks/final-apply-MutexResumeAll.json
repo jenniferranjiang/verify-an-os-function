@@ -1,7 +1,0 @@
-{
-  "status": "passed",
-  "files": [
-    "VC/MutexResumeAll_proof_manual.v",
-    "VC/MutexResumeAll_lib.v"
-  ]
-}

@@ -41,3 +41,15 @@ git restore --source=f96dd2e20249ed8f55d8a33097de411a97aab9ab -- ksemaphoredelet
 git fetch origin trial-archive
 git restore --source=764bd5919b1b8b301de7c94755cde510bed60d9b -- keventcreate-trial-261101-1 kmutexcreate-trial-261101-1
 ```
+
+2026-11-09：`keventdelete-trial-261103-1` 和 `kmutexdelete-trial-261103-1`
+的当前工作树快照已保存到远程 `trial-archive`，固定提交为
+`7e76450cbd41e10b5ff3543a4ae8e4fc30fd7fc1`。归档包含两个目录中当前存在的
+已跟踪文件及未被忽略的未跟踪文件，共 1059 个；逐文件 blob 核对无差异。
+23 个可重建的 Rocq 编译产物和临时缓存未归档。此次操作只保存既有源码、证明和
+验证记录，没有重新运行验证或增加新的验证结论。需要恢复时执行：
+
+```sh
+git fetch origin trial-archive
+git restore --source=7e76450cbd41e10b5ff3543a4ae8e4fc30fd7fc1 -- keventdelete-trial-261103-1 kmutexdelete-trial-261103-1
+```

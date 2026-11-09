@@ -1,7 +1,0 @@
-{
-  "status": "passed",
-  "files": [
-    "VC/KMutexDelete_proof_manual.v",
-    "VC/KMutexDelete_lib.v"
-  ]
-}
