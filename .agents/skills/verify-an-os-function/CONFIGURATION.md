@@ -18,8 +18,6 @@
 | `annotated_c_dir` | 可选，annotated C 目录；为空时扫描根 `annotatedc/`、`annotated_C/`。都有且用途不明确时询问；都没有时新建 `annotatedc/`。 |
 | `references.vrtos`、`references.crtos_verify`、`references.los_verify` | 可选参考根目录，未填写或不可用时说明并跳过，不阻塞验证；实际导入成为构建依赖时须确认该依赖可用。 |
 
-本机配置不随 skill 分发；当前仓库已通过 `.gitignore` 排除它，其他工程分享前也应排除该文件。可分发文件是空白模板及本说明。
-
 目录扫描、沿用现有结构及验证过程中的编译检查见[工程组织与维护指南](references/project-maintenance-guide.md#路径配置与目录发现)。
 
 ## Rocq 编译配置
