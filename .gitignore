@@ -38,3 +38,6 @@ annotated_C/dep/
 # CRTOS source is maintained in the sibling upstream checkout.
 /Ubiquitous/
 /APP_Framework/
+
+# User-specific verification paths; share config.example.json instead.
+/.agents/verify-os.config.json

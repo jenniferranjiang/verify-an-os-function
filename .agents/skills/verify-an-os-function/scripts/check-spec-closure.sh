@@ -61,7 +61,14 @@ if [[ -z "$symexec_bin" && -f "$trial_dir/CONFIGURE" ]]; then
         "$trial_dir/CONFIGURE" | tail -n 1)
     [[ -n "$symexec_dir" ]] && symexec_bin="${symexec_dir%/}/symexec"
 fi
-symexec_bin=${symexec_bin:-/home/xinra/qcp-binary-democases/linux-binary/symexec}
+if [[ -z "$symexec_bin" && -n ${OS_QCP_ROOT:-} ]]; then
+    symexec_bin="${OS_QCP_ROOT%/}/linux-binary/symexec"
+fi
+[[ -n "$symexec_bin" ]] || {
+    echo "missing symexec path: set SYMEXEC_BIN, trial CONFIGURE SymExec_DIR, or OS_QCP_ROOT from verify-os.config.json" >&2
+    exit 2
+}
+[[ "$symexec_bin" == /* ]] || symexec_bin="$trial_dir/$symexec_bin"
 
 [[ -x "$symexec_bin" ]] || {
     echo "symexec is not executable: $symexec_bin" >&2

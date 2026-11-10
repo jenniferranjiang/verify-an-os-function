@@ -1,7 +1,7 @@
 # Implement
 
 用户确认 predicate/spec revisions 后，main agent 完整读取已配置 QCP 根目录的
-`AGENTS.md`，按[路径配置](project-configuration-guide.md#implement-阶段的-qcp-路径配置)
+`AGENTS.md`，按[路径配置](project-maintenance-guide.md#implement-阶段的-qcp-路径配置)
 将验证工作目录指向当前 trial，沿用现有工程，从它指定的
 `verification-orchestrator` 入口启动 QCP workflow，并把批准的 predicate/spec 当作冻结输入。
 
@@ -15,7 +15,7 @@
 
 ### 沿用现有工程
 
-设计与审阅阶段已有的 trial 文件结构是 implement 必须遵循的工程格式。验证继续使用现有 annotated C、库文件、`_CoqProject` 和其中的外部库引用，文件组织与库引用按[工程配置指南](project-configuration-guide.md#trial-与全局库)保持不变，验证工作目录指向当前 trial。不重新配置为 QCP 示例仓库的结构，不复制整套依赖或示例，也不改写已有逻辑命名空间。
+设计与审阅阶段已有的 trial 文件结构是 implement 必须遵循的工程格式。验证继续使用现有 annotated C、库文件、`_CoqProject` 和其中的外部库引用，文件组织与库引用按[工程组织与维护指南](project-maintenance-guide.md#trial-与全局库)保持不变，验证工作目录指向当前 trial。不重新配置为 QCP 示例仓库的结构，不复制整套依赖或示例，也不改写已有逻辑命名空间。
 
 由 QCP 工具适配本 OS 工程，而不是让 OS 工程迁就 QCP 的默认目录约定。先检查实际使用的 controller 是否能读取现有工程配置、解析现有输入及外部库路径，并按 trial 的文件组织处理验证产物；已有支持直接复用，尚不支持时在 implement 中完成必要的工具侧适配。适配范围以支持本实验为准，不要求先建设通用工具框架，也不能仅修改本指南便视为工具已支持。
 
@@ -32,6 +32,6 @@ Main 交接 annotation 任务时须明确传达本节的 OS 适配规则。
 ## 验证范围与执行
 
 交接时分开列出本轮实现证明目标与从根 annotated_C 或其他证明工程导入的 `reused-spec` 边界，附复用来源、revision 和 caller-local contract 的位置。
-按[工程配置指南](project-configuration-guide.md#已有-spec-的复用与特化)，导入 spec 只放在 caller 定义前，不为其新建独立函数文件，也不生成本轮实现 VC 或重新证明函数体；工具的闭包检查须识别这类边界，不得因缺少同名 `.c` 文件而补建文件。
+按[工程组织与维护指南](project-maintenance-guide.md#已有-spec-的复用与特化)，导入 spec 只放在 caller 定义前，不为其新建独立函数文件，也不生成本轮实现 VC 或重新证明函数体；工具的闭包检查须识别这类边界，不得因缺少同名 `.c` 文件而补建文件。
 之后只执行 controller 返回的 action，直到 controller 报告 `done` 或明确 blocker；不要在本 skill
 中复制 QCP 的阶段、命令、返回状态或 final-check。

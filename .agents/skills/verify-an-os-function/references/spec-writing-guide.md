@@ -47,7 +47,7 @@ QCP parser/symbolic、VC 和 proof 在用户确认 review-passed revisions 后�
 验证闭包遵循主 `SKILL.md` 的[验证范围](../SKILL.md#验证范围)：先按当前配置和
 [源代码处理](源代码处理.md) 完成适配，再沿切片中保留的调用递归。文档明确规定且适用的
 模型/API 替换作为边界，无需重复批准，也不递归被替换部分的原始内部调用。
-从根 annotated_C 或其他证明工程导入复用的依赖 spec 按[工程配置指南](project-configuration-guide.md#已有-spec-的复用与特化)
+从根 annotated_C 或其他证明工程导入复用的依赖 spec 按[工程组织与维护指南](project-maintenance-guide.md#已有-spec-的复用与特化)
 记为 `reused-spec` 边界，只在 caller 定义前放函数声明和完整 spec，不为其新建独立 `.c` 文件，也不为该函数及其内部调用安排本轮 VC 或函数体重证；适用性和 contract 一致性仍须检查。其余非
 `trusted` 函数按本节建立 annotated C。Main agent 可以建议把复杂
 callee 作为 `trusted`，但不能代替用户决定。批准的 symbol 和 contract 记录在当前任务
@@ -73,7 +73,7 @@ dependency closure。只新增特化 spec 且原 spec 与依赖未变时，不�
 LOS 文件只提供函数 spec 的写法示例。可以复用的是 QCP 的通用 `critical_STS/CriticalCSL`，不是 LOS 的
 `Los_CS_C`、`Los_Verify_State` 或 transition；crtOS 使用自己的状态和允许转换。
 
-已有 spec 的导入、等价适配与场景特化统一按 [工程配置指南](project-configuration-guide.md#已有-spec-的复用与特化)执行。
+已有 spec 的导入、等价适配与场景特化统一按 [工程组织与维护指南](project-maintenance-guide.md#已有-spec-的复用与特化)执行。
 
 ### 单函数切片的等价转换
 
@@ -243,7 +243,7 @@ allocation、free 或 container membership 变化，应使用已有 object/conta
 
 ### 3.1 Spec 与注解位置
 
-本轮需要实现验证的每个 C 函数有唯一 canonical 文件和一份 active 函数体，可以包含原有具名 specs 及按 [工程配置指南](project-configuration-guide.md#已有-spec-的复用与特化)新增的特化 spec。导入 spec 的 canonical 依据保留在来源证明中，trial 只在 caller 定义前放 declaration-only spec。`Require` 写调用前必须持有的具体资源和事实，`Ensure` 按真实
+本轮需要实现验证的每个 C 函数有唯一 canonical 文件和一份 active 函数体，可以包含原有具名 specs 及按 [工程组织与维护指南](project-maintenance-guide.md#已有-spec-的复用与特化)新增的特化 spec。导入 spec 的 canonical 依据保留在来源证明中，trial 只在 caller 定义前放 declaration-only spec。`Require` 写调用前必须持有的具体资源和事实，`Ensure` 按真实
 成功、失败、阻塞或早返回路径写返回值、状态变化、资源转移与 frame。外层函数证明调用
 其他函数时，只使用这些函数已经写好并最终证明的 spec，不展开它们的实现。
 
@@ -374,7 +374,7 @@ spec，反之亦然；当前闭包两种调用都有时才分别处理。若不�
 
 ### 4.3 在 trial 中增量增加模块特化
 
-先查根 `/home/xinra/crtos-verify/annotated_C/`。当本轮需要为 callee 增加新的 canonical 模块特化，而不是
+先查当前工程解析后的 annotated C 目录。当本轮需要为 callee 增加新的 canonical 模块特化，而不是
 原样导入已有 spec 时，如果根目录中已经有该函数及适用的 IC 或 OC low-level spec，就将其 canonical
 annotated C 文件按原相对路径复制到当前 trial，保留已有函数体、low-level spec、imports 和其他具名
 high-level specs，只在 trial 副本中增量加入当前模块的 high-level spec；不得从头重写、删掉或弱化
@@ -383,7 +383,7 @@ high-level specs，只在 trial 副本中增量加入当前模块的 high-level 
 
 当前 caller 文件仍在函数定义前声明所采用的完整 callee spec，并与 trial 中新增的同名 canonical
 high-level spec 一致。设计、审阅与 implement 均在 trial 中完成；达到主 skill 规定的合并条件后，再按
-[工程配置指南](project-configuration-guide.md#annotated-c-的增量维护)把新增特化增量合并回根
+[工程组织与维护指南](project-maintenance-guide.md#annotated-c-的增量维护)把新增特化增量合并回根
 `annotated_C/`，不以 trial 文件整体覆盖全局文件。
 
 ### 4.4 临界区调用链中的五个位置

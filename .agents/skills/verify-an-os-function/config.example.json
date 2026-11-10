@@ -1,0 +1,13 @@
+{
+  "qcp_root": "",
+  "source_root": "",
+  "coq_bin": "",
+  "symexec_bin": "",
+  "trust_base": "",
+  "annotated_c_dir": "",
+  "references": {
+    "vrtos": "",
+    "crtos_verify": "",
+    "los_verify": ""
+  }
+}
