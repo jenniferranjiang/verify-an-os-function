@@ -1,6 +1,0 @@
-menuconfig BSP_USING_USBD
-    bool "Using usbd device"
-    default y
-    if BSP_USING_USBD
-        source "$BSP_DIR/third_party_driver/usb/usbd/Kconfig"
-    endif

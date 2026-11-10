@@ -1,3 +1,0 @@
-config BSP_USING_ETH
-    bool 
-    default y

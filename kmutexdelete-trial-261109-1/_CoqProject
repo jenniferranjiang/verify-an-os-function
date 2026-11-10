@@ -20,7 +20,6 @@
 -Q ../../qcp-binary-democases/Rocq/algorithms Algorithms
 -R ../../qcp-binary-democases/Rocq/examples/Applications_human/cdcllib CDCLLib
 -R ../lib CRTOS_Verify.lib
--R ../vendor/qcp_strategy QCPCompat
 -Q ./lib KMutexDeleteTrial.lib
 
 ../lib/common/CrtosConfig.v

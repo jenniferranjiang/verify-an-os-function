@@ -1,3 +1,0 @@
-config IRIS_ML_DEMO
-    bool "enable apps/iris ml demo"
-    default n

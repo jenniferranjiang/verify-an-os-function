@@ -1,6 +1,0 @@
-############################################################################
-# APP_Framework/Framework/connection/zigbee/e18/Make.defs
-############################################################################
-ifneq ($(CONFIG_ADAPTER_ESP07S_WIFI),)
-CONFIGURED_APPS += $(APPDIR)/../../../APP_Framework/Framework/connection/wifi/esp07s_wifi
-endif

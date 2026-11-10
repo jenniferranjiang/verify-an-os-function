@@ -1,3 +1,0 @@
-config K210_FFT_TEST
-    bool "enable apps/k210 fft test"
-    default n

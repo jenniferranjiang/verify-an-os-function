@@ -96,7 +96,35 @@ program 的适用条件和设计见 [Predicate 指南第 4 节](predicate-lemma-
 `by local` 的范围结论仍须证明；具体注解可在 Annotation 阶段补充，见
 [Annotation 阶段适配](implementation-and-validation-guide.md#annotation-阶段适配)。
 
-4. `_MutexDelete(struct Mutex *mutex)` 的目标对象由 C 形参 `mutex`（逻辑地址
+4. 对于以对象指针等非 ID 参数直接确定操作对象、且采用 `safeExec` 与临界区
+协议的函数，优先参考下面的公开 spec：直接使用真实 C 形参，由抽象 program
+表达对象查找、有效域和操作行为，不在公开入口额外暴露对象描述符或内部 ID。
+
+```c
+x_err_t _DeleteMsgQueue(struct MsgQueue *mq)
+/*@ msgqueue_delete_oc
+    With (sg : StableGlobalState) (before : VarGlobalState) X
+    Require safeExec(LastSeen(before), abs_msgqueue_delete(sg, mq), X) &&
+      OutsideCritical(sg, before)
+    Ensure exists after,
+      __return == 0 && msgqueue_deleted(mq, after) &&
+      safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after)
+ */;
+```
+
+`Require` 中不应出现 `exists` ，确实需要由 caller 提供的逻辑
+参数应放在 `With` 中，再在 `Require` 中写它与实际 C 参数、状态和资源的关联。
+如果某个对象描述符或内部 ID 只是抽象操作或函数体推理所需的 witness，就应留在
+内部，不要为去掉 `Require` 中的 `exists obj` 而机械地新增 `With obj`。
+上述示例中只需 `sg`、`before` 和 `X`，无需额外传入 `mq` 对应的对象描述符。
+
+这条入口规则不禁止 `Ensure` 中量化执行后才得到的状态或结果，例如示例中的
+`exists after`，也不禁止抽象 program 内部的存在量化。参考时应保持真实函数的
+返回类型、返回路径、资源和效果；例如返回 `void` 的删除函数使用 `return(tt)`，
+不能照搬示例的 `__return == 0`。对象有效域必须由抽象语义及适用协议实际承担，
+不能仅删除入口条件而遗漏相应调用要求。
+
+`_MutexDelete(struct Mutex *mutex)` 的目标对象由 C 形参 `mutex`（逻辑地址
 `p`）直接确定。这类 canonical spec 不应在 `With` 中额外引入 `id`，也不应在
 `Require` 中写 `exists id, ...` 来描述被删除的 mutex。这里 `id` 不是应改放到
 `With` 的 ghost 参数，而是根本不应进入该函数的抽象行为描述。例如，下面的公开边界不合适：

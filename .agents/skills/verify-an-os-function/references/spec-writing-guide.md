@@ -374,7 +374,7 @@ spec，反之亦然；当前闭包两种调用都有时才分别处理。若不�
 
 ### 4.3 在 trial 中增量增加模块特化
 
-先查根 `/home/xinra/crtos/annotated_C/`。当本轮需要为 callee 增加新的 canonical 模块特化，而不是
+先查根 `/home/xinra/crtos-verify/annotated_C/`。当本轮需要为 callee 增加新的 canonical 模块特化，而不是
 原样导入已有 spec 时，如果根目录中已经有该函数及适用的 IC 或 OC low-level spec，就将其 canonical
 annotated C 文件按原相对路径复制到当前 trial，保留已有函数体、low-level spec、imports 和其他具名
 high-level specs，只在 trial 副本中增量加入当前模块的 high-level spec；不得从头重写、删掉或弱化

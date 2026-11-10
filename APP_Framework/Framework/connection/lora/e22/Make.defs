@@ -1,6 +1,0 @@
-############################################################################
-# APP_Framework/Framework/connection/lora/e22/Make.defs
-############################################################################
-ifneq ($(CONFIG_ADAPTER_E22),)
-CONFIGURED_APPS += $(APPDIR)/../../../APP_Framework/Framework/connection/lora/e22
-endif

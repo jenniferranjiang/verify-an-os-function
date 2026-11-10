@@ -1,6 +1,0 @@
-############################################################################
-# APP_Framework/Framework/connection/wifi/esp8285/Make.defs
-############################################################################
-ifneq ($(CONFIG_ADAPTER_ESP8285_WIFI),)
-CONFIGURED_APPS += $(APPDIR)/../../../APP_Framework/Framework/connection/wifi/esp8285_wifi
-endif

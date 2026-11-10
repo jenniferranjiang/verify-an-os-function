@@ -1,7 +1,0 @@
-config POWERLINK_MN
-    bool "Using powerlink MN"
-    default n
-
-config POWERLINK_CN
-    bool "Using powerlink CN"
-    default n

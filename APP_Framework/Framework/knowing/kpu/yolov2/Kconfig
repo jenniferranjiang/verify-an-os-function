@@ -1,7 +1,0 @@
-menuconfig USING_YOLOV2
-    bool "yolov2 region layer"
-	depends on USING_KPU_PROCESSING
-    default n
-
-
-

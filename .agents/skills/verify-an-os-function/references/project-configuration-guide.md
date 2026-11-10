@@ -2,33 +2,62 @@
 
 配置 trial、增补共享定义、复用 annotated C 或调整库路径时参考本指南。
 
+## 源码工程与验证工程分离
+
+CRTOS 源码由独立的上游仓库 `https://www.gitlink.org.cn/chos/crtos` 跟踪。源码根目录与验证工程根目录分别配置，不从 skill 所在目录推断源码位置，也不把 `Ubiquitous/`、`APP_Framework/` 复制进 skill 或验证仓库。
+
+当前本机布局为：
+
+```text
+/home/xinra/
+├── crtos/          # 上游源码：Ubiquitous/、APP_Framework/ 等
+└── crtos-verify/   # 验证工程：lib/、annotated_C/、trial、tools/、.agents/
+```
+
+迁移到其他环境时分别解析源码根目录（示例变量 `OS_SOURCE_ROOT`）和验证工程根目录（`OS_PROJECT_ROOT`）；下文中的本机绝对路径按实际配置替换。源码分析从源码工程读取实现与配置，验证库、annotated C、trial 和 `_CoqProject` 放在验证工程。记录源码仓库 URL、commit、影响验证的本地差异及激活配置，以便追溯切片与证明所依据的源码版本。
+
 ## Trial 与全局库
 
 每个 trial 根目录的 `_CoqProject` 列出本次使用的外部 `-R`/`-Q` 路径、全局库和本地实验库。本地实验库按主 skill 的 [文件组织与存放](../SKILL.md#文件组织与存放)统一映射 `trial/lib/`，只包含需要修改的共享库文件副本及新增库文件；未修改的依赖直接从全局库导入，不复制整个依赖闭包。全局库与本地实验库使用不同的逻辑前缀，避免同名模块相互遮蔽；依赖实验副本时使用本地逻辑路径，仍直接复用的共享模块使用全局逻辑路径。若依赖者必须调整 imports、类型或接口才能使用修改版，将这些需要修改的文件纳入 trial，避免在同一依赖链中混用不兼容的全局原版与 trial 修改版。路径映射与 Makefile、QCP 命令及 `Require` 使用的逻辑名称保持一致；相对路径按对应项目的工作目录解析。
 
-CRTOS 全局库由 `/home/xinra/crtos/_CoqProject` 管理。现有映射为 `-R ./lib CRTOS_Verify.lib`，外部依赖也在该文件中声明。沿用此组织，不另在 `lib/` 内维护一份重复配置。
+CRTOS 全局库由 `/home/xinra/crtos-verify/_CoqProject` 管理。现有映射为 `-R ./lib CRTOS_Verify.lib`，外部依赖也在该文件中声明。沿用此组织，不另在 `lib/` 内维护一份重复配置。
 
 Trial 不会因为位于 CRTOS 根目录下就自动继承根 `_CoqProject`，使用全局库时仍需显式配置映射及所需外部依赖。路径变化后同步构建、QCP 和编辑器配置，并重新编译受影响的 `.vo`。
 
 上述组织与外部库引用规则在 implement 阶段继续适用，必须[沿用现有 trial 工程](implementation-and-validation-guide.md#沿用现有工程)进行验证。由 QCP 工具侧适配本 OS 工程的格式与外部库引用，不因工具默认约定而重新配置、复制整套依赖或重组工程。
 
+## Implement 阶段的 QCP 路径配置
+
+沿用已配置可用的 QCP/Rocq 环境，将验证工作目录指向当前 trial：controller 的
+`--main-root` 和 MCP 调用的 `workspace` 使用该 trial 目录，目标文件路径相对此解析，
+并沿用其中的 `_CoqProject` 和已有库映射。这里调整的是验证工作目录，不是 QCP 安装目录。
+
+若已经指向当前 trial 且环境可用，直接继续，无需重新配置；切换 trial 时只更新
+受影响的工作目录和路径。本 skill 不重复 QCP 的工具安装与环境配置说明。
+
 ## Rocq 编译配置
 
-- 统一使用 `tools/rocq/toolchain.json` 指定的 `pv-bench-8.20.1`；VsRocq 路径为 `/home/xinra/.opam/pv-bench-8.20.1/bin/vsrocqtop`。
+- 统一使用 `tools/rocq/toolchain.json` 选定的编译环境；维护者当前使用 `pv-bench-8.20.1`。VsRocq 使用相同环境 bin 目录中的 `vsrocqtop`，路径按本机安装位置填写。
 - `FP` 和 `MonadLib` 只映射 QCP 树中的库；`vendor/fixedpoints` 和 `vendor/MonadLib` 仅作源码快照。
 - 新 `.v` 加入所属 `_CoqProject`。先构建根 `lib/`，trial VC 再按 `lib -> goal -> proof_auto -> proof_manual -> goal_check` 编译。
 
 需要编译的时机有三处：predicate 完成并准备审阅时，编译相关 predicate 文件；VC 完成后，编译本次生成的 VC 和证明文件；implement 完成并将 trial 库合并到全局 `lib/` 后，使用根项目配置重新编译新增或修改的库文件及其依赖者，并检查 trial 的引用。草案阶段不要求每次修改后都编译。
 
 ```sh
+# 按本机 toolchain 填写实际绝对路径；以下仍是示例
+OS_QCP_ROOT=/work/qcp-binary-democases
+OS_PROJECT_ROOT=/work/crtos-verify
+OS_SOURCE_ROOT=/work/crtos
+OS_COQ_BIN=/home/alice/.opam/pv-bench-8.20.1/bin
+
 # QCP 基础库变化后
-cd /home/xinra/qcp-binary-democases/Rocq
-make -f Makefile core COQBIN=/home/xinra/.opam/pv-bench-8.20.1/bin/
+cd "$OS_QCP_ROOT/Rocq"
+make -f Makefile core COQBIN="$OS_COQ_BIN/"
 
 # CRTOS 根库
-cd /home/xinra/crtos
-coq_makefile -f _CoqProject -o Makefile.coq
-make -f Makefile.coq COQBIN=/home/xinra/.opam/pv-bench-8.20.1/bin/
+cd "$OS_PROJECT_ROOT"
+"$OS_COQ_BIN/coq_makefile" -f _CoqProject -o Makefile.coq
+make -f Makefile.coq COQBIN="$OS_COQ_BIN/"
 ```
 
 `makes inconsistent assumptions` 表示混用了新旧 `.vo`；`Cannot find a physical path` 表示 `_CoqProject`/编辑器映射不一致。当前 QCP 使用 `valid_object` 等新接口，不再使用 `isvalidptr_*`、`store_2byte`/`store_4byte` 和 `sizeof_front_end_type_of_ptr_size`。`rocq_mcp_cache_*.v` 是临时文件，不加入构建。
@@ -58,7 +87,7 @@ lib/
 
 ### 已有共享库的复用与修改
 
-`/home/xinra/crtos/lib/` 中的已有定义应优先复用，也允许按当前源码和验证需求增补或修改。已有接口缺少所需元素、操作或引理时，在职责对应的 `lib/<module>/` 或 `lib/common/` 中增量补充。
+`/home/xinra/crtos-verify/lib/` 中的已有定义应优先复用，也允许按当前源码和验证需求增补或修改。已有接口缺少所需元素、操作或引理时，在职责对应的 `lib/<module>/` 或 `lib/common/` 中增量补充。模块级 state、predicate/invariant 和共享接口缺失时，补齐对应模块定义，并接入全局状态与系统不变量；已有定义直接复用。针对特定函数新增的抽象操作、program、局部 view、引理和证明辅助，统一放入该函数的 K<Function>.v，不另建函数专用的 State/Inv 文件。确属模块共享能力的增补，仍归入对应模块文件。
 
 无需修改的文件直接从全局库导入。需要修改的文件复制到平铺的 `trial/lib/`，记录全局来源和可比较的基线版本，在副本中修改；新增库文件也直接放在 `trial/lib/`，并记录目标全局路径。若依赖者必须调整 imports、类型或接口才能使用修改版，只将这些需要修改的文件一并纳入 trial。设计、审阅和 implement 期间不写回或移动全局原文件，不复制整套库或整个依赖闭包。
 
@@ -102,7 +131,7 @@ annotated_C/
 
 ### 已有 spec 的复用与特化
 
-`/home/xinra/crtos/annotated_C/` 或其他证明工程中已有的函数 spec 应直接导入 trial 使用。导入 `g` 的 spec 时，只提取当前调用需要的函数声明、完整 `With/Require/Ensure` 和必要依赖，写在调用者 `f.c` 的 `f` 定义前，并标明来源文件和 revision；不新建 `trial/annotated_C/src/g.c`，不复制 `g` 的函数体，也不为汇集导入 spec 新建文件。来源是多函数文件时仍只提取所需 contract。导入时完成必要的等价适配和依赖配置，保持原 contract 的语义；多个 caller 中的同名 spec 须与所采用的同一来源版本一致。只有本轮新写 spec、需要实现验证的函数按一函数一文件组织；已有目标文件直接修改。设计、审阅和 implement 期间仅修改 trial 中的内容，并记录每个本地 canonical 文件的全局目标路径；实现完成后的合并规则见下节。
+`/home/xinra/crtos-verify/annotated_C/` 或其他证明工程中已有的函数 spec 应直接导入 trial 使用。导入 `g` 的 spec 时，只提取当前调用需要的函数声明、完整 `With/Require/Ensure` 和必要依赖，写在调用者 `f.c` 的 `f` 定义前，并标明来源文件和 revision；不新建 `trial/annotated_C/src/g.c`，不复制 `g` 的函数体，也不为汇集导入 spec 新建文件。来源是多函数文件时仍只提取所需 contract。导入时完成必要的等价适配和依赖配置，保持原 contract 的语义；多个 caller 中的同名 spec 须与所采用的同一来源版本一致。只有本轮新写 spec、需要实现验证的函数按一函数一文件组织；已有目标文件直接修改。设计、审阅和 implement 期间仅修改 trial 中的内容，并记录每个本地 canonical 文件的全局目标路径；实现完成后的合并规则见下节。
 
 **从根 `annotated_C/` 或其他证明工程导入复用已有 spec 的依赖函数，本轮不需要生成其实现的 VC，也不重新证明其函数体。** 将其标记为 `reused-spec` 边界，记录来源文件、spec revision 和采用的 contract；其 canonical 依据是原证明中的 spec，不要求 trial 中另有同名函数文件。导入前核对原证明状态和适用假设，导入后的适用性、类型、源码适配及 caller-local contract 一致性仍须检查，不以缺少本地函数或 proof 文件为由自动建文件或安排重新证明。
 

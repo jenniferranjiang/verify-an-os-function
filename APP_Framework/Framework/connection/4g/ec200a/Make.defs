@@ -1,6 +1,0 @@
-############################################################################
-# APP_Framework/Framework/connection/4g/ec200a/Make.defs
-############################################################################
-ifneq ($(CONFIG_ADAPTER_4G_EC200A),)
-CONFIGURED_APPS += $(APPDIR)/../../../APP_Framework/Framework/connection/4g/ec200a
-endif

@@ -1,6 +1,0 @@
-############################################################################
-# APP_Framework/Framework/sensor/voice/d124/Make.defs
-############################################################################
-ifneq ($(CONFIG_SENSOR_D124),)
-CONFIGURED_APPS += $(APPDIR)/../../../APP_Framework/Framework/sensor/voice/d124
-endif

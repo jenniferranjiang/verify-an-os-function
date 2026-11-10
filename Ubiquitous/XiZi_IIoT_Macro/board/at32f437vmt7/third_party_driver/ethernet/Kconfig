@@ -1,9 +1,0 @@
-config BSP_USING_YT8512
-    bool "Using Ethernet PHY YT8512"
-    default y
-    select RESOURCES_LWIP
-
-config BSP_USING_LWIP
-    bool "Using LWIP"
-    default y
-    select RESOURCES_LWIP

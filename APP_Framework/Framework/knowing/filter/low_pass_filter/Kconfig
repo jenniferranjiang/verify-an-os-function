@@ -1,3 +1,0 @@
-config ONE_ORDER_RC_LOW_PASS_FILTER
-        bool "one order rc lpf"
-        default n

@@ -5,7 +5,7 @@ Require Export CRTOS_Verify.lib.delay.KTaskUnSetDelay CRTOS_Verify.lib.common.Re
 Require Export CRTOS_Verify.lib.semaphore.SemaphoreOps.
 Require Export CRTOS_Verify.lib.mutex.MutexOps.
 Require Export CRTOS_Verify.lib.event.EventOps.
-From QCPCompat Require Import Mapping.
+From SimpleC.StrategyLib Require Import Mapping.
 From Logic.lib Require Import Coqlib.
 Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.
 From SimpleC.SL Require Import Mem SeparationLogic MapLib.

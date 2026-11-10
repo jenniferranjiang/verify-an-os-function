@@ -1,4 +1,0 @@
-config APP_MNIST
-    bool "enable apps/mnist"
-    depends on USING_TENSORFLOWLITEMICRO
-    default n

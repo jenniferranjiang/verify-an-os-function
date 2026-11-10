@@ -51,8 +51,6 @@ lib/semaphore/KSemaphoreCreate.v
 lib/mutex/KMutexCreate.v
 lib/event/KEventCreate.v
 
--R ./vendor/qcp_strategy QCPCompat
-vendor/qcp_strategy/Mapping.v
 
 # Task, scheduler, delay and tick modules restored for the mutex deletion trial.
 lib/assign/AssignInv.v

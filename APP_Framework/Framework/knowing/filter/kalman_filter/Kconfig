@@ -1,3 +1,0 @@
-config ONE_ORDER_KALMAN_FILTER
-        bool "one order kalman filter"
-        default n

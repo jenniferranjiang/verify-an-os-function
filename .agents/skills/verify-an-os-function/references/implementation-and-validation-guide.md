@@ -1,21 +1,23 @@
 # Implement
 
-用户确认 predicate/spec revisions 后，main agent 完整读取
-`/home/xinra/qcp-binary-democases/AGENTS.md`，沿用现有 trial 工程，从它指定的
+用户确认 predicate/spec revisions 后，main agent 完整读取已配置 QCP 根目录的
+`AGENTS.md`，按[路径配置](project-configuration-guide.md#implement-阶段的-qcp-路径配置)
+将验证工作目录指向当前 trial，沿用现有工程，从它指定的
 `verification-orchestrator` 入口启动 QCP workflow，并把批准的 predicate/spec 当作冻结输入。
 
 ## 证明前的工具就绪条件
 
-确认 QCP、Rocq MCP 和项目依赖已配置可用，具体见
-[Implement 环境准备](../../verify-c-function-with-qcp/references/toolchain-preflight.md)。
+确认已有 QCP、Rocq MCP 和项目依赖可用。
 同一环境复用已有成功结果，不在每次证明前重复完整验收；环境错误先修复。
 环境可用后直接按 QCP agent 的 workflow/controller 完成证明，不额外增加一套验证流程。
 
 ## QCP工具适配
 
-设计与审阅阶段已有的 trial 文件结构是 implement 必须遵循的工程格式。验证继续使用现有 annotated C、库文件、`_CoqProject` 和其中的外部库引用，文件组织与库引用按[工程配置指南](project-configuration-guide.md#trial-与全局库)保持不变，不重新配置为 QCP 示例仓库的结构，不复制整套依赖或示例，也不改写已有逻辑命名空间。
+### 沿用现有工程
 
-由 QCP 工具适配本 OS 工程，而不是让 OS 工程迁就 QCP 的默认目录约定。当前 controller 的固定目录和工程内依赖限制不能直接支持上述格式，应在 implement 中完成 QCP 工具侧的必要适配：读取现有工程配置、解析现有输入及外部库路径，并按 trial 的文件组织处理验证产物。适配范围以支持本实验为准，不要求先建设通用工具框架，也不能仅修改本指南便视为工具已支持。
+设计与审阅阶段已有的 trial 文件结构是 implement 必须遵循的工程格式。验证继续使用现有 annotated C、库文件、`_CoqProject` 和其中的外部库引用，文件组织与库引用按[工程配置指南](project-configuration-guide.md#trial-与全局库)保持不变，验证工作目录指向当前 trial。不重新配置为 QCP 示例仓库的结构，不复制整套依赖或示例，也不改写已有逻辑命名空间。
+
+由 QCP 工具适配本 OS 工程，而不是让 OS 工程迁就 QCP 的默认目录约定。先检查实际使用的 controller 是否能读取现有工程配置、解析现有输入及外部库路径，并按 trial 的文件组织处理验证产物；已有支持直接复用，尚不支持时在 implement 中完成必要的工具侧适配。适配范围以支持本实验为准，不要求先建设通用工具框架，也不能仅修改本指南便视为工具已支持。
 
 交接时提供现有输入文件和工程配置的位置；符号执行、依赖分析、证明编译和 final-check 均须使用一致的路径映射，并实际检查适配生效。
 

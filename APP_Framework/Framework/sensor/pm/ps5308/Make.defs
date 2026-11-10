@@ -1,6 +1,0 @@
-############################################################################
-# APP_Framework/Framework/sensor/pm/ps5308/Make.defs
-############################################################################
-ifneq ($(CONFIG_SENSOR_PS5308),)
-CONFIGURED_APPS += $(APPDIR)/../../../APP_Framework/Framework/sensor/pm/ps5308
-endif

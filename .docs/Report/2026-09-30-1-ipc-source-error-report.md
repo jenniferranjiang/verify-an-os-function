@@ -30,14 +30,14 @@
 
 ### 3.1 源码位置
 
-- [`struct Mutex::holder`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_mutex.h#L38) 直接保存 `TaskDescriptor *`。
-- 首次取得 mutex 时，[`_MutexObtain`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c#L98) 将当前任务写入 `holder`。
-- 交接 mutex 时，[`_MutexAbandon`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c#L178) 将等待任务写入 `holder`。
-- [`_KTaskResourceDelete`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c#L98) 只从 ready vector 移除任务并将其标为 close，没有检查 mutex。
-- [`_DeleteKTask`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c#L643) 没有检查目标任务是否持有 mutex。
-- [`KTaskQuit`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c#L569) 对主动退出任务执行同类资源删除。
-- zombie recycler 在 [`zombierecycle.c`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/zombierecycle.c#L64) 释放任务栈，并在第 74 行释放 `TaskDescriptor`。
-- [`ShowMutex`](../../Ubiquitous/XiZi_IIoT_Macro/tool/shell/letter-shell/cmd.c#L246) 在 `holder != NONE` 时解引用 `holder->task_base_info.name`。
+- [`struct Mutex::holder`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_mutex.h#L38) 直接保存 `TaskDescriptor *`。
+- 首次取得 mutex 时，[`_MutexObtain`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c#L98) 将当前任务写入 `holder`。
+- 交接 mutex 时，[`_MutexAbandon`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c#L178) 将等待任务写入 `holder`。
+- [`_KTaskResourceDelete`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c#L98) 只从 ready vector 移除任务并将其标为 close，没有检查 mutex。
+- [`_DeleteKTask`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c#L643) 没有检查目标任务是否持有 mutex。
+- [`KTaskQuit`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c#L569) 对主动退出任务执行同类资源删除。
+- zombie recycler 在 [`zombierecycle.c`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/zombierecycle.c#L64) 释放任务栈，并在第 74 行释放 `TaskDescriptor`。
+- [`ShowMutex`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/tool/shell/letter-shell/cmd.c#L246) 在 `holder != NONE` 时解引用 `holder->task_base_info.name`。
 
 ### 3.2 问题解释
 
@@ -95,9 +95,9 @@ Mutex 保存 Task 地址，但 Task 生命周期没有维护反向关系。源�
 
 ### 4.1 源码位置
 
-- [`recursive_cnt`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_mutex.h#L36) 是 `uint8`，范围为 0～255。
-- 同一 holder 再次 obtain 时，[`mutex.c:95-96`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c#L95) 直接执行 `recursive_cnt++`，没有上限检查。
-- abandon 时，[`mutex.c:171-172`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c#L171) 先执行 `recursive_cnt--`，结果为 0 就释放或交接 mutex。
+- [`recursive_cnt`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_mutex.h#L36) 是 `uint8`，范围为 0～255。
+- 同一 holder 再次 obtain 时，[`mutex.c:95-96`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c#L95) 直接执行 `recursive_cnt++`，没有上限检查。
+- abandon 时，[`mutex.c:171-172`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c#L171) 先执行 `recursive_cnt--`，结果为 0 就释放或交接 mutex。
 
 ### 4.2 问题解释
 
@@ -152,12 +152,12 @@ mutex->recursive_cnt++;
 
 ### 5.1 源码位置
 
-- `_MutexObtain` 的 `msec` 是有符号 `int32`，见 [`mutex.c:77`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c#L77)。
-- [`mutex.c:86`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c#L86) 直接调用 `CalculateTickFromTimeMs(msec)`。
-- [`CalculateTickFromTimeMs`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/tick.c#L99) 的参数是无符号 `uint32`。
-- [`tick.c:104-107`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/tick.c#L104) 将 0 tick 强制改成 1 tick。
-- [`WAITING_FOREVER`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_base.h#L125) 定义为 `-1`。
-- [`mutex.c:104`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c#L104) 的 `wait_time == 0` 分支因此无法处理输入 0。
+- `_MutexObtain` 的 `msec` 是有符号 `int32`，见 [`mutex.c:77`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c#L77)。
+- [`mutex.c:86`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c#L86) 直接调用 `CalculateTickFromTimeMs(msec)`。
+- [`CalculateTickFromTimeMs`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/tick.c#L99) 的参数是无符号 `uint32`。
+- [`tick.c:104-107`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/tick.c#L104) 将 0 tick 强制改成 1 tick。
+- [`WAITING_FOREVER`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_base.h#L125) 定义为 `-1`。
+- [`mutex.c:104`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/mutex.c#L104) 的 `wait_time == 0` 分支因此无法处理输入 0。
 
 ### 5.2 零等待问题解释
 
@@ -223,11 +223,11 @@ ticks = (product + 999U) / 1000U;
 
 ### 6.1 源码位置
 
-[`_EventDelete`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/event.c#L55) 先在第 62～64 行检查并清空 `pend_list`，随后才在第 67～70 行重新进入临界区并撤销 ID 和全局 Event 链表节点，最后在第 73 行释放 Event。
+[`_EventDelete`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/event.c#L55) 先在第 62～64 行检查并清空 `pend_list`，随后才在第 67～70 行重新进入临界区并撤销 ID 和全局 Event 链表节点，最后在第 73 行释放 Event。
 
-[`LinklistResumeAll`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/linklist.c#L110) 在内部加锁并唤醒 waiter，但在第 129 行解锁后才返回。因此，从它返回到 `_EventDelete` 第 67 行重新加锁之间存在调度窗口。
+[`LinklistResumeAll`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/linklist.c#L110) 在内部加锁并唤醒 waiter，但在第 129 行解锁后才返回。因此，从它返回到 `_EventDelete` 第 67 行重新加锁之间存在调度窗口。
 
-[`_EventProcess`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/event.c#L137) 在条件不满足时，于第 179～182 行记录等待条件并将任务的 `sched_link` 插入 `event->pend_list`，有限等待还会在第 184～185 行设置 delay。
+[`_EventProcess`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/event.c#L137) 在条件不满足时，于第 179～182 行记录等待条件并将任务的 `sched_link` 插入 `event->pend_list`，有限等待还会在第 184～185 行设置 delay。
 
 在 `IdRemoveObj` 执行前，Event 仍处于 ID manager 中，新的 `KEventProcess` 仍可找到并进入该对象。
 
@@ -288,13 +288,13 @@ Event 已从 ID manager 删除并释放，任务 P 不能再由该 Event 的正�
 
 #### 超时路径写入已释放内存
 
-若 P 有有限超时，[`KTaskTimeout`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c#L407) 会执行：
+若 P 有有限超时，[`KTaskTimeout`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/ktask.c#L407) 会执行：
 
 ```c
 DoubleLinkListRmNode(&P->task_dync_sched_member.sched_link);
 ```
 
-[`DoubleLinkListRmNode`](../../Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c#L71) 通过 `node_next` 和 `node_prev` 写入相邻节点。对于唯一 waiter，这些指针通常指向已经释放的 `event->pend_list`，从而形成 use-after-free write。
+[`DoubleLinkListRmNode`](../../../crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/double_link.c#L71) 通过 `node_next` 和 `node_prev` 写入相邻节点。对于唯一 waiter，这些指针通常指向已经释放的 `event->pend_list`，从而形成 use-after-free write。
 
 若该内存已经被新 Event 或其他对象复用，超时摘链可能破坏新对象字段或堆管理信息，表现为链表死循环、非法地址访问、后续 malloc/free 失败或不相关模块崩溃。
 

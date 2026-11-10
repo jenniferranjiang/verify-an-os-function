@@ -211,9 +211,8 @@ Proof.
   replace (p+0*1) with p by lia.
   replace (p+(0+1)*1) with (p+1) by lia.
   unfold store_char, store_uchar. Intros.
-  split_pure_spatial.
-  - cancel.
-  - split_pures; dump_pre_spatial; unfold Byte.max_unsigned; intuition lia.
+  unfold store_integer, store_uinteger.
+  entailer!; unfold valid_unsigned_value; lia.
 Qed.
 Lemma mutex_zero_bytes__zero_bytes : forall p,
   0 < p -> p <= UINT_MAX - sizeof("Mutex"%string) -> addr_aligned p 4 ->
@@ -483,12 +482,13 @@ Proof.
     + cbn [DLL.dllseg event_link_node]. Intros z.
       unfold store_event, EventZero. Intros. subst p.
       unfold event_link_node. cbn.
+      set (ep := event_addr e) in *.
       sep_apply_l_atomic (store_uint_undef_store_uint
-        (&(event_addr e # "Event" ->ₛ "options")) (event_options e)).
+        (&(ep # "Event" ->ₛ "options")) (event_options e)).
       sep_apply_l_atomic (store_uint_undef_store_uint
-        (&(event_addr e # "Event" ->ₛ "options")) 0).
+        (&(ep # "Event" ->ₛ "options")) 0).
       prop_apply_p (undef_store_int_exclusive 4 4
-        (&(event_addr e # "Event" ->ₛ "options")) ltac:(lia)).
+        (&(ep # "Event" ->ₛ "options")) ltac:(lia)).
       Intros_p Hfalse. dump_pre_spatial. contradiction.
     + cbn [DLL.dllseg event_link_node]. Intros z.
       fold (DLL.dllseg (store_event wait) z x y py (map event_link_node es)).

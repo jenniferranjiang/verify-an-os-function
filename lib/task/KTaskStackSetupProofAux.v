@@ -363,9 +363,14 @@ Proof.
   rewrite ?sepcon_emp_equiv.
   Exists 35 35 35 35.
   cbv [Vector.hd Vector.tl].
+  cbn [Vector.caseS].
   entailer!.
+  - replace (p + 0 * 1) with p by lia.
+    replace (p + 1 * 1) with (p + 1) by lia.
+    replace (p + (1 + 1) * 1) with (p + 1 + 1) by lia.
+    replace (p + (1 + 1 + 1) * 1) with (p + 1 + 1 + 1) by lia.
+    cancel.
   - unfold valid_unsigned_value, ktask_stack_memset_uint_value; lia.
-  - apply aligned_reglen_addr_aligned; exact Haligned.
 Qed.
 
 (* 从剩余的 ['#'] 字节区中切出当前循环迭代要覆盖的一个 4 字节

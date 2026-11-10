@@ -1,3 +1,0 @@
-menuconfig BSP_USING_USBD_CDC
-    bool "Using usbd cdc device"
-    default y

@@ -1,3 +1,0 @@
-config ONE_ORDER_RC_HIGH_PASS_FILTER
-        bool "one order rc hpf"
-        default n
