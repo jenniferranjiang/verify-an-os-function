@@ -2,8 +2,8 @@
 #define CRTOS_SEMAPHORE_DELETE_LOGIC_H
 /*@ Import Coq Require Import CRTOS_Verify.lib.id.IdModuleSpec */
 /* Formal types and semantic vocabulary only. Contracts are caller-local. */
-/*@ Import Coq Require Import CRTOS_Verify.lib.semaphore.KSemaphoreDelete CRTOS_Verify.lib.task.KTaskUnSetDelay */
-/*@ Import Coq Require Import CRTOS_Verify.lib.list.DoubleLinkListSpec CRTOS_Verify.lib.common.TaskStatusMemory CRTOS_Verify.lib.task.KTaskParseInfo */
+/*@ Import Coq Require Import CRTOS_Verify.lib.semaphore.KSemaphoreDelete CRTOS_Verify.lib.delay.KTaskUnSetDelay */
+/*@ Import Coq Require Import CRTOS_Verify.lib.list.DoubleLinkListSpec CRTOS_Verify.lib.task.TaskStatusMemory CRTOS_Verify.lib.task.KTaskParseInfo */
 /*@ Import Coq Import IDNode DLL */
 /*@ Import Coq From MonadLib.MonadErr Require Import MonadErrBasic MonadErrHoare monadesafe_lib */
 /*@ Import Coq Import Monad MonadNotation */

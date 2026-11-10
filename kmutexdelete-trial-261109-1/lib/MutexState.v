@@ -2,8 +2,8 @@
 Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.
 From Logic.lib Require Import Coqlib.
 From SimpleC.SL Require Import Mem CNotation IntLib.
-Require Export CRTOS_Verify.lib.KTaskWakeup.
-Require Export CRTOS_Verify.lib.MutexOps.
+Require Export CRTOS_Verify.lib.task.KTaskWakeup.
+Require Export CRTOS_Verify.lib.mutex.MutexOps.
 
 Import KTaskCNotation ListNotations.
 Local Open Scope Z_scope.

@@ -2,7 +2,7 @@ Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.
 From SimpleC.SL Require Import Mem CNotation.
 Require Export CRTOS_Verify.lib.common.CrtosConfig CRTOS_Verify.lib.common.dll_abs CRTOS_Verify.lib.id.idnode_abs.
 Require Export CRTOS_Verify.lib.common.StructFieldOffsetAxiom.
-Import CrtosCNotation ListNotations.
+Import KTaskCNotation ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope string.
 

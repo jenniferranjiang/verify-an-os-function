@@ -1,8 +1,8 @@
 Require Import Coq.ZArith.ZArith Coq.Strings.String.
 From SimpleC.SL Require Import Mem CNotation.
-Require Import CRTOS_Verify.lib.common.EventInv.
+Require Import CRTOS_Verify.lib.event.EventInv.
 Require Import CRTOS_Verify.lib.common.StructFieldOffsetAxiom.
-Import CrtosCNotation.
+Import KTaskCNotation.
 Local Open Scope Z_scope.
 Local Open Scope string.
 

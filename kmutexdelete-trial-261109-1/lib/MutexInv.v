@@ -2,8 +2,8 @@
 Require Import Coq.ZArith.ZArith Coq.Lists.List Coq.Strings.String.
 From SimpleC.SL Require Import Mem SeparationLogic MapLib.
 Require Import Logic.LogicGenerator.demo932.Interface.
-Require Export CRTOS_Verify.lib.CrtosInv.
-Require Export CRTOS_Verify.lib.IdModuleSpec.
+Require Export CRTOS_Verify.lib.common.CrtosInv.
+Require Export CRTOS_Verify.lib.id.IdModuleSpec.
 Require Export KMutexDeleteTrial.lib.MutexState.
 
 Import ListNotations DLL IDNode.

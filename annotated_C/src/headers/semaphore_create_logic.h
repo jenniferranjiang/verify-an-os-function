@@ -2,7 +2,7 @@
 #define CRTOS_SEMAPHORE_CREATE_LOGIC_H
 /* Formal semantic vocabulary only; function contracts remain caller-local. */
 /*@ Import Coq Require Import CRTOS_Verify.lib.semaphore.KSemaphoreCreate */
-/*@ Import Coq Require Import CRTOS_Verify.lib.common.CrtosInv CRTOS_Verify.lib.common.SemaphoreInv */
+/*@ Import Coq Require Import CRTOS_Verify.lib.common.CrtosInv CRTOS_Verify.lib.semaphore.SemaphoreInv */
 /*@ Import Coq Require Import CRTOS_Verify.lib.list.DoubleLinkListSpec */
 /*@ Import Coq Import IDNode DLL */
 /*@ Import Coq From MonadLib.MonadErr

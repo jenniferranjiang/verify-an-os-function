@@ -133,7 +133,7 @@ Proof.
 Qed.
 
 (**
-  [os_atomic_cmd cmd] 对应 LOS_Verify/Los_Rules_lib.v 的 [atomic_cmd]：
+  [task_atomic_cmd cmd] 对应 LOS_Verify/Los_Rules_lib.v 的 [atomic_cmd]：
   把单个 [VarGlobalState] 上的原子关系提升为状态集合上的抽象程序。
   从前态集合选取实际加锁观察 [before]，执行 [cmd.(nrm)] 得到返回值和 [after]，
   解锁后的隐藏状态集合固定为 [Crtos_RTrans after]。
@@ -159,6 +159,17 @@ Definition os_atomic_cmd {A : Type}
        exists before, states_before before /\ cmd.(MonadErr.err) before |}.
 
 
+(** Compatibility name used by restored task specifications. *)
+Definition task_atomic_cmd {A : Type} := @os_atomic_cmd A.
+
+
+(** 真实非SMP临界区计数单元；Disable交出0，Lock改1，Unlock归0再Enable归还。
+    Outside/Inside 采用同一 QCP phase token，仅描述协议阶段及资源交接。
+    Disable/Enable 的 trusted 接口在当前范围内抽象为取得/归还资源；
+    不对硬件中断状态作断言。使用创建函数的普通入口时排除已持有临界区资源者；
+    此计数谓词本身不限制其他接口的嵌套层数。 *)
+Definition CriticalNest (n : Z) : Assertion :=
+  &("KTaskOsAssignLockNest") # UShort |-> n.
 (** 抽象调用入口所见状态集合允许共享 OS 状态按 rely 变化，不含硬件中断状态。 *)
 Definition LastSeen (st : VarGlobalState) :
     (VarGlobalState -> Prop) -> Prop :=

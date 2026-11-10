@@ -3,7 +3,7 @@ From SimpleC.SL Require Import Mem SeparationLogic CNotation.
 Require Import Logic.LogicGenerator.demo932.Interface.
 Require Export CRTOS_Verify.lib.common.CrtosInv.
 From MonadLib.MonadErr Require Export MonadErrBasic monadesafe_lib.
-Import CrtosCNotation ListNotations IDNode DLL MonadErr.
+Import KTaskCNotation ListNotations IDNode DLL MonadErr.
 Local Open Scope Z_scope.
 Local Open Scope sac.
 Local Open Scope string.
