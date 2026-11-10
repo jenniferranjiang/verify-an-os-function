@@ -25,7 +25,7 @@
 ## Rocq 编译配置
 
 - 若已有 `tools/rocq/toolchain.json`，沿用并核对与路径配置一致；其他工程不要求此包装器，使用确认后的 `coq_bin` 或 PATH。VsRocq 使用相同环境 bin 目录中的 `vsrocqtop`，路径按本机安装位置填写。
-- `FP` 和 `MonadLib` 只映射 QCP 树中的库；`vendor/fixedpoints` 和 `vendor/MonadLib` 仅作源码快照。
+- QCP 库直接引用配置的 `qcp_root` 下的实际目录，沿用工程已有的逻辑名与路径映射；不复制到验证工程，也不保留源码快照。
 ```sh
 # Agent 解析 JSON 并检查后，通过独立环境变量传入路径：
 # OS_QCP_ROOT=qcp_root，OS_PROJECT_ROOT=验证工程根目录，
