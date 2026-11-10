@@ -310,19 +310,21 @@ all: simpl in H; destruct H as [<-|[<-|[<-|[]]]]; apply Mn; simpl; auto.
 Qed.
 Lemma four_zero_uint__zero_layout : forall p, addr_aligned p 4 -> (CharArray.full p 4 (repeat_Z 0 4) |-- p # UInt |-> 0)%sac.
 Proof.
-intros p Ha.
-sep_apply_l_atomic (semaphore_four_zero_bytes_ptr p Ha).
-unfold store_ptr, store_uint.
-change ptr_size with 4%nat.
-Intros.
-split_pure_spatial.
-- cancel.
-- dump_pre_spatial.
-unfold isvalidptr, isvalidptr_int, CommonAssertion.aligned_4, addr_aligned in *.
-change ptr_size_Z with 4 in *.
-change (CArch.Arch32.aligned CArch.Arch32.ptr_align p) with (p mod 4 = 0) in *.
-change Integers.Int.max_unsigned with 4294967295.
-tauto || lia.
+  intros p Ha.
+  change (repeat_Z 0 4) with [0; 0; 0; 0].
+  unfold CharArray.full, store_array.
+  cbn [store_array_rec].
+  unfold StoreCharAsElement.storeA.
+  rewrite sizeof_char.
+  replace (p + 0 * 1) with p by lia.
+  replace (p + (0 + 1) * 1) with (p + 1) by lia.
+  replace (p + (0 + 1 + 1) * 1) with (p + 2) by lia.
+  replace (p + (0 + 1 + 1 + 1) * 1) with (p + 3) by lia.
+  rewrite store_uint_store_char.
+  Exists 0 0 0 0.
+  cbv [Vector.hd Vector.tl].
+  entailer!.
+  change Int.max_unsigned with 4294967295; lia.
 Qed.
 Lemma event_zero_bytes__zero_layout : forall p, 0 < p -> p <= 4294967295-36 -> addr_aligned p 4 -> (CharArray.full p 36 (repeat_Z 0 36) |-- EventZero p)%sac.
 Proof.
@@ -480,9 +482,13 @@ Proof.
   - simpl map. destruct (Z.eq_dec p (event_addr e)) as [Heq|Hneq].
     + cbn [DLL.dllseg event_link_node]. Intros z.
       unfold store_event, EventZero. Intros. subst p.
-      unfold store_uint. Intros. unfold event_link_node. cbn.
-      match goal with |- context [store_4byte ?a (event_options e)] =>
-        prop_apply_p (dup_store_4bytes a (event_options e) 0) end.
+      unfold event_link_node. cbn.
+      sep_apply_l_atomic (store_uint_undef_store_uint
+        (&(event_addr e # "Event" ->ₛ "options")) (event_options e)).
+      sep_apply_l_atomic (store_uint_undef_store_uint
+        (&(event_addr e # "Event" ->ₛ "options")) 0).
+      prop_apply_p (undef_store_int_exclusive 4 4
+        (&(event_addr e # "Event" ->ₛ "options")) ltac:(lia)).
       Intros_p Hfalse. dump_pre_spatial. contradiction.
     + cbn [DLL.dllseg event_link_node]. Intros z.
       fold (DLL.dllseg (store_event wait) z x y py (map event_link_node es)).

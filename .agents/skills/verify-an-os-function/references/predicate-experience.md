@@ -396,7 +396,7 @@
     }.
     ```
 
-    `lib/dll_abs.v` 中已有下面的节点定义，`lib/dll.v` 会导出它：
+    `lib/common/dll_abs.v` 中已有下面的节点定义，`lib/common/dll.v` 会导出它：
 
     ```coq
     Record DL_Node (A : Type) : Type := Build_DL_Node {
@@ -430,7 +430,7 @@
          end) first previous nodes.
     ```
 
-    `lib/dll.v` 的 `DLL` 模块中已有：
+    `lib/common/dll.v` 的 `DLL` 模块中已有：
 
     ```coq
     Definition dllseg {A : Type}
@@ -469,7 +469,7 @@
     设计阶段已能指出具体证明用途时即可加入，不必等到证明受阻；
     暂无用途时，不要仅因状态中存在列表或唯一性符合直觉就加入 `wf`。
 
-15. Semaphore 使用系统共享的临界区协议，直接复用 `lib/CrtosRules.v` 中的
+15. Semaphore 使用系统共享的临界区协议，直接复用 `lib/common/CrtosRules.v` 中的
     `InsideCritical(sg, st)` 和 `OutsideCritical(sg, st)`，不要另定义
     `SemaphoreInsideCritical`、`SemaphoreOutsideCritical`，也不要只为增加模块前缀
     建立同义别名或重新实例化一套 STS。
@@ -479,5 +479,75 @@
     当前验证需要，先将需要修改的状态、invariant 或临界区接口文件复制到 `trial/lib/`，
     在副本中修改，再由 semaphore 导入修改后的定义，不要为绕过这个缺口另建模块专用协议。
     按模块职责增补定义和全局组合，检查受影响的接口、审阅结论与编译结果。
-    Predicate 和 spec 均通过审阅后，按主 skill 的[审阅后自动合并库](../SKILL.md#审阅后自动合并库)
-    流程将修改及新增文件合并到共享 `lib/`，完成依赖切换与重新编译。
+    Predicate 和 spec 均通过审阅、经用户确认并 implement 到 `done` 后，
+    按主 skill 的[实现完成后自动合并库](../SKILL.md#实现完成后自动合并库)流程将修改及新增文件合并到共享 `lib/`，完成依赖切换与重新编译。
+
+16. 组合函数级抽象 `program` 时，使用 monad 顺序记法直接对应 C
+    控制流，不要手工嵌套多层 `MonadErr.bind`：
+
+    ```coq
+    result <- operation1 ;;
+    operation2 result ;;
+    if result then operation3 else return tt.
+    ```
+
+    `x <- c1 ;; c2`、`c1 ;; c2` 和 `return v` 分别对应 `bind`、忽略返回值的
+    `bind` 和 `MonadErr.ret`，改写记法不改变抽象语义。`assume!! P` 只过滤
+    不满足 `P` 的路径，不产生 `err`，不得用来隐去真实 C 路径。
+    返回类型和 `sg` 等参数仍按目标 C 语义决定，不机械照抄示例。
+
+    `MonadErr` 中的条件控制流优先复用 QCP 的 `if_else`。它已经把条件分支封装为
+    带互补 `test` 的 `choice`，不要再手工写
+    `choice (assume!! P ;; c1) (assume!! (~ P) ;; c2)`。CRTOS 的
+    `lib/common/CrtosRules.v` 为与 monad 状态无关的纯命题提供了
+    `IF P c1 c2` 记法，其定义就是 `if_else (fun _ => P) c1 c2`。例如：
+
+    ```coq
+    Definition abs_get_msgqueue_by_id (sg : StableGlobalState) (id : Z)
+        : program (VarGlobalState -> Prop) (option addr) :=
+      IF (id < 0)
+        (ret None)
+        (task_atomic_cmd (msgqueue_lookup_locked sg id)).
+    ```
+
+
+17. Predicate 的参数应当由它所描述的对象、状态关系或资源决定，不要仅因为某个
+    使用点需要一条附加条件，就把这条条件做成 predicate 的参数。增加参数前应检查：
+    去掉这个参数后，predicate 是否仍能完整、无歧义地表达原来的对象关系和资源？
+    如果可以，而该参数只用于在某些调用点打开或关闭额外约束，就没有必要把它作为
+    predicate 参数。
+
+    例如下面的 `empty` 不影响 `id`、`p` 与已发布对象之间的对应关系，也不改变
+    predicate 拥有的资源：
+
+    ```coq
+    Definition event_delete_guard (id p : Z) (empty : bool)
+        (st : VarGlobalState) : Prop :=
+      p <> 0 /\ exists e,
+        In e st.(os_events) /\ e.(event_addr) = p /\ e.(event_id) = id /\
+        (empty = true -> e.(event_pending_addrs) = nil).
+    ```
+
+    其中 `empty = false` 只是不要求 pending 为空，并不表达一个独立状态。因此
+    `empty` 没有必要成为 `event_delete_guard` 的参数。guard 可以只描述对象关联：
+
+    ```coq
+    Definition event_delete_guard (id p : Z)
+        (st : VarGlobalState) : Prop :=
+      exists e,
+        In e st.(os_events) /\ e.(event_addr) = p /\ e.(event_id) = id.
+    ```
+
+    被移出的条件按其职责放在使用处：
+
+    - 某个函数要求 pending list 为空或非空，就在该函数的 canonical spec 中直接写
+      `event_pending_at id p nil st`，或者量化 `waiting` 后写 `waiting <> nil`。
+    - `p <> 0` 表示指针 `p` 非空。指针非空条件写在 monad/program 的谓词中，
+      例如用 `assume!! (p <> 0)` 表达，不要把它作为对象 guard 的参数。
+    - 如果空或非空还必须跨环境步骤保持，就在相应 transition、临界区 contract 或
+      具名环境条件中明确写前态和后态。
+
+    这条经验不是禁止 predicate 使用布尔参数。若布尔值确实改变 predicate 所描述的
+    抽象状态、concrete shape 或资源组成，例如分别表示未初始化与已初始化内存形态，
+    它就是有语义的参数，可以保留。判断标准是参数是否属于 predicate 本身的语义，
+    而不是它能否方便某个 spec 或 proof 临时增加条件。

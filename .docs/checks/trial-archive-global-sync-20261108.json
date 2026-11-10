@@ -1,0 +1,104 @@
+{
+  "audit_date": "2026-11-09",
+  "result": "restored",
+  "root_cause": "The flat/scenarios-to-src/kernel/<module> migration deleted the old canonical paths before creating the semaphore, mutex, and event module targets.",
+  "sources": {
+    "create": {
+      "revision": "764bd5919b1b8b301de7c94755cde510bed60d9b",
+      "ref": "origin/trial-archive"
+    },
+    "delete": {
+      "revision": "9a211c61e96bfcd3ca447ecbfa4e5e7d94fe4b8e",
+      "ref": "HEAD"
+    }
+  },
+  "files": [
+    {
+      "target": "annotated_C/src/kernel/semaphore/KSemaphoreCreate.c",
+      "source": "ksemaphorecreate-trial-261022-1/annotated_C/src/KSemaphoreCreate.c",
+      "sha256": "ffb4ec343f9fbda31518f69827a757cd40c51ff19ef4f556b06f833c3fa24060"
+    },
+    {
+      "target": "annotated_C/src/kernel/semaphore/_SemaphoreCreate.c",
+      "source": "ksemaphorecreate-trial-261022-1/annotated_C/src/_SemaphoreCreate.c",
+      "sha256": "82bd562e8fc0ffb8e40947c6ca93361e7d4c5fa48ca30317d631e34ddecd777e"
+    },
+    {
+      "target": "annotated_C/src/kernel/semaphore/KSemaphoreDelete.c",
+      "source": "annotated_C/src/KSemaphoreDelete.c",
+      "sha256": "ea52a061a542e98280a5c3f2088d54d6f9cc6b3573181055ca30510c596cc264"
+    },
+    {
+      "target": "annotated_C/src/kernel/semaphore/_SemaphoreDelete.c",
+      "source": "annotated_C/src/_SemaphoreDelete.c",
+      "sha256": "b5dfa4f90871da6053fd95a7407b3479f20fd0204262c151663051e79074e820"
+    },
+    {
+      "target": "annotated_C/src/kernel/semaphore/LinklistResumeAll.c",
+      "source": "annotated_C/src/LinklistResumeAll.c",
+      "sha256": "876f37e6b9377872aba575e0564957178abbfe4da21ad7081f58ee71ebf1af42"
+    },
+    {
+      "target": "annotated_C/src/kernel/mutex/KMutexCreate.c",
+      "source": "kmutexcreate-trial-261101-1/annotated_C/src/KMutexCreate.c",
+      "sha256": "65ce09bfadbd9063e1d56f021fbbf9673c6bebcfc9023f589df357d9d70006f7"
+    },
+    {
+      "target": "annotated_C/src/kernel/mutex/_MutexCreate.c",
+      "source": "kmutexcreate-trial-261101-1/annotated_C/src/_MutexCreate.c",
+      "sha256": "eea431f60ba523604c78b8054bd3c97cc23010eb5f30bd3650710451bd3a9626"
+    },
+    {
+      "target": "annotated_C/src/kernel/mutex/KMutexDelete.c",
+      "source": "annotated_C/src/KMutexDelete.c",
+      "sha256": "84a41ac180502edff1f9903a93ead38688f803227c7b9917efce5f8eef0dfa74"
+    },
+    {
+      "target": "annotated_C/src/kernel/mutex/_MutexDelete.c",
+      "source": "annotated_C/src/_MutexDelete.c",
+      "sha256": "9bdf5568d7da549ff40b2d490adc0e109d159b505e46e6200b1e52c0ab486172"
+    },
+    {
+      "target": "annotated_C/src/kernel/mutex/LinklistResumeAll.c",
+      "source": "annotated_C/src/outside_critical/LinklistResumeAll.c",
+      "sha256": "eb13cba5b9095e2de71388b5cc55f32e020156dac4c43634bd77c733ba9c2079"
+    },
+    {
+      "target": "annotated_C/src/kernel/event/KEventCreate.c",
+      "source": "keventcreate-trial-261101-1/annotated_C/src/KEventCreate.c",
+      "sha256": "62b7c5258ecdd967a557eb8f123976749818df3faccb8d9f71998eaeb83468f0"
+    },
+    {
+      "target": "annotated_C/src/kernel/event/_EventCreate.c",
+      "source": "keventcreate-trial-261101-1/annotated_C/src/_EventCreate.c",
+      "sha256": "3ce3fd6397ee9077e5f9818bdfa659b88a39924f89f2768e56fbd716cd45b9a5"
+    },
+    {
+      "target": "annotated_C/src/kernel/event/KEventDelete.c",
+      "source": "annotated_C/scenarios/event-delete/src/KEventDelete.c",
+      "sha256": "f0d5bd6de546574a26021e030e206b4df64c9623b715b6d1fac85dcaf0b074fb"
+    },
+    {
+      "target": "annotated_C/src/kernel/event/_EventDelete.c",
+      "source": "annotated_C/scenarios/event-delete/src/_EventDelete.c",
+      "sha256": "b7fe332a95a8bcc4709b27c30fb4e41feda8ce28ad0fe98299d9f59fd3e55630"
+    },
+    {
+      "target": "annotated_C/src/kernel/event/FindEventById.c",
+      "source": "annotated_C/scenarios/event-delete/src/FindEventById.c",
+      "sha256": "e48dbae9385bfdf1a7b831cfa99cf0c970dfa6971c2b047a643fac51482e4879"
+    },
+    {
+      "target": "annotated_C/src/kernel/event/LinklistResumeAll.c",
+      "source": "annotated_C/scenarios/event-delete/src/LinklistResumeAll.c",
+      "sha256": "dd83c9fcf058bbc378583420ac88f28fbe18b40513c9960f7e684b247f55cedd"
+    }
+  ],
+  "checks": {
+    "canonical_target_count": 16,
+    "source_byte_match_count": 16,
+    "source_byte_match": true,
+    "unimplemented_r2_r3_promoted": false,
+    "rocq_files_changed": false
+  }
+}

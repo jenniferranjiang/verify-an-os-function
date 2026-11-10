@@ -11,11 +11,11 @@
  * With/Require/Ensure are unchanged. The provider proves the high-level
  * refinement; consumers import that contract without requesting it again.
  */
-/*@ Import Coq Require Import CRTOS_Verify.lib.IdModuleSpec */
+/*@ Import Coq Require Import CRTOS_Verify.lib.id.IdModuleSpec */
 /*@ Extern Coq
   (idmanager_contains : StableIdmanager -> VarIdmanager -> Z -> Z -> Prop)
 */
-/*@ Printing Coq Name idmanager_contains := CRTOS_Verify.lib.IdModuleSpec.idmanager_contains */
+/*@ Printing Coq Name idmanager_contains := CRTOS_Verify.lib.id.IdModuleSpec.idmanager_contains */
 
 /* Source: annotated_C/src/id/AllocId.c */
 int AllocId(struct IdManager *manager)
@@ -47,7 +47,7 @@ void InsertObj(struct IdManager *manager, struct IdNode *idnode)
 */;
 
 /* Source: annotated_C/src/id/RemoveObj.c */
-void RemoveObj(struct IdManager *manager, struct IdNode *idnode)
+struct IdNode *RemoveObj(struct IdManager *manager, struct IdNode *idnode)
 /*@ With (sm: StableIdmanager) (m: VarIdmanager) (id: Z)
     Require store_idmanager_remove_ready(sm, m, manager, idnode, id)
     Ensure store_idmanager_removeobj_post(sm, m, manager, idnode, id)

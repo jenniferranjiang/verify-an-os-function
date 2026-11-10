@@ -16,7 +16,7 @@ Lemma store_task_status_fold : forall p raw,
 Proof. intros; unfold store_task_status; Exists raw; entailer!. Qed.
 
 Lemma store_task_status_valid : forall p status,
-  store_task_status p status |-- “ isvalidptr_char p ”.
+  store_task_status p status |-- “ valid_object p (sizeof(CHAR)) 1 ”.
 Proof.
   intros; unfold store_task_status; Intros raw.
   prop_apply (valid_store_uchar p raw); Intros. entailer!.

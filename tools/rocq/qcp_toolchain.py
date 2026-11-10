@@ -6,7 +6,7 @@ import shlex
 import sys
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parent.parent
+ROOT = Path(os.environ.get("ROCQ_WORKSPACE", str(HERE.parent.parent))).resolve()
 
 
 def profile():

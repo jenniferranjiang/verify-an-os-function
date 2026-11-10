@@ -79,7 +79,7 @@ def prepare(trial, case, output):
     # These are preserved formal inputs, not outputs of this environment test.
     protected = {
         **copied,
-        str(ROOT / 'lib/KSemaphoreDelete.vo'): sha(ROOT / 'lib/KSemaphoreDelete.vo'),
+        str(ROOT / 'lib/semaphore/KSemaphoreDelete.vo'): sha(ROOT / 'lib/semaphore/KSemaphoreDelete.vo'),
         str(Path(cfg['qcp_root']) / 'Rocq/SeparationLogic/Mem.vo'):
             sha(Path(cfg['qcp_root']) / 'Rocq/SeparationLogic/Mem.vo'),
     }

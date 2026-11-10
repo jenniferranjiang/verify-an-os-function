@@ -1,7 +1,7 @@
 # Spec 编写指南
 
 本指南服务 `write-spec`。以当前配置下的权威源码、目标模块与依赖，以及用户批准的 `trusted` 函数为依据；涉及 lock/IRQ/atomicity 或 abstract-command 时，核对相应协议。当前 predicate revision 提供总状态、module state、局部读取/更新函数、predicate、lemma、crtOS `LastSeen`、目标函数的 atomic command 和适用的
-crtOS 临界区定义；函数的 canonical contract 写在其自身 annotated C 的函数定义上；caller
+crtOS 临界区定义；本轮实现验证函数的 canonical contract 写在其自身 annotated C 的函数定义上，导入 spec 的 canonical 依据保留在来源证明中；caller
 文件可以复制 direct-callee contract 作为 declaration-only API，但必须
 与 canonical 文件中所选的同名 spec 一致。Markdown 和手写 .v 均不得复制函数 contract 正文。Markdown 只可记录路径、symbol、C 证据、返回路径和审阅状态，不承载 spec 正文。Spec review 与 predicate review
 分开。Predicate 和 spec 草案可以共同修改；草案期间发现 predicate 缺口时直接返回 `slice-design`
@@ -18,14 +18,16 @@ QCP parser/symbolic、VC 和 proof 在用户确认 review-passed revisions 后�
 
 1. [先固定模型和函数层次](#1-先固定模型和函数层次)
 2. [确定参数和 effect](#2-确定参数和-effect)
-   - [2.2 Local/Glob 在 Spec 中的使用](#22-localglob-在-spec-中的使用)
+   - [2.1 C 形参、逻辑参数与 continuation](#21-c-形参逻辑参数与-continuation)
+   - [2.2 Stable/Mutable 在 Spec 中的使用](#22-stablemutable-在-spec-中的使用)
+   - [2.3 Local/Glob 在 Spec 中的使用](#23-localglob-在-spec-中的使用)
 3. [写每个函数的 Spec](#3-写每个函数的-spec)
    - [3.1 Spec 与注解位置](#31-spec-与注解位置)
    - [3.2 函数 Spec 的直接可审阅性](#32-函数-spec-的直接可审阅性)
    - [3.3 保持函数层次的抽象边界](#33-保持函数层次的抽象边界)
    - [3.4 Predicate 的展开、更新与恢复](#34-predicate-的展开更新与恢复)
    - [3.5 Predicate 接口不足时的处理](#35-predicate-接口不足时的处理)
-4. [临界区调用链中的函数 Spec](#4-临界区调用链中的函数-spec)
+4. [临界区内外 Spec 的判断与证明方法](#4-临界区内外-spec-的判断与证明方法)
 5. [覆盖所有结果路径](#5-覆盖所有结果路径)
 6. [Spec 审阅](#6-spec-审阅)
 
@@ -45,8 +47,8 @@ QCP parser/symbolic、VC 和 proof 在用户确认 review-passed revisions 后�
 验证闭包遵循主 `SKILL.md` 的[验证范围](../SKILL.md#验证范围)：先按当前配置和
 [源代码处理](源代码处理.md) 完成适配，再沿切片中保留的调用递归。文档明确规定且适用的
 模型/API 替换作为边界，无需重复批准，也不递归被替换部分的原始内部调用。
-从根 annotated_C 导入复用的依赖 spec 按[工程配置指南](project-configuration-guide.md#已有-spec-的复用与特化)
-记为 `reused-spec` 边界，不为该函数及其内部调用安排本轮 VC 或函数体重证；适用性和 contract 一致性仍须检查。其余非
+从根 annotated_C 或其他证明工程导入复用的依赖 spec 按[工程配置指南](project-configuration-guide.md#已有-spec-的复用与特化)
+记为 `reused-spec` 边界，只在 caller 定义前放函数声明和完整 spec，不为其新建独立 `.c` 文件，也不为该函数及其内部调用安排本轮 VC 或函数体重证；适用性和 contract 一致性仍须检查。其余非
 `trusted` 函数按本节建立 annotated C。Main agent 可以建议把复杂
 callee 作为 `trusted`，但不能代替用户决定。批准的 symbol 和 contract 记录在当前任务
 上下文或报告中，不写入本通用 guide。无法唯一解析的调用须说明位置和原因，解决前阻塞 review。dispatch 和宏
@@ -99,7 +101,29 @@ Stable/Mutable 是否拆分由当前 predicate revision 决定，在 spec 中不
 本身不提供访问权限。函数 spec 还必须表达 load 所需的前态值、store 产生的新值或结构，以及 write footprint
 之外保持不变的 frame。
 
-### 2.1 Stable/Mutable 在 Spec 中的使用
+### 2.1 C 形参、逻辑参数与 continuation
+
+`With` 量化的是规格所需的逻辑上下文，不是把 C 形参再声明一次。正式注解可以直接按 C 参数名
+引用当前函数的形参。抽象 program 和公开 predicate 中的对象标识应当与真实 C 接口一致：
+
+- 若 C 签名真实接收 `id`，例如 `GetTaskWithIdnodeInfo(int32 id)`，则 `Require`、abstract program 和
+  effect 可以直接使用这个 C 形参 `id`；不要再在 `With` 中量化一个同名 `id`。
+- 若 C 签名只接收对象指针，例如 `_MutexDelete(struct Mutex *mutex)`，则 canonical spec 和公开 abstract program
+  优先直接用 `mutex` 描述目标对象。若实现还需要对象内部 ID，应从 reviewed object/module predicate
+  与相应观察状态中取得并在 abstract program 内部传递该 witness；不要把 C 没有接收的 ID
+  写成仿佛由 caller 额外传入的公开 `With id`。若对象身份必须跨过解锁窗口保持以排除 ABA，则在入口
+  确定一次身份并始终传递同一 witness，不得在每次加锁后任意重选 ID。
+
+`With` 仍然可以量化 `sg`、前态、抽象对象值和资源内容等 ghost context；这些值必须通过
+reviewed predicate 或明确等式与 C 参数及真实内存关联，不能因为出现在 `With` 中就视为 C 输入。
+
+`safeExec(P, c, X)` 中的 `X` 是 continuation，表示抽象操作 `c` 完成后 caller 剩余的逻辑后续。对返回类型
+`A` 的 program，它的类型形如 `A -> (VarGlobalState -> Prop) -> Prop`；QCP 注解中的单独 `X` 通常由上下文
+推断这个类型。函数入口使用 `safeExec(..., operation, X)`，出口使用
+`safeExec(..., return(result), X)`，表示当前 C 函数已精化 `operation`，并将同一后续 `X` 交还 caller。
+没有 abstract command 或不使用 `safeExec` 的函数不要机械引入 `X`。
+
+### 2.2 Stable/Mutable 在 Spec 中的使用
 
 Stable/Mutable 如何划分由当前 predicate revision 决定，Spec 中不另写一套。对于初始化完成后正常运行的函数，如果状态已经拆成 `sg : StableGlobalState` 和 `st : VarGlobalState`，应在函数前后复用同一个 `sg`，用不同的 `st` 表示共享内容的变化。不要因为目标函数没有修改某个字段，就在 Spec 阶段临时把它移入 `sg`；也不要为了套用统一格式，让每个函数都同时携带 `st_bef`、`st_lock` 和 `st_aft`。只有实际执行过程确实区分函数入口、取得锁和修改完成这几个时刻，才需要这些状态参数。
 
@@ -145,7 +169,7 @@ exists st_lock,
 
 如果函数不使用锁，或者当前配置保证入口到执行期间共享状态不会被其他执行改变，就不必机械引入 `st_lock`。初始化、动态重配置或销毁重建函数可能建立或改变 Stable 部分，应按照当前 predicate revision 和函数接口单独编写 Spec。若使用一个总 state，则沿用当前 predicate revision 的更新函数或保持条件，保证固定地址和固定配置不会被普通状态更新替换。
 
-### 2.2 Local/Glob 在 Spec 中的使用
+### 2.3 Local/Glob 在 Spec 中的使用
 
 Local/Glob 是帮助组织函数 Spec 中资源位置的说明性术语，
 这里使用 Local/Glob 作为理解使用临界区相关函数 Spec 的术语，不要求项目定义名为 `Local` 或 `Glob` 的 Rocq predicate、
@@ -219,7 +243,7 @@ allocation、free 或 container membership 变化，应使用已有 object/conta
 
 ### 3.1 Spec 与注解位置
 
-每个真实 C 函数有唯一 canonical 文件和一份 active 函数体，可以包含原有具名 specs 及按 [工程配置指南](project-configuration-guide.md#已有-spec-的复用与特化)新增的特化 spec。`Require` 写调用前必须持有的具体资源和事实，`Ensure` 按真实
+本轮需要实现验证的每个 C 函数有唯一 canonical 文件和一份 active 函数体，可以包含原有具名 specs 及按 [工程配置指南](project-configuration-guide.md#已有-spec-的复用与特化)新增的特化 spec。导入 spec 的 canonical 依据保留在来源证明中，trial 只在 caller 定义前放 declaration-only spec。`Require` 写调用前必须持有的具体资源和事实，`Ensure` 按真实
 成功、失败、阻塞或早返回路径写返回值、状态变化、资源转移与 frame。外层函数证明调用
 其他函数时，只使用这些函数已经写好并最终证明的 spec，不展开它们的实现。
 
@@ -298,7 +322,71 @@ ownership view、更新后的恢复接口或创建/删除过程的中间状态�
 revision 已经 `review-passed`，将其标记为 `invalidated`，固定新 revision 并重新完成 predicate review，
 之后才能进入 spec review。
 
-## 4. 临界区调用链中的函数 Spec
+## 4. 临界区内外 Spec 的判断与证明方法
+
+### 4.1 先判断当前调用上下文
+
+普通 kernel 对外函数默认只验证临界区外（OC）入口和出口；只有当前验证目标明确要求该函数在已持锁状态下执行，或者当前调用点有实际的 Lock/Unlock 控制流证据时，才采用临界区内（IC）spec。不能仅根据函数名、所在目录或它访问共享内存就推断调用上下文。
+
+分析 callee 时，只检查当前目标函数及本轮验证闭包中的实际调用点，并沿每条到达调用点的控制流确认最近的 Lock/Unlock 状态：
+
+- 调用前尚未进入临界区，或已经 Unlock：使用 OC spec；
+- 调用前已经 Lock，且到调用点尚未 Unlock：使用 IC spec；
+- 当前闭包中的不同调用点分别处于 IC 和 OC：分别使用对应的 IC、OC spec；
+- 某条可达路径无法确定是否持锁：不能猜测，解决该控制流或协议问题后再写 spec。
+
+### 4.2 判断是否需要 high-level 与 low-level Spec
+
+这里的 high-level/low-level 是相对于 spec 推导关系而言的。Low-level spec 是已经由函数体实现证明
+支撑的通用接口；high-level spec 是当前 caller 或模块使用的具名接口，并通过
+`high_level_spec <= low_level_spec` 从前者推导。例如 `msgqueue_recv_ic <= pendlist_ic` 和
+`msgqueue_recv_oc <= outside_critical` 中，右侧是保留的 low-level spec，左侧是新增的模块
+high-level spec。
+
+调用次数不是增加 high-level spec 的依据。多个调用点使用相同临界区协议、抽象对象和资源表示时，
+应复用同一 spec。只有当前 caller 的模块对象需要把通用 callee 的参数、资源或效果具体化时，才
+保留已有 low-level spec 并新增模块 high-level spec。例如通用等待链函数以 `PendlistTarget` 描述
+效果，而当前 caller 持有 event、semaphore、mutex 或 msgqueue 的具体对象及其 pending 字段，就
+需要 high-level spec 明确具体字段地址、抽象 target、调用前资源和调用后的模块资源重组。
+
+新增 high-level spec 时，先查找同一 low-level spec、同一 IC/OC 上下文下已有的相似模块 spec，
+复用其 `With/Require/Ensure` 结构以及已有 abstract program、effect、predicate 和 lemma，只具体化
+当前模块的对象、字段地址和 target。例如消息队列接收等待链使用 `PendMsgRecv(mq)` 实例化通用
+`target`：
+
+- IC high-level spec 继续使用 `pendlist_nodes`、`linklist_resume_all_step` 等通用 predicate/effect，
+  把其中的 `target` 实例化为 `PendMsgRecv(mq)`；
+- OC high-level spec 继续使用 `safeExec`、`abs_linklist_resume_all` 和 `OutsideCritical`，写成
+  `abs_linklist_resume_all(sg, PendMsgRecv(mq))`；
+- 只因模块名称不同，不另建一套重复的 abstract program、effect 或 predicate。只有现有抽象确实
+  无法表达当前模块行为时，才返回 predicate 设计补充缺失接口。
+
+以下情况通常不需要新增 high-level spec：
+
+- 函数只操作局部变量或 caller-owned memory，不涉及临界区协议和共享模块状态；
+- caller 已经能够直接使用 low-level spec，并能用现有 predicate/lemma 建立和恢复所需资源；
+- 只是同一上下文中增加了更多调用次数，没有新的抽象 target 或 ownership 表示。
+
+只新增当前调用上下文实际需要的 high-level 接口：当前仅有 IC 调用时不必同时新增 OC high-level
+spec，反之亦然；当前闭包两种调用都有时才分别处理。若不存在适用且已经证明的 low-level spec，
+不能把 high-level spec 当作已由函数体证明，应先按真实 C 行为另行完成 low-level spec 的设计、审阅
+和实现证明。
+
+### 4.3 在 trial 中增量增加模块特化
+
+先查根 `/home/xinra/crtos/annotated_C/`。当本轮需要为 callee 增加新的 canonical 模块特化，而不是
+原样导入已有 spec 时，如果根目录中已经有该函数及适用的 IC 或 OC low-level spec，就将其 canonical
+annotated C 文件按原相对路径复制到当前 trial，保留已有函数体、low-level spec、imports 和其他具名
+high-level specs，只在 trial 副本中增量加入当前模块的 high-level spec；不得从头重写、删掉或弱化
+原有 contract。新增 high-level spec 应以 `high_level_spec <= low_level_spec` 标注推导来源，并检查
+参数对应、调用点前提、前后态效果、ownership 与 frame 的推导。
+
+当前 caller 文件仍在函数定义前声明所采用的完整 callee spec，并与 trial 中新增的同名 canonical
+high-level spec 一致。设计、审阅与 implement 均在 trial 中完成；达到主 skill 规定的合并条件后，再按
+[工程配置指南](project-configuration-guide.md#annotated-c-的增量维护)把新增特化增量合并回根
+`annotated_C/`，不以 trial 文件整体覆盖全局文件。
+
+### 4.4 临界区调用链中的五个位置
 
 对于涉及进出临界区的调用链，可以按下面五个位置理解各函数的 spec。不使用临界区的函数只采用适用的状态与抽象操作表达。
 
@@ -315,7 +403,7 @@ revision 已经 `review-passed`，将其标记为 `invalidated`，固定新 revi
 contract 丢掉未修改模块的保持或 caller-owned 资源。下面以查询接口示意外层写法，正式定义和
 返回码仍以目标项目为准。
 
-### 4.1 外层函数开始执行
+#### 4.4.1 外层函数开始执行
 
 这是外层函数 spec 的 `Require`：
 
@@ -329,9 +417,14 @@ Require
   OutsideCritical(sg, st_bef)
 ```
 
+这里的 `id` 是目标 C 函数已有的形参，所以可以直接出现在 `Require` 和
+`abs_get_task_with_idnode(sg, id)` 中；`With` 只引入 `sg`、入口状态 `st_bef` 和 continuation `X`即可。
+若函数只接收对象指针，公开 spec 应按该指针描述对象，内部 ID 的取得与身份保持按
+[第 2.1 节](#21-c-形参逻辑参数与-continuation)处理。
+
 如果该函数没有 atomic command，只保留它实际需要的 `OutsideCritical` 和 caller-owned 资源。
 
-### 4.2 调用 Lock 函数
+#### 4.4.2 调用 Lock 函数
 
 Lock 是一个独立 C 函数，有自己的 spec：
 
@@ -347,7 +440,7 @@ Ensure
     OS_inv(sg, st_lock)
 ```
 
-### 4.3 在临界区内更新
+#### 4.4.3 在临界区内更新
 
 临界区内函数入口能提供、出口能恢复 `os_inv` 时，可以在 `Require/Ensure` 中使用它；否则用局部
 predicate 描述相应资源和状态变化。例如，若 `os_inv` 要求 READY 任务位于 ready 队列，先摘链、
@@ -355,7 +448,7 @@ predicate 描述相应资源和状态变化。例如，若 `os_inv` 要求 READY
 
 不要求临界区内每条语句之后都恢复 `os_inv`，但恢复时机也不只由加锁、解锁决定：调用要求
 `os_inv` 的 callee 前和返回承诺 `os_inv` 的函数时同样必须恢复。局部展开、strategy 与更新后恢复
-的具体分工见 [第 3.4 节](#34-predicate-的展开更新与恢复)；锁操作的资源交接按第 4.2、4.4 节处理。
+的具体分工见 [第 3.4 节](#34-predicate-的展开更新与恢复)；锁操作的资源交接按第 4.4.2、4.4.4 节处理。
 
 不进行临界区资源交接的辅助函数，其 `InsideCritical` 可由 caller 通过 frame rule 保留，不必写入 spec。
 
@@ -363,7 +456,7 @@ predicate 描述相应资源和状态变化。例如，若 `os_inv` 要求 READY
 就把接口写成逐个摘链、逐步转移的递归或 `Inductive` 关系。例如唤醒整条 pending，应描述等待链
 清空、任务状态改变、延时取消、就绪队列更新及其余状态保持。
 
-### 4.4 调用 Unlock 函数
+#### 4.4.4 调用 Unlock 函数
 
 Unlock 也是一个独立 C 函数，有自己的 spec：
 
@@ -380,7 +473,7 @@ Ensure
 
 恢复中断只恢复进入临界区前保存的中断开关状态，不会把 task、scheduler 等共享状态从 `new` 改回 `old`。
 
-### 4.5 外层函数返回
+#### 4.4.5 外层函数返回
 
 这是外层函数 spec 的 `Ensure`：
 
@@ -406,14 +499,14 @@ Ensure
 操作中保持不变；应由总状态提升或适用的协议表达。Caller-owned 资源仍须显式组合和返还。
 没有 abstract-command 层的函数，则直接写其效果关系与资源变化。
 
-第 4.1 项和第 4.5 项合起来是外层函数的一个 spec；第 4.2 项是 Lock 的 spec；第 4.3 项中的每个辅助函数有自己的 spec；
-第 4.4 项是 Unlock 的 spec。
+第 4.4.1 项和第 4.4.5 项合起来是外层函数的一个 spec；第 4.4.2 项是 Lock 的 spec；第 4.4.3 项中的每个辅助函数有自己的 spec；
+第 4.4.4 项是 Unlock 的 spec。
 
 不是所有函数都有这五个位置。只按照真实源码选择实际出现的部分：
 
-- 只负责 Lock 的函数只有第 4.2 项；
-- 已经在临界区内调用的辅助函数只有第 4.3 项；
-- 只负责 Unlock 的函数只有第 4.4 项；
+- 只负责 Lock 的函数只有第 4.4.2 项；
+- 已经在临界区内调用的辅助函数只有第 4.4.3 项；
+- 只负责 Unlock 的函数只有第 4.4.4 项；
 - 自己完成 Lock、更新和 Unlock 的外层函数会经历完整流程；
 - 不使用临界区的函数不套这五步，只根据自己的参数、内存读写、atomic command 和返回值写 spec。
 
@@ -436,7 +529,7 @@ Ensure
 1. 检查验证范围。
    从适配后的目标函数重新扫描当前配置下保留的调用、dispatch 和宏处理结果。模型/API 边界核对
    《源代码处理》的适用规则、contract 及结论限制，不要求递归被替换部分的原始内部调用。
-   `reused-spec` 边界核对原 spec 的来源、revision、导入适配及 caller-local contract 一致性，不要求重证函数体。
+   `reused-spec` 边界核对原 spec 的来源、revision、导入适配及 caller-local contract 一致性；spec 应位于 caller 定义前，不为导入函数新建独立文件，不要求重证函数体。
    对其余未被用户批准为 `trusted` 的可达函数，`annotated_C/src/` 中必须有且只有一个以该函数命名的 `.c` 文件；
    该文件包含该函数的一份真实完整定义和 canonical `With/Require/Ensure`。
    除文档规定且适用的适配外，切片提取和调用归一不能改变原 C 的控制流、返回值或副作用；
@@ -455,8 +548,8 @@ Ensure
    所有 spec 固定使用同一个 review-passed predicate revision。
 
 3. 检查产物完整性。
-   Rocq predicate 文件必须能够 compile/typecheck。Annotated C 必须完成验证范围、一函数一文件、真实
-   函数体、callee spec 一致性和源码等价性检查。本阶段不运行 QCP parser/symbolic 或 closure script，
+   Rocq predicate 文件必须能够 compile/typecheck。Annotated C 必须完成验证范围、callee spec 一致性和源码等价性检查；一函数一文件与真实
+   函数体检查仅适用于本轮实现验证目标，导入 spec 按 `reused-spec` 边界检查。本阶段不运行 QCP parser/symbolic 或 closure script，
    不生成 VC，也不开始 proof。
 
 4. 给出审阅结论。

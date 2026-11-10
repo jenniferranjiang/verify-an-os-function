@@ -1,128 +1,52 @@
 # CRTOS 共享验证库
 
-共享库统一使用 `CRTOS_Verify.lib` 逻辑路径，由根 `_CoqProject` 管理。
-当前内存模型为 `Arch32 LittleEndian`；各 trial 分别记录其源码配置及 ABI 适配范围。
-新 trial 显式导入共享库，函数专用定义使用自己的逻辑路径。
+共享库使用 `CRTOS_Verify.lib` 逻辑路径，由根目录 `_CoqProject` 管理。
+全局 `.v` 按职责放在 `common/` 或对应模块目录，`lib/` 根目录不保存
+`.v`。
 
-2026-11-01 按用户要求移除全局 event/msgqueue 模型，待其专门验证时重新设计。
-随后 KEventCreate 新实验重新设计并接入 event；msgqueue 仍不在当前全局状态与不变量中。历史 trial 保持原样。
-范围及编译记录见 [全局库清理记录](../.docs/Report/2026-11-01-global-lib-prune.md)。
+## 当前范围
 
-## Semaphore
+本分支移除了 task、assign、delay 子系统及其全局 predicate。全局状态只组合：
 
-| 文件 | 职责 |
-| --- | --- |
-| `SemaphoreState.v` | 对象地址、ID、计数、等待任务地址序列；稳定管理器配置及纯状态更新 |
-| `SemaphoreInv.v` | 对象各生命周期的内存所有权、模块不变量、字段偏移假设，以及资源拆分、失败回收、零字节到字段转换引理 |
-| `KSemaphoreCreate.v` | 创建函数的抽象操作；不是 C 实现证明文件 |
-| `SemaphoreOps.v` | 非负 ID 的 uint16 查询归一、等待序列更新及对象注销 |
-| `KSemaphoreDelete.v` | 删除与批量唤醒的整体前后关系、循环逐步关系及连接义务、锁外回收对象表示 |
-| `KTaskWakeup.v` | VRTOS 唤醒与来源摘链关系、RRR 就绪插入、延时取消；保留批量更新及局部 view，公开 Wakeup 规格借还 `os_inv` |
-| `RemoveFound.v` | VRTOS 的按完整元素摘除关系及原有证明 |
-| `ServiceSlotWf.v` | recycler/idle 服务任务的登记、NULL Delay 与自持关系 |
-| `IdModuleSpec.v` | 同步 ID 模块公开契约所需的查询成员关系 |
-| `KTaskUnSetDelay.v` | NULL、inactive、active 延时对象的调用者局部视图 |
-| `DoubleLinkListSpec.v` | 链表插入纯序列语义及哨兵处头插引理 |
-| `idnode.v` | ID 管理器内存表示，以及最小空闲 ID、容量满等引理（`IDNode` 模块） |
+- event、mutex、semaphore 的纯状态与对象内存表示；
+- ISR 状态与内存表示；
+- 通用 ID manager 与双向链表；
+- 非任务专用的对象创建抽象关系。
 
-`CrtosGlobState.v` 组合 semaphore 与其他模块的状态；其他模块的更新保留
-semaphore 分量。`CrtosRules.v` 提供统一的临界区协议和小端内存模型。
-`CrtosInv.v` 组合模块内存，并把信号量等待节点纳入全局唯一所有权约束。
+`os_inv` 不再拥有 task descriptor、调度队列、delay、tick、zombie、service
+slot 或 exstatus。同步对象等待链仍保留地址序列与链表所有权，但其节点 payload
+使用 `empty_wait_payload`，不再连接任何 task predicate。
 
-2026-10-25 删除设计修正了等待节点的真实嵌套字段地址，并在 `TaskInv.v`
-补充 SUSPEND 任务的 bitmap 一致性。当前删除输入使用非 SMP、32 位验证适配，
-调度按《源代码处理》的模型边界处理；设计审阅通过不等于实现证明完成。
-revision、共享迁移及检查结果见
-[删除设计记录](https://github.com/jenniferranjiang/verify-an-os-function/blob/f96dd2e20249ed8f55d8a33097de411a97aab9ab/ksemaphoredelete-trial-261025-1/.docs/Report/status.md)。
+## 保留的底层模块
 
-新 trial 可按需要导入，例如：
+- `common/dll_abs.v`、`common/dll.v`
+- `list/NodeSelfLinked.v`、`list/DoubleLinkListSpec.v`
+- `id/idnode_abs.v`、`id/idnode.v`、`id/IdModuleSpec.v`
+- `common/StructFieldOffsetAxiom.v`
+- `common/ObjectWaitNode.v`（仅计算同步对象等待链的嵌入节点地址，不拥有
+  descriptor，也不定义 task state/predicate）
+- `common/RemoveFound.v`
 
-```coq
-Require Import CRTOS_Verify.lib.CrtosInv.
-Require Import CRTOS_Verify.lib.DoubleLinkListSpec.
-Import IDNode.
-```
+这些模块仍在根构建清单中，避免因清理 task 子系统而误删纯链表或 ID 基础设施。
 
-`CrtosInv` 导出 `SemaphoreInv`，其中包含初始化和资源转换引理；其他 semaphore
-函数无需为使用模块状态而导入 `KSemaphoreCreate`。ID 与链表通用引理放在各自模块，
-不再单设 `SemaphoreOwnership`、`SemaphoreByteLayout` 或 `SemaphoreSpecBridge` 文件。
+## Annotated C
 
-## 构建与验证边界
+`annotated_C/src/kernel/task`、`assign`、`delay` 以及对应 task 专用头文件已
+移除。原 event/mutex/semaphore annotated C 会直接展开 task invariant 或调用
+task wakeup，因此也从本分支清理；保留 `kernel/list`、`kernel/id` 与其通用
+头文件。
 
-在项目根目录运行：
+## 构建
 
 ```sh
 make -f Makefile.coq -j2 COQBIN=/home/xinra/.opam/pv-bench-8.20.1/bin/
 ```
 
-根 `.vscode/settings.json` 使用同一套共享库映射；查看历史创建实验时，可打开
-该实验自己的 `KSemaphoreCreate.code-workspace`。
+该构建只检查保留的共享 Rocq 库，不代表任何 C 实现已经完成验证。
 
-库的编译检查不等于 C 实现已验证。当前创建函数的模块化证明及 helper contract
-边界仍见[归档 trial 的状态记录](https://github.com/jenniferranjiang/verify-an-os-function/blob/8d5877b8d9b27bfc51744723b357876b9a8eacda/ksemaphorecreate-trial-261022-1/checks/status.json)；该 trial 保存在统一归档分支。
-共享库保留既有 ABI 信任假设，不将其标为已证明结论。
+## 完整任务模型恢复（2026-11-10）
 
-迁移范围、编译证据和复用限制见
-[共享化记录](../.docs/Report/design-changes/2026-10-22-1-semaphore-shared.md)；
-最新文件组织和编译结果见
-[合并记录](../.docs/Report/2026-10-22-semaphore-lib-consolidation.md)。
-
-2026-10-28 已同步 VRTOS `bc601a1` 的导入定义和调用规格。保留小端及本地信号量表示；
-共享库构建和接口检查通过，未迁移上游实现证明。见
-[VRTOS 同步记录](https://github.com/jenniferranjiang/verify-an-os-function/blob/f96dd2e20249ed8f55d8a33097de411a97aab9ab/ksemaphoredelete-trial-261025-1/.docs/Report/2026-10-28-vrtos-sync.md)。
-
-## Mutex 创建（2026-11-01）
-
-| 文件 | 职责 |
-| --- | --- |
-| `MutexState.v` | 完整对象字段、等待地址序列、固定配置与派生 ID 管理状态 |
-| `MutexInv.v` | 36 字节对象、模块所有权、静态初始化资源与明确待证的字节转换义务 |
-| `MutexOps.v` | 唤醒时摘除 mutex 等待者并保留其余字段的纯关系 |
-| `KMutexCreate.v` | 创建的失败/成功抽象操作；不是 C 实现证明 |
-
-`CrtosGlobState.v`、`CrtosInv.v` 和 `KTaskWakeup.v` 已接入 mutex 分量及其 frame。
-移除 event/msgqueue 之前，`KMutexCreate` / `_MutexCreate` 实现证明均已通过 controller final-check（done）。该历史结论对应当时的全局库版本；当前全局库已经改变，不能直接沿用该完成状态。原证明保存在 trial/VC，记录见
-[KMutexCreate 实验状态](../kmutexcreate-trial-261101-1/.docs/Report/status.md)。
-[源码缺陷报告](../kmutexcreate-trial-261101-1/.docs/Report/source-errors.md)
-记录其他 mutex API 的七项问题；其中删除竞争可能破坏真实共享堆。
-因此创建函数的模块化证明不表示整个 mutex 模块或任意并发调用环境保持系统不变量。
-
-## Event 创建设计（2026-11-01）
-
-`keventcreate-trial-261101-1` 的 predicate 与完整10-symbol调用闭包 spec
-均独立 **review-passed**。后续Process延时失败修复按用户要求仅保存在trial候选中，权威源码已恢复；候选16个主机场景通过且经独立增量复查；Create正文和formal revision未变。用户随后批准implement，KEventCreate与_EventCreate均已通过controller final-check并返回done。结论限定于报告记录的信任边界及运行范围；_EventProcess的trial候选不属于本轮证明目标。
-
-| 文件 | 职责 |
-| --- | --- |
-| `EventState.v` | 对象地址、ID、options低3位、events低29位、等待任务序列及派生ID管理状态 |
-| `EventInv.v` | 私有/清零/发布对象的完整资源、模型布局条件、初始化与字节转换待证义务 |
-| `EventOps.v` | 唤醒时只摘除事件等待者，保持其他字段 |
-| `KEventCreate.v` | 创建抽象操作、其他模块frame、发布恢复的类型化待证义务 |
-
-`CrtosGlobState`、`CrtosInv`、`KTaskWakeup` 已接入event状态、等待节点及frame。
-权威32位位域对象为32字节；按TrustBase展开位域后的验证模型为36字节，
-切片显式保留options截断。布局检查不等于C实现证明。
-
-审阅revision、共享迁移和根库编译证据见
-[Event实验状态](../keventcreate-trial-261101-1/.docs/Report/status.md)。
-[源码问题](../keventcreate-trial-261101-1/.docs/Report/source-errors.md)
-涉及创建闭包之外的Process无效ID、等待选项及查找后生命周期风险。
-新全局状态版本不自动继承历史trial的C证明结论；本次只重编译受影响共享库。
-
-`EventLayoutABI.v` 在实现阶段补齐已检查36字节Event模型的两条可信布局事实：`event_size_axiom`、`event_top_level_field_offset_axiom`。它们沿用TrustBase的结构体布局/位域适配，不证明内存所有权或字节转换；原始位域ABI仍为32字节。见[布局适配审阅](../keventcreate-trial-261101-1/.docs/Report/event-layout-review.md)。
-
-## Mutex 删除的条件化设计（2026-11-03）
-
-`KMutexDelete.v` 提供原三段临界区的删除操作、等待队列批量唤醒、完整退休对象和类型化待证资源桥。Predicate 与12-symbol闭包spec均已独立review-passed，尚未做C实现证明。结论只适用于用户批准的A1（查询命中的同一分配对象直到本次注销不被他人删除/回收/复用）及A2（排空到注销无新waiter）；源码两个窗口没有修复。具名mutex_live/mutex_drained锁合同只用于该受限调用链，不能当作无条件通用锁接口。
-
-规格入口为 `annotated_C/src/KMutexDelete.c`、`_MutexDelete.c`；Mutex的锁外 `LinklistResumeAll` 位于 `annotated_C/src/outside_critical/LinklistResumeAll.c`。原锁内Semaphore版本保持不变，两个同名切片按调用场景独立使用，不一起链接。独立types/logic头只提供ABI与语义词汇，不集中放函数规格。
-
-审阅版本、用户假设与共享迁移见 [KMutexDelete 实验记录](../kmutexdelete-trial-261103-1/.docs/Report/status.md)。这些设计定义不改变此前其他模块的语义或证明状态。
-
-## Event 删除的条件化设计（2026-11-03）
-
-`keventdelete-predicate-r1` 与完整15-symbol闭包的 `keventdelete-spec-r1` 均独立 **review-passed**。公开规格限制 `0 <= id < 65536`，保持原int32 C接口；128..65535允许查找未命中后返回。用户另批准D1（命中的同一分配对象到本次注销不被他人回收/复用）和D2（观察/清空pending后到注销仍为空）的环境条件。原源码未修复，具名 `event_delete_gap` Lock合同仅适用于该受限调用链，不是普通锁的无条件保证。
-
-`EventInv.v`增补完整退休对象，`EventOps.v`增补pending更新和注销；`KEventDelete.v`描述原始多段临界区、批量唤醒、查空/查非空路径与类型化待证资源桥。没有改变已有定义或全局协议的含义。共享编译和接口检查不是C实现证明。
-
-完整新场景输入位于 `annotated_C/scenarios/event-delete/`，包括4个active目标和11个模型/复用边界。Event的锁外ResumeAll与既有Semaphore锁内、Mutex锁外场景分开保存，不共同链接；原场景保持不变。版本、用户批准、审阅和合并检查见 [KEventDelete实验记录](../keventdelete-trial-261103-1/.docs/Report/status.md)。
+根 `lib/*.v` 恢复完整 task/assign/delay 状态与不变量，使用原有
+`CRTOS_Verify.lib.*` 路径，供 mutex deletion trial 直接导入。
+此前裁剪后的 `common/` 等目录保持独立的模块路径；两套全局状态不能混用。
+来源、QCP 依赖与本次未完成编译验证的说明见 `TASK_MODEL.md`。

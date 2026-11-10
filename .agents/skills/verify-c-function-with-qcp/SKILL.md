@@ -84,6 +84,7 @@ Predicate 只有在以下条件成立时才 review-ready：模块范围与配置
 - 闭包内每个非 trusted 函数 f 必须且只能有一个 canonical annotated C 文件，其中有一份真实 active body 和完整 With/Require/Ensure。
 - f 调用 g 时，在 f 定义前写 g 的完整 declaration-only API spec，不复制 g 函数体；caller-local contract 必须与 canonical spec alpha/typedef 等价。
 - 不得用裸 C prototype、implementation-pending 或模块级 specs header 替代 callee spec。
+- ABI 类型、结构体布局、宏和全局声明优先复用项目既有的稳定模块 header；可以在其中新增内容；新增函数不默认创建函数专用 types header。
 - Canonical contract 直接表达各真实返回/阻塞路径、abstract effect、old/new、ownership transfer 和 frame。裸 store 通常留在 representation predicate 或函数体局部展开中，不沿调用链泄漏实现字段。
 - 不得用含糊的 pre/post/spec helper 隐藏入口资源、成功/失败路径或出口效果。
 - 切片可作有源码/config 依据的等价归一，但不得改算法、路径、返回值、ABI 布局或副作用；每项可执行归一都要记录并审阅。
@@ -125,6 +126,7 @@ Parser/symbolic 若暴露问题，先按 [验证记录指南](references/reporti
 
 - 工作区路径和子目录由目标项目配置决定；不覆盖现有内容，不把 trial 放入权威源码子树。
 - 维护项目的 _CoqProject 或等价配置，使 library mapping、Makefile、QCP 命令和 Require 一致；任何逻辑路径变化都要同步并重编译受影响文件。
+- 移动或导入 annotated C 时同时固定其 header closure、include search path 和预处理配置；源文件逐字相同但相对 include 语义变化时，不得声称验证输入保持不变。
 - 写新 predicate、lemma、strategy 或 assertion 前，先用 rg 搜索 QCP 库和项目已有定义；不猜测 QCP 语法。
 - 复用跨模块定义前检查其内容。若有疑点，在任务回复和对应设计/review 记录标记 [OPEN]；未经授权不修改共享定义，影响正确性的问题解决前不得 review-passed。
 - 可复用的 skill 变化先记录触发问题、方法、适用边界和验证证据，经独立检查和用户批准后再吸收到主干。

@@ -16,15 +16,28 @@ Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。
 ```text
 确认验证上下文 -> C 分析 -> predicate 与 spec 草案迭代
              -> predicate review-passed -> spec review-passed
-             -> 自动合并 trial 库及复用 spec 的增量修改到全局目录并完成一致性检查
              -> 用户确认两份 revision
              -> QCP verification-orchestrator implement（含 final-check）
+             -> implement done 后自动合并 trial 库及复用 spec 的增量修改到全局目录并完成一致性检查
              -> 最终完整性审阅与结果汇总
 ```
 
 ## 通用验证约束
 
 设计阶段可以先写引理陈述，不要求立即完成证明；未证明的内容必须明确为待证义务，不能当作已证明结论使用。不得用 `Parameter`、`Axiom`、占位定义或手写 `Admitted/admit` 绕过证明。
+
+### 临时产物与保留边界
+
+`trial/.docs/Report/` 只保存人工可读的当前设计、审阅、错误和最终完整性记录。不把完整 formal source、控制器每步返回、编译目录或多份状态摘要复制进报告目录。
+
+验证中仍在使用的 QCP `reports/`、`verification_runs/` 和正式 `VC/` 由 verification-orchestrator 管理，main agent 不自行整理、改写或提前删除。需要暂存的编译输出、对比快照、一次性脚本和工具日志放入为当前任务新建的 `/tmp/crtos-verify-<trial>-<purpose>-XXXXXX/`；不用仓库 `.docs/` 充当工作区或备份目录。
+
+一个阶段结束时执行一次收尾：
+
+- 保留当前 formal 输入与证明、当前 revision/manifest、有效的 review 结论、必要的源码对应与信任假设，以及 `done` 后的 final-check/最终完整性摘要。
+- 删除可重建的 `.vo/.vos/.vok/.glob/.*.aux`、tactic cache、重复 VC 副本、已被后续成功尝试取代的工作区，以及人工另存的 claim/finalize/step 回执副本。
+- 任务中的 `/tmp` 备份只保留到目标写入、比较和必要检查成功；对应阶段结束后立即删除。不删除编辑器、Codex 或其他任务拥有的临时目录。
+- 清理前确认目标没有被运行中的进程使用，且所依赖的最终摘要已存在。清理后检查报告链接、当前 revision 和正式构建输入未被损坏。
 
 ## 确认验证上下文
 
@@ -54,41 +67,44 @@ owned memory、mutable fields、lifecycle states 和 unchanged resources。隐�
 
 开始设计前先读取 CRTOS 全局库 `/home/xinra/crtos/lib`。已有定义直接导入复用，不重复定义。当前工程 annotated C、QCP 库及 crtosverify、LOSVerify、VRTOS 的证明参考位置见 [库与证明参考](#库与证明参考)。
 
-新增定义放入职责对应的模块文件，使用处通过 `Require Import` 引用；需要向下游公开的接口使用 `Require Export`。已有模块增加元素或操作时，在该模块中增量补充；新增模块时，由全局状态或系统不变量导入并增加必要的组合项，不复制整套共享定义。
+全局库文件组织:共享 predicate/invariant 接口、全局组合、协议和通用引理放在 `lib/common/`，模块的状态操作、函数抽象及证明分解放在 `lib/<module>/`。Trial 中所有本地库文件统一平铺在 `trial/lib/`，只记录其全局来源或目标路径，不建模块子目录。使用处通过 `Require Import` 引用；需要向下游公开的接口使用 `Require Export`。
 
 已有共享库允许按源码和验证需求增补或修改；无需修改的定义直接导入，需要修改的文件在 trial 副本中处理。修改范围、依赖调整与审阅要求统一按 [工程配置指南](references/project-configuration-guide.md#已有共享库的复用与修改)执行。
 
 ### 文件组织与存放
 
-`trial/lib/` 只保存本次需要修改的全局库文件副本及新增库文件。如果当前实验使用的其他库文件必须修改 import、类型或接口，才能引用 trial 中的新定义，也将这些文件复制到 trial 后修改；无需改动的库文件继续直接引用全局版本。模块职责通过文件划分，依赖通过 imports 和构建配置管理，确保本次构建使用一致的定义版本。
+`trial/lib/` 只保存本次需要修改的全局库文件副本及新增库文件，所有 `.v` 都直接放在该目录下。复制已有文件时记录全局来源和基线；新增文件时记录 implement 完成后的目标全局路径。无需改动的库文件继续直接引用全局版本。
 
-参考 LiteOS 验证工程 `/home/xinra/LOS_Verify/lib/` 的职责分层：
-`glob_vars_and_defs.v` 保存稳定全局变量及公共基础定义，`Los_Verify_State_def.v`
-定义抽象状态，`sem.v`、`task.v` 等提供模块内存表示，`Los_Verify_inv.v`
-导入各模块并组合系统不变量。参考其职责与依赖关系，不机械复制文件名或全部布局；
-其中的内容不因此自动成为已验证或可直接复用的结论。
+全局库使用下列结构：
 
-CRTOS 按全局、模块、函数三个层次说明文件职责：
+```text
+lib/
+├── common/                 # 共享 invariant/predicate 接口、系统组合、协议和通用引理
+│   ├── <Module>Inv.v
+│   └── CrtosInv.v
+├── <module>/               # 模块状态操作、函数抽象与证明分解
+│   ├── <Module>State.v
+│   ├── <Module>Ops.v
+│   └── K<Function>.v       # 函数专用抽象操作、program、引理或 proof support
+└── index.md
+```
 
-- **全局状态**：例如 `CrtosGlobState.v`，导入各模块状态并组合成 `StableGlobalState`、`VarGlobalState`，保留确实作用于整个 OS 状态的操作和上下文关系。
-- **系统协议**：保留独立的 `CrtosRules.v`，基于全局状态定义统一的 critical/IRQ 状态机、断言模型及进入和退出临界区等协议接口，供各模块共同使用；不在各模块中重复实例化协议。
-- **系统不变量**：例如 `CrtosInv.v`，导入模块内存表示，组合系统内存不变量并表达跨模块关联，具体模块的 store 谓词由模块文件提供。
-- **模块定义**：各模块分别维护自己的抽象类型、状态、稳定地址或配置，以及局部操作。例如信号量的 `SemaphoreAbs`、`SemaphoreState`、`SemaphoreStable` 归信号量模块，不集中堆入全局状态文件。
-- **模块内存表示**：例如 `semaphore.v`，使用该模块的抽象定义，提供其对应 C 内存的 store 谓词、局部不变量及相关引理，供模块各函数和系统不变量复用。模块定义和内存表示属于同一模块，可按依赖需要合并或分文件。
-- **函数文件**：验证具体函数时，可以按函数单独建立 `.v` 文件，例如 `KSemaphoreCreate.v`，放该函数的 `abs_*` 操作、`program`、操作组合及专用辅助定义等函数特有内容，引用模块和系统共享定义，不复制公共内容。函数的 QCP `With/Require/Ensure` 仍写在 annotated C 中。
+具体职责如下：
 
-文件拆分以实际依赖关系为依据。例如模块内存谓词依赖全局协议，而全局协议依赖
-OS 总状态时，将模块纯状态放在不依赖全局协议的 `semaphore_def.v` 等下层文件中，
-供全局状态和模块内存表示共同import。上述名称仅作示例；是否单设
-`glob_vars_and_defs.v` 取决于稳定全局上下文或公共基础定义是否需要独立的依赖层。
+- **`common/`**：放全局状态与系统不变量组合、统一 critical/IRQ 协议、通用内存/布局基础、共享 predicate/invariant 接口和跨模块引理。沿用 VRTOS 布局，`EventInv.v`、`MutexInv.v`、`SemaphoreInv.v`、`TaskInv.v` 等模块内存 invariant 仍放在 `common/`。
+- **`<module>/`**：放该模块的状态操作、函数抽象 program、专用引理和实现证明分解。例如 `semaphore/SemaphoreState.v`、`semaphore/SemaphoreOps.v`、`semaphore/KSemaphoreCreate.v`。
+- **分层优先**：是否放入 `common/` 取决于它是否属于共享 invariant/predicate 接口层，不只看文件名或引用次数。id、list 等具有独立概念和接口的子系统仍使用 `id/`、`list/` 等独立目录。
+- **根目录限制**：`lib/` 根目录不再新增 `.v` 文件。本轮涉及的旧根目录文件须迁入所属模块或 `common/`，同步修改 imports、`_CoqProject`、Makefile、QCP 与编辑器路径；不为了当前任务批量搬迁未触及的历史文件。
 
-### 审阅后自动合并库
+文件拆分以实际职责和依赖关系为依据，不要求每个模块必须机械拥有 `State/Inv/Ops` 三个文件。系统组合文件导入各模块接口，模块文件不复制全局状态或系统协议。函数的 QCP `With/Require/Ensure` 仍写在 annotated C 中，不因 Rocq 目录分组而改变。详细路径、逻辑名和迁移检查见 [工程配置指南](references/project-configuration-guide.md#全局-lib-目录结构)。
 
-在完整验证流程中，predicate 和 spec 均达到 `review-passed` 后，main agent 必须主动将本次修改及新增的库文件合并到全局 `lib/`，包括模块文件和函数专用文件，不要求已被多个 trial 使用。无需另行请求共享库更新确认，也不等到实现证明结束才合并。审阅结束但未通过时不得合并。用户仅要求只读 review 时仍遵守该范围。
+### 实现完成后自动合并库
+
+在完整验证流程中，只有用户已确认 `review-passed` 的 predicate/spec revisions，且 QCP verification-orchestrator 已对它们完成 implement、controller 返回 `done`（含 `final-check`）后，main agent 才必须主动将本次修改及新增的库文件按已记录的目标路径合并到全局 `lib/<module>/` 或 `lib/common/`，包括模块文件和函数专用文件，不要求已被多个 trial 使用。无需另行请求共享库更新确认。仅审阅通过、implement 未到 `done` 或用户仅要求只读 review 时都不得合并。
 
 按复制时的基线、trial 修改版及全局最新版本合并已有文件，保留其他工作；必要的新增依赖一并纳入全局库，全局库不得依赖 trial 文件或专属路径。按 [工程配置指南](references/project-configuration-guide.md#共享库的增量维护)更新 imports、索引、全局组合和相关配置，将当前 trial 对已合并定义的引用切回全局库。审阅留存副本不再参与构建。
 
-使用根项目配置重新编译新增、修改的库文件及受影响的依赖者，并检查当前 trial 的引用与类型一致性；不得用 trial 的旧编译产物充当检查结果。检查通过后才报告合并完成。纯路径迁移且不改变已审阅语义时记录迁移对应关系即可；若合并必须改变定义含义或接口，说明原因和影响，更新受影响的构造、操作、规格与证明，并重新审阅受影响部分。进入实现证明前的 predicate/spec revision 确认要求仍按总流程执行。
+使用根项目配置重新编译新增、修改的库文件及受影响的依赖者，并检查当前 trial 的引用与类型一致性；不得用 trial 的旧编译产物充当检查结果。检查通过后才报告合并完成。纯路径迁移且不改变已实现证明的语义时记录迁移对应关系即可；若合并冲突迫使定义含义或接口发生变化，不得直接写入全局库：先在 trial 中说明原因和影响，更新受影响的构造、操作、规格与证明，重新审阅并经用户确认后，再次 implement 到 `done`，然后合并。
 
 
 ### 定义注释与文件顺序
@@ -116,15 +132,20 @@ Predicate 设计记录按 [验证记录指南](references/reporting-guide.md)编
 一函数一文件切片**。先按当前配置和 [源代码处理](references/源代码处理.md) 完成源码适配，
 再从目标函数沿适配后切片中的直接调用、已解析的 function pointer/done-table dispatch 和宏展开后的调用
 确定验证闭包。以文档规定的模型或 API contract 为边界，不再递归其原始内部调用。
-从根 `annotated_C/` 导入复用的依赖 spec 按下节作为 `reused-spec` 边界，不递归其内部调用安排实现证明。
+从根 `annotated_C/` 或其他证明工程导入复用的依赖 spec 按下节作为 `reused-spec` 边界，不递归其内部调用安排实现证明。
 其余调用递归至函数叶子或用户批准的 `trusted` 函数。Main agent 可以建议将复杂函数排除出
 验证闭包，但不得代替用户决定。无法唯一解析的调用须说明调用位置和无法确定目标的原因，解决前阻塞 review。
 
 ### 已有 spec 复用与文件组织
 
-写 spec 时先查 `/home/xinra/crtos/annotated_C/`，已有 spec 应导入 trial 并完成保持原语义的适配。复用、修改、场景特化及审阅后合并统一按 [工程配置指南](references/project-configuration-guide.md#annotated-c-的增量维护)执行。
+全局 annotated C 只维护 `annotated_C/src/` 中的 canonical 输入：通用 kernel helper 放在 `src/kernel/common/`，模块函数放在 `src/kernel/<module>/`，架构和临界区外实现保留各自子目录。不新建全局 `scenarios/`；场景特化写成 canonical 文件中的具名 spec。`gen/` 和 `dep/` 只是可重生成的临时产物，不作为全局维护或合并目标。Trial 的实现验证闭包仍平铺在 `trial/annotated_C/src/`，每个本地文件记录全局来源或 implement 完成后的目标 `src/` 路径。
 
-从该目录导入复用已有 spec 的依赖函数，本轮不生成其实现的 VC，也不重新证明函数体；记录为 `reused-spec` 边界并检查适用性及接口一致性。具体范围与新增、修改规格的处理见 [已有 spec 的复用与特化](references/project-configuration-guide.md#已有-spec-的复用与特化)。
+写 spec 时先查 `/home/xinra/crtos/annotated_C/`，已有 spec 应导入 trial 并完成保持原语义的适配。复用、修改、场景特化及实现完成后合并统一按 [工程配置指南](references/project-configuration-guide.md#annotated-c-的增量维护)执行。
+
+从该目录或其他证明工程导入复用已有 spec 的依赖函数，本轮不生成其实现的 VC，也不重新证明函数体；记录为 `reused-spec` 边界并检查适用性及接口一致性。具体范围与新增、修改规格的处理见 [已有 spec 的复用与特化](references/project-configuration-guide.md#已有-spec-的复用与特化)。
+
+- 导入的 spec 直接以函数声明及完整 `With/Require/Ensure` 写在使用它的 `f.c` 中、`f` 的定义前，并标明来源和 revision；不为导入的 `g` 新建 `annotated_C/src/g.c`，也不复制其函数体。多个 caller 使用时分别放置所需 spec，并核对它们与同一来源版本一致。
+- 只有本轮新写 spec、需要实现验证的函数才新建独立函数文件；已有本轮目标文件就在原文件中修改。对导入 spec 的等价适配不算新写，不触发建文件。
 
 - 闭包中保留实现验证的每个非 `trusted` 函数 `f` 必须且只能有一个 `annotated_C/src/f.c`，其中包含 `f` 的一个真实
   active 定义、完整函数体和 canonical `With/Require/Ensure`；declaration-only 文件不合格。
@@ -216,7 +237,7 @@ main agent 不再定义第二套步骤或返回状态。具体调用边界见
 
 具体检查按目标代码及设计选择适用项，不要求逐项写报告；适用的编译、类型或证明检查须通过，影响正确性的未解决问题仍阻塞审阅通过。
 
-Spec 审阅使用明确的、已通过审阅的 predicate 版本。在完整验证流程中，两者分别 `review-passed` 后，main agent 先按[审阅后自动合并库](#审阅后自动合并库)完成合并与依赖检查，再请用户确认两份明确版本及其迁移对应关系；确认前不得启动 QCP verification-orchestrator。库编译与引用、类型检查不替代后续实现证明，也不提前运行 QCP symbolic 或生成 VC。
+Spec 审阅使用明确的、已通过审阅的 predicate 版本。在完整验证流程中，两者分别 `review-passed` 后，main agent 先请用户确认两份明确 revisions；确认前不得启动 QCP verification-orchestrator。确认后执行 implement，只有 controller 返回 `done`（含 `final-check`）后，才按[实现完成后自动合并库](#实现完成后自动合并库)完成全局合并、依赖检查与版本对应记录，再进入最终完整性审阅。
 
 ### 审阅与复查
 
@@ -246,8 +267,8 @@ Predicate/spec 草案（`draft`）可以共同修改，不做中间审阅。满�
 
 | 来源 | 位置 | 用途 |
 |---|---|---|
-| [CRTOS 全局库](/home/xinra/crtos/) | `lib/` | 复用模块定义、predicate<br>和已证明引理。 |
-| [CRTOS annotated C](/home/xinra/crtos/) | `annotated_C/` | 查找函数 spec、注解、断言<br>和 strategy 用法。 |
+| [CRTOS 全局库](/home/xinra/crtos/) | `lib/<module>/`、`lib/common/` | 复用模块定义、predicate<br>和已证明引理。 |
+| [CRTOS annotated C](/home/xinra/crtos/) | `annotated_C/src/kernel/<module>/`、<br>`annotated_C/src/kernel/common/` | 查找函数 spec、注解、断言<br>和 strategy 用法。 |
 | [当前 trial](/home/xinra/crtos/) | `<trial>/annotated_C/` | 参考当前函数及依赖函数的<br>切片、spec 和局部断言。 |
 | [QCP 基础库](/home/xinra/qcp-binary-democases/SeparationLogic/) | `SeparationLogic/`、`MonadLib/`<br>`StrategyLib/`、`auxlibs/` 等 | 复用分离逻辑、抽象 program、<br>strategy、tactic 及通用引理。 |
 | [QCP 示例](/home/xinra/qcp-binary-democases/SeparationLogic/) | `examples/` 及 QCP 项目教程 | 参考注解、assertion、<br>`which implies` 和证明写法。 |
@@ -259,5 +280,5 @@ Predicate/spec 草案（`draft`）可以共同修改，不做中间审阅。满�
 
 上述“复用”指使用适合当前目标的可使用实际定义或已证明结论；作为证明依据时确认其证明状态、依赖假设和当前工程兼容性。“参考”允许借鉴设计和证明方法，不表示整个目录已经可信，也不替代用户对具体 `trusted` C symbol 的批准。
 
-涉及跨模块调用时必须复用共享 `lib/` 中的已有定义，不得重复增加已有概念。若现有接口缺少所需内容，先复制所属模块到 `trial/lib/`，在副本中增补定义并更新必要的导入与全局组合；若已有定义不符合当前 C 或本 skill 的要求，应说明定义位置、修改依据和影响，在副本中修改并检查受影响的使用处。按上述审阅后自动合并流程写回全局库。
+涉及跨模块调用时必须复用共享 `lib/` 中的已有定义，不得重复增加已有概念。若现有接口缺少所需内容，把所属模块文件复制到平铺的 `trial/lib/`，在副本中增补定义并记录其全局来源与目标路径；若已有定义不符合当前 C 或本 skill 的要求，应说明修改依据和影响，并检查受影响的使用处。按上述实现完成后自动合并流程写回全局库。
 

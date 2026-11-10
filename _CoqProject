@@ -8,8 +8,9 @@
 -R ../qcp-binary-democases/Rocq/stdlib SimpleC.StdLib
 -R ../qcp-binary-democases/Rocq/StrategyLib SimpleC.StrategyLib
 -R ../qcp-binary-democases/Rocq/Common SimpleC.Common
--R ./vendor/fixedpoints FP
--R ./vendor/MonadLib MonadLib
+-R ../qcp-binary-democases/Rocq/CoreLang SimpleC.CoreLang
+-R ../qcp-binary-democases/Rocq/fixedpoints FP
+-R ../qcp-binary-democases/Rocq/MonadLib MonadLib
 -R ../qcp-binary-democases/Rocq/listlib ListLib
 -R ../qcp-binary-democases/Rocq/MaxMinLib MaxMinLib
 -R ../qcp-binary-democases/Rocq/GraphLib GraphLib
@@ -17,14 +18,43 @@
 -R ../qcp-binary-democases/Rocq/tracelib TraceLib
 -R ../qcp-binary-democases/Rocq/coq-record-update/src RecordUpdate
 -Q ../qcp-binary-democases/Rocq/algorithms Algorithms
--R ../qcp-binary-democases/Rocq/cdcllib CDCLLib
+-R ../qcp-binary-democases/Rocq/examples/Applications_human/cdcllib CDCLLib
 -R ./lib CRTOS_Verify.lib
 
-vendor/fixedpoints/LiftConstructors.v
-vendor/fixedpoints/PartialOrder_Setoid.v
-vendor/fixedpoints/BourbakiWitt.v
-vendor/MonadLib/Monad.v
-vendor/MonadLib/MonadErr/MonadErrBasic.v
+lib/common/CrtosConfig.v
+lib/common/StructFieldOffsetAxiom.v
+lib/common/dll_abs.v
+lib/id/idnode_abs.v
+lib/event/EventState.v
+lib/mutex/MutexState.v
+lib/semaphore/SemaphoreState.v
+lib/isr/IsrState.v
+lib/common/CrtosGlobState.v
+lib/common/CrtosRules.v
+lib/common/dll.v
+lib/list/NodeSelfLinked.v
+lib/id/idnode.v
+lib/common/ObjectWaitNode.v
+lib/list/DoubleLinkListSpec.v
+lib/id/IdModuleSpec.v
+lib/common/RemoveFound.v
+lib/common/IsrManagerInv.v
+lib/common/SemaphoreInv.v
+lib/common/MutexInv.v
+lib/common/EventInv.v
+lib/semaphore/SemaphoreOps.v
+lib/mutex/MutexOps.v
+lib/event/EventOps.v
+lib/event/EventLayoutABI.v
+lib/common/CrtosInv.v
+lib/semaphore/KSemaphoreCreate.v
+lib/mutex/KMutexCreate.v
+lib/event/KEventCreate.v
+
+-R ./vendor/qcp_strategy QCPCompat
+vendor/qcp_strategy/Mapping.v
+
+# Shared full task model used by the mutex deletion trial.
 lib/AssignInv.v
 lib/AssignState.v
 lib/Bitmap.v
@@ -34,9 +64,21 @@ lib/CrtosInv.v
 lib/CrtosRules.v
 lib/DelayInv.v
 lib/DelayState.v
+lib/DoubleLinkListSpec.v
+lib/EventInv.v
+lib/EventLayoutABI.v
+lib/EventOps.v
+lib/EventState.v
 lib/ExstatusInv.v
+lib/IdModuleSpec.v
 lib/IsrManagerInv.v
 lib/IsrState.v
+lib/KEventCreate.v
+lib/KEventDelete.v
+lib/KMutexCreate.v
+lib/KMutexDelete.v
+lib/KSemaphoreCreate.v
+lib/KSemaphoreDelete.v
 lib/KTaskDelay.v
 lib/KTaskDelayMem.v
 lib/KTaskDescriptor.v
@@ -46,8 +88,18 @@ lib/KTaskPure.v
 lib/KTaskSchedMember.v
 lib/KTaskStackSetup.v
 lib/KTaskStackSetupProofAux.v
+lib/KTaskUnSetDelay.v
+lib/KTaskWakeup.v
+lib/MutexInv.v
+lib/MutexOps.v
+lib/MutexState.v
 lib/NodeSelfLinked.v
 lib/OsAssignReadyVector.v
+lib/RemoveFound.v
+lib/SemaphoreInv.v
+lib/SemaphoreOps.v
+lib/SemaphoreState.v
+lib/ServiceSlotWf.v
 lib/StructFieldOffsetAxiom.v
 lib/TaskInv.v
 lib/TaskState.v
@@ -59,42 +111,3 @@ lib/dll.v
 lib/dll_abs.v
 lib/idnode.v
 lib/idnode_abs.v
-lib/DoubleLinkListSpec.v
-lib/KSemaphoreCreate.v
-lib/SemaphoreInv.v
-lib/SemaphoreState.v
-vendor/MonadLib/MonadErr/MonadErrHoare.v
-vendor/MonadLib/MonadErr/MonadErrLoop.v
-vendor/MonadLib/MonadErr/monadesafe_lib.v
-lib/KTaskUnSetDelay.v
-lib/KTaskWakeup.v
-lib/SemaphoreOps.v
-lib/KSemaphoreDelete.v
-lib/RemoveFound.v
-lib/ServiceSlotWf.v
-
--R ./vendor/qcp_strategy QCPCompat
-vendor/qcp_strategy/Mapping.v
-lib/IdModuleSpec.v
-
-lib/MutexState.v
-
-lib/MutexInv.v
-
-lib/MutexOps.v
-
-lib/KMutexCreate.v
-
-lib/EventInv.v
-
-lib/EventOps.v
-
-lib/EventState.v
-
-lib/KEventCreate.v
-
-lib/EventLayoutABI.v
-
-lib/KMutexDelete.v
-
-lib/KEventDelete.v

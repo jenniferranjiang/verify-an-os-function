@@ -27,7 +27,9 @@ Predicate 和 spec 分开 review。Spec review 只使用同一份 review-passed 
 5. caller-local callee contract 与 canonical spec alpha/typedef 等价；
 6. 切片 body、路径、返回值、副作用和所访问 ABI layout 与权威 C/config 等价。
 
-不集中建立模块级 specs header，不复制整套依赖源码树 或无关 headers。若 body 按字段访问 struct，切片声明必须保持被访问字段的真实 ABI offset；否则把整个字段操作抽成真实具名 API，不得发明错误精简布局。
+不集中建立模块级 specs header，不复制整套依赖源码树或无关 headers。同一模块的函数优先复用一个稳定模块 ABI header，不因新增 target 机械创建新的 types header。Header 可以承载当前配置的 C ABI、宏、全局声明以及 QCP 的 `Import Coq`/`Extern Coq` 词汇；canonical contract 仍在 active definition 上，caller-local callee contract 仍在直接调用者的 annotated C 中。场景特有逻辑 header 只能用于尚不能与已审阅模块接口等价的词汇适配，不能成为复制 ABI 或隐藏合同的常规方式。若 body 按字段访问 struct，切片声明必须保持被访问字段的真实 ABI offset；否则把整个字段操作抽成真实具名 API，不得发明错误精简布局。
+
+Annotated C 的正式输入包括预处理闭包，而不只是 `.c` 文件正文。移动、复制或归档切片时必须同时固定实际 header 文件、include search path、条件编译参数和生成输入；相对 include 因目录变化而指向不同文件、缺失文件或旧 header 时，即使 `.c` 哈希未变也不是同一验证输入。进入 review 前至少完成 dependency/preprocess 检查，并确认预处理后的 active body、annotation、ABI 声明和 imports 来自预期 revision。
 
 修改 callee canonical spec 后，所有 caller-local 副本和 transitive callers 都进入 affected closure。
 

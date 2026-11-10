@@ -29,7 +29,7 @@ Main 交接 annotation 任务时须明确传达本节的 OS 适配规则。
 
 ## 验证范围与执行
 
-交接时分开列出本轮实现证明目标与从根 annotated_C 导入的 `reused-spec` 边界，附复用来源、revision 和 contract。
-按[工程配置指南](project-configuration-guide.md#已有-spec-的复用与特化)，导入复用函数不生成本轮实现 VC，也不重新证明函数体；保留其函数文件不表示要将其提交为证明目标。
+交接时分开列出本轮实现证明目标与从根 annotated_C 或其他证明工程导入的 `reused-spec` 边界，附复用来源、revision 和 caller-local contract 的位置。
+按[工程配置指南](project-configuration-guide.md#已有-spec-的复用与特化)，导入 spec 只放在 caller 定义前，不为其新建独立函数文件，也不生成本轮实现 VC 或重新证明函数体；工具的闭包检查须识别这类边界，不得因缺少同名 `.c` 文件而补建文件。
 之后只执行 controller 返回的 action，直到 controller 报告 `done` 或明确 blocker；不要在本 skill
 中复制 QCP 的阶段、命令、返回状态或 final-check。

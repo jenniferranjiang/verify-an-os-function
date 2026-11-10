@@ -354,26 +354,18 @@ Proof.
   rewrite UCharArray.seg_empty.
   rewrite ktask_sizeof_uchar.
   Exists ktask_stack_memset_uint_value.
-  unfold store_uint, store_uchar, store_4byte.
-  entailer!.
+  change (store_uinteger 4 4 p ktask_stack_memset_uint_value)
+    with (p # UInt |-> ktask_stack_memset_uint_value).
+  rewrite (store_number_as_uchar_bytes 4 4 (valid_unsigned_value 4)
+    p ktask_stack_memset_uint_value ltac:(lia)).
+  rewrite byte_vector_ex_equiv.
+  cbn [byte_vector_ex store_bytes_as].
+  rewrite ?sepcon_emp_equiv.
   Exists 35 35 35 35.
+  cbv [Vector.hd Vector.tl].
   entailer!.
-  - repeat match goal with
-    | |- context[p + 0 * 1] =>
-        replace (p + 0 * 1) with p by lia
-    | |- context[p + 1 * 1] =>
-        replace (p + 1 * 1) with (p + 1) by lia
-    | |- context[p + (1 + 1) * 1] =>
-        replace (p + (1 + 1) * 1) with (p + 2) by lia
-    | |- context[p + (1 + 1 + 1) * 1] =>
-        replace (p + (1 + 1 + 1) * 1) with (p + 3) by lia
-    end.
-    entailer!.
-  - unfold isvalidptr_int, isvalidptr_char in *.
-    repeat match goal with H : _ /\ _ |- _ => destruct H end.
-    repeat split; try lia.
-    apply aligned_reglen_addr_aligned.
-    exact Haligned.
+  - unfold valid_unsigned_value, ktask_stack_memset_uint_value; lia.
+  - apply aligned_reglen_addr_aligned; exact Haligned.
 Qed.
 
 (* 从剩余的 ['#'] 字节区中切出当前循环迭代要覆盖的一个 4 字节

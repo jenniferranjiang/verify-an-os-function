@@ -229,12 +229,15 @@ Lemma semaphore_two_zero_chars_ushort : forall p,
   p # Char |-> 0 ** (p + 1) # Char |-> 0 |-- p # UShort |-> 0.
 Proof.
   intros p Halign.
-  unfold store_char, store_ushort, store_2byte.
-  Intros.
+  change (store_uinteger 2 2 p 0) with (p # UShort |-> 0).
+  rewrite (store_number_as_char_bytes 2 2 (valid_unsigned_value 2) p 0 ltac:(lia)).
+  rewrite byte_vector_ex_equiv.
+  cbn [byte_vector_ex store_bytes_as].
+  rewrite ?sepcon_emp_equiv.
   Exists 0 0.
+  cbv [Vector.hd Vector.tl].
   entailer!.
-  - unfold isvalidptr_short, isvalidptr_char, aligned_2, addr_aligned in *.
-    lia.
+  unfold valid_unsigned_value; lia.
 Qed.
 
 Lemma semaphore_two_zero_bytes_ushort : forall p,
@@ -261,17 +264,22 @@ Lemma semaphore_four_zero_chars_ptr : forall p,
   (p + 2) # Char |-> 0 ** (p + 3) # Char |-> 0 |-- p # Ptr |-> 0.
 Proof.
   intros p Halign.
-  unfold store_char, store_ptr.
-  change ptr_size with 4%nat.
-  unfold store_4byte.
-  Intros.
-  Exists 0 0 0 0.
-  entailer!.
-  - unfold isvalidptr, isvalidptr_char, valid_ptr_value, addr_aligned in *.
-    change ptr_size_Z with 4.
-    change (Arch32.aligned Arch32.ptr_align p) with (p mod 4 = 0).
-    lia.
-  - unfold valid_ptr_value. change addr_max_unsigned with 4294967295. lia.
+  eapply derivable1_trans with (y := p # UInt |-> 0).
+  - rewrite store_uint_store_char.
+    Exists 0 0 0 0.
+    cbv [Vector.hd Vector.tl].
+    entailer!.
+    change Int.max_unsigned with 4294967295; lia.
+  - unfold poly_store, store_ptr, store_uinteger,
+      derivable1, andp, coq_prop.
+    simpl_nonptr_sizeof.
+    intros m [[Hobject Hvalue] Hbytes].
+    split; [|exact Hbytes].
+    split.
+    + change Arch.ptr_align with 4.
+      exact Hobject.
+    + unfold valid_ptr_value, Arch.valid_ptr_value.
+      change addr_max_unsigned with 4294967295; lia.
 Qed.
 
 Lemma semaphore_four_zero_bytes_ptr : forall p,

@@ -27,8 +27,8 @@ struct IdManager _name = { \
     .htable = __htable_##_name \
 };
 
-/*@ Import Coq Require Import CRTOS_Verify.lib.idnode */
-/*@ Import Coq Require Import CRTOS_Verify.lib.CrtosRules */
+/*@ Import Coq Require Import CRTOS_Verify.lib.id.idnode */
+/*@ Import Coq Require Import CRTOS_Verify.lib.common.CrtosRules */
 /*@ Import Coq Import IDNode */
 
 /*@ Extern Coq (unit :: *) */

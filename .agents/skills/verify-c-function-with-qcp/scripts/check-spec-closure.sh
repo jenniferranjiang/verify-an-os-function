@@ -7,13 +7,16 @@ usage() {
 usage: check-spec-closure.sh <trial-dir> [legacy-timing-tsv]
        [--timing <timing-v2.tsv>] [--affected <annotated-c-file>]...
 
-Without --affected, checks the full flat annotated_C/src closure.
+Without --affected, checks the full recursive annotated_C/src closure.
 With --affected, checks only the named C files; affected runs are not
 review-ready full-closure evidence.
 
 Set SYMEXEC_BIN to the QCP symexec executable, or provide SymExec_DIR
 in <trial-dir>/CONFIGURE. Set QCP_STRATEGY to the strategy logical/file
 name, or provide QCP_Strategy in CONFIGURE.
+Set QCP_C_INCLUDE_DIRS to a whitespace-separated list when the project uses
+nonstandard header directories. By default, existing annotated_C/src/include,
+annotated_C/src/headers and annotated_C/src are used.
 EOF
     exit 2
 }
@@ -86,10 +89,27 @@ fi
 
 cd "$trial_dir"
 
+declare -a include_dirs=()
+declare -a c_include_flags=()
+if [[ -n ${QCP_C_INCLUDE_DIRS:-} ]]; then
+    read -r -a include_dirs <<<"$QCP_C_INCLUDE_DIRS"
+else
+    for candidate in annotated_C/src/include annotated_C/src/headers annotated_C/src; do
+        [[ -d "$candidate" ]] && include_dirs+=("$candidate")
+    done
+fi
+for include_dir in "${include_dirs[@]}"; do
+    [[ -d "$include_dir" ]] || {
+        echo "missing QCP C include directory: $include_dir" >&2
+        exit 2
+    }
+    c_include_flags+=("-I$include_dir")
+done
+
 declare -a c_files=()
 if [[ "$closure_kind" == full ]]; then
     mapfile -t c_files < <(
-        find annotated_C/src -maxdepth 1 -type f -name '*.c' -printf '%p\n' |
+        find annotated_C/src -type f -name '*.c' -printf '%p\n' |
             sort
     )
 else
@@ -100,11 +120,11 @@ else
             annotated_C/src/*) candidate=$(realpath "$trial_dir/$requested") ;;
             *) candidate=$(realpath "$src_dir/$requested") ;;
         esac
-        [[ -f "$candidate" && $(dirname "$candidate") == "$src_dir" && $candidate == *.c ]] || {
+        [[ -f "$candidate" && $candidate == "$src_dir"/* && $candidate == *.c ]] || {
             echo "invalid affected C file: $requested" >&2
             exit 2
         }
-        relative="annotated_C/src/$(basename "$candidate")"
+        relative="annotated_C/src/${candidate#"$src_dir"/}"
         if [[ -z ${seen_files[$relative]+x} ]]; then
             c_files+=("$relative")
             seen_files[$relative]=1
@@ -127,7 +147,7 @@ if [[ -n ${PREDICATE_FILE:-} ]]; then
     predicate_revision_kind="file:${PREDICATE_FILE#./}"
 else
     predicate_revision=$(
-        find lib -maxdepth 1 -type f -name '*.v' -printf './%P\n' |
+        find lib -type f -name '*.v' -printf './%P\n' |
             sort |
             while read -r path; do
                 sha256sum "lib/${path#./}" | sed 's#  lib/#  ./#'
@@ -235,13 +255,14 @@ fi
 
 for file in "${c_files[@]}"; do
     run_checked c-syntax "${file#annotated_C/src/}" \
-        gcc -std=gnu11 -fsyntax-only -Iannotated_C/src "$file" || exit 1
+        gcc -std=gnu11 -fno-builtin -fsyntax-only "${c_include_flags[@]}" "$file" || exit 1
 done
 
 for file in "${c_files[@]}"; do
     start=$(now_ms)
     output=$(mktemp)
     if "$symexec_bin" \
+        "${c_include_flags[@]}" \
         --input-file="$file" \
         -slp annotated_C/src/ "$qcp_strategy" \
         --no-coq-gen --no-exec-info >"$output" 2>&1 &&

@@ -1,4 +1,0 @@
-{
-  "status": "failed",
-  "error": "Sandboxed stdio initialize stalled; manually interrupted test (exit 130). Exact QCP handshake succeeded outside sandbox. No proof-readiness claimed."
-}

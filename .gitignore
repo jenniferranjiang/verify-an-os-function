@@ -30,3 +30,11 @@ __pycache__/
 # Disposable controller build workspaces. Final VC proofs and reports stay tracked.
 **/verification_runs/**/_coq_builds/
 .external-inputs.lock
+
+# Derived annotated-C preprocessing output; canonical inputs live in annotated_C/src/.
+annotated_C/gen/
+annotated_C/dep/
+
+# Trials use shared libraries instead of private dependency snapshots.
+/kmutexdelete-trial-261109-1/.provider/
+/tools/rocq/qcp_toolchain.py.before-qcp-workspace

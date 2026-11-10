@@ -51,6 +51,28 @@ CRTOS 根目录是 /home/xinra/crtos/。默认 trial 是该根目录的直接子
 - 写新 definition、strategy、assertion 或 annotation 前，先用 rg 搜索 QCP 教程/示例、当前 trial 和已有 CRTOS 定义。不得猜测 QCP 语法。
 - 复用前检查内容、revision、assumptions 和验证状态；有疑点时在任务回复及对应设计/review 记录中标记 [OPEN]。未经用户明确授权不修改或删除共享文件。
 
+## Annotated C header 与预处理
+
+CRTOS 的模块化 annotated C 采用与 VRTOS 一致的 include-search-path 组织：C 文件按 basename 包含 header，不用依赖当前目录层级的 `../include`。默认候选目录为：
+
+~~~text
+annotated_C/src/include
+annotated_C/src/headers
+annotated_C/src
+~~~
+
+工程 Makefile、QCP/symexec 命令、dependency check 和人工复现必须使用同一组 `-I`。Header 只承载当前配置下的 C ABI/宏/全局声明以及 `Import Coq`、`Extern Coq` 等逻辑词汇；函数 canonical spec 留在其 active definition，direct-callee 的完整 declaration-only spec 留在 caller，不建立隐藏合同的模块级 specs header。
+
+每个子系统优先维护一个稳定的模块 ABI header，例如 Semaphore 使用 `m_semaphore.h`；新增函数复用模块 header，不按函数创建新的 types header，可以在其中增加内容。函数或场景特有的 Rocq imports/`Extern Coq` 留在 annotated C，或在确有多个复用者时进入模块逻辑 header。导入或移动 canonical C 时必须同步其完整 header closure 和预处理配置，并检查：
+
+- 每个 include 在声明的 search path 中唯一解析到预期文件；
+- dependency generation 与 C preprocessing 成功；
+- 预处理结果中的 active C、QCP annotations、ABI declarations 和 logical imports 与批准 revision 对应；
+- `Require Import` 的逻辑路径与根/trial `_CoqProject`、实际 `.v/.vo` 及 VsRocq 映射一致；
+- 不使用 `/tmp` 等会在重启后消失的目录承载正式 header 或 Rocq library mapping。
+
+只核对 `.c` 的 byte/hash 一致性不足以证明迁移保持验证输入；header 或 include 解析变化必须作为 dependency change 处理。
+
 ## Implement 工具配置
 
 当前 CRTOS trial 的 QCP strategy 逻辑名通常是 CRTOS_Verify.VC.strategy，但运行前以 trial 的 CONFIGURE、Makefile、_CoqProject 和实际 strategy 文件为准。调用通用闭包脚本时显式设置：
