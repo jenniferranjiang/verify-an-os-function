@@ -12,6 +12,7 @@
 |---|---|
 | `qcp_root` | 必填，QCP 安装/仓库根目录，须有工具、Rocq 库与工作流说明；缺失时报告并请用户配置，不能跳过 QCP。 |
 | `source_root` | 必填，待验证的真实 C 源码根目录；从中确认源码、headers 与激活配置。 |
+| `source_processing` | 可选，用户维护的源码处理规则文件；省略或为空时只使用 skill 默认规则，填写后必须可读。与默认规则冲突的条目以用户规则为准，其余共同生效。 |
 | `coq_bin` | 可选，兼容当前 QCP 的 Rocq/Coq bin 目录；为空时检查已有工程工具链或 PATH，实际编译前必须确认可用且兼容。 |
 | `symexec_bin` | 可选，覆盖 symexec 可执行路径；为空时尝试 `qcp_root/linux-binary/symexec`，其他 QCP 安装布局填写实际位置。 |
 | `trust_base` | 可选，用户维护的信任边界文件；配置后必须可读，未配置不继承外部授权。 |
@@ -19,6 +20,14 @@
 | `references.vrtos`、`references.crtos_verify`、`references.los_verify` | 可选参考根目录，未填写或不可用时说明并跳过，不阻塞验证；实际导入成为构建依赖时须确认该依赖可用。 |
 
 目录扫描、沿用现有结构及验证过程中的编译检查见[工程组织与维护指南](references/project-maintenance-guide.md#路径配置与目录发现)。
+
+## 用户源码处理规则
+
+默认规则保存在 [源代码处理](references/源代码处理.md)。用户可自行创建规则文件，例如 `.agents/source-processing.md`，然后在 `.agents/verify-os.config.json` 中设置 `"source_processing": ".agents/source-processing.md"`，无需修改 skill。已有配置缺少该字段时仍可直接使用默认规则。
+
+用户文件只需写补充的对原始源代码的处理规则即可，即如何将源代码处理为合适的验证切片代码，并说明适用对象或条件。
+
+默认文件和用户文件分别保留，使用时同时参考；冲突条目以用户规则为准，其余规则共同生效。未配置用户文件时使用默认文件。
 
 ## Rocq 编译配置
 

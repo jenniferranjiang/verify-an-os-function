@@ -26,7 +26,7 @@ Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。
 
 ## 通用验证约束
 
-设计阶段可以先写引理陈述，不要求立即完成证明；未证明的内容必须明确为待证义务，不能当作已证明结论使用。不得用 `Parameter`、`Axiom`、占位定义或手写 `Admitted/admit` 绕过证明。
+设计阶段可以先写引理陈述，不要求立即完成证明；未证明的内容必须明确为待证义务，不能当作已证明结论使用。
 
 ### 临时产物与保留边界
 
@@ -44,6 +44,8 @@ Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。
 ## 确认验证上下文
 
 优先读取用户指定或项目已有的说明。开始时按[环境与路径配置](CONFIGURATION.md)读取用户配置，再按[工程组织与维护指南](references/project-maintenance-guide.md#路径配置与目录发现)确认源码与验证工程根目录、扫描现有目录结构，然后创建本次所需文件。
+
+源码处理同时参考默认的 [源代码处理](references/源代码处理.md) 和可选配置 `source_processing` 指定的用户规则文件。两个文件分别保留，无需合并；冲突条目以用户规则为准，其余规则共同生效。未配置用户文件时使用默认文件。用户在当前任务中明确指定的规则同样优先于默认规则，具体配置见[用户源码处理规则](CONFIGURATION.md#用户源码处理规则)。本 skill 各处引用《源代码处理》时均遵循此约定。
 
 开始时读取配置的 `trust_base`，未配置则查看项目已有信任说明；没有说明也可继续设计。信任文件由用户维护，agent 不修改。已有授权核对适用条件后直接使用，相关一致性检查仍须执行；新增或扩大信任范围须经用户批准。中可以包括工具适配假设、一致性检查要求和 trusted specs等。Main agent 可以建议将复杂函数设为 `trusted`；用户明确批准具体函数及采用的 contract 后，才能跳过其函数体的递归验证，并在设计或审阅记录中注明。
 
@@ -218,6 +220,8 @@ Rocq predicate 文件通过 compile/typecheck，annotated C 已完成人工结�
 开始目标证明前，按[工具就绪条件](references/implementation-and-validation-guide.md#证明前的工具就绪条件)确认环境已配置可用；同一环境复用已有成功结果，之后按 QCP workflow 推进。环境错误先修复。
 
 交接时提供 TrustBase 文件路径，并明确本轮实现证明目标与 `reused-spec` 清单；导入复用函数不提交为 VC/函数体证明目标。trusted 和 reused-spec contract 均不作为本轮新完成的实现证明计数。
+
+交接给 QCP workflow 时必须明确 VC 文件修改边界：手工完成 VC 证明只修改 `*_proof_manual.v`；不得手工修改 `*_proof_auto.v`、`*_goal.v` 或 `*_goal_check.v`。
 
 Annotation、spec、predicate、VC 和 proof 的诊断、修正与重试全部由该 workflow 按自己的规则处理；
 main agent 不再定义第二套步骤或返回状态。具体调用边界见

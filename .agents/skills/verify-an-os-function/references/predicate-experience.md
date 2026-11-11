@@ -255,12 +255,10 @@
    `store_object` 必须把该地址的真实对象与上层的 ID、抽象状态关联起来；存在量词
    只隐藏具体地址，不替代唯一性约束，也不能丢掉操作前后属于同一个对象的关系。
 
-9. QCP 能够根据 C 结构体布局自动生成 padding 资源时，手写的对象
-   predicate 中不要再重复描述 padding。
+9. QCP 能够根据 C 结构体布局自动生成 padding 资源，predicate 中不要再重复描述 padding。
 
    例如 `struct Semaphore` 在 `value` 前后存在 padding 时，
-   `store_semaphore_object_body` 中只需保留 `value` 和 pending-list 的表示，
-   不要加入下列断言：
+   `store_semaphore_object_body` 中不要加入下列断言：
 
    ```coq
    CharArray.full (sem + 2) 2 (repeat_Z 0 2)

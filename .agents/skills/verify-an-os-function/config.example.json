@@ -1,6 +1,7 @@
 {
   "qcp_root": "",
   "source_root": "",
+  "source_processing": "",
   "coq_bin": "",
   "symexec_bin": "",
   "trust_base": "",
