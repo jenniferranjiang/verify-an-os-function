@@ -16,6 +16,7 @@
 | `coq_bin` | 可选，兼容当前 QCP 的 Rocq/Coq bin 目录；为空时检查已有工程工具链或 PATH，实际编译前必须确认可用且兼容。 |
 | `symexec_bin` | 可选，覆盖 symexec 可执行路径；为空时尝试 `qcp_root/linux-binary/symexec`，其他 QCP 安装布局填写实际位置。 |
 | `trust_base` | 可选，用户维护的信任边界文件；配置后必须可读，未配置不继承外部授权。 |
+| `review_whitelist` | 可选，用户维护的 predicate/spec 审阅补充白名单；配置后必须可读。省略或为空时只使用 skill 默认白名单；冲突条目以用户规则为准，其余共同生效。 |
 | `annotated_c_dir` | 可选，annotated C 目录；为空时扫描根 `annotatedc/`、`annotated_C/`。都有且用途不明确时询问；都没有时新建 `annotatedc/`。 |
 | `references.vrtos`、`references.crtos_verify`、`references.los_verify` | 可选参考根目录，未填写或不可用时说明并跳过，不阻塞验证；实际导入成为构建依赖时须确认该依赖可用。 |
 
@@ -29,7 +30,29 @@
 
 默认文件和用户文件分别保留，使用时同时参考；冲突条目以用户规则为准，其余规则共同生效。未配置用户文件时使用默认文件。
 
+## 用户审阅白名单
+
+默认白名单保存在 [ReviewWhitelist.md](references/ReviewWhitelist.md)，随 skill 维护。
+用户可自行创建补充文件，例如 `.agents/review-whitelist.md`，然后在 `.agents/verify-os.config.json`
+中设置 `"review_whitelist": ".agents/review-whitelist.md"`。路径解析规则与其他配置相同。
+已有配置缺少该字段或字段为空时，只使用默认白名单。
+
+默认文件和用户文件分别保留，设计与审阅时同时读取；冲突条目以用户规则为准，其余规则共同生效。
+用户可按条目 ID 覆盖、收窄或明确禁用默认条目，无需复制整份默认文件。
+Agent 不自行新增、修改或扩大默认及用户白名单；用户明确要求修改时按指定范围执行。
+
+每条规则应有稳定 ID，并说明适用的建模方式或定义、豁免的审阅要求和保留的检查。
+Predicate/spec 设计与审阅前读取适用文件，只对符合适用条件的有效条目执行例外，其余审阅条件照常执行。
+命中条目时，在现有审阅记录中注明文件版本（如内容哈希）、条目 ID、适用 formal symbols/revisions
+以及结论限制，不把被豁免的性质写成已证明结论。白名单变化后只复查受影响的审阅结论，
+不自动将旧 `needs-fix` 改为通过。
+
+白名单只调整设计审阅的通过条件，不新增 Rocq 公理、trusted contract 或源码适配授权，
+不免除实际生成的 VC，也不代替用户对 predicate/spec revisions 的确认。
+
 ## Rocq 编译配置
+
+根 `_CoqProject` 与根 Makefile 统一管理全局库和 trial 输入；不另维护 trial 的 `_CoqProject`/Makefile。路径映射以工程根目录解析，编译可通过根构建入口选择当前 trial 的目标。见[统一构建规则](references/project-maintenance-guide.md#trial-与全局库)。
 
 - 若已有 `tools/rocq/toolchain.json`，沿用并核对与路径配置一致；其他工程不要求此包装器，使用确认后的 `coq_bin` 或 PATH。VsRocq 使用相同环境 bin 目录中的 `vsrocqtop`，路径按本机安装位置填写。
 - QCP 库直接引用配置的 `qcp_root` 下的实际目录，沿用工程已有的逻辑名与路径映射；不复制到验证工程，也不保留源码快照。
@@ -53,7 +76,7 @@ make -f Makefile.coq COQBIN="$OS_COQ_BIN/"
 
 ## 编辑器适配
 
-项目已有的 Coq 8.18--8.20 / VsRocq 适配说明记录了局部 `_CoqProject` 路径未按文档生效的情况。遇到该环境时，将共享库、当前活动 trial 的外部路径和本地 `lib/` 映射同步到 CRTOS 根 `.vscode/settings.json` 的 `vsrocq.args`，并确保 `"*.v": "rocq"`。
+编辑器应使用根 `_CoqProject` 的同一组映射。项目已有 Coq 8.18--8.20 / VsRocq 未自动采用工程映射的情况；遇到该环境时，将根配置中的共享库与活动 trial 映射同步到根 `.vscode/settings.json` 的 `vsrocq.args`，并确保 `"*.v": "rocq"`，不另创建 trial 项目配置。
 
 该适配使用已经解析并确认存在的绝对路径，不依赖 `vsrocq.args` 对 `${workspaceFolder}` 的展开。切换活动 trial 时替换旧 trial 专属映射，不累积映射到同一逻辑路径的多个 `lib/`。
 
@@ -61,6 +84,6 @@ Coq/VsRocq 升级后实测局部项目和路径变量是否生效，再决定是
 
 ## 可选闭包检查脚本
 
-[scripts/check-spec-closure.sh](scripts/check-spec-closure.sh) 适用于标准 trial，不是任意既有工程的通用入口。运行前把配置解析后的 `qcp_root` 作为 `OS_QCP_ROOT` 环境变量传入，非默认 symexec 路径通过 `SYMEXEC_BIN` 传入。路径优先级为 `SYMEXEC_BIN`、trial `CONFIGURE` 的 `SymExec_DIR`、`OS_QCP_ROOT/linux-binary/symexec`；无路径时明确报错，不回退维护者路径。`CONFIGURE` 的相对路径以 trial 为基准。
+[scripts/check-spec-closure.sh](scripts/check-spec-closure.sh) 是保留给已有独立 trial 构建结构的旧辅助脚本，不适用于新的根统一构建流程。它会运行 symbolic，设计/审阅阶段不得执行。新工程不为使用它而新增 trial Makefile；实现阶段使用 QCP workflow 的检查，或先适配脚本使其明确调用根构建入口。运行前把配置解析后的 `qcp_root` 作为 `OS_QCP_ROOT` 环境变量传入，非默认 symexec 路径通过 `SYMEXEC_BIN` 传入。路径优先级为 `SYMEXEC_BIN`、trial `CONFIGURE` 的 `SymExec_DIR`、`OS_QCP_ROOT/linux-binary/symexec`；无路径时明确报错，不回退维护者路径。`CONFIGURE` 的相对路径以 trial 为基准。
 
-脚本仍需要 Bash、GNU coreutils/find、make、gcc、rg，trial 的 `make lib`、`VC/`、平铺 `annotated_C/src/` 及 `CRTOS_Verify.VC.strategy`。其他平台、逻辑前缀或构建入口使用对应的等价检查，不为辅助脚本重组用户工程。路径配置不能代替 QCP 与 Rocq MCP 的安装和连接；检查 `agents/openai.yaml` 声明的服务可用性，缺失时报告具体依赖。
+旧脚本仍依赖 Bash、GNU coreutils/find、make、gcc、rg，以及旧 trial 的 `make lib`、`VC/`、平铺 `annotated_C/src/` 及 `CRTOS_Verify.VC.strategy`。其他平台、逻辑前缀或构建入口使用对应的等价检查，不为辅助脚本重组用户工程。路径配置不能代替 QCP 与 Rocq MCP 的安装和连接；检查 `agents/openai.yaml` 声明的服务可用性，缺失时报告具体依赖。

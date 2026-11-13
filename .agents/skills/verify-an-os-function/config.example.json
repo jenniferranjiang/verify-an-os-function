@@ -5,6 +5,7 @@
   "coq_bin": "",
   "symexec_bin": "",
   "trust_base": "",
+  "review_whitelist": "",
   "annotated_c_dir": "",
   "references": {
     "vrtos": "",

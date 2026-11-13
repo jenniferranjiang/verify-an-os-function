@@ -13,6 +13,8 @@ description: 验证 CRTOS 等非 SMP OS 的 C 函数与模块：设计并审阅 
 
 ## 总流程
 
+用户要求验证一个函数时，任务同时包括完成该函数所属模块的 `lib` 设计。模块 `lib` 应依据该模块全部函数及对象生命周期，补齐模块状态、内存 predicate/invariant、共享接口，以及按资源归属所需的 OS 总状态和 `os_inv` 集成（判断条件见 [Predicate 指南第 6.5 节](references/predicate-lemma-design-guide.md#65-组合模块-predicate)）；已有定义直接复用。函数 spec 和 C 实现证明的范围仍按目标函数的调用闭包确定，不因此自动扩展为模块全部函数的实现证明。仅设计和审阅的任务也适用这一模块 `lib` 范围，但不要求提前完成引理或 C 实现证明。
+
 Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。作者与 reviewer 应分开；predicate review 和 spec review 分别明确对象、条件和结论，可写在同一份记录中。Review 次数不预设，由产物 revision、修改影响和通过条件决定。没有独立检查能力时，由 main agent 按相同条件自检并注明。
 
 ```text
@@ -27,6 +29,11 @@ Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。
 ## 通用验证约束
 
 设计阶段可以先写引理陈述，不要求立即完成证明；未证明的内容必须明确为待证义务，不能当作已证明结论使用。
+
+Predicate/spec 设计与审阅前读取[默认审阅白名单](references/ReviewWhitelist.md)及配置的
+`review_whitelist` 用户补充文件，按[用户审阅白名单](CONFIGURATION.md#用户审阅白名单)
+应用审阅例外。两份文件分别保留，冲突条目以用户规则为准，其余共同生效；未配置用户文件时使用默认文件。
+命中的例外不作为设计审阅 blocker。Agent 不自行扩大例外，白名单不免除 VC 证明或引入新的信任假设。
 
 ### 临时产物与保留边界
 
@@ -45,7 +52,7 @@ Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。
 
 优先读取用户指定或项目已有的说明。开始时按[环境与路径配置](CONFIGURATION.md)读取用户配置，再按[工程组织与维护指南](references/project-maintenance-guide.md#路径配置与目录发现)确认源码与验证工程根目录、扫描现有目录结构，然后创建本次所需文件。
 
-源码处理同时参考默认的 [源代码处理](references/源代码处理.md) 和可选配置 `source_processing` 指定的用户规则文件。两个文件分别保留，无需合并；冲突条目以用户规则为准，其余规则共同生效。未配置用户文件时使用默认文件。用户在当前任务中明确指定的规则同样优先于默认规则，具体配置见[用户源码处理规则](CONFIGURATION.md#用户源码处理规则)。本 skill 各处引用《源代码处理》时均遵循此约定。
+处理源码到验证切片的转换时，按照 [源代码处理](references/源代码处理.md) 执行，并结合当前配置与 TrustBase 核对适用条件。源码处理同时参考默认的 [源代码处理](references/源代码处理.md) 和可选配置 `source_processing` 指定的用户规则文件。两个文件分别保留，无需合并；冲突条目以用户规则为准，其余规则共同生效。未配置用户文件时使用默认文件。用户在当前任务中明确指定的规则同样优先于默认规则，具体配置见[用户源码处理规则](CONFIGURATION.md#用户源码处理规则)。本 skill 各处引用《源代码处理》时均遵循此约定。
 
 开始时读取配置的 `trust_base`，未配置则查看项目已有信任说明；没有说明也可继续设计。信任文件由用户维护，agent 不修改。已有授权核对适用条件后直接使用，相关一致性检查仍须执行；新增或扩大信任范围须经用户批准。中可以包括工具适配假设、一致性检查要求和 trusted specs等。Main agent 可以建议将复杂函数设为 `trusted`；用户明确批准具体函数及采用的 contract 后，才能跳过其函数体的递归验证，并在设计或审阅记录中注明。
 
@@ -68,7 +75,7 @@ owned memory、mutable fields、lifecycle states 和 unchanged resources。隐�
 
 Trial 中所有本地库文件统一平铺在 `trial/lib/`，只记录其全局来源或目标路径，不建模块子目录。使用处通过 `Require Import` 引用；需要向下游公开的接口使用 `Require Export`。
 
-已有共享库允许按源码和验证需求增补或修改；无需修改的定义直接导入，需要修改的文件在 trial 副本中处理。修改范围、依赖调整与审阅要求统一按 [工程组织与维护指南](references/project-maintenance-guide.md#已有共享库的复用与修改)执行。
+已有共享库允许按源码和验证需求增补或修改；无需修改的定义直接导入，需要修改的文件在 trial 副本中处理。编译要求不扩大复制范围：遇到路径或类型问题，先核对外部库映射和接口兼容性，不把传递依赖清单直接当作复制清单，也不只为统一 import 路径复制未修改的库。修改范围、依赖调整与审阅要求统一按 [工程组织与维护指南](references/project-maintenance-guide.md#已有共享库的复用与修改)执行。
 
 ### 文件组织与存放
 
@@ -99,7 +106,7 @@ lib/
 
 文件拆分以实际职责和依赖关系为依据，不要求每个模块必须机械拥有 `State/Inv/Ops` 三个文件。系统组合文件导入各模块接口，模块文件不复制全局状态或系统协议。当全局state中模块级 state、predicate/invariant 和共享接口缺失时，补齐对应模块定义，并接入全局状态与系统不变量；已有定义直接复用。针对特定函数新增的抽象操作、program、局部 view、引理和证明辅助，统一放入该函数的 K<Function>.v，不另建函数专用的 State/Inv 文件。确属模块共享能力的增补，仍归入对应模块文件。
 
-函数的 QCP `With/Require/Ensure` 仍写在 annotated C 中，不因 Rocq 目录分组而改变。详细路径、逻辑名和迁移检查见 [工程组织与维护指南](references/project-maintenance-guide.md#全局-lib-目录结构)。
+函数的 QCP `With/Require/Ensure` 仍写在 annotated C 中，不因 Rocq 目录分组而改变。一函数一文件约束适用于 C 切片；类型、宏、声明和共享 Coq 词汇按模块维护 header，不机械地为每个函数新建 header。详细路径、逻辑名和迁移检查见 [工程组织与维护指南](references/project-maintenance-guide.md#全局-lib-目录结构)。
 
 ### 实现完成后自动合并库
 
@@ -163,22 +170,6 @@ Predicate 设计记录按 [验证记录指南](references/reporting-guide.md)编
 - 调用另一个函数时，不能只写它的 C 声明，还要提供完整的 `With/Require/Ensure`，说明调用需要什么条件和资源、结束后得到什么结果。调用处应给出所需的逻辑参数。
 - 上层函数用模块或对象的 predicate 描述行为，例如“创建一个信号量并加入管理集合”，不必重复展开每个字段和链表指针。具体内存细节放在 predicate 定义或底层操作中；调用条件、各条路径的结果和资源变化仍要看得清楚，不能全部藏在含义不明的 `xxx_pre`、`xxx_post` 中。具体写法参考 [Spec 编写指南](references/spec-writing-guide.md)。
 
-### 宏展开与源码切片
-
-处理源码到验证切片的转换时，按照 [源代码处理](references/源代码处理.md) 执行，并结合当前配置与 TrustBase 核对适用条件。
-其中明确规定的适配优先于下述一般宏展开与源码等价要求。
-
-- Function-like 宏先按《源代码处理》选择适用的处理方式。没有规定抽象替换的宏按当前配置展开，
-  展开后保留的调用继续加入闭包；空宏、常量和纯类型/布局宏不产生函数。
-  允许使用文档规定的宏替代函数及其 spec；其余可执行语句在 caller 中等价归一，不自行发明替代 API。
-- 不得集中建立模块级 `*_specs.h`。
-- 不按目录复制整套 kernel/libc source tree 或无关 headers；已进入闭包的 kernel/libc
-  函数仍按一函数一文件切片。切片只保留当前函数真正需要的声明；若正文按字段访问 struct，声明必须保持被访问字段的真实 ABI offset，
-  否则把该字段操作整体抽成具名 API，不得发明错误的精简布局。
-- 除《源代码处理》明确规定且适用的适配外，从权威 C 提取单函数切片时，不改算法、路径、返回值或副作用。parser 所需的等价
-  拆句、宏展开、dispatch 解析和 static-to-slice-external 归一必须逐项记录并审阅；没有用户
-  批准或源码/配置依据时不得做语义替换。
-
 ### 闭包检查与审阅准备
 
 结束 `write-spec` 前必须从适配后的目标函数重新扫描完整可达闭包。目标函数及每个递归可达 symbol 都必须
@@ -221,6 +212,8 @@ Rocq predicate 文件通过 compile/typecheck，annotated C 已完成人工结�
 
 交接时提供 TrustBase 文件路径，并明确本轮实现证明目标与 `reused-spec` 清单；导入复用函数不提交为 VC/函数体证明目标。trusted 和 reused-spec contract 均不作为本轮新完成的实现证明计数。
 
+已采用审阅白名单时，要求 QCP annotation owner 及后续涉及设计检查的任务直接通过白名单中描述情况，但不因此跳过任何实际 VC。
+
 交接给 QCP workflow 时必须明确 VC 文件修改边界：手工完成 VC 证明只修改 `*_proof_manual.v`；不得手工修改 `*_proof_auto.v`、`*_goal.v` 或 `*_goal_check.v`。
 
 Annotation、spec、predicate、VC 和 proof 的诊断、修正与重试全部由该 workflow 按自己的规则处理；
@@ -262,7 +255,7 @@ Predicate/spec 草案（`draft`）可以共同修改，不做中间审阅。满�
 
 默认 trial 是 当前验证工程根目录 的直接子目录 `<function-name>-trial-YYMMDD-N/`，或使用用户指定的独立目录。新实验按当前日期 + 当天第几次实验命名，不沿用 IDE、终端或历史上下文残留的名称。先检查验证工程中当天已有的实验目录，自动计算下一次序号。只有验证工程中确实存在尚未运行完成的实验目录时，才继续该实验。如果发现多个未完成实验或完成状态不明确，先向我确认，不自行猜测。
 
-每个 trial 维护自己的 `_CoqProject`；全局 `lib/` 由 CRTOS 根目录的 `_CoqProject` 统一管理，不依赖某个 trial 的配置或实验文件。各 trial 显式配置对全局库的引用，本地实验定义使用独立逻辑路径。确保构建工具、QCP 和编辑器使用一致的库路径；路径变化后同步配置并重新编译受影响的文件。配置或调整路径时参考 [工程组织与维护指南](references/project-maintenance-guide.md)。
+由验证工程根目录统一维护 `_CoqProject` 和 Makefile 构建入口，trial 不另维护一套。新增 trial 的逻辑路径与正式构建输入加入根项目配置；全局库和 trial 使用不同逻辑前缀，未修改库直接外部引用。构建、QCP 和编辑器都使用这份配置，trial 仅作为输入及产物目录。更新构建配置不等于把 trial 定义合并到全局库。具体配置、迁移及部分提交规则见 [工程组织与维护指南](references/project-maintenance-guide.md#trial-与全局库)。
 
 验证以当前配置下的真实 CRTOS 源码为准。完整源码模式只修改注解；单函数切片按上述《源代码处理》规则适配，其他工具转换须保持程序行为，并在 spec review 中说明转换位置、理由及源码依据。不得超出已规定的适配范围改变算法、遗漏执行路径或副作用，也不得使用错误的数据布局。等价转换示例见 [Spec 编写指南](references/spec-writing-guide.md#单函数切片的等价转换)。
 
