@@ -16,7 +16,7 @@ CRTOS 源码由独立的上游仓库 `https://www.gitlink.org.cn/chos/crtos` 跟
 
 本文及主 skill 的全局 `lib/<module>/`、`lib/common/`、`annotated_C/src/...` 和根目录限制仅适用于默认布局；复制、合并、索引和 imports 使用实际路径。例如平铺目标可以是 `lib/TaskInv.v` 和 `annotatedc/KTaskCreate.c`。沿用已有逻辑前缀；无 `_CoqProject` 时按实际依赖建立，不硬编码 `CRTOS_Verify`。已有索引则维护，没有则按需要创建。
 
-Trial 仍使用平铺的 `trial/lib/` 与 `trial/annotated_C/src/`，与全局布局分别记录，由 QCP 适配工作布局。不同全局目录的同名文件复制到 trial 时先解决名称/逻辑路径冲突，不能覆盖。分享 `.agents` 时保留模板，不分享用户的本机配置。
+Trial 的 Rocq 文件平铺在 `trial/lib/`，函数切片平铺在 `trial/annotated_C/src/`，模块 header 放在与 `src/` 同级的 `trial/annotated_C/headers/`；三者与全局布局分别记录，由 QCP 适配工作布局。不同全局目录的同名文件复制到 trial 时先解决名称/逻辑路径冲突，不能覆盖。分享 `.agents` 时保留模板，不分享用户的本机配置。
 
 ## Trial 与全局库
 
@@ -73,7 +73,9 @@ lib/
 
 当前验证工程 `lib/` 中的已有定义应优先复用，也允许按当前源码和验证需求增补或修改。已有接口缺少所需元素、操作或引理时，在职责对应的 `lib/<module>/` 或 `lib/common/` 中增量补充。模块级 state、predicate/invariant 和共享接口缺失时，补齐对应模块定义，并接入全局状态与系统不变量；已有定义直接复用。针对特定函数新增的抽象操作、program、局部 view、引理和证明辅助，统一放入该函数的 K<Function>.v，不另建函数专用的 State/Inv 文件。确属模块共享能力的增补，仍归入对应模块文件。
 
-无需修改的文件直接从全局库导入。需要修改的文件复制到平铺的 `trial/lib/`，记录全局来源和可比较的基线版本，在副本中修改；新增库文件也直接放在 `trial/lib/`，并记录目标全局路径。依赖者只有在定义或接口本身确实需要改变时才纳入 trial，并记录具体差异；仅需调整引用路径或重新编译，不作为复制未修改库的依据。设计、审阅和 implement 期间不写回或移动全局原文件，不复制整套库或整个依赖闭包。
+新增定义前先查全局库：已有且适用的定义直接通过原逻辑路径引用；已有定义或接口确实需要增补或修改时，才把所属文件复制到平铺的 `trial/lib/`，记录来源、基线及具体要改的定义或接口；全局库没有的内容才新建本地文件。编译、被其他文件引用、调整路径或重新生成 `.vo` 都不是复制理由。
+
+直接引用遇到错误时，先区分外部路径配置问题与实际类型/接口冲突。需要改变接口时，说明具体不匹配和必要改动，再处理对应文件；不根据传递依赖图自动复制全部依赖，也不为解决工程组织问题自行改变验证范围或既定模型。审阅准备时核对 trial 库清单，只有 import/逻辑路径替换而没有定义或接口改动的副本应移出，恢复外部引用。设计、审阅和 implement 期间不写回或移动全局原文件。
 
 共享库的修改可以涉及定义含义或接口，但必须符合真实源码与系统协议，并同步调整受影响的构造、操作、predicate、spec 和证明。已有全局lib或者spec不符合当前skill可以直接报告，然后再进行修改。若修改导致已有审阅或证明结论不再适用，明确其影响并重新审阅受影响部分，不沿用失效结论。修改已有文件时检查修改处及受影响内容，新建文件时检查完整文件。共享库的修改权限不允许间接改变复用 spec 的原语义；涉及已有 spec 时仍须满足下文的语义保持规则。
 
@@ -109,7 +111,7 @@ annotated_C/
 - `kernel/common/` 只放不属于某个具体模块的通用 kernel 函数及 canonical spec。函数即使被多个模块调用，只要其语义上属于 task、delay、assign 等模块，仍放在对应模块目录。
 - Trial 始终使用平铺的 `trial/annotated_C/src/` 作为本轮一函数一文件输入，不复制全局 `kernel/<module>/` 层次。复制已有 canonical 文件时记录全局来源、基线和 revision；新增文件时记录 implement 完成后的全局目标路径。
 - 对于 `kernel/` 中没有的模块，按需新建模块目录。
-- 同一模块的函数默认共用模块 header，默认放在 `src/headers/<module>.h`，不用另外新建 `annotated_C/header/`。已有工程放在 `include/`、模块目录或平铺目录里的，就继续放在那里，新增的header文件也放在那里。header 的维护方式见下节。
+- 全局 header 沿用既有位置（上图示例为 `src/headers/`）；trial 的模块 header 统一放在 `trial/annotated_C/headers/<module>.h`，不放在 `src/` 或 `src/headers/`。`annotated_C` 名称按工程实际目录映射，例如使用 `annotatedc` 时就是 `trial/annotatedc/headers/`。header 的维护方式见下节。
 
 
 ## Annotated C 的增量维护
@@ -146,7 +148,7 @@ annotated_C/
 
 同一模块的 C 类型、宏、公共声明、Coq imports 和共享 `Extern Coq` 词汇默认集中在模块 header，由各函数切片直接引用。不要把“一函数一文件”延伸成“一函数一 header”，也不要为 create/delete 等单个操作建立仅转发 include 或几条声明的小 header。已有 ABI/逻辑 header 分层有明确用途时可以沿用，不机械合并不同模块；跨模块内容放回其所属模块或已有公共 header。函数的 `With/Require/Ensure` 仍按规则写在 `.c` 的 canonical 定义及 caller-local 声明上，不集中到模块级 `*_specs.h`。
 
-开始时先查已有 header，能直接用就直接引用。需要修改时只把相关 header 复制到 trial，记录来源和基线，在副本里改；新建 header 也先放在 trial，并记录要合并到全局的路径。类型和结构体布局须与当前源码及配置一致。
+开始时先查已有模块 header，能直接用就直接引用。需要修改时只把相关 header 复制到 `trial/annotated_C/headers/`，记录来源和基线；新增模块 header 也放在此处，并记录将来的全局目标路径。同模块已有 header 时在其中增补，不再按函数追加一层 header。同步根构建和工具的 include 路径，让 `src/` 中的 `.c` 能引用这些模块头文件；不为迁就工具默认目录而把 header 放回 `src/`。类型和结构体布局须与当前源码及配置一致。
 
 达到下文的合并条件后，把本次新增或修改的 header 与函数文件一起合并回全局目录。已有模块 header 就在原文件里增补，没有才新建；比较基线、trial 版本和全局最新版本，保留其他工作。同步调整 `#include` 和包含路径，不保留对 trial 的依赖，并检查受影响的 `.c`，确认整理 header 没有改变声明、类型布局或 spec 的含义。
 

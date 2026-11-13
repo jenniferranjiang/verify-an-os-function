@@ -106,7 +106,7 @@ lib/
 
 文件拆分以实际职责和依赖关系为依据，不要求每个模块必须机械拥有 `State/Inv/Ops` 三个文件。系统组合文件导入各模块接口，模块文件不复制全局状态或系统协议。当全局state中模块级 state、predicate/invariant 和共享接口缺失时，补齐对应模块定义，并接入全局状态与系统不变量；已有定义直接复用。针对特定函数新增的抽象操作、program、局部 view、引理和证明辅助，统一放入该函数的 K<Function>.v，不另建函数专用的 State/Inv 文件。确属模块共享能力的增补，仍归入对应模块文件。
 
-函数的 QCP `With/Require/Ensure` 仍写在 annotated C 中，不因 Rocq 目录分组而改变。一函数一文件约束适用于 C 切片；类型、宏、声明和共享 Coq 词汇按模块维护 header，不机械地为每个函数新建 header。详细路径、逻辑名和迁移检查见 [工程组织与维护指南](references/project-maintenance-guide.md#全局-lib-目录结构)。
+函数的 QCP `With/Require/Ensure` 仍写在 annotated C 中，不因 Rocq 目录分组而改变。一函数一文件约束适用于 C 切片；类型、宏、声明和共享 Coq 词汇按模块维护 header，trial 中放在 `annotated_C/headers/`，与 `src/` 分开，不机械地为每个函数新建 header。详细路径、逻辑名和迁移检查见 [工程组织与维护指南](references/project-maintenance-guide.md#全局-lib-目录结构)。
 
 ### 实现完成后自动合并库
 
