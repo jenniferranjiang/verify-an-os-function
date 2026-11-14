@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-09",
+  "date": "2026-11-15",
   "branch": "trial-archive",
   "base_commit": "f96dd2e20249ed8f55d8a33097de411a97aab9ab",
   "trial_directories": [
@@ -9,6 +9,7 @@
     "kmutexcreate-trial-260928-2",
     "kmutexcreate-trial-261101-1",
     "kmutexdelete-trial-261103-1",
+    "kmutexdelete-trial-261109-1",
     "ksemaphorecreate-trial-260928-1",
     "ksemaphorecreate-trial-261012-1",
     "ksemaphorecreate-trial-261019-1",

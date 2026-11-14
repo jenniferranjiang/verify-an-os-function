@@ -1,0 +1,76 @@
+-R ../../qcp-binary-democases/Rocq/flocq/src Flocq
+-R ../../qcp-binary-democases/Rocq/SeparationLogic SimpleC.SL
+-R ../../qcp-binary-democases/Rocq/unifysl Logic
+-R ../../qcp-binary-democases/Rocq/sets SetsClass
+-R ../../qcp-binary-democases/Rocq/compcert_lib compcert.lib
+-R ../../qcp-binary-democases/Rocq/auxlibs AUXLib
+-R ../../qcp-binary-democases/Rocq/examples SimpleC.EE
+-R ../../qcp-binary-democases/Rocq/stdlib SimpleC.StdLib
+-R ../../qcp-binary-democases/Rocq/StrategyLib SimpleC.StrategyLib
+-R ../../qcp-binary-democases/Rocq/Common SimpleC.Common
+-R ../../qcp-binary-democases/Rocq/CoreLang SimpleC.CoreLang
+-R ../../qcp-binary-democases/Rocq/fixedpoints FP
+-R ../../qcp-binary-democases/Rocq/MonadLib MonadLib
+-R ../../qcp-binary-democases/Rocq/listlib ListLib
+-R ../../qcp-binary-democases/Rocq/MaxMinLib MaxMinLib
+-R ../../qcp-binary-democases/Rocq/GraphLib GraphLib
+-R ../../qcp-binary-democases/Rocq/SumLib SumLib
+-R ../../qcp-binary-democases/Rocq/tracelib TraceLib
+-R ../../qcp-binary-democases/Rocq/coq-record-update/src RecordUpdate
+-Q ../../qcp-binary-democases/Rocq/algorithms Algorithms
+-R ../../qcp-binary-democases/Rocq/examples/Applications_human/cdcllib CDCLLib
+-R ../lib CRTOS_Verify.lib
+-Q ./lib KMutexDeleteTrial.lib
+
+../lib/common/CrtosConfig.v
+../lib/common/dll_abs.v
+../lib/id/idnode_abs.v
+../lib/common/StructFieldOffsetAxiom.v
+../lib/task/KTaskPure.v
+../lib/task/TaskStatus.v
+../lib/task/TaskState.v
+../lib/assign/AssignState.v
+../lib/assign/Bitmap.v
+../lib/delay/DelayState.v
+../lib/isr/IsrState.v
+../lib/semaphore/SemaphoreState.v
+../lib/mutex/MutexState.v
+../lib/event/EventState.v
+../lib/common/CrtosGlobState.v
+../lib/common/CrtosRules.v
+../lib/common/dll.v
+../lib/list/NodeSelfLinked.v
+../lib/id/idnode.v
+../lib/list/DoubleLinkListSpec.v
+../lib/task/TaskStatusMemory.v
+../lib/task/KTaskSchedMember.v
+../lib/task/KTaskParseInfo.v
+../lib/task/KTaskStackSetupProofAux.v
+../lib/task/KTaskStackSetup.v
+../lib/task/KTaskDescriptor.v
+../lib/task/TaskInv.v
+../lib/assign/OsAssignReadyVector.v
+../lib/assign/AssignInv.v
+../lib/delay/KTaskDelay.v
+../lib/delay/KTaskDelayMem.v
+../lib/delay/DelayInv.v
+../lib/tick/TickOrder.v
+../lib/tick/TickInv.v
+../lib/task/ExstatusInv.v
+../lib/isr/IsrManagerInv.v
+../lib/common/RemoveFound.v
+../lib/semaphore/SemaphoreOps.v
+../lib/mutex/MutexOps.v
+../lib/event/EventOps.v
+../lib/semaphore/SemaphoreInv.v
+../lib/mutex/MutexInv.v
+../lib/event/EventInv.v
+../lib/event/EventLayoutABI.v
+../lib/common/ServiceSlotWf.v
+../lib/common/CrtosInv.v
+../lib/delay/KTaskUnSetDelay.v
+../lib/task/KTaskWakeup.v
+../lib/id/IdModuleSpec.v
+lib/MutexState.v
+lib/MutexInv.v
+lib/KMutexDelete.v

@@ -39,3 +39,5 @@ Restore one trial from the main working directory when needed:
 git fetch origin trial-archive
 git restore --source=origin/trial-archive -- <trial-directory>
 ```
+
+2026-11-15: Archived `kmutexdelete-trial-261109-1` (23 source/configuration/review files) before global promotion and local removal. Implementation VC/proof is incomplete. Shared dependencies are the main tree at `f84a9c0584a57d3afa5e25068b54f6cedeae6e15`. No verification claim is added.
