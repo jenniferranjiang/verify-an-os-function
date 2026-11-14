@@ -37,5 +37,14 @@ Main 交接 annotation 任务时须明确传达本节的 OS 适配规则。
 
 交接时分开列出本轮实现证明目标与从根 annotated_C 或其他证明工程导入的 `reused-spec` 边界，附复用来源、revision 和 caller-local contract 的位置。
 按[工程组织与维护指南](project-maintenance-guide.md#已有-spec-的复用与特化)，导入 spec 只放在 caller 定义前，不为其新建独立函数文件，也不生成本轮实现 VC 或重新证明函数体；工具的闭包检查须识别这类边界，不得因缺少同名 `.c` 文件而补建文件。
-之后只执行 controller 返回的 action，直到 controller 报告 `done` 或明确 blocker；不要在本 skill
+之后只执行 controller 返回的 action，直到 controller 报告 `done`、明确 blocker 或达到下述时间预算；不要在本 skill
 中复制 QCP 的阶段、命令、返回状态或 final-check。
+
+
+Controller 完成后的收尾统一按主 skill 的[正式成果迁出与 trial 删除](../SKILL.md#正式成果迁出与-trial-删除)执行。
+
+## VC 证明时间预算
+
+每个目标函数的 VC 证明累计上限为 **100 分钟**，包含证明尝试和相关编译；重试与恢复不重置计时，等待用户及环境故障修复不计入。
+
+交接给 verification-orchestrator 时落实计时与暂停。到时保存可恢复状态，汇报已用时间、剩余义务及主要卡点，等待用户决定是否追加时间。

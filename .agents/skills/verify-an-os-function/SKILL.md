@@ -9,7 +9,7 @@ description: 验证 CRTOS 等非 SMP OS 的 C 函数与模块：设计并审阅 
 
 `SKILL.md.orig` 是历史备份，不作为执行入口或参考依据，不从中继承路径、信任授权或流程约定。
 
-验证记录保存在 trial 的 `.docs/Report/` 中。按实际需要组织，可合并相关内容，不要求每类单独成文。报告类型与写法见 [验证记录指南](references/reporting-guide.md)。
+进行中的验证记录保存在 trial 的 `.docs/Report/` 中；完成后整理为全局最终报告，仅保留必要的源码缺陷记录和可选 manifest，不逐份归档过程报告。存放与清理规则见 [验证记录指南](references/reporting-guide.md)。
 
 ## 总流程
 
@@ -22,8 +22,8 @@ Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。
              -> predicate review-passed -> spec review-passed
              -> 用户确认两份 revision
              -> QCP verification-orchestrator implement（含 final-check）
-             -> implement done 后自动合并 trial 库及复用 spec 的增量修改到全局目录并完成一致性检查
-             -> 最终完整性审阅与结果汇总
+             -> implement done 后迁出 lib、annotated C、VC 并完成全局一致性检查
+             -> 最终完整性审阅、整理最终报告 -> 删除 trial
 ```
 
 ## 通用验证约束
@@ -37,13 +37,15 @@ Predicate/spec 设计与审阅前读取[默认审阅白名单](references/Review
 
 ### 临时产物与保留边界
 
+开始实验及首次引入已有文件时，按[最终报告的统计要求](references/reporting-guide.md#最终报告)记录修改前基线，供证明完成后的统计使用。
+
 `trial/.docs/Report/` 只保存人工可读的当前设计、审阅、错误和最终完整性记录。不把完整 formal source、控制器每步返回、编译目录或多份状态摘要复制进报告目录。
 
 验证中仍在使用的 QCP `reports/`、`verification_runs/` 和正式 `VC/` 由 verification-orchestrator 管理，main agent 不自行整理、改写或提前删除。需要暂存的编译输出、对比快照、一次性脚本和工具日志放入为当前任务新建的 系统临时目录中的 `crtos-verify-<trial>-<purpose>-XXXXXX/`（用 `mktemp -d` 创建，尊重 `TMPDIR`）；不用仓库 `.docs/` 充当工作区或备份目录。
 
 一个阶段结束时执行一次收尾：
 
-- 保留当前 formal 输入与证明、当前 revision/manifest、有效的 review 结论、必要的源码对应与信任假设，以及 `done` 后的 final-check/最终完整性摘要。
+- 未完成时保留当前 formal 输入、证明、恢复所需状态和有效记录；完整验证结束后，正式输入及证明迁入全局目录，记录按报告指南精简，不为保留历史而留下整个 trial。
 - 删除可重建的 `.vo/.vos/.vok/.glob/.*.aux`、tactic cache、重复 VC 副本、已被后续成功尝试取代的工作区，以及人工另存的 claim/finalize/step 回执副本。
 - 任务中的 `/tmp` 备份只保留到目标写入、比较和必要检查成功；对应阶段结束后立即删除。不删除编辑器、Codex 或其他任务拥有的临时目录。
 - 清理前确认目标没有被运行中的进程使用，且所依赖的最终摘要已存在。清理后检查报告链接、当前 revision 和正式构建输入未被损坏。
@@ -107,15 +109,6 @@ lib/
 文件拆分以实际职责和依赖关系为依据，不要求每个模块必须机械拥有 `State/Inv/Ops` 三个文件。系统组合文件导入各模块接口，模块文件不复制全局状态或系统协议。当全局state中模块级 state、predicate/invariant 和共享接口缺失时，补齐对应模块定义，并接入全局状态与系统不变量；已有定义直接复用。针对特定函数新增的抽象操作、program、局部 view、引理和证明辅助，统一放入该函数的 K<Function>.v，不另建函数专用的 State/Inv 文件。确属模块共享能力的增补，仍归入对应模块文件。
 
 函数的 QCP `With/Require/Ensure` 仍写在 annotated C 中，不因 Rocq 目录分组而改变。一函数一文件约束适用于 C 切片；类型、宏、声明和共享 Coq 词汇按模块维护 header，trial 中放在 `annotated_C/headers/`，与 `src/` 分开，不机械地为每个函数新建 header。详细路径、逻辑名和迁移检查见 [工程组织与维护指南](references/project-maintenance-guide.md#全局-lib-目录结构)。
-
-### 实现完成后自动合并库
-
-在完整验证流程中，只有用户已确认 `review-passed` 的 predicate/spec revisions，且 QCP verification-orchestrator 已对它们完成 implement、controller 返回 `done`（含 `final-check`）后，main agent 才必须主动将本次修改及新增的库文件按已记录的目标路径合并到全局 `lib/<module>/` 或 `lib/common/`，包括模块文件和函数专用文件，不要求已被多个 trial 使用。无需另行请求共享库更新确认。仅审阅通过、implement 未到 `done` 或用户仅要求只读 review 时都不得合并。
-
-按复制时的基线、trial 修改版及全局最新版本合并已有文件，保留其他工作；必要的新增依赖一并纳入全局库，全局库不得依赖 trial 文件或专属路径。按 [工程组织与维护指南](references/project-maintenance-guide.md#共享库的增量维护)更新 imports、索引、全局组合和相关配置，将当前 trial 对已合并定义的引用切回全局库。审阅留存副本不再参与构建。
-
-使用根项目配置重新编译新增、修改的库文件及受影响的依赖者，并检查当前 trial 的引用与类型一致性；不得用 trial 的旧编译产物充当检查结果。检查通过后才报告合并完成。纯路径迁移且不改变已实现证明的语义时记录迁移对应关系即可；若合并冲突迫使定义含义或接口发生变化，不得直接写入全局库：先在 trial 中说明原因和影响，更新受影响的构造、操作、规格与证明，重新审阅并经用户确认后，再次 implement 到 `done`，然后合并。
-
 
 ### 定义注释与文件顺序
 
@@ -206,9 +199,11 @@ Rocq predicate 文件通过 compile/typecheck，annotated C 已完成人工结�
 
 只有用户明确确认 review-passed predicate/spec revisions 后才能进入。Main agent 读取
 已配置 QCP 根目录中的 `AGENTS.md`，按[路径配置](references/project-maintenance-guide.md#implement-阶段的-qcp-路径配置)将验证工作目录指向当前 trial，按[QCP工具适配](references/implementation-and-validation-guide.md#qcp工具适配)要求由 QCP 工具适配本 OS 的 trial 格式，从其中指定的 `verification-orchestrator` 启动 QCP workflow，
-把已批准 predicate/spec 作为冻结输入，然后只执行 controller 返回的 action，直到 `done` 或明确 blocker。
+把已批准 predicate/spec 作为冻结输入，然后只执行 controller 返回的 action，直到 `done`、明确 blocker 或达到证明时间预算。
 
 开始目标证明前，按[工具就绪条件](references/implementation-and-validation-guide.md#证明前的工具就绪条件)确认环境已配置可用；同一环境复用已有成功结果，之后按 QCP workflow 推进。环境错误先修复。
+
+交接时落实[每个目标函数累计 100 分钟的 VC 证明预算](references/implementation-and-validation-guide.md#vc-证明时间预算)，到时保存状态并等待用户决定是否追加时间。
 
 交接时提供 TrustBase 文件路径，并明确本轮实现证明目标与 `reused-spec` 清单；导入复用函数不提交为 VC/函数体证明目标。trusted 和 reused-spec contract 均不作为本轮新完成的实现证明计数。
 
@@ -231,13 +226,13 @@ main agent 不再定义第二套步骤或返回状态。具体调用边界见
 - **Predicate**：检查是否准确描述源码中的对象、内存归属及生命周期，是否存在资源遗漏、重复归属或无依据假设。检查方法见 [Predicate 指南第 10 节](references/predicate-lemma-design-guide.md#10-检查并审阅-predicates)。
 - **Spec**：检查验证范围是否符合目标，每条真实路径的参数、返回值、状态变化、资源转移及未修改资源是否与 C 一致；`Require` 是否足以执行且没有无依据地加强调用条件，`Ensure` 是否准确表达应保证的行为；临界区及调用者资源是否在出口正确返还；被调用函数是否被错误标成已验证。不得有无依据假设或阻塞问题。详细检查项见 [Spec 指南第 6 节](references/spec-writing-guide.md#6-spec-审阅)。
 
-- **最终完整性检查**：确认 QCP controller 已返回 `done`，复用其 `final-check` 结果，不重复执行证明检查。同时确认切片与原始 CRTOS 源码的一致性结论仍然有效：源码、配置及切片相关内容未变时复用 Spec 审阅结论，有变化则重新核对受影响部分。QCP 的完成状态不能替代这项源码一致性确认；两者均通过后才能报告原 CRTOS 目标验证完成。
+- **最终完整性检查**：确认 QCP controller 已返回 `done`，复用其 `final-check` 结果，不重复执行证明检查。同时确认切片与原始 CRTOS 源码的一致性结论仍然有效：源码、配置及切片相关内容未变时复用 Spec 审阅结论，有变化则重新核对受影响部分。QCP 的完成状态不能替代这项源码一致性确认；还须确认[收尾流程](#正式成果迁出与-trial-删除)中的全局编译、引用检查及记录安置已完成，才能给出最终完整性通过结论。
 
 最终结论区分已证明结论和信任假设；对基于 TrustBase 的源码适配说明适用配置及结论限制，不将其表述为无条件的源码等价。TrustBase 或实际依赖发生变化时，只复查受影响结论，不把新条目自动追认为旧证明的依据。
 
 具体检查按目标代码及设计选择适用项，不要求逐项写报告；适用的编译、类型或证明检查须通过，影响正确性的未解决问题仍阻塞审阅通过。
 
-Spec 审阅使用明确的、已通过审阅的 predicate 版本。在完整验证流程中，两者分别 `review-passed` 后，main agent 先请用户确认两份明确 revisions；确认前不得启动 QCP verification-orchestrator。确认后执行 implement，只有 controller 返回 `done`（含 `final-check`）后，才按[实现完成后自动合并库](#实现完成后自动合并库)完成全局合并、依赖检查与版本对应记录，再进入最终完整性审阅。
+Spec 审阅使用明确的、已通过审阅的 predicate 版本。两者分别 `review-passed` 后，提供以[人工审阅导读](references/reporting-guide.md#spec-报告)为正文的 spec 报告。在完整验证流程中，main agent 随后请用户确认两份明确 revisions；确认前不得启动 QCP verification-orchestrator。确认后执行 implement，只有 controller 返回 `done`（含 `final-check`）后，才按[正式成果迁出与 trial 删除](#正式成果迁出与-trial-删除)执行收尾。
 
 ### 审阅与复查
 
@@ -250,6 +245,17 @@ Predicate/spec 草案（`draft`）可以共同修改，不做中间审阅。满�
 修改使原来的通过结论不再适用时，将该结论标为 `invalidated`，重新审阅受影响的部分；不影响结论的变化无需重审。
 
 审阅记录的写法见 [验证记录指南](references/reporting-guide.md)。
+
+## 正式成果迁出与 trial 删除
+
+trial 是工作区，不能作为长期归档目录。用户已确认通过审阅的 predicate/spec revisions，且 controller 返回 `done`（含 `final-check`）、工作已结束后，main agent 主动执行以下收尾，无需另设共享库更新或迁出审批。模块文件和函数专用文件均适用，不要求被多个模块或 trial 使用。
+
+1. 先按[最终报告的统计要求](references/reporting-guide.md#最终报告)记录证明完成时的 manual/lib 增量，再将本轮正式 lib、annotated C/header、VC/证明迁入已记录的全局目标位置，沿用工程已有布局。新增文件移动；目标已有文件时，比较基线、trial 修改版和全局最新版本，整合后替换，保留已有定义、spec 和其他工作。各类文件的处理细节见[工程维护指南](references/project-maintenance-guide.md#共享库的增量维护)。
+2. 更新根构建、imports、逻辑路径、索引、工具和编辑器引用，并移除本轮失效配置引用；在全局位置重新编译受影响的 lib、依赖者及 VC/证明到 goal_check，核对 annotated C 与源码的对应，确保正式构建不再需要 trial 文件、临时路径或旧 `.vo`。纯路径迁移不重新运行 symbolic、生成 VC 或启动实现证明；若整合导致定义、契约或证明义务变化，先回到相应设计、审阅、用户确认和 implement 流程，不能沿用旧 done 结论。
+3. 按[报告保留规则](references/reporting-guide.md#完成后保留什么)写好一份最终报告，迁出必要的源码缺陷记录；只有工具需要时保留 manifest。报告指向全局正式文件，保留最终 revision、结果及必要的迁移对应，不链接即将删除的 trial 或日志。
+4. 完成[最终完整性审阅](#审阅内容与通过条件)，将结论写入最终报告。确认 workflow 已结束、不再需要恢复状态，且 trial 内没有尚未安置的必要文件或其他任务的内容后，删除整个本轮 trial。成功收尾后只维护全局正式成果和精简记录，不保留重复源码或完整 trial 快照。
+
+未完成、迁出检查失败或存在本轮待解决问题时，保留恢复所需输入、证明、记录和状态；仅完成设计与审阅不触发本节的迁出/删除。迁出中需要恢复验证时，先恢复所需 trial 输入及构建映射，不搬走仍在运行或需要恢复的控制器所依赖的文件。所有收尾检查通过后才能报告整个流程完成。
 
 ## 项目与参考路径
 
@@ -280,5 +286,5 @@ Predicate/spec 草案（`draft`）可以共同修改，不做中间审阅。满�
 
 上述“复用”指使用适合当前目标的可使用实际定义或已证明结论；作为证明依据时确认其证明状态、依赖假设和当前工程兼容性。“参考”允许借鉴设计和证明方法，不表示整个目录已经可信，也不替代用户对具体 `trusted` C symbol 的批准。
 
-涉及跨模块调用时必须复用共享 `lib/` 中的已有定义，不得重复增加已有概念。若现有接口缺少所需内容，把所属模块文件复制到平铺的 `trial/lib/`，在副本中增补定义并记录其全局来源与目标路径；若已有定义不符合当前 C 或本 skill 的要求，应说明修改依据和影响，并检查受影响的使用处。按上述实现完成后自动合并流程写回全局库。
+涉及跨模块调用时必须复用共享 `lib/` 中的已有定义，不得重复增加已有概念。若现有接口缺少所需内容，把所属模块文件复制到平铺的 `trial/lib/`，在副本中增补定义并记录其全局来源与目标路径；若已有定义不符合当前 C 或本 skill 的要求，应说明修改依据和影响，并检查受影响的使用处。按[正式成果迁出与 trial 删除](#正式成果迁出与-trial-删除)进入全局库。
 

@@ -12,11 +12,11 @@ CRTOS 源码由独立的上游仓库 `https://www.gitlink.org.cn/chos/crtos` 跟
 
 开始时按[环境与路径配置](../CONFIGURATION.md)读取并检查用户配置，确认验证工程、源码和工具位置。
 
-开始验证先扫描 `lib/`、解析后的 annotated C 目录、已有 `_CoqProject`、构建文件和 imports，记录实际布局与逻辑前缀。只要求根目录有 `lib/` 与 annotated C 两类产物目录：缺哪个补哪个，缺失/空目录按下文默认布局逐步创建所需文件，不预建无关空模块。已有目录分别沿用各自结构：与示例一样就按示例，平铺就继续在根目录增补 `.v` 和 canonical `.c`，其他布局按同类文件位置增补，不迁移现有文件。
+开始验证先扫描 `lib/`、解析后的 annotated C 目录、已有 `VC/`、`_CoqProject`、构建文件和 imports，记录实际布局与逻辑前缀。全局正式产物分别由 `lib/`、annotated C 和 `VC/` 目录维护；按实际产物逐步创建所需目录和文件，不预建无关空模块，仅设计审阅时不要求创建空 `VC/`。已有目录分别沿用各自结构：与示例一样就按示例，平铺就继续在根目录增补 `.v` 和 canonical `.c`，其他布局按同类文件位置增补，不迁移现有文件。
 
 本文及主 skill 的全局 `lib/<module>/`、`lib/common/`、`annotated_C/src/...` 和根目录限制仅适用于默认布局；复制、合并、索引和 imports 使用实际路径。例如平铺目标可以是 `lib/TaskInv.v` 和 `annotatedc/KTaskCreate.c`。沿用已有逻辑前缀；无 `_CoqProject` 时按实际依赖建立，不硬编码 `CRTOS_Verify`。已有索引则维护，没有则按需要创建。
 
-Trial 的 Rocq 文件平铺在 `trial/lib/`，函数切片平铺在 `trial/annotated_C/src/`，模块 header 放在与 `src/` 同级的 `trial/annotated_C/headers/`；三者与全局布局分别记录，由 QCP 适配工作布局。不同全局目录的同名文件复制到 trial 时先解决名称/逻辑路径冲突，不能覆盖。分享 `.agents` 时保留模板，不分享用户的本机配置。
+Trial 的 Rocq 文件平铺在 `trial/lib/`，函数切片平铺在 `trial/annotated_C/src/`，模块 header 放在与 `src/` 同级的 `trial/annotated_C/headers/`；三者与全局布局分别记录，由 QCP 适配工作布局。不同全局目录的同名文件复制到 trial 时先解决名称/逻辑路径冲突，不能覆盖。
 
 ## Trial 与全局库
 
@@ -24,9 +24,9 @@ Trial 的 Rocq 文件平铺在 `trial/lib/`，函数切片平铺在 `trial/annot
 
 `trial/lib/` 只保存新增库及确实修改定义或接口的文件。未修改库通过原逻辑路径直接引用，不因编译、传递依赖或 import 路径不同而复制。遇到接口类型不匹配，先检查现有库接口、外部映射和修改处的兼容性处理；需要改变定义时记录具体语义差异，不能把只改路径的副本当成必需的模块修改。全局库与各 trial 使用不同逻辑前缀，避免同名文件互相遮蔽。
 
-构建命令从工程根目录执行，所有相对映射以根目录解析；例如先在根目录运行 `coq_makefile -f _CoqProject -o Makefile.coq`，再用 `make -f Makefile.coq <trial>/lib/<File>.vo` 构建目标及其依赖。编辑器和工具使用同一根项目配置，不依赖从 trial 工作目录自动继承。既有 trial 独立配置迁移时，先把映射和输入纳入根配置并实际编译通过，再移除重复入口；不只删文件而留下失效的脚本或工具参数。
+构建命令从工程根目录执行，所有相对映射以根目录解析；例如先在根目录运行 `coq_makefile -f _CoqProject -o Makefile.coq`，再用 `make -f Makefile.coq <trial>/lib/<File>.vo` 构建目标及其依赖。编辑器和工具使用同一根项目配置，不依赖从 trial 工作目录自动继承。新 trial 直接使用根配置，无需独立配置迁移。仅在已有旧 trial 仍维护独立配置时，先将其映射和输入纳入根配置并实际编译通过，再移除重复入口及失效的脚本或工具参数。
 
-trial 文件暂不提交时，只选择提交已完成的共享修改；不要一并提交对未上传 trial 文件的必需构建引用。待 trial 发布时，再将它与对应根构建配置变更一同提交。这是提交范围的协调，不要求在设计阶段提前合并 trial 库到全局 `lib/`。
+统一根构建配置后，仍需按提交范围检查它引用的文件是否齐全。如果本次暂不提交某个 trial，也不要提交对该 trial 文件的必需构建引用，否则其他人拉取后会因缺少输入而构建失败。需要发布该 trial 时，将它与对应根构建配置变更一同提交即可；trial 文件已随提交提供时，无需额外处理。这与是否将 trial 库合并到全局 `lib/` 无关。
 
 上述组织与外部库引用规则在 implement 阶段继续适用，必须[沿用现有 trial 工程](implementation-and-validation-guide.md#沿用现有工程)进行验证。由 QCP 工具侧适配本 OS 工程的格式与外部库引用，不因工具默认约定而重新配置、复制整套依赖或重组工程。
 
@@ -43,7 +43,7 @@ Rocq 编译及依赖解析则明确使用验证工程根目录的 `_CoqProject` 
 
 - 新 `.v` 加入根 `_CoqProject`，由根构建入口解析全局库及 trial 依赖。设计阶段只编译所需 lib；进入实现阶段后，VC 按 `lib -> goal -> proof_auto -> proof_manual -> goal_check` 编译。
 
-需要编译的时机有三处：predicate 完成并准备审阅时，编译相关 predicate 文件；VC 完成后，编译本次生成的 VC 和证明文件；implement 完成并将 trial 库合并到全局 `lib/` 后，使用根项目配置重新编译新增或修改的库文件及其依赖者，并检查 trial 的引用。草案阶段不要求每次修改后都编译。
+需要编译的时机有三处：predicate 完成并准备审阅时，编译相关 predicate 文件；VC 完成后，编译本次生成的 VC 和证明文件；implement 完成并迁出正式成果后，使用根项目配置在全局路径下重新编译新增或修改的库文件、受影响的依赖者及 VC/证明到 goal_check，并确认正式文件不再引用 trial。草案阶段不要求每次修改后都编译。
 
 工具链选择、编译命令和环境问题见[环境与路径配置](../CONFIGURATION.md#rocq-编译配置)。
 
@@ -71,7 +71,7 @@ lib/
 
 ### 已有共享库的复用与修改
 
-当前验证工程 `lib/` 中的已有定义应优先复用，也允许按当前源码和验证需求增补或修改。已有接口缺少所需元素、操作或引理时，在职责对应的 `lib/<module>/` 或 `lib/common/` 中增量补充。模块级 state、predicate/invariant 和共享接口缺失时，补齐对应模块定义，并接入全局状态与系统不变量；已有定义直接复用。针对特定函数新增的抽象操作、program、局部 view、引理和证明辅助，统一放入该函数的 K<Function>.v，不另建函数专用的 State/Inv 文件。确属模块共享能力的增补，仍归入对应模块文件。
+当前验证工程 `lib/` 中的已有定义应优先复用，也允许按当前源码和验证需求增补或修改。已有接口缺少所需元素、操作或引理时，按职责确定 `lib/<module>/` 或 `lib/common/` 的目标位置，在对应 trial 文件中增量补充。模块级 state、predicate/invariant 和共享接口缺失时，补齐对应模块定义，并接入全局状态与系统不变量；已有定义直接复用。针对特定函数新增的抽象操作、program、局部 view、引理和证明辅助，统一放入该函数的 K<Function>.v，不另建函数专用的 State/Inv 文件。确属模块共享能力的增补，仍归入对应模块文件。
 
 新增定义前先查全局库：已有且适用的定义直接通过原逻辑路径引用；已有定义或接口确实需要增补或修改时，才把所属文件复制到平铺的 `trial/lib/`，记录来源、基线及具体要改的定义或接口；全局库没有的内容才新建本地文件。编译、被其他文件引用、调整路径或重新生成 `.vo` 都不是复制理由。
 
@@ -79,17 +79,11 @@ lib/
 
 共享库的修改可以涉及定义含义或接口，但必须符合真实源码与系统协议，并同步调整受影响的构造、操作、predicate、spec 和证明。已有全局lib或者spec不符合当前skill可以直接报告，然后再进行修改。若修改导致已有审阅或证明结论不再适用，明确其影响并重新审阅受影响部分，不沿用失效结论。修改已有文件时检查修改处及受影响内容，新建文件时检查完整文件。共享库的修改权限不允许间接改变复用 spec 的原语义；涉及已有 spec 时仍须满足下文的语义保持规则。
 
-### 实现完成后合并共享库
+### 共享库迁出细节
 
-按主 skill 的[实现完成后自动合并库](../SKILL.md#实现完成后自动合并库)执行：设计、审阅和 implement 期间只修改 trial 副本及新增文件；复制时记录全局来源和可用于比较的基线版本。在完整验证流程中，用户确认已通过审阅的 predicate/spec revisions，且 QCP controller 返回 `done`（含 `final-check`）后，main agent 按已记录的目标路径主动合并平铺在 `trial/lib/` 中的修改及新增文件到对应 `lib/<module>/` 或 `lib/common/`，无需另设共享库更新审批。模块文件和函数专用文件均适用，不要求被多个模块或 trial 使用。未到 `done` 时保留 trial 产物，不写入全局库。
+迁出条件和顺序统一按主 skill 的[正式成果迁出与 trial 删除](../SKILL.md#正式成果迁出与-trial-删除)执行。共享库目标为已记录的 `lib/<module>/`、`lib/common/` 或用户已有位置。设计阶段的模块状态与系统 invariant 集成应已在 trial 中完成，不推迟到迁出时才设计。
 
-新增模块状态时，在平铺的 `trial/lib/` 中建立状态文件，并记录其目标模块目录；完成 implement 后再创建或更新全局模块目录，并在 `common/` 中的全局状态与系统不变量中接入该模块。导入仅使定义可用，不会自动更新 record 构造、状态更新函数或不变量；这些使用处随接口变化同步调整。仅新增局部引理或操作时，不需要改动全局组合。
-
-合并前检查依赖、名称冲突及目标文件的最新内容，以复制时基线、trial 修改版及全局最新版本比较并合并，不得直接用旧副本覆盖其他工作。共享文件只能依赖共享库或外部库，不能依赖 trial 的实验文件或专属路径；从 trial 引入的必要新依赖在 implement 完成后一并纳入全局库。若合并需要改变已审阅且已实现证明的定义含义或接口，先回到 trial 修改，重新审阅、经用户确认并 implement 到 `done`，再执行合并。
-
-合并后，按模块更新 `lib/index.md` 中的文件职责与实际子目录路径，并按实际变化更新根 `_CoqProject`、根 Makefile、QCP 配置、编辑器路径以及使用处的 imports；将当前 trial 对已合并定义的引用切回全局逻辑路径。使用根项目配置重新编译新增或修改的 `.v` 文件及受影响的依赖者，并检查当前 trial 的引用与类型一致性，不沿用 trial 的 `.vo` 作为共享库编译结果。检查通过后才能报告共享库更新完成；语义或接口变化时按上述规则退回 trial。此处一致性检查在已完成的 QCP `final-check` 之后执行，不重复启动 symbolic、VC 或实现证明。
-
-Trial 中保留此次完成 implement 的版本，便于追溯，并记录该版本到合并后文件及逻辑路径的对应关系。纯路径迁移且不改变已实现证明的语义时不要求重新审阅或实现证明。
+同步必要依赖、imports、全局组合和已有索引。trial 为复用原库而导入同名根文件时，须解决兼容定义和命名关系，避免直接覆盖造成 self-import；核对受影响的全局依赖者。
 
 ## 全局 Annotated C 目录结构
 
@@ -150,10 +144,25 @@ annotated_C/
 
 开始时先查已有模块 header，能直接用就直接引用。需要修改时只把相关 header 复制到 `trial/annotated_C/headers/`，记录来源和基线；新增模块 header 也放在此处，并记录将来的全局目标路径。同模块已有 header 时在其中增补，不再按函数追加一层 header。同步根构建和工具的 include 路径，让 `src/` 中的 `.c` 能引用这些模块头文件；不为迁就工具默认目录而把 header 放回 `src/`。类型和结构体布局须与当前源码及配置一致。
 
-达到下文的合并条件后，把本次新增或修改的 header 与函数文件一起合并回全局目录。已有模块 header 就在原文件里增补，没有才新建；比较基线、trial 版本和全局最新版本，保留其他工作。同步调整 `#include` 和包含路径，不保留对 trial 的依赖，并检查受影响的 `.c`，确认整理 header 没有改变声明、类型布局或 spec 的含义。
+迁出时，header 与函数文件一起归入全局目标；已有模块 header 在其内容上整合，没有才新建。同步调整 `#include` 和包含路径，不保留对 trial 的依赖，并检查受影响的 `.c`，确认整理 header 没有改变声明、类型布局或 spec 的含义。
 
-### 实现完成后合并 annotated C
+### Annotated C 迁出细节
 
-在完整验证流程中，用户确认已通过审阅的 predicate/spec revisions，且 QCP controller 返回 `done`（含 `final-check`）后，与共享库一样主动合并本次等价修改及新增特化到根 `annotated_C/src/`，无需另设更新审批。比较基线、trial 版本及全局最新版本，已有 canonical 文件按原函数位置增量合并，新增 canonical 文件按已记录的目标路径写入 `src/kernel/<module>/`、`src/kernel/common/` 或 `src/` 下其他适用子目录，并保留其他工作和原 contract；导入 spec 的修改从 caller-local 声明提取，不为合并另建 trial 函数文件。其他证明工程的来源只作复用依据，不因此写回外部工程。不以单函数切片覆盖原多函数文件，不把 trial 专属路径写入全局文件。所需新增库依赖一并按共享库规则合并；`scenarios/`、`gen/`、`dep/` 不是合并目标。未到 `done` 时不写入根 `annotated_C/src/`。
+按主 skill 的[收尾流程](../SKILL.md#正式成果迁出与-trial-删除)，已有 canonical 文件按原函数位置增量整合，新增文件移动到已记录的 `src/kernel/<module>/`、`src/kernel/common/` 或其他适用位置。保留原 contract；导入 spec 的修改从 caller-local 声明提取，不为迁出另建 trial 函数文件。不以单函数切片覆盖原多函数文件；其他证明工程只作复用依据，不因此写回外部工程。`scenarios/`、`gen/`、`dep/` 不是全局维护目标。
 
-合并后核对 imports、具名 spec、受影响的 caller-local contracts 及源码等价性，记录 trial 与全局文件的版本对应；trial 继续保留本轮已完成 implement 的一函数一文件输入，导入 spec 保留在 caller 定义前。共享 `.v` 依赖按根项目配置编译，annotated C 完成人工结构与语义一致性检查，不重复启动 QCP。合并表示本轮已完成实现证明并进入全局维护；导入复用部分按上述 `reused-spec` 规则免于本轮 VC 和函数体重证。若合并时发现新的或受影响的证明义务，退回 trial 更新并重新走 review、用户确认和 implement，不把它们留到合并后处理。
+核对具名 spec、受影响的 caller-local contracts、imports 及源码等价性；导入 spec 仍保留在正式 caller 定义前。Annotated C 完成人工结构与语义一致性检查；导入复用部分仍按上述 `reused-spec` 规则处理，不追认为本轮新完成的函数体证明。
+
+## 全局 VC 目录与维护
+
+与 `lib/` 一样，VC 按模块维护；函数专属文件归入对应函数目录，跨函数共享的 strategy 等证明放在公共部分。新目录默认如下，已有布局则沿用实际位置并记录映射：
+
+```text
+VC/
+├── common/                    # 共享 strategy 和辅助证明
+└── <module>/
+    └── <function>/            # goal、proof_auto、proof_manual、goal_check 等正式文件
+```
+
+按主 skill 的[收尾流程](../SKILL.md#正式成果迁出与-trial-删除)，将 trial 中当前有效的 VC 目标、自动/手工证明、goal_check 及必要辅助文件成套迁出。复用且未改的全局证明直接引用；不要搬入重复生成结果、编译缓存或旧失败版本。已有目标先比较并保留其他有效证明，不以同名文件直接覆盖不兼容的内容。
+
+通过工具完成所需路径/import 调整，核对逻辑名称和 theorem 依赖；路径整理不能改变 VC 陈述、假设或证明内容来绕过检查。全局根构建配置纳入这些正式文件，并按依赖顺序重新编译到 goal_check。
