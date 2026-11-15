@@ -1,0 +1,54 @@
+--- a/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/data_queue.c
++++ b/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/data_queue.c
+@@ -41,6 +41,9 @@
+     lock = CriticalAreaLock();
+     do {
+         memset(p_queue, 0, sizeof(DataQueueType));
++        /* Bug fix: zero is a valid semaphore ID; -1 means not acquired. */
++        p_queue->sem_blank = -1;
++        p_queue->sem_data = -1;
+         p_queue->front = p_queue->rear = 0;
+         p_queue->max_len = NodeNumber;
+         p_queue->base = (DataElemType *)x_malloc(p_queue->max_len * sizeof(DataElemType));
+@@ -51,12 +54,14 @@
+         // The semaphore is initialized to len-1, because the full condition of the loop queue is real + 1 = = front, 
+         // a vacancy is always wasted
+         p_queue->sem_blank = KSemaphoreCreate( p_queue->max_len - 1);
+-        if (!p_queue->sem_blank) {
++        /* Original buggy check: if (!p_queue->sem_blank) */
++        if (p_queue->sem_blank < 0) {
+             break;
+         }
+ 
+         p_queue->sem_data = KSemaphoreCreate( 0);
+-        if (!p_queue->sem_data) {
++        /* Original buggy check: if (!p_queue->sem_data) */
++        if (p_queue->sem_data < 0) {
+             break;
+         }
+ 
+@@ -91,14 +96,18 @@
+         p_queue->base = NONE;
+     }
+ 
+-    if (p_queue->sem_blank) {
++    /* Original buggy check: if (p_queue->sem_blank) */
++    if (p_queue->sem_blank >= 0) {
+         KSemaphoreDelete(p_queue->sem_blank);
+-        p_queue->sem_blank = NONE;
+-    }
+-
+-    if (p_queue->sem_data) {
++        /* Original buggy reset: p_queue->sem_blank = NONE; */
++        p_queue->sem_blank = -1;
++    }
++
++    /* Original buggy check: if (p_queue->sem_data) */
++    if (p_queue->sem_data >= 0) {
+         KSemaphoreDelete(p_queue->sem_data);
+-        p_queue->sem_data = NONE;
++        /* Original buggy reset: p_queue->sem_data = NONE; */
++        p_queue->sem_data = -1;
+     }
+     ENABLE_INTERRUPT(lock);
+ }

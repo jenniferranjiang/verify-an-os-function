@@ -1,0 +1,11 @@
+# Dataqueue 模块接入与外部库复用
+
+用户要求验证 InitDataqueue 时完成所属模块 lib，并将共享dataqueue状态及资源接入OS总状态/os_inv；同时明确未修改的库直接引用原库，不在trial维护副本。
+
+本轮正式lib仅保留三个确实修改的核心文件CrtosGlobState.v、CrtosRules.v、CrtosInv.v，以及四个dataqueue文件。原VarGlobalState仍采用原字段加os_dataqueues的平铺record，没有另建core+queues包装总状态。project_core确定性提取旧字段，用于调用外部原库接口；StableGlobalState复用原类型。
+
+CrtosRules直接复用原库唯一空间断言载体和STS，Inside/Outside通过状态投影衔接原协议。CrtosInv的实际os_inv分离组合外部原os_inv与dataqueue_inv，Lock/IRQ契约交接该完整资源。信号量原抽象操作通过保守提升保持新增queue分量；原库的helper契约显式使用CoreVarGlobalState，避免同名类型误连。不从旧固定Lock合同凭空推导额外资源；保护资源schema的本轮实例以及初始化empty、发布和取回资源义务均显式记录。
+
+成功Init在原unlock前发布共享条目并交出对象/数组；失败从未发布，保留私有回滚并返还结构体。运行期环索引、已写槽、活跃内容和retire/withdraw接口由模块lib描述，本轮不扩大为Push/Pop等函数的C证明。
+
+先前局部设计aa94ab/f2c580缺共享集成；随后c6c705/d3bdd版本虽接入了原os_inv，但复制了整条依赖链。本轮按用户要求取消未改库副本并重新编译、审阅，前版结论均已失效。用户批准的DQ-001源码修复保持；当前仍仅设计审阅，未启动QCP parser/symbolic、VC、orchestrator或C实现证明，不合并全局库。

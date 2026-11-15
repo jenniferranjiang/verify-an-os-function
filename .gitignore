@@ -16,6 +16,7 @@ compile_commands.json
 .lia.cache
 .nia.cache
 .Makefile.coq.d
+.Makefile.d
 rocq_mcp_cache_*.v
 *:Zone.Identifier
 
@@ -31,8 +32,6 @@ __pycache__/
 annotated_C/gen/
 annotated_C/dep/
 
-# Trials use shared libraries instead of private dependency snapshots.
-/kmutexdelete-trial-261109-1/.provider/
 /tools/rocq/qcp_toolchain.py.before-qcp-workspace
 
 # CRTOS source is maintained in the sibling upstream checkout.

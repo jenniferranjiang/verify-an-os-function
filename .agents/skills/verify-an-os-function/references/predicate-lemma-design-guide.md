@@ -615,9 +615,13 @@ container predicate 和必要 lemma；仅凭类型名或习惯性实现不能构
 
 需要接入时，在全局状态中补齐实际 invariant 组合、状态更新和资源交接，不能只添加 import；这项集成在 trial 中完成，与之后合并全局目录是不同步骤。
 
+项目已有 OS 总状态和 `os_inv` 时，直接修改它们的原定义副本：在现有 state record 中增加模块分量，在现有 `os_inv` 定义体中组合模块 invariant 及必要的跨模块关系。本阶段只处理当前 trial 及其实际使用的依赖；本轮用到的定义若需适配，在 trial 副本中按需修改，不要求同步更新全局库、其他 trial、历史 spec 或证明，也不扫描和改造所有旧调用者。模块自己的 `State`/`Inv` 文件可以新增，但不能另建一套系统级入口。例如 CRTOS 应修改 `CrtosGlobState.v` 中的全局状态和 `CrtosInv.v` 中的 `os_inv`，而不是新增 `CrtosDataqueue.State = { core : VarGlobalState; queues : ... }`，再用旧 token 的投影包装另一份系统不变量。文件名以实际工程为准。
+
+不得以保留旧 Assertion carrier、避免修改依赖库、减少编译工作或便于复用为由，采用上述外层包装。全局状态扩展若改变 STS/Assertion 类型，只处理当前 trial 实际需要的共享协议和 predicate 接口兼容性，并按[共享库修改规则](project-maintenance-guide.md#已有共享库的复用与修改)记录必要修改范围。确实无法兼容时，报告具体类型或接口冲突；不能自行改成另一套全局模型。审阅须检查 trial 中原 state/`os_inv` 的修改副本及本轮调用处是否已使用新增分量，外层组合不能算作集成完成。
+
 模块全局 predicate 必须覆盖当前配置下该模块拥有或管理的全部内存。开发时可以按对象或容器逐步加入并编译，但要持续修改同一个正式 definition；在模块资源和生命周期尚未闭合时，它仍是 draft。每次加入资源时，检查其唯一 owner、与现有 footprint 不重叠，并追溯到使用它的真实模块函数；发现新的逻辑状态时返回第 2 节。
 
-`slice_OS_inv` 可以只组合目标函数及其依赖需要的模块 predicate，但其中每个模块 predicate 本身必须完整。组合时检查跨模块地址不重叠；跨模块联系优先使用纯 consistency relation，不复制 ownership。只有验证边界内的共享资源、critical protocol、initialization 和生命周期全部闭合后，才能声称为完整 `OS_inv`。
+尚无系统不变量的工程可以建立 `slice_OS_inv`，只组合目标函数及其依赖需要的模块 predicate，但其中每个模块 predicate 本身必须完整。项目已有 `os_inv` 时，局部 view 可以辅助拆合资源，不能以新建 `slice_OS_inv` 替代对原 `os_inv` 的集成。组合时检查跨模块地址不重叠；跨模块联系优先使用纯 consistency relation，不复制 ownership。只有验证边界内的共享资源、critical protocol、initialization 和生命周期全部闭合后，才能声称为完整 `OS_inv`。
 
 ## 7. 根据真实 C 操作定义 Lemma
 

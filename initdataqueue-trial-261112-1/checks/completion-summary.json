@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "predicate_revision": "0bd5b847fe79b5f6be975a392d968b2c972df8228c7a3d45f8d10758db7cff31",
+  "spec_revision": "bd320182858f13b1fb3eb06b3d450dcbb2f94d6df632d03a543e3a5769184767",
+  "formal_count": 7,
+  "modified_existing_library_files": 3,
+  "dataqueue_files": 4,
+  "unmodified_library_copies": 0,
+  "extern_declarations": 75,
+  "core_alias_identity_checks": 4,
+  "canonical_functions": 6,
+  "reachable_symbols": 24,
+  "root_library_sources": "unchanged; imported externally",
+  "formal_hashes": "match compilation and independent review",
+  "cleanup": "Obsolete copies/staging removed; current compilation cache rebuilt and retained for user-requested diagnosis.",
+  "implementation_proof": "not performed"
+}

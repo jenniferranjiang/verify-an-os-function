@@ -54,6 +54,8 @@ Predicate/spec 设计与审阅前读取适用文件，只对符合适用条件�
 
 根 `_CoqProject` 与根 Makefile 统一管理全局库和 trial 输入；不另维护 trial 的 `_CoqProject`/Makefile。路径映射以工程根目录解析，编译可通过根构建入口选择当前 trial 的目标。见[统一构建规则](references/project-maintenance-guide.md#trial-与全局库)。
 
+当前 trial 直接 import 未修改的全局项目库；仅需修改的已有库副本及新增库使用 `trial/lib/` 和本轮逻辑前缀。根配置同时保留所需全局与 trial 映射，避免同名定义被意外遮蔽。设计和实现阶段只编译本轮目标及必要依赖，全局依赖适配与统一编译留到正式成果迁出后。QCP 等外部基础库按配置直接引用。
+
 - 若已有 `tools/rocq/toolchain.json`，沿用并核对与路径配置一致；其他工程不要求此包装器，使用确认后的 `coq_bin` 或 PATH。VsRocq 使用相同环境 bin 目录中的 `vsrocqtop`，路径按本机安装位置填写。
 - QCP 库直接引用配置的 `qcp_root` 下的实际目录，沿用工程已有的逻辑名与路径映射；不复制到验证工程，也不保留源码快照。
 ```sh

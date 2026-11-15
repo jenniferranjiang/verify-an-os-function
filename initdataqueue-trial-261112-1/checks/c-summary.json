@@ -1,0 +1,15 @@
+{
+  "command": "gcc -m32 -std=c11 -fsyntax-only annotated_C/src/*.c checks/abi.c",
+  "exit_code": 0,
+  "diagnostic": "initdataqueue-trial-261112-1/annotated_C/src/DeInitDataqueue.c:5:13: warning: inline function \u2018NULL_PARAM_CHECK_1\u2019 declared but never defined\n    5 | inline void NULL_PARAM_CHECK_1(void *p)\n      |             ^~~~~~~~~~~~~~~~~~\ninitdataqueue-trial-261112-1/annotated_C/src/InitDataqueue.c:5:13: warning: inline function \u2018NULL_PARAM_CHECK_1\u2019 declared but never defined\n    5 | inline void NULL_PARAM_CHECK_1(void *p)\n      |             ^~~~~~~~~~~~~~~~~~\n",
+  "files": {
+    "annotated_C/src/DeInitDataqueue.c": "8401f5fe53561d9438c02d62eb065329cff38860d03552aa4e56002dba55add5",
+    "annotated_C/src/InitDataqueue.c": "976fac85229a438f848b1595e36c0e306b39cd75e7eea7aba5dffab969b58b41",
+    "annotated_C/src/KSemaphoreCreate.c": "8ecc4ad8c694f9ca8882364db97d4815ae6aa2c289db345b7efc2dcda20f6139",
+    "annotated_C/src/KSemaphoreDelete.c": "75eadb91e984d3db714bcf332365d4640d3872f70d535210ba0fde84c9313faf",
+    "annotated_C/src/_SemaphoreCreate.c": "4ca7b333a9d1a832e5cfa87d88a51a3a5803be943475d32496f1d4bf7711f2ca",
+    "annotated_C/src/_SemaphoreDelete.c": "047dda6a7b749e4130d3aff57007ae39184ff78382a4dfa1b188f8e2c22b1b14",
+    "checks/abi.c": "6d2ab74aca16c771c304009c8f1f7047194df20911543e6230db6d944c37f70b"
+  },
+  "scope": "C syntax and host ILP32 static ABI assertions only; no QCP parser, symbolic, VC or C body proof"
+}

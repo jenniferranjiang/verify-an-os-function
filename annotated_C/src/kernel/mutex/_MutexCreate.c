@@ -1,7 +1,7 @@
 #include "mutex_create_types.h"
 #include "mutex_create_logic.h"
 
-/*@ Import Coq Require Import CRTOS_Verify.VC.MutexCreate_lib */
+/*@ Import Coq Require Import CRTOS_Verify.VC.mutex.MutexCreate_lib */
 /*@ Extern Coq (MutexAbs :: *) (MutexStable :: *)
                (TaskState :: *) (TaskDescriptorAbs :: *) (option :: * => *) */
 /*@ Extern Coq MutexState := list MutexAbs */

@@ -1,0 +1,507 @@
+{
+  "format_version": 1,
+  "trial": "initdataqueue-trial-261112-1",
+  "scope": "Design and review only; no symbolic, VC, orchestrator or C implementation proof",
+  "sources": [
+    {
+      "symbol": "KSemaphoreCreate",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/KSemaphoreCreate.c",
+      "sha256": "327769e9d7769fb1c630d74245e76ff24a3a7057f551cfb47e26468716072ead",
+      "selected_spec": "original OC contract; provenance only",
+      "boundary": "provenance-only",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": "The new IC contract is this trial canonical, not an equivalent proven import."
+    },
+    {
+      "symbol": "_SemaphoreCreate",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/_SemaphoreCreate.c",
+      "sha256": "86010ac7d389c6b895a673444d19c96a70b0af365136fe67502838a7f0853a28",
+      "selected_spec": "original OC contract; provenance only",
+      "boundary": "provenance-only",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": "The new IC contract is this trial canonical, not an equivalent proven import."
+    },
+    {
+      "symbol": "KSemaphoreDelete",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/KSemaphoreDelete.c",
+      "sha256": "ef7c27f4fbfa0aab7c3b1039fa488da9e4b82f6d92be6129c462da1b85860c83",
+      "selected_spec": "original OC contract; provenance only",
+      "boundary": "provenance-only",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": "The new IC contract is this trial canonical, not an equivalent proven import."
+    },
+    {
+      "symbol": "_SemaphoreDelete",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/_SemaphoreDelete.c",
+      "sha256": "953c7644c4fdacdafacdb505f86b201eb0f6b5347cbfad50d9815353f824c32a",
+      "selected_spec": "original OC contract; provenance only",
+      "boundary": "provenance-only",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": "The new IC contract is this trial canonical, not an equivalent proven import."
+    },
+    {
+      "symbol": "IdInsertObj",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/headers/id_module_spec.h",
+      "sha256": "2f293057ec98604ae558d528291db8ebc0081975aa3bdb741298730adc085fea",
+      "selected_spec": "default",
+      "boundary": "reused-spec",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": "Unchanged original external API directly imported. Where a core state occurs, CoreVarGlobalState/core_* explicitly denote definitionally the original root types/protocols; full-state IC contracts remain new design targets. No copied helper library or carrier migration."
+    },
+    {
+      "symbol": "InitDoubleLinkList",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/list/InitDoubleLinkList.c",
+      "sha256": "773d1d5b00d9072336041b088154b3449e6a978165917abfe9f2cc88916ecd49",
+      "selected_spec": "default",
+      "boundary": "reused-spec",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": "Unchanged original external API directly imported. Where a core state occurs, CoreVarGlobalState/core_* explicitly denote definitionally the original root types/protocols; full-state IC contracts remain new design targets. No copied helper library or carrier migration."
+    },
+    {
+      "symbol": "DoubleLinkListInsertNodeAfter",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/list/DoubleLinkListInsertNodeAfter.c",
+      "sha256": "9b27c23929a553aacb58221941b18f37ac08b5e8433cbe2a68c398da9eab6a81",
+      "selected_spec": "dispatch_case",
+      "boundary": "reused-spec",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": "Unchanged original external API directly imported. Where a core state occurs, CoreVarGlobalState/core_* explicitly denote definitionally the original root types/protocols; full-state IC contracts remain new design targets. No copied helper library or carrier migration."
+    },
+    {
+      "symbol": "IdGetObj",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/id/IdGetObj.c",
+      "sha256": "6f5447b61e00e565c578815331e1b9c4d777a6b70e17f6a653a73dc6f9349cae",
+      "selected_spec": "default",
+      "boundary": "reused-spec",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": "Unchanged original external API directly imported. Where a core state occurs, CoreVarGlobalState/core_* explicitly denote definitionally the original root types/protocols; full-state IC contracts remain new design targets. No copied helper library or carrier migration."
+    },
+    {
+      "symbol": "IdRemoveObj",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/id/IdRemoveObj.c",
+      "sha256": "5694b0d103788e448d12bb48a1090312f54e0760c2fc09bf6c576e5104a49bf7",
+      "selected_spec": "low_level_spec",
+      "boundary": "reused-spec",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": "Unchanged original external API directly imported. Where a core state occurs, CoreVarGlobalState/core_* explicitly denote definitionally the original root types/protocols; full-state IC contracts remain new design targets. No copied helper library or carrier migration."
+    },
+    {
+      "symbol": "IsDoubleLinkListEmpty",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/list/IsDoubleLinkListEmpty.c",
+      "sha256": "4b22b601357f81ec24f89cdcfd28a186b27fc7d9db2c7930811c5cc9b14ef1ca",
+      "selected_spec": "dll",
+      "boundary": "reused-spec",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": "Unchanged original external API directly imported. Where a core state occurs, CoreVarGlobalState/core_* explicitly denote definitionally the original root types/protocols; full-state IC contracts remain new design targets. No copied helper library or carrier migration."
+    },
+    {
+      "symbol": "DoubleLinkListRmNode",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/headers/m_double_linklist.h",
+      "sha256": "8e67a7da9673c31ca64c330eac42066d37ef2c6257c7323792659a6580435a40",
+      "selected_spec": "remove_member",
+      "boundary": "reused-spec",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": "Unchanged original external API directly imported. Where a core state occurs, CoreVarGlobalState/core_* explicitly denote definitionally the original root types/protocols; full-state IC contracts remain new design targets. No copied helper library or carrier migration."
+    },
+    {
+      "symbol": "LinklistResumeAll",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/LinklistResumeAll.c",
+      "sha256": "6cc02c9e3a48d69d85820510b53c08795e10f48e2865cbfd81d35f27499337aa",
+      "selected_spec": "semaphore_waiters",
+      "boundary": "reused-spec",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": "Original root semaphore_waiters API imported directly. CoreVarGlobalState/core_os_inv are explicit aliases of its original root state/invariant; KOK normalized to its definition 0. No modified helper carrier or copied library. Full dataqueue framing and lifted IC operation are separate integration obligations; this trial empty-pending branch remains unreachable.",
+      "lifting_obligation": "For any future use of the general branch, connect the unchanged root helper to project_core/restore_core while framing dataqueue resources. No claim of an already proved full-state IC implementation; this branch is not consumed under the reviewed empty guard.",
+      "constant_normalization": "Use return code 0 in the caller-local contract, definitionally equal to original KOK by root lib/task/KTaskParseInfo.v:31 (Definition KOK : Z := 0); no new constant definition or stronger result. This removes its sole header import and the otherwise unnecessary KTaskParseInfo/ProofAux dependency."
+    },
+    {
+      "symbol": "x_malloc",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/_SemaphoreCreate.c",
+      "sha256": "86010ac7d389c6b895a673444d19c96a70b0af365136fe67502838a7f0853a28",
+      "selected_spec": "delay_object",
+      "boundary": "trusted-allocator-api",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": ""
+    },
+    {
+      "symbol": "memset",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/_SemaphoreCreate.c",
+      "sha256": "86010ac7d389c6b895a673444d19c96a70b0af365136fe67502838a7f0853a28",
+      "selected_spec": "default",
+      "boundary": "standard-library-api",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": ""
+    },
+    {
+      "symbol": "x_free",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/_SemaphoreCreate.c",
+      "sha256": "86010ac7d389c6b895a673444d19c96a70b0af365136fe67502838a7f0853a28",
+      "selected_spec": "SemaphoreRaw interface",
+      "boundary": "trusted-allocator-api",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": ""
+    },
+    {
+      "symbol": "x_free",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/_SemaphoreDelete.c",
+      "sha256": "953c7644c4fdacdafacdb505f86b201eb0f6b5347cbfad50d9815353f824c32a",
+      "selected_spec": "SemaphoreRaw interface",
+      "boundary": "trusted-allocator-api",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": ""
+    },
+    {
+      "symbol": "CONTAINER_OF_SEMAPHORE_ID",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/_SemaphoreDelete.c",
+      "sha256": "953c7644c4fdacdafacdb505f86b201eb0f6b5347cbfad50d9815353f824c32a",
+      "selected_spec": "default",
+      "boundary": "trusted-container-api",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": ""
+    },
+    {
+      "symbol": "KTASK_ASSIGN",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/_SemaphoreDelete.c",
+      "sha256": "953c7644c4fdacdafacdb505f86b201eb0f6b5347cbfad50d9815353f824c32a",
+      "selected_spec": "outside_critical",
+      "boundary": "source-processing-model-api",
+      "proof_status": "not re-proved in this design-only trial",
+      "notes": ""
+    },
+    {
+      "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c",
+      "sha256": "d5b41c3bde69e0416431d2425c61e35453778ae4b1569747f2c2258f3dfe16ec",
+      "boundary": "authoritative-body-and-dispatch-source"
+    },
+    {
+      "source": "/home/xinra/crtos-verify/annotated_C/src/headers/m_semaphore.h",
+      "sha256": "da0cd6e37c11a35e29954694e91a5eefbf53a39dad2c0fe1e7248e8a090051f5",
+      "boundary": "reused-c-abi"
+    },
+    {
+      "source": "/home/xinra/crtos-verify/annotated_C/src/headers/semaphore_create_logic.h",
+      "sha256": "186716a00fdea2a4a9bb453989c78283685f6a550856a42f2db95d4beda7b417",
+      "boundary": "historical-adapter-provenance-only"
+    },
+    {
+      "source": "/home/xinra/crtos-verify/annotated_C/src/headers/semaphore_delete_logic.h",
+      "sha256": "dd14a8e4740be56d4eb1efd13430849577717c7f91afdbd2df1450c4da751314",
+      "boundary": "historical-adapter-provenance-only"
+    },
+    {
+      "source": "/home/xinra/crtos-verify/.agents/skills/verify-an-os-function/references/TrustBase.md",
+      "sha256": "a2201e7277938c1c45f3570c4224fa26724bc7d4f27027077f00d6d384ad35f7",
+      "boundary": "trust-base"
+    },
+    {
+      "source": "/home/xinra/crtos-verify/.agents/skills/verify-an-os-function/references/源代码处理.md",
+      "sha256": "c8f053d92f328068180b44017e29a72702b0b50837dddbf855656ce3a4d791a8",
+      "boundary": "source-processing-rules"
+    },
+    {
+      "symbol": "InitDataqueue/DeInitDataqueue",
+      "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/data_queue.c",
+      "sha256": "6ff659a97e06586b48d5a77de05ee9dfb5884659ace0f5eaa340daf57376c89e",
+      "selected_spec": "repaired current source",
+      "boundary": "authoritative-body-source",
+      "proof_status": "design only; implementation not proved here",
+      "notes": "Approved patch applied; old checks/resets retained in comments."
+    },
+    {
+      "symbol": "NULL_PARAM_CHECK_1",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/common/null_paramter_check.c",
+      "sha256": "d6328ba5bcefe03d6ea150d3387587ea9fbcde5607b3c9e68f51a8007cbb7bdb",
+      "selected_spec": "default",
+      "boundary": "source-processing-model-api",
+      "proof_status": "design only; implementation not proved here",
+      "notes": "Legacy null-spin rule; source xs_kdbg.h KERNEL_DEBUG enabled. Non-null object storage is still required."
+    },
+    {
+      "symbol": "CriticalAreaLock/CriticalAreaUnLock",
+      "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/_SemaphoreCreate.c",
+      "sha256": "86010ac7d389c6b895a673444d19c96a70b0af365136fe67502838a7f0853a28",
+      "selected_spec": "ordinary/stable",
+      "boundary": "trusted-critical-api",
+      "proof_status": "design only; implementation not proved here",
+      "notes": "Same shared CRTOS protocol; no hardware IRQ-state conclusion."
+    },
+    {
+      "symbol": "DisableLocalInterrupt/EnableLocalInterrupt",
+      "source": "/home/xinra/vrtos/annotated_C/src/kernel/common/kdebug_not_in_interrupt.c",
+      "sha256": "523889774adaaf1c2faa3852c7366e9d372ac1ea5b52857d3b8685ca1ca04afd",
+      "selected_spec": "ordinary/restore",
+      "boundary": "reused-spec",
+      "proof_status": "design only; implementation not proved here",
+      "notes": "Unchanged original external API directly imported. Where a core state occurs, CoreVarGlobalState/core_* explicitly denote definitionally the original root types/protocols; full-state IC contracts remain new design targets. No copied helper library or carrier migration."
+    },
+    {
+      "symbol": "x_free",
+      "source": "/home/xinra/crtos-verify/initdataqueue-trial-261112-1/annotated_C/src/DeInitDataqueue.c",
+      "sha256": "8401f5fe53561d9438c02d62eb065329cff38860d03552aa4e56002dba55add5",
+      "selected_spec": "size-parametric buffer interface",
+      "boundary": "trusted-allocator-api",
+      "proof_status": "design only; implementation not proved here",
+      "notes": "New application of existing trusted allocator contract: original base and complete allocation bytes, zero size allowed; typed buffer forget bridge explicitly pending."
+    }
+  ],
+  "canonical_targets": [
+    {
+      "symbol": "KSemaphoreCreate",
+      "path": "annotated_C/src/KSemaphoreCreate.c",
+      "sha256": "8ecc4ad8c694f9ca8882364db97d4815ae6aa2c289db345b7efc2dcda20f6139",
+      "selected_spec": "dataqueue_ic",
+      "classification": "new IC design; implementation unproved",
+      "future_global_target": "annotated_C/src/kernel/semaphore/KSemaphoreCreate.c",
+      "merge_gate": "Only after user confirms reviewed revisions and implement controller returns done including final-check. Preserve existing OC canonical variants; do not replace OC body wholesale with IC-adapted body."
+    },
+    {
+      "symbol": "_SemaphoreCreate",
+      "path": "annotated_C/src/_SemaphoreCreate.c",
+      "sha256": "4ca7b333a9d1a832e5cfa87d88a51a3a5803be943475d32496f1d4bf7711f2ca",
+      "selected_spec": "dataqueue_ic",
+      "classification": "new IC design; implementation unproved",
+      "future_global_target": "annotated_C/src/kernel/semaphore/_SemaphoreCreate.c",
+      "merge_gate": "Only after user confirms reviewed revisions and implement controller returns done including final-check. Preserve existing OC canonical variants; do not replace OC body wholesale with IC-adapted body."
+    },
+    {
+      "symbol": "KSemaphoreDelete",
+      "path": "annotated_C/src/KSemaphoreDelete.c",
+      "sha256": "75eadb91e984d3db714bcf332365d4640d3872f70d535210ba0fde84c9313faf",
+      "selected_spec": "dataqueue_ic",
+      "classification": "new IC design; implementation unproved",
+      "future_global_target": "annotated_C/src/kernel/semaphore/KSemaphoreDelete.c",
+      "merge_gate": "Only after user confirms reviewed revisions and implement controller returns done including final-check. Preserve existing OC canonical variants; do not replace OC body wholesale with IC-adapted body."
+    },
+    {
+      "symbol": "_SemaphoreDelete",
+      "path": "annotated_C/src/_SemaphoreDelete.c",
+      "sha256": "047dda6a7b749e4130d3aff57007ae39184ff78382a4dfa1b188f8e2c22b1b14",
+      "selected_spec": "dataqueue_ic",
+      "classification": "new IC design; implementation unproved",
+      "future_global_target": "annotated_C/src/kernel/semaphore/_SemaphoreDelete.c",
+      "merge_gate": "Only after user confirms reviewed revisions and implement controller returns done including final-check. Preserve existing OC canonical variants; do not replace OC body wholesale with IC-adapted body."
+    },
+    {
+      "symbol": "InitDataqueue",
+      "path": "annotated_C/src/InitDataqueue.c",
+      "sha256": "976fac85229a438f848b1595e36c0e306b39cd75e7eea7aba5dffab969b58b41",
+      "selected_spec": "outside_critical",
+      "classification": "new design; implementation unproved",
+      "future_global_target": "annotated_C/src/kernel/dataqueue/InitDataqueue.c",
+      "merge_gate": "No merge in design-only phase."
+    },
+    {
+      "symbol": "DeInitDataqueue",
+      "path": "annotated_C/src/DeInitDataqueue.c",
+      "sha256": "8401f5fe53561d9438c02d62eb065329cff38860d03552aa4e56002dba55add5",
+      "selected_spec": "init_rollback",
+      "classification": "new design; implementation unproved",
+      "future_global_target": "annotated_C/src/kernel/dataqueue/DeInitDataqueue.c",
+      "merge_gate": "No merge in design-only phase."
+    }
+  ],
+  "new_headers": [
+    {
+      "path": "annotated_C/src/dataqueue_semaphore_common_logic.h",
+      "sha256": "7a0f902db19cf3abe8693e6ec86730484c49f3794a7877ec8f283be96222fb7c",
+      "future_global_target": "annotated_C/src/headers/dataqueue_semaphore_common_logic.h"
+    },
+    {
+      "path": "annotated_C/src/dataqueue_semaphore_create_logic.h",
+      "sha256": "82258cd0b6200287ddcf26fd147bd20604c079a50f27d60c353ba082cb40821b",
+      "future_global_target": "annotated_C/src/headers/dataqueue_semaphore_create_logic.h"
+    },
+    {
+      "path": "annotated_C/src/dataqueue_semaphore_delete_logic.h",
+      "sha256": "3fb17919cd8f14ece8db3045e40b2e31d863a16cb993e1fb6f2125267261e8c1",
+      "future_global_target": "annotated_C/src/headers/dataqueue_semaphore_delete_logic.h"
+    },
+    {
+      "path": "annotated_C/src/dataqueue_logic.h",
+      "future_global_target": "annotated_C/src/headers/dataqueue_logic.h",
+      "sha256": "3107c7c749803fef7739e2f262bb371fb148ad0bbafbcec60b6ce3885111246d"
+    }
+  ],
+  "header_type_audit": "header-type-audit.json",
+  "same_contract_checks": "5 new-closure caller-local/canonical contracts identical; 8 reused helper APIs plus KTASK_ASSIGN model API identical after whitespace/core-alias/KOK->0 normalization. Four core aliases separately checked by Rocq eq_refl identities.",
+  "c_structure_check": "gcc -m32 -std=c11 -fsyntax-only all six canonical C and checks/abi.c: passed; legacy inline declaration warnings only",
+  "reachable_call_graph": {
+    "InitDataqueue": [
+      "NULL_PARAM_CHECK_1",
+      "CriticalAreaLock",
+      "memset",
+      "x_malloc",
+      "KSemaphoreCreate",
+      "CriticalAreaUnLock",
+      "DeInitDataqueue"
+    ],
+    "DeInitDataqueue": [
+      "NULL_PARAM_CHECK_1",
+      "DisableLocalInterrupt",
+      "x_free",
+      "KSemaphoreDelete",
+      "EnableLocalInterrupt"
+    ],
+    "KSemaphoreCreate": [
+      "_SemaphoreCreate"
+    ],
+    "_SemaphoreCreate": [
+      "x_malloc",
+      "memset",
+      "IdInsertObj",
+      "x_free",
+      "InitDoubleLinkList",
+      "DoubleLinkListInsertNodeAfter"
+    ],
+    "KSemaphoreDelete": [
+      "_SemaphoreDelete"
+    ],
+    "_SemaphoreDelete": [
+      "IdGetObj",
+      "CONTAINER_OF_SEMAPHORE_ID",
+      "IsDoubleLinkListEmpty",
+      "LinklistResumeAll",
+      "IdRemoveObj",
+      "DoubleLinkListRmNode",
+      "x_free",
+      "KTASK_ASSIGN"
+    ]
+  },
+  "return_paths": {
+    "InitDataqueue": [
+      "array allocation fails: return -1 after cleanup, (blank,data)=(-1,-1)",
+      "blank creation fails: return -1 after freeing array, (-5,-1)",
+      "data creation fails: return -1 after freeing array/deleting original blank, (-1,-5)",
+      "success: return 0 with array, two IDs in [0,128), initial counts uint16(NodeNumber-1) and 0"
+    ],
+    "DeInitDataqueue": [
+      "each base/blank/data conditional both branches preserved; negative handles unchanged; prior nonnegative handles set -1; no early return"
+    ],
+    "_SemaphoreCreate": [
+      "malloc failure -5",
+      "ID capacity failure -5 and free",
+      "success includes ID 0"
+    ],
+    "_SemaphoreDelete": [
+      "negative ID return",
+      "missing ID return",
+      "found object removal/free; pending nonempty branch exists in body but excluded by reviewed current IC empty guard"
+    ]
+  },
+  "integration_state": "Seven formal inputs freshly compiled; 75 Extern declarations across four headers and four core-alias identities typechecked; awaiting independent final review.",
+  "logical_migration_manifest": "shared-library-sources.json",
+  "shared_source_analysis": ".docs/Report/shared-source-analysis.md",
+  "header_type_audit_script": "tools/check-header-types.py",
+  "contract_adaptation": "Unmodified external libraries retain their original Assertion/STS carrier and original core-state contracts. Explicit CoreVarGlobalState/core_* aliases are definitionally the root API. Trial full VarGlobalState extends original fields with os_dataqueues and uses project_core/restore_core and ordinary resource framing; new IC contracts are independent design obligations, not automatically derived implementation proofs.",
+  "integration_architecture": "Only existing CrtosGlobState/CrtosRules/CrtosInv trial semantic extensions plus four dataqueue files remain; unmodified original libraries imported directly. project_core reconstructs original global state for unchanged core library APIs; original Assertion/STS carrier reused.",
+  "caller_contract_checks": [
+    {
+      "caller": "InitDataqueue",
+      "callee": "KSemaphoreCreate",
+      "selected_spec": "dataqueue_ic",
+      "comparison": "identical after whitespace normalization"
+    },
+    {
+      "caller": "InitDataqueue",
+      "callee": "DeInitDataqueue",
+      "selected_spec": "init_rollback",
+      "comparison": "identical after whitespace normalization"
+    },
+    {
+      "caller": "KSemaphoreCreate",
+      "callee": "_SemaphoreCreate",
+      "selected_spec": "dataqueue_ic",
+      "comparison": "identical after whitespace normalization"
+    },
+    {
+      "caller": "DeInitDataqueue",
+      "callee": "KSemaphoreDelete",
+      "selected_spec": "dataqueue_ic",
+      "comparison": "identical after whitespace normalization"
+    },
+    {
+      "caller": "KSemaphoreDelete",
+      "callee": "_SemaphoreDelete",
+      "selected_spec": "dataqueue_ic",
+      "comparison": "identical after whitespace normalization"
+    },
+    {
+      "caller": "_SemaphoreCreate",
+      "callee": "IdInsertObj",
+      "selected_spec": "default",
+      "comparison": "identical after whitespace, proven definitional core aliases and KOK->0 normalization"
+    },
+    {
+      "caller": "_SemaphoreCreate",
+      "callee": "InitDoubleLinkList",
+      "selected_spec": "default",
+      "comparison": "identical after whitespace, proven definitional core aliases and KOK->0 normalization"
+    },
+    {
+      "caller": "_SemaphoreCreate",
+      "callee": "DoubleLinkListInsertNodeAfter",
+      "selected_spec": "dispatch_case",
+      "comparison": "identical after whitespace, proven definitional core aliases and KOK->0 normalization"
+    },
+    {
+      "caller": "_SemaphoreDelete",
+      "callee": "IdGetObj",
+      "selected_spec": "default",
+      "comparison": "identical after whitespace, proven definitional core aliases and KOK->0 normalization"
+    },
+    {
+      "caller": "_SemaphoreDelete",
+      "callee": "IdRemoveObj",
+      "selected_spec": "low_level_spec",
+      "comparison": "identical after whitespace, proven definitional core aliases and KOK->0 normalization"
+    },
+    {
+      "caller": "_SemaphoreDelete",
+      "callee": "IsDoubleLinkListEmpty",
+      "selected_spec": "dll",
+      "comparison": "identical after whitespace, proven definitional core aliases and KOK->0 normalization"
+    },
+    {
+      "caller": "_SemaphoreDelete",
+      "callee": "DoubleLinkListRmNode",
+      "selected_spec": "remove_member",
+      "comparison": "identical after whitespace, proven definitional core aliases and KOK->0 normalization"
+    },
+    {
+      "caller": "_SemaphoreDelete",
+      "callee": "LinklistResumeAll",
+      "selected_spec": "semaphore_waiters",
+      "comparison": "identical after whitespace, proven definitional core aliases and KOK->0 normalization"
+    },
+    {
+      "caller": "_SemaphoreDelete",
+      "callee": "KTASK_ASSIGN",
+      "selected_spec": "outside_critical",
+      "comparison": "identical after whitespace, proven definitional core aliases and KOK->0 normalization"
+    }
+  ],
+  "helper_state_aliases": {
+    "CoreVarGlobalState": "CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState",
+    "core_os_inv": "CRTOS_Verify.lib.common.CrtosInv.os_inv",
+    "core_LastSeen": "CRTOS_Verify.lib.common.CrtosRules.LastSeen",
+    "core_OutsideCritical": "CRTOS_Verify.lib.common.CrtosRules.OutsideCritical"
+  },
+  "header_audit_binding": {
+    "result_sha256": "fe8e9703b7cf6e56121a90666a0da238bbf7ec3e4c42587b46abb14317fea773",
+    "headers": {
+      "annotated_C/src/dataqueue_logic.h": "3107c7c749803fef7739e2f262bb371fb148ad0bbafbcec60b6ce3885111246d",
+      "annotated_C/src/dataqueue_semaphore_common_logic.h": "7a0f902db19cf3abe8693e6ec86730484c49f3794a7877ec8f283be96222fb7c",
+      "annotated_C/src/dataqueue_semaphore_create_logic.h": "82258cd0b6200287ddcf26fd147bd20604c079a50f27d60c353ba082cb40821b",
+      "annotated_C/src/dataqueue_semaphore_delete_logic.h": "3fb17919cd8f14ece8db3045e40b2e31d863a16cb993e1fb6f2125267261e8c1"
+    },
+    "formal_dependencies": {
+      "lib/CrtosGlobState.v": "4b5225b040930d3880c82bff93e5ae9c35893aa5ed2c9d5c522fc585dccf7947",
+      "lib/CrtosInv.v": "6e7c4ab4623767e105b8b8d9c691b445a59f39edcaf0131d81196696e510bb4b",
+      "lib/CrtosRules.v": "8b5b40232233e1c4de81952bc7e0cc70b5a92158714de703b7463f33b3be85f0",
+      "lib/DataqueueInv.v": "0c7c0ec719e4806b22c407f8906ca55c6de649ca0b787a9f75c72f9115b73d26",
+      "lib/DataqueueSemaphore.v": "4f70d370380b092f3bf5f85ec8bff2e3b06731021f7953d47ff10b0fabf6c4f1",
+      "lib/DataqueueState.v": "112b0822b003cd59e7ebde929c3310ca9a4b707c46e9431a389d392a34f206f4",
+      "lib/KInitDataqueue.v": "e1bb6a3c82b111e42bc3b7417a7a5b6adac762b8af8710e040d0adbbf84da7eb"
+    }
+  },
+  "predicate_revision": "0bd5b847fe79b5f6be975a392d968b2c972df8228c7a3d45f8d10758db7cff31"
+}

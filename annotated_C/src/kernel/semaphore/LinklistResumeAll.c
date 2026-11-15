@@ -1,7 +1,7 @@
 #include "m_semaphore.h"
 #include "semaphore_delete_logic.h"
 
-/*@ Import Coq Require Import CRTOS_Verify.VC.LinklistResumeAll_lib */
+/*@ Import Coq Require Import CRTOS_Verify.VC.semaphore.LinklistResumeAll_lib */
 /*@ Extern Coq
   (resume_remaining_effect : addr -> list addr -> VarGlobalState -> list addr -> VarGlobalState -> Prop)
   (semaphore_resume_all_steps : addr -> list addr -> VarGlobalState -> VarGlobalState -> Prop)

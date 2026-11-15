@@ -77,7 +77,7 @@ LOS 文件只提供函数 spec 的写法示例。可以复用的是 QCP 的通�
 
 ### 单函数切片的等价转换
 
-完整源码模式下，`annotated_C/src` 只增加或修改注解。单函数切片为适配工具可进行有源码与配置依据的等价转换，例如拆分赋值或逗号表达式、展开函数式宏、解析固定函数表分派，或把原编译单元中的 static 对象以外部声明形式提供给切片。
+除按 [源码问题门禁](reporting-guide.md#源码问题门禁)批准并记录的副本修复外，完整源码模式下，`annotated_C/src` 只增加或修改注解。缺陷修复只作用于 trial 副本，验证针对修复版本，不属于等价转换。单函数切片为适配工具可进行有源码与配置依据的等价转换，例如拆分赋值或逗号表达式、展开函数式宏、解析固定函数表分派，或把原编译单元中的 static 对象以外部声明形式提供给切片。
 
 本节的等价转换必须保留求值顺序、执行路径、返回值、副作用、对象身份和实际访问字段的布局。外部声明须对应原对象，不能创建新的对象代替它。每项转换在 spec review 中说明位置、理由及源码/config 依据；不得换算法、隐藏函数体或凭空简化数据布局。《源代码处理》明确规定的抽象适配按主 skill 的专门规则执行，不要求将其表述为逐语句等价转换。
 
@@ -374,17 +374,26 @@ spec，反之亦然；当前闭包两种调用都有时才分别处理。若不�
 
 ### 4.3 在 trial 中增量增加模块特化
 
-先查当前工程解析后的 annotated C 目录。当本轮需要为 callee 增加新的 canonical 模块特化，而不是
-原样导入已有 spec 时，如果根目录中已经有该函数及适用的 IC 或 OC low-level spec，就将其 canonical
-annotated C 文件按原相对路径复制到当前 trial，保留已有函数体、low-level spec、imports 和其他具名
-high-level specs，只在 trial 副本中增量加入当前模块的 high-level spec；不得从头重写、删掉或弱化
-原有 contract。新增 high-level spec 应以 `high_level_spec <= low_level_spec` 标注推导来源，并检查
-参数对应、调用点前提、前后态效果、ownership 与 frame 的推导。
+先查当前工程解析后的 annotated C 目录，确认已有 IC 或 OC low-level spec 的证明状态与适用性。
+新增模块 high-level spec 的存放位置按 callee 是否属于本轮实现验证目标区分，遵循
+[工程组织与维护指南](project-maintenance-guide.md#新增场景特化)：
 
-当前 caller 文件仍在函数定义前声明所采用的完整 callee spec，并与 trial 中新增的同名 canonical
-high-level spec 一致。设计、审阅与 implement 均在 trial 中完成；达到主 skill 规定的合并条件后，再按
-[工程组织与维护指南](project-maintenance-guide.md#annotated-c-的增量维护)把新增特化增量合并回根
-`annotated_C/`，不以 trial 文件整体覆盖全局文件。
+- 复用已有 spec 的依赖函数：将原 low-level spec 与新增的具名 high-level spec 一起写在 caller
+  定义前，记录来源文件、revision 和推导义务。不因新增特化而建立 callee 文件、复制函数体或
+  重新生成其实现 VC；多个 caller 使用同名特化时，保持来源版本与 contract 一致。
+- 本轮需要实现验证的函数：在其 trial canonical 文件中增量增加特化，保留已有函数体、
+  low-level spec、必要 imports 和其他具名 specs。文件按一函数一文件平铺在
+  `trial/annotated_C/src/`，记录全局来源或目标路径；已有 trial 目标文件直接修改。
+  Caller 定义前声明的完整 callee spec 须与该 canonical 文件中的同名 spec 一致。
+
+两种情况都不得删掉或弱化原有 contract。新增 high-level spec 应以
+`high_level_spec <= low_level_spec` 标注推导来源，并检查参数对应、调用点前提、前后态效果、
+ownership 与 frame 的推导；新增特化不能直接视为已由原证明覆盖，须完成相应推导证明。
+
+设计、审阅与 implement 均在 trial 中完成；达到主 skill 规定的合并条件后，按
+[工程组织与维护指南](project-maintenance-guide.md#annotated-c-迁出细节)增量合并到全局
+`annotated_C/`。导入 spec 的特化从 caller-local 声明提取，不为迁出另建 trial 函数文件，
+也不以 trial 文件整体覆盖全局文件。
 
 ### 4.4 临界区调用链中的五个位置
 

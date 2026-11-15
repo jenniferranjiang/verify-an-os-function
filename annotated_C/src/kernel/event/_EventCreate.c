@@ -1,7 +1,7 @@
 #include "event_create_types.h"
 #include "event_create_logic.h"
 
-/*@ Import Coq Require Import CRTOS_Verify.VC.EventCreate_lib */
+/*@ Import Coq Require Import CRTOS_Verify.VC.event.EventCreate_lib */
 /*@ Extern Coq
   (In : {A} -> A -> list A -> Prop)
   (event_addr : EventAbs -> addr)

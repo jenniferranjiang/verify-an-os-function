@@ -1,0 +1,64 @@
+{
+  "checks": [
+    {
+      "symbol": "InitDataqueue",
+      "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/data_queue.c",
+      "source_sha256": "6ff659a97e06586b48d5a77de05ee9dfb5884659ace0f5eaa340daf57376c89e",
+      "canonical": "annotated_C/src/InitDataqueue.c",
+      "canonical_sha256": "976fac85229a438f848b1595e36c0e306b39cd75e7eea7aba5dffab969b58b41",
+      "body_equal_after_documented_adaptations": true
+    },
+    {
+      "symbol": "DeInitDataqueue",
+      "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/data_queue.c",
+      "source_sha256": "6ff659a97e06586b48d5a77de05ee9dfb5884659ace0f5eaa340daf57376c89e",
+      "canonical": "annotated_C/src/DeInitDataqueue.c",
+      "canonical_sha256": "8401f5fe53561d9438c02d62eb065329cff38860d03552aa4e56002dba55add5",
+      "body_equal_after_documented_adaptations": true
+    },
+    {
+      "symbol": "KSemaphoreCreate",
+      "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c",
+      "source_sha256": "d5b41c3bde69e0416431d2425c61e35453778ae4b1569747f2c2258f3dfe16ec",
+      "canonical": "annotated_C/src/KSemaphoreCreate.c",
+      "canonical_sha256": "8ecc4ad8c694f9ca8882364db97d4815ae6aa2c289db345b7efc2dcda20f6139",
+      "body_equal_after_documented_adaptations": true
+    },
+    {
+      "symbol": "_SemaphoreCreate",
+      "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c",
+      "source_sha256": "d5b41c3bde69e0416431d2425c61e35453778ae4b1569747f2c2258f3dfe16ec",
+      "canonical": "annotated_C/src/_SemaphoreCreate.c",
+      "canonical_sha256": "4ca7b333a9d1a832e5cfa87d88a51a3a5803be943475d32496f1d4bf7711f2ca",
+      "body_equal_after_documented_adaptations": true
+    },
+    {
+      "symbol": "KSemaphoreDelete",
+      "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c",
+      "source_sha256": "d5b41c3bde69e0416431d2425c61e35453778ae4b1569747f2c2258f3dfe16ec",
+      "canonical": "annotated_C/src/KSemaphoreDelete.c",
+      "canonical_sha256": "75eadb91e984d3db714bcf332365d4640d3872f70d535210ba0fde84c9313faf",
+      "body_equal_after_documented_adaptations": true
+    },
+    {
+      "symbol": "_SemaphoreDelete",
+      "source": "/home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c",
+      "source_sha256": "d5b41c3bde69e0416431d2425c61e35453778ae4b1569747f2c2258f3dfe16ec",
+      "canonical": "annotated_C/src/_SemaphoreDelete.c",
+      "canonical_sha256": "047dda6a7b749e4130d3aff57007ae39184ff78382a4dfa1b188f8e2c22b1b14",
+      "body_equal_after_documented_adaptations": true
+    }
+  ],
+  "all_passed": true,
+  "adaptations": [
+    "NULL old null-spin API",
+    "debug printing removal",
+    "fixed done-table dispatch",
+    "nested lock removal for IC semaphore calls",
+    "IRQ macro expansion",
+    "trusted container-of macro API",
+    "documented DO_KTASK_ASSIGN model"
+  ],
+  "limitations": "Body comparison complements manual ABI/config/contract checks. It is not C implementation proof.",
+  "note": "Current root/core helper aliases change only annotations; the six active C bodies remain identical to the previously checked normalized bodies."
+}

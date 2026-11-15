@@ -1,6 +1,6 @@
 #include "m_semaphore.h"
 #include "semaphore_create_logic.h"
-/*@ Import Coq Require Import CRTOS_Verify.VC.SemaphoreCreate_lib */
+/*@ Import Coq Require Import CRTOS_Verify.VC.semaphore.SemaphoreCreate_lib */
 
 /* Existing semantic interfaces used only to expose call-site resources. */
 /*@ Extern Coq

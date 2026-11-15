@@ -1,6 +1,6 @@
 #include "m_semaphore.h"
 #include "semaphore_delete_logic.h"
-/*@ Import Coq Require Import CRTOS_Verify.VC.SemaphoreDelete_lib */
+/*@ Import Coq Require Import CRTOS_Verify.VC.semaphore.SemaphoreDelete_lib */
 /*@ Extern Coq
   (delete_global_frame : StableGlobalState -> VarGlobalState -> Assertion)
   (delete_manager_frame : StableGlobalState -> VarGlobalState -> Assertion)

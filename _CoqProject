@@ -20,6 +20,7 @@
 -Q ../qcp-binary-democases/Rocq/algorithms Algorithms
 -R ../qcp-binary-democases/Rocq/examples/Applications_human/cdcllib CDCLLib
 -R ./lib CRTOS_Verify.lib
+-R ./VC CRTOS_Verify.VC
 
 lib/common/CrtosConfig.v
 lib/common/StructFieldOffsetAxiom.v
@@ -52,7 +53,7 @@ lib/mutex/KMutexCreate.v
 lib/event/KEventCreate.v
 
 
-# Task, scheduler, delay and tick modules restored for the mutex deletion trial.
+# Shared task, scheduler, delay and tick modules.
 lib/assign/AssignInv.v
 lib/assign/AssignState.v
 lib/assign/Bitmap.v
@@ -81,3 +82,86 @@ lib/task/TaskStatus.v
 lib/task/TaskStatusMemory.v
 lib/tick/TickInv.v
 lib/tick/TickOrder.v
+
+# Promoted mutex deletion design (implementation proof incomplete).
+lib/mutex/MutexDeleteState.v
+lib/mutex/MutexDeleteInv.v
+
+# Archived VC sources and their proof helpers.
+VC/event/EventCreate_goal.v
+VC/event/EventCreate_goal_check.v
+VC/event/EventCreate_lib.v
+VC/event/EventCreate_proof_auto.v
+VC/event/EventCreate_proof_manual.v
+VC/event/KEventCreate_goal.v
+VC/event/KEventCreate_goal_check.v
+VC/event/KEventCreate_lib.v
+VC/event/KEventCreate_proof_auto.v
+VC/event/KEventCreate_proof_manual.v
+VC/mutex/KMutexCreate_goal.v
+VC/mutex/KMutexCreate_goal_check.v
+VC/mutex/KMutexCreate_lib.v
+VC/mutex/KMutexCreate_proof_auto.v
+VC/mutex/KMutexCreate_proof_manual.v
+VC/semaphore/KSemaphoreCreate_goal.v
+VC/semaphore/KSemaphoreCreate_goal_check.v
+VC/semaphore/KSemaphoreCreate_lib.v
+VC/semaphore/KSemaphoreCreate_proof_auto.v
+VC/semaphore/KSemaphoreCreate_proof_manual.v
+VC/semaphore/KSemaphoreDelete_goal.v
+VC/semaphore/KSemaphoreDelete_goal_check.v
+VC/semaphore/KSemaphoreDelete_lib.v
+VC/semaphore/KSemaphoreDelete_proof_auto.v
+VC/semaphore/KSemaphoreDelete_proof_manual.v
+VC/semaphore/LinklistResumeAll_goal.v
+VC/semaphore/LinklistResumeAll_goal_check.v
+VC/semaphore/LinklistResumeAll_lib.v
+VC/semaphore/LinklistResumeAll_proof_auto.v
+VC/semaphore/LinklistResumeAll_proof_manual.v
+VC/mutex/MutexCreate_goal.v
+VC/mutex/MutexCreate_goal_check.v
+VC/mutex/MutexCreate_lib.v
+VC/mutex/MutexCreate_proof_auto.v
+VC/mutex/MutexCreate_proof_manual.v
+VC/semaphore/SemaphoreCreate_goal.v
+VC/semaphore/SemaphoreCreate_goal_check.v
+VC/semaphore/SemaphoreCreate_lib.v
+VC/semaphore/SemaphoreCreate_proof_auto.v
+VC/semaphore/SemaphoreCreate_proof_manual.v
+VC/semaphore/SemaphoreDelete_goal.v
+VC/semaphore/SemaphoreDelete_goal_check.v
+VC/semaphore/SemaphoreDelete_lib.v
+VC/semaphore/SemaphoreDelete_proof_auto.v
+VC/semaphore/SemaphoreDelete_proof_manual.v
+VC/semaphore/SemaphoreSpecBridge.v
+
+# Current InitDataqueue design: local changed/new libraries only.
+-R ./initdataqueue-trial-261115-1/lib CRTOS_InitDataqueue
+initdataqueue-trial-261115-1/lib/DataqueueState.v
+initdataqueue-trial-261115-1/lib/AssignInv.v
+initdataqueue-trial-261115-1/lib/Bitmap.v
+initdataqueue-trial-261115-1/lib/KTaskOsAssign.v
+initdataqueue-trial-261115-1/lib/OsAssignReadyVector.v
+initdataqueue-trial-261115-1/lib/CrtosGlobState.v
+initdataqueue-trial-261115-1/lib/CrtosInv.v
+initdataqueue-trial-261115-1/lib/CrtosRules.v
+initdataqueue-trial-261115-1/lib/ServiceSlotWf.v
+initdataqueue-trial-261115-1/lib/dll.v
+initdataqueue-trial-261115-1/lib/DelayInv.v
+initdataqueue-trial-261115-1/lib/KTaskDelayMem.v
+initdataqueue-trial-261115-1/lib/KTaskUnSetDelay.v
+initdataqueue-trial-261115-1/lib/EventInv.v
+initdataqueue-trial-261115-1/lib/EventLayoutABI.v
+initdataqueue-trial-261115-1/lib/idnode.v
+initdataqueue-trial-261115-1/lib/IsrManagerInv.v
+initdataqueue-trial-261115-1/lib/DoubleLinkListSpec.v
+initdataqueue-trial-261115-1/lib/NodeSelfLinked.v
+initdataqueue-trial-261115-1/lib/MutexInv.v
+initdataqueue-trial-261115-1/lib/SemaphoreInv.v
+initdataqueue-trial-261115-1/lib/ExstatusInv.v
+initdataqueue-trial-261115-1/lib/KTaskSchedMember.v
+initdataqueue-trial-261115-1/lib/KTaskStackSetup.v
+initdataqueue-trial-261115-1/lib/KTaskWakeup.v
+initdataqueue-trial-261115-1/lib/TaskInv.v
+initdataqueue-trial-261115-1/lib/TaskStatusMemory.v
+initdataqueue-trial-261115-1/lib/TickInv.v

@@ -1,0 +1,674 @@
+{
+  "archive_source_commit": "7e76450cbd41e10b5ff3543a4ae8e4fc30fd7fc1",
+  "trials": [
+    "ksemaphorecreate-trial-261022-1",
+    "ksemaphoredelete-trial-261025-1",
+    "kmutexcreate-trial-261101-1",
+    "keventcreate-trial-261101-1"
+  ],
+  "namespace_replacements": {
+    "CRTOS_Verify.lib.IsrState": "CRTOS_Verify.lib.isr.IsrState",
+    "CRTOS_Verify.lib.IsrManagerInv": "CRTOS_Verify.lib.isr.IsrManagerInv",
+    "CRTOS_Verify.lib.KTaskStackSetup": "CRTOS_Verify.lib.task.KTaskStackSetup",
+    "CRTOS_Verify.lib.TaskInv": "CRTOS_Verify.lib.task.TaskInv",
+    "CRTOS_Verify.lib.TaskState": "CRTOS_Verify.lib.task.TaskState",
+    "CRTOS_Verify.lib.KTaskSchedMember": "CRTOS_Verify.lib.task.KTaskSchedMember",
+    "CRTOS_Verify.lib.KTaskStackSetupProofAux": "CRTOS_Verify.lib.task.KTaskStackSetupProofAux",
+    "CRTOS_Verify.lib.KTaskDescriptor": "CRTOS_Verify.lib.task.KTaskDescriptor",
+    "CRTOS_Verify.lib.TaskStatus": "CRTOS_Verify.lib.task.TaskStatus",
+    "CRTOS_Verify.lib.KTaskParseInfo": "CRTOS_Verify.lib.task.KTaskParseInfo",
+    "CRTOS_Verify.lib.KTaskWakeup": "CRTOS_Verify.lib.task.KTaskWakeup",
+    "CRTOS_Verify.lib.TaskStatusMemory": "CRTOS_Verify.lib.task.TaskStatusMemory",
+    "CRTOS_Verify.lib.KTaskPure": "CRTOS_Verify.lib.task.KTaskPure",
+    "CRTOS_Verify.lib.ExstatusInv": "CRTOS_Verify.lib.task.ExstatusInv",
+    "CRTOS_Verify.lib.OsAssignReadyVector": "CRTOS_Verify.lib.assign.OsAssignReadyVector",
+    "CRTOS_Verify.lib.AssignState": "CRTOS_Verify.lib.assign.AssignState",
+    "CRTOS_Verify.lib.Bitmap": "CRTOS_Verify.lib.assign.Bitmap",
+    "CRTOS_Verify.lib.KTaskOsAssign": "CRTOS_Verify.lib.assign.KTaskOsAssign",
+    "CRTOS_Verify.lib.AssignInv": "CRTOS_Verify.lib.assign.AssignInv",
+    "CRTOS_Verify.lib.idnode": "CRTOS_Verify.lib.id.idnode",
+    "CRTOS_Verify.lib.idnode_abs": "CRTOS_Verify.lib.id.idnode_abs",
+    "CRTOS_Verify.lib.IdModuleSpec": "CRTOS_Verify.lib.id.IdModuleSpec",
+    "CRTOS_Verify.lib.EventLayoutABI": "CRTOS_Verify.lib.event.EventLayoutABI",
+    "CRTOS_Verify.lib.KEventCreate": "CRTOS_Verify.lib.event.KEventCreate",
+    "CRTOS_Verify.lib.EventInv": "CRTOS_Verify.lib.event.EventInv",
+    "CRTOS_Verify.lib.KEventDelete": "CRTOS_Verify.lib.event.KEventDelete",
+    "CRTOS_Verify.lib.EventState": "CRTOS_Verify.lib.event.EventState",
+    "CRTOS_Verify.lib.EventOps": "CRTOS_Verify.lib.event.EventOps",
+    "CRTOS_Verify.lib.SemaphoreInv": "CRTOS_Verify.lib.semaphore.SemaphoreInv",
+    "CRTOS_Verify.lib.SemaphoreState": "CRTOS_Verify.lib.semaphore.SemaphoreState",
+    "CRTOS_Verify.lib.KSemaphoreCreate": "CRTOS_Verify.lib.semaphore.KSemaphoreCreate",
+    "CRTOS_Verify.lib.SemaphoreOps": "CRTOS_Verify.lib.semaphore.SemaphoreOps",
+    "CRTOS_Verify.lib.KSemaphoreDelete": "CRTOS_Verify.lib.semaphore.KSemaphoreDelete",
+    "CRTOS_Verify.lib.NodeSelfLinked": "CRTOS_Verify.lib.list.NodeSelfLinked",
+    "CRTOS_Verify.lib.DoubleLinkListSpec": "CRTOS_Verify.lib.list.DoubleLinkListSpec",
+    "CRTOS_Verify.lib.TickInv": "CRTOS_Verify.lib.tick.TickInv",
+    "CRTOS_Verify.lib.TickOrder": "CRTOS_Verify.lib.tick.TickOrder",
+    "CRTOS_Verify.lib.CrtosRules": "CRTOS_Verify.lib.common.CrtosRules",
+    "CRTOS_Verify.lib.StructFieldOffsetAxiom": "CRTOS_Verify.lib.common.StructFieldOffsetAxiom",
+    "CRTOS_Verify.lib.CrtosConfig": "CRTOS_Verify.lib.common.CrtosConfig",
+    "CRTOS_Verify.lib.dll": "CRTOS_Verify.lib.common.dll",
+    "CRTOS_Verify.lib.CrtosInv": "CRTOS_Verify.lib.common.CrtosInv",
+    "CRTOS_Verify.lib.RemoveFound": "CRTOS_Verify.lib.common.RemoveFound",
+    "CRTOS_Verify.lib.dll_abs": "CRTOS_Verify.lib.common.dll_abs",
+    "CRTOS_Verify.lib.ObjectWaitNode": "CRTOS_Verify.lib.common.ObjectWaitNode",
+    "CRTOS_Verify.lib.ServiceSlotWf": "CRTOS_Verify.lib.common.ServiceSlotWf",
+    "CRTOS_Verify.lib.CrtosGlobState": "CRTOS_Verify.lib.common.CrtosGlobState",
+    "CRTOS_Verify.lib.KTaskUnSetDelay": "CRTOS_Verify.lib.delay.KTaskUnSetDelay",
+    "CRTOS_Verify.lib.DelayInv": "CRTOS_Verify.lib.delay.DelayInv",
+    "CRTOS_Verify.lib.KTaskDelay": "CRTOS_Verify.lib.delay.KTaskDelay",
+    "CRTOS_Verify.lib.DelayState": "CRTOS_Verify.lib.delay.DelayState",
+    "CRTOS_Verify.lib.KTaskDelayMem": "CRTOS_Verify.lib.delay.KTaskDelayMem",
+    "CRTOS_Verify.lib.MutexInv": "CRTOS_Verify.lib.mutex.MutexInv",
+    "CRTOS_Verify.lib.MutexOps": "CRTOS_Verify.lib.mutex.MutexOps",
+    "CRTOS_Verify.lib.KMutexDelete": "CRTOS_Verify.lib.mutex.KMutexDelete",
+    "CRTOS_Verify.lib.MutexState": "CRTOS_Verify.lib.mutex.MutexState",
+    "CRTOS_Verify.lib.KMutexCreate": "CRTOS_Verify.lib.mutex.KMutexCreate",
+    "TrialShared.IsrState": "CRTOS_Verify.lib.isr.IsrState",
+    "TrialShared.IsrManagerInv": "CRTOS_Verify.lib.isr.IsrManagerInv",
+    "TrialShared.KTaskStackSetup": "CRTOS_Verify.lib.task.KTaskStackSetup",
+    "TrialShared.TaskInv": "CRTOS_Verify.lib.task.TaskInv",
+    "TrialShared.TaskState": "CRTOS_Verify.lib.task.TaskState",
+    "TrialShared.KTaskSchedMember": "CRTOS_Verify.lib.task.KTaskSchedMember",
+    "TrialShared.KTaskStackSetupProofAux": "CRTOS_Verify.lib.task.KTaskStackSetupProofAux",
+    "TrialShared.KTaskDescriptor": "CRTOS_Verify.lib.task.KTaskDescriptor",
+    "TrialShared.TaskStatus": "CRTOS_Verify.lib.task.TaskStatus",
+    "TrialShared.KTaskParseInfo": "CRTOS_Verify.lib.task.KTaskParseInfo",
+    "TrialShared.KTaskWakeup": "CRTOS_Verify.lib.task.KTaskWakeup",
+    "TrialShared.TaskStatusMemory": "CRTOS_Verify.lib.task.TaskStatusMemory",
+    "TrialShared.KTaskPure": "CRTOS_Verify.lib.task.KTaskPure",
+    "TrialShared.ExstatusInv": "CRTOS_Verify.lib.task.ExstatusInv",
+    "TrialShared.OsAssignReadyVector": "CRTOS_Verify.lib.assign.OsAssignReadyVector",
+    "TrialShared.AssignState": "CRTOS_Verify.lib.assign.AssignState",
+    "TrialShared.Bitmap": "CRTOS_Verify.lib.assign.Bitmap",
+    "TrialShared.KTaskOsAssign": "CRTOS_Verify.lib.assign.KTaskOsAssign",
+    "TrialShared.AssignInv": "CRTOS_Verify.lib.assign.AssignInv",
+    "TrialShared.idnode": "CRTOS_Verify.lib.id.idnode",
+    "TrialShared.idnode_abs": "CRTOS_Verify.lib.id.idnode_abs",
+    "TrialShared.IdModuleSpec": "CRTOS_Verify.lib.id.IdModuleSpec",
+    "TrialShared.EventLayoutABI": "CRTOS_Verify.lib.event.EventLayoutABI",
+    "TrialShared.KEventCreate": "CRTOS_Verify.lib.event.KEventCreate",
+    "TrialShared.EventInv": "CRTOS_Verify.lib.event.EventInv",
+    "TrialShared.KEventDelete": "CRTOS_Verify.lib.event.KEventDelete",
+    "TrialShared.EventState": "CRTOS_Verify.lib.event.EventState",
+    "TrialShared.EventOps": "CRTOS_Verify.lib.event.EventOps",
+    "TrialShared.SemaphoreInv": "CRTOS_Verify.lib.semaphore.SemaphoreInv",
+    "TrialShared.SemaphoreState": "CRTOS_Verify.lib.semaphore.SemaphoreState",
+    "TrialShared.KSemaphoreCreate": "CRTOS_Verify.lib.semaphore.KSemaphoreCreate",
+    "TrialShared.SemaphoreOps": "CRTOS_Verify.lib.semaphore.SemaphoreOps",
+    "TrialShared.KSemaphoreDelete": "CRTOS_Verify.lib.semaphore.KSemaphoreDelete",
+    "TrialShared.NodeSelfLinked": "CRTOS_Verify.lib.list.NodeSelfLinked",
+    "TrialShared.DoubleLinkListSpec": "CRTOS_Verify.lib.list.DoubleLinkListSpec",
+    "TrialShared.TickInv": "CRTOS_Verify.lib.tick.TickInv",
+    "TrialShared.TickOrder": "CRTOS_Verify.lib.tick.TickOrder",
+    "TrialShared.CrtosRules": "CRTOS_Verify.lib.common.CrtosRules",
+    "TrialShared.StructFieldOffsetAxiom": "CRTOS_Verify.lib.common.StructFieldOffsetAxiom",
+    "TrialShared.CrtosConfig": "CRTOS_Verify.lib.common.CrtosConfig",
+    "TrialShared.dll": "CRTOS_Verify.lib.common.dll",
+    "TrialShared.CrtosInv": "CRTOS_Verify.lib.common.CrtosInv",
+    "TrialShared.RemoveFound": "CRTOS_Verify.lib.common.RemoveFound",
+    "TrialShared.dll_abs": "CRTOS_Verify.lib.common.dll_abs",
+    "TrialShared.ObjectWaitNode": "CRTOS_Verify.lib.common.ObjectWaitNode",
+    "TrialShared.ServiceSlotWf": "CRTOS_Verify.lib.common.ServiceSlotWf",
+    "TrialShared.CrtosGlobState": "CRTOS_Verify.lib.common.CrtosGlobState",
+    "TrialShared.KTaskUnSetDelay": "CRTOS_Verify.lib.delay.KTaskUnSetDelay",
+    "TrialShared.DelayInv": "CRTOS_Verify.lib.delay.DelayInv",
+    "TrialShared.KTaskDelay": "CRTOS_Verify.lib.delay.KTaskDelay",
+    "TrialShared.DelayState": "CRTOS_Verify.lib.delay.DelayState",
+    "TrialShared.KTaskDelayMem": "CRTOS_Verify.lib.delay.KTaskDelayMem",
+    "TrialShared.MutexInv": "CRTOS_Verify.lib.mutex.MutexInv",
+    "TrialShared.MutexOps": "CRTOS_Verify.lib.mutex.MutexOps",
+    "TrialShared.KMutexDelete": "CRTOS_Verify.lib.mutex.KMutexDelete",
+    "TrialShared.MutexState": "CRTOS_Verify.lib.mutex.MutexState",
+    "TrialShared.KMutexCreate": "CRTOS_Verify.lib.mutex.KMutexCreate",
+    "KSemaphoreCreateTrial.KSemaphoreCreate": "CRTOS_Verify.lib.semaphore.KSemaphoreCreate",
+    "KSemaphoreCreateTrial.SemaphoreByteLayout": "CRTOS_Verify.lib.semaphore.SemaphoreInv",
+    "KSemaphoreCreateTrial.SemaphoreOwnership": "CRTOS_Verify.lib.semaphore.SemaphoreInv",
+    "KSemaphoreCreateTrial.SemaphoreSpecBridge": "CRTOS_Verify.VC.semaphore.SemaphoreSpecBridge",
+    "KMutexDeleteTrial.lib.MutexState": "CRTOS_Verify.lib.mutex.MutexDeleteState",
+    "KMutexDeleteTrial.lib.MutexInv": "CRTOS_Verify.lib.mutex.MutexDeleteInv",
+    "KMutexDeleteTrial.lib.KMutexDelete": "CRTOS_Verify.lib.mutex.KMutexDelete"
+  },
+  "files": [
+    {
+      "source": "ksemaphorecreate-trial-261022-1/VC/KSemaphoreCreate_goal.v",
+      "destination": "VC/semaphore/KSemaphoreCreate_goal.v",
+      "source_sha256": "8c56670af9526233ce7c045d1db3dea50259151935a0d5f1b75a116bd5869bce",
+      "destination_sha256": "418dd9f22a2d435f2a1684863d58ea3612b36e9e53f36ab92201b629797d05da"
+    },
+    {
+      "source": "ksemaphorecreate-trial-261022-1/VC/KSemaphoreCreate_goal_check.v",
+      "destination": "VC/semaphore/KSemaphoreCreate_goal_check.v",
+      "source_sha256": "c4ad36506165a2d1d9549aa7e093c2e86785052b8d309c00cc14ded0d5c58a2f",
+      "destination_sha256": "d816f767a89bf74a5913c51d5048777fcd2981c9fabf912af4799f3cee7ac8f0"
+    },
+    {
+      "source": "ksemaphorecreate-trial-261022-1/VC/KSemaphoreCreate_lib.v",
+      "destination": "VC/semaphore/KSemaphoreCreate_lib.v",
+      "source_sha256": "1f8a54afaa392924392567aef82ee5ba89cdf1a63d87dffd441a01e206123963",
+      "destination_sha256": "1f8a54afaa392924392567aef82ee5ba89cdf1a63d87dffd441a01e206123963"
+    },
+    {
+      "source": "ksemaphorecreate-trial-261022-1/VC/KSemaphoreCreate_proof_auto.v",
+      "destination": "VC/semaphore/KSemaphoreCreate_proof_auto.v",
+      "source_sha256": "d3d582d89978590a7ec3aaa6a836a15eaa5fd4cdb60877eecf73f6b681efd3a7",
+      "destination_sha256": "e813c9e0807ebb9164061eb5c9310e3b13e806b0a31456f075500cfa13a32a05"
+    },
+    {
+      "source": "ksemaphorecreate-trial-261022-1/VC/KSemaphoreCreate_proof_manual.v",
+      "destination": "VC/semaphore/KSemaphoreCreate_proof_manual.v",
+      "source_sha256": "4309ea7f8c1378b54f0334cf79128ffb7cbbee4b1d2343c117c24cf3c737ac3e",
+      "destination_sha256": "28b3b6b311ca96796330316f421e7461132ecafab604bb613362f8f1bc0c0133"
+    },
+    {
+      "source": "ksemaphorecreate-trial-261022-1/VC/SemaphoreCreate_goal.v",
+      "destination": "VC/semaphore/SemaphoreCreate_goal.v",
+      "source_sha256": "c0f862b6f2d7b02012051c2ba0b9ebafac7b0241015d6734f62a98009e6cc5ce",
+      "destination_sha256": "7a7c788a650054d71c8279e8798c76ccbe4f281597cc34865ebfbca1bf8172c6"
+    },
+    {
+      "source": "ksemaphorecreate-trial-261022-1/VC/SemaphoreCreate_goal_check.v",
+      "destination": "VC/semaphore/SemaphoreCreate_goal_check.v",
+      "source_sha256": "897c6d0c353b7bf572ddc861f1f084479d0848dddc1b19c643c2e46d2e6defa4",
+      "destination_sha256": "2e638e4291d251fd95523bfad090627b2526db90acda6f96c7b945335bcf5185"
+    },
+    {
+      "source": "ksemaphorecreate-trial-261022-1/VC/SemaphoreCreate_lib.v",
+      "destination": "VC/semaphore/SemaphoreCreate_lib.v",
+      "source_sha256": "ee0022fa9277a2f4e07c0b40929e4952ed395374b44412c48d547a2a34b59f5f",
+      "destination_sha256": "fc395b7e9484678169b54c20e880610e8117caeb569f4b40fd6825185b112a8a"
+    },
+    {
+      "source": "ksemaphorecreate-trial-261022-1/VC/SemaphoreCreate_proof_auto.v",
+      "destination": "VC/semaphore/SemaphoreCreate_proof_auto.v",
+      "source_sha256": "48a3bf524e095b5afd03a615640ac5c639ae295da112e6c949329f40f768895f",
+      "destination_sha256": "012544f589fcca2288562259cce0803c87e175adede670d574d8262a652ddd51"
+    },
+    {
+      "source": "ksemaphorecreate-trial-261022-1/VC/SemaphoreCreate_proof_manual.v",
+      "destination": "VC/semaphore/SemaphoreCreate_proof_manual.v",
+      "source_sha256": "8042adcef68711187ef30391ae1264ede131d414eca0eecd5adc78b24df57104",
+      "destination_sha256": "79fcae0efc1d2def0b9ac3b245a1caff27182b8246865cb874537d846bd88c32"
+    },
+    {
+      "source": "ksemaphorecreate-trial-261022-1/lib/SemaphoreSpecBridge.v",
+      "destination": "VC/semaphore/SemaphoreSpecBridge.v",
+      "source_sha256": "6366f505934ca185fe36192445e220c883cac6e52f8a1fb41eabe39726b71785",
+      "destination_sha256": "5c31c8fd7c53d5a2f18640486ab5c24eeaa701019a579c9bc09c3088966b54a7"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/KSemaphoreDelete_goal.v",
+      "destination": "VC/semaphore/KSemaphoreDelete_goal.v",
+      "source_sha256": "9f6adef32f03185e25b11d4a9750cf1b0c37e3ba93a19d6e9dacbf23bb67bdb8",
+      "destination_sha256": "41c444585367ebe838105c7ce464f1e1cce01b77bc02e489dff5d3c5303bc521"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/KSemaphoreDelete_goal_check.v",
+      "destination": "VC/semaphore/KSemaphoreDelete_goal_check.v",
+      "source_sha256": "4a16be05fe3aa3615ca6008deabb9ef75de6f1591422b76631b2be4621057530",
+      "destination_sha256": "39159cd9b0ec9ff2e800016754e2d47e72e6ed3d8b692cf65f99dde29cf1b9b8"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/KSemaphoreDelete_lib.v",
+      "destination": "VC/semaphore/KSemaphoreDelete_lib.v",
+      "source_sha256": "1f8a54afaa392924392567aef82ee5ba89cdf1a63d87dffd441a01e206123963",
+      "destination_sha256": "1f8a54afaa392924392567aef82ee5ba89cdf1a63d87dffd441a01e206123963"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/KSemaphoreDelete_proof_auto.v",
+      "destination": "VC/semaphore/KSemaphoreDelete_proof_auto.v",
+      "source_sha256": "b505b9dc6910bf8b6be98d9618ac92c4bcebc4bfabab3b5dda8757b979b3e8ac",
+      "destination_sha256": "79f56a7a191cf377014b486c027b218f28d06f3a02a22cbdee98a0fe6906b6b7"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/KSemaphoreDelete_proof_manual.v",
+      "destination": "VC/semaphore/KSemaphoreDelete_proof_manual.v",
+      "source_sha256": "0482a1d9d7714c0e68ffa6dd8f922894455570ff5369c3fc4fe5e5aaae2e4aaf",
+      "destination_sha256": "2048861b7677cd06e38a5703ec5f248c53c8392767e4672ebc51d4c2e6adfce5"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/LinklistResumeAll_goal.v",
+      "destination": "VC/semaphore/LinklistResumeAll_goal.v",
+      "source_sha256": "fb3502403f57cfbe51d07957486f2f11c8f8eef1a205aefe246278140ae40d3f",
+      "destination_sha256": "05e64b7a5786dc9212ed250b55194f70790a51a7181f09baeeafac695349a468"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/LinklistResumeAll_goal_check.v",
+      "destination": "VC/semaphore/LinklistResumeAll_goal_check.v",
+      "source_sha256": "2c2586ac032f67f79280f1e2aa09b96b8f605ac02327901751be041f8c1eb944",
+      "destination_sha256": "a0616e557f42a1fdf3653ea7f7ba7e5c541642f7b4a4c4ba590be150aa996c96"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/LinklistResumeAll_lib.v",
+      "destination": "VC/semaphore/LinklistResumeAll_lib.v",
+      "source_sha256": "5867e39f9abb298c68f9ee5b1f5b74b95d64472e8aec5ee53c5185e550055872",
+      "destination_sha256": "fc52afd21c9d11edff7e44ff92ba915ab4abe8249dbd6b1f247ed5194b73b3cf"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/LinklistResumeAll_proof_auto.v",
+      "destination": "VC/semaphore/LinklistResumeAll_proof_auto.v",
+      "source_sha256": "2275aaf06c453ba0abebbe9a9d84b4680f7e057106e1b30a2897f756d93cbaab",
+      "destination_sha256": "836150820e2bb7c78e90def96826ebfec22e98892f94cb3a32d322b2b6761cd5"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/LinklistResumeAll_proof_manual.v",
+      "destination": "VC/semaphore/LinklistResumeAll_proof_manual.v",
+      "source_sha256": "b70019f7e5392a08a96433e19e6ea65ba6b01f1c4281b86722733e0324167603",
+      "destination_sha256": "1f042cf437359115b70c0d75bbbf314021a1faf9f34cf84e521d0193b68d5b36"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/SemaphoreDelete_goal.v",
+      "destination": "VC/semaphore/SemaphoreDelete_goal.v",
+      "source_sha256": "7f893168f36280df6e80e02818bc4dc5e5511dad24983acaf0b53def1f76a089",
+      "destination_sha256": "f8a40dca8d8cf50807978621f288aeb840438b8635c9518f5060cb0a79fb6830"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/SemaphoreDelete_goal_check.v",
+      "destination": "VC/semaphore/SemaphoreDelete_goal_check.v",
+      "source_sha256": "da220e3fe1aab49bb5df6f41a72eea546fcb33a5bc16b5be6825692c00f6d35a",
+      "destination_sha256": "a1af1b57aa540cd281ee9ad39781c5a15eac2cc236ab094d9553b1f7ea50d4c5"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/SemaphoreDelete_lib.v",
+      "destination": "VC/semaphore/SemaphoreDelete_lib.v",
+      "source_sha256": "5bb39ac24f94c1e01140655ccdad0701c5a309c75681ed20891bbf86f12e9794",
+      "destination_sha256": "8bcce128aafaf9d3d72e600453e3ae0bfb0cdb17bfcabcc7eb9aadda38aae11d"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/SemaphoreDelete_proof_auto.v",
+      "destination": "VC/semaphore/SemaphoreDelete_proof_auto.v",
+      "source_sha256": "0d43296a83b7da4e371e5ae1eee08807b85b175eb6a2d41a1c373d9bd3bb250f",
+      "destination_sha256": "a88c36c3f5cefccc9efb9db52245cda2076d2b4450270b0588f5a301d39b4335"
+    },
+    {
+      "source": "ksemaphoredelete-trial-261025-1/VC/SemaphoreDelete_proof_manual.v",
+      "destination": "VC/semaphore/SemaphoreDelete_proof_manual.v",
+      "source_sha256": "fbad64db7b5b6bd5f5a49dd743c9394f596d1b4dba8c50fcc7ae0f0a8cfeae31",
+      "destination_sha256": "36834d9c45d44f27b865b89eef663c2900873034b6681168c50482279c2b995d"
+    },
+    {
+      "source": "kmutexcreate-trial-261101-1/VC/KMutexCreate_goal.v",
+      "destination": "VC/mutex/KMutexCreate_goal.v",
+      "source_sha256": "1ffea1b8e0b6bf3e61bc0fce4a685eb5415602307b10f442c4bd69b72d679f22",
+      "destination_sha256": "51fc80d4774eab2d1c86259bd242dab43fb90684e05ab17492181e099283656b"
+    },
+    {
+      "source": "kmutexcreate-trial-261101-1/VC/KMutexCreate_goal_check.v",
+      "destination": "VC/mutex/KMutexCreate_goal_check.v",
+      "source_sha256": "ef0e20bc5004e5619eea4b5cd9aeb1adde67c3bf6d62c07e5330c0ea4ebe285b",
+      "destination_sha256": "2ef5727c336a085da8180a56ae8ca233dddd05c0700eb2696507e6faf68ceffe"
+    },
+    {
+      "source": "kmutexcreate-trial-261101-1/VC/KMutexCreate_lib.v",
+      "destination": "VC/mutex/KMutexCreate_lib.v",
+      "source_sha256": "1ae1f7c6d5368048c57a13c91be9f64c58bfe84392fec929e2f575d75fd3d2be",
+      "destination_sha256": "1e7ee4b0ee9de59bfccb17ab10e07586066287effd40ed10b2390ac5bc2f35de"
+    },
+    {
+      "source": "kmutexcreate-trial-261101-1/VC/KMutexCreate_proof_auto.v",
+      "destination": "VC/mutex/KMutexCreate_proof_auto.v",
+      "source_sha256": "5c00973b8dff38e34b57996ce28d480a073690b54ea60de7e06b1072b3fe2abe",
+      "destination_sha256": "4ff8ead701a878433ffd705e4b464cc4f1be60089cf30ee0ef5cc09105a662a7"
+    },
+    {
+      "source": "kmutexcreate-trial-261101-1/VC/KMutexCreate_proof_manual.v",
+      "destination": "VC/mutex/KMutexCreate_proof_manual.v",
+      "source_sha256": "e78b0818441157a637a13e0e5cfa736fe227da4c7ef2e10f8d441ed084bd6f43",
+      "destination_sha256": "a32244bcb77af348218bdd1a1e4aefb8e5ba95c3971b0c710148f8c7fd8cc32f"
+    },
+    {
+      "source": "kmutexcreate-trial-261101-1/VC/MutexCreate_goal.v",
+      "destination": "VC/mutex/MutexCreate_goal.v",
+      "source_sha256": "b6f5501a322771a07fdd61e28b7826e270dff559a7eb553c2f3373c80b634456",
+      "destination_sha256": "afb4f6e19637bef6f76a3da8917dc1a40a5cba3de74ce56bd6f840db172327d2"
+    },
+    {
+      "source": "kmutexcreate-trial-261101-1/VC/MutexCreate_goal_check.v",
+      "destination": "VC/mutex/MutexCreate_goal_check.v",
+      "source_sha256": "221c46bbd1aa0ac09d6719f7939670a21d4c5f393a1be97c4a1f15b0ba975a12",
+      "destination_sha256": "023fb668a35953d655b91daeaee108da303f53593b58077b2652d8efb71d0b56"
+    },
+    {
+      "source": "kmutexcreate-trial-261101-1/VC/MutexCreate_lib.v",
+      "destination": "VC/mutex/MutexCreate_lib.v",
+      "source_sha256": "dcb0383ddf287f4bcd22bbc3723d8847884d2afaf749eb6978fa7b69162039f0",
+      "destination_sha256": "297eaa6aafd92eff495943ca6dc9f61a4a857aa869354242dd49cc41536b1028"
+    },
+    {
+      "source": "kmutexcreate-trial-261101-1/VC/MutexCreate_proof_auto.v",
+      "destination": "VC/mutex/MutexCreate_proof_auto.v",
+      "source_sha256": "dccb584df64ba35560a1b7ed070a9ed89e7e43b545aaade89ce3ff966351ac74",
+      "destination_sha256": "a6e498b9903013a802f1f64a2e0e9d88846e6441dc7451b3f219ed3e64e719d1"
+    },
+    {
+      "source": "kmutexcreate-trial-261101-1/VC/MutexCreate_proof_manual.v",
+      "destination": "VC/mutex/MutexCreate_proof_manual.v",
+      "source_sha256": "031c7fde3d112b2ae490aae27ab2821d339bc3784c58ea927576ff056ee02c7b",
+      "destination_sha256": "db2417ce6c8c9b5be2185632f1fb6ea9041083320f4e73a2f3186390e51cbba5"
+    },
+    {
+      "source": "keventcreate-trial-261101-1/VC/EventCreate_goal.v",
+      "destination": "VC/event/EventCreate_goal.v",
+      "source_sha256": "4511373ea18c32bd03862c14a4d48b95fc1e79c6f42e4f151d6b4bd1603cdbd8",
+      "destination_sha256": "c07ff749d6e89ad587c38ffb297f26627a5663825073309874e9aca8adfe473b"
+    },
+    {
+      "source": "keventcreate-trial-261101-1/VC/EventCreate_goal_check.v",
+      "destination": "VC/event/EventCreate_goal_check.v",
+      "source_sha256": "615b65c957e77c53a2824ab5416e989b55b90a16a79e03201c0d83c7486060d9",
+      "destination_sha256": "a6af15c9fe76547f08eed3a5d211a04c48d239f46e44de5dd2b83ddce6eb0305"
+    },
+    {
+      "source": "keventcreate-trial-261101-1/VC/EventCreate_lib.v",
+      "destination": "VC/event/EventCreate_lib.v",
+      "source_sha256": "57cd61ac2da49c5afa80f023fdb714b0e3b37dafbc25ce41f0d018feb4c77a57",
+      "destination_sha256": "1f084acfe8c4824369110797e4a529dd67a3fb23072762b04efe412a399302a0"
+    },
+    {
+      "source": "keventcreate-trial-261101-1/VC/EventCreate_proof_auto.v",
+      "destination": "VC/event/EventCreate_proof_auto.v",
+      "source_sha256": "d9c0ad10f0cf9d5244f874250a363b592654f055bc397caf2c09b932ee20f86f",
+      "destination_sha256": "a0377976673fefa203749857836ad01d3d9fd144a187e8cffb1fb3debe37991a"
+    },
+    {
+      "source": "keventcreate-trial-261101-1/VC/EventCreate_proof_manual.v",
+      "destination": "VC/event/EventCreate_proof_manual.v",
+      "source_sha256": "1e800054068f5a56a788f6cd591b2814e370f66a469a422336fa86e75ef92df0",
+      "destination_sha256": "45f5e5af0578202c732a5a11a1e27e10bf050e0c506ac4955906bfd5669b57fd"
+    },
+    {
+      "source": "keventcreate-trial-261101-1/VC/KEventCreate_goal.v",
+      "destination": "VC/event/KEventCreate_goal.v",
+      "source_sha256": "d8c7ed240af79925edba18cd82536ce7d03a7b47e0689a2319d22cd44de3cef4",
+      "destination_sha256": "6237356065d3043d94d3da65ca37673933074d73262deae04773d0d6fd205f6a"
+    },
+    {
+      "source": "keventcreate-trial-261101-1/VC/KEventCreate_goal_check.v",
+      "destination": "VC/event/KEventCreate_goal_check.v",
+      "source_sha256": "1d144be802002d980c94e37e2fd553f63b3bbc4caea8b0fd71b1d861fd9ea2e8",
+      "destination_sha256": "c6776ebeb3dbc062b16d84274954043ae63219e279d2f45b5aa5c4e684cd8db9"
+    },
+    {
+      "source": "keventcreate-trial-261101-1/VC/KEventCreate_lib.v",
+      "destination": "VC/event/KEventCreate_lib.v",
+      "source_sha256": "1f611c42c491266e492f750d7262c7c793835a5bb38dd7295002ea70b7b9be00",
+      "destination_sha256": "2103dcc2c7ea4d9227ddb64371ac84540467096a4e974f4ee7da01fa11e53c13"
+    },
+    {
+      "source": "keventcreate-trial-261101-1/VC/KEventCreate_proof_auto.v",
+      "destination": "VC/event/KEventCreate_proof_auto.v",
+      "source_sha256": "67828631aa642aa3915d557e9af8b252667ca0833616814bc818ef0fcb217a55",
+      "destination_sha256": "e29bcc282aabbd6dce4721f71639d701d6dd3a4608def74c00832cd2a628d6f1"
+    },
+    {
+      "source": "keventcreate-trial-261101-1/VC/KEventCreate_proof_manual.v",
+      "destination": "VC/event/KEventCreate_proof_manual.v",
+      "source_sha256": "44b63f8989bdac7299aed7dd5e95fc48d88da176e88c0dc89600819a6f6c51bb",
+      "destination_sha256": "367d6e7e63ee8d4e3f08613acddffa953c7a029e0b6b86e0178a570dbb15e2e8"
+    },
+    {
+      "source": "kmutexdelete-trial-261109-1/lib/MutexInv.v",
+      "destination": "lib/mutex/MutexDeleteInv.v",
+      "source_sha256": "421ebdb67fe6cc3c335e8c0b013b4ea4a3c70be9e6bf36445476547430b5f360",
+      "destination_sha256": "cb8752dd71a3467284945071f6768aeb5b278310a1b1358e8270e9b9a0db8987"
+    },
+    {
+      "source": "kmutexdelete-trial-261109-1/lib/KMutexDelete.v",
+      "destination": "lib/mutex/KMutexDelete.v",
+      "source_sha256": "3d89c86551b0119535e976fe4016e92a9876821deffd3eaa625e79ba5ac2cb13",
+      "destination_sha256": "37ebc61718f94daecc2230acd165a198f3b32e54869df4c547a52f3b0aa2ce40"
+    },
+    {
+      "source": "kmutexdelete-trial-261109-1/lib/MutexState.v",
+      "destination": "lib/mutex/MutexDeleteState.v",
+      "source_sha256": "7127634e8f4c0393c478fd38adb29488c575118012c6137dcf83efb77f9bb562",
+      "destination_sha256": "7127634e8f4c0393c478fd38adb29488c575118012c6137dcf83efb77f9bb562"
+    },
+    {
+      "source": "kmutexdelete-trial-261109-1/annotated_C/src/mutex_delete_logic.h",
+      "destination": "annotated_C/src/headers/mutex_delete_logic.h",
+      "source_sha256": "c00f88858c90510449ff03cf1d64347accd7cdbb8f63abb938ad0d71d7e2aa9d",
+      "destination_sha256": "74dae0dd8b12ace3b2d4e47478a3596c7ffb82fb1ef7ba3efe5c48585588af16"
+    },
+    {
+      "source": "kmutexdelete-trial-261109-1/annotated_C/src/mutex_delete_types.h",
+      "destination": "annotated_C/src/headers/mutex_delete_types.h",
+      "source_sha256": "c7e913ea68dc21add1e9b5872a2ed90a37dfee79976baff7184bbb3968431bf4",
+      "destination_sha256": "c7e913ea68dc21add1e9b5872a2ed90a37dfee79976baff7184bbb3968431bf4"
+    },
+    {
+      "source": "kmutexdelete-trial-261109-1/annotated_C/src/LinklistResumeAll.c",
+      "destination": "annotated_C/src/kernel/mutex/LinklistResumeAll.c",
+      "source_sha256": "c444ddc990491c2ada8fadb2cfafc0d6a788d034078e8a0e510bfea85b063316",
+      "destination_sha256": "1a18aeb3a976e24bb6dc1d01c71d2da57a03f35424fcb32bf9aeeff54e6a3d94"
+    },
+    {
+      "source": "kmutexdelete-trial-261109-1/annotated_C/src/_MutexDelete.c",
+      "destination": "annotated_C/src/kernel/mutex/_MutexDelete.c",
+      "source_sha256": "a7f67386432fd6e1412ed8f8850a0fc7b217c9a62cd4f8c98627d7d15feccb2d",
+      "destination_sha256": "a7f67386432fd6e1412ed8f8850a0fc7b217c9a62cd4f8c98627d7d15feccb2d"
+    },
+    {
+      "source": "kmutexdelete-trial-261109-1/annotated_C/src/KMutexDelete.c",
+      "destination": "annotated_C/src/kernel/mutex/KMutexDelete.c",
+      "source_sha256": "0ecc4f5ced75a5c1d504d2bfad60afa79a085b3285e262c6422b7e834ab1e4a1",
+      "destination_sha256": "0ecc4f5ced75a5c1d504d2bfad60afa79a085b3285e262c6422b7e834ab1e4a1"
+    }
+  ],
+  "mutexdelete_archive_commit": "4b223a27ca0822bfd9439be0c51b98b7780b73d8",
+  "mutexdelete_archive_remote_verified": true,
+  "mutexdelete_trial_removed": true,
+  "source_comparison": "All 54 migrated files match original source after module-path substitutions and trailing blank-line normalization.",
+  "mutexdelete_status": "implementation VC/proof incomplete; no new proof claim",
+  "vc_source_count": 46,
+  "reused_global_helpers": [
+    "SemaphoreByteLayout and SemaphoreOwnership lemmas already live in lib/semaphore/SemaphoreInv.v; use those current-toolchain proofs."
+  ],
+  "c_syntax_check": {
+    "command": "gcc -fsyntax-only -Iannotated_C/src/headers annotated_C/src/kernel/mutex/{KMutexDelete,_MutexDelete,LinklistResumeAll}.c",
+    "exit_code": 0,
+    "warnings": "NULL_PARAM_CHECK_1 inline declaration has no body in two files."
+  },
+  "rocq_build": {
+    "command": "PATH=/home/xinra/.opam/pv-bench-8.20.1/bin:$PATH make -k -f Makefile.coq -j4",
+    "exit_code": 2,
+    "compiled_goal_checks": [
+      "VC/KEventCreate_goal_check.vo",
+      "VC/KMutexCreate_goal_check.vo"
+    ],
+    "mutexdelete_library_compiled": true,
+    "failures": [
+      [
+        "./VC/MutexCreate_lib.v",
+        "24",
+        " The reference msgqueue_inv was not found in the current environment."
+      ],
+      [
+        "./VC/SemaphoreCreate_lib.v",
+        "58",
+        "\n (in proof published_world_wf__publish): Attempt to save an incomplete proof\n(there are remaining open goals)."
+      ],
+      [
+        "./VC/EventCreate_lib.v",
+        "34",
+        "\nTactic failure: split_pure_spatial: RHS must be (pure && spatial) or (spatial && pure)."
+      ],
+      [
+        "./VC/SemaphoreDelete_lib.v",
+        "23",
+        " The reference msgqueue_inv was not found in the current environment."
+      ],
+      [
+        "./VC/LinklistResumeAll_lib.v",
+        "659",
+        " Unexpected name (no introduction patterns were expected in the\nbranch)."
+      ],
+      [
+        "./VC/KSemaphoreCreate_goal_check.v",
+        "5",
+        " The label proof_of_KSemaphoreCreate_return_wit_1 is already declared."
+      ],
+      [
+        "./VC/KSemaphoreDelete_goal_check.v",
+        "5",
+        " The label proof_of_KSemaphoreDelete_return_wit_1 is already declared."
+      ]
+    ],
+    "note": "Historical flat-layout result; current module-layout results are in vc_layout_check."
+  },
+  "git_diff_check": "passed",
+  "scope": "Source migration and configuration only. Historical proofs are not all compatible with current shared model/toolchain; no goals weakened or admissions added.",
+  "vc_layout": {
+    "rule": "VC/<module>/; cross-module shared proofs in VC/common/ when needed",
+    "source": ".agents/skills/verify-an-os-function/references/project-maintenance-guide.md",
+    "path_mapping": {
+      "ksemaphorecreate-trial-261022-1/VC/KSemaphoreCreate_goal.v": "VC/semaphore/KSemaphoreCreate_goal.v",
+      "ksemaphorecreate-trial-261022-1/VC/KSemaphoreCreate_goal_check.v": "VC/semaphore/KSemaphoreCreate_goal_check.v",
+      "ksemaphorecreate-trial-261022-1/VC/KSemaphoreCreate_lib.v": "VC/semaphore/KSemaphoreCreate_lib.v",
+      "ksemaphorecreate-trial-261022-1/VC/KSemaphoreCreate_proof_auto.v": "VC/semaphore/KSemaphoreCreate_proof_auto.v",
+      "ksemaphorecreate-trial-261022-1/VC/KSemaphoreCreate_proof_manual.v": "VC/semaphore/KSemaphoreCreate_proof_manual.v",
+      "ksemaphorecreate-trial-261022-1/VC/SemaphoreCreate_goal.v": "VC/semaphore/SemaphoreCreate_goal.v",
+      "ksemaphorecreate-trial-261022-1/VC/SemaphoreCreate_goal_check.v": "VC/semaphore/SemaphoreCreate_goal_check.v",
+      "ksemaphorecreate-trial-261022-1/VC/SemaphoreCreate_lib.v": "VC/semaphore/SemaphoreCreate_lib.v",
+      "ksemaphorecreate-trial-261022-1/VC/SemaphoreCreate_proof_auto.v": "VC/semaphore/SemaphoreCreate_proof_auto.v",
+      "ksemaphorecreate-trial-261022-1/VC/SemaphoreCreate_proof_manual.v": "VC/semaphore/SemaphoreCreate_proof_manual.v",
+      "ksemaphorecreate-trial-261022-1/lib/SemaphoreSpecBridge.v": "VC/semaphore/SemaphoreSpecBridge.v",
+      "ksemaphoredelete-trial-261025-1/VC/KSemaphoreDelete_goal.v": "VC/semaphore/KSemaphoreDelete_goal.v",
+      "ksemaphoredelete-trial-261025-1/VC/KSemaphoreDelete_goal_check.v": "VC/semaphore/KSemaphoreDelete_goal_check.v",
+      "ksemaphoredelete-trial-261025-1/VC/KSemaphoreDelete_lib.v": "VC/semaphore/KSemaphoreDelete_lib.v",
+      "ksemaphoredelete-trial-261025-1/VC/KSemaphoreDelete_proof_auto.v": "VC/semaphore/KSemaphoreDelete_proof_auto.v",
+      "ksemaphoredelete-trial-261025-1/VC/KSemaphoreDelete_proof_manual.v": "VC/semaphore/KSemaphoreDelete_proof_manual.v",
+      "ksemaphoredelete-trial-261025-1/VC/LinklistResumeAll_goal.v": "VC/semaphore/LinklistResumeAll_goal.v",
+      "ksemaphoredelete-trial-261025-1/VC/LinklistResumeAll_goal_check.v": "VC/semaphore/LinklistResumeAll_goal_check.v",
+      "ksemaphoredelete-trial-261025-1/VC/LinklistResumeAll_lib.v": "VC/semaphore/LinklistResumeAll_lib.v",
+      "ksemaphoredelete-trial-261025-1/VC/LinklistResumeAll_proof_auto.v": "VC/semaphore/LinklistResumeAll_proof_auto.v",
+      "ksemaphoredelete-trial-261025-1/VC/LinklistResumeAll_proof_manual.v": "VC/semaphore/LinklistResumeAll_proof_manual.v",
+      "ksemaphoredelete-trial-261025-1/VC/SemaphoreDelete_goal.v": "VC/semaphore/SemaphoreDelete_goal.v",
+      "ksemaphoredelete-trial-261025-1/VC/SemaphoreDelete_goal_check.v": "VC/semaphore/SemaphoreDelete_goal_check.v",
+      "ksemaphoredelete-trial-261025-1/VC/SemaphoreDelete_lib.v": "VC/semaphore/SemaphoreDelete_lib.v",
+      "ksemaphoredelete-trial-261025-1/VC/SemaphoreDelete_proof_auto.v": "VC/semaphore/SemaphoreDelete_proof_auto.v",
+      "ksemaphoredelete-trial-261025-1/VC/SemaphoreDelete_proof_manual.v": "VC/semaphore/SemaphoreDelete_proof_manual.v",
+      "kmutexcreate-trial-261101-1/VC/KMutexCreate_goal.v": "VC/mutex/KMutexCreate_goal.v",
+      "kmutexcreate-trial-261101-1/VC/KMutexCreate_goal_check.v": "VC/mutex/KMutexCreate_goal_check.v",
+      "kmutexcreate-trial-261101-1/VC/KMutexCreate_lib.v": "VC/mutex/KMutexCreate_lib.v",
+      "kmutexcreate-trial-261101-1/VC/KMutexCreate_proof_auto.v": "VC/mutex/KMutexCreate_proof_auto.v",
+      "kmutexcreate-trial-261101-1/VC/KMutexCreate_proof_manual.v": "VC/mutex/KMutexCreate_proof_manual.v",
+      "kmutexcreate-trial-261101-1/VC/MutexCreate_goal.v": "VC/mutex/MutexCreate_goal.v",
+      "kmutexcreate-trial-261101-1/VC/MutexCreate_goal_check.v": "VC/mutex/MutexCreate_goal_check.v",
+      "kmutexcreate-trial-261101-1/VC/MutexCreate_lib.v": "VC/mutex/MutexCreate_lib.v",
+      "kmutexcreate-trial-261101-1/VC/MutexCreate_proof_auto.v": "VC/mutex/MutexCreate_proof_auto.v",
+      "kmutexcreate-trial-261101-1/VC/MutexCreate_proof_manual.v": "VC/mutex/MutexCreate_proof_manual.v",
+      "keventcreate-trial-261101-1/VC/EventCreate_goal.v": "VC/event/EventCreate_goal.v",
+      "keventcreate-trial-261101-1/VC/EventCreate_goal_check.v": "VC/event/EventCreate_goal_check.v",
+      "keventcreate-trial-261101-1/VC/EventCreate_lib.v": "VC/event/EventCreate_lib.v",
+      "keventcreate-trial-261101-1/VC/EventCreate_proof_auto.v": "VC/event/EventCreate_proof_auto.v",
+      "keventcreate-trial-261101-1/VC/EventCreate_proof_manual.v": "VC/event/EventCreate_proof_manual.v",
+      "keventcreate-trial-261101-1/VC/KEventCreate_goal.v": "VC/event/KEventCreate_goal.v",
+      "keventcreate-trial-261101-1/VC/KEventCreate_goal_check.v": "VC/event/KEventCreate_goal_check.v",
+      "keventcreate-trial-261101-1/VC/KEventCreate_lib.v": "VC/event/KEventCreate_lib.v",
+      "keventcreate-trial-261101-1/VC/KEventCreate_proof_auto.v": "VC/event/KEventCreate_proof_auto.v",
+      "keventcreate-trial-261101-1/VC/KEventCreate_proof_manual.v": "VC/event/KEventCreate_proof_manual.v"
+    },
+    "logical_mapping": {
+      "CRTOS_Verify.VC.EventCreate_goal": "CRTOS_Verify.VC.event.EventCreate_goal",
+      "CRTOS_Verify.VC.EventCreate_goal_check": "CRTOS_Verify.VC.event.EventCreate_goal_check",
+      "CRTOS_Verify.VC.EventCreate_lib": "CRTOS_Verify.VC.event.EventCreate_lib",
+      "CRTOS_Verify.VC.EventCreate_proof_auto": "CRTOS_Verify.VC.event.EventCreate_proof_auto",
+      "CRTOS_Verify.VC.EventCreate_proof_manual": "CRTOS_Verify.VC.event.EventCreate_proof_manual",
+      "CRTOS_Verify.VC.KEventCreate_goal": "CRTOS_Verify.VC.event.KEventCreate_goal",
+      "CRTOS_Verify.VC.KEventCreate_goal_check": "CRTOS_Verify.VC.event.KEventCreate_goal_check",
+      "CRTOS_Verify.VC.KEventCreate_lib": "CRTOS_Verify.VC.event.KEventCreate_lib",
+      "CRTOS_Verify.VC.KEventCreate_proof_auto": "CRTOS_Verify.VC.event.KEventCreate_proof_auto",
+      "CRTOS_Verify.VC.KEventCreate_proof_manual": "CRTOS_Verify.VC.event.KEventCreate_proof_manual",
+      "CRTOS_Verify.VC.KMutexCreate_goal": "CRTOS_Verify.VC.mutex.KMutexCreate_goal",
+      "CRTOS_Verify.VC.KMutexCreate_goal_check": "CRTOS_Verify.VC.mutex.KMutexCreate_goal_check",
+      "CRTOS_Verify.VC.KMutexCreate_lib": "CRTOS_Verify.VC.mutex.KMutexCreate_lib",
+      "CRTOS_Verify.VC.KMutexCreate_proof_auto": "CRTOS_Verify.VC.mutex.KMutexCreate_proof_auto",
+      "CRTOS_Verify.VC.KMutexCreate_proof_manual": "CRTOS_Verify.VC.mutex.KMutexCreate_proof_manual",
+      "CRTOS_Verify.VC.KSemaphoreCreate_goal": "CRTOS_Verify.VC.semaphore.KSemaphoreCreate_goal",
+      "CRTOS_Verify.VC.KSemaphoreCreate_goal_check": "CRTOS_Verify.VC.semaphore.KSemaphoreCreate_goal_check",
+      "CRTOS_Verify.VC.KSemaphoreCreate_lib": "CRTOS_Verify.VC.semaphore.KSemaphoreCreate_lib",
+      "CRTOS_Verify.VC.KSemaphoreCreate_proof_auto": "CRTOS_Verify.VC.semaphore.KSemaphoreCreate_proof_auto",
+      "CRTOS_Verify.VC.KSemaphoreCreate_proof_manual": "CRTOS_Verify.VC.semaphore.KSemaphoreCreate_proof_manual",
+      "CRTOS_Verify.VC.KSemaphoreDelete_goal": "CRTOS_Verify.VC.semaphore.KSemaphoreDelete_goal",
+      "CRTOS_Verify.VC.KSemaphoreDelete_goal_check": "CRTOS_Verify.VC.semaphore.KSemaphoreDelete_goal_check",
+      "CRTOS_Verify.VC.KSemaphoreDelete_lib": "CRTOS_Verify.VC.semaphore.KSemaphoreDelete_lib",
+      "CRTOS_Verify.VC.KSemaphoreDelete_proof_auto": "CRTOS_Verify.VC.semaphore.KSemaphoreDelete_proof_auto",
+      "CRTOS_Verify.VC.KSemaphoreDelete_proof_manual": "CRTOS_Verify.VC.semaphore.KSemaphoreDelete_proof_manual",
+      "CRTOS_Verify.VC.LinklistResumeAll_goal": "CRTOS_Verify.VC.semaphore.LinklistResumeAll_goal",
+      "CRTOS_Verify.VC.LinklistResumeAll_goal_check": "CRTOS_Verify.VC.semaphore.LinklistResumeAll_goal_check",
+      "CRTOS_Verify.VC.LinklistResumeAll_lib": "CRTOS_Verify.VC.semaphore.LinklistResumeAll_lib",
+      "CRTOS_Verify.VC.LinklistResumeAll_proof_auto": "CRTOS_Verify.VC.semaphore.LinklistResumeAll_proof_auto",
+      "CRTOS_Verify.VC.LinklistResumeAll_proof_manual": "CRTOS_Verify.VC.semaphore.LinklistResumeAll_proof_manual",
+      "CRTOS_Verify.VC.MutexCreate_goal": "CRTOS_Verify.VC.mutex.MutexCreate_goal",
+      "CRTOS_Verify.VC.MutexCreate_goal_check": "CRTOS_Verify.VC.mutex.MutexCreate_goal_check",
+      "CRTOS_Verify.VC.MutexCreate_lib": "CRTOS_Verify.VC.mutex.MutexCreate_lib",
+      "CRTOS_Verify.VC.MutexCreate_proof_auto": "CRTOS_Verify.VC.mutex.MutexCreate_proof_auto",
+      "CRTOS_Verify.VC.MutexCreate_proof_manual": "CRTOS_Verify.VC.mutex.MutexCreate_proof_manual",
+      "CRTOS_Verify.VC.SemaphoreCreate_goal": "CRTOS_Verify.VC.semaphore.SemaphoreCreate_goal",
+      "CRTOS_Verify.VC.SemaphoreCreate_goal_check": "CRTOS_Verify.VC.semaphore.SemaphoreCreate_goal_check",
+      "CRTOS_Verify.VC.SemaphoreCreate_lib": "CRTOS_Verify.VC.semaphore.SemaphoreCreate_lib",
+      "CRTOS_Verify.VC.SemaphoreCreate_proof_auto": "CRTOS_Verify.VC.semaphore.SemaphoreCreate_proof_auto",
+      "CRTOS_Verify.VC.SemaphoreCreate_proof_manual": "CRTOS_Verify.VC.semaphore.SemaphoreCreate_proof_manual",
+      "CRTOS_Verify.VC.SemaphoreDelete_goal": "CRTOS_Verify.VC.semaphore.SemaphoreDelete_goal",
+      "CRTOS_Verify.VC.SemaphoreDelete_goal_check": "CRTOS_Verify.VC.semaphore.SemaphoreDelete_goal_check",
+      "CRTOS_Verify.VC.SemaphoreDelete_lib": "CRTOS_Verify.VC.semaphore.SemaphoreDelete_lib",
+      "CRTOS_Verify.VC.SemaphoreDelete_proof_auto": "CRTOS_Verify.VC.semaphore.SemaphoreDelete_proof_auto",
+      "CRTOS_Verify.VC.SemaphoreDelete_proof_manual": "CRTOS_Verify.VC.semaphore.SemaphoreDelete_proof_manual",
+      "CRTOS_Verify.VC.SemaphoreSpecBridge": "CRTOS_Verify.VC.semaphore.SemaphoreSpecBridge"
+    },
+    "content_check": "All 46 VC files preserved except imports and qualified module paths."
+  },
+  "vc_layout_check": {
+    "layout": "VC/<module>/",
+    "formal_files": 46,
+    "resolved_vc_references": 76,
+    "archive_equivalence": "All 46 files match their archived source after imports/module-path substitutions only.",
+    "build_command": "make -k -f Makefile.coq -j4 (pv-bench-8.20.1)",
+    "build_exit_code": 2,
+    "compiled_goal_checks": [
+      "VC/event/KEventCreate_goal_check.vo",
+      "VC/mutex/KMutexCreate_goal_check.vo"
+    ],
+    "failures": [
+      [
+        "./VC/event/EventCreate_lib.v",
+        "34",
+        "\nTactic failure: split_pure_spatial: RHS must be (pure && spatial) or (spatial && pure)."
+      ],
+      [
+        "./VC/mutex/MutexCreate_lib.v",
+        "24",
+        " The reference msgqueue_inv was not found in the current environment."
+      ],
+      [
+        "./VC/semaphore/SemaphoreDelete_lib.v",
+        "23",
+        " The reference msgqueue_inv was not found in the current environment."
+      ],
+      [
+        "./VC/semaphore/LinklistResumeAll_lib.v",
+        "659",
+        " Unexpected name (no introduction patterns were expected in the\nbranch)."
+      ],
+      [
+        "./VC/semaphore/SemaphoreCreate_lib.v",
+        "58",
+        "\n (in proof published_world_wf__publish): Attempt to save an incomplete proof\n(there are remaining open goals)."
+      ],
+      [
+        "./VC/semaphore/KSemaphoreCreate_goal_check.v",
+        "5",
+        " The label proof_of_KSemaphoreCreate_return_wit_1 is already declared."
+      ],
+      [
+        "./VC/semaphore/KSemaphoreDelete_goal_check.v",
+        "5",
+        " The label proof_of_KSemaphoreDelete_return_wit_1 is already declared."
+      ]
+    ],
+    "new_path_errors": false,
+    "diff_check": "passed",
+    "compiled_artifacts_removed": true
+  }
+}

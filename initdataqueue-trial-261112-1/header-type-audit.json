@@ -1,0 +1,653 @@
+{
+  "status": "passed",
+  "scope": "All final logic-header Extern declarations; explicit Rocq types only, no QCP parser/symbolic/VC",
+  "declaration_count": 75,
+  "symbols": [
+    "DataqueueAbs",
+    "DataElemAbs",
+    "option",
+    "dq_front",
+    "dq_rear",
+    "dq_max_len",
+    "dq_base",
+    "dq_blank",
+    "dq_data",
+    "dq_blank_object",
+    "dq_data_object",
+    "DataqueueRaw",
+    "dataqueue_storage",
+    "dataqueue_init_slots",
+    "dq_cleared",
+    "dq_created_refs",
+    "abs_init_dataqueue",
+    "dq_published_at",
+    "abs_dataqueue_deinit",
+    "dq_sem_delete_empty",
+    "dq_semaphore_delete_effect",
+    "addr",
+    "StableGlobalState",
+    "VarGlobalState",
+    "CoreVarGlobalState",
+    "StableIdmanager",
+    "VarIdmanager",
+    "DL_Node",
+    "program",
+    "unit",
+    "bool",
+    "addr_aligned",
+    "ALIGN_SIZE",
+    "CharArray::undef_full",
+    "CharArray::full",
+    "repeat_Z",
+    "store_idnode_insert_ready",
+    "store_idmanager",
+    "store_idmanager_found",
+    "idmanager_min_free_id",
+    "idmanager_add",
+    "idmanager_link",
+    "idmanager_query",
+    "idmanager_contains",
+    "idmanager_remove",
+    "store_node_self_linked",
+    "store_dll",
+    "occupy_dll_node",
+    "dll_insert_anchor",
+    "dll_insert_after_dispatch",
+    "Build_DL_Node",
+    "SemaphoreRaw",
+    "semaphore_pending_head",
+    "sched_link_node",
+    "semaphore_pending_nodes",
+    "semaphore_resume_all_effect",
+    "map",
+    "LastSeen",
+    "safeExec",
+    "return",
+    "tt",
+    "true",
+    "false",
+    "abs_ktask_assign",
+    "OutsideCritical",
+    "os_inv",
+    "InsideCritical",
+    "Crtos_RTrans",
+    "Crtos_GTrans",
+    "core_os_inv",
+    "core_LastSeen",
+    "core_OutsideCritical",
+    "dq_semaphore_create_effect",
+    "dq_sem_delete_empty",
+    "dq_semaphore_delete_effect"
+  ],
+  "entries": [
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "DataqueueAbs",
+      "kind": "type constructor",
+      "coq_type": "Type",
+      "coq_symbol": "DataqueueAbs"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "DataElemAbs",
+      "kind": "type constructor",
+      "coq_type": "Type",
+      "coq_symbol": "DataElemAbs"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "option",
+      "kind": "type constructor",
+      "coq_type": "Type -> Type",
+      "coq_symbol": "option"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dq_front",
+      "kind": "term",
+      "coq_type": "DataqueueAbs -> Z",
+      "coq_symbol": "dq_front"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dq_rear",
+      "kind": "term",
+      "coq_type": "DataqueueAbs -> Z",
+      "coq_symbol": "dq_rear"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dq_max_len",
+      "kind": "term",
+      "coq_type": "DataqueueAbs -> Z",
+      "coq_symbol": "dq_max_len"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dq_base",
+      "kind": "term",
+      "coq_type": "DataqueueAbs -> Z",
+      "coq_symbol": "dq_base"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dq_blank",
+      "kind": "term",
+      "coq_type": "DataqueueAbs -> Z",
+      "coq_symbol": "dq_blank"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dq_data",
+      "kind": "term",
+      "coq_type": "DataqueueAbs -> Z",
+      "coq_symbol": "dq_data"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dq_blank_object",
+      "kind": "term",
+      "coq_type": "DataqueueAbs -> Z",
+      "coq_symbol": "dq_blank_object"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dq_data_object",
+      "kind": "term",
+      "coq_type": "DataqueueAbs -> Z",
+      "coq_symbol": "dq_data_object"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "DataqueueRaw",
+      "kind": "term",
+      "coq_type": "Z -> Assertion",
+      "coq_symbol": "DataqueueRaw"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dataqueue_storage",
+      "kind": "term",
+      "coq_type": "Z -> DataqueueAbs -> list(option DataElemAbs) -> Assertion",
+      "coq_symbol": "dataqueue_storage"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dataqueue_init_slots",
+      "kind": "term",
+      "coq_type": "DataqueueAbs -> list(option DataElemAbs)",
+      "coq_symbol": "dataqueue_init_slots"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dq_cleared",
+      "kind": "term",
+      "coq_type": "DataqueueAbs -> DataqueueAbs",
+      "coq_symbol": "dq_cleared"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dq_created_refs",
+      "kind": "term",
+      "coq_type": "DataqueueAbs -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Prop",
+      "coq_symbol": "dq_created_refs"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "abs_init_dataqueue",
+      "kind": "term",
+      "coq_type": "InitDataqueueTrial.lib.CrtosGlobState.StableGlobalState -> Z -> Z -> MonadErr.M (InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Prop) DataqueueAbs",
+      "coq_symbol": "abs_init_dataqueue"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dq_published_at",
+      "kind": "term",
+      "coq_type": "Z -> DataqueueAbs -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Prop",
+      "coq_symbol": "dq_published_at"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "abs_dataqueue_deinit",
+      "kind": "term",
+      "coq_type": "InitDataqueueTrial.lib.CrtosGlobState.StableGlobalState -> DataqueueAbs -> MonadErr.M (InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Prop) DataqueueAbs",
+      "coq_symbol": "abs_dataqueue_deinit"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dq_sem_delete_empty",
+      "kind": "term",
+      "coq_type": "Z -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Prop",
+      "coq_symbol": "dq_sem_delete_empty"
+    },
+    {
+      "header": "dataqueue_logic.h",
+      "symbol": "dq_semaphore_delete_effect",
+      "kind": "term",
+      "coq_type": "Z -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Prop",
+      "coq_symbol": "dq_semaphore_delete_effect"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "addr",
+      "kind": "QCP alias to Z"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "StableGlobalState",
+      "kind": "type constructor",
+      "coq_type": "Type",
+      "coq_symbol": "InitDataqueueTrial.lib.CrtosGlobState.StableGlobalState"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "VarGlobalState",
+      "kind": "type constructor",
+      "coq_type": "Type",
+      "coq_symbol": "InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "CoreVarGlobalState",
+      "kind": "type constructor",
+      "coq_type": "Type",
+      "coq_symbol": "InitDataqueueTrial.lib.CrtosGlobState.CoreVarGlobalState"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "StableIdmanager",
+      "kind": "type constructor",
+      "coq_type": "Type",
+      "coq_symbol": "StableIdmanager"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "VarIdmanager",
+      "kind": "type constructor",
+      "coq_type": "Type",
+      "coq_symbol": "VarIdmanager"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "DL_Node",
+      "kind": "type constructor",
+      "coq_type": "Type -> Type",
+      "coq_symbol": "DL_Node"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "program",
+      "kind": "type constructor",
+      "coq_type": "Type -> Type -> Type",
+      "coq_symbol": "MonadErr.M"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "unit",
+      "kind": "type constructor",
+      "coq_type": "Type",
+      "coq_symbol": "unit"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "bool",
+      "kind": "type constructor",
+      "coq_type": "Type",
+      "coq_symbol": "bool"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "addr_aligned",
+      "kind": "term",
+      "coq_type": "Z -> Z -> Prop",
+      "coq_symbol": "addr_aligned"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "ALIGN_SIZE",
+      "kind": "term",
+      "coq_type": "Z",
+      "coq_symbol": "ALIGN_SIZE"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "CharArray::undef_full",
+      "kind": "term",
+      "coq_type": "Z -> Z -> Assertion",
+      "coq_symbol": "CharArray.undef_full"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "CharArray::full",
+      "kind": "term",
+      "coq_type": "Z -> Z -> list Z -> Assertion",
+      "coq_symbol": "CharArray.full"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "repeat_Z",
+      "kind": "term",
+      "coq_type": "forall {A : Type}, A -> Z -> list A",
+      "coq_symbol": "repeat_Z"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "store_idnode_insert_ready",
+      "kind": "term",
+      "coq_type": "Z -> Assertion",
+      "coq_symbol": "store_idnode_insert_ready"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "store_idmanager",
+      "kind": "term",
+      "coq_type": "StableIdmanager -> VarIdmanager -> Z -> Assertion",
+      "coq_symbol": "store_idmanager"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "store_idmanager_found",
+      "kind": "term",
+      "coq_type": "StableIdmanager -> VarIdmanager -> Z -> Z -> Z -> Assertion",
+      "coq_symbol": "store_idmanager_found"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "idmanager_min_free_id",
+      "kind": "term",
+      "coq_type": "StableIdmanager -> VarIdmanager -> Z -> Prop",
+      "coq_symbol": "idmanager_min_free_id"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "idmanager_add",
+      "kind": "term",
+      "coq_type": "VarIdmanager -> Z -> VarIdmanager",
+      "coq_symbol": "idmanager_add"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "idmanager_link",
+      "kind": "term",
+      "coq_type": "StableIdmanager -> VarIdmanager -> Z -> Z -> VarIdmanager",
+      "coq_symbol": "idmanager_link"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "idmanager_query",
+      "kind": "term",
+      "coq_type": "VarIdmanager -> Z -> bool",
+      "coq_symbol": "idmanager_query"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "idmanager_contains",
+      "kind": "term",
+      "coq_type": "StableIdmanager -> VarIdmanager -> Z -> Z -> Prop",
+      "coq_symbol": "idmanager_contains"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "idmanager_remove",
+      "kind": "term",
+      "coq_type": "StableIdmanager -> VarIdmanager -> Z -> VarIdmanager",
+      "coq_symbol": "idmanager_remove"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "store_node_self_linked",
+      "kind": "term",
+      "coq_type": "Z -> Assertion",
+      "coq_symbol": "store_node_self_linked"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "store_dll",
+      "kind": "term",
+      "coq_type": "forall {A : Type}, (Z -> A -> Assertion) -> Z -> list(DL_Node A) -> Assertion",
+      "coq_symbol": "store_dll"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "occupy_dll_node",
+      "kind": "term",
+      "coq_type": "Z -> Assertion",
+      "coq_symbol": "occupy_dll_node"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "dll_insert_anchor",
+      "kind": "term",
+      "coq_type": "forall {A : Type}, Z -> list(DL_Node A) -> Z -> Prop",
+      "coq_symbol": "dll_insert_anchor"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "dll_insert_after_dispatch",
+      "kind": "term",
+      "coq_type": "forall {A : Type}, Z -> list(DL_Node A) -> Z -> DL_Node A -> list(DL_Node A)",
+      "coq_symbol": "dll_insert_after_dispatch"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "Build_DL_Node",
+      "kind": "term",
+      "coq_type": "forall {A : Type}, A -> Z -> DL_Node A",
+      "coq_symbol": "Build_DL_Node"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "SemaphoreRaw",
+      "kind": "term",
+      "coq_type": "Z -> Assertion",
+      "coq_symbol": "SemaphoreRaw"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "semaphore_pending_head",
+      "kind": "term",
+      "coq_type": "Z -> Z",
+      "coq_symbol": "semaphore_pending_head"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "sched_link_node",
+      "kind": "term",
+      "coq_type": "Z -> DL_Node Z",
+      "coq_symbol": "sched_link_node"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "semaphore_pending_nodes",
+      "kind": "term",
+      "coq_type": "Z -> InitDataqueueTrial.lib.CrtosGlobState.CoreVarGlobalState -> list(DL_Node Z) -> Prop",
+      "coq_symbol": "semaphore_pending_nodes"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "semaphore_resume_all_effect",
+      "kind": "term",
+      "coq_type": "Z -> list Z -> InitDataqueueTrial.lib.CrtosGlobState.CoreVarGlobalState -> InitDataqueueTrial.lib.CrtosGlobState.CoreVarGlobalState -> Prop",
+      "coq_symbol": "semaphore_resume_all_effect"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "map",
+      "kind": "term",
+      "coq_type": "forall {A : Type} {B : Type}, (A -> B) -> list A -> list B",
+      "coq_symbol": "map"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "LastSeen",
+      "kind": "term",
+      "coq_type": "InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> (InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Prop) -> Prop",
+      "coq_symbol": "InitDataqueueTrial.lib.CrtosRules.LastSeen"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "safeExec",
+      "kind": "term",
+      "coq_type": "forall {Sigma : Type} {A : Type}, (Sigma -> Prop) -> MonadErr.M Sigma A -> (A -> Sigma -> Prop) -> Prop",
+      "coq_symbol": "monadesafe_lib.safeExec"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "return",
+      "kind": "term",
+      "coq_type": "forall {Sigma : Type} {A : Type}, A -> MonadErr.M Sigma A",
+      "coq_symbol": "MonadErr.ret"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "tt",
+      "kind": "term",
+      "coq_type": "unit",
+      "coq_symbol": "tt"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "true",
+      "kind": "term",
+      "coq_type": "bool",
+      "coq_symbol": "true"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "false",
+      "kind": "term",
+      "coq_type": "bool",
+      "coq_symbol": "false"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "abs_ktask_assign",
+      "kind": "term",
+      "coq_type": "MonadErr.M (InitDataqueueTrial.lib.CrtosGlobState.CoreVarGlobalState -> Prop) unit",
+      "coq_symbol": "abs_ktask_assign"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "OutsideCritical",
+      "kind": "term",
+      "coq_type": "InitDataqueueTrial.lib.CrtosGlobState.StableGlobalState -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Assertion",
+      "coq_symbol": "InitDataqueueTrial.lib.CrtosRules.OutsideCritical"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "os_inv",
+      "kind": "term",
+      "coq_type": "InitDataqueueTrial.lib.CrtosGlobState.StableGlobalState -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Assertion",
+      "coq_symbol": "InitDataqueueTrial.lib.CrtosInv.os_inv"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "InsideCritical",
+      "kind": "term",
+      "coq_type": "InitDataqueueTrial.lib.CrtosGlobState.StableGlobalState -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Assertion",
+      "coq_symbol": "InitDataqueueTrial.lib.CrtosRules.InsideCritical"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "Crtos_RTrans",
+      "kind": "term",
+      "coq_type": "InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Prop",
+      "coq_symbol": "InitDataqueueTrial.lib.CrtosRules.Crtos_RTrans"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "Crtos_GTrans",
+      "kind": "term",
+      "coq_type": "InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Prop",
+      "coq_symbol": "InitDataqueueTrial.lib.CrtosRules.Crtos_GTrans"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "core_os_inv",
+      "kind": "term",
+      "coq_type": "InitDataqueueTrial.lib.CrtosGlobState.StableGlobalState -> InitDataqueueTrial.lib.CrtosGlobState.CoreVarGlobalState -> Assertion",
+      "coq_symbol": "InitDataqueueTrial.lib.CrtosInv.core_os_inv"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "core_LastSeen",
+      "kind": "term",
+      "coq_type": "InitDataqueueTrial.lib.CrtosGlobState.CoreVarGlobalState -> (InitDataqueueTrial.lib.CrtosGlobState.CoreVarGlobalState -> Prop) -> Prop",
+      "coq_symbol": "InitDataqueueTrial.lib.CrtosRules.core_LastSeen"
+    },
+    {
+      "header": "dataqueue_semaphore_common_logic.h",
+      "symbol": "core_OutsideCritical",
+      "kind": "term",
+      "coq_type": "InitDataqueueTrial.lib.CrtosGlobState.StableGlobalState -> InitDataqueueTrial.lib.CrtosGlobState.CoreVarGlobalState -> Assertion",
+      "coq_symbol": "InitDataqueueTrial.lib.CrtosRules.core_OutsideCritical"
+    },
+    {
+      "header": "dataqueue_semaphore_create_logic.h",
+      "symbol": "dq_semaphore_create_effect",
+      "kind": "term",
+      "coq_type": "InitDataqueueTrial.lib.CrtosGlobState.StableGlobalState -> Z -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Z -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Prop",
+      "coq_symbol": "dq_semaphore_create_effect"
+    },
+    {
+      "header": "dataqueue_semaphore_delete_logic.h",
+      "symbol": "dq_sem_delete_empty",
+      "kind": "term",
+      "coq_type": "Z -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Prop",
+      "coq_symbol": "dq_sem_delete_empty"
+    },
+    {
+      "header": "dataqueue_semaphore_delete_logic.h",
+      "symbol": "dq_semaphore_delete_effect",
+      "kind": "term",
+      "coq_type": "Z -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState -> Prop",
+      "coq_symbol": "dq_semaphore_delete_effect"
+    }
+  ],
+  "headers": {
+    "annotated_C/src/dataqueue_logic.h": "3107c7c749803fef7739e2f262bb371fb148ad0bbafbcec60b6ce3885111246d",
+    "annotated_C/src/dataqueue_semaphore_common_logic.h": "7a0f902db19cf3abe8693e6ec86730484c49f3794a7877ec8f283be96222fb7c",
+    "annotated_C/src/dataqueue_semaphore_create_logic.h": "82258cd0b6200287ddcf26fd147bd20604c079a50f27d60c353ba082cb40821b",
+    "annotated_C/src/dataqueue_semaphore_delete_logic.h": "3fb17919cd8f14ece8db3045e40b2e31d863a16cb993e1fb6f2125267261e8c1"
+  },
+  "printing_name_mapping": {
+    "program": "MonadErr.M",
+    "return": "MonadErr.ret",
+    "safeExec": "monadesafe_lib.safeExec",
+    "StableGlobalState": "InitDataqueueTrial.lib.CrtosGlobState.StableGlobalState",
+    "VarGlobalState": "InitDataqueueTrial.lib.CrtosGlobState.VarGlobalState",
+    "CoreVarGlobalState": "InitDataqueueTrial.lib.CrtosGlobState.CoreVarGlobalState",
+    "os_inv": "InitDataqueueTrial.lib.CrtosInv.os_inv",
+    "core_os_inv": "InitDataqueueTrial.lib.CrtosInv.core_os_inv",
+    "InsideCritical": "InitDataqueueTrial.lib.CrtosRules.InsideCritical",
+    "OutsideCritical": "InitDataqueueTrial.lib.CrtosRules.OutsideCritical",
+    "LastSeen": "InitDataqueueTrial.lib.CrtosRules.LastSeen",
+    "Crtos_RTrans": "InitDataqueueTrial.lib.CrtosRules.Crtos_RTrans",
+    "Crtos_GTrans": "InitDataqueueTrial.lib.CrtosRules.Crtos_GTrans",
+    "core_OutsideCritical": "InitDataqueueTrial.lib.CrtosRules.core_OutsideCritical",
+    "core_LastSeen": "InitDataqueueTrial.lib.CrtosRules.core_LastSeen"
+  },
+  "core_alias_definitional_identities": {
+    "CoreVarGlobalState": "CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState",
+    "core_os_inv": "CRTOS_Verify.lib.common.CrtosInv.os_inv",
+    "core_LastSeen": "CRTOS_Verify.lib.common.CrtosRules.LastSeen",
+    "core_OutsideCritical": "CRTOS_Verify.lib.common.CrtosRules.OutsideCritical"
+  },
+  "formal_dependencies": {
+    "lib/CrtosGlobState.v": "4b5225b040930d3880c82bff93e5ae9c35893aa5ed2c9d5c522fc585dccf7947",
+    "lib/CrtosInv.v": "6e7c4ab4623767e105b8b8d9c691b445a59f39edcaf0131d81196696e510bb4b",
+    "lib/CrtosRules.v": "8b5b40232233e1c4de81952bc7e0cc70b5a92158714de703b7463f33b3be85f0",
+    "lib/DataqueueInv.v": "0c7c0ec719e4806b22c407f8906ca55c6de649ca0b787a9f75c72f9115b73d26",
+    "lib/DataqueueSemaphore.v": "4f70d370380b092f3bf5f85ec8bff2e3b06731021f7953d47ff10b0fabf6c4f1",
+    "lib/DataqueueState.v": "112b0822b003cd59e7ebde929c3310ca9a4b707c46e9431a389d392a34f206f4",
+    "lib/KInitDataqueue.v": "e1bb6a3c82b111e42bc3b7417a7a5b6adac762b8af8710e040d0adbbf84da7eb"
+  },
+  "compiler": "/home/xinra/.opam/pv-bench-8.20.1/bin/coqc",
+  "load_path_source": "_CoqProject -R/-Q mappings",
+  "project_sha256": "43e82587293515170defa3a4f933773b8450cbc38f75750d6e5bcc4c32158007",
+  "audit_script_sha256": "4a3c1f4bffd1b2b21c62faf2cd0e4ce1794e2a8facd7c7101bbb94114f0be822",
+  "audit_source_sha256": "38648775f24b1222512ea54c7ae5305e033d1762fd9187b38035e65d32e1a853",
+  "inputs_unchanged_during_compile": true,
+  "exit_code": 0,
+  "diagnostic": "Warning:\n/home/xinra/qcp-binary-democases/Rocq/examples/Applications_human/cdcllib was\npreviously bound to SimpleC.EE.Applications_human.cdcllib; it is remapped to\nCDCLLib [overriding-logical-loadpath,filesystem,default]\n"
+}

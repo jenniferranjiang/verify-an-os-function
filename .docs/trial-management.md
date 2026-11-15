@@ -12,7 +12,7 @@
 `ksemaphoredelete-trial-261025-1` 已保存到 [归档分支](https://github.com/jenniferranjiang/verify-an-os-function/tree/trial-archive)，固定提交为 `f96dd2e20249ed8f55d8a33097de411a97aab9ab`。
 其 predicate 已进入全局 `lib/`，23 个函数的 40 个公开契约与全局对应位置一致。
 `KSemaphoreDelete.c`、`_SemaphoreDelete.c` 和 `LinklistResumeAll.c` 在全局 `annotated_C/src/` 中与归档的已验证版本逐字一致，包含完整函数体注解。
-VC 和证明辅助库保留在归档 trial，不复制到全局。注解中的 `CRTOS_Verify.VC.*` 引用也原样保留；需要重跑验证时恢复 trial，使用其原有项目配置和证明依赖。
+最初 VC 和证明辅助库仅保留在归档 trial；2026-11-15 已按用户要求将四类最新实验的 VC 和必要证明辅助库同步到全局 `VC/`，并适配当前模块路径。原始版本仍保留在归档分支。
 
 按需恢复当前 trial：
 
@@ -53,3 +53,43 @@ git restore --source=764bd5919b1b8b301de7c94755cde510bed60d9b -- keventcreate-tr
 git fetch origin trial-archive
 git restore --source=7e76450cbd41e10b5ff3543a4ae8e4fc30fd7fc1 -- keventdelete-trial-261103-1 kmutexdelete-trial-261103-1
 ```
+
+2026-11-15：根目录建立 `VC/`，映射为 `CRTOS_Verify.VC`，同步更新
+`_CoqProject`、生成的 Makefile 及本机 VsRocq 配置。来源为
+`7e76450cbd41e10b5ff3543a4ae8e4fc30fd7fc1` 中以下最新实验：
+
+- `ksemaphorecreate-trial-261022-1`：10 个 VC/证明文件及 SemaphoreSpecBridge 辅助库；另外两个旧辅助库复用全局 SemaphoreInv 中已迁移的引理。
+- `ksemaphoredelete-trial-261025-1`：15 个 VC/证明文件（包括 LinklistResumeAll）。
+- `kmutexcreate-trial-261101-1`：10 个 VC/证明文件。
+- `keventcreate-trial-261101-1`：10 个 VC/证明文件。
+
+迁移仅调整逻辑模块路径，不修改 goal 或证明语义；历史 auto 模板中的
+`Admitted` 原样保留，不能据此把模板中的占位证明视为完成。
+逐文件来源、哈希和检查结果见 [迁移记录](checks/vc-migration-20261115.json)。
+
+`kmutexdelete-trial-261109-1` 的 23 个源码、配置及审阅文件已逐字核对并
+推送到 `trial-archive`，提交 `4b223a27ca0822bfd9439be0c51b98b7780b73d8`。
+远端提交核对后删除本地 trial。三个 C 文件同步到 `annotated_C/src/kernel/mutex/`，
+两个头文件同步到 `annotated_C/src/headers/`。增量库迁移为
+`lib/mutex/MutexDeleteState.v`、`MutexDeleteInv.v`、`KMutexDelete.v`，
+保留共享 `MutexState.v` 与 `MutexInv.v`。本次未完成 mutexdelete 的实现 VC/证明；
+设计中的待证义务仍是待证义务。需要恢复原始现场时：
+
+```sh
+git restore --source=4b223a27ca0822bfd9439be0c51b98b7780b73d8 -- kmutexdelete-trial-261109-1
+```
+
+迁移后的实际检查：三个 mutexdelete 库均已编译，三个 C 文件通过 GCC 语法检查。
+`KEventCreate_goal_check` 和 `KMutexCreate_goal_check` 已编译；整体 Rocq 构建未通过。
+旧证明与当前共享模型/工具链存在兼容差异（例如已移除的 `msgqueue_inv`、
+旧 tactic 形状，以及 semaphore auto/manual 的重复导出标签）。本次没有重写这些证明、
+弱化 goal 或增加 `Admitted`；归档中的 VC 不能直接宣称已在当前全局环境全部重验通过。
+详细失败位置见 [迁移记录](checks/vc-migration-20261115.json) 中的 `vc_layout_check`；模块布局复编译仍为相同的 7 处兼容错误，没有新增路径错误。
+
+VC 目录布局按更新后的 skill 使用 `VC/<module>/`，不保留函数子目录。
+46 个正式文件分布为 `VC/semaphore/` 26 个、`VC/mutex/` 10 个、`VC/event/` 10 个；
+`LinklistResumeAll` 的 VC 及 `SemaphoreSpecBridge.v` 均归入 semaphore 模块。
+本次没有跨模块共享 strategy，不预建空 `VC/common/`。
+Rocq imports、annotated C 中的 VC imports、根构建输入和迁移 manifest 均已同步；
+编辑器沿用递归 `-R ./VC CRTOS_Verify.VC` 对应的绝对路径映射。
+当前布局检查结果见迁移 manifest 的 `vc_layout_check`。
