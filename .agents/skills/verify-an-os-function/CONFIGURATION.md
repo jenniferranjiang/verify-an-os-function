@@ -6,7 +6,7 @@
 
 填写 `qcp_root` 和 `source_root` 两个必填项；其他字段可以保留空字符串。JSON 不支持注释，填写时保留双引号和逗号结构。配置只影响路径选择，不会安装工具或连接 MCP 服务。
 
-验证工程根目录默认是用户启动任务的当前目录，用户明确指定时使用指定目录；不从 skill 安装位置推断。读取根目录的 `.agents/verify-os.config.json`；首次使用复制 [config.example.json](config.example.json)，请用户填写必填项。配置为 JSON 数据，不作为 shell 执行。相对路径统一相对验证工程根目录解析，不相对 trial；不自动展开 `~` 或环境变量。解析后检查路径可用性并记录实际绝对路径。
+验证工程根目录默认是用户启动任务的当前目录，用户明确指定时使用指定目录；不从 skill 安装位置推断。读取根目录的 `.agents/verify-os.config.json`；首次使用复制 [config.example.json](config.example.json)，请用户填写必填项。配置为 JSON 数据，不作为 shell 执行。相对路径统一相对验证工程根目录解析；不自动展开 `~` 或环境变量。解析后检查路径可用性并记录实际绝对路径。
 
 | 配置项 | 约定 |
 |---|---|
@@ -52,9 +52,9 @@ Predicate/spec 设计与审阅前读取适用文件，只对符合适用条件�
 
 ## Rocq 编译配置
 
-根 `_CoqProject` 与根 Makefile 统一管理全局库和 trial 输入；不另维护 trial 的 `_CoqProject`/Makefile。路径映射以工程根目录解析，编译可通过根构建入口选择当前 trial 的目标。见[统一构建规则](references/project-maintenance-guide.md#trial-与全局库)。
+根 `_CoqProject` 与根Makefile统一管理全局 `lib/` 和 `VC/` 输入，设计、实现和编辑器使用相同配置。文件直接在所属全局目录维护，已有定义在原位置增量修改，沿用项目的逻辑前缀和根构建入口，见[全局工作区规则](references/project-maintenance-guide.md#全局工作区与依赖维护)。
 
-当前 trial 直接 import 未修改的全局项目库；仅需修改的已有库副本及新增库使用 `trial/lib/` 和本轮逻辑前缀。根配置同时保留所需全局与 trial 映射，避免同名定义被意外遮蔽。设计和实现阶段只编译本轮目标及必要依赖，全局依赖适配与统一编译留到正式成果迁出后。QCP 等外部基础库按配置直接引用。
+共享接口变动时同步必要imports与使用处，编译本轮目标及受影响依赖，不混用绑定旧定义的缓存；依赖一致性随当前改动处理。外部QCP基础库仍按配置直接引用。QCP的main-root/workspace都指向验证工程根目录，输入和VC输出明确限定本轮目标。
 
 - 若已有 `tools/rocq/toolchain.json`，沿用并核对与路径配置一致；其他工程不要求此包装器，使用确认后的 `coq_bin` 或 PATH。VsRocq 使用相同环境 bin 目录中的 `vsrocqtop`，路径按本机安装位置填写。
 - QCP 库直接引用配置的 `qcp_root` 下的实际目录，沿用工程已有的逻辑名与路径映射；不复制到验证工程，也不保留源码快照。
@@ -74,18 +74,18 @@ cd "$OS_PROJECT_ROOT"
 make -f Makefile.coq COQBIN="$OS_COQ_BIN/"
 ```
 
-`makes inconsistent assumptions` 表示混用了新旧 `.vo`；`Cannot find a physical path` 表示 `_CoqProject`/编辑器映射不一致。当前 QCP 使用 `valid_object` 等新接口，不再使用 `isvalidptr_*`、`store_2byte`/`store_4byte` 和 `sizeof_front_end_type_of_ptr_size`。`rocq_mcp_cache_*.v` 是临时文件，不加入构建。
+`makes inconsistent assumptions` 表示混用了新旧 `.vo`；`Cannot find a physical path` 可能由 `_CoqProject`/编辑器映射不一致或依赖 `.vo` 缺失导致。先核对逻辑路径与编译产物，再按依赖顺序构建所缺或失效的目标；保留结果供交互式加载，不通过无差别清缓存处理。当前 QCP 使用 `valid_object` 等新接口，不再使用 `isvalidptr_*`、`store_2byte`/`store_4byte` 和 `sizeof_front_end_type_of_ptr_size`。`rocq_mcp_cache_*.v` 是临时文件，不加入构建。
 
 ## 编辑器适配
 
-编辑器应使用根 `_CoqProject` 的同一组映射。项目已有 Coq 8.18--8.20 / VsRocq 未自动采用工程映射的情况；遇到该环境时，将根配置中的共享库与活动 trial 映射同步到根 `.vscode/settings.json` 的 `vsrocq.args`，并确保 `"*.v": "rocq"`，不另创建 trial 项目配置。
+编辑器应使用根 `_CoqProject` 的同一组映射。项目已有 Coq 8.18--8.20 / VsRocq 未自动采用工程映射的情况；遇到该环境时，将根配置中的全局lib、VC与外部库映射同步到根 `.vscode/settings.json` 的 `vsrocq.args`，并确保 `"*.v": "rocq"`，不为单个任务另建项目配置。
 
-该适配使用已经解析并确认存在的绝对路径，不依赖 `vsrocq.args` 对 `${workspaceFolder}` 的展开。切换活动 trial 时替换旧 trial 专属映射，不累积映射到同一逻辑路径的多个 `lib/`。
+该适配使用已经解析并确认存在的绝对路径，不依赖 `vsrocq.args` 对 `${workspaceFolder}` 的展开。修改根配置时同步受影响的编辑器映射，不把多个物理目录映射到同一逻辑前缀来隐式替换定义。
 
 Coq/VsRocq 升级后实测局部项目和路径变量是否生效，再决定是否继续使用此适配；不要仅根据 Coq 版本推断编辑器行为。
 
-## 可选闭包检查脚本
+## 工具检查入口
 
-[scripts/check-spec-closure.sh](scripts/check-spec-closure.sh) 是保留给已有独立 trial 构建结构的旧辅助脚本，不适用于新的根统一构建流程。它会运行 symbolic，设计/审阅阶段不得执行。新工程不为使用它而新增 trial Makefile；实现阶段使用 QCP workflow 的检查，或先适配脚本使其明确调用根构建入口。运行前把配置解析后的 `qcp_root` 作为 `OS_QCP_ROOT` 环境变量传入，非默认 symexec 路径通过 `SYMEXEC_BIN` 传入。路径优先级为 `SYMEXEC_BIN`、trial `CONFIGURE` 的 `SymExec_DIR`、`OS_QCP_ROOT/linux-binary/symexec`；无路径时明确报错，不回退维护者路径。`CONFIGURE` 的相对路径以 trial 为基准。
+闭包检查、symbolic、VC生成与证明统一由用户批准后的QCP verification-orchestrator管理。设计/审阅阶段只做规则允许的源码、契约一致性和Rocq类型检查，不运行symbolic。工具路径来自本配置，实际调用参数和检查顺序遵循QCP工作流。
 
-旧脚本仍依赖 Bash、GNU coreutils/find、make、gcc、rg，以及旧 trial 的 `make lib`、`VC/`、平铺 `annotated_C/src/` 及 `CRTOS_Verify.VC.strategy`。其他平台、逻辑前缀或构建入口使用对应的等价检查，不为辅助脚本重组用户工程。路径配置不能代替 QCP 与 Rocq MCP 的安装和连接；检查 `agents/openai.yaml` 声明的服务可用性，缺失时报告具体依赖。
+路径配置不能代替QCP与Rocq MCP的安装和连接；检查 `agents/openai.yaml` 声明的服务可用性，缺失时报告具体依赖。工具使用项目实际目录结构及统一的路径映射。

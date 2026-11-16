@@ -1,3 +1,107 @@
+/* Dataqueue IC design input (not an additional implementation proof).
+ * The original OC definition, contract and proof annotations below are retained.
+ * This named IC contract targets a temporary slice adapted from that same body:
+ * remove nested CriticalAreaLock/UnLock calls and OC-only proof annotations;
+ * select the dataqueue_ic* callee contracts recorded below.
+ * Wrapper bodies themselves need no lock removal. The OC body is NOT asserted
+ * to satisfy the IC contract without that documented source adaptation.
+ * See .docs/Report/dataqueue/2026-11-16-InitDataqueue-DataqueuePeak/design.md for the complete reconstruction choices.
+ */
+#include "dataqueue.h"
+#include "dataqueue_semaphore_logic.h"
+
+/* Current source: kernel/thread/semaphore.c; non-SMP ILP32.
+ * New IC contract for dataqueue's existing locked call site. Original global
+ * OC contract is unchanged and is not claimed to prove this IC specialization.
+ */
+
+/* KERNEL_MALLOC exact macro target, trusted; byte_manage.c size==0 branch. */
+void *x_malloc(x_size_t size)
+/*@ dataqueue_ic_import
+    Require emp
+    Ensure (size == 0 && __return == 0) ||
+      (size > 0 && __return == 0) ||
+      (size > 0 && __return > 0 && __return <= UINT_MAX - size &&
+       addr_aligned(__return, 4) && CharArray::undef_full(__return, size))
+*/;
+/* C standard-library model; owns all bytes, including struct padding. */
+void *memset(void *s, int c, size_t n)
+/*@ dataqueue_ic_import
+    Require 0 <= c && c <= 127 && CharArray::undef_full(s, n)
+    Ensure __return == s && CharArray::full(s, n, repeat_Z(c, n))
+*/;
+/* KERNEL_FREE exact macro target; entire original allocation is returned. */
+void x_free(void *p)
+/*@ dataqueue_ic_import
+    With n
+    Require p != 0 && 0 < n && CharArray::undef_full(p, n)
+    Ensure emp
+*/;
+/* reused-spec: /home/xinra/vrtos/annotated_C/src/headers/id_module_spec.h; IdInsertObj.
+ * Source SHA-256: 18471aa301c6f43685aa5ad9f8e3500a16b36065b791d216be365da4f624f342.
+ * Contract imported with the current predicate names; body/proof status is not
+ * a reason to add a local implementation target. See .docs/Report/dataqueue/2026-11-16-InitDataqueue-DataqueuePeak/design.md. */
+int IdInsertObj(struct IdManager *manager, struct IdNode *idnode)
+/*@ dataqueue_ic_import
+    With (sm: StableIdmanager) (m: VarIdmanager)
+    Require store_idmanager(sm, m, manager) *
+            store_idnode_insert_ready(idnode)
+    Ensure (__return == -1 &&
+            store_idmanager(sm, m, manager) *
+            store_idnode_insert_ready(idnode))
+           ||
+           (idmanager_min_free_id(sm, m, __return) &&
+            store_idmanager(sm,
+              idmanager_link(sm, idmanager_add(m, __return), __return, idnode),
+              manager))
+*/;
+
+/* reused-spec: annotated_C/src/kernel/list/InitDoubleLinkList.c; InitDoubleLinkList.
+ * Source SHA-256: 773d1d5b00d9072336041b088154b3449e6a978165917abfe9f2cc88916ecd49.
+ * Contract imported with the current predicate names; body/proof status is not
+ * a reason to add a local implementation target. See .docs/Report/dataqueue/2026-11-16-InitDataqueue-DataqueuePeak/design.md. */
+void InitDoubleLinkList(DoubleLinklistType *linklist_head)
+/*@ dataqueue_ic_import
+    Require
+      undef_data_at(&(linklist_head->node_prev)) *
+      undef_data_at(&(linklist_head->node_next))
+    Ensure
+      linklist_head != 0 && store_node_self_linked(linklist_head)
+*/;
+
+/* reused-spec: annotated_C/src/kernel/list/DoubleLinkListInsertNodeAfter.c; DoubleLinkListInsertNodeAfter.
+ * Source SHA-256: 9b27c23929a553aacb58221941b18f37ac08b5e8433cbe2a68c398da9eab6a81.
+ * Contract imported with the current predicate names; body/proof status is not
+ * a reason to add a local implementation target. See .docs/Report/dataqueue/2026-11-16-InitDataqueue-DataqueuePeak/design.md. */
+void DoubleLinkListInsertNodeAfter(DoubleLinklistType *linklist, DoubleLinklistType *linklist_node)
+/*@ dataqueue_ic_dispatch_case
+    With {A} (storeA: addr -> A -> Assertion)
+             (nodes: list(DL_Node A)) (a: A) (head: addr)
+    Require dll_insert_anchor(head, nodes, linklist) &&
+            linklist_node != 0 &&
+            store_dll(storeA, head, nodes) *
+            storeA(linklist_node, a) *
+            occupy_dll_node(linklist_node)
+    Ensure store_dll(
+             storeA, head,
+             dll_insert_after_dispatch(
+               head, nodes, linklist,
+               Build_DL_Node(a, linklist_node)))
+*/;
+
+
+/* IC target contract; original OC target contract remains below. */
+int32 _SemaphoreCreate(uint16 val)
+/*@ dataqueue_ic
+    With (sg : StableGlobalState) (before : VarGlobalState)
+    Require os_inv(sg, before)
+    Ensure exists after,
+      ((__return == -5) || (0 <= __return && __return < 128)) &&
+      semaphore_create_ic_effect(sg, val, before, __return, after) &&
+      os_inv(sg, after)
+*/;
+
+/* Original OC input, preserved verbatim below. */
 #include "m_semaphore.h"
 #include "semaphore_create_logic.h"
 /*@ Import Coq Require Import CRTOS_Verify.VC.semaphore.SemaphoreCreate_lib */

@@ -54,7 +54,7 @@ Definition assign_ready_vector_addr (sg : StableGlobalState) : addr :=
 (** 就绪表更新保持 running/current-priority 以及所有其他模块。 *)
 Definition replace_global_ready_vector (ready : OsAssignReadyVectorAbs)
     (st : VarGlobalState) : VarGlobalState :=
-  {| os_events := st.(os_events); os_mutexes := st.(os_mutexes); os_semaphores := st.(os_semaphores); os_tasks := st.(os_tasks);
+  {| os_dataqueues := st.(os_dataqueues); os_events := st.(os_events); os_mutexes := st.(os_mutexes); os_semaphores := st.(os_semaphores); os_tasks := st.(os_tasks);
      os_tick := st.(os_tick); os_delays := st.(os_delays);
      os_assign := mkVarAssignAbs ready st.(os_assign).(assignRunningTask)
        st.(os_assign).(assignCurrentPriority);
@@ -65,7 +65,7 @@ Definition replace_global_ready_vector (ready : OsAssignReadyVectorAbs)
 (** 延时取消仅替换 delay 分区；task.delay 指针不变，也没有释放对象。 *)
 Definition replace_global_delays (delays : DelayState) (st : VarGlobalState)
     : VarGlobalState :=
-  {| os_events := st.(os_events); os_mutexes := st.(os_mutexes); os_semaphores := st.(os_semaphores); os_tasks := st.(os_tasks);
+  {| os_dataqueues := st.(os_dataqueues); os_events := st.(os_events); os_mutexes := st.(os_mutexes); os_semaphores := st.(os_semaphores); os_tasks := st.(os_tasks);
      os_tick := st.(os_tick); os_delays := delays; os_assign := st.(os_assign);
      zombie_queue := st.(zombie_queue); os_recycle := st.(os_recycle);
      os_idle := st.(os_idle);
@@ -233,6 +233,7 @@ Record unset_linked_delay_step
     st_after.(os_delays).(delay_inactive_map) =
       partial_mapping_update st_before.(os_delays).(delay_inactive_map)
         delay_ptr (delay_mark_inactive delay_data);
+  unset_delay_dataqueues : st_after.(os_dataqueues) = st_before.(os_dataqueues);
   unset_delay_tasks : st_after.(os_tasks) = st_before.(os_tasks);
   unset_delay_tick : st_after.(os_tick) = st_before.(os_tick);
   unset_delay_assign : st_after.(os_assign) = st_before.(os_assign);
@@ -463,6 +464,7 @@ Definition semaphore_remove_waiter_step (task : addr)
     不修改 exstatus；写 -ERROR 是 LinklistResumeAll 的前一步动作。 *)
 Record ktask_wakeup_step (task : addr) (desc : TaskDescriptorAbs)
     (before after : VarGlobalState) : Prop := {
+  wakeup_dataqueues : after.(os_dataqueues) = before.(os_dataqueues);
   wakeup_ready : assign_insert_step_ic
     before.(os_tasks).(task_desc_map) task desc
     before.(os_assign).(assignReadyVector) after.(os_assign).(assignReadyVector);
@@ -507,6 +509,7 @@ Definition semaphore_pending_nodes (sem : addr) (st : VarGlobalState)
     Mutex/Event 分量作为 frame 保持。 *)
 Record ktask_wakeup_pending_frame (task : addr) (desc : TaskDescriptorAbs)
     (before after : VarGlobalState) : Prop := {
+  pending_wakeup_dataqueues : after.(os_dataqueues) = before.(os_dataqueues);
   pending_wakeup_ready : assign_insert_step_ic
     before.(os_tasks).(task_desc_map) task desc
     before.(os_assign).(assignReadyVector) after.(os_assign).(assignReadyVector);
@@ -556,6 +559,7 @@ Definition ktask_wakeup_detached_null_condition
 
 Record ktask_wakeup_detached_null_step (task : addr) (desc : TaskDescriptorAbs)
     (before after : VarGlobalState) : Prop := {
+  wakeup_detached_dataqueues : after.(os_dataqueues) = before.(os_dataqueues);
   wakeup_detached_ready : assign_insert_step_ic
     before.(os_tasks).(task_desc_map) task desc
     before.(os_assign).(assignReadyVector) after.(os_assign).(assignReadyVector);

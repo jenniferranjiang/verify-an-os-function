@@ -136,3 +136,57 @@ Definition semaphore_resume_all_effect_steps_obligation : Prop :=
        semaphore_resume_all_effect sem.(semaphore_addr)
          sem.(semaphore_pending_addrs) before after) ”.
 
+
+(** 只约束实际会找到的对象；负 ID 和 lookup 失败仍保留真实早返回路径。
+    Init 回滚尚未发布 queue，且新 semaphore 无等待者，满足此场景。
+    非空等待队列的一般删除不由本轮 IC 规格覆盖。 *)
+Definition semaphore_delete_quiescent (id : Z) (st : VarGlobalState) : Prop :=
+  0 <= id ->
+  (forall s, In s st.(os_semaphores) ->
+    s.(semaphore_id) = semaphore_query_id id -> s.(semaphore_pending_addrs) = nil) /\
+  (forall q, In q st.(os_dataqueues) ->
+    q.(dq_sem_blank) <> semaphore_query_id id /\
+    q.(dq_sem_data) <> semaphore_query_id id).
+
+(** Delete 的实际 ID 转窄仍保留；不存在时只允许抽象状态不变，存在时只摘除
+    查到的同一地址，free 由具体内存契约回收，不冒充纯函数释放内存。 *)
+Definition semaphore_delete_ic_effect (id : Z)
+    (before after : VarGlobalState) : Prop :=
+  (id < 0 /\ after = before) \/
+  (0 <= id /\
+    (( (forall s, In s before.(os_semaphores) ->
+          s.(semaphore_id) <> semaphore_query_id id) /\ after = before) \/
+     (exists s, In s before.(os_semaphores) /\
+       s.(semaphore_id) = semaphore_query_id id /\
+       s.(semaphore_pending_addrs) = nil /\
+       after = replace_semaphores
+         (semaphore_unpublish s.(semaphore_addr) before.(os_semaphores)) before))).
+
+
+
+(** dataqueue调用使用的锁内命名接口，与既有完整ResumeAll效果定义相同。 *)
+Definition semaphore_resume_all_ic_effect := semaphore_resume_all_effect.
+
+(** 保留caller既定名称但直接描述本轮state中的真实pending节点，不依赖旧投影。 *)
+Definition semaphore_pending_nodes_ic (p : Z) (st : VarGlobalState)
+    (nodes : list (DL_Node Z)) : Prop :=
+  exists obj, In obj st.(os_semaphores) /\ obj.(semaphore_addr) = p /\
+    map CRTOS_Verify.lib.task.KTaskWakeup.sched_link_node obj.(semaphore_pending_addrs) = nodes.
+
+(** 调用实际effect保持queue对象、相关semaphore地址/ID；普通待证义务，非信任。 *)
+Definition resume_all_dataqueue_refs_obligation : Prop := forall p waiting before after q,
+  semaphore_resume_all_ic_effect p waiting before after ->
+  dataqueue_semaphores before.(os_semaphores) q ->
+  dataqueue_semaphores after.(os_semaphores) q.
+Definition resume_all_dataqueue_state_obligation : Prop := forall p waiting before after,
+  semaphore_resume_all_ic_effect p waiting before after ->
+  after.(os_dataqueues) = before.(os_dataqueues).
+
+(** 统一native资源下queue部分按真实semaphore effect原样frame。
+    原LinklistResumeAll证明须在这些native共享接口下实例化并检查，不能把旧carrier
+    theorem直接作为新Assertion结论。此义务只说明新增queue分量，不隐藏任务等更新。 *)
+Definition resume_all_frame_obligation : Prop := forall p waiting before after,
+  semaphore_resume_all_ic_effect p waiting before after ->
+  Crtos_C_Rules.derivable1
+    (dataqueue_inv before.(os_semaphores) before.(os_dataqueues))
+    (dataqueue_inv after.(os_semaphores) after.(os_dataqueues)).

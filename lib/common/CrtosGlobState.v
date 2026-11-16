@@ -8,6 +8,7 @@ Require Export CRTOS_Verify.lib.isr.IsrState.
 Require Export CRTOS_Verify.lib.semaphore.SemaphoreState.
 Require Export CRTOS_Verify.lib.mutex.MutexState.
 Require Export CRTOS_Verify.lib.event.EventState.
+Require Export CRTOS_Verify.lib.dataqueue.DataqueueState.
 Import KTaskCNotation ListNotations.
 Local Open Scope Z_scope.
 Local Open Scope string.
@@ -37,6 +38,7 @@ Record StableGlobalState : Type := {
 (** 当前全局状态只描述 OS 数据；硬件中断状态及其保存、恢复不在本次建模范围。
     临界区内外的资源交接由 CrtosRules 中的抽象协议描述。 *)
 Record VarGlobalState : Type := Build_VarGlobalState {
+  os_dataqueues : DataqueueState;
   os_events : EventState;
   os_mutexes : MutexState;
   os_semaphores : SemaphoreState;
@@ -97,6 +99,7 @@ Definition replace_id_manager
     os_recycle := before.(os_recycle);
     os_idle := before.(os_idle);
     os_isr := before.(os_isr);
+    os_dataqueues := before.(os_dataqueues);
     os_events := before.(os_events);
     os_mutexes := before.(os_mutexes);
     os_semaphores := before.(os_semaphores);
@@ -154,6 +157,7 @@ Definition replace_task_ptr_list
     os_recycle := before.(os_recycle);
     os_idle := before.(os_idle);
     os_isr := before.(os_isr);
+    os_dataqueues := before.(os_dataqueues);
     os_events := before.(os_events);
     os_mutexes := before.(os_mutexes);
     os_semaphores := before.(os_semaphores);
@@ -178,6 +182,7 @@ Definition replace_task_desc_map
     os_recycle := before.(os_recycle);
     os_idle := before.(os_idle);
     os_isr := before.(os_isr);
+    os_dataqueues := before.(os_dataqueues);
     os_events := before.(os_events);
     os_mutexes := before.(os_mutexes);
     os_semaphores := before.(os_semaphores);
@@ -195,7 +200,7 @@ Definition replace_sched_owned_tasks (owned : list addr) (st : VarGlobalState)
      os_tick := st.(os_tick); os_delays := st.(os_delays); os_assign := st.(os_assign);
      zombie_queue := st.(zombie_queue); os_recycle := st.(os_recycle);
      os_idle := st.(os_idle);
-     os_isr := st.(os_isr); os_events := st.(os_events); os_mutexes := st.(os_mutexes);
+     os_isr := st.(os_isr); os_dataqueues := st.(os_dataqueues); os_events := st.(os_events); os_mutexes := st.(os_mutexes);
     os_semaphores := st.(os_semaphores);
     os_exstatus := st.(os_exstatus) |}.
 
@@ -203,7 +208,7 @@ Definition replace_sched_owned_tasks (owned : list addr) (st : VarGlobalState)
 (** 发布一个信号量只替换 semaphore 分量，所有其他 OS 模块保持。 *)
 Definition replace_semaphores (sems : SemaphoreState) (st : VarGlobalState)
     : VarGlobalState :=
-  {| os_events := st.(os_events); os_mutexes := st.(os_mutexes); os_semaphores := sems;
+  {| os_dataqueues := st.(os_dataqueues); os_events := st.(os_events); os_mutexes := st.(os_mutexes); os_semaphores := sems;
      os_tasks := st.(os_tasks); os_tick := st.(os_tick); os_delays := st.(os_delays);
      os_assign := st.(os_assign); zombie_queue := st.(zombie_queue);
      os_recycle := st.(os_recycle); os_idle := st.(os_idle);
@@ -212,7 +217,7 @@ Definition replace_semaphores (sems : SemaphoreState) (st : VarGlobalState)
 (** 仅替换互斥量对象序列；其他模块与任务字段原样保留。 *)
 Definition replace_mutexes (mutexes : MutexState) (st : VarGlobalState)
     : VarGlobalState :=
-  {| os_events := st.(os_events); os_mutexes := mutexes; os_semaphores := st.(os_semaphores);
+  {| os_dataqueues := st.(os_dataqueues); os_events := st.(os_events); os_mutexes := mutexes; os_semaphores := st.(os_semaphores);
      os_tasks := st.(os_tasks); os_tick := st.(os_tick); os_delays := st.(os_delays);
      os_assign := st.(os_assign); zombie_queue := st.(zombie_queue);
      os_recycle := st.(os_recycle); os_idle := st.(os_idle);
@@ -221,9 +226,17 @@ Definition replace_mutexes (mutexes : MutexState) (st : VarGlobalState)
 (** 仅替换事件对象序列；任务、调度、其他同步模块及所有其余分量原样保留。 *)
 Definition replace_events (events : EventState) (st : VarGlobalState)
     : VarGlobalState :=
-  {| os_events := events; os_mutexes := st.(os_mutexes);
+  {| os_dataqueues := st.(os_dataqueues); os_events := events; os_mutexes := st.(os_mutexes);
      os_semaphores := st.(os_semaphores);
      os_tasks := st.(os_tasks); os_tick := st.(os_tick); os_delays := st.(os_delays);
      os_assign := st.(os_assign); zombie_queue := st.(zombie_queue);
      os_recycle := st.(os_recycle); os_idle := st.(os_idle);
      os_isr := st.(os_isr); os_exstatus := st.(os_exstatus) |}.
+
+(** 只替换 dataqueue 分量；同一原始 OS record 的其他分量原样保留。 *)
+Definition replace_dataqueues (qs : DataqueueState) (st : VarGlobalState) : VarGlobalState :=
+ {| os_dataqueues := qs; os_events := st.(os_events); os_mutexes := st.(os_mutexes);
+    os_semaphores := st.(os_semaphores); os_tasks := st.(os_tasks); os_tick := st.(os_tick);
+    os_delays := st.(os_delays); os_assign := st.(os_assign); zombie_queue := st.(zombie_queue);
+    os_recycle := st.(os_recycle); os_idle := st.(os_idle); os_isr := st.(os_isr);
+    os_exstatus := st.(os_exstatus) |}.

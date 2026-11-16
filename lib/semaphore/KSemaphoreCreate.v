@@ -34,3 +34,18 @@ Check LastSeen.
 Check abs_semaphore_create.
 Check SemaphoreRaw.
 Check SemaphoreZero.
+
+(** 已在临界区内的完整 create：malloc 或 ID 分配失败均返回 -5、不改模块；
+    成功选择最小空闲 ID，发布一个 value=val、pending 为空的新对象。
+    地址新鲜性来自 allocator ownership；其余 OS 分量逐项由 replace 保留。
+    失败分支不声称 ID 已满：采用的既有 IdInsertObj API 不提供该事实。 *)
+Definition semaphore_create_ic_effect (sg : StableGlobalState) (val : Z)
+    (before : VarGlobalState) (result : Z) (after : VarGlobalState) : Prop :=
+  (result = -5 /\ after = before) \/
+  (exists p,
+    p <> 0 /\ addr_aligned p 4 /\
+    ~ In p (map semaphore_addr before.(os_semaphores)) /\
+    CRTOS_Verify.lib.id.idnode.IDNode.idmanager_min_free_id sg.(os_semaphore_stable).(semaphore_manager_stable)
+      (semaphore_manager before.(os_semaphores)) result /\
+    after = replace_semaphores
+      (semaphore_publish p result val before.(os_semaphores)) before).

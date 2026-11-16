@@ -1,11 +1,13 @@
 # Spec 编写指南
 
 本指南服务 `write-spec`。以当前配置下的权威源码、目标模块与依赖，以及用户批准的 `trusted` 函数为依据；涉及 lock/IRQ/atomicity 或 abstract-command 时，核对相应协议。当前 predicate revision 提供总状态、module state、局部读取/更新函数、predicate、lemma、crtOS `LastSeen`、目标函数的 atomic command 和适用的
-crtOS 临界区定义；本轮实现验证函数的 canonical contract 写在其自身 annotated C 的函数定义上，导入 spec 的 canonical 依据保留在来源证明中；caller
+crtOS 临界区定义；本轮实现验证函数的 canonical contract 写在其自身 annotated C 的函数定义上，导入 spec 的 canonical 依据保留在来源文件中；caller
 文件可以复制 direct-callee contract 作为 declaration-only API，但必须
-与 canonical 文件中所选的同名 spec 一致。Markdown 和手写 .v 均不得复制函数 contract 正文。Markdown 只可记录路径、symbol、C 证据、返回路径和审阅状态，不承载 spec 正文。Spec review 与 predicate review
+与 canonical 文件中所选的同名 spec 一致。当前任务的正式contract保存在annotated C中，报告引用路径和symbol并解释行为；Rocq文件提供它使用的语义组件。本指南及经验文件中的契约示例用于说明写法。Spec review 与 predicate review
 分开。Predicate 和 spec 草案可以共同修改；草案期间发现 predicate 缺口时直接返回 `slice-design`
-修正，不标记 `invalidated` 也不做中间 review。Spec review 必须引用同一份 `review-passed` predicate revision。
+修正。草案本身不做中间review；改动使既有通过结论不再适用时，将受影响结论标为 `invalidated` 并重新审阅。Spec review 必须引用同一份 `review-passed` predicate revision。
+
+函数规格的解释与本轮lib改动一起写入长期保留的[设计说明](reporting-guide.md#设计说明)。除说明契约表达的操作外，还要定位人需要重点审阅的入口限制、结果保证、资源交接和重要假设，解释为什么值得确认。
 
 Spec 是验证前写出的正式目标，不是验证结果：它规定调用所需资源、返回或非终止路径、abstract effect、
 具体内存 ownership 与值/结构的前后态、ownership 转移以及 frame；后续 proof 才证明 C 实现满足该 spec。
@@ -77,7 +79,7 @@ LOS 文件只提供函数 spec 的写法示例。可以复用的是 QCP 的通�
 
 ### 单函数切片的等价转换
 
-除按 [源码问题门禁](reporting-guide.md#源码问题门禁)批准并记录的副本修复外，完整源码模式下，`annotated_C/src` 只增加或修改注解。缺陷修复只作用于 trial 副本，验证针对修复版本，不属于等价转换。单函数切片为适配工具可进行有源码与配置依据的等价转换，例如拆分赋值或逗号表达式、展开函数式宏、解析固定函数表分派，或把原编译单元中的 static 对象以外部声明形式提供给切片。
+除按 [源码错误报告](reporting-guide.md#源码错误报告)批准并记录的副本修复外，完整源码模式下，`annotated_C/src` 只增加或修改注解。缺陷修复只作用于验证工程全局annotated C中的源码副本，验证针对修复版本，不属于等价转换。单函数切片为适配工具可进行有源码与配置依据的等价转换，例如拆分赋值或逗号表达式、展开函数式宏、解析固定函数表分派，或把原编译单元中的 static 对象以外部声明形式提供给切片。
 
 本节的等价转换必须保留求值顺序、执行路径、返回值、副作用、对象身份和实际访问字段的布局。外部声明须对应原对象，不能创建新的对象代替它。每项转换在 spec review 中说明位置、理由及源码/config 依据；不得换算法、隐藏函数体或凭空简化数据布局。《源代码处理》明确规定的抽象适配按主 skill 的专门规则执行，不要求将其表述为逐语句等价转换。
 
@@ -108,11 +110,7 @@ Stable/Mutable 是否拆分由当前 predicate revision 决定，在 spec 中不
 
 - 若 C 签名真实接收 `id`，例如 `GetTaskWithIdnodeInfo(int32 id)`，则 `Require`、abstract program 和
   effect 可以直接使用这个 C 形参 `id`；不要再在 `With` 中量化一个同名 `id`。
-- 若 C 签名只接收对象指针，例如 `_MutexDelete(struct Mutex *mutex)`，则 canonical spec 和公开 abstract program
-  优先直接用 `mutex` 描述目标对象。若实现还需要对象内部 ID，应从 reviewed object/module predicate
-  与相应观察状态中取得并在 abstract program 内部传递该 witness；不要把 C 没有接收的 ID
-  写成仿佛由 caller 额外传入的公开 `With id`。若对象身份必须跨过解锁窗口保持以排除 ABA，则在入口
-  确定一次身份并始终传递同一 witness，不得在每次加锁后任意重选 ID。
+- 若C签名只接收对象指针，例如 `_MutexDelete(struct Mutex *mutex)`，公开spec和abstract program接口直接用 `mutex` 定位对象。真实实现读取或缓存的内部ID可从对象表示及观察状态取得，作为抽象程序内部局部值或实例化callee契约的依据，无需在公开入口额外增加 `With id`。跨解锁的对象身份保持由适用的lifetime/ownership/generation条件表达，地址或ID相等本身不足以排除ABA。
 
 `With` 仍然可以量化 `sg`、前态、抽象对象值和资源内容等 ghost context；这些值必须通过
 reviewed predicate 或明确等式与 C 参数及真实内存关联，不能因为出现在 `With` 中就视为 C 输入。
@@ -243,9 +241,9 @@ allocation、free 或 container membership 变化，应使用已有 object/conta
 
 ### 3.1 Spec 与注解位置
 
-本轮需要实现验证的每个 C 函数有唯一 canonical 文件和一份 active 函数体，可以包含原有具名 specs 及按 [工程组织与维护指南](project-maintenance-guide.md#已有-spec-的复用与特化)新增的特化 spec。导入 spec 的 canonical 依据保留在来源证明中，trial 只在 caller 定义前放 declaration-only spec。`Require` 写调用前必须持有的具体资源和事实，`Ensure` 按真实
+本轮需要实现验证的每个C函数有明确的canonical位置和唯一active函数体，可以包含原有具名 specs 及按 [工程组织与维护指南](project-maintenance-guide.md#已有-spec-的复用与特化)新增的特化 spec。导入 spec 的 canonical 依据保留在来源文件中，当前工程只在 caller 定义前放 declaration-only spec。`Require` 写调用前必须持有的具体资源和事实，`Ensure` 按真实
 成功、失败、阻塞或早返回路径写返回值、状态变化、资源转移与 frame。外层函数证明调用
-其他函数时，只使用这些函数已经写好并最终证明的 spec，不展开它们的实现。
+其他函数时按其已声明的完整 spec 进行模块化推理，不展开导入边界的实现。若依赖spec尚无适用的实现证明，结论须注明相对于该契约成立，不能宣称依赖函数已证，也不因此自动扩展本轮函数体证明范围。
 
 先引用当前 predicate revision 的 crtOS `LastSeen`、目标函数 atomic command、read/update 和 crtOS 自己的临界区定义，在 annotated C 的函数定义上直接写 With/Require/Ensure。Rocq library 只提供这些注解引用的共享语义组件，不保存整份函数 contract。若这些接口不足，predicate 仍为 draft 时直接返回 `slice-design` 修正；修改已批准接口时才提交 slice change request。不在 spec 阶段另写一套。
 
@@ -337,8 +335,8 @@ revision 已经 `review-passed`，将其标记为 `invalidated`，固定新 revi
 
 ### 4.2 判断是否需要 high-level 与 low-level Spec
 
-这里的 high-level/low-level 是相对于 spec 推导关系而言的。Low-level spec 是已经由函数体实现证明
-支撑的通用接口；high-level spec 是当前 caller 或模块使用的具名接口，并通过
+这里的 high-level/low-level 是相对于 spec 推导关系而言的。Low-level spec 是作为推导依据的
+通用契约，其函数体证明状态单独记录；high-level spec 是当前 caller 或模块使用的具名接口，并通过
 `high_level_spec <= low_level_spec` 从前者推导。例如 `msgqueue_recv_ic <= pendlist_ic` 和
 `msgqueue_recv_oc <= outside_critical` 中，右侧是保留的 low-level spec，左侧是新增的模块
 high-level spec。
@@ -368,32 +366,29 @@ high-level spec。
 - 只是同一上下文中增加了更多调用次数，没有新的抽象 target 或 ownership 表示。
 
 只新增当前调用上下文实际需要的 high-level 接口：当前仅有 IC 调用时不必同时新增 OC high-level
-spec，反之亦然；当前闭包两种调用都有时才分别处理。若不存在适用且已经证明的 low-level spec，
-不能把 high-level spec 当作已由函数体证明，应先按真实 C 行为另行完成 low-level spec 的设计、审阅
-和实现证明。
+spec，反之亦然；当前闭包两种调用都有时才分别处理。已有适用的 low-level spec 时，即使其
+实现证明未完成或不能直接移植，也仍按导入契约处理，记录来源证明状态及特化推导义务，不自动
+建立callee文件或安排函数体证明。只有确实缺少适用契约或需要无法从原契约推导的新语义时，才
+按真实C行为新写spec；不能把high-level推导或设计审阅通过说成函数体已证明。
 
-### 4.3 在 trial 中增量增加模块特化
+### 4.3 在全局文件中增量增加模块特化
 
-先查当前工程解析后的 annotated C 目录，确认已有 IC 或 OC low-level spec 的证明状态与适用性。
+先查当前工程解析后的 annotated C 目录，分别确认已有 IC 或 OC low-level spec 的语义适用性与证明状态；不以证明状态决定是否复制函数体。
 新增模块 high-level spec 的存放位置按 callee 是否属于本轮实现验证目标区分，遵循
 [工程组织与维护指南](project-maintenance-guide.md#新增场景特化)：
 
 - 复用已有 spec 的依赖函数：将原 low-level spec 与新增的具名 high-level spec 一起写在 caller
   定义前，记录来源文件、revision 和推导义务。不因新增特化而建立 callee 文件、复制函数体或
   重新生成其实现 VC；多个 caller 使用同名特化时，保持来源版本与 contract 一致。
-- 本轮需要实现验证的函数：在其 trial canonical 文件中增量增加特化，保留已有函数体、
-  low-level spec、必要 imports 和其他具名 specs。文件按一函数一文件平铺在
-  `trial/annotated_C/src/`，记录全局来源或目标路径；已有 trial 目标文件直接修改。
+- 本轮需要实现验证的函数：在其全局canonical文件中增量增加特化，保留已有函数体、
+  low-level spec、必要 imports 和其他具名 specs。新建切片默认一函数一文件，已有目标按用户或项目的文件组织原位增补。
   Caller 定义前声明的完整 callee spec 须与该 canonical 文件中的同名 spec 一致。
 
 两种情况都不得删掉或弱化原有 contract。新增 high-level spec 应以
 `high_level_spec <= low_level_spec` 标注推导来源，并检查参数对应、调用点前提、前后态效果、
 ownership 与 frame 的推导；新增特化不能直接视为已由原证明覆盖，须完成相应推导证明。
 
-设计、审阅与 implement 均在 trial 中完成；达到主 skill 规定的合并条件后，按
-[工程组织与维护指南](project-maintenance-guide.md#annotated-c-迁出细节)增量合并到全局
-`annotated_C/`。导入 spec 的特化从 caller-local 声明提取，不为迁出另建 trial 函数文件，
-也不以 trial 文件整体覆盖全局文件。
+设计、审阅与implement均直接维护全局annotated C，按[工程维护指南](project-maintenance-guide.md#canonical-与-caller-一致性)同步canonical与caller声明。特化在对应声明或定义处增量补充，保留已有其他契约。
 
 ### 4.4 临界区调用链中的五个位置
 
@@ -542,9 +537,8 @@ Ensure
 1. 检查验证范围。
    从适配后的目标函数重新扫描当前配置下保留的调用、dispatch 和宏处理结果。模型/API 边界核对
    《源代码处理》的适用规则、contract 及结论限制，不要求递归被替换部分的原始内部调用。
-   `reused-spec` 边界核对原 spec 的来源、revision、导入适配及 caller-local contract 一致性；spec 应位于 caller 定义前，不为导入函数新建独立文件，不要求重证函数体。
-   对其余未被用户批准为 `trusted` 的可达函数，`annotated_C/src/` 中必须有且只有一个以该函数命名的 `.c` 文件；
-   该文件包含该函数的一份真实完整定义和 canonical `With/Require/Ensure`。
+   `reused-spec` 边界核对原 spec 的来源、revision、导入适配及 caller-local contract 一致性；spec 应位于 caller 定义前，不为导入函数新建独立文件，不要求重证函数体。来源证明未完成或未适配只记入依赖状态，不单独阻塞设计审阅；规格语义不适用或契约不一致仍须解决，不能混同这两类问题。
+   对本轮其余实现目标，核对其canonical位置、唯一真实完整定义及canonical `With/Require/Ensure`。新建单函数切片默认与函数同名；已有多函数文件及用户指定命名直接沿用。
    除文档规定且适用的适配外，切片提取和调用归一不能改变原 C 的控制流、返回值或副作用；
    caller 中声明的 callee spec 必须与 canonical 文件中所选同名 spec 或采用的模型/API contract 一致。复用的原 contract 保持语义；新增特化须检查原 spec 到特化的推导、调用点前提的依据及资源重组，不能把未证明的特化当成已验证保证。
 
@@ -561,8 +555,8 @@ Ensure
    所有 spec 固定使用同一个 review-passed predicate revision。
 
 3. 检查产物完整性。
-   Rocq predicate 文件必须能够 compile/typecheck。Annotated C 必须完成验证范围、callee spec 一致性和源码等价性检查；一函数一文件与真实
-   函数体检查仅适用于本轮实现验证目标，导入 spec 按 `reused-spec` 边界检查。本阶段不运行 QCP parser/symbolic 或 closure script，
+   Rocq predicate 文件必须能够 compile/typecheck。Annotated C 必须完成验证范围、callee spec 一致性和源码等价性检查；文件组织按用户/项目约定检查，真实
+   函数体检查只针对本轮实现验证目标，导入 spec 按 `reused-spec` 边界检查。本阶段不运行 QCP parser/symbolic 或 closure script，
    不生成 VC，也不开始 proof。
 
 4. 给出审阅结论。

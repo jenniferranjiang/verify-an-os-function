@@ -11,6 +11,7 @@ Require Export CRTOS_Verify.lib.isr.IsrManagerInv.
 Require Export CRTOS_Verify.lib.semaphore.SemaphoreInv.
 Require Export CRTOS_Verify.lib.mutex.MutexInv.
 Require Export CRTOS_Verify.lib.event.EventInv.
+Require Export CRTOS_Verify.lib.common.DataqueueInv.
 Require Export CRTOS_Verify.lib.list.DoubleLinkListSpec.
 Require Export CRTOS_Verify.lib.event.EventLayoutABI.
 Import ListNotations DLL IDNode.
@@ -65,7 +66,8 @@ Definition os_inv (sg : StableGlobalState) (st : VarGlobalState) : Assertion :=
   exstatus_inv sg st **
   semaphore_inv wait sg.(os_semaphore_stable) st.(os_semaphores) **
   mutex_inv wait sg.(os_mutex_stable) st.(os_mutexes) **
-  event_inv wait sg.(os_event_stable) st.(os_events).
+  event_inv wait sg.(os_event_stable) st.(os_events) **
+  dataqueue_inv st.(os_semaphores) st.(os_dataqueues).
 
 (** 保留本地调用者使用的引理名；对应上游 Record 的两个投影。 *)
 Lemma os_sched_owners_domain : forall sg st task,
@@ -136,7 +138,8 @@ Definition event_create_frame (sg : StableGlobalState) (st : VarGlobalState)
   IntArray.full sg.(os_idle_array) CORE_COUNT (map service_id st.(os_idle)) **
   isrmanager_inv sg.(os_isr_stable) st.(os_isr) ** exstatus_inv sg st **
   semaphore_inv wait sg.(os_semaphore_stable) st.(os_semaphores) **
-  mutex_inv wait sg.(os_mutex_stable) st.(os_mutexes).
+  mutex_inv wait sg.(os_mutex_stable) st.(os_mutexes) **
+  dataqueue_inv st.(os_semaphores) st.(os_dataqueues).
 
 (** 待证的拆出接口；Definition只保存命题，不提供证明事实。 *)
 Definition event_create_split_obligation : Prop :=
@@ -198,7 +201,8 @@ Definition mutex_create_frame (sg : StableGlobalState) (st : VarGlobalState)
   IntArray.full sg.(os_idle_array) CORE_COUNT (map service_id st.(os_idle)) **
   event_inv wait sg.(os_event_stable) st.(os_events) **
   isrmanager_inv sg.(os_isr_stable) st.(os_isr) ** exstatus_inv sg st **
-  semaphore_inv wait sg.(os_semaphore_stable) st.(os_semaphores).
+  semaphore_inv wait sg.(os_semaphore_stable) st.(os_semaphores) **
+  dataqueue_inv st.(os_semaphores) st.(os_dataqueues).
 
 
 Lemma mutex_two_zero_uchars__zero_bytes : forall p,
@@ -536,3 +540,17 @@ Proof.
     k = 11 \/ k = 12 \/ k = 13 \/ k = 14 \/ k = 15) by lia.
   repeat destruct Hcases as [Hcases | Hcases]; rewrite Hcases; reflexivity.
 Qed.
+
+(** Init成功在解锁前将私有对象交给原os_inv内的新模块分量；其他模块不变。
+    只有真实已建立的ready和semaphore关联才能发布；不是额外的trusted API。 *)
+Definition dataqueue_publish_obligation : Prop := forall sg st q,
+  dataqueue_ready q -> dataqueue_semaphores st.(os_semaphores) q ->
+  os_inv sg st ** dataqueue_owned q |--
+    os_inv sg (replace_dataqueues (dataqueue_publish q st.(os_dataqueues)) st).
+
+(** 撤回共享对象后局部唯一持有结构与数组，供DeInit回收。
+    本空间接口本身不证明没有锁外用户；注销者须在其生命周期约定中排除它们。 *)
+Definition dataqueue_withdraw_obligation : Prop := forall sg st left q right,
+  st.(os_dataqueues) = left ++ q :: right ->
+  os_inv sg st |--
+    os_inv sg (replace_dataqueues (left ++ right) st) ** dataqueue_owned q.

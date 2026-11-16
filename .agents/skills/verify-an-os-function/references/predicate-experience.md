@@ -273,7 +273,7 @@
     `SemaphoreStableContext` 中的 `done` 约束，以及 `semaphore_outside`、
     `semaphore_inside` 和 `store_semaphore_static_initial` 中对它的引用。
 
-    semaphore trial 中原先为 `done` 写过下面这些定义。在 annotated C
+    此前semaphore验证中为 `done` 写过下面这些定义。在 annotated C
     已改为直接调用后，这些定义都不需要：
 
     ```coq
@@ -363,29 +363,29 @@
     完整候选尚未闭合，则保持 draft 并记录待补 dependency，不把“尚未实现”冒充为
     “已经证明无法实现”。
 
-    准备提出上游 breaking change 或停止实验前，至少依次检查并留下实际证据：
+    准备提出上游 breaking change 或停止实验前，检查并留下实际依据：
 
     - 已有共享定义是否已经提供所需 owner、view、transition 或 acquire/release；
-    - 能否在当前 trial 中增加不复制上游内部状态的最小 adapter；
-    - 能否用独立 bridge/integration layer 组合两个模块的既有接口；
-    - 上述方案是否因明确的类型、assertion carrier、ownership 或源码语义冲突而失败。
+    - 冲突位于哪些具体定义，哪些共享接口确实需要参数化或调整；
+    - 必要接口修改与 adapter/bridge 方案各自增加哪些证明义务、阅读和维护成本；
+    - 哪些依赖无需修改，哪些只需重新编译，哪些必须修改才能完成本轮集成。
 
-    只有这些更小方案具有可复现的失败结果，并且正确性确实要求改变既有接口时，
-    才把“修改上游模块”列为 required fix。否则应报告当前已知缺口和待验证方案，
+    不要求先实现并否定所有 adapter/bridge，才允许修改本轮必要的共享接口；
+    也不能从一次类型错误推出整个全局依赖闭包都需改造。依据具体问题选择最小必要
+    调整，不以修改文件数量最少作为唯一目标。尚无依据时应报告已知缺口和待验证方案，
     不能把架构推测升级为 blocker。用户提供的既有候选应先固定内容或 revision、
     实际 compile/typecheck，并基于具体 delta 审阅；不能仅因它尚未包含后续层文件就
     丢弃候选或另起不相干设计。
 
     例如 semaphore 调用位于线程子系统中的 `CriticalAreaLock`，只说明它复用公共
     critical/IRQ primitive；这本身不推出 semaphore state 必须加入 Task state，
-    也不推出必须修改 Task formal files。应先检查 semaphore-local critical adapter、
-    独立 protocol 和 Task/Scheduler bridge。只有这些方案实际失败后，才能依据失败
-    证据讨论共享 Task protocol 的变更。
+    也不推出必须修改 Task formal files。应检查实际共享接口及其类型依赖，再判断
+    是否需要调整；不能仅凭调用关系增加状态分量、另建协议或复制整个任务库。
 
 13. `SemDLNode` 和 `sem_dllseg` 重复了公共 DLL 库已有的结构，应优先复用
     `DL_Node` 和 `DLL.dllseg`。
 
-    `ksemaphorecreate-trial-260928-1/lib/SemaphoreRep.v` 中的节点定义是：
+    此前semaphore表示设计中的节点定义是（历史示例，不指定当前文件布局）：
 
     ```coq
     Record SemDLNode (A : Type) : Type := Build_SemDLNode {
@@ -474,11 +474,11 @@
 
     Semaphore 自己的对象、等待队列和模块内存由相应 predicate 描述，通过全局
     invariant 组织；这些模块资源不构成另一套临界区。如果现有全局定义不足以表达
-    当前验证需要，先将需要修改的状态、invariant 或临界区接口文件复制到 `trial/lib/`，
-    在副本中修改，再由 semaphore 导入修改后的定义，不要为绕过这个缺口另建模块专用协议。
+    当前验证需要，直接在全局所属状态、invariant或临界区接口原文件增补，
+    并同步semaphore及其他受影响使用处，不要为绕过这个缺口另建模块专用协议。
     按模块职责增补定义和全局组合，检查受影响的接口、审阅结论与编译结果。
     Predicate 和 spec 均通过审阅、经用户确认并 implement 到 `done` 后，
-    按主 skill 的[正式成果迁出与 trial 删除](../SKILL.md#正式成果迁出与-trial-删除)执行收尾。
+    按主 skill 的[全局一致性检查与收尾](../SKILL.md#全局一致性检查与收尾)执行收尾。
 
 16. 组合函数级抽象 `program` 时，使用 monad 顺序记法直接对应 C
     控制流，不要手工嵌套多层 `MonadErr.bind`：

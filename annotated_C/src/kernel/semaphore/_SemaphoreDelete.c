@@ -1,3 +1,151 @@
+/* Dataqueue IC design input (not an additional implementation proof).
+ * The original OC definition, contract and proof annotations below are retained.
+ * This named IC contract targets a temporary slice adapted from that same body:
+ * remove nested CriticalAreaLock/UnLock calls and OC-only proof annotations;
+ * select the dataqueue_ic* callee contracts recorded below.
+ * Wrapper bodies themselves need no lock removal. The OC body is NOT asserted
+ * to satisfy the IC contract without that documented source adaptation.
+ * See .docs/Report/dataqueue/2026-11-16-InitDataqueue-DataqueuePeak/design.md for the complete reconstruction choices.
+ */
+#include "dataqueue.h"
+#include "dataqueue_semaphore_logic.h"
+
+/* Current source: kernel/thread/semaphore.c; non-SMP ILP32.
+ * New IC contract for dataqueue's existing locked call site. Original global
+ * OC contract is unchanged and is not claimed to prove this IC specialization.
+ */
+
+/* reused-spec: annotated_C/src/kernel/id/IdGetObj.c; IdGetObj.
+ * Source SHA-256: 6f5447b61e00e565c578815331e1b9c4d777a6b70e17f6a653a73dc6f9349cae.
+ * Contract imported with the current predicate names; body/proof status is not
+ * a reason to add a local implementation target. See .docs/Report/dataqueue/2026-11-16-InitDataqueue-DataqueuePeak/design.md. */
+struct IdNode *IdGetObj(struct IdManager *manager, uint16 id)
+/*@ dataqueue_ic_import
+    With (sm: StableIdmanager) (m: VarIdmanager)
+    Require 0 <= id && id < 65536 && store_idmanager(sm, m, manager)
+    Ensure (manager == 0 &&
+            __return == 0 &&
+            store_idmanager(sm, m, manager))
+           ||
+           (manager != 0 &&
+            __return == 0 &&
+            idmanager_query(m, id) == false &&
+            store_idmanager(sm, m, manager))
+           ||
+           (manager != 0 &&
+            __return != 0 &&
+            idmanager_query(m, id) == true &&
+            store_idmanager_found(sm, m, manager, __return, id))
+*/;
+
+/* TrustBase CONTAINER_OF model: exact embedding, no dereference permission. */
+struct Semaphore *CONTAINER_OF_SEMAPHORE_ID(struct IdNode *id_ptr)
+/*@ dataqueue_ic_import
+    With (sem_ptr : Z)
+    Require id_ptr == field_addr(sem_ptr, struct Semaphore, id) && emp
+    Ensure __return == sem_ptr && id_ptr == &(__return->id) && emp
+*/;
+
+/* reused-spec: annotated_C/src/kernel/list/IsDoubleLinkListEmpty.c; IsDoubleLinkListEmpty.
+ * Source SHA-256: 4b22b601357f81ec24f89cdcfd28a186b27fc7d9db2c7930811c5cc9b14ef1ca.
+ * Contract imported with the current predicate names; body/proof status is not
+ * a reason to add a local implementation target. See .docs/Report/dataqueue/2026-11-16-InitDataqueue-DataqueuePeak/design.md. */
+int IsDoubleLinkListEmpty(const DoubleLinklistType *linklist)
+/*@ dataqueue_ic_dll
+    With {A} (storeA : Z -> A -> Assertion)
+             (nodes : list(DL_Node A))
+    Require
+      store_dll(storeA, linklist, nodes)
+    Ensure
+      ((__return == 1 && nodes == nil) ||
+       (__return == 0 && nodes != nil)) &&
+      store_dll(storeA, linklist, nodes)
+ */;
+
+/* reused-spec: annotated_C/src/kernel/semaphore/LinklistResumeAll.c / semaphore_waiters.
+ * Source SHA-256: 29ca9f354357150f450eed11198bff152a258c1611f8a3e3d153330f70a13b05.
+ * Native shared-state effect preserves the dataqueue component. Its adaptation
+ * obligations remain explicit. The nonempty branch is retained but unreachable
+ * under dataqueue_cleanup_ic's empty-pending guard. */
+x_err_t LinklistResumeAll(DoubleLinklistType *list)
+/*@ dataqueue_ic_semaphore_waiters
+    With (sg : StableGlobalState) (before : VarGlobalState)
+         (sem : Z) (waiting : list Z)
+    Require list == semaphore_pending_head(sem) &&
+      semaphore_pending_nodes_ic(sem, before, map(sched_link_node, waiting)) && os_inv(sg, before)
+    Ensure __return == 0 && exists after,
+      semaphore_resume_all_ic_effect(sem, waiting, before, after) &&
+      semaphore_pending_nodes_ic(sem, after, nil) && os_inv(sg, after)
+*/;
+
+/* reused-spec: annotated_C/src/kernel/id/IdRemoveObj.c; IdRemoveObj / low_level_spec.
+ * Source SHA-256: 5694b0d103788e448d12bb48a1090312f54e0760c2fc09bf6c576e5104a49bf7.
+ * Contract imported with the current predicate names; body/proof status is not
+ * a reason to add a local implementation target. See .docs/Report/dataqueue/2026-11-16-InitDataqueue-DataqueuePeak/design.md. */
+void IdRemoveObj(struct IdManager *manager, uint16 id)
+/*@ dataqueue_ic_low_level_spec
+    With (sm: StableIdmanager) (m: VarIdmanager)
+    Require manager != 0 &&
+            0 <= id && id < 65536 &&
+            store_idmanager(sm, m, manager)
+    Ensure (idmanager_query(m, id) == false &&
+            store_idmanager(sm, m, manager))
+           ||
+           (exists idnode,
+              idmanager_query(m, id) == true &&
+              idmanager_contains(sm, m, id, idnode) &&
+              idnode != 0 &&
+              &(idnode->link) != 0 &&
+              store_idmanager(sm, idmanager_remove(sm, m, id), manager) *
+              (idnode->id == 65535) *
+              (idnode->link.node_prev == &(idnode->link)) *
+              (idnode->link.node_next == &(idnode->link)))
+*/;
+
+/* reused-spec: annotated_C/src/headers/m_double_linklist.h; DoubleLinkListRmNode / remove_member.
+ * Source SHA-256: 8e67a7da9673c31ca64c330eac42066d37ef2c6257c7323792659a6580435a40.
+ * Contract imported with the current predicate names; body/proof status is not
+ * a reason to add a local implementation target. See .docs/Report/dataqueue/2026-11-16-InitDataqueue-DataqueuePeak/design.md. */
+void DoubleLinkListRmNode(DoubleLinklistType *linklist_node)
+/*@ dataqueue_ic_remove_member
+    With {A} (storeA: addr -> A -> Assertion)
+             (head: addr) (a: A)
+             (prefix: list(DL_Node A))
+             (suffix: list(DL_Node A))
+    Require store_dll(storeA, head,
+              app(prefix, cons(Build_DL_Node(a, linklist_node), suffix)))
+    Ensure store_dll(storeA, head, app(prefix, suffix)) *
+           storeA(linklist_node, a) *
+           store_node_self_linked(linklist_node)
+*/;
+
+/* Source-processing model: empty critical section, current shared protocol. */
+void KTASK_ASSIGN(void)
+/*@ dataqueue_ic_outside_critical
+    With (sg : StableGlobalState) (before : VarGlobalState) X
+    Require safeExec(LastSeen(before), abs_ktask_assign, X) && OutsideCritical(sg, before)
+    Ensure exists after,
+      safeExec(LastSeen(after), return(tt), X) && OutsideCritical(sg, after)
+*/;
+/* KERNEL_FREE exact macro target; entire original allocation is returned. */
+void x_free(void *p)
+/*@ dataqueue_ic_import
+    With n
+    Require p != 0 && 0 < n && CharArray::undef_full(p, n)
+    Ensure emp
+*/;
+
+
+/* IC target contract; original OC target contract remains below. */
+void _SemaphoreDelete(int32 id)
+/*@ dataqueue_cleanup_ic
+    With (sg : StableGlobalState) (before : VarGlobalState)
+    Require semaphore_delete_quiescent(id, before) && os_inv(sg, before)
+    Ensure exists after,
+      semaphore_delete_ic_effect(id, before, after) && os_inv(sg, after)
+*/;
+
+/* Original OC input, preserved verbatim below. */
 #include "m_semaphore.h"
 #include "semaphore_delete_logic.h"
 /*@ Import Coq Require Import CRTOS_Verify.VC.semaphore.SemaphoreDelete_lib */

@@ -82,7 +82,7 @@ program 的适用条件和设计见 [Predicate 指南第 4 节](predicate-lemma-
 `uint16` 是 16 位无符号整数；若 `id` 是该类型的 C 值，可以局部推出
 `0 <= id && id <= 65535`。
 
-实际例子见 [`_SemaphoreCreate`](../../../../ksemaphorecreate-trial-261022-1/annotated_C/src/_SemaphoreCreate.c)：
+以下以 `_SemaphoreCreate` 的历史规格写法为例；当前文件位置以工程全局canonical输入为准：
 参数为 `uint16 val`，其 `Require` 只组合 `safeExec` 和 `OutsideCritical`，
 函数体开头用下面的注解取得类型范围：
 
@@ -127,7 +127,7 @@ x_err_t _DeleteMsgQueue(struct MsgQueue *mq)
 `_MutexDelete(struct Mutex *mutex)` 的目标对象由 C 形参 `mutex`（逻辑地址
 `p`）直接确定。这类 canonical spec 不应在 `With` 中额外引入 `id`，也不应在
 `Require` 中写 `exists id, ...` 来描述被删除的 mutex。这里 `id` 不是应改放到
-`With` 的 ghost 参数，而是根本不应进入该函数的抽象行为描述。例如，下面的公开边界不合适：
+`With` 的ghost参数；公开抽象接口仍以真实指针定位对象。例如，下面的公开边界不合适：
 
 ```c
 Require mutex != 0 && exists id,
@@ -137,14 +137,9 @@ Require mutex != 0 && exists id,
   OutsideCritical(sg, before)
 ```
 
-`_MutexDelete` 的抽象行为只是删除并回收地址 `p` 对应的 mutex。公开
-predicate、transition 和 abstract program 都应只以 `p` 跟踪目标对象。
+`_MutexDelete`的公开抽象行为是删除并回收地址 `p` 对应的mutex，公开predicate、transition和abstract program接口按该指针定位对象。
 
-实现证明展开对象表示并调用 `IdRemoveObj` 时，可以从地址 `p` 对应的当前
-mutex 对象中局部取得 `current.mutex_id`，用它实例化 callee contract。这只是体内的
-representation/proof witness，不应进入 `_MutexDelete` 的公开 spec、abstract program
-或跨 helper 的行为接口。如果需要排除解锁窗口中的回收/地址复用，应对 `p`
-表达 lifetime/ownership/generation 条件；`id` 不能代替地址世代条件。
+真实C读取或缓存的内部ID，可以从对象表示及观察状态取得，作为抽象程序内部局部值，或用来实例化 `IdRemoveObj` 等callee的契约。这与要求caller在公开入口额外提供ID不同。跨解锁需要保持对象身份时，用适用的lifetime/ownership/generation条件表达；地址或ID相等本身不足以排除ABA。
 
 这条经验不适用于 `KMutexDelete(int32 id)` 这类真实以 `id` 为 C 形参的外层 API；
 该外层 spec 可以直接使用其 C 形参 `id`。也不适用于`_SemaphoreDelete(int32 id)`等本身传入`id` 为 C 形参的函数。

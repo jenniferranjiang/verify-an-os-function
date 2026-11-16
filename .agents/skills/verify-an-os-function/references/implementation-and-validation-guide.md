@@ -2,7 +2,7 @@
 
 用户确认 predicate/spec revisions 后，main agent 完整读取已配置 QCP 根目录的
 `AGENTS.md`，按[路径配置](project-maintenance-guide.md#implement-阶段的-qcp-路径配置)
-将验证工作目录指向当前 trial，沿用现有工程，从它指定的
+将验证工作目录指向验证工程根目录，沿用现有工程，从它指定的
 `verification-orchestrator` 入口启动 QCP workflow，并把批准的 predicate/spec 当作冻结输入。
 
 交接时附默认审阅白名单及已配置的用户补充文件路径、版本、冲突处理结果和本轮适用条目，
@@ -19,11 +19,11 @@
 
 ### 沿用现有工程
 
-设计与审阅阶段已有的 trial 文件结构是 implement 必须遵循的工程格式。验证继续使用现有 annotated C、直接 import 的未修改全局库、`trial/lib/` 中的修改副本及新增库，以及验证工程根目录统一维护的 `_CoqProject`、Makefile 和外部基础库引用，文件组织与库引用按[工程组织与维护指南](project-maintenance-guide.md#trial-与全局库)保持不变，验证工作目录指向当前 trial。只构建本轮目标，不提前处理全局工程的依赖适配；不重新配置为 QCP 示例仓库的结构，也不改写已有逻辑命名空间。
+设计与审阅阶段直接维护的全局文件就是implement输入。沿用全局lib、annotated C、VC、根_CoqProject/Makefile与外部基础库路径，保持现有逻辑前缀。按[全局工程规则](project-maintenance-guide.md#全局工作区与依赖维护)处理必要依赖及其检查，保留其他函数的有效输入和证明。
 
-由 QCP 工具适配本 OS 工程，而不是让 OS 工程迁就 QCP 的默认目录约定。先检查实际使用的 controller 是否能读取现有工程配置、解析现有输入及外部库路径，并按 trial 的文件组织处理验证产物；已有支持直接复用，尚不支持时在 implement 中完成必要的工具侧适配。适配范围以支持本实验为准，不要求先建设通用工具框架，也不能仅修改本指南便视为工具已支持。
+Controller的main-root与MCP的workspace使用验证工程根目录，交接明确本轮canonical文件、批准revision、reused-spec边界和VC输出位置。不能因根目录里存在其他函数就把它们全交给workflow。冻结输入包含本轮实际使用的共享定义版本；依赖变动须按语义影响更新状态及重新检查。
 
-交接时分别提供 trial 输入/产物目录与验证工程根配置/构建入口的位置；符号执行、依赖分析、证明编译和 final-check 均须使用一致的路径映射，并实际检查适配生效，不把 trial 工作目录误当作独立构建配置根目录。
+由QCP工具适配本OS全局模块目录及根构建配置。先检查实际controller能否解析这些路径；已有支持直接复用，尚不支持时完成本任务所需的工具侧适配，并实际检查输入解析和构建结果。符号执行、依赖分析、证明编译和final-check使用一致路径。
 
 ## Annotation 阶段适配
 
@@ -35,13 +35,13 @@ Main 交接 annotation 任务时须明确传达本节的 OS 适配规则。
 
 ## 验证范围与执行
 
-交接时分开列出本轮实现证明目标与从根 annotated_C 或其他证明工程导入的 `reused-spec` 边界，附复用来源、revision 和 caller-local contract 的位置。
-按[工程组织与维护指南](project-maintenance-guide.md#已有-spec-的复用与特化)，导入 spec 只放在 caller 定义前，不为其新建独立函数文件，也不生成本轮实现 VC 或重新证明函数体；工具的闭包检查须识别这类边界，不得因缺少同名 `.c` 文件而补建文件。
+交接时分开列出按spec设计确定的本轮实现证明目标与从根 annotated_C 或其他证明工程导入的 `reused-spec` 边界，附复用来源、revision、caller-local contract位置及已知证明状态。旧证明未完成或不能移植不自动扩大本轮目标。
+按[工程组织与维护指南](project-maintenance-guide.md#已有-spec-的复用与特化)，导入 spec 只放在 caller 定义前，不为其新建独立函数文件，也不生成本轮实现 VC 或重新证明函数体；工具的闭包检查须识别这类边界，不得因缺少同名 `.c`、proof文件或发现未证依赖而补建文件。依赖契约未获实现证明时，报告caller结论相对于该契约成立，不宣称整个调用链已证，也不自动改标trusted。
 之后只执行 controller 返回的 action，直到 controller 报告 `done`、明确 blocker 或达到下述时间预算；不要在本 skill
 中复制 QCP 的阶段、命令、返回状态或 final-check。
 
 
-Controller 完成后的收尾统一按主 skill 的[正式成果迁出与 trial 删除](../SKILL.md#正式成果迁出与-trial-删除)执行。
+实际产生VC和证明后，更新长期保留的[设计说明](reporting-guide.md#设计说明)：解释本轮证明目标对应的C路径与资源操作，以及关键义务如何借助lib/spec完成。Controller完成后的收尾按主skill的[全局一致性检查与收尾](../SKILL.md#全局一致性检查与收尾)执行。
 
 ## VC 证明时间预算
 

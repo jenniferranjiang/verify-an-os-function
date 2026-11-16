@@ -14,7 +14,7 @@
 6. [定义具体内存 Predicate](#6-定义具体内存-predicate)
 7. [根据真实 C 操作定义 Lemma](#7-根据真实-c-操作定义-lemma)
 8. [检查 Validity、初始化与生命周期](#8-检查-validity初始化与生命周期)
-9. [为正式定义编写注释](#9-为正式定义编写注释)
+9. [正式定义注释与设计说明](#9-正式定义注释与设计说明)
 10. [检查并审阅 Predicates](#10-检查并审阅-predicates)
 
 ## 1. 确认源码与范围
@@ -343,7 +343,7 @@ Definition abs_get_task_with_idnode_locked
 
 抽象 program 描述函数在临界区内完成的操作，包括返回结果和状态变化。例如，abs_get_task_with_idnode_locked 描述一次查询，查询本身满足 after = before。外层 abs_get_task_with_idnode 按已有临界区协议连接这次操作，供函数 spec 中的 safeExec 使用。函数入口记录的状态与取得临界区时的状态可能不同，因此查询自身不修改状态，不代表整个调用的入口与出口状态相同。若操作只定义在模块状态上，连接到 OS 总状态时还应明确：本次操作只更新目标模块，其他模块保持不变。
 
-这些定义供 [Spec 指南第 4 节](spec-writing-guide.md#4-临界区调用链中的函数-spec)的外层契约使用；
+这些定义供 [Spec 指南第 4 节](spec-writing-guide.md#4-临界区内外-spec-的判断与证明方法)的外层契约使用；
 它们表达操作语义，不代替具体内存 ownership 或临界区资源谓词。
 
 ## 5. 为临界区定义状态关系
@@ -364,8 +364,8 @@ Definition abs_get_task_with_idnode_locked
 - `GTrans current new` 表示当前函数取得共享资源后，从 `current` 更新到准备交还资源时的 `new`，这种变化是否属于
   当前 OS 允许的更新。
 
-若项目使用 QCP `CriticalCSL`，这两个名字由 crtOS 自己的 `critical_STS_transition` 提供；若尚未定义，slice 必须先
-补上并审批，spec 不能直接假设符号存在。项目采用其他临界区库时，使用其中表达相同含义的实际关系。纯关系在
+若项目使用 QCP `CriticalCSL`，这两个名字由 crtOS 自己的 `critical_STS_transition` 提供；若尚未定义，先在predicate草案中补齐，
+spec据此编写，spec审阅使用已通过审阅的predicate版本。项目采用其他临界区库时，使用其中表达相同含义的实际关系。纯关系在
 separation-logic spec 中不代替 `InsideCritical` 或 `OS_inv` 等资源谓词。
 QCP 当前接口可以让 `RTrans` 和 `GTrans` 指向同一个 `critical_STS_transition`；两个名字区分它在进入和退出临界区时的
 用途，并不要求项目一定维护两套不同的状态转换定义。
@@ -373,7 +373,7 @@ QCP 当前接口可以让 `RTrans` 和 `GTrans` 指向同一个 `critical_STS_tr
 `OutsideCritical/InsideCritical` 说明共享内存资源处于临界区外还是已交给当前执行；`safeExec/LastSeen` 说明抽象命令
 允许哪些状态和结果。一个调用过程中负责进入和退出临界区的对外公开函数往往两组都需要。
 临界区内辅助函数是否在 spec 中使用 `os_inv`，以及如何保留 `InsideCritical`，见
-[Spec 指南第 4.3 节](spec-writing-guide.md#43-在临界区内更新)。
+[Spec 指南第 4.4.3 节](spec-writing-guide.md#443-在临界区内更新)。
 
 ## 6. 定义具体内存 Predicate
 
@@ -613,11 +613,11 @@ container predicate 和必要 lemma；仅凭类型名或习惯性实现不能构
 - 对象全生命周期由单一调用者独占，或函数只是操作调用者显式提供并收回的局部资源时，可以使用局部 predicate，不必增加 OS 全局分量。纯函数或不拥有共享内存的辅助库也不因新建了模块文件而接入 `os_inv`。
 - 资源已由其他模块 invariant 或既有共享协议持有时，复用该归属，通过必要的纯关系和接口连接；不要在 `os_inv` 中重复拥有同一块内存。
 
-需要接入时，在全局状态中补齐实际 invariant 组合、状态更新和资源交接，不能只添加 import；这项集成在 trial 中完成，与之后合并全局目录是不同步骤。
+需要接入时，在全局状态中补齐实际 invariant 组合、状态更新和资源交接，不能只添加 import；这项集成直接在全局原文件完成，必要依赖适配与检查随当前改动处理。
 
-项目已有 OS 总状态和 `os_inv` 时，直接修改它们的原定义副本：在现有 state record 中增加模块分量，在现有 `os_inv` 定义体中组合模块 invariant 及必要的跨模块关系。本阶段只处理当前 trial 及其实际使用的依赖；本轮用到的定义若需适配，在 trial 副本中按需修改，不要求同步更新全局库、其他 trial、历史 spec 或证明，也不扫描和改造所有旧调用者。模块自己的 `State`/`Inv` 文件可以新增，但不能另建一套系统级入口。例如 CRTOS 应修改 `CrtosGlobState.v` 中的全局状态和 `CrtosInv.v` 中的 `os_inv`，而不是新增 `CrtosDataqueue.State = { core : VarGlobalState; queues : ... }`，再用旧 token 的投影包装另一份系统不变量。文件名以实际工程为准。
+项目已有 OS 总状态和 `os_inv` 时，直接修改它们的全局原定义：在现有 state record 中增加模块分量，在现有 `os_inv` 定义体中组合模块 invariant 及必要的跨模块关系。按实际依赖识别受影响的模块、spec和证明，在全局原文件处理必要调整，不能依靠旧.vo保留不一致版本，也不无条件改造无关调用者。受影响结论失效时明确标记并复查；这不自动扩大本轮C函数体证明范围。模块自己的 `State`/`Inv` 文件可以新增，但不能另建一套系统级入口。例如 CRTOS 应修改 `CrtosGlobState.v` 中的全局状态和 `CrtosInv.v` 中的 `os_inv`，而不是新增 `CrtosDataqueue.State = { core : VarGlobalState; queues : ... }`，再用旧 token 的投影包装另一份系统不变量。文件名以实际工程为准。
 
-不得以保留旧 Assertion carrier、避免修改依赖库、减少编译工作或便于复用为由，采用上述外层包装。全局状态扩展若改变 STS/Assertion 类型，只处理当前 trial 实际需要的共享协议和 predicate 接口兼容性，并按[共享库修改规则](project-maintenance-guide.md#已有共享库的复用与修改)记录必要修改范围。确实无法兼容时，报告具体类型或接口冲突；不能自行改成另一套全局模型。审阅须检查 trial 中原 state/`os_inv` 的修改副本及本轮调用处是否已使用新增分量，外层组合不能算作集成完成。
+不得以保留旧 Assertion carrier、避免修改依赖库、减少编译工作或便于复用为由，采用上述外层包装。新增模块定义直接放入全局lib所属目录，已有共享定义及必要imports在原位置修改。无需修改的库直接引用；只需重编译的依赖不因此复制或重设计。接口调整以实际模型和使用点为依据。具体范围按[全局工作区与依赖维护](project-maintenance-guide.md#全局工作区与依赖维护)诊断，参与组合的定义须使用同一套状态及断言模型。
 
 模块全局 predicate 必须覆盖当前配置下该模块拥有或管理的全部内存。开发时可以按对象或容器逐步加入并编译，但要持续修改同一个正式 definition；在模块资源和生命周期尚未闭合时，它仍是 draft。每次加入资源时，检查其唯一 owner、与现有 footprint 不重叠，并追溯到使用它的真实模块函数；发现新的逻辑状态时返回第 2 节。
 
@@ -683,12 +683,9 @@ project_initialization_resource
 
 特别检查 early return 和错误路径。
 
-## 9. 正式定义注释与 Predicate 设计报告
+## 9. 正式定义注释与设计说明
 
-正式 `.v` 文件是 state、predicate、statement 及其局部语义解释的唯一来源。Predicate 设计报告解释跨定义、
-跨文件和模块级设计，但不是第二份 formal source；遵循
-[验证记录指南](reporting-guide.md)，不要求模板或固定章节。报告引用正式文件、symbol 和 revision，
-不得复制 Rocq 定义或用自然语言改写出另一套语义。
+正式 `.v` 文件保存state、predicate、statement及其局部语义解释。跨定义和跨文件的改动原因、资源组织写入与spec共用的[设计说明](reporting-guide.md#设计说明)，链接实际定义；这份说明在实验完成后仍保留。
 对本次设计或修改涉及的非平凡、核心组合或对外使用的定义，不论是新建还是已有，
 都在 definition/statement 前写简短的 `(** ... *)` 中文文档注释。例如：
 
@@ -722,11 +719,7 @@ Definition update_task_id_map ids before := ...
 private helper 不需重复说明。
 Definition 改变时必须同时更新相关注释。
 
-设计报告集中说明如果塞进单个 definition 注释就会割裂或重复的内容：验证 scope/config、模块相关 C 对象、
-abstract state 的选取理由、predicate/file 分层、ownership 边界、初始化和 lifecycle、跨模块借用或转移、
-公开 view/interface、重要替代方案及限制。报告中的判断必须链接到源码证据和 formal symbol；某个 definition
-自身的参数、地址、字段、ownership 或使用限制仍应在紧邻它的 `.v` 注释中说清楚，不能要求读者依赖报告才能
-理解该定义。跨定义设计变化时同步更新报告；只修正文句且不改变 formal semantics 时不产生新的 predicate revision。
+设计说明结合本次新增或修改的定义，解释为什么这样表示对象、怎样分配资源，以及如何接入系统不变量；函数规格部分在同一份说明中维护。篇幅按改动复杂度决定，已有内容只说明变化。定义自身的参数、地址、字段和使用限制仍在相邻的 `.v` 注释中解释。设计改变时同步更新说明；纯文字调整不产生新的predicate revision。
 
 ## 10. 检查并审阅 Predicates
 

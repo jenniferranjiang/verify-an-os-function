@@ -135,33 +135,9 @@ VC/semaphore/SemaphoreDelete_proof_auto.v
 VC/semaphore/SemaphoreDelete_proof_manual.v
 VC/semaphore/SemaphoreSpecBridge.v
 
-# Current InitDataqueue design: local changed/new libraries only.
--R ./initdataqueue-trial-261115-1/lib CRTOS_InitDataqueue
-initdataqueue-trial-261115-1/lib/DataqueueState.v
-initdataqueue-trial-261115-1/lib/AssignInv.v
-initdataqueue-trial-261115-1/lib/Bitmap.v
-initdataqueue-trial-261115-1/lib/KTaskOsAssign.v
-initdataqueue-trial-261115-1/lib/OsAssignReadyVector.v
-initdataqueue-trial-261115-1/lib/CrtosGlobState.v
-initdataqueue-trial-261115-1/lib/CrtosInv.v
-initdataqueue-trial-261115-1/lib/CrtosRules.v
-initdataqueue-trial-261115-1/lib/ServiceSlotWf.v
-initdataqueue-trial-261115-1/lib/dll.v
-initdataqueue-trial-261115-1/lib/DelayInv.v
-initdataqueue-trial-261115-1/lib/KTaskDelayMem.v
-initdataqueue-trial-261115-1/lib/KTaskUnSetDelay.v
-initdataqueue-trial-261115-1/lib/EventInv.v
-initdataqueue-trial-261115-1/lib/EventLayoutABI.v
-initdataqueue-trial-261115-1/lib/idnode.v
-initdataqueue-trial-261115-1/lib/IsrManagerInv.v
-initdataqueue-trial-261115-1/lib/DoubleLinkListSpec.v
-initdataqueue-trial-261115-1/lib/NodeSelfLinked.v
-initdataqueue-trial-261115-1/lib/MutexInv.v
-initdataqueue-trial-261115-1/lib/SemaphoreInv.v
-initdataqueue-trial-261115-1/lib/ExstatusInv.v
-initdataqueue-trial-261115-1/lib/KTaskSchedMember.v
-initdataqueue-trial-261115-1/lib/KTaskStackSetup.v
-initdataqueue-trial-261115-1/lib/KTaskWakeup.v
-initdataqueue-trial-261115-1/lib/TaskInv.v
-initdataqueue-trial-261115-1/lib/TaskStatusMemory.v
-initdataqueue-trial-261115-1/lib/TickInv.v
+# Dataqueue module and function abstractions.
+lib/dataqueue/DataqueueState.v
+lib/common/DataqueueInv.v
+lib/dataqueue/KInitDataqueue.v
+lib/dataqueue/KDeInitDataqueue.v
+lib/dataqueue/KDataqueuePeak.v
