@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "InitDataqueue",
+      "meaning": "Frozen reviewed address-map contract: publish an empty queue at p_queue on success; partial initialization failure cleans up the private object and returns -1."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

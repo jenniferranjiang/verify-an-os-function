@@ -1,0 +1,47 @@
+{
+  "run": {
+    "status": "running",
+    "phase": "annotation",
+    "created_at": "2026-11-16T16:38:11.275887Z"
+  },
+  "commands": [
+    {
+      "phase": "annotation",
+      "command": "coq-check",
+      "calls": 1,
+      "elapsed_seconds": 0.022683
+    },
+    {
+      "phase": "annotation",
+      "command": "symexec",
+      "calls": 1,
+      "elapsed_seconds": 0.049141
+    }
+  ],
+  "annotation_attempts": [
+    {
+      "attempt_id": "InitDataqueue-annotation-r1",
+      "phase": "annotation",
+      "status": "running",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-11-16T16:39:01.822617Z",
+          "finished_at": "2026-11-16T16:39:01.854967Z",
+          "elapsed_seconds": 0.022683
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-16T16:38:21.752508Z"
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-11-16T16:39:02.120940Z",
+          "finished_at": "2026-11-16T16:39:02.182709Z",
+          "elapsed_seconds": 0.049141
+        }
+      ]
+    }
+  ],
+  "rounds": []
+}

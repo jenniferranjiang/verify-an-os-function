@@ -1,5 +1,7 @@
+/* Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c; SHA-256 dafd02bf7c6fa5a7324c6e0f824d9a1ddc1544c43f9e71aabeb902d832f30ab8.
+ * Selected 32-bit non-SMP config: KERNEL_STATIC_OBJECTS and KERNEL_DEFER_IPC_SCHED undefined. */
 /* Dataqueue IC design input (not an additional implementation proof).
- * The original OC definition, contract and proof annotations below are retained.
+ * The OC definition is synchronized to the latest source; its contracts and proof annotations are retained.
  * This named IC contract targets a temporary slice adapted from that same body:
  * remove nested CriticalAreaLock/UnLock calls and OC-only proof annotations;
  * select the dataqueue_ic* callee contracts recorded below.
@@ -11,8 +13,8 @@
 #include "dataqueue_semaphore_logic.h"
 
 /* Current source: kernel/thread/semaphore.c; non-SMP ILP32.
- * New IC contract for dataqueue's existing locked call site. Original global
- * OC contract is unchanged and is not claimed to prove this IC specialization.
+ * New IC contract for dataqueue's existing locked call site. The global
+ * OC contract and IC specialization remain separate design interfaces.
  */
 
 /* reused-spec: annotated_C/src/kernel/id/IdGetObj.c; IdGetObj.
@@ -145,7 +147,7 @@ void _SemaphoreDelete(int32 id)
       semaphore_delete_ic_effect(id, before, after) && os_inv(sg, after)
 */;
 
-/* Original OC input, preserved verbatim below. */
+/* OC input: existing contracts/annotations retained; latest-source adaptations marked below. */
 #include "m_semaphore.h"
 #include "semaphore_delete_logic.h"
 /*@ Import Coq Require Import CRTOS_Verify.VC.semaphore.SemaphoreDelete_lib */
@@ -167,7 +169,7 @@ void _SemaphoreDelete(int32 id)
 */
 
 
-/* Source: /home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c. Current 32-bit non-SMP configuration. */
+/* Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c. Current 32-bit non-SMP configuration. */
 x_base CriticalAreaLock(void)
 /*@ ordinary
     With (sg : StableGlobalState) (st1 : VarGlobalState)
@@ -376,7 +378,8 @@ void _SemaphoreDelete(int32 id)
     struct Semaphore *sem = NONE;
     struct IdNode *idnode = NONE;
 
-    if (id < 0)
+    /* SemIdInvalid(id), inlined from the latest pure helper. */
+    if (id < 0 || id > 65535)
         return;
 
     lock = CriticalAreaLock() /*@ where (ordinary) sg = sg, st1 = before */;
@@ -518,6 +521,8 @@ void _SemaphoreDelete(int32 id)
     x_free(sem);
 
     if (resched){
+        /* DO_KTASK_ASSIGN_ON_WAKE() == DO_KTASK_ASSIGN in the selected
+         * config (KERNEL_DEFER_IPC_SCHED undefined); use the existing model. */
         KTASK_ASSIGN() /*@ where (outside_critical) sg = sg, before = after, X = X */;
     }
 }

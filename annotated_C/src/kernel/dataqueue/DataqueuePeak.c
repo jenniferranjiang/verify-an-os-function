@@ -1,10 +1,8 @@
-/* Source: /home/xinra/crtos/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/data_queue.c; SHA-256 a8b12c43c3f2061df08320f50daaabda7ada033e40670c2d37ea2d8ef774f601.
+/* Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/data_queue.c; SHA-256 a8b12c43c3f2061df08320f50daaabda7ada033e40670c2d37ea2d8ef774f601.
  * Rule-authorized shared-access adaptation; new formal spec draft; no VC generated.
  */
 #include "dataqueue.h"
 
-void NULL_PARAM_CHECK_1(void *p)
-/*@ Require emp Ensure p != 0 */;
 x_base CriticalAreaLock(void)
 /*@ With (sg : StableGlobalState) (before : VarGlobalState)
     Require OutsideCritical(sg, before)
@@ -41,7 +39,7 @@ x_err_t DataqueuePeak(DataQueueType *p_queue, const void **StartAddr, x_size_t *
 {
     x_base lock = 0;
 
-    NULL_PARAM_CHECK_1(p_queue); /* Old NULL normal-return model. */
+    /* NULL_PARAM_CHECK(p_queue); latest log/count diagnostic omitted. */
 
     /* KPrintf("DataqueuePeak\n"); TrustBase debug removal. */
 

@@ -1,0 +1,336 @@
+{
+  "schema_version": 4,
+  "generation": 44,
+  "run_id": "DeInitDataqueue-20261118121138",
+  "case": "DeInitDataqueue",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos-verify",
+  "run_root": "/home/xinra/crtos-verify/verification_runs/DeInitDataqueue-20261118121138",
+  "report_root": "/home/xinra/crtos-verify/reports/DeInitDataqueue-20261118121138",
+  "target_files": {
+    "c_file": "annotated_C/src/kernel/dataqueue/DeInitDataqueue.c",
+    "formal_directory": "VC/dataqueue",
+    "formal_case_lib": "VC/dataqueue/DeInitDataqueue_lib.v",
+    "goal_file": "VC/dataqueue/DeInitDataqueue_goal.v",
+    "proof_auto_file": "VC/dataqueue/DeInitDataqueue_proof_auto.v",
+    "proof_manual_file": "VC/dataqueue/DeInitDataqueue_proof_manual.v",
+    "goal_check_file": "VC/dataqueue/DeInitDataqueue_goal_check.v",
+    "case_name": "DeInitDataqueue",
+    "active_case_theory": "CRTOS_Verify.VC.dataqueue"
+  },
+  "problem_context": {
+    "problem_statement": "Verify approved map-based DeInitDataqueue init_cleanup only (unpublished private initialization rollback). User-authorized concrete dataqueue_layout_abi and prior IRQ resource boundary. KSemaphoreDelete IC is subsequent stage1 proof target, imported lower contracts remain reused boundaries. User explicitly permits Rocq MCP development and removes proof time budget. Only manual proof spans may be hand edited; generated goal/auto/check immutable. Similar justified annotation/model repairs preapproved, review still actual. Original crtoslatest read-only; preserve .vo."
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "DeInitDataqueue"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "DisableLocalInterrupt::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) Require OutsideCritical(sg, before) Ensure exists observed, Crtos_RTrans(before, observed) && InsideCritical(sg, observed) * os_inv(sg, observed)",
+        "EnableLocalInterrupt::<default>": "With (sg : StableGlobalState) (held after : VarGlobalState) Require Crtos_GTrans(held, after) && InsideCritical(sg, held) * os_inv(sg, after) Ensure OutsideCritical(sg, after)",
+        "x_free::<default>": "With n Require p != 0 && 0 < n && CharArray::undef_full(p, n) Ensure emp",
+        "KSemaphoreDelete::dataqueue_cleanup_ic": "dataqueue_cleanup_ic With (sg : StableGlobalState) (before : VarGlobalState) Require semaphore_delete_quiescent(id, before) && os_inv(sg, before) Ensure exists after, semaphore_delete_ic_effect(id, before, after) && os_inv(sg, after)",
+        "DeInitDataqueue::init_cleanup": "init_cleanup With (sg : StableGlobalState) (before : VarGlobalState) (q : DataQueueAbs) (refs : DataqueueSemRefs) X Require safeExec(LastSeen(before), abs_deinit_dataqueue(sg, p_queue, q, refs), X) && store_dataqueue(p_queue, q) * OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(tt), X) && store_dataqueue(p_queue, dataqueue_retired(q)) * OutsideCritical(sg, after)"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-11-18T04:11:38.530220Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 1,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/dataqueue/DeInitDataqueue_goal_check.vo",
+    "base_artifact_count": 216,
+    "current_source_count": 4,
+    "elapsed_seconds": 3.790461,
+    "snapshot": "verification_runs/DeInitDataqueue-20261118121138/dependency_plan.json"
+  },
+  "attempts": {
+    "DeInitDataqueue-annotation-r1": {
+      "attempt_id": "DeInitDataqueue-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/DeInitDataqueue-20261118121138",
+      "claimed_action": "deliver:DeInitDataqueue-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T04:11:52.063082Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T04:11:59.407213Z",
+            "finished_at": "2026-11-18T04:16:35.381768Z",
+            "elapsed_seconds": 275.974555
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T04:16:35.381735Z",
+      "finished_at": "2026-11-18T04:16:36.584300Z"
+    },
+    "DeInitDataqueue-vc-checking-r1": {
+      "attempt_id": "DeInitDataqueue-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/DeInitDataqueue-vc-checking-r1",
+      "claimed_action": "deliver:DeInitDataqueue-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T04:17:23.933946Z",
+      "source_annotation": "DeInitDataqueue-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T04:18:05.046977Z",
+            "finished_at": "2026-11-18T04:36:31.328785Z",
+            "elapsed_seconds": 1106.281808
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T04:36:31.328734Z",
+      "finished_at": "2026-11-18T04:36:31.394535Z"
+    },
+    "DeInitDataqueue-vc-proving-r1": {
+      "attempt_id": "DeInitDataqueue-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-18T04:36:31.394566Z",
+      "source_annotation": "DeInitDataqueue-annotation-r1",
+      "source_vc_checking": "DeInitDataqueue-vc-checking-r1",
+      "groups": {
+        "owned_buffer_view": {
+          "status": "accepted",
+          "owner": "group-worker/DeInitDataqueue-vc-proving-r1:owned_buffer_view",
+          "claimed_action": "deliver:DeInitDataqueue-vc-proving-r1:owned_buffer_view:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T04:37:07.002330Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T04:37:51.649650Z",
+                "finished_at": "2026-11-18T04:51:48.229298Z",
+                "elapsed_seconds": 836.579648
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T04:51:48.229254Z",
+          "finished_at": "2026-11-18T04:53:24.010319Z"
+        },
+        "irq_observation": {
+          "status": "accepted",
+          "owner": "group-worker/DeInitDataqueue-vc-proving-r1:irq_observation",
+          "claimed_action": "deliver:DeInitDataqueue-vc-proving-r1:irq_observation:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T04:37:07.002350Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T04:54:22.700576Z",
+                "finished_at": "2026-11-18T05:00:14.722186Z",
+                "elapsed_seconds": 352.02161
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T05:00:14.722065Z",
+          "finished_at": "2026-11-18T05:00:59.602377Z"
+        },
+        "free_branch_projection": {
+          "status": "accepted",
+          "owner": "group-worker/DeInitDataqueue-vc-proving-r1:free_branch_projection",
+          "claimed_action": "deliver:DeInitDataqueue-vc-proving-r1:free_branch_projection:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T04:37:07.002354Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T05:01:35.344885Z",
+                "finished_at": "2026-11-18T05:05:59.121186Z",
+                "elapsed_seconds": 263.776301
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T05:05:59.121106Z",
+          "finished_at": "2026-11-18T05:06:45.239252Z"
+        },
+        "first_delete_transition": {
+          "status": "accepted",
+          "owner": "group-worker/DeInitDataqueue-vc-proving-r1:first_delete_transition",
+          "claimed_action": "deliver:DeInitDataqueue-vc-proving-r1:first_delete_transition:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T04:37:07.002357Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T05:07:14.006212Z",
+                "finished_at": "2026-11-18T05:13:30.402492Z",
+                "elapsed_seconds": 376.39628
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T05:13:30.402462Z",
+          "finished_at": "2026-11-18T05:13:58.692654Z"
+        },
+        "cleanup_refinement": {
+          "status": "accepted",
+          "owner": "group-worker/DeInitDataqueue-vc-proving-r1:cleanup_refinement",
+          "claimed_action": "deliver:DeInitDataqueue-vc-proving-r1:cleanup_refinement:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T04:37:07.002359Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T05:14:22.739756Z",
+                "finished_at": "2026-11-18T05:21:57.309815Z",
+                "elapsed_seconds": 454.570059
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T05:21:57.309764Z",
+          "finished_at": "2026-11-18T05:22:56.455980Z"
+        },
+        "return_and_irq_frames": {
+          "status": "accepted",
+          "owner": "group-worker/DeInitDataqueue-vc-proving-r1:return_and_irq_frames",
+          "claimed_action": "deliver:DeInitDataqueue-vc-proving-r1:return_and_irq_frames:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T04:37:07.002361Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T05:23:11.456565Z",
+                "finished_at": "2026-11-18T05:26:39.353733Z",
+                "elapsed_seconds": 207.897168
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T05:26:39.353702Z",
+          "finished_at": "2026-11-18T05:27:15.897123Z"
+        },
+        "safety_1_8": {
+          "status": "accepted",
+          "owner": "group-worker/DeInitDataqueue-vc-proving-r1:safety_1_8",
+          "claimed_action": "deliver:DeInitDataqueue-vc-proving-r1:safety_1_8:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T04:37:07.002363Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T05:27:38.241075Z",
+                "finished_at": "2026-11-18T05:30:09.217267Z",
+                "elapsed_seconds": 150.976192
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T05:30:09.217234Z",
+          "finished_at": "2026-11-18T05:30:45.751262Z"
+        },
+        "safety_9_16": {
+          "status": "accepted",
+          "owner": "group-worker/DeInitDataqueue-vc-proving-r1:safety_9_16",
+          "claimed_action": "deliver:DeInitDataqueue-vc-proving-r1:safety_9_16:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T04:37:07.002365Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T05:31:08.575055Z",
+                "finished_at": "2026-11-18T05:33:35.637993Z",
+                "elapsed_seconds": 147.062938
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T05:33:35.637959Z",
+          "finished_at": "2026-11-18T05:34:11.901301Z"
+        },
+        "call_frames_3_5": {
+          "status": "accepted",
+          "owner": "group-worker/DeInitDataqueue-vc-proving-r1:call_frames_3_5",
+          "claimed_action": "deliver:DeInitDataqueue-vc-proving-r1:call_frames_3_5:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T04:37:07.002366Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T05:34:29.744948Z",
+                "finished_at": "2026-11-18T05:43:28.048619Z",
+                "elapsed_seconds": 538.303671
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T05:43:28.048588Z",
+          "finished_at": "2026-11-18T05:44:17.147946Z"
+        },
+        "call_frames_6_8": {
+          "status": "accepted",
+          "owner": "group-worker/DeInitDataqueue-vc-proving-r1:call_frames_6_8",
+          "claimed_action": "deliver:DeInitDataqueue-vc-proving-r1:call_frames_6_8:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T04:37:07.002368Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T05:44:33.131254Z",
+                "finished_at": "2026-11-18T05:49:04.237872Z",
+                "elapsed_seconds": 271.106618
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T05:49:04.237841Z",
+          "finished_at": "2026-11-18T05:49:54.631654Z"
+        }
+      },
+      "finished_at": "2026-11-18T05:51:49.363028Z"
+    }
+  },
+  "current": {
+    "annotation": "DeInitDataqueue-annotation-r1",
+    "vc-checking": "DeInitDataqueue-vc-checking-r1",
+    "vc-proving": "DeInitDataqueue-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/DeInitDataqueue-20261118121138",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "DeInitDataqueue-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-11-18T05:54:19.279096Z",
+    "files": [
+      "VC/dataqueue/DeInitDataqueue_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-11-18T06:16:28.590356Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-11-18T04:11:38.530237Z",
+  "updated_at": "2026-11-18T06:16:28.604854Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-11-18T06:16:28.590332Z"
+}

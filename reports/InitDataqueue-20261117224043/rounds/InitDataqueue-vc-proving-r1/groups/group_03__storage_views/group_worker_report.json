@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-alignment-premise",
+    "vcs": [
+      {
+        "name": "proof_of_InitDataqueue_which_implies_wit_2_split_goal_spatial",
+        "parent": "proof_of_InitDataqueue_which_implies_wit_2",
+        "annotation_location": "InitDataqueue.c which-implies immediately after memset"
+      }
+    ],
+    "message": "The byte-array view quantifies arbitrary p and retains only CharArray.full, whose cells require alignment 1; typed UShort/Ptr/Int postcondition requires alignment 2/4. Entry DataqueueStorage already provides addr_aligned(p,4), but this fact was omitted from the local view premise. Preserve it in the annotation; no stronger public Require or new ABI assumption is needed.",
+    "repair_boundary": "canonical InitDataqueue.c post-memset which-implies annotation; generated files unchanged"
+  }
+}

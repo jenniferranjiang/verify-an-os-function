@@ -1,0 +1,181 @@
+From SimpleC.Verification Require Import VCPrelude.
+From CRTOS_Verify.VC.dataqueue Require Import DeInitDataqueue_goal.
+From CRTOS_Verify.VC.dataqueue Require Import DeInitDataqueue_proof_auto.
+Require Import CRTOS_Verify.lib.dataqueue.KInitDataqueue CRTOS_Verify.lib.dataqueue.KDataqueuePeak.
+From MonadLib.MonadErr Require Import MonadErrBasic MonadErrHoare monadesafe_lib.
+Import Monad MonadNotation.
+Local Open Scope monad.
+Local Open Scope sac.
+
+
+Lemma proof_of_DeInitDataqueue_safety_wit_1 : DeInitDataqueue_safety_wit_1.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_2 : DeInitDataqueue_safety_wit_2.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_3 : DeInitDataqueue_safety_wit_3.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_4 : DeInitDataqueue_safety_wit_4.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_5 : DeInitDataqueue_safety_wit_5.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_6 : DeInitDataqueue_safety_wit_6.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_7 : DeInitDataqueue_safety_wit_7.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_8 : DeInitDataqueue_safety_wit_8.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_9 : DeInitDataqueue_safety_wit_9.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_10 : DeInitDataqueue_safety_wit_10.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_11 : DeInitDataqueue_safety_wit_11.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_12 : DeInitDataqueue_safety_wit_12.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_13 : DeInitDataqueue_safety_wit_13.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_14 : DeInitDataqueue_safety_wit_14.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_15 : DeInitDataqueue_safety_wit_15.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_safety_wit_16 : DeInitDataqueue_safety_wit_16.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_2_1 : DeInitDataqueue_entail_wit_2_1.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_2_2 : DeInitDataqueue_entail_wit_2_2.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_3_1 : DeInitDataqueue_entail_wit_3_1.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_3_2 : DeInitDataqueue_entail_wit_3_2.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_return_wit_1 : DeInitDataqueue_return_wit_1.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_partial_solve_wit_1 : DeInitDataqueue_partial_solve_wit_1.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_partial_solve_wit_2 : DeInitDataqueue_partial_solve_wit_2.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_partial_solve_wit_3_pure : DeInitDataqueue_partial_solve_wit_3_pure.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_partial_solve_wit_3 : DeInitDataqueue_partial_solve_wit_3.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_partial_solve_wit_4_pure : DeInitDataqueue_partial_solve_wit_4_pure.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_partial_solve_wit_4 : DeInitDataqueue_partial_solve_wit_4.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_partial_solve_wit_5_pure : DeInitDataqueue_partial_solve_wit_5_pure.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_partial_solve_wit_5 : DeInitDataqueue_partial_solve_wit_5.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_partial_solve_wit_6_pure : DeInitDataqueue_partial_solve_wit_6_pure.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_partial_solve_wit_6 : DeInitDataqueue_partial_solve_wit_6.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_partial_solve_wit_7_pure : DeInitDataqueue_partial_solve_wit_7_pure.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_partial_solve_wit_7 : DeInitDataqueue_partial_solve_wit_7.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_partial_solve_wit_8_pure : DeInitDataqueue_partial_solve_wit_8_pure.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_partial_solve_wit_8 : DeInitDataqueue_partial_solve_wit_8.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_1_split_goal_1 : DeInitDataqueue_entail_wit_1_split_goal_1.
+Proof. Show. Abort.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_1_split_goal_2 : DeInitDataqueue_entail_wit_1_split_goal_2.
+Proof. Show. Abort.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_1 : DeInitDataqueue_entail_wit_1.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_4_1_split_goal_1 : DeInitDataqueue_entail_wit_4_1_split_goal_1.
+Proof. Show. Abort.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_4_1_split_goal_2 : DeInitDataqueue_entail_wit_4_1_split_goal_2.
+Proof. Show. Abort.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_4_1_split_goal_3 : DeInitDataqueue_entail_wit_4_1_split_goal_3.
+Proof. Show. Abort.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_4_1 : DeInitDataqueue_entail_wit_4_1.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_4_2_split_goal_1 : DeInitDataqueue_entail_wit_4_2_split_goal_1.
+Proof. Show. Abort.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_4_2_split_goal_2 : DeInitDataqueue_entail_wit_4_2_split_goal_2.
+Proof. Show. Abort.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_4_2_split_goal_3 : DeInitDataqueue_entail_wit_4_2_split_goal_3.
+Proof. Show. Abort.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_4_2 : DeInitDataqueue_entail_wit_4_2.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_4_3_split_goal_1 : DeInitDataqueue_entail_wit_4_3_split_goal_1.
+Proof. Show. Abort.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_4_3_split_goal_2 : DeInitDataqueue_entail_wit_4_3_split_goal_2.
+Proof. Show. Abort.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_4_3 : DeInitDataqueue_entail_wit_4_3.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_4_4_split_goal_1 : DeInitDataqueue_entail_wit_4_4_split_goal_1.
+Proof. Show. Abort.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_4_4_split_goal_2 : DeInitDataqueue_entail_wit_4_4_split_goal_2.
+Proof. Show. Abort.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_4_4 : DeInitDataqueue_entail_wit_4_4.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_5_1 : DeInitDataqueue_entail_wit_5_1.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_5_2 : DeInitDataqueue_entail_wit_5_2.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_5_3 : DeInitDataqueue_entail_wit_5_3.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_entail_wit_5_4 : DeInitDataqueue_entail_wit_5_4.
+Proof. Show. Admitted.
+
+Lemma proof_of_DeInitDataqueue_which_implies_wit_1 : DeInitDataqueue_which_implies_wit_1.
+Proof. Show. Admitted.
+

@@ -1,0 +1,9 @@
+# Missing alignment at memset byte-to-fields view
+
+Exact assigned split: proof_of_InitDataqueue_which_implies_wit_2_split_goal_spatial, parent proof_of_InitDataqueue_which_implies_wit_2. Its precondition only owns CharArray.full p sizeof(DataQueue) zeros; p is arbitrary and no alignment fact is present. The postcondition owns UShort, Ptr and Int typed stores, whose valid_object includes alignment 2 or 4. ABI offset/size equations do not imply that an arbitrary base address is aligned.
+
+Rocq MCP inspected the actual current generated statement, printed CharArray.full and valid_object, and proved `(1 # UShort |-> 0) |-- False` by unfolding store_ushort/store_uinteger and valid_object: the pure hypothesis includes 1 mod 2 = 0, contradictory. CharArray cells only require alignment 1. Thus 20 zero bytes starting at odd address demonstrate the missing premise; no full concrete heap countermodel is claimed. Both original and strategy alternatives require the impossible typed front resource for odd p.
+
+Repair the which-implies annotation after memset in canonical InitDataqueue.c to explicitly retain addr_aligned(p_queue,4) on its left side (and preserve it as needed). The fact already follows from entry DataqueueStorage and the preceding which-implies, so this is an annotation framing repair, not new public Require or trust. Do not alter generated VC manually.
+
+The three wit_1 splits were separately proved Qed in Rocq MCP and saved in allowed manual spans. Initial group-development compiled these but failed in wit_1 top-level Goal_apply branch ordering. That unfinished top-level was restored to Abort; wit_2 also remains Abort. No whole-group completion is claimed. No C/lib/goal/auto/check edits or added assumptions. Terminal report marks actual annotation gap, not tactic search failure. Finalize need not compile the impossible target to accept the diagnosis.

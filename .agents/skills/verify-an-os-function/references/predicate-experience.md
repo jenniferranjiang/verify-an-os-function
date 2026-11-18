@@ -176,13 +176,38 @@
    这里只替换数组的组织方式；`store_sem_bucket` 仍描述单个元素，
    `semaphore_buckets_ok` 仍描述数组内容与模块 abstract state 的关系。
 
-4. 只有当 C 形态确实是“数组里放指针，指针再指向外面的对象”时，才优先考虑
-   `storemap`/`store_map` 这类地址到资源的映射谓词。例如若源码是 `T *table[N]`，
-   或者 manager 中维护的是一组不连续分配的 object/header 指针，那么数组本体只拥有
-   各个指针槽和值，真正的对象资源位于这些指针指向的地址上；此时可以用 `storearray`
-   描述指针数组，用 `storemap` 描述外部地址集合对应的对象资源。
+4. 当 C 中没有用于枚举某类对象的全局指针表或管理链，接口由 caller 给出对象地址，
+   并且对象在成功初始化后才将内存资源交入 `os_inv` 时，优先用地址到抽象状态的
+   partial function 描述全部已发布对象，再用 `store_map` 组织它们的内存资源。
+   不要为了描述这个逻辑集合而虚构 C 中不存在的全局链表或根指针。
 
-   判断用 storearray 还是 storemap，不要只看类型里有没有 *。要看真正的对象在哪里。如果对象本体连续放在数组里，就用数组谓词；如果数组里只是放指针，真正对象在外面、地址不连续，才用 map 谓词。
+   例如 Dataqueue 的结构地址由 caller 提供，Init 另行分配元素数组。可以采用：
+
+   ```coq
+   dataqueue_map : addr -> option DataQueueAbs
+   store_dataqueue : addr -> DataQueueAbs -> Assertion
+   (* os_inv 中的模块资源项： *)
+   store_map store_dataqueue dataqueue_map
+   ```
+
+   `dataqueue_map p = Some q` 表示地址 `p` 的对象已发布，抽象状态为 `q`。
+   对象自身地址由 key 提供，value 不再重复保存自身地址；对象内部的数组指针等字段
+   仍属于 value。lookup 是纯事实，访问字段的权限须从 `store_map` 拆出对应 cell。
+   cell 应完整描述交入 `os_inv` 的结构和附属资源，避免和其他模块重复拥有内存。
+
+   初始化前及尚未发布的中间阶段，对象资源由 caller 或初始化函数局部持有；
+   成功时在旧 key 为 `None` 的位置写入 `Some q`，同时把资源交入 `os_inv`，
+   其余 key 保持不变。失败时按真实路径回收已取得的资源，不发布该对象。
+   `None` 只表示不在已发布集合中，不表示这个地址没有已分配的私有内存。
+   对象撤回、资源释放和允许并发使用的生命周期条件须分别描述；map 本身不保证
+   地址在释放后不被复用。实际存在部分发布的实现，应按其真实交接阶段建模，
+   不能机械套用“整个 Init 成功后才发布”。
+
+   而若 C 中确有 `T *table[N]` 或管理链，应描述这些结构的真实内存及其与对象 map
+   的成员关系，使用 `store_array`描述指针数组，而外部分散对象可用 `store_map`；
+   链表的顺序和链指针由链表谓词描述。同一对象字段不能被两者重复拥有。
+   若对象本体连续存放在数组中，则直接用数组谓词组织它们。
+   选择依据是对象的位置和资源交接方式，不是类型里是否有 `*`，也不是是否由 malloc 分配。
 
 5. 信号量等待队列的纯状态建议直接保存等待任务的地址，去掉只有
    `waiter_task : addr` 一个字段的 `SemaphoreWaiter` 包装，将

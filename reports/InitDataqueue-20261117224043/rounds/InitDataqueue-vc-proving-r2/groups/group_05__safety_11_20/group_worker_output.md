@@ -1,0 +1,5 @@
+# safety_11_20 r2 delivery
+
+Reused the r1 accepted safety groups 2/3/4 proofs for ten top-level goals and the two assigned safety12 split goals. Current statements were compared with annotation-attempt1/after: the propagated explicit alignment premise changes binder numbering, but none of the reused proof scripts refer to numbered premises. Constant/contradiction goals use explicit LLM_pre_process with lia/int_auto; the two arithmetic splits extract NodeNumber bounds from its UShort store. The aggressive parent dispatches split1 then split2 with Goal_apply.
+
+The current controller group-check exited 0 with status passed in 29.56 seconds and recompiled the current r2 goal, auto, manual and assigned wrapper. This is current proof validation, not reliance on historical Qed alone. No new assumptions, libraries, helpers or imports were added. Only the twelve assigned proof spans changed; all other content mechanically matches the current canonical manual. No MCP replay was necessary for unchanged proof scripts after statement comparison; formal current compilation passed.

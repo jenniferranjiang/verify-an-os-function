@@ -1,0 +1,4 @@
+{"at": "2026-11-16T16:38:11.281819Z", "phase": "intake", "event": "run-initialized", "details": {"run_id": "InitDataqueue-20261117003811"}}
+{"at": "2026-11-16T16:38:21.770084Z", "phase": "annotation", "event": "owner-claimed", "details": {"attempt": "InitDataqueue-annotation-r1", "owner": "annotation/InitDataqueue-20261117003811"}}
+{"at": "2026-11-16T16:39:01.854967Z", "phase": "annotation", "event": "command-timing", "details": {"command": "coq-check", "attempt_id": "InitDataqueue-annotation-r1", "stage": "coq-check", "started_at": "2026-11-16T16:39:01.822617Z", "elapsed_seconds": 0.02268309499777388, "exit_code": 0}}
+{"at": "2026-11-16T16:39:02.182709Z", "phase": "annotation", "event": "command-timing", "details": {"command": "symexec", "attempt_id": "InitDataqueue-annotation-r1", "stage": "symexec", "started_at": "2026-11-16T16:39:02.120940Z", "elapsed_seconds": 0.04914143299538409, "exit_code": 1}}

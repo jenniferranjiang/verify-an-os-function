@@ -31,7 +31,7 @@ Definition dataqueue_peak_entry (sg : StableGlobalState) (p : addr)
     (states : VarGlobalState -> Prop) : Prop :=
   forall observed, states observed ->
     os_inv sg observed |--
-      “ exists q, In q observed.(os_dataqueues) /\ q.(dq_addr) = p ”.
+      “ exists q, observed.(os_dataqueues).(dataqueue_map) p = Some q ”.
 
 (** 一次锁内查询的完整行为：front=rear时None，否则返回当前front槽。
     after=before仅表示这一次锁内操作不写任何OS对象，包括queue数组及
@@ -40,7 +40,7 @@ Definition abs_dataqueue_peak_locked (p : addr)
     : program VarGlobalState (option DataqueueElem) :=
   {| nrm := fun before result after =>
        after = before /\ exists q,
-         In q before.(os_dataqueues) /\ q.(dq_addr) = p /\
+         before.(os_dataqueues).(dataqueue_map) p = Some q /\
          ((q.(dq_front) = q.(dq_rear) /\ result = None) \/
           (q.(dq_front) <> q.(dq_rear) /\ exists e,
             dataqueue_peak q = Some e /\ result = Some e));
@@ -55,8 +55,8 @@ Definition abs_dataqueue_peak (sg : StableGlobalState) (p : addr)
   os_atomic_cmd (abs_dataqueue_peak_locked p).
 
 (** 借出已登记queue后保留所有其他OS资源及其精确归还关系；Peak读后交回
-    同一dataqueue_owned即可恢复同一锁内os_inv。仅陈述待证义务，不是公理。 *)
-Definition dataqueue_peak_focus_obligation : Prop := forall sg st q,
-  In q st.(os_dataqueues) ->
+    同一store_dataqueue即可恢复同一锁内os_inv。仅陈述待证义务，不是公理。 *)
+Definition dataqueue_peak_focus_obligation : Prop := forall sg st p q,
+  st.(os_dataqueues).(dataqueue_map) p = Some q ->
   os_inv sg st |--
-    dataqueue_owned q ** (dataqueue_owned q -* os_inv sg st).
+    store_dataqueue p q ** (store_dataqueue p q -* os_inv sg st).

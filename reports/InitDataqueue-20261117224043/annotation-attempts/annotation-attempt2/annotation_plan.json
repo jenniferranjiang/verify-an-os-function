@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "InitDataqueue",
+      "meaning": "Unchanged frozen map-based initialization and partial-cleanup contract."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": [
+    {
+      "source": {
+        "attempt": "InitDataqueue-vc-proving-r1:storage_views",
+        "name": "proof_of_InitDataqueue_which_implies_wit_2_split_goal_spatial",
+        "annotation_location": "InitDataqueue.c which-implies immediately after memset"
+      },
+      "current": [
+        "proof_of_InitDataqueue_which_implies_wit_2_split_goal_spatial"
+      ],
+      "old_gap": "Post-memset byte view discarded entry addr_aligned(p_queue,4); byte cells provide alignment1, typed stores require alignment2/4.",
+      "change": "Included existing addr_aligned(p_queue,4) on left and right of the local which-implies annotation. No public Require or ABI assumption changed.",
+      "result": "resolved"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "InitDataqueue",
+      "meaning": "Frozen approved initialization spec: publish empty queue on success, otherwise retire partial object and return -1 with actual negative semaphore codes."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

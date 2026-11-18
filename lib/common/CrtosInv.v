@@ -543,14 +543,15 @@ Qed.
 
 (** Init成功在解锁前将私有对象交给原os_inv内的新模块分量；其他模块不变。
     只有真实已建立的ready和semaphore关联才能发布；不是额外的trusted API。 *)
-Definition dataqueue_publish_obligation : Prop := forall sg st q,
+Definition dataqueue_publish_obligation : Prop := forall sg st p q,
+  st.(os_dataqueues).(dataqueue_map) p = None ->
   dataqueue_ready q -> dataqueue_semaphores st.(os_semaphores) q ->
-  os_inv sg st ** dataqueue_owned q |--
-    os_inv sg (replace_dataqueues (dataqueue_publish q st.(os_dataqueues)) st).
+  os_inv sg st ** store_dataqueue p q |--
+    os_inv sg (replace_dataqueues (dataqueue_publish p q st.(os_dataqueues)) st).
 
-(** 撤回共享对象后局部唯一持有结构与数组，供DeInit回收。
-    本空间接口本身不证明没有锁外用户；注销者须在其生命周期约定中排除它们。 *)
-Definition dataqueue_withdraw_obligation : Prop := forall sg st left q right,
-  st.(os_dataqueues) = left ++ q :: right ->
+(** 撤回map条目只转移所有权，不证明锁外用户已退出或允许并发销毁。 *)
+Definition dataqueue_withdraw_obligation : Prop := forall sg st p q,
+  st.(os_dataqueues).(dataqueue_map) p = Some q ->
   os_inv sg st |--
-    os_inv sg (replace_dataqueues (left ++ right) st) ** dataqueue_owned q.
+    os_inv sg (replace_dataqueues (dataqueue_remove p st.(os_dataqueues)) st) **
+    store_dataqueue p q.

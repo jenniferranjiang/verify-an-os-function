@@ -1,8 +1,10 @@
 # 源码修改前后对照
 
-更新时间：2026-11-16。说明当前全局annotated C中的验证副本，**没有修改原仓库** `/home/xinra/crtos`。下文代码是关键差异节选，省略处不表示删除原逻辑；完整C见链接。正式副本注释保留已批准缺陷修复的原代码。
+> 2026-11-17：按用户要求删除Push/Pop/_SemaphoreObtain三个分析副本。下文涉及这些副本的同步与测试是删除前的历史记录；修复及适配代码保留在[source-changes.md](source-changes.md)，不表示当前仍有对应实现文件。七份canonical、lib和VC不受此次删除影响。
 
-本报告分开列出用户批准的缺陷修复、默认规则允许的源码适配，以及尚未应用的准备项。规格注解不是源码行为修复；设计/测试通过也不代表实现证明完成。证据详见 [source-errors.md](source-errors.md) 和 [source-fix-review.md](source-fix-review.md)。
+更新时间：2026-11-16。说明当前全局annotated C中的验证副本，**没有修改原仓库** `/home/xinra/crtoslatest`。下文代码是关键差异节选，省略处不表示删除原逻辑；完整C见链接。正式副本注释保留已批准缺陷修复的原代码。
+
+本报告分开列出用户批准的缺陷修复、默认规则允许的源码适配，以及本轮上游变化的同步。规格注解不是源码行为修复；设计/测试通过也不代表实现证明完成。证据详见 [source-errors.md](source-errors.md) 和 [source-fix-review.md](source-fix-review.md)。
 
 ## 1. InitDataqueue：正确区分有效ID与创建失败
 
@@ -100,7 +102,7 @@ if (p_queue->sem_blank >= 0) {
 
 ## 3. PushDataqueue / PopDataqueue：所有timeout都执行Obtain并检查结果
 
-状态：**用户已批准，副本已修复并复核。** 当前批准副本：[Push](../../../../annotated_C/module_context/dataqueue/PushDataqueue.c)、[Pop](../../../../annotated_C/module_context/dataqueue/PopDataqueue.c)，待新spec完成时归入canonical位置。
+状态：**用户已批准，副本已修复并复核。** 当前批准副本：`Push`、`Pop`，待新spec完成时归入canonical位置。
 
 原来（以Push为例，Pop对应sem_data）：
 
@@ -238,146 +240,81 @@ if (p_queue->front != p_queue->rear) {
 
 已检查空/非空路径与保存值恢复。此修改解决检查和读取的时序一致性，仍要求调用期间目标对象满足共享对象的生命周期前提。
 
-## 6. _SemaphoreObtain：零超时不转换成1tick
+## 6. 按crtoslatest同步Semaphore源码行为
 
-状态：**用户本次已批准，副本已应用且main独立复核通过；尚未据此宣称新spec完成。** [修复副本](../../../../annotated_C/module_context/semaphore/_SemaphoreObtain.c)
+本轮来源为 `/home/xinra/crtoslatest`，commit `a07641a0b58469ae3ea19317cce2cf48974989bb`。下面是上游代码变化的同步，不是新增的本地缺陷补丁。
 
-原来：
+### 非法ID在查找前拒绝
+
+旧验证输入只检查 `id < 0`。新版SemIdInvalid还拒绝 `id > UINT16_MAX`，因此65536不能再窄化为ID0并操作另一个对象。副本等价内联为：
 
 ```c
-if (WAITING_FOREVER == msec)
-    wait_time = WAITING_FOREVER;
-else
-    wait_time = CalculateTickFromTimeMs(msec);
+if (id < 0 || id > 65535)
+    return;
 ```
 
-批准后的修改：
+_Delete使用上面的void返回，_Obtain上下文使用-ERROR返回。合法范围内仍由IdGetObj判断是否登记；例如65535通过表示范围检查，不等于它一定是已分配ID。Lib增加semaphore_id_invalid，并同步OC删除抽象、IC删除效果和quiescent条件；越界ID保持状态，不要求无关队列提供删除资源。
+
+### Obtain直接采用新版等待与失败处理
+
+`_SemaphoreObtain源码上下文`已从新源码刷新，保留非法负timeout拒绝、零timeout不转换、有限等待设置失败后唤醒本任务并返回-ENOMEMORY：
 
 ```c
+if (msec < 0 && msec != WAITING_FOREVER)
+    return -ERROR;
 if (msec == 0)
     wait_time = 0;
 else if (WAITING_FOREVER == msec)
     wait_time = WAITING_FOREVER;
 else
-    wait_time = CalculateTickFromTimeMs(msec);
-```
-
-### 原代码为什么有“零等待分支”却仍然等待
-
-_Obtain后面原本就有这段控制流：先看semaphore计数是否大于0，有额度就递减并返回EOK；没有额度，再检查 `wait_time == 0`，为零就返回-ETIMEOUT。这个分支本身没有缺失，问题发生在更早的单位转换。
-
-真实CalculateTickFromTimeMs会把计算结果为0的情况提升到MIN_TICKS=1，输入0也如此。当前配置TICK_PER_SECOND=100，于是 `msec=0 → converter(0)=1 → wait_time=1`。资源不足时，`wait_time==0` 为假，继续将任务加入等待链，调用 `KTaskSetDelay(task, 1)`，解锁并请求调度。这里能确定的是进入等待分支并请求1tick延时，不能把它表述成一定恰好等待某个墙钟时长。
-
-### 为什么修复Obtain，而不修改时间转换函数
-
-“0表示只尝试一次、不能等待”是Obtain调用接口的特殊含义。时间转换函数本身采用最少1tick的规则，其他caller可能依赖该行为。修改converter会扩大影响范围，并改变已有可复用规格。本次最小修复是在Obtain里先识别这个特殊值，其余输入继续使用原转换。
-
-修复后资源有额度时仍递减成功，**不会因为timeout=0就直接拒绝获取**；只有资源不足时，wait_time保持0，命中已有立即超时分支，不进入挂起/延时/调度。-1仍保留无限等待语义；其他timeout仍原样转换，未另外修正舍入规则或改变负值输入的原处理。
-
-### 反例和实际副本检查说明了什么
-
-测试直接使用实际converter和Obtain函数体，只替换锁、ID查询、等待链、delay、scheduler等外围依赖以记录调用。对有效ID、value=0、timeout=0：
-
-| 观察项 | 原版 | 已应用副本 |
-| --- | --- | --- |
-| Suspend | 1次 | 0次 |
-| SetDelay | 1次，参数1tick | 0次 |
-| Assign | 1次 | 0次 |
-| 返回来源 | 调度stub模拟唤醒后的task->exstatus | 原有立即-ETIMEOUT分支 |
-
-测试中两次返回值均为-2，但返回前经历的过程完全不同；只比返回码会漏掉问题。另检查计数可用、负ID、有限等待、无限等待。Main核对实际副本与批准diff逐token一致，并重新编译运行测试通过。这证明所述分支修复，不是完整scheduler、等待时间或并发行为证明。
-
-## 7. 其余已应用的切片与工具适配
-
-| 项目 | 原来 | 验证副本 | 依据及限制 |
-| --- | --- | --- | --- |
-| 固定done分派 | done.SemaphoreCreate/Delete(...) | 调用_SemaphoreCreate/Delete(...) | 原静态表目标确定；不改变算法 |
-| 内部嵌套锁 | _SemaphoreCreate/Delete自己Lock/Unlock | 当前IC副本注释去掉嵌套锁，caller持锁 | 只适用于当前锁内调用场景，不改全局OC版本 |
-| IRQ宏 | DISABLE_INTERRUPT/ENABLE_INTERRUPT | DisableLocalInterrupt/EnableLocalInterrupt | 精确宏目标；资源交接使用用户已批准信任，不证明硬件mstatus |
-| 旧NULL检查 | 空指针循环的NULL_PARAM_CHECK宏 | NULL_PARAM_CHECK_1正常返回模型 | 仅描述正常返回条件，不把空指针行为改写为成功 |
-| 调试 | KPrintf、SYS_KDEBUG_LOG、KDEBUG_NOT_IN_INTERRUPT | 按规则注释移除 | TrustBase允许的调试适配 |
-| CONTAINER_OF | 从id节点取Semaphore指针的宏 | CONTAINER_OF_SEMAPHORE_ID模型 | 保持字段偏移对应，沿用已允许模型 |
-| 调度宏 | DO_KTASK_ASSIGN | KTASK_ASSIGN模型调用 | 沿用项目规则与完整callee契约 |
-| 类型和头文件 | 原编译单元类型/匿名结构、配置 | 一函数一文件，模块header，具名tag；ILP32非SMP | 保持字段次序与选定32位布局；不是修改原硬件工程配置 |
-
-### 这些适配为什么需要单独记录
-
-固定done目标是把源码中可唯一确定的间接调用写成直接调用，方便检查调用边界；如果函数表可能运行时改变，就不能据此随意替换。这里依据实际静态表，而不是按函数名猜测。
-
-嵌套锁适配只用于Init已持锁、DeInit已进入IRQ临界区的调用场景。外层仍负责取得和归还共享资源，内部C的分配、ID、链表操作与返回分支保留。不能拿这个IC副本代表外部任意调用的OC版本，也不能因此删掉真实新Obtain/Abandon所需的锁。
-
-旧NULL宏、CONTAINER_OF和调度宏采用的是项目允许的模型边界，后续证明依赖这些模型；调试移除也依赖TrustBase。它们不同于“证明原宏/硬件实现正确”。IRQ宏展开保留同一个保存值，用户信任的是资源交接约定，不是把硬件中断实现验证了一遍。
-
-一函数一文件与具名结构tag是输入组织；ILP32选择则是本轮验证配置，已核对DataQueue结构20字节、DataElem结构8字节及字段偏移。不能据此声称64位硬件部署也被当前布局证明覆盖。
-
-## 8. 已识别但尚未应用的适配
-
-_SemaphoreObtain在等待路径调度后直接 `return task->exstatus;`。task指针是在先前临界区取得的，但解锁和调度之后，先前的共享内存读取权限不能一直保留在caller手中。exstatus又是唤醒/超时路径可更新的共享字段，后续读取需要重新按协议取得资源。
-
-拟按规则改为“加锁→读取exstatus到局部变量→解锁→返回局部变量”。这只保护返回值读取，不把等待和调度放进锁，也不证明task在等待期间永不退役。当前尚未应用，不能算入已完成修改；它与第6节零超时算法修复是两个独立事项。应用后还须检查新锁成对恢复、返回值一致及task生命周期前提。
-
-当前没有修复或假定解决Push/Pop跨锁对象退役/ID复用、Obtain成功后的ring条件，以及Abandon失败被忽略问题。设计须如实表达实际行为和适用前提，不能将未发生的修改写成已修复。
-
-## 9. 后续依赖中新发现的问题：尚未修改
-
-以下问题是在继续设计Push/Pop的等待调用链时发现的，**不属于已批准、已应用的源码修改**。单独列在这里，是为了说明为什么零超时修好后，仍不能立即把完整等待路径标为设计完成。详细证据及状态见 [source-errors.md](source-errors.md)。
-
-### 9.1 延时链排序与tick回绕不一致
-
-KTaskSetDelay原来使用普通无符号数值比较决定插入位置：
-
-```c
-if (delay->ticks < dnode->ticks) {
-    DoubleLinkListInsertNodeBefore(nodelink, &delay->link);
-    break;
+    wait_time = CalculateTickFromTimeMs((uint32)msec);
+/* ... 挂入semaphore pending ... */
+if (wait_time > 0 && KTaskSetDelay(task, wait_time) != EOK) {
+    KTaskWakeup(task->id.id);
+    CriticalAreaUnLock(lock);
+    return -ENOMEMORY;
 }
 ```
 
-32位tick达到最大值后回到0，所以数值更小不一定表示更早到期。具体例子：
+这是实际新源码分支的节选，副本保留原嵌套if写法。新源码已经处理这些路径，当前副本不再把零超时分支标为本地补丁。该文件仍是分析上下文，尚无完整Obtain函数规格或实现证明。
 
-1. 当前tick是 `0xfffffffe`，已有任务A在 `0xffffffff` 到期，即再过1tick。
-2. 新任务B请求3ticks，deadline回绕成1，实际应比A晚2ticks到期。
-3. 原比较器看到 `1 < 0xffffffff`，把B插在A前面。
-4. tick达到 `0xffffffff`，CheckTaskDelay先看队首B。它使用回绕差值判断，正确认定deadline=1还未到期，于是break，不再检查后面的A。
-5. A已经到期，却被B挡住；反例中直到tick=1，B和A才被依次处理，A晚了2ticks。
+## 7. 新NULL诊断宏的适配
 
-这不是仅与参考证明的定义不同，而是插入顺序与实际检查顺序不一致。已用实际SetDelay、UnSetDelay、CheckTaskDelay和DLL函数体构造可运行反例，只替换外围系统依赖，观察到上述结果。
+旧验证输入使用NULL_PARAM_CHECK_1及 `Ensure p != 0`，对应旧宏遇NULL死循环的正常返回模型。crtoslatest的NULL_PARAM_CHECK只输出诊断并计数，然后继续执行，不能再由它推出非空。
 
-最小比较器提案为：
+当前Init/DeInit/Peak已移除旧模型声明与调用，Push/Pop分析副本也按规则注释掉诊断宏：
 
 ```c
-if (delay->ticks != dnode->ticks &&
-    (uint32)(dnode->ticks - delay->ticks) < TICK_SIZE_MAX / 2) {
-    DoubleLinkListInsertNodeBefore(nodelink, &delay->link);
-    break;
-}
+/* NULL_PARAM_CHECK(p_queue); latest log/count diagnostic omitted. */
 ```
 
-同一反例中，提案让A在B前面，A在原deadline被处理，B仍等到tick=1。这仍依赖半周期内可比较的deadline窗口；不能把一个反例修复说成通用任意跨度延时都正确。**提案未批准、未应用**，当前不声称KTaskSetDelay已有可直接适用的spec。
+后续访问权限由真实存储资源承担：Init入口的DataqueueStorage、DeInit的dataqueue_owned，以及Peak加锁后从os_inv取得的队列资源。没有为了移除宏而凭空增加非空假设或trusted函数。
 
-### 9.2 有限等待时Delay分配失败，但Obtain忽略错误
+## 8. 调度、生命周期宏及其他工具适配
 
-当前真实调用顺序是：
+当前验证配置为ILP32、非SMP、100Hz，未定义KERNEL_STATIC_OBJECTS和KERNEL_DEFER_IPC_SCHED。因此新版wrapper的生命周期检查宏展开为空，DO_KTASK_ASSIGN_ON_WAKE在本配置展开为DO_KTASK_ASSIGN，继续使用既有KTASK_ASSIGN模型。若以后改变这些配置，须重新核对分支。
+
+固定done分派仍按真实静态表解析；调试打印按TrustBase注释移除；IRQ宏仍展开为已有授权的DisableLocalInterrupt/EnableLocalInterrupt并原样传回保存值；CONTAINER_OF沿用字段偏移模型。全局Semaphore canonical保留OC body及具名IC契约，IC源码适配规则见 [design.md](design.md)。这些是已明确条件的验证适配，不是原宏或硬件实现已获证明。
+
+## 9. Obtain返回exstatus的共享读取适配
+
+新版原代码在调度后直接 `return task->exstatus;`。为按共享访问规则取得该字段，当前分析副本改为：
 
 ```c
-LinklistSuspend(&sem->pend_list, task, LINKLIST_FLAG_PRIO);
-if (wait_time > 0) {
-    KTaskSetDelay(task, wait_time); /* 返回值未检查 */
-}
+lock = CriticalAreaLock();
+int32 result = task->exstatus;
 CriticalAreaUnLock(lock);
-DO_KTASK_ASSIGN;
+return result;
 ```
 
-如果task此前没有Delay对象，SetDelay需要分配内存。分配失败会返回-ENOMEMORY，而且没有创建超时节点。但此时task已经挂起并进入semaphore等待链，Obtain又丢弃错误继续调度。
+只保护读取，不把等待或调度放入锁内；两个出口资源仍需由后续Obtain规格描述。这个最小适配不提供task跨等待期间的生命周期保证，也不表示Obtain实现证明完成。
 
-在之后没有Abandon/Delete或其他显式唤醒的执行里，CheckTaskDelay找不到这个任务的超时节点，所请求的有限timeout不会触发它的唤醒。与第6项相反，这里不是本应不等待却等待，而是请求有限等待却没有建立结束等待的机制。
+## 当前基线和检查依据
 
-仅添加“SetDelay失败就return”也不够：任务已被挂起并链接到pending，必须先撤销这次加入、恢复任务可运行状态，并保证临界区正确退出。具体回滚实现需要核对任务/ready/pending资源后再提出可应用补丁。**目前仅完成源码路径分析，没有实现修复，也没有声称已用完整调度测试证明非终止。**
+当前原data_queue.c SHA-256为 `a8b12c43c3f2061df08320f50daaabda7ada033e40670c2d37ea2d8ef774f601`，与之前逐字相同，因此第1–5节的已批准修复/适配仍有同样依据。semaphore.c新SHA-256为 `dafd02bf7c6fa5a7324c6e0f824d9a1ddc1544c43f9e71aabeb902d832f30ab8`。
 
-这两项不影响已完成的Init/初始化回滚/Peak设计路径，但会阻塞新的完整Push/Pop等待路径。没有用隐含“永不回绕”或“分配必成功”条件把它们排除。
+新源码Delay和Tick行为已在来源复查中确认；本轮未给它们新增canonical或宣称相关函数规格已完成。当前仍存在的源码错误仅列于 [source-errors.md](source-errors.md)，本轮同步及针对性检查见 [source-fix-review.md](source-fix-review.md)。
 
-## 源码基线与检查范围
+## 2026-11-17 QCP语法适配
 
-原data_queue.c SHA-256：`a8b12c43c3f2061df08320f50daaabda7ada033e40670c2d37ea2d8ef774f601`；semaphore.c：`d5b41c3bde69e0416431d2425c61e35453778ae4b1569747f2c2258f3dfe16ec`；tick.c：`4db5cceacbf0f7a6c4d72151c9e66cdf30bdfa0eb455820cdf5048365456323d`。
-
-Init/DeInit已检查ID0、分配与两次创建失败、重复清理及n=0/1；Peak检查空/非空；Push/Pop已检查多种timeout下成功/失败及ID锁内缓存。早期Push/Pop测试用semaphore stub，不能覆盖第6节真实Obtain缺陷。所有测试仅支持所述控制流与布局结论，不是完整并发证明；本trial尚未完成C实现证明。
+InitDataqueue唯一active body中的 `p_queue->front = p_queue->rear = 0;` 拆为 `p_queue->rear = 0; p_queue->front = 0;`，原表达式保留于注释。两个不同结构字段按原C求值顺序赋相同值，无额外调用或路径变化。这是QCP解析适配，不是新算法修复。header的Extern Coq按kind/term分块，声明内容和顺序不变。新增which-implies及Assert只生成证明义务，不改变C执行。

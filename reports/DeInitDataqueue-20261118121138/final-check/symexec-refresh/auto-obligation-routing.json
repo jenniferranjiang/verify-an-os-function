@@ -1,0 +1,359 @@
+{
+  "promoted": [
+    "proof_of_DeInitDataqueue_safety_wit_1",
+    "proof_of_DeInitDataqueue_safety_wit_2",
+    "proof_of_DeInitDataqueue_safety_wit_3",
+    "proof_of_DeInitDataqueue_safety_wit_4",
+    "proof_of_DeInitDataqueue_safety_wit_5",
+    "proof_of_DeInitDataqueue_safety_wit_6",
+    "proof_of_DeInitDataqueue_safety_wit_7",
+    "proof_of_DeInitDataqueue_safety_wit_8",
+    "proof_of_DeInitDataqueue_safety_wit_9",
+    "proof_of_DeInitDataqueue_safety_wit_10",
+    "proof_of_DeInitDataqueue_safety_wit_11",
+    "proof_of_DeInitDataqueue_safety_wit_12",
+    "proof_of_DeInitDataqueue_safety_wit_13",
+    "proof_of_DeInitDataqueue_safety_wit_14",
+    "proof_of_DeInitDataqueue_safety_wit_15",
+    "proof_of_DeInitDataqueue_safety_wit_16",
+    "proof_of_DeInitDataqueue_entail_wit_2_1",
+    "proof_of_DeInitDataqueue_entail_wit_2_2",
+    "proof_of_DeInitDataqueue_entail_wit_3_1",
+    "proof_of_DeInitDataqueue_entail_wit_3_2",
+    "proof_of_DeInitDataqueue_return_wit_1",
+    "proof_of_DeInitDataqueue_partial_solve_wit_1",
+    "proof_of_DeInitDataqueue_partial_solve_wit_2",
+    "proof_of_DeInitDataqueue_partial_solve_wit_3_pure",
+    "proof_of_DeInitDataqueue_partial_solve_wit_3",
+    "proof_of_DeInitDataqueue_partial_solve_wit_4_pure",
+    "proof_of_DeInitDataqueue_partial_solve_wit_4",
+    "proof_of_DeInitDataqueue_partial_solve_wit_5_pure",
+    "proof_of_DeInitDataqueue_partial_solve_wit_5",
+    "proof_of_DeInitDataqueue_partial_solve_wit_6_pure",
+    "proof_of_DeInitDataqueue_partial_solve_wit_6",
+    "proof_of_DeInitDataqueue_partial_solve_wit_7_pure",
+    "proof_of_DeInitDataqueue_partial_solve_wit_7",
+    "proof_of_DeInitDataqueue_partial_solve_wit_8_pure",
+    "proof_of_DeInitDataqueue_partial_solve_wit_8"
+  ],
+  "generator_auto_lemmas": [
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_1",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_2",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_3",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_4",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_5",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_6",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_7",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_8",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_9",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_10",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_11",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_12",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_13",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_14",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_15",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_safety_wit_16",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_entail_wit_2_1",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_entail_wit_2_2",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_entail_wit_3_1",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_entail_wit_3_2",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_return_wit_1",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_partial_solve_wit_1",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_partial_solve_wit_2",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_partial_solve_wit_3_pure",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_partial_solve_wit_3",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_partial_solve_wit_4_pure",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_partial_solve_wit_4",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_partial_solve_wit_5_pure",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_partial_solve_wit_5",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_partial_solve_wit_6_pure",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_partial_solve_wit_6",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_partial_solve_wit_7_pure",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_partial_solve_wit_7",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_partial_solve_wit_8_pure",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    },
+    {
+      "name": "proof_of_DeInitDataqueue_partial_solve_wit_8",
+      "unfinished_markers": [
+        {
+          "kind": "Admitted",
+          "line": 2
+        }
+      ]
+    }
+  ],
+  "generator_auto_sha256": "aa92fe4cdb1b5df0f47490200f990ebf2ac1af83b234c5c420b2c00e28b393c3",
+  "generator_manual_sha256": "c6003473ad18bc82be79aac5ee22f8e2fddd4dc2f313ed23d6ec8c27bc2e54df",
+  "statements_preserved": true
+}

@@ -1,0 +1,82 @@
+{
+  "schema_version": 4,
+  "generation": 3,
+  "run_id": "InitDataqueue-20261117003811",
+  "case": "InitDataqueue",
+  "phase": "annotation",
+  "main_root": "/home/xinra/crtos-verify",
+  "run_root": "/home/xinra/crtos-verify/verification_runs/InitDataqueue-20261117003811",
+  "report_root": "/home/xinra/crtos-verify/reports/InitDataqueue-20261117003811",
+  "target_files": {
+    "c_file": "annotated_C/src/kernel/dataqueue/InitDataqueue.c",
+    "formal_directory": "VC",
+    "formal_case_lib": "VC/InitDataqueue_lib.v",
+    "goal_file": "VC/InitDataqueue_goal.v",
+    "proof_auto_file": "VC/InitDataqueue_proof_auto.v",
+    "proof_manual_file": "VC/InitDataqueue_proof_manual.v",
+    "goal_check_file": "VC/InitDataqueue_goal_check.v",
+    "case_name": "InitDataqueue",
+    "active_case_theory": "CRTOS_Verify.VC"
+  },
+  "problem_context": {},
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "InitDataqueue"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "CriticalAreaLock::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) Require OutsideCritical(sg, before) Ensure exists observed, Crtos_RTrans(before, observed) && InsideCritical(sg, observed) * os_inv(sg, observed)",
+        "CriticalAreaUnLock::<default>": "With (sg : StableGlobalState) (held after : VarGlobalState) Require Crtos_GTrans(held, after) && InsideCritical(sg, held) * os_inv(sg, after) Ensure OutsideCritical(sg, after)",
+        "x_malloc::<default>": "Require emp Ensure (size == 0 && __return == 0) || (size > 0 && __return == 0) || (size > 0 && __return > 0 && __return <= UINT_MAX - size && addr_aligned(__return, 4) && CharArray::undef_full(__return, size))",
+        "memset::<default>": "Require 0 <= c && c <= 127 && CharArray::undef_full(s, n) Ensure __return == s && CharArray::full(s, n, repeat_Z(c, n))",
+        "KSemaphoreCreate::dataqueue_ic": "dataqueue_ic With (sg : StableGlobalState) (before : VarGlobalState) Require os_inv(sg, before) Ensure exists after, ((__return == -5) || (0 <= __return && __return < 128)) && semaphore_create_ic_effect(sg, val, before, __return, after) && os_inv(sg, after)",
+        "DeInitDataqueue::init_cleanup": "init_cleanup With (sg : StableGlobalState) (before : VarGlobalState) (q : DataqueueObject) (refs : DataqueueSemRefs) X Require dq_addr(q) == p_queue && safeExec(LastSeen(before), abs_deinit_dataqueue(sg, q, refs), X) && dataqueue_owned(q) * OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(tt), X) && dataqueue_owned(dataqueue_retired(q)) * OutsideCritical(sg, after)",
+        "InitDataqueue::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_init_dataqueue(sg, p_queue, NodeNumber), X) && DataqueueStorage(p_queue) * OutsideCritical(sg, before) Ensure (exists after q, __return == 0 && In(q, os_dataqueues(after)) && dq_addr(q) == p_queue && dq_max_len(q) == NodeNumber && dq_front(q) == 0 && dq_rear(q) == 0 && dq_base(q) != 0 && 0 <= dq_sem_blank(q) && 0 <= dq_sem_data(q) && dq_sem_blank(q) != dq_sem_data(q) && safeExec(LastSeen(after), return(0), X) && OutsideCritical(sg, after)) || (exists after q, __return == -1 && dq_addr(q) == p_queue && dq_max_len(q) == NodeNumber && dq_front(q) == 0 && dq_rear(q) == 0 && dq_base(q) == 0 && ((dq_sem_blank(q) == -1 && dq_sem_data(q) == -1) || (dq_sem_blank(q) == -5 && dq_sem_data(q) == -1) || (dq_sem_blank(q) == -1 && dq_sem_data(q) == -5)) && safeExec(LastSeen(after), return(-1), X) && dataqueue_owned(q) * OutsideCritical(sg, after))"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-11-16T16:38:11.275868Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 1,
+  "dune_preparation": null,
+  "attempts": {
+    "InitDataqueue-annotation-r1": {
+      "attempt_id": "InitDataqueue-annotation-r1",
+      "phase": "annotation",
+      "status": "running",
+      "owner": "annotation/InitDataqueue-20261117003811",
+      "claimed_action": "deliver:InitDataqueue-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-16T16:38:16.431439Z",
+      "failed_vcs": [],
+      "started_at": "2026-11-16T16:38:21.752508Z"
+    }
+  },
+  "current": {
+    "annotation": "InitDataqueue-annotation-r1",
+    "vc-checking": null,
+    "vc-proving": null
+  },
+  "annotation_owner": "annotation/InitDataqueue-20261117003811",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": null,
+  "final_apply": null,
+  "final_check": null,
+  "created_at": "2026-11-16T16:38:11.275887Z",
+  "updated_at": "2026-11-16T16:38:21.765102Z"
+}

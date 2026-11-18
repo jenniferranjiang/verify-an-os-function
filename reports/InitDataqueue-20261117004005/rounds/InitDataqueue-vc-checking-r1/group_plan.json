@@ -1,0 +1,419 @@
+{
+  "groups": [
+    {
+      "id": "publish_transition",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern T-success (high risk): choose left whole-goal disjunct. Extract UShort bounds from max_len store, reduce 32/16-bit casts and sizeof(DataElem)=8; successful nonzero malloc implies n>0. Instantiate q=dataqueue_constructed p_queue_pre NodeNumber_pre retval_2 retval_3 retval_4; after=replace_dataqueues (dataqueue_publish q (os_dataqueues after_3)) after_3. Fold exact fields/padding and convert allocated n*8 bytes by induction to n None slots. From the two create effects and current os_inv establish distinct fresh IDs, empty pending and referenced objects; extend iter_sepcon with q, preserving every other OS component, and establish dataqueue_ready. Use the two effects to construct the actual successful init-phase attempt with its refs and consume safeExec of abs_init_dataqueue through os_atomic_cmd at observed, then true success branch, obtaining safeExec(ret 0) X at after. GTrans follows protocol relation; preserve InsideCritical. Never use the pure fallback alternative which would claim q already published in after_3; prove all fold/layout/refinement facts here, not by assuming obligation Props."
+        }
+      ]
+    },
+    {
+      "id": "cleanup_malloc",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_2_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern T-cleanup (high risk): positive-size malloc failure; base=0 and IDs -1,-1. Instantiate held=observed, actual after from the current invariant, q=dataqueue_constructed with exactly the stored fields; choose correct failure disjunct (third for malloc, second for first-create failure, first for second-create failure). Fold fields plus padding into dataqueue_owned; if base nonzero prove n>0 and byte-to-None-slot array conversion from UShort bounds/allocation length. Reconstruct dataqueue_init_phase_effect including actual create effects and refs (None for negative IDs; saved allocated blank pointer for successful first create). Use safeExec bind decomposition at actual observed init phase to obtain continuation Y for abs_deinit_dataqueue and forall final bridge to ret(-1) X. This transfers the existing checked cleanup entry condition from original safeExec, rather than assuming arbitrary lifecycle facts. GTrans is the existing protocol relation; frame os_inv and InsideCritical unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_2_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern T-cleanup (high risk): zero-size malloc failure; base=0 and IDs -1,-1. Instantiate held=observed, actual after from the current invariant, q=dataqueue_constructed with exactly the stored fields; choose correct failure disjunct (third for malloc, second for first-create failure, first for second-create failure). Fold fields plus padding into dataqueue_owned; if base nonzero prove n>0 and byte-to-None-slot array conversion from UShort bounds/allocation length. Reconstruct dataqueue_init_phase_effect including actual create effects and refs (None for negative IDs; saved allocated blank pointer for successful first create). Use safeExec bind decomposition at actual observed init phase to obtain continuation Y for abs_deinit_dataqueue and forall final bridge to ret(-1) X. This transfers the existing checked cleanup entry condition from original safeExec, rather than assuming arbitrary lifecycle facts. GTrans is the existing protocol relation; frame os_inv and InsideCritical unchanged."
+        }
+      ]
+    },
+    {
+      "id": "cleanup_create",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_2_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern T-cleanup (high risk): first create failed; base=retval_2, IDs -5,-1, after=after_2. Instantiate held=observed, actual after from the current invariant, q=dataqueue_constructed with exactly the stored fields; choose correct failure disjunct (third for malloc, second for first-create failure, first for second-create failure). Fold fields plus padding into dataqueue_owned; if base nonzero prove n>0 and byte-to-None-slot array conversion from UShort bounds/allocation length. Reconstruct dataqueue_init_phase_effect including actual create effects and refs (None for negative IDs; saved allocated blank pointer for successful first create). Use safeExec bind decomposition at actual observed init phase to obtain continuation Y for abs_deinit_dataqueue and forall final bridge to ret(-1) X. This transfers the existing checked cleanup entry condition from original safeExec, rather than assuming arbitrary lifecycle facts. GTrans is the existing protocol relation; frame os_inv and InsideCritical unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_2_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern T-cleanup (high risk): second create failed; base=retval_2, IDs retval_3,-5, after=after_3. Instantiate held=observed, actual after from the current invariant, q=dataqueue_constructed with exactly the stored fields; choose correct failure disjunct (third for malloc, second for first-create failure, first for second-create failure). Fold fields plus padding into dataqueue_owned; if base nonzero prove n>0 and byte-to-None-slot array conversion from UShort bounds/allocation length. Reconstruct dataqueue_init_phase_effect including actual create effects and refs (None for negative IDs; saved allocated blank pointer for successful first create). Use safeExec bind decomposition at actual observed init phase to obtain continuation Y for abs_deinit_dataqueue and forall final bridge to ret(-1) X. This transfers the existing checked cleanup entry condition from original safeExec, rather than assuming arbitrary lifecycle facts. GTrans is the existing protocol relation; frame os_inv and InsideCritical unchanged."
+        }
+      ]
+    },
+    {
+      "id": "layout_views",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_which_implies_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_InitDataqueue_which_implies_wit_1_split_goal_1": "Unfold DataqueueStorage, extract nonzero/alignment pure conjunct for numeric split or cancel CharArray.undef_full after sizeof(DataQueue)=20 for spatial split; preserve exact byte ownership.",
+            "proof_of_InitDataqueue_which_implies_wit_1_split_goal_2": "Unfold DataqueueStorage, extract nonzero/alignment pure conjunct for numeric split or cancel CharArray.undef_full after sizeof(DataQueue)=20 for spatial split; preserve exact byte ownership.",
+            "proof_of_InitDataqueue_which_implies_wit_1_split_goal_spatial": "Unfold DataqueueStorage, extract nonzero/alignment pure conjunct for numeric split or cancel CharArray.undef_full after sizeof(DataQueue)=20 for spatial split; preserve exact byte ownership."
+          }
+        },
+        {
+          "name": "proof_of_InitDataqueue_which_implies_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_InitDataqueue_which_implies_wit_2_split_goal_spatial": "Use actual ABI field offsets and sizeof(DataQueue)=20; split zero-filled CharArray into [0,2),[2,4),[4,6),padding[6,8),[8,12),[12,16),[16,20). Convert little-endian zero bytes to UShort/Ptr/Int zero cells, forget only the two padding bytes to undef_full, then reassemble separation in target order. All layout equalities must be proved from existing ABI interface; do not assume dataqueue_zero_obligation."
+          }
+        }
+      ]
+    },
+    {
+      "id": "return_results",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern R-failure 1: instantiate returned object with dataqueue_retired(q_3), state after_4; unfold dataqueue_retired projections, preserve addr/max_len/front/rear and base=0. Branch 1 has respectively sem IDs (nonnegative,-5),(-5,-1),(-1,-1); use Z.leb of nonnegative/negative to get (-1,-5),(-5,-1),(-1,-1). Apply the forall-final continuation bridge to PreH1 to obtain safeExec(ret -1) X. Select the matching output disjunct; cancel owned retired object and OutsideCritical."
+        },
+        {
+          "name": "proof_of_InitDataqueue_return_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern R-failure 2: instantiate returned object with dataqueue_retired(q_3), state after_4; unfold dataqueue_retired projections, preserve addr/max_len/front/rear and base=0. Branch 2 has respectively sem IDs (nonnegative,-5),(-5,-1),(-1,-1); use Z.leb of nonnegative/negative to get (-1,-5),(-5,-1),(-1,-1). Apply the forall-final continuation bridge to PreH1 to obtain safeExec(ret -1) X. Select the matching output disjunct; cancel owned retired object and OutsideCritical."
+        },
+        {
+          "name": "proof_of_InitDataqueue_return_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern R-failure 3: instantiate returned object with dataqueue_retired(q_3), state after_4; unfold dataqueue_retired projections, preserve addr/max_len/front/rear and base=0. Branch 3 has respectively sem IDs (nonnegative,-5),(-5,-1),(-1,-1); use Z.leb of nonnegative/negative to get (-1,-5),(-5,-1),(-1,-1). Apply the forall-final continuation bridge to PreH1 to obtain safeExec(ret -1) X. Select the matching output disjunct; cancel owned retired object and OutsideCritical."
+        },
+        {
+          "name": "proof_of_InitDataqueue_return_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern R-success: choose the left whole-goal alternative, instantiate q=q_3 and after=after_3; all scalar, membership and safeExec facts are premises. Cancel OutsideCritical. No entry/exit state equality is claimed."
+        }
+      ]
+    },
+    {
+      "id": "constants_init",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        }
+      ]
+    },
+    {
+      "id": "constants_stores",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        }
+      ]
+    },
+    {
+      "id": "allocation_guards",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: extract pure branch premises; malloc zero/nonzero or negative/nonnegative create return premises directly contradict, hence ex falso for the pure False target. No existential or resource transformation; frame all stores and os_inv."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: extract pure branch premises; malloc zero/nonzero or negative/nonnegative create return premises directly contradict, hence ex falso for the pure False target. No existential or resource transformation; frame all stores and os_inv."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: extract pure branch premises; malloc zero/nonzero or negative/nonnegative create return premises directly contradict, hence ex falso for the pure False target. No existential or resource transformation; frame all stores and os_inv."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_12",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_InitDataqueue_safety_wit_12_split_goal_1": "Extract 0<=NodeNumber_pre<=65535 from max_len UShort store (frame all other resources); compute INT_MIN/INT_MAX and use lia on NodeNumber_pre-1. No state/existential changes.",
+            "proof_of_InitDataqueue_safety_wit_12_split_goal_2": "Extract 0<=NodeNumber_pre<=65535 from max_len UShort store (frame all other resources); compute INT_MIN/INT_MAX and use lia on NodeNumber_pre-1. No state/existential changes."
+          }
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        }
+      ]
+    },
+    {
+      "id": "create_guards_first",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_15",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_16",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: extract pure branch premises; malloc zero/nonzero or negative/nonnegative create return premises directly contradict, hence ex falso for the pure False target. No existential or resource transformation; frame all stores and os_inv."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_17",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: extract pure branch premises; malloc zero/nonzero or negative/nonnegative create return premises directly contradict, hence ex falso for the pure False target. No existential or resource transformation; frame all stores and os_inv."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_18",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        }
+      ]
+    },
+    {
+      "id": "create_guards_second",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_19",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_20",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_21",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: extract pure branch premises; malloc zero/nonzero or negative/nonnegative create return premises directly contradict, hence ex falso for the pure False target. No existential or resource transformation; frame all stores and os_inv."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_22",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: extract pure branch premises; malloc zero/nonzero or negative/nonnegative create return premises directly contradict, hence ex falso for the pure False target. No existential or resource transformation; frame all stores and os_inv."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_23",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_24",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        }
+      ]
+    },
+    {
+      "id": "cleanup_constants",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_25",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_26",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_27",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_28",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_29",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern S: introduce all parameters and pure hypotheses; preserve/frame all spatial resources and prove constant signed-int bounds by computation/lia. This witness only constrains literals 0 or 1, never changes state or ownership."
+        }
+      ]
+    },
+    {
+      "id": "initial_call_frames",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_3_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        }
+      ]
+    },
+    {
+      "id": "create_call_frames",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        }
+      ]
+    },
+    {
+      "id": "unlock_frames",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_8_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_9_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_10_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        }
+      ]
+    },
+    {
+      "id": "cleanup_unlock_and_call",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_11_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_12_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_12",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        }
+      ]
+    },
+    {
+      "id": "cleanup_call_frames",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_13_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_14_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pattern P: unfold this witness (and its _pure/_aux definitions when implication-valued), introduce the supplied pure-witness argument if present, introduce quantified parameters and pure hypotheses. Re-establish each pure conjunct from the identical context (for return bridge retain full forall final), cancel/reorder unchanged stores, os_inv, dataqueue_owned and critical token. There are no fresh state witnesses or abstract transitions; call arguments q/refs/Y and saved lock are unchanged."
+        }
+      ]
+    }
+  ]
+}

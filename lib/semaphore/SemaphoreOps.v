@@ -4,9 +4,15 @@ Require Export CRTOS_Verify.lib.semaphore.SemaphoreState.
 Import ListNotations.
 Local Open Scope Z_scope.
 
-(** int32 入口的负值分支先在调用者处理；非负值传给 uint16 形参时按
-    65536 取模。不能把所有大于 ID_MAX 的 int32 输入直接当作无效 ID。 *)
+(** uint16形参的通用转换仍按65536取模。crtoslatest的公开semaphore入口
+    先检查下述SemIdInvalid范围，Delete仅对通过检查的值调用此转换。
+    128..65535仍属合法表示范围，是否登记由ID manager查找决定。 *)
 Definition semaphore_query_id (id : Z) : Z := id mod 65536.
+
+(** 对应crtoslatest semaphore.c中的SemIdInvalid；检查发生在Delete加锁前。
+    高于UINT16_MAX的int32输入直接返回，不能再别名到低16位的其他对象。 *)
+Definition semaphore_id_invalid (id : Z) : bool :=
+  orb (Z.ltb id 0) (Z.ltb 65535 id).
 
 (** 只更新这个已发布对象的等待序列；基址、ID、value 和其他对象均保持。
     地址用于追踪同一个仍存活的对象；不声称跨释放后的地址永久唯一。 *)

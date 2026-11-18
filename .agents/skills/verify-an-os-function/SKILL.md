@@ -155,7 +155,7 @@ Predicate和spec的设计内容共同写入[设计说明](references/reporting-g
 
 以下是新建/空目录的默认组织；已有目录名称与布局优先。全文全局 `annotated_C/` 和 `src/...` 按扫描结果映射，平铺时直接使用该目录下的 canonical 文件。
 
-全局 annotated C 只维护 `annotated_C/src/` 中的 canonical 输入：通用 kernel helper 放在 `src/kernel/common/`，模块函数放在 `src/kernel/<module>/`，架构和临界区外实现保留各自子目录。场景特化在相应canonical文件或caller声明中增补具名spec。`gen/` 和 `dep/` 按工具临时产物管理。本轮目标直接在全局canonical文件维护；仅供分析而保留的修复上下文使用用户或项目约定位置，缺少约定时默认放在annotated C的 `module_context/`，并注明用途。
+全局 annotated C 只维护 `annotated_C/src/` 中的 canonical 输入：通用 kernel helper 放在 `src/kernel/common/`，模块函数放在 `src/kernel/<module>/`，架构和临界区外实现保留各自子目录。场景特化在相应canonical文件或caller声明中增补具名spec。`gen/` 和 `dep/` 按工具临时产物管理。本轮目标直接在全局canonical文件维护。
 
 写 spec 时先查 当前工程解析后的 annotated C 目录，已有 spec 应在当前caller中导入并完成保持原语义的适配。复用、修改和场景特化统一按 [工程组织与维护指南](references/project-maintenance-guide.md#annotated-c-的增量维护)执行。
 
@@ -163,7 +163,7 @@ Predicate和spec的设计内容共同写入[设计说明](references/reporting-g
 
 - 导入的 spec 直接以函数声明及完整 `With/Require/Ensure` 写在使用它的 `f.c` 中、`f` 的定义前，并标明来源和 revision；不为导入的 `g` 新建 `annotated_C/src/g.c`，也不复制其函数体。多个 caller 使用时分别放置所需 spec，并核对它们与同一来源版本一致。
 - 除用户明确指定的函数体证明目标外，只有本轮确实新写 spec 的函数才建立独立函数文件，包含真实 body 和 canonical spec；已有本轮目标文件在原处修改。导入已有 spec、等价适配及从已有 spec 推导的场景特化均不触发复制 body。不得因为旧证明未完成、含 `Admitted`、缺少 proof 文件或不适用于当前证明模型，就把已有 spec 改列为“本轮新写”并扩展 `src/`。
-- 不为仅供模块predicate分析的其他函数新增 `src/` 文件。确需保留其修复或适配副本时，作为分析上下文单独存放并注明不属于本轮VC目标；已有全局canonical文件不因本轮未选中而删除，也不自动纳入本轮证明。
+- 仅供模块predicate分析的其他函数直接读取源码，不另存函数体；修复或适配方案在报告中说明，正式编写spec时再落实到canonical文件。已有全局canonical文件不因本轮未选中而删除，也不自动纳入本轮证明。
 
 - 本轮实现验证的每个函数 `f` 都要有明确的canonical位置，包含唯一真实active定义、完整函数体和canonical `With/Require/Ensure`。新建单函数切片默认命名为 `f.c`；已有多函数文件或用户指定组织方式直接沿用，以函数名和位置标识目标。
 - `f.c` 中调用 `g` 时，只在 `f` 的定义前写 `g` 的完整 declaration-only API spec，不复制

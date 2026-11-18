@@ -1,0 +1,407 @@
+{
+  "groups": [
+    {
+      "id": "publish_transition",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the whole-goal LEFT alternative, retaining os_inv after_3 and the private allocation. Extract ushort NodeNumber bounds from the max_len store, use dataqueue_layout_abi to rewrite sizeof DataElem=8, eliminate 32/16-bit wraps using 0<n<=65535 and n*8<2^32. Let q=dataqueue_constructed n base blank data with repeat None slots, after=replace_dataqueues(dataqueue_publish p q after_3.os_dataqueues) after_3. Convert allocated bytes into n slots and fold store_dataqueue, preserving padding. Prove old map p=None by case analysis on lookup: a Some entry allows store_map_split and duplicates the privately owned front field, contradiction. Use the two create effects to obtain both distinct fresh IDs and semaphore refs, preserving first through second creation. Prove empty contents ready and sem association; insert new cell with store_map while framing other modules. Establish the exact init-phase effect from observed to after, then use input safeExec and RTrans to discharge successful continuation and GTrans. Do not use unproved obligation Props as lemmas; the pure right alternative is invalid for unpublished after_3."
+        }
+      ]
+    },
+    {
+      "id": "cleanup_malloc",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_2_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Malloc failure with positive requested length: choose third result disjunct, held=after=observed, q=dataqueue_constructed n 0 (-1) (-1), refs=(None,None). Fold six concrete fields plus padding into private store_dataqueue (empty buffer). Instantiate the malloc-failure init phase and extract the cleanup continuation from safeExec. Set Y to the actual remaining bind continuation to return -1 and prove the universal final bridge by safeExec bind/return rules. Keep os_inv/InsideCritical unchanged; derive GTrans. No buffer or semaphore is consumed."
+        },
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_2_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Zero-size malloc failure: same third result disjunct and q/base/IDs as entail2_1. The phase models allocation failure for n=0 as well; preserve n rather than strengthen n>0. Construct cleanup continuation Y from actual phase and input safeExec, keep all structure/padding bytes and os_inv, establish identity GTrans."
+        }
+      ]
+    },
+    {
+      "id": "cleanup_create",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_2_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "First create failure: choose second disjunct, held=observed, after=after_2, q=dataqueue_constructed n retval_2 (-5) (-1), refs=(None,None). Use positive malloc size and ushort bounds plus ABI to normalize bytes=n*8 and fold buffer/structure. The failed create effect is the actual phase witness; use input safeExec to obtain remaining cleanup Y plus final -1 bridge. Frame os_inv after_2 and InsideCritical observed, establish GTrans. No created semaphore ref required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_2_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Second create failure: choose first disjunct; held=observed, after=after_3, q=dataqueue_constructed n retval_2 retval_3 (-5). Select blank_ptr from successful first create, refs=(Some blank_ptr,None); show second failed create preserves it. Normalize array bytes and fold private store_dataqueue. Use both create effects as phase witnesses and safeExec bind decomposition to produce cleanup Y and universal final -1 bridge. Preserve os_inv after_3 and saved InsideCritical observed. Do not assume cleanup guard; it must follow from the checked continuation."
+        }
+      ]
+    },
+    {
+      "id": "storage_views",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_which_implies_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_InitDataqueue_which_implies_wit_1_split_goal_1": "Unfold DataqueueStorage; project addr_aligned p 4 from its pure conjunction.",
+            "proof_of_InitDataqueue_which_implies_wit_1_split_goal_2": "Unfold DataqueueStorage; project p<>0 from its pure conjunction.",
+            "proof_of_InitDataqueue_which_implies_wit_1_split_goal_spatial": "Unfold DataqueueStorage and rewrite sizeof DataQueue=20 using dataqueue_layout_abi, then cancel the unchanged CharArray.undef_full."
+          }
+        },
+        {
+          "name": "proof_of_InitDataqueue_which_implies_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_InitDataqueue_which_implies_wit_2_split_goal_spatial": "Use authorized dataqueue_layout_abi to rewrite size20 and eight field offsets; split 20 zero bytes into lengths 2,2,2,2(padding),4,4,4. Convert zero bytes to the three UShort, pointer and two Int zero stores using actual memory encoding lemmas, weaken padding bytes to undef, normalize sizeof CHAR=1, and reassemble. No zero-obligation Prop may be assumed. The statement quantifies all p; prove with the actual byte/typed-store model without silently inserting an alignment hypothesis."
+          }
+        }
+      ]
+    },
+    {
+      "id": "returns",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose failure disjunct 1, q_2=dataqueue_retired q_3, after_2=after_4. Unfold retired projections only, decide Z.leb by supplied sem ID signs, and use PreH8 at after_4 with returned safeExec tt to obtain safeExec -1. Preserve the exact store_dataqueue and OutsideCritical resources; no os_inv needed."
+        },
+        {
+          "name": "proof_of_InitDataqueue_return_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose failure disjunct 2, q_2=dataqueue_retired q_3, after_2=after_4. Unfold retired projections only, decide Z.leb by supplied sem ID signs, and use PreH8 at after_4 with returned safeExec tt to obtain safeExec -1. Preserve the exact store_dataqueue and OutsideCritical resources; no os_inv needed."
+        },
+        {
+          "name": "proof_of_InitDataqueue_return_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose failure disjunct 3, q_2=dataqueue_retired q_3, after_2=after_4. Unfold retired projections only, decide Z.leb by supplied sem ID signs, and use PreH8 at after_4 with returned safeExec tt to obtain safeExec -1. Preserve the exact store_dataqueue and OutsideCritical resources; no os_inv needed."
+        },
+        {
+          "name": "proof_of_InitDataqueue_return_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose success whole left alternative, q=q_3 and after=after_3. All lookup/field/continuation facts are hypotheses; cancel OutsideCritical unchanged."
+        }
+      ]
+    },
+    {
+      "id": "safety_1",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        }
+      ]
+    },
+    {
+      "id": "safety_2",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure contradiction from explicit malloc or Create branch hypotheses: zero versus nonzero/positive pointer, or negative versus nonnegative ID. Introduce context and derive False; all spatial resources are irrelevant."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure contradiction from explicit malloc or Create branch hypotheses: zero versus nonzero/positive pointer, or negative versus nonnegative ID. Introduce context and derive False; all spatial resources are irrelevant."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure contradiction from explicit malloc or Create branch hypotheses: zero versus nonzero/positive pointer, or negative versus nonnegative ID. Introduce context and derive False; all spatial resources are irrelevant."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_12",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_InitDataqueue_safety_wit_12_split_goal_1": "Retain spatial antecedent, extract 0<=NodeNumber_pre<=65535 from its UShort cell; INT_MIN/INT_MAX constants then prove the indicated bound on NodeNumber_pre-1 by linear arithmetic. No nonzero capacity assumption needed.",
+            "proof_of_InitDataqueue_safety_wit_12_split_goal_2": "Retain spatial antecedent, extract 0<=NodeNumber_pre<=65535 from its UShort cell; INT_MIN/INT_MAX constants then prove the indicated bound on NodeNumber_pre-1 by linear arithmetic. No nonzero capacity assumption needed."
+          }
+        }
+      ]
+    },
+    {
+      "id": "safety_3",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_15",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_16",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure contradiction from explicit malloc or Create branch hypotheses: zero versus nonzero/positive pointer, or negative versus nonnegative ID. Introduce context and derive False; all spatial resources are irrelevant."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_17",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure contradiction from explicit malloc or Create branch hypotheses: zero versus nonzero/positive pointer, or negative versus nonnegative ID. Introduce context and derive False; all spatial resources are irrelevant."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_18",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        }
+      ]
+    },
+    {
+      "id": "safety_4",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_19",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_20",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_21",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure contradiction from explicit malloc or Create branch hypotheses: zero versus nonzero/positive pointer, or negative versus nonnegative ID. Introduce context and derive False; all spatial resources are irrelevant."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_22",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Pure contradiction from explicit malloc or Create branch hypotheses: zero versus nonzero/positive pointer, or negative versus nonnegative ID. Introduce context and derive False; all spatial resources are irrelevant."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_23",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        }
+      ]
+    },
+    {
+      "id": "safety_5",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_24",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_25",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_26",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_27",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_28",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_29",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The target is only constant 0/1 INT bounds or 1<>INT_MIN. Unfold machine limits, introduce pure context, prove arithmetic while retaining the spatial context."
+        }
+      ]
+    },
+    {
+      "id": "call_frames_1",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_3_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        }
+      ]
+    },
+    {
+      "id": "call_frames_2",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_8_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_9_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        }
+      ]
+    },
+    {
+      "id": "call_frames_3",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_10_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_11_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_12_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_12",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        }
+      ]
+    },
+    {
+      "id": "call_frames_4",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_13_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_14_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the stated pure implication premise if present, unfold its _aux target, and preserve all identical spatial cells by commutativity/associativity and cancellation. RHS pure facts are already explicit hypotheses (safeExec/RTrans/GTrans/field equalities); split conjunctions and discharge directly. Do not unfold OS predicates or derive function behavior. For pure-only witness keep resources and project the exact supplied fact."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "DisableLocalInterrupt",
+      "meaning": "既有授权的非SMP IRQ资源交接，取得观察状态和os_inv。"
+    },
+    {
+      "name": "EnableLocalInterrupt",
+      "meaning": "归还同次保存值与更新后的os_inv，恢复OutsideCritical。"
+    },
+    {
+      "name": "x_free",
+      "meaning": "消费非空原分配的全部字节资源。"
+    },
+    {
+      "name": "KSemaphoreDelete",
+      "meaning": "dataqueue_cleanup_ic契约在无等待者/无已发布queue引用场景删除ID，保持其余状态。"
+    },
+    {
+      "name": "DeInitDataqueue",
+      "meaning": "init_cleanup清理未发布私有队列，释放数组并将已取得非负ID删除后置-1，返还退役结构及原safeExec续体。"
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

@@ -16,8 +16,7 @@ Definition DataqueueStorage (p : addr) : Assertion :=
 (** 本工程当前QCP struct_padding=emp；[6,8)是DataQueueType真实padding，
     只有这里拥有两字节，whole-struct memset/回收转换时不能丢弃。
     工具改为自动持有padding时须同步移除此显式残余，不可重复拥有。 *)
-Definition dataqueue_fields (q : DataqueueObject) : Assertion :=
-  let p := q.(dq_addr) in
+Definition dataqueue_fields (p : addr) (q : DataQueueAbs) : Assertion :=
   &(p # "DataQueue" ->ₛ "front") # UShort |-> q.(dq_front) **
   &(p # "DataQueue" ->ₛ "rear") # UShort |-> q.(dq_rear) **
   &(p # "DataQueue" ->ₛ "max_len") # UShort |-> q.(dq_max_len) **
@@ -39,25 +38,26 @@ Definition dataqueue_slot (base index : Z) (entry : option DataqueueElem) : Asse
 
 (** base=0表示尚未分配或已回收，数组没有owner；否则拥有恰好n个元素。
     所有空闲/已pop槽仍在数组谓词中，不因缺少逻辑有效数据而丢失内存。 *)
-Definition dataqueue_buffer (q : DataqueueObject) : Assertion :=
+Definition dataqueue_buffer (q : DataQueueAbs) : Assertion :=
   if Z.eq_dec q.(dq_base) 0 then “ q.(dq_slots) = nil ” && emp
   else “ 0 < q.(dq_max_len) /\ addr_aligned q.(dq_base) 4 ” &&
     store_array dataqueue_slot q.(dq_base) q.(dq_max_len) q.(dq_slots).
 
 (** 完整对象内存；既用于私有的部分初始化/退役，也用于共享ready对象。
     sem_blank/sem_data只拥有ID字段，不拥有Semaphore的任何字节。 *)
-Definition dataqueue_owned (q : DataqueueObject) : Assertion :=
-  “ q.(dq_addr) <> 0 /\ addr_aligned q.(dq_addr) 4 ” &&
-  dataqueue_fields q ** dataqueue_buffer q.
+Definition store_dataqueue (p : addr) (q : DataQueueAbs) : Assertion :=
+  “ p <> 0 /\ addr_aligned p 4 ” &&
+  dataqueue_fields p q ** dataqueue_buffer q.
 
-(** 成功发布后共享队列唯一拥有结构与数组；列表是逻辑集合而非C链。
-    使用QCP iter_sepcon组合不连续对象，地址互斥来自实际字段ownership。 *)
+(** map是已发布对象的唯一权威来源；lookup是纯事实，store_map拥有各key
+    对应结构和数组。Semaphore只由原模块拥有，这里仅约束两个ID的关联。 *)
 Definition dataqueue_inv (ss : SemaphoreState) (qs : DataqueueState) : Assertion :=
-  “ Forall (fun q => dataqueue_ready q /\ dataqueue_semaphores ss q) qs ” &&
-  iter_sepcon (map dataqueue_owned qs).
+  “ forall p q, qs.(dataqueue_map) p = Some q ->
+      dataqueue_ready q /\ dataqueue_semaphores ss q ” &&
+  store_map store_dataqueue qs.(dataqueue_map).
 
-(** Init清零结果与分配数组转换均为待证义务；布局来自C前端/ABI核对，
-    不增加新信任公理。整结构padding保持在dataqueue_fields。 *)
+(** ILP32布局事实的完整陈述；用户已授权以具体ABI公理接入。
+    资源转换仍为待证义务，整结构padding保持在dataqueue_fields。 *)
 Definition dataqueue_layout : Prop :=
   sizeof("DataQueue") = 20 /\ sizeof("DataElem") = 8 /\
   forall p,
@@ -70,29 +70,41 @@ Definition dataqueue_layout : Prop :=
   &(p # "DataElem" ->ₛ "data") = p /\
   &(p # "DataElem" ->ₛ "length") = p+4.
 
+(** 用户在2026-11-17继续验证对话中确认的具体ABI信任实例。
+    当前dataqueue.h经gcc -m32静态断言核对：DataQueue大小20、DataElem大小8，
+    二者对齐4，字段偏移与上面的dataqueue_layout一致。
+    此公理仅连接不透明sizeof/字段地址与C ABI，不提供内存、生命周期、
+    字节拆合、发布或任何函数行为保证；TrustBase文件保持用户维护。 *)
+Axiom dataqueue_layout_abi : dataqueue_layout.
+
 Definition dataqueue_buffer_alloc_obligation : Prop := forall p n,
   0 < n <= 65535 -> p <> 0 -> addr_aligned p 4 -> dataqueue_layout ->
   CharArray.undef_full p (n*8) |--
     store_array dataqueue_slot p n (repeat None (Z.to_nat n)).
 Definition dataqueue_zero_obligation : Prop := forall p,
   p <> 0 -> addr_aligned p 4 -> dataqueue_layout ->
-  CharArray.full p 20 (repeat_Z 0 20) |-- dataqueue_owned (dataqueue_zero p).
+  CharArray.full p 20 (repeat_Z 0 20) |-- store_dataqueue p dataqueue_zero.
 Definition dataqueue_buffer_free_obligation : Prop := forall q,
   q.(dq_base) <> 0 -> dataqueue_layout ->
   dataqueue_buffer q |-- CharArray.undef_full q.(dq_base) (q.(dq_max_len)*8).
-Definition dataqueue_retired_storage_obligation : Prop := forall q,
+Definition dataqueue_retired_storage_obligation : Prop := forall p q,
   dataqueue_layout ->
-  dataqueue_owned (dataqueue_retired q) |-- DataqueueStorage q.(dq_addr).
+  store_dataqueue p (dataqueue_retired q) |-- DataqueueStorage p.
 
-(** 按列表成员拆出/合回对象，模块仍使用同一个数组/对象predicate。
-    相关split/merge可由iter_sepcon的app/cons定理证明，不另建容器递归。 *)
-Definition dataqueue_split_obligation : Prop := forall ss left q right,
-  dataqueue_inv ss (left ++ q :: right) |--
-  dataqueue_inv ss (left ++ right) ** dataqueue_owned q.
-Definition dataqueue_merge_obligation : Prop := forall ss left q right,
+(** lookup后借出唯一对象，余下map资源不含该key；更新时恢复新value。
+    复用QCP的store_map_missing_i，以下仍为待证明的模块接口。 *)
+Definition dataqueue_split_obligation : Prop := forall ss qs p q,
+  qs.(dataqueue_map) p = Some q ->
+  dataqueue_inv ss qs |--
+    “ forall key v, qs.(dataqueue_map) key = Some v ->
+        dataqueue_ready v /\ dataqueue_semaphores ss v ” &&
+    store_map_missing_i store_dataqueue qs.(dataqueue_map) p ** store_dataqueue p q.
+Definition dataqueue_merge_obligation : Prop := forall ss qs p q,
+  (forall key v, key <> p -> qs.(dataqueue_map) key = Some v ->
+    dataqueue_ready v /\ dataqueue_semaphores ss v) ->
   dataqueue_ready q -> dataqueue_semaphores ss q ->
-  dataqueue_inv ss (left ++ right) ** dataqueue_owned q |--
-  dataqueue_inv ss (left ++ q :: right).
+  store_map_missing_i store_dataqueue qs.(dataqueue_map) p ** store_dataqueue p q |--
+    dataqueue_inv ss (dataqueue_publish p q qs).
 
 (** 本模块没有静态根或初始化token；空模块贡献emp。其他模块仍由原os_inv初始化。 *)
 Definition dataqueue_initial_obligation : Prop := forall ss,
@@ -101,13 +113,13 @@ Definition dataqueue_initial_obligation : Prop := forall ss,
 (** 数组读写共用的单槽拆合接口：复用QCP missing_i表示，其余槽和整个结构
     仍在同一断言中。Some槽拆出两个已知字段后可原样合回；不拥有payload。
     这是待证的等价陈述，不另建逐字段状态或假定split已获证明。 *)
-Definition dataqueue_slot_view_obligation : Prop := forall q i e,
+Definition dataqueue_slot_view_obligation : Prop := forall p q i e,
   dataqueue_ready q -> 0 <= i < q.(dq_max_len) ->
   nth (Z.to_nat i) q.(dq_slots) None = Some e ->
-  dataqueue_owned q --||--
-    (“ q.(dq_addr) <> 0 /\ addr_aligned q.(dq_addr) 4 /\
+  store_dataqueue p q --||--
+    (“ p <> 0 /\ addr_aligned p 4 /\
        addr_aligned q.(dq_base) 4 ” &&
-     dataqueue_fields q ** dataqueue_slot q.(dq_base) i (Some e) **
+     dataqueue_fields p q ** dataqueue_slot q.(dq_base) i (Some e) **
      store_array_missing_i_rec dataqueue_slot q.(dq_base) i 0
        q.(dq_max_len) q.(dq_slots)).
 

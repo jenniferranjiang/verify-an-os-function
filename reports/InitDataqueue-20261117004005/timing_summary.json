@@ -1,0 +1,146 @@
+{
+  "run": {
+    "status": "running",
+    "phase": "vc-proving",
+    "created_at": "2026-11-16T16:40:05.146259Z"
+  },
+  "commands": [
+    {
+      "phase": "annotation",
+      "command": "coq-check",
+      "calls": 1,
+      "elapsed_seconds": 0.038848
+    },
+    {
+      "phase": "annotation",
+      "command": "symexec",
+      "calls": 6,
+      "elapsed_seconds": 3.023723
+    },
+    {
+      "phase": "annotation",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 2.379613
+    },
+    {
+      "phase": "vc-checking",
+      "command": "dune-build",
+      "calls": 1,
+      "elapsed_seconds": 4.647821
+    },
+    {
+      "phase": "vc-checking",
+      "command": "coq-debug",
+      "calls": 2,
+      "elapsed_seconds": 32.865293
+    },
+    {
+      "phase": "vc-checking",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 0.081414
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-preparing",
+      "calls": 1,
+      "elapsed_seconds": 0.238237
+    },
+    {
+      "phase": "vc-proving",
+      "command": "finalize-delivery",
+      "calls": 2,
+      "elapsed_seconds": 0.235934
+    }
+  ],
+  "annotation_attempts": [
+    {
+      "attempt_id": "InitDataqueue-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-11-16T16:40:34.798037Z",
+          "finished_at": "2026-11-16T16:40:34.855787Z",
+          "elapsed_seconds": 0.038848
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-16T16:44:21.320871Z",
+          "finished_at": "2026-11-16T16:44:23.713342Z",
+          "elapsed_seconds": 2.379613
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-16T16:40:16.994485Z",
+          "finished_at": "2026-11-16T16:44:21.339668Z",
+          "elapsed_seconds": 244.345183
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-11-16T16:40:35.301316Z",
+          "calls": 6,
+          "finished_at": "2026-11-16T16:43:44.581064Z",
+          "elapsed_seconds": 3.023723
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "attempt_id": "InitDataqueue-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-debug",
+          "started_at": "2026-11-16T16:46:19.151600Z",
+          "calls": 2,
+          "finished_at": "2026-11-16T16:47:31.568662Z",
+          "elapsed_seconds": 32.865293
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-16T16:49:01.891375Z",
+          "finished_at": "2026-11-16T16:49:01.981257Z",
+          "elapsed_seconds": 0.081414
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-16T16:44:42.265790Z",
+          "finished_at": "2026-11-16T16:49:01.906586Z",
+          "elapsed_seconds": 259.640796
+        }
+      ]
+    },
+    {
+      "attempt_id": "InitDataqueue-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "running",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-16T16:52:01.685187Z",
+          "calls": 2,
+          "finished_at": "2026-11-16T16:52:48.796838Z",
+          "elapsed_seconds": 0.235934
+        },
+        {
+          "name": "group-work",
+          "started_at": "2026-11-16T16:49:12.462697Z",
+          "calls": 2,
+          "finished_at": "2026-11-16T16:52:48.695860Z",
+          "elapsed_seconds": 207.181308
+        },
+        {
+          "name": "vc-proving-preparing",
+          "started_at": "2026-11-16T16:49:07.228894Z",
+          "finished_at": "2026-11-16T16:49:07.476269Z",
+          "elapsed_seconds": 0.238237
+        }
+      ]
+    }
+  ]
+}

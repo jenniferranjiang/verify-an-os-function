@@ -1,0 +1,303 @@
+{
+  "groups": [
+    {
+      "id": "owned_buffer_view",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_DeInitDataqueue_which_implies_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold store_dataqueue into nonzero/aligned structure fields, padding and dataqueue_buffer. Choose each existential field value from q. Split on dq_base q=0. Null branch buffer is emp and slots=nil; choose left alternative and cancel all fields/padding. Nonnull branch has positive max_len and complete store_array dataqueue_slot; prove its conversion into CharArray.undef_full base (max_len*8) by induction on slots/array representation. For None slots forget no values; for Some slots forget data/length values using typed-store-to-undef facts. Authorized dataqueue_layout_abi converts offsets and 8-byte strides; concatenate each slot two four-byte blocks, retaining the structure/padding frame. Array length originates in store_array and scalar range in field stores, not a new assumption. dataqueue_buffer_free_obligation is only a Prop and must not be used as a theorem."
+        }
+      ]
+    },
+    {
+      "id": "irq_observation",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_DeInitDataqueue_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Select the whole-goal LEFT alternative, keeping os_inv sg observed in the antecedent. Unfold abs_deinit_dataqueue; use safeExec of assertS to obtain dataqueue_cleanup_entry for the initial LastSeen set. Crtos_RTrans before observed establishes membership in that observation set. Instantiate entry at observed to get os_inv |-- cleanup_guard, then project both quiescence facts while preserving os_inv by pure extraction/frame. Cancel InsideCritical/private store_dataqueue unchanged. Do not select the pure emp fallback: its generated split drops the os_inv needed by cleanup_entry. Whitelist001 permits this checked observation model, not assuming the resulting facts without this argument."
+        }
+      ]
+    },
+    {
+      "id": "free_branch_projection",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_DeInitDataqueue_entail_wit_2_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The null branch contradicts saved base=dq_base q and dq_base q<>0; derive False and close the entailment."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_entail_wit_2_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "This feasible branch preserves all fields, padding, critical token and os_inv; instantiate existential field values by their current values if present and cancel. The nonnull 3_1 case retains allocated bytes before free; the null 2_2 case has no array. Preserve saved q/value equalities and branch sign."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_entail_wit_3_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "This feasible branch preserves all fields, padding, critical token and os_inv; instantiate existential field values by their current values if present and cancel. The nonnull 3_1 case retains allocated bytes before free; the null 2_2 case has no array. Preserve saved q/value equalities and branch sign."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_entail_wit_3_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The nonnull branch contradicts saved base=dq_base q and dq_base q=0; derive False and close the entailment."
+        }
+      ]
+    },
+    {
+      "id": "first_delete_transition",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_DeInitDataqueue_entail_wit_4_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_DeInitDataqueue_entail_wit_4_1_split_goal_1": "Substitute the field-to-q ID equalities. Unfold semaphore_delete_ic_effect on the first ID. Invalid-ID and lookup-miss cases have after=observed, so reuse old quiescence. In the hit case after=replace_semaphores(filter-out-address) observed: every surviving semaphore was an old member, pending fields are unchanged, and dataqueue_map is unchanged. Apply old semaphore_delete_quiescent for the second ID to those old members and identical map lookups. This holds even if IDs coincide; removal cannot create waiters/references. No os_inv or freshness assumption is required for this pure monotonicity.",
+            "proof_of_DeInitDataqueue_entail_wit_4_1_split_goal_2": "Use the saved equality between the C blank field and dq_sem_blank q and its branch sign. Unfold dataqueue_retired and project dq_sem_blank; rewrite Z.leb 0 blank to true for the nonnegative branch or false for the negative branch. The desired equality is then reflexivity after substitution. Duplicate split equations are each proved, not skipped.",
+            "proof_of_DeInitDataqueue_entail_wit_4_1_split_goal_3": "Use the saved equality between the C blank field and dq_sem_blank q and its branch sign. Unfold dataqueue_retired and project dq_sem_blank; rewrite Z.leb 0 blank to true for the nonnegative branch or false for the negative branch. The desired equality is then reflexivity after substitution. Duplicate split equations are each proved, not skipped."
+          }
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_entail_wit_4_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_DeInitDataqueue_entail_wit_4_2_split_goal_1": "Substitute the field-to-q ID equalities. Unfold semaphore_delete_ic_effect on the first ID. Invalid-ID and lookup-miss cases have after=observed, so reuse old quiescence. In the hit case after=replace_semaphores(filter-out-address) observed: every surviving semaphore was an old member, pending fields are unchanged, and dataqueue_map is unchanged. Apply old semaphore_delete_quiescent for the second ID to those old members and identical map lookups. This holds even if IDs coincide; removal cannot create waiters/references. No os_inv or freshness assumption is required for this pure monotonicity.",
+            "proof_of_DeInitDataqueue_entail_wit_4_2_split_goal_2": "Use the saved equality between the C blank field and dq_sem_blank q and its branch sign. Unfold dataqueue_retired and project dq_sem_blank; rewrite Z.leb 0 blank to true for the nonnegative branch or false for the negative branch. The desired equality is then reflexivity after substitution. Duplicate split equations are each proved, not skipped.",
+            "proof_of_DeInitDataqueue_entail_wit_4_2_split_goal_3": "Use the saved equality between the C blank field and dq_sem_blank q and its branch sign. Unfold dataqueue_retired and project dq_sem_blank; rewrite Z.leb 0 blank to true for the nonnegative branch or false for the negative branch. The desired equality is then reflexivity after substitution. Duplicate split equations are each proved, not skipped."
+          }
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_entail_wit_4_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_DeInitDataqueue_entail_wit_4_3_split_goal_1": "Use the saved equality between the C blank field and dq_sem_blank q and its branch sign. Unfold dataqueue_retired and project dq_sem_blank; rewrite Z.leb 0 blank to true for the nonnegative branch or false for the negative branch. The desired equality is then reflexivity after substitution. Duplicate split equations are each proved, not skipped.",
+            "proof_of_DeInitDataqueue_entail_wit_4_3_split_goal_2": "Use the saved equality between the C blank field and dq_sem_blank q and its branch sign. Unfold dataqueue_retired and project dq_sem_blank; rewrite Z.leb 0 blank to true for the nonnegative branch or false for the negative branch. The desired equality is then reflexivity after substitution. Duplicate split equations are each proved, not skipped."
+          }
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_entail_wit_4_4",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_DeInitDataqueue_entail_wit_4_4_split_goal_1": "Use the saved equality between the C blank field and dq_sem_blank q and its branch sign. Unfold dataqueue_retired and project dq_sem_blank; rewrite Z.leb 0 blank to true for the nonnegative branch or false for the negative branch. The desired equality is then reflexivity after substitution. Duplicate split equations are each proved, not skipped.",
+            "proof_of_DeInitDataqueue_entail_wit_4_4_split_goal_2": "Use the saved equality between the C blank field and dq_sem_blank q and its branch sign. Unfold dataqueue_retired and project dq_sem_blank; rewrite Z.leb 0 blank to true for the nonnegative branch or false for the negative branch. The desired equality is then reflexivity after substitution. Duplicate split equations are each proved, not skipped."
+          }
+        }
+      ]
+    },
+    {
+      "id": "cleanup_refinement",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_DeInitDataqueue_entail_wit_5_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose whole-goal LEFT alternative. Branch 1: instantiate final=after when data ID is nonnegative (1/2), otherwise final=middle (3/4). First ID uses saved delete effect in 1/3, middle=observed in 2/4. These two branch choices construct dataqueue_cleanup_effect q observed final exactly, with no additional semaphore existence premise. Use safeExec of assertS followed by os_atomic_cmd, observed membership from RTrans, and high-step/atomic refinement to derive safeExec(LastSeen final,ret tt,X) and GTrans observed final. Reassemble store_dataqueue p (dataqueue_retired q): base=0/slots=nil eliminates buffer, keep front/rear/max_len, blank already retired, and data=-1 or preserved negative according to branch guard. Nonzero/alignment and padding are in the antecedent. Frame InsideCritical sg observed and current os_inv sg final. No resource is inferred merely from the pure effect."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_entail_wit_5_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose whole-goal LEFT alternative. Branch 2: instantiate final=after when data ID is nonnegative (1/2), otherwise final=middle (3/4). First ID uses saved delete effect in 1/3, middle=observed in 2/4. These two branch choices construct dataqueue_cleanup_effect q observed final exactly, with no additional semaphore existence premise. Use safeExec of assertS followed by os_atomic_cmd, observed membership from RTrans, and high-step/atomic refinement to derive safeExec(LastSeen final,ret tt,X) and GTrans observed final. Reassemble store_dataqueue p (dataqueue_retired q): base=0/slots=nil eliminates buffer, keep front/rear/max_len, blank already retired, and data=-1 or preserved negative according to branch guard. Nonzero/alignment and padding are in the antecedent. Frame InsideCritical sg observed and current os_inv sg final. No resource is inferred merely from the pure effect."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_entail_wit_5_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose whole-goal LEFT alternative. Branch 3: instantiate final=after when data ID is nonnegative (1/2), otherwise final=middle (3/4). First ID uses saved delete effect in 1/3, middle=observed in 2/4. These two branch choices construct dataqueue_cleanup_effect q observed final exactly, with no additional semaphore existence premise. Use safeExec of assertS followed by os_atomic_cmd, observed membership from RTrans, and high-step/atomic refinement to derive safeExec(LastSeen final,ret tt,X) and GTrans observed final. Reassemble store_dataqueue p (dataqueue_retired q): base=0/slots=nil eliminates buffer, keep front/rear/max_len, blank already retired, and data=-1 or preserved negative according to branch guard. Nonzero/alignment and padding are in the antecedent. Frame InsideCritical sg observed and current os_inv sg final. No resource is inferred merely from the pure effect."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_entail_wit_5_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose whole-goal LEFT alternative. Branch 4: instantiate final=after when data ID is nonnegative (1/2), otherwise final=middle (3/4). First ID uses saved delete effect in 1/3, middle=observed in 2/4. These two branch choices construct dataqueue_cleanup_effect q observed final exactly, with no additional semaphore existence premise. Use safeExec of assertS followed by os_atomic_cmd, observed membership from RTrans, and high-step/atomic refinement to derive safeExec(LastSeen final,ret tt,X) and GTrans observed final. Reassemble store_dataqueue p (dataqueue_retired q): base=0/slots=nil eliminates buffer, keep front/rear/max_len, blank already retired, and data=-1 or preserved negative according to branch guard. Nonzero/alignment and padding are in the antecedent. Frame InsideCritical sg observed and current os_inv sg final. No resource is inferred merely from the pure effect."
+        }
+      ]
+    },
+    {
+      "id": "return_and_irq_frames",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_DeInitDataqueue_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose after=final and cancel retired object and OutsideCritical; continuation is exactly the saved premise."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Retain original safeExec pure fact and commute private store_dataqueue with OutsideCritical for Disable call; exact frame cancellation."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Project saved RTrans/safeExec/two quiescent facts and reorder private object/InsideCritical/os_inv; no new condition introduced."
+        }
+      ]
+    },
+    {
+      "id": "safety_1_8",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Discharge fixed ILP32 INT_MIN/INT_MAX bounds for literal 0 or 1 and safe negation of 1 using integer arithmetic; spatial resources are only frame. Do not assume dynamic object bounds."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use base=dq_base q and mutually inconsistent null/non-null guard facts to derive False, leaving arbitrary spatial frame."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use base=dq_base q and mutually inconsistent null/non-null guard facts to derive False, leaving arbitrary spatial frame."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Discharge fixed ILP32 INT_MIN/INT_MAX bounds for literal 0 or 1 and safe negation of 1 using integer arithmetic; spatial resources are only frame. Do not assume dynamic object bounds."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Discharge fixed ILP32 INT_MIN/INT_MAX bounds for literal 0 or 1 and safe negation of 1 using integer arithmetic; spatial resources are only frame. Do not assume dynamic object bounds."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Discharge fixed ILP32 INT_MIN/INT_MAX bounds for literal 0 or 1 and safe negation of 1 using integer arithmetic; spatial resources are only frame. Do not assume dynamic object bounds."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Discharge fixed ILP32 INT_MIN/INT_MAX bounds for literal 0 or 1 and safe negation of 1 using integer arithmetic; spatial resources are only frame. Do not assume dynamic object bounds."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Discharge fixed ILP32 INT_MIN/INT_MAX bounds for literal 0 or 1 and safe negation of 1 using integer arithmetic; spatial resources are only frame. Do not assume dynamic object bounds."
+        }
+      ]
+    },
+    {
+      "id": "safety_9_16",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Discharge fixed ILP32 INT_MIN/INT_MAX bounds for literal 0 or 1 and safe negation of 1 using integer arithmetic; spatial resources are only frame. Do not assume dynamic object bounds."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Discharge fixed ILP32 INT_MIN/INT_MAX bounds for literal 0 or 1 and safe negation of 1 using integer arithmetic; spatial resources are only frame. Do not assume dynamic object bounds."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Discharge fixed ILP32 INT_MIN/INT_MAX bounds for literal 0 or 1 and safe negation of 1 using integer arithmetic; spatial resources are only frame. Do not assume dynamic object bounds."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_12",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Discharge fixed ILP32 INT_MIN/INT_MAX bounds for literal 0 or 1 and safe negation of 1 using integer arithmetic; spatial resources are only frame. Do not assume dynamic object bounds."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Discharge fixed ILP32 INT_MIN/INT_MAX bounds for literal 0 or 1 and safe negation of 1 using integer arithmetic; spatial resources are only frame. Do not assume dynamic object bounds."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Discharge fixed ILP32 INT_MIN/INT_MAX bounds for literal 0 or 1 and safe negation of 1 using integer arithmetic; spatial resources are only frame. Do not assume dynamic object bounds."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_15",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Discharge fixed ILP32 INT_MIN/INT_MAX bounds for literal 0 or 1 and safe negation of 1 using integer arithmetic; spatial resources are only frame. Do not assume dynamic object bounds."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_safety_wit_16",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Discharge fixed ILP32 INT_MIN/INT_MAX bounds for literal 0 or 1 and safe negation of 1 using integer arithmetic; spatial resources are only frame. Do not assume dynamic object bounds."
+        }
+      ]
+    },
+    {
+      "id": "call_frames_3_5",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_DeInitDataqueue_partial_solve_wit_3_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use actual nonnull base guard and max_len>0 from the nonnull buffer view to establish free pointer nonzero and max_len*8>0."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_partial_solve_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the separately quantified pure-obligation premise and unfold this partial-solve auxiliary goal. Instantiate that premise on exactly the current state, values and spatial resources; preserve all accompanying facts, commute the requested callee resource first, and cancel untouched fields/padding/critical/object frames. For free use base=dq_base q to identify the byte allocation; for Delete use the matching os_inv; for Enable use InsideCritical and os_inv with saved GTrans. The pure premise is an implication argument in the generated target, not an added assumption."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_partial_solve_wit_4_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Rewrite C ID using saved field equality; requested quiescent is the saved fact at observed (4/5) or middle (6/7)."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_partial_solve_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the separately quantified pure-obligation premise and unfold this partial-solve auxiliary goal. Instantiate that premise on exactly the current state, values and spatial resources; preserve all accompanying facts, commute the requested callee resource first, and cancel untouched fields/padding/critical/object frames. For free use base=dq_base q to identify the byte allocation; for Delete use the matching os_inv; for Enable use InsideCritical and os_inv with saved GTrans. The pure premise is an implication argument in the generated target, not an added assumption."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_partial_solve_wit_5_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Rewrite C ID using saved field equality; requested quiescent is the saved fact at observed (4/5) or middle (6/7)."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_partial_solve_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the separately quantified pure-obligation premise and unfold this partial-solve auxiliary goal. Instantiate that premise on exactly the current state, values and spatial resources; preserve all accompanying facts, commute the requested callee resource first, and cancel untouched fields/padding/critical/object frames. For free use base=dq_base q to identify the byte allocation; for Delete use the matching os_inv; for Enable use InsideCritical and os_inv with saved GTrans. The pure premise is an implication argument in the generated target, not an added assumption."
+        }
+      ]
+    },
+    {
+      "id": "call_frames_6_8",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_DeInitDataqueue_partial_solve_wit_6_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Rewrite C ID using saved field equality; requested quiescent is the saved fact at observed (4/5) or middle (6/7)."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_partial_solve_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the separately quantified pure-obligation premise and unfold this partial-solve auxiliary goal. Instantiate that premise on exactly the current state, values and spatial resources; preserve all accompanying facts, commute the requested callee resource first, and cancel untouched fields/padding/critical/object frames. For free use base=dq_base q to identify the byte allocation; for Delete use the matching os_inv; for Enable use InsideCritical and os_inv with saved GTrans. The pure premise is an implication argument in the generated target, not an added assumption."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_partial_solve_wit_7_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Rewrite C ID using saved field equality; requested quiescent is the saved fact at observed (4/5) or middle (6/7)."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_partial_solve_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the separately quantified pure-obligation premise and unfold this partial-solve auxiliary goal. Instantiate that premise on exactly the current state, values and spatial resources; preserve all accompanying facts, commute the requested callee resource first, and cancel untouched fields/padding/critical/object frames. For free use base=dq_base q to identify the byte allocation; for Delete use the matching os_inv; for Enable use InsideCritical and os_inv with saved GTrans. The pure premise is an implication argument in the generated target, not an added assumption."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_partial_solve_wit_8_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Requested GTrans observed final is already a saved premise."
+        },
+        {
+          "name": "proof_of_DeInitDataqueue_partial_solve_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Introduce the separately quantified pure-obligation premise and unfold this partial-solve auxiliary goal. Instantiate that premise on exactly the current state, values and spatial resources; preserve all accompanying facts, commute the requested callee resource first, and cancel untouched fields/padding/critical/object frames. For free use base=dq_base q to identify the byte allocation; for Delete use the matching os_inv; for Enable use InsideCritical and os_inv with saved GTrans. The pure premise is an implication argument in the generated target, not an added assumption."
+        }
+      ]
+    }
+  ]
+}

@@ -1,7 +1,13 @@
 #ifndef CRTOS_DATAQUEUE_SEMAPHORE_LOGIC_H
 #define CRTOS_DATAQUEUE_SEMAPHORE_LOGIC_H
 #include "m_semaphore.h"
-/* Native shared predicates: vocabulary only; contracts remain in each C file. */
+/* Native shared predicates: vocabulary only; contracts remain in each C file.
+ * Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_sem.h; SHA-256 c2c6edfde22823863a655d6d2a3f59fb749085a8b426166c885c2d5354174fab.
+ * Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_assign.h; SHA-256 939b9f9b498ef33a02863dd0063220017610364f423e36c93a9be7c66848a472.
+ * Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_static_objects.h; SHA-256 7299746e499097857ca3a2f0fbb67352fba9f4efbb94c7b52280b998d61d1576.
+ * Selected annotated_C/src/include/xsconfig.h leaves KERNEL_DEFER_IPC_SCHED
+ * and KERNEL_STATIC_OBJECTS undefined: ON_WAKE uses DO_KTASK_ASSIGN and
+ * lifecycle-check macros are empty. Other configurations require new review. */
 /*@ Import Coq Require Import CRTOS_Verify.lib.semaphore.KSemaphoreDelete */
 /*@ Import Coq Require Import CRTOS_Verify.lib.id.idnode CRTOS_Verify.lib.id.IdModuleSpec CRTOS_Verify.lib.common.dll CRTOS_Verify.lib.list.NodeSelfLinked */
 /*@ Import Coq Import IDNode DLL */
@@ -9,6 +15,8 @@
 #define CRTOS_DATAQUEUE_COQ_OPTION
 /*@ Extern Coq
   (option :: * => *)
+*/
+/*@ Extern Coq
   (Some : {A} -> A -> option A) (None : {A} -> option A)
 */
 #endif
@@ -16,6 +24,8 @@
 /*@ Extern Coq Record StableIdmanager { idmax: Z; hoffset: Z; id_map: Z; htable: Z; } */
 /*@ Extern Coq
   (VarIdmanager :: *) (IdNodeAbs :: *) (DL_Node :: * => *)
+*/
+/*@ Extern Coq
   (store_idmanager : StableIdmanager -> VarIdmanager -> Z -> Assertion)
   (Build_IdNodeAbs : Z -> Z -> IdNodeAbs)
   (store_idmanager_allocated_unlinked : StableIdmanager -> VarIdmanager -> Z -> Z -> Assertion)

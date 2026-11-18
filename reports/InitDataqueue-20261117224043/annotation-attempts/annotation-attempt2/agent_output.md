@@ -1,0 +1,9 @@
+# Retry: preserve existing alignment at memset view
+
+Read previous storage_views manual, blocker and exact current generated goal. Changed only the local which-implies immediately after memset: addr_aligned(p_queue,4) now appears on both its left and right. The entry DataqueueStorage-to-bytes view already supplies this fact. No public contract, executable C, header, lib, ABI assumption or proof was edited.
+
+The old split quantified arbitrary p_queue with only CharArray.full zeros in its spatial premise. Its conclusion owns UShort/Ptr/Int stores. The regenerated same-named split explicitly has `PreH1 : addr_aligned p_queue 4`; its typed spatial conclusion remains the same. This resolves the reported annotation missing premise; conversion proof is still required from the proving owner. The old spatial cells, zero values and padding remain present. No obligation Prop was assumed.
+
+Ordered checks: formal-case-lib-design passed/skipped (absent case lib); controller symexec exit0/passed and committed all four current generated files. First retry, no repeated no-progress attempt.
+
+Raw Definition body comparison against annotation-attempt2/before goal: 43 byte-identical, 33 changed, 2 added (`InitDataqueue_partial_solve_wit_4_aux` and `_pure`), none removed. Existing alignment is now explicitly retained downstream, changing safety/entail/partial-solve statements and binder contexts. These numbers include split definitions, not just top-level VCs. Prior accepted proofs require current statement/wrapper compilation checks; they are not automatically 60 exact unchanged proofs. Current manual statements were inspected, including the same-named failed split and its parent; no manual edits were made. The plan marks only the concrete missing-premise comparison resolved, not the VC proved.

@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "status": "planning",
+  "function_specs": [],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

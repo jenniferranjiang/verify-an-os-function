@@ -32,7 +32,7 @@ CRTOS源码可由独立的上游仓库 `https://www.gitlink.org.cn/chos/crtos` �
 
 全局 `lib/` 是唯一项目库来源。已有定义直接import，需要改动就在所属文件原位修改，沿用项目的逻辑前缀与模型。QCP等外部基础库直接引用配置路径。
 
-根 `_CoqProject` 列出外部映射、全局lib和VC的实际输入；根Makefile或Makefile.coq为统一构建入口。编辑器、QCP与Rocq使用同一套路径和现有逻辑名称，不将两个物理目录映射为同一前缀来隐式替换定义。
+根手写 `Makefile` 维护外部映射、全局lib和VC的实际输入，并生成 `_CoqProject`；`Makefile.coq` 仅转发到统一构建入口。编辑器、QCP与Rocq使用同一套路径和现有逻辑名称，不将两个物理目录映射为同一前缀来隐式替换定义。
 
 共享接口改变时：
 
@@ -43,7 +43,7 @@ CRTOS源码可由独立的上游仓库 `https://www.gitlink.org.cn/chos/crtos` �
 
 新增dataqueue等模块时，直接修改现有CrtosGlobState/CrtosInv等文件，补入模块状态与资源，使用同一套系统状态和协议。必要的共享接口和依赖一致性随本轮修改处理。
 
-构建从工程根目录执行，例如 `coq_makefile -f _CoqProject -o Makefile.coq`，随后 `make -f Makefile.coq lib/<module>/<File>.vo` 构建所需目标及依赖。默认保留.vo，其他缓存按[主skill保留边界](../SKILL.md#临时产物与保留边界)处理。提交时确保所提交构建配置引用的输入一并提供，不提交指向未提供文件或任务临时目录的必需依赖。
+构建从工程根目录执行，例如 `make lib/<module>/<File>.vo` 构建所需目标及依赖，`make lib -j2` 构建共享库。新增输入或修改映射时编辑 `Makefile` 中的 `lib_FILES`、`VC_code_proof_FILES`、`COQ_FLAG`；构建自动更新 `_CoqProject` 和 `.depend`，不要再用 `coq_makefile` 覆盖手写入口。工具链沿用 `tools/rocq/toolchain.json`。默认保留.vo，其他缓存按[主skill保留边界](../SKILL.md#临时产物与保留边界)处理。提交时确保所提交构建配置引用的输入一并提供，不提交指向未提供文件或任务临时目录的必需依赖。
 
 接续已有成果时，核对来源基线、当前文件及授权，逐文件整合有效差异，并检查受影响的结果。
 
@@ -85,7 +85,7 @@ Controller的 `--main-root` 与MCP调用的 `workspace` 使用验证工程根目
 
 公共header沿用既有位置，默认 `annotated_C/src/headers/`，配置include沿用 `src/include/`。目录名使用解析结果，例如annotatedc，不硬编码用户布局。
 
-仅为模块分析保留的适配/修复函数放用户或项目约定的分析上下文位置，没有约定时默认用annotated C的module_context，并注明不是实现目标。新增spec后归入唯一canonical位置，避免同一body维护两个权威版本。gen/dep等工具生成临时目录不自动成为权威输入；不自行新增scenarios来替代用户已有组织方式。
+仅供模块分析的函数按主skill的文件组织规则处理。gen/dep等工具生成临时目录不自动成为权威输入；不自行新增scenarios来替代用户已有组织方式。
 
 ## Annotated C 的增量维护
 

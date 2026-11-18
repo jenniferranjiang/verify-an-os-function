@@ -1,0 +1,662 @@
+{
+  "schema_version": 4,
+  "generation": 92,
+  "run_id": "InitDataqueue-20261117224043",
+  "case": "InitDataqueue",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos-verify",
+  "run_root": "/home/xinra/crtos-verify/verification_runs/InitDataqueue-20261117224043",
+  "report_root": "/home/xinra/crtos-verify/reports/InitDataqueue-20261117224043",
+  "target_files": {
+    "c_file": "annotated_C/src/kernel/dataqueue/InitDataqueue.c",
+    "formal_directory": "VC/dataqueue",
+    "formal_case_lib": "VC/dataqueue/InitDataqueue_lib.v",
+    "goal_file": "VC/dataqueue/InitDataqueue_goal.v",
+    "proof_auto_file": "VC/dataqueue/InitDataqueue_proof_auto.v",
+    "proof_manual_file": "VC/dataqueue/InitDataqueue_proof_manual.v",
+    "goal_check_file": "VC/dataqueue/InitDataqueue_goal_check.v",
+    "case_name": "InitDataqueue",
+    "active_case_theory": "CRTOS_Verify.VC.dataqueue"
+  },
+  "problem_context": {
+    "problem_statement": "Verify approved map-based InitDataqueue, including failure cleanup. DataqueueInv.dataqueue_layout_abi is user-authorized concrete ILP32 layout only. Reused ID/DLL contracts remain boundaries. No unproved obligation Props may be assumed. Manual proof edits only in manual files. Per-function cumulative VC proof budget 100 minutes, prior attempts conservatively charged 15 minutes. Original crtoslatest read-only. Preserve .vo."
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "InitDataqueue"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "CriticalAreaLock::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) Require OutsideCritical(sg, before) Ensure exists observed, Crtos_RTrans(before, observed) && InsideCritical(sg, observed) * os_inv(sg, observed)",
+        "CriticalAreaUnLock::<default>": "With (sg : StableGlobalState) (held after : VarGlobalState) Require Crtos_GTrans(held, after) && InsideCritical(sg, held) * os_inv(sg, after) Ensure OutsideCritical(sg, after)",
+        "x_malloc::<default>": "Require emp Ensure (size == 0 && __return == 0) || (size > 0 && __return == 0) || (size > 0 && __return > 0 && __return <= UINT_MAX - size && addr_aligned(__return, 4) && CharArray::undef_full(__return, size))",
+        "memset::<default>": "Require 0 <= c && c <= 127 && CharArray::undef_full(s, n) Ensure __return == s && CharArray::full(s, n, repeat_Z(c, n))",
+        "KSemaphoreCreate::dataqueue_ic": "dataqueue_ic With (sg : StableGlobalState) (before : VarGlobalState) Require os_inv(sg, before) Ensure exists after, ((__return == -5) || (0 <= __return && __return < 128)) && semaphore_create_ic_effect(sg, val, before, __return, after) && os_inv(sg, after)",
+        "DeInitDataqueue::init_cleanup": "init_cleanup With (sg : StableGlobalState) (before : VarGlobalState) (q : DataQueueAbs) (refs : DataqueueSemRefs) X Require safeExec(LastSeen(before), abs_deinit_dataqueue(sg, p_queue, q, refs), X) && store_dataqueue(p_queue, q) * OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(tt), X) && store_dataqueue(p_queue, dataqueue_retired(q)) * OutsideCritical(sg, after)",
+        "InitDataqueue::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_init_dataqueue(sg, p_queue, NodeNumber), X) && DataqueueStorage(p_queue) * OutsideCritical(sg, before) Ensure (exists after q, __return == 0 && dataqueue_map(os_dataqueues(after), p_queue) == Some(q) && dq_max_len(q) == NodeNumber && dq_front(q) == 0 && dq_rear(q) == 0 && dq_base(q) != 0 && 0 <= dq_sem_blank(q) && 0 <= dq_sem_data(q) && dq_sem_blank(q) != dq_sem_data(q) && safeExec(LastSeen(after), return(0), X) && OutsideCritical(sg, after)) || (exists after q, __return == -1 && dq_max_len(q) == NodeNumber && dq_front(q) == 0 && dq_rear(q) == 0 && dq_base(q) == 0 && ((dq_sem_blank(q) == -1 && dq_sem_data(q) == -1) || (dq_sem_blank(q) == -5 && dq_sem_data(q) == -1) || (dq_sem_blank(q) == -1 && dq_sem_data(q) == -5)) && safeExec(LastSeen(after), return(-1), X) && store_dataqueue(p_queue, q) * OutsideCritical(sg, after))"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-11-17T14:40:43.402229Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 1,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/dataqueue/InitDataqueue_goal_check.vo",
+    "base_artifact_count": 216,
+    "current_source_count": 4,
+    "elapsed_seconds": 5.276091,
+    "snapshot": "verification_runs/InitDataqueue-20261117224043/dependency_plan.json"
+  },
+  "attempts": {
+    "InitDataqueue-annotation-r1": {
+      "attempt_id": "InitDataqueue-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/InitDataqueue-20261117224043",
+      "claimed_action": "deliver:InitDataqueue-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-17T14:40:52.650422Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-17T14:41:11.521406Z",
+            "finished_at": "2026-11-17T14:42:27.956751Z",
+            "elapsed_seconds": 76.435345
+          }
+        ]
+      },
+      "returned_at": "2026-11-17T14:42:27.956723Z",
+      "finished_at": "2026-11-17T14:42:29.287995Z"
+    },
+    "InitDataqueue-vc-checking-r1": {
+      "attempt_id": "InitDataqueue-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/InitDataqueue-vc-checking-r1",
+      "claimed_action": "deliver:InitDataqueue-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-17T14:43:05.711033Z",
+      "source_annotation": "InitDataqueue-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-17T14:43:19.755007Z",
+            "finished_at": "2026-11-17T14:48:42.701839Z",
+            "elapsed_seconds": 322.946832
+          }
+        ]
+      },
+      "returned_at": "2026-11-17T14:48:42.701814Z",
+      "finished_at": "2026-11-17T14:48:42.749476Z"
+    },
+    "InitDataqueue-vc-proving-r1": {
+      "attempt_id": "InitDataqueue-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "running",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-17T14:48:42.749495Z",
+      "source_annotation": "InitDataqueue-annotation-r1",
+      "source_vc_checking": "InitDataqueue-vc-checking-r1",
+      "groups": {
+        "publish_transition": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:publish_transition",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:publish_transition:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T14:48:50.582978Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T14:48:58.834804Z",
+                "finished_at": "2026-11-17T15:19:48.868680Z",
+                "elapsed_seconds": 1850.033876
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T15:19:48.868662Z",
+          "finished_at": "2026-11-17T15:20:40.017967Z"
+        },
+        "cleanup_malloc": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:cleanup_malloc",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:cleanup_malloc:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T14:48:50.582995Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T15:20:53.350936Z",
+                "finished_at": "2026-11-17T15:26:25.885224Z",
+                "elapsed_seconds": 332.534288
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T15:26:25.885196Z",
+          "finished_at": "2026-11-17T15:26:59.428482Z"
+        },
+        "cleanup_create": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:cleanup_create",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:cleanup_create:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T14:48:50.582999Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T15:27:10.536787Z",
+                "finished_at": "2026-11-17T15:36:50.531446Z",
+                "elapsed_seconds": 579.994659
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T15:36:50.531418Z",
+          "finished_at": "2026-11-17T15:37:50.098059Z"
+        },
+        "storage_views": {
+          "status": "blocked",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:storage_views",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:storage_views:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T14:48:50.583001Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T15:38:06.758762Z",
+                "finished_at": "2026-11-17T15:41:57.512135Z",
+                "elapsed_seconds": 230.753373
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T15:41:57.512102Z",
+          "blocker": {
+            "failure_class": "annotation-gap",
+            "kind": "missing-alignment-premise",
+            "vcs": [
+              {
+                "name": "proof_of_InitDataqueue_which_implies_wit_2_split_goal_spatial",
+                "parent": "proof_of_InitDataqueue_which_implies_wit_2",
+                "annotation_location": "InitDataqueue.c which-implies immediately after memset"
+              }
+            ],
+            "message": "The byte-array view quantifies arbitrary p and retains only CharArray.full, whose cells require alignment 1; typed UShort/Ptr/Int postcondition requires alignment 2/4. Entry DataqueueStorage already provides addr_aligned(p,4), but this fact was omitted from the local view premise. Preserve it in the annotation; no stronger public Require or new ABI assumption is needed.",
+            "repair_boundary": "canonical InitDataqueue.c post-memset which-implies annotation; generated files unchanged"
+          },
+          "finished_at": "2026-11-17T15:41:57.578066Z"
+        },
+        "returns": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:returns",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:returns:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T14:48:50.583003Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T15:42:10.697913Z",
+                "finished_at": "2026-11-17T15:45:48.058975Z",
+                "elapsed_seconds": 217.361062
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T15:45:48.058942Z",
+          "finished_at": "2026-11-17T15:46:15.027927Z"
+        },
+        "safety_1": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:safety_1",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:safety_1:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T14:48:50.583004Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T15:46:40.783253Z",
+                "finished_at": "2026-11-17T15:48:57.962680Z",
+                "elapsed_seconds": 137.179427
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T15:48:57.962650Z",
+          "finished_at": "2026-11-17T15:49:24.746026Z"
+        },
+        "safety_2": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:safety_2",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:safety_2:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T14:48:50.583006Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T15:49:48.612982Z",
+                "finished_at": "2026-11-17T15:53:21.934867Z",
+                "elapsed_seconds": 213.321885
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T15:53:21.934839Z",
+          "finished_at": "2026-11-17T15:53:50.240622Z"
+        },
+        "safety_3": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:safety_3",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:safety_3:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T14:48:50.583008Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T15:54:11.957426Z",
+                "finished_at": "2026-11-17T15:56:56.008123Z",
+                "elapsed_seconds": 164.050697
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T15:56:56.008095Z",
+          "finished_at": "2026-11-17T15:57:27.492889Z"
+        },
+        "safety_4": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:safety_4",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:safety_4:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T14:48:50.583010Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T15:57:47.857128Z",
+                "finished_at": "2026-11-17T16:00:51.867745Z",
+                "elapsed_seconds": 184.010617
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T16:00:51.867717Z",
+          "finished_at": "2026-11-17T16:01:38.754445Z"
+        },
+        "safety_5": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:safety_5",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:safety_5:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T14:48:50.583012Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T16:01:47.819842Z",
+                "finished_at": "2026-11-17T16:04:06.554699Z",
+                "elapsed_seconds": 138.734857
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T16:04:06.554672Z",
+          "finished_at": "2026-11-17T16:04:37.601427Z"
+        },
+        "call_frames_1": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:call_frames_1",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:call_frames_1:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T14:48:50.583013Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T16:04:56.565825Z",
+                "finished_at": "2026-11-17T16:07:50.354381Z",
+                "elapsed_seconds": 173.788556
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T16:07:50.354349Z",
+          "finished_at": "2026-11-17T16:08:22.609834Z"
+        },
+        "call_frames_2": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:call_frames_2",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:call_frames_2:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T14:48:50.583014Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T16:28:17.119533Z",
+                "finished_at": "2026-11-17T16:31:45.716786Z",
+                "elapsed_seconds": 208.597253
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T16:31:45.716757Z",
+          "finished_at": "2026-11-17T16:32:20.899709Z"
+        },
+        "call_frames_3": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:call_frames_3",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:call_frames_3:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T14:48:50.583016Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T16:32:31.912565Z",
+                "finished_at": "2026-11-17T16:35:30.245759Z",
+                "elapsed_seconds": 178.333194
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T16:35:30.245725Z",
+          "finished_at": "2026-11-17T16:36:03.716564Z"
+        },
+        "call_frames_4": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:call_frames_4",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:call_frames_4:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T14:48:50.583017Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T16:36:24.862695Z",
+                "finished_at": "2026-11-17T16:39:32.602225Z",
+                "elapsed_seconds": 187.73953
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T16:39:32.602196Z",
+          "finished_at": "2026-11-17T16:40:02.831071Z"
+        }
+      }
+    },
+    "InitDataqueue-annotation-r2": {
+      "attempt_id": "InitDataqueue-annotation-r2",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/InitDataqueue-20261117224043",
+      "claimed_action": "deliver:InitDataqueue-annotation-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-11-17T16:40:19.091200Z",
+      "feedback_sources": [
+        {
+          "phase": "group",
+          "attempt_id": "InitDataqueue-vc-proving-r1:storage_views",
+          "evidence": [
+            "/home/xinra/crtos-verify/reports/InitDataqueue-20261117224043/rounds/InitDataqueue-vc-proving-r1/groups/group_03__storage_views/group_worker_report.json",
+            "/home/xinra/crtos-verify/reports/InitDataqueue-20261117224043/rounds/InitDataqueue-vc-proving-r1/groups/group_03__storage_views/group_worker_output.md"
+          ]
+        }
+      ],
+      "reason": "group-worker-annotation-gaps",
+      "failed_vcs": [
+        {
+          "source_attempt": "InitDataqueue-vc-proving-r1:storage_views",
+          "manual": "/home/xinra/crtos-verify/verification_runs/InitDataqueue-20261117224043/InitDataqueue-vc-proving-r1/groups/group_03__storage_views/InitDataqueue_proof_manual.v",
+          "message": "The byte-array view quantifies arbitrary p and retains only CharArray.full, whose cells require alignment 1; typed UShort/Ptr/Int postcondition requires alignment 2/4. Entry DataqueueStorage already provides addr_aligned(p,4), but this fact was omitted from the local view premise. Preserve it in the annotation; no stronger public Require or new ABI assumption is needed.",
+          "name": "proof_of_InitDataqueue_which_implies_wit_2_split_goal_spatial",
+          "parent": "proof_of_InitDataqueue_which_implies_wit_2",
+          "annotation_location": "InitDataqueue.c which-implies immediately after memset"
+        }
+      ],
+      "retry_reason": "group-worker-annotation-gaps",
+      "retry_previous_attempt": "InitDataqueue-vc-proving-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-17T16:40:26.109694Z",
+            "finished_at": "2026-11-17T16:42:10.676768Z",
+            "elapsed_seconds": 104.567074
+          }
+        ]
+      },
+      "returned_at": "2026-11-17T16:42:10.676738Z",
+      "finished_at": "2026-11-17T16:42:12.662335Z"
+    },
+    "InitDataqueue-vc-checking-r2": {
+      "attempt_id": "InitDataqueue-vc-checking-r2",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/InitDataqueue-vc-checking-r2",
+      "claimed_action": "deliver:InitDataqueue-vc-checking-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-11-17T16:42:27.006323Z",
+      "source_annotation": "InitDataqueue-annotation-r2",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-17T16:42:40.866981Z",
+            "finished_at": "2026-11-17T16:46:29.205345Z",
+            "elapsed_seconds": 228.338364
+          }
+        ]
+      },
+      "returned_at": "2026-11-17T16:46:29.205315Z",
+      "finished_at": "2026-11-17T16:46:29.275689Z"
+    },
+    "InitDataqueue-vc-proving-r2": {
+      "attempt_id": "InitDataqueue-vc-proving-r2",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-17T16:46:29.275717Z",
+      "source_annotation": "InitDataqueue-annotation-r2",
+      "source_vc_checking": "InitDataqueue-vc-checking-r2",
+      "groups": {
+        "storage_alignment": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r2:storage_alignment",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r2:storage_alignment:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T16:46:36.270341Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T16:46:45.880365Z",
+                "finished_at": "2026-11-17T16:54:42.924260Z",
+                "elapsed_seconds": 477.043895
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T16:54:42.924234Z",
+          "finished_at": "2026-11-17T16:55:14.111107Z"
+        },
+        "publish_transition": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r2:publish_transition",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r2:publish_transition:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T16:46:36.270362Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T16:55:28.968290Z",
+                "finished_at": "2026-11-17T16:59:14.612492Z",
+                "elapsed_seconds": 225.644202
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T16:59:14.612463Z",
+          "finished_at": "2026-11-17T17:00:11.274249Z"
+        },
+        "cleanup_transitions": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r2:cleanup_transitions",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r2:cleanup_transitions:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T16:46:36.270367Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T17:00:21.472724Z",
+                "finished_at": "2026-11-17T17:03:38.228615Z",
+                "elapsed_seconds": 196.755891
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T17:03:38.228587Z",
+          "finished_at": "2026-11-17T17:04:41.215621Z"
+        },
+        "return_projection": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r2:return_projection",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r2:return_projection:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T16:46:36.270370Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T17:04:53.587333Z",
+                "finished_at": "2026-11-17T17:07:26.703123Z",
+                "elapsed_seconds": 153.11579
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T17:07:26.703090Z",
+          "finished_at": "2026-11-17T17:07:53.195731Z"
+        },
+        "safety_1_10": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r2:safety_1_10",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r2:safety_1_10:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T16:46:36.270372Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T17:08:21.500188Z",
+                "finished_at": "2026-11-17T17:10:28.598225Z",
+                "elapsed_seconds": 127.098037
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T17:10:28.598196Z",
+          "finished_at": "2026-11-17T17:10:53.007102Z"
+        },
+        "safety_11_20": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r2:safety_11_20",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r2:safety_11_20:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T16:46:36.270374Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T17:11:18.093332Z",
+                "finished_at": "2026-11-17T17:13:55.294572Z",
+                "elapsed_seconds": 157.20124
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T17:13:55.294545Z",
+          "finished_at": "2026-11-17T17:14:23.008185Z"
+        },
+        "safety_21_29": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r2:safety_21_29",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r2:safety_21_29:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T16:46:36.270376Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T17:14:44.907980Z",
+                "finished_at": "2026-11-17T17:17:17.217117Z",
+                "elapsed_seconds": 152.309137
+              }
+            ]
+          },
+          "returned_at": "2026-11-17T17:17:17.217090Z",
+          "finished_at": "2026-11-17T17:17:42.161879Z"
+        },
+        "call_frames_1": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r2:call_frames_1",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r2:call_frames_1:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T16:46:36.270378Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-17T17:18:09.335838Z",
+                "finished_at": "2026-11-18T03:56:21.620765Z",
+                "elapsed_seconds": 38292.284927
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T03:56:21.620737Z",
+          "finished_at": "2026-11-18T03:57:01.524693Z"
+        },
+        "call_frames_2": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r2:call_frames_2",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r2:call_frames_2:0",
+          "repair_index": 0,
+          "created_at": "2026-11-17T16:46:36.270380Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T03:57:33.825762Z",
+                "finished_at": "2026-11-18T04:01:39.802917Z",
+                "elapsed_seconds": 245.977155
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T04:01:39.802882Z",
+          "finished_at": "2026-11-18T04:02:20.292151Z"
+        }
+      },
+      "finished_at": "2026-11-18T04:05:11.236103Z"
+    }
+  },
+  "current": {
+    "annotation": "InitDataqueue-annotation-r2",
+    "vc-checking": "InitDataqueue-vc-checking-r2",
+    "vc-proving": "InitDataqueue-vc-proving-r2"
+  },
+  "annotation_owner": "annotation/InitDataqueue-20261117224043",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "InitDataqueue-vc-proving-r2"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-11-18T04:07:41.849415Z",
+    "files": [
+      "VC/dataqueue/InitDataqueue_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-11-18T04:10:49.905248Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-11-17T14:40:43.402247Z",
+  "updated_at": "2026-11-18T04:10:49.929882Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-11-18T04:10:49.905226Z"
+}

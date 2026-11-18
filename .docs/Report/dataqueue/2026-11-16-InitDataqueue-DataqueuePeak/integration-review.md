@@ -1,4 +1,8 @@
+> **源码来源更新（2026-11-16）：** 本记录是全局整合当时的输入/检查证据。之后源码配置已切换至crtoslatest，当前源码错误复查见[source-errors.md](source-errors.md)；本记录不自动构成新来源的验证结果。
+
 # Dataqueue 全局整合检查
+
+> 2026-11-17：按用户要求删除Push/Pop/_SemaphoreObtain三个分析副本。下文涉及这些副本的同步与测试是删除前的历史记录；修复及适配代码保留在[source-changes.md](source-changes.md)，不表示当前仍有对应实现文件。七份canonical、lib和VC不受此次删除影响。
 
 本次已完成最新InitDataqueue设计及批准源码副本的全局整合，原工作区不是后续构建依赖。**新增设计的迁移对应性及全局lib类型检查通过；全部旧VC证明并未通过当前回归编译。** 本次没有运行QCP parser/symbolic、生成新VC或完成C实现证明。
 

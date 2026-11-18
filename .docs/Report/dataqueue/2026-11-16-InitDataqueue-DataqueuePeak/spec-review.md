@@ -1,29 +1,39 @@
-> 本文保留迁移前设计审阅的依据与结论。路径已更新为全局位置；原revision/hash指迁移前输入，不能直接作为当前全局编译或实现证明结论。当前整合情况见 [设计说明](design.md) 与 [整合检查](integration-review.md)。
+> 当前恢复说明：用户已授权具体DataQueue/DataElem布局事实，已接入dataqueue_layout_abi；下文旧ABI缺失记录是历史阻塞。当前正在map版本重编译与验证，尚无新的实现完成结论。
 
-# Dataqueue native spec 独立审阅
+> **2026-11-17 当前变更：** 用户已授权地址map改造，本文r1列表版本及旧Init VC适用性已invalidated；历史证据保留。当前设计与迁移检查见 [map-refactor.md](map-refactor.md)。ABI布局连接缺口仍待解决。
 
-**review-passed**。审阅者为main agent，非spec作者；日期2026-11-16。此结论针对当前输入重新核对，不继承已撤回方案的通过结论。
+# 当前 Spec 审阅
 
-Predicate：`dq-predicate-native-20261116-r1`，29份lib联合SHA-256 `36ddb2be676b077b06232a36527fa967dd248a4f6a1c082dc1fa9e62958e8842`，已独立通过，见 [predicate-review.md](predicate-review.md)。Spec：`dq-spec-native-20261116-r1`，7份canonical C及2份header，联合SHA-256 `b48685d3abfd9b3359121464f6511b23876519e718b0180671d9719ad89aa67f`。算法为C路径排序后接header路径排序，拼接“trial相对路径 空格 文件SHA-256 换行”再取SHA-256。
+> 2026-11-17：按用户要求删除Push/Pop/_SemaphoreObtain三个分析副本。下文涉及这些副本的同步与测试是删除前的历史记录；修复及适配代码保留在[source-changes.md](source-changes.md)，不表示当前仍有对应实现文件。七份canonical、lib和VC不受此次删除影响。
 
-## 范围与依赖
+**review-passed（当前七函数实验的设计范围）**。日期2026-11-16，reviewer为main，非本轮C/spec同步作者。本次复查源码变化及受影响规格，不是实现证明。
 
-Init调用闭包保留Init、DeInit及四个Semaphore函数；用户另行指定Peak。七份文件各有唯一真实body和canonical契约。八个已有spec只在caller声明，来源与条件性见 [spec-design.md](design.md)，不因证明缺失或模型差异扩大body范围，不自动标为trusted。五组本轮caller-local与canonical契约规范化后相同，共享NULL/Lock/Unlock契约一致，每个实际调用都有完整声明端spec。
+Predicate固定为已独立通过的 `dq-predicate-crtoslatest-20261116-r1`，输入与hash见[predicate-review.md](predicate-review.md)。Spec revision为 `dq-spec-crtoslatest-20261116-r1`；七份canonical C按工程相对路径排序，再接两个dataqueue header按路径排序，将各项 `path sha256\n` 拼接后取SHA-256：`ac42f2c9be1295424d2e941866aa08c4c78b3a31ea0cd535d6bd986a86c985fb`。具体文件与人需重点确认的条件见[设计说明](design.md)。原native revision已被本次输入替代。
 
-_SemaphoreCreate的memset初始化sem->link两个字段，ID与pending-list初始化只触及各自资源，因而已有typed InsertAfter前置可由frame建立。InitDoubleLinkList、Empty、Rm及ID接口采用既有资源语义。LinklistResumeAll保留完整IC接口和native效果；empty-pending令该分支不可达，新增queue保持义务已显式陈述，未当作完成证明。
+## 源码变化与契约对应
 
-## 路径、ownership与frame
+本次检查以crtoslatest `a07641a0b58469ae3ea19317cce2cf48974989bb`及当前ILP32、非SMP配置为依据。STATIC_OBJECTS和DEFER_IPC_SCHED未启用，因此生命周期检查宏为空，ON_WAKE沿用当前调度模型；不推广至其他配置。
 
-Init从完整私有结构开始，不排除n=0或1。成功发布结构和完整数组至os_inv，不重复返还私有资源；槽仍可未知，payload不归queue所有。n=0由当前分配器模型失败，n=1允许成功。三类失败保持真实解锁后IRQ重新进入的窗口，回滚返回-1，ID对为(-1,-1)、(-5,-1)、(-1,-5)。DeInit的init_cleanup只描述未发布对象回滚，保留原负ID与其余字段，不声称通用并发销毁。四份Semaphore IC契约保留分配、ID失败、负ID及查询失败分支。
+新版NULL检查只记录诊断，不提供正常返回时非空的保证。三个Dataqueue文件已删除旧NULL模型声明与调用；访问权限仍由Init私有完整结构、DeInit cleanup对象、Peak锁内os_inv及两个独立输出槽提供，没有为此加强Require。
 
-Peak的完整说明见 [dataqueue-peak-spec.md](design.md)。入口以C指针定位共享对象；读权限来自锁内os_inv，非空front槽Some来自ready关系。空路径返回-1并保持两个输出槽原option表示；非空返回0并写入同次观察的队首指针和长度。None输出允许未初始化存储，Some保留已知旧值；两个输出槽独立拥有且与系统资源分离。不要求payload所有权，不修改front/rear、数组或semaphore。锁内效果保持整个OS状态，外层允许加锁前环境变化，未把入口和出口状态错误等同。两出口都恢复同一次lock保存值。
+Delete先判断id<0或id>65535，再查表。同步后的OC抽象入口及本轮IC effect均保留非法输入直接返回、状态不变的路径；有效ID查找失败仍返回且不释放任何对象。128..65535未被错误地排除。合法命中路径的quiescent条件仍要求没有等待者且没有已发布queue引用，适用于Init失败清理，不把该接口解释为任意并发销毁。
 
-所有共享访问采用同一native Assertion与临界区协议；字段、padding、数组missing_i及归还资源的待证陈述已纳入predicate审阅。公开spec没有另造模型或忽略未触达资源。
+Init的三类失败与发布成功、DeInit的未发布对象回滚、Peak空/非空两出口及资源交接均保持原设计。Init不排除n=0/1；成功交出完整对象和数组至os_inv，失败返还私有对象并保留真实负错误码。Peak同锁检查与读槽，空路径不改两个输出，非空路径写出同次观察值，不取得payload所有权。两条路径均恢复原保存值。
 
-## 检查及结论限制
+## 闭包与输入检查
 
-沿用本阶段29份Rocq类型检查、header符号及native类型检查和7份ILP32 GCC语法检查。main核对原六份C逐字不变；Peak仅新增注解及既定NULL/调试适配，有效body与批准副本一致。Peak未新增semaphore调用。全局formal源码hash与阶段前一致；原源码及批准修复、IRQ授权保持。
+七个canonical位置及IC切片选择方法沿用[设计说明](design.md)：Init、DeInit、Peak及Create/Delete四个Semaphore函数。本轮审阅四个Semaphore的dataqueue IC场景；当前canonical中的OC body需按既定规则去除嵌套锁并选择具名IC callee契约，不能直接把OC body宣称为IC证明。
 
-默认白名单001适用于cleanup与Peak观察条件；宽松Rely下非真空性不作为blocker，也不声称可满足性已证明。该例外不增加信任、不免除后续VC。保存地址/ID不构成ABA世代保证。
+Main逐项比较修改前后七份C及两个header的正式注解，除删除旧NULL契约外全部保持。caller-local/canonical配对及复用边界未新增或改变；移除NULL模型后没有遗留调用。ID、DLL、LinklistResumeAll仍为记录了来源的reused-spec，分配、临界区、IRQ等沿用原授权接口。Push/Pop/_Obtain仅为分析上下文，没有因此增加完整spec或实现目标。
 
-没有已知设计blocker。此结论仅为设计审阅通过；未运行QCP注解parser、symbolic、VC、实现证明或全局统一编译。所有待证Prop及导入spec的证明条件仍有效，不能宣称依赖或完整调用链已证。本轮授权工作止于设计审阅；后续implement须按skill由用户确认两份revision后另行开展。
+Main重新执行源码对照：十一份已有C/header有效语句仅有规定的NULL移除和Delete范围检查变化；_Obtain逆向撤去三项已记录适配后与新版原函数逐字相同。22个实际body受控测试经main重编译并运行通过。作者的七份ILP32 GCC检查、63项header词汇和native类型检查、64份lib类型检查通过；检查范围与限制见[source-fix-review.md](source-fix-review.md)。
+
+## 结论边界
+
+默认白名单001仍适用，未新增信任或把待证Prop视为定理。通用OC Delete与已发布queue的生命周期兼容问题仍未解决，不在此次受限IC通过结论内。既有46份VC源码保持不变，其历史编译问题和新body所需证明均未在本轮解决；不以旧VC证明新版Delete。
+
+本次未运行QCP parser、symbolic、生成VC或实现证明。进入实现阶段仍需用户确认上述predicate/spec revisions。当前任务所要求的源码同步和现存错误整理已完成。
+
+2026-11-17 实现注解适配复核：Main核对两份header差异只有Extern Coq分块分隔符插入，声明未变；Init链式赋值按原求值顺序拆分，正式契约经controller冻结检查保持。原设计语义结论仍适用；当前7份C+2header摘要为 `30eaeacd0a2912c59a48f7781ccf2ce53184b2d49446688be2cad3e165daeb49`。新增断言的可证性仍待VC检查，annotation接纳不表示实现证明通过。详见design及source-changes。
+
+本轮map改造已分别独立审阅通过：`dq-predicate-map-20261117-r1` / `dq-spec-map-20261117-r1`。64份lib依赖编译通过、.vo保留；无新实现证明。当前正式输入与检查见[map-refactor.md](map-refactor.md)。

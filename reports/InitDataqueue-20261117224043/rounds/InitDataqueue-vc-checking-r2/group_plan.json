@@ -1,0 +1,382 @@
+{
+  "groups": [
+    {
+      "id": "storage_alignment",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_which_implies_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_InitDataqueue_which_implies_wit_1_split_goal_1": "Unfold DataqueueStorage; retain the owned 20 bytes. Project alignment/nonzero pure conjuncts and use authorized dataqueue_layout_abi size(DataQueue)=20 to rewrite the spatial length. No new address premise.",
+            "proof_of_InitDataqueue_which_implies_wit_1_split_goal_2": "Unfold DataqueueStorage; retain the owned 20 bytes. Project alignment/nonzero pure conjuncts and use authorized dataqueue_layout_abi size(DataQueue)=20 to rewrite the spatial length. No new address premise.",
+            "proof_of_InitDataqueue_which_implies_wit_1_split_goal_spatial": "Unfold DataqueueStorage; retain the owned 20 bytes. Project alignment/nonzero pure conjuncts and use authorized dataqueue_layout_abi size(DataQueue)=20 to rewrite the spatial length. No new address premise."
+          }
+        },
+        {
+          "name": "proof_of_InitDataqueue_which_implies_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_InitDataqueue_which_implies_wit_2_split_goal_spatial": "Use explicit PreH1 addr_aligned p_queue 4 and authorized dataqueue_layout_abi size/offset facts. Expand or split the 20 known-zero bytes at offsets 0,2,4,6,8,12,16,20. Construct zero UShort stores at p,p+2,p+4, zero Ptr at p+8, zero Int at p+12,p+16; forget values only in padding [p+6,p+8). Derive typed valid_object range from byte ranges and alignment2/4 from PreH1. Cancel each byte exactly once. No spatial resource is introduced by the ABI fact."
+          }
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_4_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Specifically PreH4 is exactly addr_aligned p_queue_pre 4; extract it without using the byte array for alignment."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. The new aux preserves the known full-zero byte array plus os_inv/InsideCritical and reasserts entry alignment."
+        }
+      ]
+    },
+    {
+      "id": "publish_transition",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Select LEFT whole-goal alternative (right fallback incorrectly requires the pre-publication map already contains q). Derive 0<=n<=65535 from max_len UShort; use ABI DataElem size8 and malloc bounds to eliminate 32-bit multiplication truncation, establish n>0. Build q=dataqueue_constructed n base blank data, convert bytes to repeat None slots, fold store_dataqueue. Derive map p=None by store_map_split plus exclusive duplicate private/shared front store. Two create effects yield distinct fresh IDs and exact semaphore refs. Choose after=replace_dataqueues(dataqueue_publish p q after_3.os_dataqueues) after_3, insert cell with MapLib, preserve task/other global records explicitly where indexed by full state. Show ready and sem association. Construct init-phase high step from observed; apply safeExec/highstepbind_derive to return0 and GTrans. Preserve InsideCritical. Extra alignment premise is available, not a new requirement."
+        }
+      ]
+    },
+    {
+      "id": "cleanup_transitions",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_2_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use q=dataqueue_constructed n 0 (-1) (-1), refs=(None,None), held=after=observed. Cancel six fields and padding into store_dataqueue with empty buffer (no malloc bytes). Choose third disjunct. Instantiate actual malloc-failure phase, derive safeExec cleanup;;ret(-1) via high-step bind; choose Y=fun _=>X(-1) and establish universal final-return bridge via wp_bind/wp_ret. Retain os_inv and InsideCritical. Does not assume cleanup guard separately. This malloc-failure path has positive requested length."
+        },
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_2_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use q=dataqueue_constructed n 0 (-1) (-1), refs=(None,None), held=after=observed. Cancel six fields and padding into store_dataqueue with empty buffer (no malloc bytes). Choose third disjunct. Instantiate actual malloc-failure phase, derive safeExec cleanup;;ret(-1) via high-step bind; choose Y=fun _=>X(-1) and establish universal final-return bridge via wp_bind/wp_ret. Retain os_inv and InsideCritical. Does not assume cleanup guard separately. This malloc-failure path has zero requested length; do not require n>0."
+        },
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_2_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose second disjunct and q=dataqueue_constructed n base (-5) (-1), refs=(None,None), held=observed, after=after_2. Get n range from UShort; normalize byte length with ABI and convert allocated bytes into slots, fold six fields/padding. Use failed first create effect and malloc success to build exact init phase and derive cleanup continuation Y and final-return bridge. Preserve current os_inv/InsideCritical; do not discard allocation."
+        },
+        {
+          "name": "proof_of_InitDataqueue_entail_wit_2_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose first disjunct and q=dataqueue_constructed n base blank (-5), refs=(Some blank_ptr,None), held=observed, after=after_3. First successful create supplies blank_ptr/ref and fresh ID; second failed create retains it. Normalize byte length and fold object/array. Construct both effects in exact init phase and derive cleanup continuation Y plus return(-1) bridge. Do not assume deletion or discharge cleanup contract body here."
+        }
+      ]
+    },
+    {
+      "id": "return_projection",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose q=dataqueue_retired q_3, after=after_4; select the disjunct matching (-1,-5), (-5,-1), or (-1,-1) respectively for return1,2,3. Unfold retired only for fields, preserve store_dataqueue/OutsideCritical, apply given forall-final bridge to safeExec return tt Y."
+        },
+        {
+          "name": "proof_of_InitDataqueue_return_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose q=dataqueue_retired q_3, after=after_4; select the disjunct matching (-1,-5), (-5,-1), or (-1,-1) respectively for return1,2,3. Unfold retired only for fields, preserve store_dataqueue/OutsideCritical, apply given forall-final bridge to safeExec return tt Y."
+        },
+        {
+          "name": "proof_of_InitDataqueue_return_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose q=dataqueue_retired q_3, after=after_4; select the disjunct matching (-1,-5), (-5,-1), or (-1,-1) respectively for return1,2,3. Unfold retired only for fields, preserve store_dataqueue/OutsideCritical, apply given forall-final bridge to safeExec return tt Y."
+        },
+        {
+          "name": "proof_of_InitDataqueue_return_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose current q_3 and after_3 in the left whole-goal alternative; lookup, empty indices, two distinct nonnegative IDs and safeExec return0 are all explicit premises. Preserve OutsideCritical unchanged."
+        }
+      ]
+    },
+    {
+      "id": "safety_1_10",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process use the incompatible branch premises (zero/nonzero malloc or negative/nonnegative Create return) to prove False. No missing resources are inferred from arbitrary states."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process use the incompatible branch premises (zero/nonzero malloc or negative/nonnegative Create return) to prove False. No missing resources are inferred from arbitrary states."
+        }
+      ]
+    },
+    {
+      "id": "safety_11_20",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process use the incompatible branch premises (zero/nonzero malloc or negative/nonnegative Create return) to prove False. No missing resources are inferred from arbitrary states."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_12",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_InitDataqueue_safety_wit_12_split_goal_1": "Use max_len or NodeNumber UShort store to derive 0<=NodeNumber_pre<=65535; frame all memory and prove NodeNumber_pre-1<=INT_MAX by arithmetic.",
+            "proof_of_InitDataqueue_safety_wit_12_split_goal_2": "Use same UShort range to prove INT_MIN<=NodeNumber_pre-1; frame remaining memory."
+          }
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_15",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_16",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process use the incompatible branch premises (zero/nonzero malloc or negative/nonnegative Create return) to prove False. No missing resources are inferred from arbitrary states."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_17",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process use the incompatible branch premises (zero/nonzero malloc or negative/nonnegative Create return) to prove False. No missing resources are inferred from arbitrary states."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_18",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_19",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_20",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        }
+      ]
+    },
+    {
+      "id": "safety_21_29",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_21",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process use the incompatible branch premises (zero/nonzero malloc or negative/nonnegative Create return) to prove False. No missing resources are inferred from arbitrary states."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_22",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process use the incompatible branch premises (zero/nonzero malloc or negative/nonnegative Create return) to prove False. No missing resources are inferred from arbitrary states."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_23",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_24",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_25",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_26",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_27",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_28",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        },
+        {
+          "name": "proof_of_InitDataqueue_safety_wit_29",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "After LLM_pre_process, prove displayed constant Int bounds or inequality by integer arithmetic. Frame all spatial resources; no object unfolding required."
+        }
+      ]
+    },
+    {
+      "id": "call_frames_1",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Pure projection or direct resource permutation."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Pure projection or direct resource permutation."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_3_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Pure projection or direct resource permutation."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Auxiliary implication: introduce antecedent and unfold auxiliary definition."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Pure projection or direct resource permutation."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_6",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Pure projection or direct resource permutation."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_7",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Pure projection or direct resource permutation."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_8_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Pure projection or direct resource permutation."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_8",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Auxiliary implication: introduce antecedent and unfold auxiliary definition."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_9_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Pure projection or direct resource permutation."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_9",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Auxiliary implication: introduce antecedent and unfold auxiliary definition."
+        }
+      ]
+    },
+    {
+      "id": "call_frames_2",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_10_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Pure projection or direct resource permutation."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_10",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Auxiliary implication: introduce antecedent and unfold auxiliary definition."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_11_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Pure projection or direct resource permutation."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_11",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Auxiliary implication: introduce antecedent and unfold auxiliary definition."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_12_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Pure projection or direct resource permutation."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_12",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Auxiliary implication: introduce antecedent and unfold auxiliary definition."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_13_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Pure projection or direct resource permutation."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_13",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Auxiliary implication: introduce antecedent and unfold auxiliary definition."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_14_pure",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Pure projection or direct resource permutation."
+        },
+        {
+          "name": "proof_of_InitDataqueue_partial_solve_wit_14",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Preserve every spatial cell at the same address (reorder/cancel only). Required pure facts are already named premises; for implication-shaped partial_solve, introduce the pure premise then unfold auxiliary target. No abstract-state transition is invented. Retain lock/current parameter and caller resources exactly. Auxiliary implication: introduce antecedent and unfold auxiliary definition."
+        }
+      ]
+    }
+  ]
+}

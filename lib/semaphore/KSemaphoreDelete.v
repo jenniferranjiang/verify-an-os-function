@@ -92,12 +92,13 @@ Definition abs_semaphore_delete_locked (id : Z) : program VarGlobalState bool :=
        exists p, semaphore_delete_locked_effect id p resched before after;
      err := fun _ => False |}.
 
-(** 负 ID 直接返回；其余路径做一次锁内抽象操作，锁外 free 消费私有对象，
+(** id<0或id>65535直接返回；通过SemIdInvalid检查后才做锁内抽象操作，
+    锁外free消费私有对象，
     最后仅在原等待队列非空时调用文档规定的 KTASK_ASSIGN 模型。
     该模型不证明硬件调度实现；其 rely 变化和临界区交接复用全系统协议。 *)
 Definition abs_semaphore_delete (sg : StableGlobalState) (id : Z)
     : program (VarGlobalState -> Prop) unit :=
-  if Z.ltb id 0 then MonadErr.ret tt
+  if semaphore_id_invalid id then MonadErr.ret tt
   else MonadErr.bind (task_atomic_cmd (abs_semaphore_delete_locked id))
          (fun resched => if resched then abs_ktask_assign else MonadErr.ret tt).
 
@@ -137,23 +138,25 @@ Definition semaphore_resume_all_effect_steps_obligation : Prop :=
          sem.(semaphore_pending_addrs) before after) ”.
 
 
-(** 只约束实际会找到的对象；负 ID 和 lookup 失败仍保留真实早返回路径。
+(** 只对通过SemIdInvalid范围检查的输入约束实际会找到的对象；
+    负ID、超过65535的ID和lookup失败均保留真实早返回路径。
     Init 回滚尚未发布 queue，且新 semaphore 无等待者，满足此场景。
     非空等待队列的一般删除不由本轮 IC 规格覆盖。 *)
 Definition semaphore_delete_quiescent (id : Z) (st : VarGlobalState) : Prop :=
-  0 <= id ->
+  0 <= id <= 65535 ->
   (forall s, In s st.(os_semaphores) ->
     s.(semaphore_id) = semaphore_query_id id -> s.(semaphore_pending_addrs) = nil) /\
-  (forall q, In q st.(os_dataqueues) ->
+  (forall p q, st.(os_dataqueues).(dataqueue_map) p = Some q ->
     q.(dq_sem_blank) <> semaphore_query_id id /\
     q.(dq_sem_data) <> semaphore_query_id id).
 
-(** Delete 的实际 ID 转窄仍保留；不存在时只允许抽象状态不变，存在时只摘除
+(** Delete先检查完整int32 ID范围，越界直接保持状态；有效范围内的转窄
+    不改变ID。不存在时只允许抽象状态不变，存在时只摘除
     查到的同一地址，free 由具体内存契约回收，不冒充纯函数释放内存。 *)
 Definition semaphore_delete_ic_effect (id : Z)
     (before after : VarGlobalState) : Prop :=
-  (id < 0 /\ after = before) \/
-  (0 <= id /\
+  ((id < 0 \/ 65535 < id) /\ after = before) \/
+  (0 <= id <= 65535 /\
     (( (forall s, In s before.(os_semaphores) ->
           s.(semaphore_id) <> semaphore_query_id id) /\ after = before) \/
      (exists s, In s before.(os_semaphores) /\

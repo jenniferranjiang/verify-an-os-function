@@ -1,8 +1,23 @@
+> 2026-11-18最新状态：Init已接纳44/62顶层VC（10组），累计预算约99–100分钟，停止新增证明尝试；无函数final-check。余18个目标、局部对齐注解修复及重试，详见[implementation-result.md](implementation-result.md)。
+
+> 当前恢复说明：用户已授权具体DataQueue/DataElem布局事实，已接入dataqueue_layout_abi；下文旧ABI缺失记录是历史阻塞。当前正在map版本重编译与验证，尚无新的实现完成结论。
+
 # Dataqueue：全局新增内容与规格导读
 
-本轮将已经完成的InitDataqueue/初始化回滚/Peak设计及源码修复上下文整合到全局工程。这里解释新增内容及其用途；源码修改前后与原因见 [source-changes.md](source-changes.md)，实际检查与旧证明适用性见 [integration-review.md](integration-review.md)。这次整合没有运行QCP或完成新的C实现证明。
+当前实验已按crtoslatest（a07641a0b58469ae3ea19317cce2cf48974989bb）同步已有InitDataqueue/初始化回滚/Peak设计及源码上下文。这里解释新增内容及其用途；源码修改前后与原因见 [source-changes.md](source-changes.md)，实际检查与旧证明适用性见 [integration-review.md](integration-review.md)。这次整合没有运行QCP或完成新的C实现证明。
 
-## 本轮lib新增和修改在讲什么
+## 本轮crtoslatest同步改了什么
+
+当前改动集中在两个已有lib文件、七份canonical C、两份header和三份分析副本：
+
+- SemaphoreOps新增semaphore_id_invalid，表达原实现SemIdInvalid的负值或高于65535检查。KSemaphoreDelete的公开program、IC effect和quiescent条件同步：非法ID直接保持状态；合法表示范围内再查对象，不能把65536窄化为ID0去删除。
+- Init/DeInit/Peak及Push/Pop上下文按新NULL诊断宏规则注释移除，取消旧NULL_PARAM_CHECK_1及其非空保证。已有DataqueueStorage/dataqueue_owned或锁内os_inv承担访问权限，未加强入口Require。
+- Semaphore wrapper的生命周期检查宏在当前未启用STATIC_OBJECTS的配置下为空；ON_WAKE在未启用DEFER_IPC_SCHED时等同既有调度模型。源码对应条件直接标在输入中。
+- _SemaphoreObtain分析副本完整采用新版ID/timeout检查及Delay失败唤醒自身回滚分支；调度后的exstatus读取另作最小临界区适配。它仍不是已完成规格的新证明目标。
+
+人工审阅应重点确认：Delete对65536等高ID现在必须直接返回；诊断宏省略不再提供非空事实；已有Dataqueue副本修复继续适用而没有扩大到原仓库；Obtain的新上游分支不能被误记为本轮新完成的spec或证明。
+
+## 已建立的lib设计及其用途
 
 | 全局位置 | 内容与原因 |
 | --- | --- |
@@ -31,7 +46,7 @@ semaphore对象只由原semaphore invariant拥有，queue拥有的是两个ID字
 
 新增dataqueue关联会影响原本不知道queue存在的共享API。尤其通用OC KSemaphoreDelete的原抽象允许删除任意查得的ID，但新的queue invariant要求关联semaphore存在。如果该ID仍被已发布queue引用，删除后这一关系无法恢复。
 
-本次保留旧OC契约与证明源码，不擅自加强其Require，也不删去queue关联来掩盖问题；**旧通用删除保证在新全局模型下需重新处理生命周期条件**。本轮init_cleanup已有无queue引用等guard，不能把它的受限保证推广为通用销毁。类型检查通过与旧API语义重新获证是两回事。
+OC契约沿用接口形式并同步新的ID入口检查，旧证明源码保留；没有加强Require或删去queue关联来处理生命周期问题；**旧通用删除保证在新全局模型下需重新处理生命周期条件**。本轮init_cleanup已有无queue引用等guard，不能把它的受限保证推广为通用销毁。类型检查通过与旧API语义重新获证是两回事。
 
 ## 本轮函数规格在讲什么
 
@@ -40,7 +55,7 @@ semaphore对象只由原semaphore invariant拥有，queue拥有的是两个ID字
 | [InitDataqueue](../../../../annotated_C/src/kernel/dataqueue/InitDataqueue.c) | 成功返回0并发布空队列；三类失败返回-1、回收已取得资源并返还结构。 | caller提供的是新存储或完整退役存储，不是可重复初始化的live queue；失败路径确实经历Unlock到IRQ重入窗口。 |
 | [DeInitDataqueue](../../../../annotated_C/src/kernel/dataqueue/DeInitDataqueue.c) | init_cleanup清理未发布对象，base清空，已取得的非负ID删除后置-1。 | 此规格是Init回滚用途；已有负错误码保持，不保证所有失败字段都是-1，不覆盖任意等待者/并发销毁。 |
 | [KSemaphoreCreate](../../../../annotated_C/src/kernel/semaphore/KSemaphoreCreate.c)、[_SemaphoreCreate](../../../../annotated_C/src/kernel/semaphore/_SemaphoreCreate.c) | 新增dataqueue_ic，表达持锁创建成功或-5失败，保存其他模块。 | 全局原OC接口仍存在；IC源码适配与callee选择见下节，不能把OC证明直接视为IC证明。 |
-| [KSemaphoreDelete](../../../../annotated_C/src/kernel/semaphore/KSemaphoreDelete.c)、[_SemaphoreDelete](../../../../annotated_C/src/kernel/semaphore/_SemaphoreDelete.c) | 新增dataqueue_cleanup_ic，覆盖负ID、查找失败及无等待者删除。 | quiescent前提限制了实际使用场景；保留真实唤醒分支，但当前清理条件使其不可达。 |
+| [KSemaphoreDelete](../../../../annotated_C/src/kernel/semaphore/KSemaphoreDelete.c)、[_SemaphoreDelete](../../../../annotated_C/src/kernel/semaphore/_SemaphoreDelete.c) | 新增dataqueue_cleanup_ic，覆盖非法ID、查找失败及无等待者删除。 | quiescent前提限制了实际使用场景；保留真实唤醒分支，但当前清理条件使其不可达。 |
 | [DataqueuePeak](../../../../annotated_C/src/kernel/dataqueue/DataqueuePeak.c) | 空时返回-1并保持输出；非空返回0，写同次锁内观察的队首指针和长度。 | 输出cell由caller提供且可未初始化；payload不归函数拥有，操作不推进front或修改semaphore。 |
 
 ### 初始化的成功与失败
@@ -63,7 +78,7 @@ ID与DLL等已有接口以caller-local完整契约复用；其实现证明状态
 
 ## Semaphore IC设计的单canonical保存方式
 
-四份既有Semaphore全局canonical保留原OC函数体、原OC契约及其所有OC专用注解，迁入的IC契约和完整callee接口以额外具名declaration放在同一文件前部。每个文件仍只有一个active定义，没有另存第二份IC权威body。原OC段已逐字核对保持；原证明文件未被该迁移覆盖或删除。新增IC契约不表示原OC body无需适配即可满足它，也不表示IC实现已有证明。
+四份Semaphore全局canonical保留OC和具名IC两种接口。OC函数体已同步新源码的ID范围检查和当前配置下的宏归一，其余既有OC专用注解继续保留；IC契约和完整callee接口在同一文件前部。每个文件仍只有一个active定义，没有另存第二份IC权威body。原证明文件保留；涉及新行为的旧VC不能直接视为当前输入的已证结论。新增IC契约不表示原OC body无需适配即可满足它，也不表示IC实现已有证明。
 
 | canonical | IC目标选择 | body适配 |
 | --- | --- | --- |
@@ -78,7 +93,7 @@ ID与DLL等已有接口以caller-local完整契约复用；其实现证明状态
 
 ### IC调用选择
 
-以下新增选名只区分同一C符号的OC/IC声明，不修改所迁入的Require/Ensure含义。此前无名的导入契约命名为`dataqueue_ic_import`；其余导入场景加`dataqueue_ic_`前缀。目标四函数的既定IC名字保持。原OC契约名字与内容不变。
+以下新增选名只区分同一C符号的OC/IC声明，不修改所迁入的Require/Ensure含义。此前无名的导入契约命名为`dataqueue_ic_import`；其余导入场景加`dataqueue_ic_`前缀。目标四函数的既定IC名字保持。OC契约名字保留，其引用的Delete抽象已按新ID范围语义更新。
 
 | caller | callee | IC切片选名 | 迁入前选名 |
 | --- | --- | --- | --- |
@@ -103,7 +118,7 @@ ID与DLL等已有接口以caller-local完整契约复用；其实现证明状态
 
 ### 迁移检查
 
-7份全局canonical通过ILP32 GCC C11语法检查（原OC内部两份保留的未使用lock局部仅作既有警告抑制）。4个Semaphore文件各恰好一个active目标定义，原OC完整文本段与迁移前SHA-256一致。3份未完成规格的源码副本逐字保存在`annotated_C/module_context/dataqueue/`及`annotated_C/module_context/semaphore/`，没有误放为新canonical，也没有丢失已批准修复。迁移没有运行QCP parser/symbolic、VC或实现证明；全局Rocq一致性检查另由构建记录说明。
+7份全局canonical通过ILP32 GCC C11语法检查（原OC内部两份保留的未使用lock局部仅作既有警告抑制）。4个Semaphore文件各恰好一个active目标定义，本轮源对应检查覆盖OC/IC共享函数体中的新ID检查及配置归一。3份未完成规格的分析副本已于2026-11-17按用户要求删除；批准修复及适配代码保留在[source-changes.md](source-changes.md)。迁移没有运行QCP parser/symbolic、VC或实现证明；全局Rocq一致性检查另由构建记录说明。
 
 ## 本轮VC及证明内容
 
@@ -111,8 +126,40 @@ ID与DLL等已有接口以caller-local完整契约复用；其实现证明状态
 
 将来进入获批实现阶段后，关键义务将包括结构/数组字节拆合、两次Create的发布与失败frame、IRQ回滚资源恢复，以及Peak借出队首槽并归还os_inv。这些是现有设计中待证明的关系，当前不能称为已完成VC或已证结论。
 
-## 待继续的函数与未修复问题
+## 后续范围与当前限制
 
-[PushDataqueue](../../../../annotated_C/module_context/dataqueue/PushDataqueue.c)、[PopDataqueue](../../../../annotated_C/module_context/dataqueue/PopDataqueue.c)与[_SemaphoreObtain](../../../../annotated_C/module_context/semaphore/_SemaphoreObtain.c)保留为源码上下文。零超时Obtain副本修复已批准并独立检查；它不等于完整Obtain契约已完成。
+`PushDataqueue`、`PopDataqueue`和`_SemaphoreObtain`尚无完整新spec；分析时直接读取源码，已删除独立分析副本。Dataqueue原文件中四项仍存在的问题和副本处理见 [source-errors.md](source-errors.md)。新版已处理的等待缺陷不再作为当前错误项或待批准补丁。
 
-新增Push/Pop及Obtain/Abandon设计仍受两个源码问题阻塞：延时链回绕排序，以及有限等待时Delay分配失败未回滚。它们尚未获修复授权；并发退役/ID复用条件及成功Obtain后仍空/满的真实分支也需如实设计。此次整合只保存现有成果和证据，未补写这些未完成规格。
+Push/Pop及Obtain/Abandon的完整新spec还未编写，后续需据新源码设计多阶段行为、生命周期与相应等待接口。此前通用OC删除可能破坏queue引用关系的模型问题仍需单独处理，不能用新ID上界检查替代它。本轮未运行QCP或生成新VC。
+
+## 2026-11-17 实现阶段：Init VC
+
+已生成 [InitDataqueue_goal.v](../../../../VC/dataqueue/InitDataqueue_goal.v)、auto/manual及goal_check四份正式VC。当前只完成annotation接纳和依赖准备，未完成实现证明。VC对应：DataqueueStorage展开为memset所需字节资源；清零后字段与padding的拆分；malloc分支的数组所有权；两次Create后的成功发布；三类失败将私有对象交给cleanup并衔接safeExec返回-1的续体。新增断言是待证明的切点，不是额外Require，也没有将lib中的obligation Prop当作定理使用。
+
+两份公共header仅拆开混合kind/term的Extern Coq块，声明序列保持；Init链式赋值按原顺序拆为rear=0、front=0。正式契约含义保持已批准revision，新增body注解的义务须由manual证明。工具适配文件为根qcp-project.json、qcp-layout.json，QCP四处路径适配使同一全局工程的符号执行、依赖构建和VC输出使用VC/dataqueue。恢复与实际结果见 [controller](../../../../reports/InitDataqueue-20261117004005/controller_state.json)。
+
+2026-11-17 当前实现状态：Init已生成VC并接纳annotation/VC-checking，首组因缺少正式DataQueue/DataElem ABI连接被controller接纳为blocked；无实现证明或final-check完成，后续阶段未启动。当前结果、任务表与待决方案见[implementation-result.md](implementation-result.md)。
+
+## 2026-11-17 地址map改造（当前设计）
+
+用户授权将列表对象集改为partial function。新的DataQueueAbs去掉dq_addr，结构地址由map key及store_dataqueue的p参数承担；dq_base仍描述malloc得到的元素数组。DataqueueState只保存dataqueue_map : addr -> option DataQueueAbs，无额外权威对象列表。Some表示已发布，None也允许尚未初始化/私有回滚对象存在于os_inv外，不等于该地址物理未分配。
+
+全局原os_dataqueues分量与replace_dataqueues接口位置保持，分量类型内部变为map；原os_inv中的dataqueue_inv改用store_map store_dataqueue并逐lookup要求ready及semaphore关联。每个cell拥有结构字段、原padding与完整槽数组，不拥有payload或Semaphore本体。有限定义域及无重复key来自QCP store_map，不虚构C全局管理表。
+
+发布在map p=None时写Some q；其他key保持。Peak用lookup定位并拆合store_dataqueue p q；Push/Pop已有纯操作保留，未来更新同一key即可。cleanup guard改为map p=None；仅处理未发布的私有对象，abs_deinit显式接收真实地址p。SemaphoreDelete的无引用条件改为对所有lookup命中条目量化。跨生命周期地址复用、semaphore ABA和通用删除生命周期问题没有因此解决。
+
+本轮正式规格改为DataQueueAbs和store_dataqueue(p_queue,q)，Init成功Ensure用lookup=Some，DeInit canonical与Init内导入同步。C可执行语句逐字归一比较不变。split/merge、发布/撤回等原待证义务已按map接口改写，仍不是已证明定理。新接口没有新增Axiom/Admitted或布局信任。
+
+旧dq-predicate/spec-crtoslatest-20261116-r1不再描述当前formal输入，标为invalidated（历史记录保留）。旧Init run和四份VC也为invalidated，依旧保存为workflow恢复/诊断依据；不得手改生成VC来匹配新设计。恢复实现需以重新审阅的map设计初始化新的冻结输入，不能继续旧run宣称当前版本通过。ABI布局连接缺口仍未解决，当前授权不包含其信任例外。
+
+## ABI授权后的验证恢复
+
+用户已确认按原第一阶段、再Pop、再Push继续，并授权类似本次有依据的修改。DataqueueInv新增唯一具体ABI公理dataqueue_layout_abi，内容严格为既有dataqueue_layout陈述（两个sizeof及八个字段地址偏移），依据当前ILP32 GCC静态断言检查。此授权不把任何资源拆合、map操作或函数效果当作公理。TrustBase用户文件不修改，既有IRQ边界保持。map设计与canonical契约含义不变；布局缺失的阻塞已补入正式输入，实际VC是否通过仍由新workflow检查。
+
+当前map+ABI发布组的实际证明路线：从typed ushort store推出NodeNumber范围；展开QCP sizeof包装后应用dataqueue_layout_abi，将分配长度归一为n*8并证明32位截断无影响。随后构造8字节到DataElem指针/长度两字段的转换与数组组合。已通过的调试步骤不代表完整VC已证；完整发布还需要map地址freshness、semaphore关联及safeExec精化。
+
+2026-11-18 annotation-r2修复：memset后字节到字段的which-implies显式在两侧保留已有addr_aligned(p_queue,4)。此前CharArray.full仅给字节对齐，不能推出typed字段对齐，这是局部注解遗漏，不是源码错误，也不需要新Require/ABI。公开spec与执行语句未变。r1已接纳60/62顶层VC，r2重新生成后部分下游目标新增显式对齐前提，必须按当前目标检查/适配旧证明，不自动继承旧accepted。
+
+## Init实现证明完成
+
+InitDataqueue-20261117224043 controller完成第二轮9组63个顶层VC，parent整文件检查、final-apply、final-check均通过，phase=done。正式manual位于VC/dataqueue/InitDataqueue_proof_manual.v。关键证明以具体ABI为布局依据，构造字节/数组转换、map freshness与发布、三类失败cleanup续体、返回和安全目标。第二轮修复了memset局部which-implies遗漏对齐前提，未改公开Require或函数行为。结论相对于KSemaphoreCreate和DeInit的canonical contracts，不能代替这些callee实现证明；后续串行验证闭包。

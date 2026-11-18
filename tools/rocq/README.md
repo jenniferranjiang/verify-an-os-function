@@ -1,5 +1,24 @@
 # QCP / Rocq MCP 运行环境
 
+根目录使用参考 `vrtos` 编写的手写 Makefile，直接调用 `coqdep` / `coqc`，
+不再用 `coq_makefile` 生成构建规则。修改文件清单或逻辑路径时编辑根 `Makefile`
+中的 `lib_FILES`、`VC_code_proof_FILES` 和 `COQ_FLAG`；构建会同步生成编辑器和
+MCP 使用的 `_CoqProject`，并自动更新 `.depend`，支持并行和单文件依赖构建。
+
+```sh
+make lib -j2                  # 编译共享库
+make VC/dataqueue/InitDataqueue_goal.vo  # 编译指定目标及其依赖
+make -j2                      # 编译全部已登记的库和 VC
+make depend                   # 更新依赖
+make print-env                # 检查工具链
+make coq_clean                # 清理编译产物，保留证明源码
+```
+
+`make -f Makefile.coq` 兼容旧命令，统一使用根 Makefile 的规则。
+默认通过 `tools/rocq/launch-mcp run` 使用 `toolchain.json` 中的环境。
+全量构建包含归档 VC；它们的既有兼容错误仍需单独处理，编译通过也不表示
+含有占位证明的文件已经完成验证。
+
 `launch-mcp rocq` 和 `launch-mcp qcp` 都启动
 `/home/xinra/qcp-binary-democases/mcp/` 中的服务。`toolchain.json` 是唯一的环境选择入口；
 `coqc` 适配器读取当前工程的 `_RocqProject` / `_CoqProject`，不固定到某个 trial。

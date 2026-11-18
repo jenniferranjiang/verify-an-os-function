@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-layout-premise",
+    "vcs": [
+      {
+        "name": "proof_of_InitDataqueue_entail_wit_1",
+        "parent": null,
+        "annotation_location": "InitDataqueue success-publication Assert before CriticalAreaUnLock"
+      }
+    ],
+    "message": "Malloc supplies n*sizeof(\"DataElem\") symbolic bytes, but published dataqueue_slot uses fixed 8-byte stride; no DataQueue/DataElem size/field layout theorem or premise exists. dataqueue_layout is only an unproved Prop, and alias-size/field_address are opaque parameters. Need checked frontend layout instantiation or explicit user decision; cannot assume new layout facts within proof.",
+    "repair_boundary": "global layout/frontend connection and affected annotation/spec review; no group proof-only repair"
+  }
+}

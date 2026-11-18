@@ -1,0 +1,1 @@
+Reused the four accepted return proof spans from r1 group_04__returns without changes. Each current return witness definition is byte-for-byte identical to annotation-attempt1/after goal definition. Current r2 controller group-check recompiles and validates these proofs.

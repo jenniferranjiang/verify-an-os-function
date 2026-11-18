@@ -17,6 +17,9 @@ compile_commands.json
 .nia.cache
 .Makefile.coq.d
 .Makefile.d
+.depend
+.depend.tmp
+_CoqProject.tmp
 rocq_mcp_cache_*.v
 *:Zone.Identifier
 
