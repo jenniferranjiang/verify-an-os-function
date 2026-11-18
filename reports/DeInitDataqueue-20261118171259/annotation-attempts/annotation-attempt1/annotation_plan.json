@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "DisableLocalInterrupt",
+      "meaning": "既有IRQ资源边界：从OutsideCritical进入观察态并取得os_inv。"
+    },
+    {
+      "name": "EnableLocalInterrupt",
+      "meaning": "按既定GTrans归还锁内资源，恢复OutsideCritical，C原样传回保存值。"
+    },
+    {
+      "name": "x_free",
+      "meaning": "返还整个非空正长度分配字节块。"
+    },
+    {
+      "name": "KSemaphoreDelete",
+      "meaning": "dataqueue_cleanup_ic：在quiescent条件下删除所查Semaphore并保持os_inv。"
+    },
+    {
+      "name": "DeInitDataqueue",
+      "meaning": "init_cleanup：清理未发布的私有部分初始化队列，释放数组并条件删除已取得的非负ID，返还退役结构和OutsideCritical，保持原safeExec续体。"
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

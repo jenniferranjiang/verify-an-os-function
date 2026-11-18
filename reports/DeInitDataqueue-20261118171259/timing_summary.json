@@ -1,0 +1,168 @@
+{
+  "run": {
+    "status": "completed",
+    "phase": "done",
+    "created_at": "2026-11-18T09:12:59.242887Z",
+    "finished_at": "2026-11-18T09:26:49.128936Z",
+    "elapsed_seconds": 829.886049
+  },
+  "commands": [
+    {
+      "phase": "annotation",
+      "command": "coq-check",
+      "calls": 1,
+      "elapsed_seconds": 0.026263
+    },
+    {
+      "phase": "annotation",
+      "command": "symexec",
+      "calls": 1,
+      "elapsed_seconds": 1.574211
+    },
+    {
+      "phase": "annotation",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 0.846112
+    },
+    {
+      "phase": "vc-checking",
+      "command": "dune-build",
+      "calls": 1,
+      "elapsed_seconds": 2.059532
+    },
+    {
+      "phase": "vc-checking",
+      "command": "coq-debug",
+      "calls": 1,
+      "elapsed_seconds": 26.102259
+    },
+    {
+      "phase": "vc-checking",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 0.054313
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-preparing",
+      "calls": 1,
+      "elapsed_seconds": 0.065437
+    },
+    {
+      "phase": "vc-proving",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 36.202445
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-verify",
+      "calls": 1,
+      "elapsed_seconds": 34.950183
+    },
+    {
+      "phase": "final-check",
+      "command": "final-apply",
+      "calls": 1,
+      "elapsed_seconds": 36.603951
+    },
+    {
+      "phase": "done",
+      "command": "final-check",
+      "calls": 1,
+      "elapsed_seconds": 37.772803
+    }
+  ],
+  "annotation_attempts": [
+    {
+      "attempt_id": "DeInitDataqueue-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-11-18T09:14:19.336031Z",
+          "finished_at": "2026-11-18T09:14:19.375714Z",
+          "elapsed_seconds": 0.026263
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T09:15:27.254196Z",
+          "finished_at": "2026-11-18T09:15:28.109214Z",
+          "elapsed_seconds": 0.846112
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T09:13:16.169969Z",
+          "finished_at": "2026-11-18T09:15:27.268626Z",
+          "elapsed_seconds": 131.098657
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-11-18T09:14:26.353115Z",
+          "finished_at": "2026-11-18T09:14:27.942057Z",
+          "elapsed_seconds": 1.574211
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "attempt_id": "DeInitDataqueue-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-debug",
+          "started_at": "2026-11-18T09:18:18.868363Z",
+          "finished_at": "2026-11-18T09:18:44.979599Z",
+          "elapsed_seconds": 26.102259
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T09:19:28.808159Z",
+          "finished_at": "2026-11-18T09:19:28.869994Z",
+          "elapsed_seconds": 0.054313
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T09:16:04.350629Z",
+          "finished_at": "2026-11-18T09:19:28.823496Z",
+          "elapsed_seconds": 204.472867
+        }
+      ]
+    },
+    {
+      "attempt_id": "DeInitDataqueue-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T09:23:09.294208Z",
+          "finished_at": "2026-11-18T09:23:46.849643Z",
+          "elapsed_seconds": 36.202445
+        },
+        {
+          "name": "group-work",
+          "started_at": "2026-11-18T09:19:42.134405Z",
+          "finished_at": "2026-11-18T09:23:09.308782Z",
+          "elapsed_seconds": 207.174377
+        },
+        {
+          "name": "vc-proving-preparing",
+          "started_at": "2026-11-18T09:19:34.614284Z",
+          "finished_at": "2026-11-18T09:19:34.686026Z",
+          "elapsed_seconds": 0.065437
+        },
+        {
+          "name": "vc-proving-verify",
+          "started_at": "2026-11-18T09:24:15.194251Z",
+          "finished_at": "2026-11-18T09:24:51.505149Z",
+          "elapsed_seconds": 34.950183
+        }
+      ]
+    }
+  ]
+}

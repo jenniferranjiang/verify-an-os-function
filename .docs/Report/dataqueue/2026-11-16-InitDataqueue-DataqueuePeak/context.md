@@ -1,3 +1,5 @@
+> 当前证明文件已按用户要求恢复QCP原生auto/manual分工，Init和DeInit均重新final-check通过。最新文件、计数及信任说明见[native-auto-restoration.md](native-auto-restoration.md)。下文旧全部manual计数是历史记录。
+
 > 当前窗口分工（用户最新指示）：本窗口只推进第一阶段Init/DeInit/Peak及必要Semaphore IC闭包；用户将在另一窗口推进Pop/Push。共享map/ABI设计沿用现状，跨窗口共享lib/header修改需协调并复核受影响证明，不能把旧输入done套用到变化后的输入。
 
 > 最新结果：InitDataqueue run InitDataqueue-20261117224043 已由controller返回done，final-check passed（63个顶层VC）。这是相对于callee契约的Init函数证明；第一阶段闭包尚未完成。当前串行进入DeInitDataqueue run DeInitDataqueue-20261118121138。用户已取消VC预算上限。下文早期预算/部分VC计数为历史记录。
@@ -51,3 +53,5 @@ QCP工具已支持现有annotated_C输入和根Make依赖，但缺少预处理�
 ## ABI授权后的验证恢复
 
 用户已确认按原第一阶段、再Pop、再Push继续，并授权类似本次有依据的修改。DataqueueInv新增唯一具体ABI公理dataqueue_layout_abi，内容严格为既有dataqueue_layout陈述（两个sizeof及八个字段地址偏移），依据当前ILP32 GCC静态断言检查。此授权不把任何资源拆合、map操作或函数效果当作公理。TrustBase用户文件不修改，既有IRQ边界保持。map设计与canonical契约含义不变；布局缺失的阻塞已补入正式输入，实际VC是否通过仍由新workflow检查。
+
+QCP本地适配已审计并收窄：移除非路径unfreeze/resume扩展与额外时间戳门禁，当前生成参数保持一致，详见[adapter-audit.md](adapter-audit.md)。

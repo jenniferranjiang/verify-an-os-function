@@ -1,3 +1,7 @@
+> 当前证明文件已按用户要求恢复QCP原生auto/manual分工，Init和DeInit均重新final-check通过。最新文件、计数及信任说明见[native-auto-restoration.md](native-auto-restoration.md)。下文旧全部manual计数是历史记录。
+
+> 当前任务变更：用户仅要求修正已有Init/DeInit证明的auto/manual分工，暂不推进其他函数。已移除本地auto转manual适配；正在新run恢复原生生成并复用已完成manual证明。原done两run保留历史证据，不伪造原状态。auto由QCP求解器给出且可能为Admitted，不报告为Rocq闭合证明；manual仍须实际Qed及final-check。
+
 > 最新结果：InitDataqueue run InitDataqueue-20261117224043 已由controller返回done，final-check passed（63个顶层VC）。这是相对于callee契约的Init函数证明；第一阶段闭包尚未完成。当前串行进入DeInitDataqueue run DeInitDataqueue-20261118121138。用户已取消VC预算上限。下文早期预算/部分VC计数为历史记录。
 
 > 2026-11-18最新授权：用户要求持续完成原第一阶段及Pop/Push，取消VC证明时间上限，预先批准后续设计修改与修复建议，无需逐轮等待确认。实际审阅、证明检查和final-check照常执行，失败不得写通过；只读原源码、manual修改边界及禁止无依据假设仍保持。历史预算记录仅作已发生过程，不再作为停止条件。
@@ -62,3 +66,5 @@ Init完成后收尾：根构建检查到正式InitDataqueue_goal_check.vo通过�
 DeInit恢复后进展：owned_buffer_view、irq_observation、free_branch_projection、first_delete_transition四组正式accepted，累计10/45顶层VC。数组到free字节、assertS锁内观察、第一删除后第二quiescent保持均已实际证明；cleanup_refinement进行中。重启未重置run/已接纳证明，原pending owner按同一claim恢复。
 
 共享header兼容：另一窗口只新增PopPush设计库，原共享lib未改；dataqueue.h的新增操作词汇/import已按CRTOS_DATAQUEUE_WITH_OPERATIONS条件启用，Pop/Push两caller定义宏。GCC预处理formal文本与修改前一致，第一阶段不再受无关import影响，相关第二阶段review/context附了更新hash和非语义检查。
+
+QCP本地适配已审计并收窄：移除非路径unfreeze/resume扩展与额外时间戳门禁，当前生成参数保持一致，详见[adapter-audit.md](adapter-audit.md)。

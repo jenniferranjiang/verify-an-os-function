@@ -1,0 +1,1 @@
+Restored the 18 same-named assigned spans from the prior completed Init proof, with exact statement comparisons and unchanged proof bodies. The current native goal is unchanged; only ownership of auto-vs-manual declarations differs. Current controller compilation passed.

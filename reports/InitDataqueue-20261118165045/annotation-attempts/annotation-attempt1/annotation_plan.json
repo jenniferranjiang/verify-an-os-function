@@ -1,8 +1,42 @@
 {
   "version": 2,
-  "status": "planning",
-  "function_specs": [],
-  "loop_invariants": [],
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "CriticalAreaLock",
+      "meaning": "Acquire current observed OS resources under the existing critical protocol."
+    },
+    {
+      "name": "CriticalAreaUnLock",
+      "meaning": "Return OS resources and restore the outside-critical state."
+    },
+    {
+      "name": "x_malloc",
+      "meaning": "Return null or an aligned allocation; zero size returns null."
+    },
+    {
+      "name": "memset",
+      "meaning": "Fill the owned byte range with the supplied byte."
+    },
+    {
+      "name": "KSemaphoreCreate",
+      "meaning": "Existing IC create effect and updated OS invariant."
+    },
+    {
+      "name": "DeInitDataqueue",
+      "meaning": "Existing init_cleanup contract retires an unpublished private queue."
+    },
+    {
+      "name": "InitDataqueue",
+      "meaning": "Publish an empty initialized queue on success; on failure clean acquired resources and return the retired private structure."
+    }
+  ],
+  "loop_invariants": [
+    {
+      "location": "InitDataqueue do-while(0)",
+      "progress": "Single-execution control wrapper with early failure breaks; no iterative state or added loop invariant."
+    }
+  ],
   "new_predicates": [],
   "vc_comparisons": []
 }

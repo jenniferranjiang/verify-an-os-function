@@ -1,9 +1,9 @@
 {
   "schema_version": 4,
-  "generation": 3,
+  "generation": 17,
   "run_id": "InitDataqueue-20261118165045",
   "case": "InitDataqueue",
-  "phase": "annotation",
+  "phase": "done",
   "main_root": "/home/xinra/crtos-verify",
   "run_root": "/home/xinra/crtos-verify/verification_runs/InitDataqueue-20261118165045",
   "report_root": "/home/xinra/crtos-verify/reports/InitDataqueue-20261118165045",
@@ -54,31 +54,123 @@
   },
   "max_witnesses_per_group": 12,
   "max_parallel_group_workers": 1,
-  "dune_preparation": null,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/dataqueue/InitDataqueue_goal_check.vo",
+    "base_artifact_count": 216,
+    "current_source_count": 4,
+    "elapsed_seconds": 4.056279,
+    "snapshot": "verification_runs/InitDataqueue-20261118165045/dependency_plan.json"
+  },
   "attempts": {
     "InitDataqueue-annotation-r1": {
       "attempt_id": "InitDataqueue-annotation-r1",
       "phase": "annotation",
-      "status": "running",
+      "status": "accepted",
       "owner": "annotation/InitDataqueue-20261118165045",
       "claimed_action": "deliver:InitDataqueue-annotation-r1:0",
       "repair_index": 0,
       "created_at": "2026-11-18T08:50:58.410258Z",
       "failed_vcs": [],
-      "started_at": "2026-11-18T08:51:07.644823Z"
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T08:51:07.644868Z",
+            "finished_at": "2026-11-18T08:53:39.443202Z",
+            "elapsed_seconds": 151.798334
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T08:53:39.443157Z",
+      "finished_at": "2026-11-18T08:53:41.120025Z"
+    },
+    "InitDataqueue-vc-checking-r1": {
+      "attempt_id": "InitDataqueue-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/InitDataqueue-vc-checking-r1",
+      "claimed_action": "deliver:InitDataqueue-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T08:54:13.640992Z",
+      "source_annotation": "InitDataqueue-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T08:54:29.676259Z",
+            "finished_at": "2026-11-18T08:58:15.369576Z",
+            "elapsed_seconds": 225.693317
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T08:58:15.369551Z",
+      "finished_at": "2026-11-18T08:58:15.409371Z"
+    },
+    "InitDataqueue-vc-proving-r1": {
+      "attempt_id": "InitDataqueue-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-18T08:58:15.409391Z",
+      "source_annotation": "InitDataqueue-annotation-r1",
+      "source_vc_checking": "InitDataqueue-vc-checking-r1",
+      "groups": {
+        "native_manual_restore": {
+          "status": "accepted",
+          "owner": "group-worker/InitDataqueue-vc-proving-r1:native_manual_restore",
+          "claimed_action": "deliver:InitDataqueue-vc-proving-r1:native_manual_restore:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T08:58:25.106559Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T08:58:35.331230Z",
+                "finished_at": "2026-11-18T09:03:06.563343Z",
+                "elapsed_seconds": 271.232113
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T09:03:06.563318Z",
+          "finished_at": "2026-11-18T09:05:00.060085Z"
+        }
+      },
+      "finished_at": "2026-11-18T09:07:25.985928Z"
     }
   },
   "current": {
     "annotation": "InitDataqueue-annotation-r1",
-    "vc-checking": null,
-    "vc-proving": null
+    "vc-checking": "InitDataqueue-vc-checking-r1",
+    "vc-proving": "InitDataqueue-vc-proving-r1"
   },
   "annotation_owner": "annotation/InitDataqueue-20261118165045",
   "pending_retry": null,
   "current_blockers": [],
-  "final_candidate": null,
-  "final_apply": null,
-  "final_check": null,
+  "final_candidate": {
+    "round": "InitDataqueue-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-11-18T09:09:45.238678Z",
+    "files": [
+      "VC/dataqueue/InitDataqueue_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-11-18T09:12:08.262700Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
   "created_at": "2026-11-18T08:50:45.800198Z",
-  "updated_at": "2026-11-18T08:51:07.661226Z"
+  "updated_at": "2026-11-18T09:12:08.273132Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-11-18T09:12:08.262679Z"
 }

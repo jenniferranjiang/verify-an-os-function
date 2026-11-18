@@ -1,0 +1,3 @@
+# Native manual proof restoration
+
+Restored 20 assigned proof spans (10 top-level and 10 aggressive splits) from the pre-restoration completed DeInit manual at `/tmp/crtos-verify-native-auto-baseline-y9mhvzna/DeInitDataqueue_proof_manual.v` (also retained by old completed run DeInitDataqueue-20261118121138). Each same-named statement was compared after whitespace normalization and matched exactly. The two protected entail1 split Abort blocks are unchanged; all other declarations, prelude and unassigned text compare byte-for-byte after masking assigned spans. No 35 native auto lemmas were copied into manual. Current controller compilation remains required.
