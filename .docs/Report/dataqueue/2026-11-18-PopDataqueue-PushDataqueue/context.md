@@ -1,3 +1,5 @@
+> 2026-11-21 更新：Dataqueue 已改为有效元素列表，本文旧 Dataqueue predicate/spec/实现结论不适用于新输入。Init、DeInit、Peak、Pop 的旧表示证明需重新适配；历史记录保留。见 [本轮设计与验证范围](../2026-11-21-FifoRepresentation/design.md)。
+
 # PopDataqueue / PushDataqueue 新实验上下文
 
 本轮仅设计和审阅，终点为 predicate 与完整调用闭包 spec 分别 review-passed。禁止启动 verification-orchestrator、运行 QCP parser/symbolic/closure script、生成 VC 或证明 C 实现；Rocq 编译和类型检查照常进行。旧实验的实现授权不用于本轮。

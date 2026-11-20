@@ -1,3 +1,5 @@
+> 2026-11-21 更新：Dataqueue 已改为有效元素列表，本文旧 Dataqueue predicate/spec/实现结论不适用于新输入。Init、DeInit、Peak、Pop 的旧表示证明需重新适配；历史记录保留。见 [本轮设计与验证范围](../2026-11-21-FifoRepresentation/design.md)。
+
 > 当前证明文件已按用户要求恢复QCP原生auto/manual分工，Init和DeInit均重新final-check通过。最新文件、计数及信任说明见[native-auto-restoration.md](native-auto-restoration.md)。下文旧全部manual计数是历史记录。
 
 > 当前任务变更：用户仅要求修正已有Init/DeInit证明的auto/manual分工，暂不推进其他函数。已移除本地auto转manual适配；正在新run恢复原生生成并复用已完成manual证明。原done两run保留历史证据，不伪造原状态。auto由QCP求解器给出且可能为Admitted，不报告为Rocq闭合证明；manual仍须实际Qed及final-check。

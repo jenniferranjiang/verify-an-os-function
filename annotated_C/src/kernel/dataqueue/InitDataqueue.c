@@ -63,14 +63,14 @@ x_err_t InitDataqueue(DataQueueType *p_queue, uint16 NodeNumber)
       (exists after q,
         __return == 0 && dataqueue_map(os_dataqueues(after), p_queue) == Some(q) &&
          dq_max_len(q) == NodeNumber &&
-        dq_front(q) == 0 && dq_rear(q) == 0 && dq_base(q) != 0 &&
+        dq_slots(q) == nil && dq_front(q) == 0 && dq_rear(q) == 0 && dq_base(q) != 0 &&
         0 <= dq_sem_blank(q) && 0 <= dq_sem_data(q) &&
         dq_sem_blank(q) != dq_sem_data(q) &&
         safeExec(LastSeen(after), return(0), X) && OutsideCritical(sg, after))
       ||
       (exists after q,
         __return == -1 && 
-        dq_max_len(q) == NodeNumber && dq_front(q) == 0 && dq_rear(q) == 0 &&
+        dq_max_len(q) == NodeNumber && dq_slots(q) == nil && dq_front(q) == 0 && dq_rear(q) == 0 &&
         dq_base(q) == 0 &&
         ((dq_sem_blank(q) == -1 && dq_sem_data(q) == -1) ||
          (dq_sem_blank(q) == -5 && dq_sem_data(q) == -1) ||
@@ -130,7 +130,7 @@ x_err_t InitDataqueue(DataQueueType *p_queue, uint16 NodeNumber)
         /*@ Assert exists after q saved,
           lock == saved && p_queue == p_queue@pre && NodeNumber == NodeNumber@pre &&
           dataqueue_map(os_dataqueues(after), p_queue) == Some(q) && 
-          dq_max_len(q) == NodeNumber && dq_front(q) == 0 && dq_rear(q) == 0 &&
+          dq_max_len(q) == NodeNumber && dq_slots(q) == nil && dq_front(q) == 0 && dq_rear(q) == 0 &&
           dq_base(q) != 0 && 0 <= dq_sem_blank(q) && 0 <= dq_sem_data(q) &&
           dq_sem_blank(q) != dq_sem_data(q) &&
           safeExec(LastSeen(after), return(0), X) && Crtos_GTrans(observed, after) &&
@@ -143,7 +143,7 @@ x_err_t InitDataqueue(DataQueueType *p_queue, uint16 NodeNumber)
     /*@ Assert exists held after q refs Y saved,
       lock == saved && p_queue == p_queue@pre && NodeNumber == NodeNumber@pre &&
        dq_max_len(q) == NodeNumber &&
-      dq_front(q) == 0 && dq_rear(q) == 0 &&
+      dq_slots(q) == nil && dq_front(q) == 0 && dq_rear(q) == 0 &&
       ((dq_sem_blank(q) == -1 && dq_sem_data(q) == -1) ||
        (dq_sem_blank(q) == -5 && dq_sem_data(q) == -1) ||
        (0 <= dq_sem_blank(q) && dq_sem_data(q) == -5)) &&

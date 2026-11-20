@@ -75,7 +75,7 @@ Controller的 `--main-root` 与MCP调用的 `workspace` 使用验证工程根目
 
 先查已有定义。适用的直接Require Import，需要向下游公开则Require Export。接口缺少内容时在所属原文件补充，模块不存在才新增文件；定义不符合当前源码时说明差异与影响，再增量修正。
 
-修改遵守真实源码和系统协议，直接在现有总state和os_inv中集成模块，见[Predicate指南](predicate-lemma-design-guide.md#65-组合模块-predicate)。不以保留旧Assertion carrier为由创建另一套系统协议。
+修改遵守真实源码和系统协议，直接在现有总state和os_inv中集成模块，见[Predicate指南](predicate-lemma-design-guide.md#74-组合模块-predicate)。不以保留旧Assertion carrier为由创建另一套系统协议。
 
 新文件审阅完整内容，已有文件审阅修改处及受影响内容。不能通过改变共享predicate偷偷改变复用spec含义；相关契约、caller和已有证明的处理遵循下节及[全局依赖规则](#全局工作区与依赖维护)。
 

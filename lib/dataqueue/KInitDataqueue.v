@@ -8,12 +8,13 @@ Import Monad MonadNotation.
 Local Open Scope monad.
 Local Open Scope Z_scope.
 
-(** malloc后尚不初始化数组元素；memset只覆盖20字节queue结构。
+(** 初始有效序列为空；malloc 数组的全部空闲内存由 buffer 谓词拥有。
+    malloc 后尚不初始化数组元素；memset 只覆盖20字节queue结构。
     base=0时无数组；n=1允许成功，n=0由本轮allocator contract返回0。 *)
 Definition dataqueue_constructed (n base blank data : Z) : DataQueueAbs :=
   {| dq_base := base; dq_max_len := n;
      dq_front := 0; dq_rear := 0; dq_sem_blank := blank; dq_sem_data := data;
-     dq_slots := if Z.eq_dec base 0 then nil else repeat None (Z.to_nat n) |}.
+     dq_slots := nil |}.
 
 (** 第一段临界区的局部结果；semaphore地址witness随结果跨失败解锁传递，
     不进入模块状态、也不作为用户C参数。 *)

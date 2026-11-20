@@ -9,13 +9,14 @@
 1. [确认源码与范围](#1-确认源码与范围)
 2. [为 C 对象定义抽象状态](#2-为-c-对象定义抽象状态)
 3. [组织 Predicate 使用的逻辑状态](#3-组织-predicate-使用的逻辑状态)
-4. [为临界区操作定义抽象 program](#4-为临界区操作定义抽象-program)
-5. [为临界区定义状态关系](#5-为临界区定义状态关系)
-6. [定义具体内存 Predicate](#6-定义具体内存-predicate)
-7. [根据真实 C 操作定义 Lemma](#7-根据真实-c-操作定义-lemma)
-8. [检查 Validity、初始化与生命周期](#8-检查-validity初始化与生命周期)
-9. [正式定义注释与设计说明](#9-正式定义注释与设计说明)
-10. [检查并审阅 Predicates](#10-检查并审阅-predicates)
+4. [根据数据结构的操作设计表示与接口](#4-根据数据结构的操作设计表示与接口)
+5. [为临界区操作定义抽象 program](#5-为临界区操作定义抽象-program)
+6. [为临界区定义状态关系](#6-为临界区定义状态关系)
+7. [定义具体内存 Predicate](#7-定义具体内存-predicate)
+8. [根据真实 C 操作定义 Lemma](#8-根据真实-c-操作定义-lemma)
+9. [检查 Validity、初始化与生命周期](#9-检查-validity初始化与生命周期)
+10. [正式定义注释与设计说明](#10-正式定义注释与设计说明)
+11. [检查并审阅 Predicates](#11-检查并审阅-predicates)
 
 ## 1. 确认源码与范围
 
@@ -297,14 +298,144 @@ TaskStableContext sg : Prop
 
 `RTrans` 和 `GTrans` 都只是 Rocq 中的关系，不会主动修改 C 内存。C 内存由实际 C 语句修改；验证过程需要用新的 `st` 描述修改后的内容，重新建立对应的内存谓词，并证明这次变化符合并发规则。具体的加锁、解锁和 transition 使用方式应放在函数 Spec 或并发验证部分说明。
 
-## 4. 为临界区操作定义抽象 program
+## 4. 根据数据结构的操作设计表示与接口
+
+先看数据结构有哪些操作，再决定用什么状态描述它、谓词如何表示它的内存，以及 spec 需要看到哪些信息。
+不要照着 C struct 的字段直接抄一个 record；定义应帮助我们说清楚这些操作做了什么。
+
+### 4.1 对象与容器的内存组织
+
+逻辑内容确定后，还需说明对象与容器怎样对应实际内存。record 的逻辑包含关系、C 对象的地址关系
+和内存 ownership 应分别判断，再建立联系。具体权限的逐项检查见第 7.1 节。
+
+先区分关系类型，再决定是否嵌套 spatial predicate：
+
+| 关系 | 典型表示 | Ownership 规则 |
+|---|---|---|
+| 逻辑值包含 | record 中有子 record | 不直接说明 heap |
+| 物理内嵌 | `struct A { B b; }` | `A_rep` 委托给唯一 `B_rep(&a->b, ...)`，不要同时 whole-struct 拥有 |
+| 指针引用 | `B *b` | 默认只拥有 pointer field，不拥有 pointee |
+| map/array 容器 | element collection | container 组合局部 element predicate |
+| intrusive membership | B 的 link 挂入 A 的容器 | container 拥有 link；B object predicate 拥有其余内存 |
+| 可由其他状态推导的索引或缓存 | 作为缓存使用的 ID、bitmap、count | 用 pure relation 连接项目中的抽象状态，不复制 heap owner；若它是 C 行为的独立依据，则按第 2.3–2.4 节重新判断 |
+
+对每个 embedded link 单独画 owner 状态机。节点未入链时由 object-local standalone predicate 拥有；入链后由恰好
+一个 container predicate 拥有；删除时 container 返还 standalone link。不要让 object predicate 和 container 同时
+拥有 `prev/next`，也不要让两边同时 `emp`。
+
+保持推荐层次：
+
+```text
+field/subobject predicate
+  -> object predicate for the relevant state
+  -> map/array/list predicate
+  -> one module glob component
+  -> store_glob_module
+  -> module_inv = pure validity && store_glob_module
+  -> slice_OS_inv
+```
+
+每层只增加自己负责的结构。map element predicate 不要暗中拥有其他 element 或全局 root；intrusive container 的
+payload callback 不要重复拥有由 container spine 管理的 link 内存。
+
+
+### 4.2 根据程序分析谓词暴露信息
+
+先看这个数据结构有哪些操作，以及调用者需要知道什么，才能说清楚操作的结果。
+这些信息通过谓词的参数表达；只在证明内部读写内存时才用到的信息，可以藏在谓词里面，需要时再展开。
+下面按具体情况说明。
+
+#### 4.2.1 判断数据结构的 record 中需要保存信息
+
+定义数据结构的 record 时，先看它有哪些操作，以及说明这些操作的结果需要哪些信息。
+需要的信息放进 record；只用于描述底层内存布局的信息，可以留在谓词内部，不必都放进 record 暴露。
+
+例如，考虑只有 push/pop 操作的环形 FIFO Dataqueue，可以比较下面两种定义。
+以下谓词写法只是示意，具体参数和地址计算以实际库为准。
+
+**第一种：暴露整个数组的槽位。**
+
+```text
+dq : list (option elem)
+dq = [Some C; Some D; None; None; ...; Some A; Some B]
+store_dataqueue := mixed_full base dq
+```
+
+这里的 `dq` 按数组的物理位置排列，空闲槽也在里面。`push_dq data dq` 和 `pop_dq dq`
+需要结合队首、队尾的位置，描述对应槽位的变化。调用者能看到这些槽位，因此 spec 也要处理这些细节。
+`None` 表示该槽没有需要描述的有效元素。
+
+**第二种：不暴露空闲槽位，只暴露队列里的有效元素。**
+
+```text
+dq : list elem
+dq = [A; B; C; D]
+
+push E 成功：dq' = app dq [E]
+pop 成功：  dq = data :: dq'，返回 data
+```
+
+如果只有 push/pop，调用者不需要知道空闲槽里是什么，可以用这种定义。
+这样写 push 的 spec，只要说明新队列是 `app dq [E]`；pop 则说明取出队首、留下剩余元素。
+容量限制和操作失败的情况仍按实际代码描述。
+
+有效元素如何放进环形数组，藏在 `store_dataqueue` 里面。例如：
+
+```text
+split dq：dq1 = [C; D]，dq2 = [A; B]
+dq = app dq2 dq1
+
+有效元素的存储：
+store_seg (base + front) dq2 ** store_seg base dq1
+```
+
+`dq2` 在数组尾部，`dq1` 在数组头部；这里 `base + front` 表示第 `front` 个元素的地址。
+完整的 `store_dataqueue` 还要包含空闲区的内存权限、队列字段及必要的索引关系，
+但这些不必暴露给调用者。证明内部执行 push/pop 时，再展开要读写的位置。
+
+这两种定义的区别在于：第一种把物理槽位放进公开状态，第二种只把有效元素放进公开状态。
+先看操作需要什么信息，再决定暴露多少；对这里只有 push/pop 的情况，第二种虽然物理状态定义时更复杂，但能让 spec 更清晰，并符合程序意图。
+
+#### 4.2.2 内存会交给不同模块管理时，按当前归属分别描述
+
+有些字段虽然嵌在一个 C 结构体里，却会随着程序运行交给不同模块管理。
+定义 record 时，不必把这些字段的内容也固定放进原对象的 record；可以由当前管理它的模块描述。
+最后把各处合起来，保证没有遗漏，也没有重复拥有同一块内存。
+
+例如 `TaskDyncSchedMember` 中的 `sched_link`，可能脱链，也可能挂在 mutex 等模块的队列中。
+它的地址不一定变化，变化的是链表关系和内存归属。因此，task 的抽象 record 不保存这部分链表内容，
+task 主体的内存谓词也不重复拥有它：
+
+- 脱链、自持的节点用 `store_owned_sched_nodes` 描述。
+  可以用：
+```coq
+Definition store_owned_sched_nodes
+    (T : addr -> option TaskDescriptorAbs) (tasks : list addr) : Assertion :=
+  iter_sepcon (map (store_detached_sched_link T) tasks).
+```
+可以理解为 `[sched_link task1] * ... * [sched_link taskN]`，其中每个 `sched_link taskI`
+都是脱链的 self-linked 节点。
+
+- 挂在其他模块中的节点，由对应模块的队列谓词描述。例如mutex模块中，可以用
+```coq
+store_dll store_wait_T &(mutex # "Mutex" ->ₛ "pend_list") obj.(mutex_pending)
+```
+描述的是一条以 mutex->pend_list 为头的双向循环链：pend_list ⇄ task1.sched_link ⇄ task2.sched_link ⇄ pend_list
+store_dll 实际拥有链表头和每个 sched_link 的 prev/next 内存。因此，这些节点挂在 mutex 上时，由 mutex 的谓词拥有。
+
+节点从一个队列转到另一个队列时，相应内存权限也一起交接。脱链节点和各模块队列中的节点合起来，
+应恰好覆盖当前建模范围内全部任务的 `sched_link`，每个节点只出现一次。
+可以用 `os_wf_sched_nodup` 检查不重复，用 `os_wf_sched_domain` 检查覆盖已发布任务；
+创建、回收中尚未纳入这个范围的节点，仍要说明由谁持有。（此处谓词均为举例）
+
+## 5. 为临界区操作定义抽象 program
 
 对于进入临界区、完成共享状态操作并退出临界区的函数，应定义或复用抽象 `program`，说明这次
 操作的返回结果和状态变化，并在 spec 中通过 `safeExec` 连接。已有适用定义就直接复用。
 Lock/Unlock 原语本身用临界区协议 spec 描述；仅在临界区内执行的辅助函数可以直接用前后置条件
 描述状态和资源变化，不必各自建立 program。
 
-### 4.1 SafeExec、LastSeen 和 Atomic Command
+### 5.1 SafeExec、LastSeen 和 Atomic Command
 
 为上述函数准备 `safeExec` 与 crtOS 临界区协议所需的接口：
 
@@ -346,7 +477,7 @@ Definition abs_get_task_with_idnode_locked
 这些定义供 [Spec 指南第 4 节](spec-writing-guide.md#4-临界区内外-spec-的判断与证明方法)的外层契约使用；
 它们表达操作语义，不代替具体内存 ownership 或临界区资源谓词。
 
-## 5. 为临界区定义状态关系
+## 6. 为临界区定义状态关系
 
 源码出现 lock、unlock、IRQ-disable/restore，并且函数借此取得共享 invariant 时，需要定义或复用 crtOS 自己的
 临界区定义：
@@ -375,10 +506,10 @@ QCP 当前接口可以让 `RTrans` 和 `GTrans` 指向同一个 `critical_STS_tr
 临界区内辅助函数是否在 spec 中使用 `os_inv`，以及如何保留 `InsideCritical`，见
 [Spec 指南第 4.4.3 节](spec-writing-guide.md#443-在临界区内更新)。
 
-## 6. 定义具体内存 Predicate
+## 7. 定义具体内存 Predicate
 
 第 2～3 节已经确定每个 C 对象的 Abstract/Concrete State 及其 Stable/Mutable 组织。本节定义具体内存 predicate，
-把这些逻辑状态与真实地址、内存值和 ownership 对应起来。具体内存 predicate 是 `Assertion`，不是第 3.1 节的
+沿用第 4 节确定的表示与内存组织，把这些逻辑状态与真实地址、内存值和 ownership 对应起来。具体内存 predicate 是 `Assertion`，不是第 3.1 节的
 Concrete State。
 
 根据 C 对象的实际布局和访问方式，分别定义对象、全局内存和容器 predicate，再把它们组合起来。最终 predicate
@@ -390,7 +521,7 @@ Concrete State。
 element/payload predicate，不复制已有结构或手写同义 Fixpoint。只有已有库确实不能表达，并能指出具体缺口时，
 才新增项目自己的结构定义或 lemma。
 
-### 6.1 确定每处内存是否由当前 Predicate 拥有
+### 7.1 确定每处内存是否由当前 Predicate 拥有
 
 | 写法 | 拥有地址 | 知道当前值 | 含义 |
 |---|---:|---:|---|
@@ -435,47 +566,7 @@ object predicate 仍应写 `owner |->_`。若完全省略，create 的 store 将
 Owner ledger 之外再记录目标路径的 memory transition：load 所需前态值或关系、store 的 old/new 值或结构、
 以及 write footprint 之外必须保持的 frame。只有 ownership 而没有这些前后态约束，不能支持函数验证。
 
-### 6.2 组合 C 对象与容器 Predicate
-
-#### 嵌套对象与容器的内存
-
-先区分关系类型，再决定是否嵌套 spatial predicate：
-
-| 关系 | 典型表示 | Ownership 规则 |
-|---|---|---|
-| 逻辑值包含 | record 中有子 record | 不直接说明 heap |
-| 物理内嵌 | `struct A { B b; }` | `A_rep` 委托给唯一 `B_rep(&a->b, ...)`，不要同时 whole-struct 拥有 |
-| 指针引用 | `B *b` | 默认只拥有 pointer field，不拥有 pointee |
-| map/array 容器 | element collection | container 组合局部 element predicate |
-| intrusive membership | B 的 link 挂入 A 的容器 | container 拥有 link；B object predicate 拥有其余内存 |
-| 可由其他状态推导的索引或缓存 | 作为缓存使用的 ID、bitmap、count | 用 pure relation 连接项目中的抽象状态，不复制 heap owner；若它是 C 行为的独立依据，则按第 2.3–2.4 节重新判断 |
-
-对每个 embedded link 单独画 owner 状态机。节点未入链时由 object-local standalone predicate 拥有；入链后由恰好
-一个 container predicate 拥有；删除时 container 返还 standalone link。不要让 object predicate 和 container 同时
-拥有 `prev/next`，也不要让两边同时 `emp`。
-
-保持推荐层次：
-
-```text
-field/subobject predicate
-  -> object predicate for the relevant state
-  -> map/array/list predicate
-  -> one module glob component
-  -> store_glob_module
-  -> module_inv = pure validity && store_glob_module
-  -> slice_OS_inv
-```
-
-每层只增加自己负责的结构。map element predicate 不要暗中拥有其他 element 或全局 root；intrusive container 的
-payload callback 不要重复拥有由 container spine 管理的 link 内存。
-
-同时画三张图并对齐：abstract value tree、concrete address graph、ownership graph。使用下表定位冲突：
-
-| 抽象路径 | Concrete 地址路径 | Owner predicate | 关系类型 | 所需 split lemma |
-|---|---|---|---|---|
-|  |  |  |  |  |
-
-### 6.3 封装 Predicate
+### 7.2 封装 Predicate
 
 可以定义具名抽象操作、predicate 和辅助关系，分别表达操作语义、对象或模块资源，以及相关逻辑
 条件。
@@ -593,7 +684,7 @@ Definition store_items base items : Assertion :=
 这样客户端只需要认识和展开 `store_items`。如果顶层递归 helper 有助于描述下标语义、陈述引理或
 组织证明，也可以单独保留，不要求多个调用者。应说明辅助定义的用途，避免无意义的改名、转发和未使用参数。
 
-### 6.4 直接从源码确定复杂 Representation
+### 7.3 直接从源码确定复杂 Representation
 
 数组、bitmap、对象池、ID-indexed table、intrusive container、sentinel、embedded link 或多 membership 都直接读取
 目标 OS 的创建、查询、插入、删除和回收源码。由实际操作确定地址公式、spine/payload 边界、ownership 转移、
@@ -605,7 +696,7 @@ container predicate 和必要 lemma；仅凭类型名或习惯性实现不能构
 `OsSchedPriQueue.c`、`OsSchedTaskQueue.c`、`LOS_TaskCreate.c`。读取后检查 `Admitted|Axiom|Parameter`；
 未证明或依赖额外假设的内容不能当作目标项目结论。
 
-### 6.5 组合模块 Predicate
+### 7.4 组合模块 Predicate
 
 设计新模块时，结合该模块全部函数及对象生命周期，判断是否需要接入 OS 总状态和 `os_inv`：
 
@@ -623,19 +714,19 @@ container predicate 和必要 lemma；仅凭类型名或习惯性实现不能构
 
 尚无系统不变量的工程可以建立 `slice_OS_inv`，只组合目标函数及其依赖需要的模块 predicate，但其中每个模块 predicate 本身必须完整。项目已有 `os_inv` 时，局部 view 可以辅助拆合资源，不能以新建 `slice_OS_inv` 替代对原 `os_inv` 的集成。组合时检查跨模块地址不重叠；跨模块联系优先使用纯 consistency relation，不复制 ownership。只有验证边界内的共享资源、critical protocol、initialization 和生命周期全部闭合后，才能声称为完整 `OS_inv`。
 
-## 7. 根据真实 C 操作定义 Lemma
+## 8. 根据真实 C 操作定义 Lemma
 
-Lemma 只补第 6 节 predicate 无法直接支持、且真实 C 操作当前需要的接口。先搜索 QCP 和项目已有的 array、map、
+Lemma 只补第 7 节 predicate 无法直接支持、且真实 C 操作当前需要的接口。先搜索 QCP 和项目已有的 array、map、
 list、container 及其他相关 lemma；能直接复用时不增加 wrapper。
 
-常见需求包括数组元素更新、链表插入/删除、对象进出容器、module state 更新，以及第 6.2～6.4 节所述的 split/merge。
+常见需求包括数组元素更新、链表插入/删除、对象进出容器、module state 更新，以及第 4.1～4.2 节及第 7.2～7.3 节所述的 split/merge。
 循环不变式和 exact remainder 可以作为模块内部接口；不要为每一次字段 load/store 分别建立一套公开的
 `cursor/missing/remainder/focus/refold` 定义。
 
 确实需要新 lemma 时，只在定义相应数据结构或模块的正式 `.v` 文件中写可审阅的 statement，并记录哪个 C 操作会使用
 它。当前阶段只确认 statement 是否正确，不完成 lemma proof，也不使用 `Admitted`、`Axiom` 或未解释的 `Parameter`。
 
-## 8. 检查 Validity、初始化与生命周期
+## 9. 检查 Validity、初始化与生命周期
 
 分离纯合法性、跨模块关系和 spatial store：
 
@@ -683,7 +774,7 @@ project_initialization_resource
 
 特别检查 early return 和错误路径。
 
-## 9. 正式定义注释与设计说明
+## 10. 正式定义注释与设计说明
 
 正式 `.v` 文件保存state、predicate、statement及其局部语义解释。跨定义和跨文件的改动原因、资源组织写入与spec共用的[设计说明](reporting-guide.md#设计说明)，链接实际定义；这份说明在实验完成后仍保留。
 对本次设计或修改涉及的非平凡、核心组合或对外使用的定义，不论是新建还是已有，
@@ -721,7 +812,7 @@ Definition 改变时必须同时更新相关注释。
 
 设计说明结合本次新增或修改的定义，解释为什么这样表示对象、怎样分配资源，以及如何接入系统不变量；函数规格部分在同一份说明中维护。篇幅按改动复杂度决定，已有内容只说明变化。定义自身的参数、地址、字段和使用限制仍在相邻的 `.v` 注释中解释。设计改变时同步更新说明；纯文字调整不产生新的predicate revision。
 
-## 10. 检查并审阅 Predicates
+## 11. 检查并审阅 Predicates
 
 审阅前按[用户审阅白名单](../CONFIGURATION.md#用户审阅白名单)读取默认及用户补充例外，
 对白名单中情况直接通过；下列一般要求不得用于重新阻塞已被明确豁免的问题。

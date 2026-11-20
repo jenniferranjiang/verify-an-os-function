@@ -41,6 +41,9 @@ int32 KSemaphoreAbandon(int32 id)
       safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after)
 */;
 
+/* abs_push_dataqueue describes each critical phase. In the non-full ring
+ * branch, dataqueue_push appends {StartAddr, DataSize} to dq_slots.
+ * The existing full branch is a no-op even though this C function returns 0. */
 x_err_t PushDataqueue(DataQueueType *p_queue, const void *StartAddr, x_size_t DataSize, int32 timeout)
 /*@ With (sg : StableGlobalState) (before : VarGlobalState) X
     Require safeExec(LastSeen(before),

@@ -1,3 +1,5 @@
+> 2026-11-21 更新：Dataqueue 已改为有效元素列表，本文旧 Dataqueue predicate/spec/实现结论不适用于新输入。Init、DeInit、Peak、Pop 的旧表示证明需重新适配；历史记录保留。见 [本轮设计与验证范围](../2026-11-21-FifoRepresentation/design.md)。
+
 # PopDataqueue / PushDataqueue 独立设计审阅
 
 结论：predicate **review-passed**；完整调用闭包 spec **review-passed**。Reviewer 为独立 agent `/root/reviewer`，未编写本轮 formal 输入。2026-11-18 在 main 提交完整候选及成功编译证据后首次完整审阅；先通过 predicate，再以同一冻结 predicate 检查 spec。未启动 QCP、symbolic、VC 或实现证明。

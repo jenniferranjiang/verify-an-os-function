@@ -25,23 +25,39 @@ Definition dataqueue_fields (p : addr) (q : DataQueueAbs) : Assertion :=
   &(p # "DataQueue" ->ₛ "sem_blank") # Int |-> q.(dq_sem_blank) **
   &(p # "DataQueue" ->ₛ "sem_data") # Int |-> q.(dq_sem_data).
 
-(** 每个连续元素仅拥有data指针槽和length整数槽；None拥有未知值而非emp。
-    8字节步长与32位DataElemType布局一致，不拥有data指向的payload。 *)
-Definition dataqueue_slot (base index : Z) (entry : option DataqueueElem) : Assertion :=
+(** 一个有效元素仅拥有data指针槽和length整数槽；不拥有payload。
+    index是物理数组下标，8字节步长与当前32位DataElemType布局一致。 *)
+Definition dataqueue_slot (base index : Z) (e : DataqueueElem) : Assertion :=
   let p := base + index * 8 in
-  match entry with
-  | None => &(p # "DataElem" ->ₛ "data") # Ptr |->_ **
-            &(p # "DataElem" ->ₛ "length") # UInt |->_
-  | Some e => &(p # "DataElem" ->ₛ "data") # Ptr |-> e.(dq_data) **
-              &(p # "DataElem" ->ₛ "length") # UInt |-> e.(dq_length)
-  end.
+  &(p # "DataElem" ->ₛ "data") # Ptr |-> e.(dq_data) **
+  &(p # "DataElem" ->ₛ "length") # UInt |-> e.(dq_length).
 
-(** base=0表示尚未分配或已回收，数组没有owner；否则拥有恰好n个元素。
-    所有空闲/已pop槽仍在数组谓词中，不因缺少逻辑有效数据而丢失内存。 *)
+(** 写入空闲槽只需要两个字段的写权限，不要求知道旧值。 *)
+Definition dataqueue_empty_slot (base index : Z) : Assertion :=
+  let p := base + index * 8 in
+  &(p # "DataElem" ->ₛ "data") # Ptr |->_ **
+  &(p # "DataElem" ->ₛ "length") # UInt |->_ .
+
+(** dq_slots只包含FIFO有效元素。未环绕时只有front到rear一段；环绕时
+    tail_part在数组尾、head_part在数组头，FIFO顺序为tail_part++head_part。
+    空闲区仍拥有完整字节，但不记录旧值。Pop不清除C数组，只忘掉出队槽的值。
+    base=0只用于尚未分配或已回收的私有对象，此时没有数组且内容为空。 *)
 Definition dataqueue_buffer (q : DataQueueAbs) : Assertion :=
   if Z.eq_dec q.(dq_base) 0 then “ q.(dq_slots) = nil ” && emp
-  else “ 0 < q.(dq_max_len) /\ addr_aligned q.(dq_base) 4 ” &&
-    store_array dataqueue_slot q.(dq_base) q.(dq_max_len) q.(dq_slots).
+  else “ dataqueue_ring_shape q /\ addr_aligned q.(dq_base) 4 ” &&
+    (if Z_le_dec q.(dq_front) q.(dq_rear) then
+       store_array_rec dataqueue_slot q.(dq_base)
+         q.(dq_front) q.(dq_rear) q.(dq_slots) **
+       CharArray.undef_full q.(dq_base) (q.(dq_front)*8) **
+       CharArray.undef_full (q.(dq_base)+q.(dq_rear)*8)
+         ((q.(dq_max_len)-q.(dq_rear))*8)
+     else EX tail_part head_part : list DataqueueElem,
+       “ q.(dq_slots) = tail_part ++ head_part ” &&
+       store_array_rec dataqueue_slot q.(dq_base)
+         q.(dq_front) q.(dq_max_len) tail_part **
+       store_array_rec dataqueue_slot q.(dq_base) 0 q.(dq_rear) head_part **
+       CharArray.undef_full (q.(dq_base)+q.(dq_rear)*8)
+         ((q.(dq_front)-q.(dq_rear))*8)).
 
 (** 完整对象内存；既用于私有的部分初始化/退役，也用于共享ready对象。
     sem_blank/sem_data只拥有ID字段，不拥有Semaphore的任何字节。 *)
@@ -77,10 +93,11 @@ Definition dataqueue_layout : Prop :=
     字节拆合、发布或任何函数行为保证；TrustBase文件保持用户维护。 *)
 Axiom dataqueue_layout_abi : dataqueue_layout.
 
-Definition dataqueue_buffer_alloc_obligation : Prop := forall p n,
-  0 < n <= 65535 -> p <> 0 -> addr_aligned p 4 -> dataqueue_layout ->
-  CharArray.undef_full p (n*8) |--
-    store_array dataqueue_slot p n (repeat None (Z.to_nat n)).
+(** malloc得到的整块未知内存表示空FIFO，不生成公开的None槽列表。 *)
+Definition dataqueue_buffer_alloc_obligation : Prop := forall q,
+  q.(dq_base) <> 0 -> addr_aligned q.(dq_base) 4 ->
+  dataqueue_ring_shape q -> q.(dq_slots) = nil -> dataqueue_layout ->
+  CharArray.undef_full q.(dq_base) (q.(dq_max_len)*8) |-- dataqueue_buffer q.
 Definition dataqueue_zero_obligation : Prop := forall p,
   p <> 0 -> addr_aligned p 4 -> dataqueue_layout ->
   CharArray.full p 20 (repeat_Z 0 20) |-- store_dataqueue p dataqueue_zero.
@@ -110,21 +127,29 @@ Definition dataqueue_merge_obligation : Prop := forall ss qs p q,
 Definition dataqueue_initial_obligation : Prop := forall ss,
   dataqueue_inv ss dataqueue_initial --||-- emp.
 
-(** 数组读写共用的单槽拆合接口：复用QCP missing_i表示，其余槽和整个结构
-    仍在同一断言中。Some槽拆出两个已知字段后可原样合回；不拥有payload。
-    这是待证的等价陈述，不另建逐字段状态或假定split已获证明。 *)
-Definition dataqueue_slot_view_obligation : Prop := forall p q i e,
-  dataqueue_ready q -> 0 <= i < q.(dq_max_len) ->
-  nth (Z.to_nat i) q.(dq_slots) None = Some e ->
-  store_dataqueue p q --||--
-    (“ p <> 0 /\ addr_aligned p 4 /\
-       addr_aligned q.(dq_base) 4 ” &&
-     dataqueue_fields p q ** dataqueue_slot q.(dq_base) i (Some e) **
-     store_array_missing_i_rec dataqueue_slot q.(dq_base) i 0
-       q.(dq_max_len) q.(dq_slots)).
+(** 只读队首时借出有效元素，归还后恢复原buffer。公开条件只谈FIFO队首，
+    不让调用者用物理下标查询dq_slots。以下为待证接口，不是已证lemma。 *)
+Definition dataqueue_slot_view_obligation : Prop := forall q e rest,
+  dataqueue_ready q -> q.(dq_slots) = e :: rest ->
+  dataqueue_buffer q |--
+    dataqueue_slot q.(dq_base) q.(dq_front) e **
+    (dataqueue_slot q.(dq_base) q.(dq_front) e -* dataqueue_buffer q).
 
-(** ready的FIFO区间已初始化；front!=rear时front就是该区间首槽。
-    Peak/Pop可据此取得data与length，纯陈述本身不提供字段访问权限。 *)
+(** 出队只忘掉原队首槽的值，仍保留全部数组内存；新的逻辑内容为rest。
+    字段front的实际写入由调用处处理，此处只转换数组表示。 *)
+Definition dataqueue_pop_buffer_obligation : Prop := forall q e rest,
+  dataqueue_ready q -> q.(dq_slots) = e :: rest -> dataqueue_layout ->
+  dataqueue_buffer q |-- dataqueue_buffer (dataqueue_pop q).
+
+(** 入队借出rear空闲槽，写入e后恢复内容为dq_slots++[e]的buffer。 *)
+Definition dataqueue_push_buffer_obligation : Prop := forall q e,
+  dataqueue_ready q -> dataqueue_count q < q.(dq_max_len)-1 -> dataqueue_layout ->
+  dataqueue_buffer q |--
+    dataqueue_empty_slot q.(dq_base) q.(dq_rear) **
+    (dataqueue_slot q.(dq_base) q.(dq_rear) e -*
+      dataqueue_buffer (dataqueue_push q e)).
+
+(** ready连接物理front/rear与FIFO长度；非空分支取得逻辑队首。 *)
 Definition dataqueue_nonempty_front_obligation : Prop := forall q,
   dataqueue_ready q -> q.(dq_front) <> q.(dq_rear) ->
-  exists e, dataqueue_peak q = Some e.
+  exists e rest, q.(dq_slots) = e :: rest /\ dataqueue_peak q = Some e.

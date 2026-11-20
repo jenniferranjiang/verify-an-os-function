@@ -106,11 +106,14 @@ typedef struct DataQueue {
 */
 /*@ Extern Coq
   (dq_data : DataqueueElem -> Z) (dq_length : DataqueueElem -> Z)
+  (dq_slots : DataQueueAbs -> list DataqueueElem)
+  (nil : {A} -> list A) (cons : {A} -> A -> list A -> list A)
   (peak_data_slot : Z -> option Z -> Assertion)
   (peak_length_slot : Z -> option Z -> Assertion)
   (abs_dataqueue_peak : StableGlobalState -> Z -> program (VarGlobalState -> Prop) (option DataqueueElem))
 */
 /*@ Printing Coq Name DataqueueElem := CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem */
+/*@ Printing Coq Name dq_slots := CRTOS_Verify.lib.dataqueue.DataqueueState.dq_slots */
 /*@ Printing Coq Name dq_data := CRTOS_Verify.lib.dataqueue.DataqueueState.dq_data */
 /*@ Printing Coq Name dq_length := CRTOS_Verify.lib.dataqueue.DataqueueState.dq_length */
 /*@ Printing Coq Name peak_data_slot := CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot */

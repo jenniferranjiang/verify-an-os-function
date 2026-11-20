@@ -11,7 +11,7 @@ description: 验证 CRTOS 等非 SMP OS 的 C 函数与模块：设计并审阅 
 
 ## 总流程
 
-用户要求验证一个函数时，任务同时包括完成该函数所属模块的 `lib` 设计。模块 `lib` 应依据该模块全部函数及对象生命周期，补齐模块状态、内存 predicate/invariant、共享接口，以及按资源归属所需的 OS 总状态和 `os_inv` 集成（判断条件见 [Predicate 指南第 6.5 节](references/predicate-lemma-design-guide.md#65-组合模块-predicate)）；已有定义直接复用。函数 spec 和 C 实现证明的范围仍按目标函数的调用闭包确定，不因此自动扩展为模块全部函数的实现证明。仅设计和审阅的任务也适用这一模块 `lib` 范围，但不要求提前完成引理或 C 实现证明。
+用户要求验证一个函数时，任务同时包括完成该函数所属模块的 `lib` 设计。模块 `lib` 应依据该模块全部函数及对象生命周期，补齐模块状态、内存 predicate/invariant、共享接口，以及按资源归属所需的 OS 总状态和 `os_inv` 集成（判断条件见 [Predicate 指南第 7.4 节](references/predicate-lemma-design-guide.md#74-组合模块-predicate)）；已有定义直接复用。函数 spec 和 C 实现证明的范围仍按目标函数的调用闭包确定，不因此自动扩展为模块全部函数的实现证明。仅设计和审阅的任务也适用这一模块 `lib` 范围，但不要求提前完成引理或 C 实现证明。
 
 Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。作者与 reviewer 应分开；predicate review 和 spec review 分别明确对象、条件和结论，可写在同一份记录中。Review 次数不预设，由产物 revision、修改影响和通过条件决定。没有独立检查能力时，由 main agent 按相同条件自检并注明。
 
@@ -118,13 +118,13 @@ lib/
 - **分层优先**：是否放入 `common/` 取决于它是否属于共享 invariant/predicate 接口层，不只看文件名或引用次数。id、list 等具有独立概念和接口的子系统仍使用 `id/`、`list/` 等独立目录。
 - **默认布局的根目录约定**：新建的分层库不在 `lib/` 根目录新增 `.v`；已有平铺库继续平铺，已有文件保留原路径，不为适配示例搬迁。路径确需调整时同步 imports、`_CoqProject`、Makefile、QCP 与编辑器配置。
 
-文件拆分以实际职责和依赖关系为依据，不要求每个模块必须机械拥有 `State/Inv/Ops` 三个文件。系统组合文件导入各模块接口，模块文件不复制全局状态或系统协议。当全局state中模块级 state、predicate/invariant 和共享接口缺失时，补齐对应模块定义，并接入全局状态与系统不变量；已有定义直接复用。项目已有 OS 总状态和 `os_inv` 时，必须在其全局原定义中直接增加模块分量，保持同一套全局状态、系统不变量和临界区协议；不得另建包裹旧 state 的外层总状态或 `old_os_inv * module_inv` 外层不变量来替代这项集成。类型兼容或依赖调整的困难不构成绕开原定义的理由，具体要求见 [Predicate 指南第 6.5 节](references/predicate-lemma-design-guide.md#65-组合模块-predicate)。针对特定函数新增的抽象操作、program、局部 view、引理和证明辅助，统一放入该函数的 K<Function>.v，不另建函数专用的 State/Inv 文件。确属模块共享能力的增补，仍归入对应模块文件。
+文件拆分以实际职责和依赖关系为依据，不要求每个模块必须机械拥有 `State/Inv/Ops` 三个文件。系统组合文件导入各模块接口，模块文件不复制全局状态或系统协议。当全局state中模块级 state、predicate/invariant 和共享接口缺失时，补齐对应模块定义，并接入全局状态与系统不变量；已有定义直接复用。项目已有 OS 总状态和 `os_inv` 时，必须在其全局原定义中直接增加模块分量，保持同一套全局状态、系统不变量和临界区协议；不得另建包裹旧 state 的外层总状态或 `old_os_inv * module_inv` 外层不变量来替代这项集成。类型兼容或依赖调整的困难不构成绕开原定义的理由，具体要求见 [Predicate 指南第 7.4 节](references/predicate-lemma-design-guide.md#74-组合模块-predicate)。针对特定函数新增的抽象操作、program、局部 view、引理和证明辅助，统一放入该函数的 K<Function>.v，不另建函数专用的 State/Inv 文件。确属模块共享能力的增补，仍归入对应模块文件。
 
 函数的 QCP `With/Require/Ensure` 仍写在 annotated C 中，不因 Rocq 目录分组而改变。新建C切片默认一函数一文件，已有文件组织按用户及项目约定处理；类型、宏、声明和共享 Coq 词汇按模块维护 header，沿用全局模块header位置（默认 `annotated_C/src/headers/`），与函数实现文件分开组织，不机械地为每个函数新建 header。详细路径和逻辑名见 [工程组织与维护指南](references/project-maintenance-guide.md#全局-lib-目录结构)。
 
 ### 定义注释与文件顺序
 
-在重要定义旁用 `(** ... *)` 中文注释说明：它表示什么、与 C 对象或字段有什么关系，以及必要的使用限制。组合 predicate 说明各部分的作用和整体资源归属即可，不重复下层细节。注释随定义更新，让读者只看 `.v` 就能理解设计。具体示例见 [Predicate 指南第 9 节](references/predicate-lemma-design-guide.md#9-正式定义注释与设计说明)。
+在重要定义旁用 `(** ... *)` 中文注释说明：它表示什么、与 C 对象或字段有什么关系，以及必要的使用限制。组合 predicate 说明各部分的作用和整体资源归属即可，不重复下层细节。注释随定义更新，让读者只看 `.v` 就能理解设计。具体示例见 [Predicate 指南第 10 节](references/predicate-lemma-design-guide.md#10-正式定义注释与设计说明)。
 
 文件中先放定义，再放引理和证明。
 
@@ -237,7 +237,7 @@ main agent 不再定义第二套步骤或返回状态。具体调用边界见
 
 ### 审阅内容与通过条件
 
-- **Predicate**：检查是否准确描述源码中的对象、内存归属及生命周期，是否存在资源遗漏、重复归属或无依据假设。检查方法见 [Predicate 指南第 10 节](references/predicate-lemma-design-guide.md#10-检查并审阅-predicates)。
+- **Predicate**：检查是否准确描述源码中的对象、内存归属及生命周期，是否存在资源遗漏、重复归属或无依据假设。检查方法见 [Predicate 指南第 11 节](references/predicate-lemma-design-guide.md#11-检查并审阅-predicates)。
 - **Spec**：检查验证范围是否符合目标，每条真实路径的参数、返回值、状态变化、资源转移及未修改资源是否与 C 一致；`Require` 是否足以执行且没有无依据地加强调用条件，`Ensure` 是否准确表达应保证的行为；临界区及调用者资源是否在出口正确返还；被调用函数是否被错误标成已验证。不得有无依据假设或阻塞问题。详细检查项见 [Spec 指南第 6 节](references/spec-writing-guide.md#6-spec-审阅)。
 
 - **最终完整性检查**：确认 QCP controller 已返回 `done`，复用其 `final-check` 结果，不重复执行证明检查。同时确认切片与原始 CRTOS 源码的一致性结论仍然有效：源码、配置及切片相关内容未变时复用 Spec 审阅结论，有变化则重新核对受影响部分。QCP 的完成状态不能替代这项源码一致性确认；还须确认[收尾流程](#全局一致性检查与收尾)中的全局编译、引用检查及记录安置已完成，才能给出最终完整性通过结论。

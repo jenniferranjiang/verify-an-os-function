@@ -252,7 +252,7 @@ allocation、free 或 container membership 变化，应使用已有 object/conta
 可以用具名抽象操作表达函数行为，用对象或模块 predicate 表达资源，用辅助关系表达相关逻辑条件；
 这些定义即使只使用一次也可以保留。函数的 `Require/Ensure` 应直接组合它们，让 reviewer 在注解中
 看到调用条件、返回结果分支和资源交接。定义的职责与写法见
-[Predicate 指南第 6.3 节](predicate-lemma-design-guide.md#63-封装-predicate)。
+[Predicate 指南第 7.2 节](predicate-lemma-design-guide.md#72-封装-predicate)。
 
 为函数定义抽象 atomic 操作是合理的：可以用 program 表达函数的返回结果和抽象状态变化，再由
 `safeExec` 引用。这里禁止的是把这个 `safeExec` 连同参数条件、临界区资源、调用者资源等全部
@@ -397,7 +397,7 @@ ownership 与 frame 的推导；新增特化不能直接视为已由原证明覆
 进入临界区、完成共享状态操作并退出的函数，应使用抽象 `program` 表达操作的返回结果和状态变化，
 通过 `safeExec` 接入函数 spec。Program 在 predicate 设计阶段定义或复用；Lock/Unlock 原语及
 临界区内辅助函数的 spec 分别见下文，不要求它们各自建立 program。设计要求见
-[Predicate 指南第 4 节](predicate-lemma-design-guide.md#4-为临界区操作定义抽象-program)。
+[Predicate 指南第 5 节](predicate-lemma-design-guide.md#5-为临界区操作定义抽象-program)。
 例如查询操作可以用 `abs_get_task_with_idnode_locked` 表达命中或未命中及状态保持，用外层
 `abs_get_task_with_idnode` 接入环境转换协议；创建操作则在自己的 program 中表达成功发布对象、
 初始化值、返回 ID 和失败时的状态变化。操作本身的效果与环境允许的变化应分别定义。

@@ -16,14 +16,15 @@ Definition abs_dataqueue_push_id (p : addr) : program VarGlobalState Z :=
        before.(os_dataqueues).(dataqueue_map) p = Some q /\ id = q.(dq_sem_blank);
      err := fun _ => False |}.
 
-(** 原ring条件保留：满时整个OS状态不变，非满时只写rear槽并推进rear。
+(** 用有效序列长度判断满：count=max_len-1 时整个 OS 状态不变，
+    非满时在序列末尾追加元素；C 对应写 rear 槽并推进 rear。
     返回本次锁内读到的data ID，供解锁后的Abandon调用；不读取payload。
     Obtain成功不自动推出非满，故两分支都属于正常行为。 *)
 Definition abs_dataqueue_push_ring (p data length : Z) : program VarGlobalState Z :=
   {| nrm := fun before id after => exists q,
        before.(os_dataqueues).(dataqueue_map) p = Some q /\
        id = q.(dq_sem_data) /\
-       (if Z.eq_dec ((q.(dq_rear)+1) mod q.(dq_max_len)) q.(dq_front)
+       (if Z.eq_dec (dataqueue_count q) (q.(dq_max_len)-1)
         then after = before
         else after = replace_dataqueues
           (dataqueue_publish p (dataqueue_push q
@@ -45,9 +46,9 @@ Definition abs_push_dataqueue (sg : StableGlobalState) (p data length timeout : 
     abs_semaphore_abandon sg abandon_id ;; ret 0
   else ret (-1).
 
-(** 槽覆盖后恢复共享对象的待证接口：其余槽、front、容量及ID保持；
+(** 追加元素后恢复共享对象的待证接口：front、容量及 ID 保持；
     此Prop只记录实现阶段义务，不作为公理或已证lemma使用。 *)
 Definition dataqueue_push_ready_obligation : Prop := forall q e,
   dataqueue_ready q ->
-  (q.(dq_rear)+1) mod q.(dq_max_len) <> q.(dq_front) ->
+  dataqueue_count q < q.(dq_max_len)-1 ->
   dataqueue_ready (dataqueue_push q e).

@@ -18,7 +18,8 @@ void EnableLocalInterrupt(x_base lock)
       InsideCritical(sg, held) * os_inv(sg, after)
     Ensure OutsideCritical(sg, after)
 */;
-/* KERNEL_FREE exact macro target; entire original allocation is returned. */
+/* KERNEL_FREE exact macro target; the FIFO segments and unused bytes are
+ * joined back into the entire original allocation before it is returned. */
 void x_free(void *p)
 /*@ With n
     Require p != 0 && 0 < n && CharArray::undef_full(p, n)

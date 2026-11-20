@@ -26,3 +26,5 @@ QCP基础库按工程配置直接引用，全局库由根 `_CoqProject` 管理�
 Dataqueue设计、已批准源码副本修复及当前限制见 [设计说明](../.docs/Report/dataqueue/2026-11-16-InitDataqueue-DataqueuePeak/design.md) 和 [整合检查](../.docs/Report/dataqueue/2026-11-16-InitDataqueue-DataqueuePeak/integration-review.md)。设计和类型检查不等于C实现证明，原有证明的适用状态以当前依赖检查结果为准。
 
 Pop/Push 本轮仅设计与审阅的输入及完整调用闭包见 [Pop/Push设计说明](../.docs/Report/dataqueue/2026-11-18-PopDataqueue-PushDataqueue/design.md)。Semaphore Obtain/Abandon 描述计数、挂起、超时及唤醒路径；设计审阅不等于这些实现已证。
+
+2026-11-21：Dataqueue 的 `dq_slots` 改为 `list DataqueueElem`，只记录 FIFO 有效元素；环绕分段及空闲内存留在 `dataqueue_buffer` 中。当前定义与旧证明适用状态见 [FIFO 表示修改](../.docs/Report/dataqueue/2026-11-21-FifoRepresentation/design.md)及[审阅记录](../.docs/Report/dataqueue/2026-11-21-FifoRepresentation/review.md)。

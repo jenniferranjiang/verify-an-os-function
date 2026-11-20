@@ -33,7 +33,7 @@ Definition dataqueue_peak_entry (sg : StableGlobalState) (p : addr)
     os_inv sg observed |--
       “ exists q, observed.(os_dataqueues).(dataqueue_map) p = Some q ”.
 
-(** 一次锁内查询的完整行为：front=rear时None，否则返回当前front槽。
+(** 一次锁内查询直接返回有效序列的队首：空序列为 None，否则为 Some e。
     after=before仅表示这一次锁内操作不写任何OS对象，包括queue数组及
     semaphore；它不把进入函数到加锁间的环境变化抹掉。 *)
 Definition abs_dataqueue_peak_locked (p : addr)
@@ -41,9 +41,7 @@ Definition abs_dataqueue_peak_locked (p : addr)
   {| nrm := fun before result after =>
        after = before /\ exists q,
          before.(os_dataqueues).(dataqueue_map) p = Some q /\
-         ((q.(dq_front) = q.(dq_rear) /\ result = None) \/
-          (q.(dq_front) <> q.(dq_rear) /\ exists e,
-            dataqueue_peak q = Some e /\ result = Some e));
+         result = dataqueue_peak q;
      err := fun _ => False |}.
 
 (** 检查候选观察后只做一段真实临界区；两种C出口均解锁。

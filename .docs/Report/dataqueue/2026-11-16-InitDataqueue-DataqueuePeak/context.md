@@ -1,3 +1,5 @@
+> 2026-11-21 更新：Dataqueue 已改为有效元素列表，本文旧 Dataqueue predicate/spec/实现结论不适用于新输入。Init、DeInit、Peak、Pop 的旧表示证明需重新适配；历史记录保留。见 [本轮设计与验证范围](../2026-11-21-FifoRepresentation/design.md)。
+
 > 当前证明文件已按用户要求恢复QCP原生auto/manual分工，Init和DeInit均重新final-check通过。最新文件、计数及信任说明见[native-auto-restoration.md](native-auto-restoration.md)。下文旧全部manual计数是历史记录。
 
 > 当前窗口分工（用户最新指示）：本窗口只推进第一阶段Init/DeInit/Peak及必要Semaphore IC闭包；用户将在另一窗口推进Pop/Push。共享map/ABI设计沿用现状，跨窗口共享lib/header修改需协调并复核受影响证明，不能把旧输入done套用到变化后的输入。

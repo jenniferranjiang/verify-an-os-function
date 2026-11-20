@@ -75,7 +75,7 @@ inline struct TaskDescriptor *GetTaskWithIdnodeInfo(int32 id)
 此例中 `id` 是 `GetTaskWithIdnodeInfo` 的真实 C 形参，不是 `With` 引入的 ghost ID；只接收对象指针的
 函数应按 [Spec 指南第 2.1 节](spec-writing-guide.md#21-c-形参逻辑参数与-continuation)区分公开指针语义与内部身份 witness。
 具体分工见 [Spec 指南第 4 节](spec-writing-guide.md#4-临界区内外-spec-的判断与证明方法)，
-program 的适用条件和设计见 [Predicate 指南第 4 节](predicate-lemma-design-guide.md#4-为临界区操作定义抽象-program)。
+program 的适用条件和设计见 [Predicate 指南第 5 节](predicate-lemma-design-guide.md#5-为临界区操作定义抽象-program)。
 
 3. 仅由 C 类型或已有存储资源即可推出的取值范围，可以在函数体中用 `by local`
 提取，不必为了后续证明使用它而在 `Require` 中重复增加条件。例如，当前配置中的
