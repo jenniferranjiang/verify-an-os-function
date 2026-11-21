@@ -18,11 +18,12 @@ void EnableLocalInterrupt(x_base lock)
       InsideCritical(sg, held) * os_inv(sg, after)
     Ensure OutsideCritical(sg, after)
 */;
-/* KERNEL_FREE exact macro target; the FIFO segments and unused bytes are
- * joined back into the entire original allocation before it is returned. */
+/* Trusted KERNEL_FREE boundary: consume the buffer in its existing FIFO
+ * representation; the queue descriptor remains with the caller. */
 void x_free(void *p)
-/*@ With n
-    Require p != 0 && 0 < n && CharArray::undef_full(p, n)
+/*@ dataqueue_free_buffer
+    With (q : DataQueueAbs)
+    Require p == q.dq_base && p != 0 && dataqueue_buffer(q)
     Ensure emp
 */;
 
@@ -69,11 +70,10 @@ void DeInitDataqueue(DataQueueType *p_queue)
           p_queue->sem_blank == q.dq_sem_blank && p_queue->sem_data == q.dq_sem_data &&
           CharArray::undef_full((char *)p_queue + 6, 2) *
           ((q.dq_base == 0 && emp) ||
-           (q.dq_base != 0 && 0 < q.dq_max_len &&
-            CharArray::undef_full(q.dq_base, q.dq_max_len * 8))) */
+           (q.dq_base != 0 && dataqueue_buffer(q))) */
 
     if (p_queue->base) {
-        x_free(p_queue->base) /*@ where n = q.dq_max_len * 8 */;
+        x_free(p_queue->base) /*@ where (dataqueue_free_buffer) q = q */;
         p_queue->base = NONE;
     }
 

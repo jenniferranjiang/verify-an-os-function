@@ -159,67 +159,46 @@ Require mutex != 0 && exists id,
     不要为了避开声明问题退回难读的嵌套投影调用。这条经验针对 QCP 的 C 标注语法，
     不要求将 Rocq `.v` 文件中的投影语法改成 C 标注写法。
 
-6. 根据函数的实际操作，使用合适的谓词描述其操作对象。不要仅因参数指向某个结构体，就要求完整结构体谓词；也不要仅因函数操作内存，就强制改用字节数组。
-以下以已授权的
-`KERNEL_FREE/x_free` 可信接口为例，对照错误写法和合适的写法。对于释放内存的函数，caller 交出合适的、描述待释放内存的 predicate
-即可，不应该先重组成完整对象 predicate 或完整字节数组。
+6. 使用合适的谓词描述函数的操作对象。以 Dataqueue 的可信 `x_free` 接口为例，
+已有 `dataqueue_buffer(q)` 描述待释放 buffer，就直接使用该谓词，不必让 caller
+先把 FIFO 有效元素和空闲区重组成整块字节数组。
 
-错误示例一：强制 caller 为释放事件描述符拼出完整 `EventRaw`。
-
-```c
-void x_free(void *ptr)
-/*@ event_object
-    Require EventRaw(ptr)
-    Ensure emp
- */;
-```
-
-这里的设计错误是增加了不必要的完整对象交接要求。`x_free` 只是释放内存，
-不执行事件模块的业务操作；不应为了调用它，要求 caller 补齐事件全部字段、
-链表存储和 padding，再组装成完整 `EventRaw`。
-
-错误示例二：强制 caller 为释放 buffer 重组成完整字节数组。
+修改前的接口：
 
 ```c
 void x_free(void *p)
 /*@ With n
     Require p != 0 && 0 < n && CharArray::undef_full(p, n)
     Ensure emp
- */;
+*/;
 ```
 
-这里的设计错误是强制使用完整字节布局，给 caller 增加不必要的长度参数
-和字节重组义务。已有合适的、描述待释放 buffer 内存的 predicate 时，
-直接交出该 predicate 描述的资源即可。
+该接口要求 caller 将 `dataqueue_buffer(q)` 转换为
+`CharArray::undef_full(q.dq_base, q.dq_max_len * 8)`，再传入长度参数。
+字节数组契约本身并非错误，但本场景已有适合描述操作对象的 buffer 谓词，
+这次转换给调用者增加了不必要的表示转换义务。
 
-当前应采用的示例：
+修改后的接口：
 
 ```c
-void x_free(void *ptr)
-/*@ msgqueue_free_buffer
-    With (mq : Z) (buffer : MsgQueueBufferAbs)
-    Require ptr == mqbAddress(buffer) && store_msgqueue_buffer(mq, buffer)
+void x_free(void *p)
+/*@ dataqueue_free_buffer
+    With (q : DataQueueAbs)
+    Require p == q.dq_base && p != 0 && dataqueue_buffer(q)
     Ensure emp
- */;
-
-void x_free(void *ptr)
-/*@ event_free_descriptor
-    Require store_event_free_ready(ptr) || (ptr == 0 && emp)
-    Ensure emp
- */;
+*/;
 ```
 
-这两个示例分别用合适的 predicate 描述待释放的 buffer 和事件描述符内存。不能把 `store_event_free_ready` 当成换名后的完整
-`EventRaw`，继续要求它覆盖事件对象的每个字节。也不应仅因 predicate 没有
-表示 padding，就要求补齐完整对象或增加字节重组证明。上述错误指本场景中
-不必要的接口要求，不是说 `EventRaw` 或字节数组断言在所有场景都不可使用。
+调用处保留 `dataqueue_buffer(q)`，直接交给 `x_free`：
 
-适用边界是：指针须按分配与回收协议指向可释放的原始分配基址；释放后，不能
-把同一分配块内已经建模的其他字段资源 frame 出去，继续作为有效内存使用。
-未建模的 padding 不必补齐，已存在的对象内存资源则须由回收协议妥善处理。
-`Ensure emp` 表示交给该调用的资源不再返还，不表示调用者其他独立资源也被释放。
-空指针分支适用于实现确实支持 `x_free(NULL)` 的情形。
+```c
+x_free(p_queue->base) /*@ where (dataqueue_free_buffer) q = q */;
+```
 
-本经验针对模块调用者使用可信回收接口，不将这些 spec 宣称为分配器实现的
-已证契约；若目标改为验证分配器本身，应按其实际实现处理分配来源、元数据及
-分配器状态，不能直接用上述模块视图代替实现证明。
+`dataqueue_buffer(q)` 拥有有效元素槽和空闲区；队列描述符留给 caller，
+元素中指针所指的 payload 不属于该 buffer 谓词。这个修改保留待释放 buffer
+的内存所有权，只改变接口采用的表示，不是允许遗漏资源。
+
+本经验适用于已授权的可信释放接口；指针仍须按分配协议指向原始分配基址。
+不能由此断言 `EventRaw` 等对象谓词不合适，也不能仅凭名称认为
+`store_event_free_ready` 比 `EventRaw` 拥有更少资源；判断应依据实际定义。

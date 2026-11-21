@@ -60,6 +60,7 @@ typedef struct DataQueue {
   (LastSeen : VarGlobalState -> (VarGlobalState -> Prop) -> Prop)
   (DataqueueStorage : Z -> Assertion)
   (store_dataqueue : Z -> DataQueueAbs -> Assertion)
+  (dataqueue_buffer : DataQueueAbs -> Assertion)
   (dataqueue_retired : DataQueueAbs -> DataQueueAbs)
   (dq_base : DataQueueAbs -> Z)
   (dq_max_len : DataQueueAbs -> Z) (dq_front : DataQueueAbs -> Z)
@@ -109,6 +110,7 @@ typedef struct DataQueue {
 /*@ Printing Coq Name dq_sem_data := CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data */
 /*@ Printing Coq Name DataqueueStorage := CRTOS_Verify.lib.common.DataqueueInv.DataqueueStorage */
 /*@ Printing Coq Name store_dataqueue := CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue */
+/*@ Printing Coq Name dataqueue_buffer := CRTOS_Verify.lib.common.DataqueueInv.dataqueue_buffer */
 /*@ Printing Coq Name DataqueueSemRefs := CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs */
 /*@ Printing Coq Name abs_deinit_dataqueue := CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue */
 /*@ Printing Coq Name abs_init_dataqueue := CRTOS_Verify.lib.dataqueue.KInitDataqueue.abs_init_dataqueue */

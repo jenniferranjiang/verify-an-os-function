@@ -271,6 +271,11 @@ allocation、free 或 container membership 变化，应使用已有 object/conta
 
 ### 3.3 保持函数层次的抽象边界
 
+使用合适的谓词描述函数的操作对象。已有谓词能表达该操作所需的资源时，
+优先复用它，不应仅因 callee 是内存操作函数，就要求 caller 将对象表示转换成
+字节数组。例如，可信 `x_free` 可直接接收 `dataqueue_buffer(q)`，无需先将
+FIFO 元素和空闲区重组成 `CharArray::undef_full`。具体示例见 [Spec 设计经验第 6 条](spec-experience.md)。
+
 Canonical contract 还必须保持函数层次的抽象边界。模块和容器函数使用 reviewed predicate、abstract
 state 和按动作命名的 transition，不把 manager 字段、bitmap bytes、数组元素或链表指针作为 API
 沿调用链逐层传递。只有语义本身就是具体 memory shape 的底层内存原语，canonical contract 才可
