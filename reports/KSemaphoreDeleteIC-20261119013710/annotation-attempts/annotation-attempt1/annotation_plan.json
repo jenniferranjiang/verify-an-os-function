@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "KSemaphoreDelete",
+      "meaning": "Delegate quiescent IC deletion, restoring os_inv and the same semaphore_delete_ic_effect as the internal callee."
+    },
+    {
+      "name": "_SemaphoreDelete",
+      "meaning": "Canonical proved IC cleanup contract: invalid or absent ID preserves abstract state; matching quiescent object is removed and its memory released."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

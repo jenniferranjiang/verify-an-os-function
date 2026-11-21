@@ -1,0 +1,133 @@
+{
+  "schema_version": 4,
+  "generation": 11,
+  "run_id": "KSemaphoreDeleteIC-20261119013710",
+  "case": "KSemaphoreDeleteIC",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos-verify",
+  "run_root": "/home/xinra/crtos-verify/verification_runs/KSemaphoreDeleteIC-20261119013710",
+  "report_root": "/home/xinra/crtos-verify/reports/KSemaphoreDeleteIC-20261119013710",
+  "target_files": {
+    "c_file": "annotated_C/src/kernel/semaphore/KSemaphoreDelete.c",
+    "formal_directory": "VC/semaphore",
+    "formal_case_lib": "VC/semaphore/KSemaphoreDeleteIC_lib.v",
+    "goal_file": "VC/semaphore/KSemaphoreDeleteIC_goal.v",
+    "proof_auto_file": "VC/semaphore/KSemaphoreDeleteIC_proof_auto.v",
+    "proof_manual_file": "VC/semaphore/KSemaphoreDeleteIC_proof_manual.v",
+    "goal_check_file": "VC/semaphore/KSemaphoreDeleteIC_goal_check.v",
+    "case_name": "KSemaphoreDeleteIC",
+    "active_case_theory": "CRTOS_Verify.VC.semaphore"
+  },
+  "problem_context": {
+    "problem_statement": "Verify canonical KSemaphoreDelete named dataqueue_cleanup_ic, default IC macro1, preserve OC path. Underlying _SemaphoreDelete IC just completed SemaphoreDeleteIC-20261118235913 done/final-check; quiescent init cleanup scope only. dq-semaphore-ic-canonical-20261118-r1 reviewed source/spec and current global map/ABI unchanged. Wrapper alone is target. TrustBase .agents/skills/verify-an-os-function/references/TrustBase.md. User removed cumulative proof budget, preapproved justified fixes; real checks required. Keep native QCP auto/manual division, generated auto solver trust permitted, no auto-to-manual transfer. Only assigned manual spans handwritten; no assumptions added. Use local controller debug/check, no private project source via Rocq MCP following prior approval rejection. Source crtoslatest readonly; keep .vo; no handwritten generated goal/auto/check changes. Main handles root build list and reports after done."
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "KSemaphoreDelete"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "_SemaphoreDelete::dataqueue_cleanup_ic": "dataqueue_cleanup_ic With (sg : StableGlobalState) (before : VarGlobalState) Require semaphore_delete_quiescent(id, before) && os_inv(sg, before) Ensure exists after, semaphore_delete_ic_effect(id, before, after) && os_inv(sg, after)",
+        "_SemaphoreDelete::outside_critical": "outside_critical With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_delete(sg, id), X) && OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(tt), X) && OutsideCritical(sg, after)",
+        "KSemaphoreDelete::dataqueue_cleanup_ic": "dataqueue_cleanup_ic With (sg : StableGlobalState) (before : VarGlobalState) Require semaphore_delete_quiescent(id, before) && os_inv(sg, before) Ensure exists after, semaphore_delete_ic_effect(id, before, after) && os_inv(sg, after)",
+        "KSemaphoreDelete::outside_critical": "outside_critical With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_delete(sg, id), X) && OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(tt), X) && OutsideCritical(sg, after)"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-11-18T17:37:10.607168Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/semaphore/KSemaphoreDeleteIC_goal_check.vo",
+    "base_artifact_count": 217,
+    "current_source_count": 4,
+    "elapsed_seconds": 5.43613,
+    "snapshot": "verification_runs/KSemaphoreDeleteIC-20261119013710/dependency_plan.json"
+  },
+  "attempts": {
+    "KSemaphoreDeleteIC-annotation-r1": {
+      "attempt_id": "KSemaphoreDeleteIC-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/KSemaphoreDeleteIC-20261119013710",
+      "claimed_action": "deliver:KSemaphoreDeleteIC-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T17:37:22.597855Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T17:37:34.196149Z",
+            "finished_at": "2026-11-18T17:39:17.343384Z",
+            "elapsed_seconds": 103.147235
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T17:39:17.343354Z",
+      "finished_at": "2026-11-18T17:39:17.579406Z"
+    },
+    "KSemaphoreDeleteIC-vc-proving-r1": {
+      "attempt_id": "KSemaphoreDeleteIC-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-18T17:39:33.836629Z",
+      "source_annotation": "KSemaphoreDeleteIC-annotation-r1",
+      "source_vc_checking": null,
+      "groups": {},
+      "finished_at": "2026-11-18T17:40:15.114872Z"
+    }
+  },
+  "current": {
+    "annotation": "KSemaphoreDeleteIC-annotation-r1",
+    "vc-checking": null,
+    "vc-proving": "KSemaphoreDeleteIC-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/KSemaphoreDeleteIC-20261119013710",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "KSemaphoreDeleteIC-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-11-18T17:41:02.544536Z",
+    "files": [
+      "VC/semaphore/KSemaphoreDeleteIC_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-11-18T17:41:47.536308Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-11-18T17:37:10.607186Z",
+  "updated_at": "2026-11-18T17:41:47.546034Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-11-18T17:41:47.536289Z"
+}

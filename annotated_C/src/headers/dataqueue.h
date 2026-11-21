@@ -74,6 +74,20 @@ typedef struct DataQueue {
   (semaphore_delete_quiescent : Z -> VarGlobalState -> Prop)
   (semaphore_delete_ic_effect : Z -> VarGlobalState -> VarGlobalState -> Prop)
 */
+/*@ Extern Coq Record DataQueueAbs {
+  dq_base: Z;
+  dq_max_len: Z;
+  dq_front: Z;
+  dq_rear: Z;
+  dq_sem_blank: Z;
+  dq_sem_data: Z;
+} */
+/*@ Extern Coq Record VarGlobalState {
+  os_dataqueues: DataqueueState;
+} */
+/*@ Extern Coq Record DataqueueState {
+  dataqueue_map: Z -> option DataQueueAbs;
+} */
 /*@ Printing Coq Name StableGlobalState := CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState */
 /*@ Printing Coq Name VarGlobalState := CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState */
 /*@ Printing Coq Name os_dataqueues := CRTOS_Verify.lib.common.CrtosGlobState.os_dataqueues */
@@ -112,6 +126,13 @@ typedef struct DataQueue {
   (peak_length_slot : Z -> option Z -> Assertion)
   (abs_dataqueue_peak : StableGlobalState -> Z -> program (VarGlobalState -> Prop) (option DataqueueElem))
 */
+/*@ Extern Coq Record DataqueueElem {
+  dq_data: Z;
+  dq_length: Z;
+} */
+/*@ Extern Coq Record DataQueueAbs {
+  dq_slots: list DataqueueElem;
+} */
 /*@ Printing Coq Name DataqueueElem := CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem */
 /*@ Printing Coq Name dq_slots := CRTOS_Verify.lib.dataqueue.DataqueueState.dq_slots */
 /*@ Printing Coq Name dq_data := CRTOS_Verify.lib.dataqueue.DataqueueState.dq_data */

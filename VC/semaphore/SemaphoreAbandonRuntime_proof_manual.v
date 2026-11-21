@@ -1,0 +1,120 @@
+From SimpleC.Verification Require Import VCPrelude.
+From CRTOS_Verify.VC.semaphore Require Import SemaphoreAbandonRuntime_goal.
+From CRTOS_Verify.VC.semaphore Require Import SemaphoreAbandonRuntime_proof_auto.
+Require Import CRTOS_Verify.lib.id.IdModuleSpec.
+Require Import CRTOS_Verify.lib.semaphore.KSemaphoreDelete CRTOS_Verify.lib.delay.KTaskUnSetDelay.
+Require Import CRTOS_Verify.lib.list.DoubleLinkListSpec CRTOS_Verify.lib.task.TaskStatusMemory CRTOS_Verify.lib.task.KTaskParseInfo.
+Import IDNode DLL.
+From MonadLib.MonadErr Require Import MonadErrBasic MonadErrHoare monadesafe_lib.
+Import Monad MonadNotation.
+Local Open Scope monad.
+Require Import CRTOS_Verify.lib.semaphore.KSemaphoreAbandon.
+Require Import CRTOS_Verify.lib.semaphore.KSemaphoreObtain.
+Import SimpleC.CoreLang.CTypes.SimpleCtypeNotations.
+Local Open Scope sac.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_2_1_split_goal_1 : _SemaphoreAbandon_entail_wit_2_1_split_goal_1.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_2_1_split_goal_2 : _SemaphoreAbandon_entail_wit_2_1_split_goal_2.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_2_1_split_goal_spatial : _SemaphoreAbandon_entail_wit_2_1_split_goal_spatial.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_2_1 : _SemaphoreAbandon_entail_wit_2_1.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_2_2_split_goal_1 : _SemaphoreAbandon_entail_wit_2_2_split_goal_1.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_2_2_split_goal_2 : _SemaphoreAbandon_entail_wit_2_2_split_goal_2.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_2_2_split_goal_spatial : _SemaphoreAbandon_entail_wit_2_2_split_goal_spatial.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_2_2 : _SemaphoreAbandon_entail_wit_2_2.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_3 : _SemaphoreAbandon_entail_wit_3.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_4_split_goal_1 : _SemaphoreAbandon_entail_wit_4_split_goal_1.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_4 : _SemaphoreAbandon_entail_wit_4.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_5_split_goal_1 : _SemaphoreAbandon_entail_wit_5_split_goal_1.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_5_split_goal_2 : _SemaphoreAbandon_entail_wit_5_split_goal_2.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_5_split_goal_spatial : _SemaphoreAbandon_entail_wit_5_split_goal_spatial.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_5 : _SemaphoreAbandon_entail_wit_5.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_6_1 : _SemaphoreAbandon_entail_wit_6_1.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_entail_wit_6_2 : _SemaphoreAbandon_entail_wit_6_2.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_return_wit_1_split_goal_1 : _SemaphoreAbandon_return_wit_1_split_goal_1.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_return_wit_1 : _SemaphoreAbandon_return_wit_1.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_return_wit_5_split_goal_1 : _SemaphoreAbandon_return_wit_5_split_goal_1.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_return_wit_5 : _SemaphoreAbandon_return_wit_5.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_return_wit_6_split_goal_1 : _SemaphoreAbandon_return_wit_6_split_goal_1.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_return_wit_6 : _SemaphoreAbandon_return_wit_6.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_partial_solve_wit_9_pure_split_goal_1 : _SemaphoreAbandon_partial_solve_wit_9_pure_split_goal_1.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_partial_solve_wit_9_pure : _SemaphoreAbandon_partial_solve_wit_9_pure.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_which_implies_wit_1_split_goal_spatial : _SemaphoreAbandon_which_implies_wit_1_split_goal_spatial.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_which_implies_wit_1 : _SemaphoreAbandon_which_implies_wit_1.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_which_implies_wit_2_split_goal_1 : _SemaphoreAbandon_which_implies_wit_2_split_goal_1.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_which_implies_wit_2_split_goal_spatial : _SemaphoreAbandon_which_implies_wit_2_split_goal_spatial.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_which_implies_wit_2 : _SemaphoreAbandon_which_implies_wit_2.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_which_implies_wit_3_split_goal_spatial : _SemaphoreAbandon_which_implies_wit_3_split_goal_spatial.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_which_implies_wit_3 : _SemaphoreAbandon_which_implies_wit_3.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_which_implies_wit_4_split_goal_spatial : _SemaphoreAbandon_which_implies_wit_4_split_goal_spatial.
+Proof. Abort.
+
+Lemma proof_of__SemaphoreAbandon_which_implies_wit_4 : _SemaphoreAbandon_which_implies_wit_4.
+Proof. Admitted.
+
+Lemma proof_of__SemaphoreAbandon_which_implies_wit_5 : _SemaphoreAbandon_which_implies_wit_5.
+Proof. Admitted.
+

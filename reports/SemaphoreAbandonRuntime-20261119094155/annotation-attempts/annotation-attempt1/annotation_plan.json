@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "_SemaphoreAbandon",
+      "meaning": "精化既有release抽象：非法或缺失ID返回-1，空等待链饱和返回-3，否则加一或唤醒首任务，后者锁外调度并返回0。"
+    },
+    {
+      "name": "CriticalAreaLock",
+      "meaning": "既有IRQ模型取得当前观察状态及os_inv。"
+    },
+    {
+      "name": "CriticalAreaUnLock",
+      "meaning": "按GTrans归还更新后的os_inv并恢复临界区外协议。"
+    },
+    {
+      "name": "IdGetObj",
+      "meaning": "导入ID查找契约，保留或返回精确命中manager视图。"
+    },
+    {
+      "name": "CONTAINER_OF_SEMAPHORE_ID",
+      "meaning": "既有容器转换模型，由ID字段地址恢复Semaphore地址。"
+    },
+    {
+      "name": "KTASK_ASSIGN",
+      "meaning": "既有锁外调度模型，返回unit并保持continuation。"
+    },
+    {
+      "name": "IsDoubleLinkListEmpty",
+      "meaning": "导入DLL判空契约，返回空/非空关系并归还完整链资源。"
+    },
+    {
+      "name": "LinklistResume",
+      "meaning": "使用已done semaphore_head_ic，唤醒非空等待链首任务并返回整体effect。"
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

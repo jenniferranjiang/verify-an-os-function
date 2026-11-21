@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "generated-name-shadowing",
+    "vcs": [
+      {
+        "name": "proof_of_LinklistResume_which_implies_wit_1",
+        "parent": null,
+        "annotation_location": "annotated_C/src/kernel/semaphore/LinklistResume.c:50-57 first which implies (pending head field borrow)"
+      }
+    ],
+    "message": "Actual controller coq-debug fails compiling current goal.v:232:25-31: C parameter binder (list : Z) shadows Coq list in subsequent EX (rest : (@list Z)). No mathematical missing premise: current obligation is ill-typed. Repair local annotation naming/view and regenerate through native annotation workflow; do not patch generated files.",
+    "repair_boundary": "C annotation"
+  }
+}

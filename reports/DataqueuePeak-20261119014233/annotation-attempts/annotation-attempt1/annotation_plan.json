@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "DataqueuePeak",
+      "meaning": "按已批准契约进行一次锁内队首观察；空时返回-1保持输出，非空返回0复制指针与长度，归还临界区资源。"
+    },
+    {
+      "name": "CriticalAreaLock",
+      "meaning": "沿用已授权共享协议取得当前观察及os_inv。"
+    },
+    {
+      "name": "CriticalAreaUnLock",
+      "meaning": "按既有协议归还同一未修改OS状态并退出临界区。"
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

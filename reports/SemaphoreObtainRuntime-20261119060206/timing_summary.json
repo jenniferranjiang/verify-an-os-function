@@ -1,0 +1,334 @@
+{
+  "run": {
+    "status": "completed",
+    "phase": "done",
+    "created_at": "2026-11-18T22:02:06.695111Z",
+    "finished_at": "2026-11-19T00:43:09.837435Z",
+    "elapsed_seconds": 9663.142324
+  },
+  "commands": [
+    {
+      "phase": "annotation",
+      "command": "coq-check",
+      "calls": 3,
+      "elapsed_seconds": 0.06356
+    },
+    {
+      "phase": "annotation",
+      "command": "symexec",
+      "calls": 15,
+      "elapsed_seconds": 25.862518
+    },
+    {
+      "phase": "annotation",
+      "command": "finalize-delivery",
+      "calls": 4,
+      "elapsed_seconds": 9.804327
+    },
+    {
+      "phase": "vc-checking",
+      "command": "dune-build",
+      "calls": 3,
+      "elapsed_seconds": 8.130572
+    },
+    {
+      "phase": "vc-checking",
+      "command": "coq-debug",
+      "calls": 3,
+      "elapsed_seconds": 70.526841
+    },
+    {
+      "phase": "vc-checking",
+      "command": "finalize-delivery",
+      "calls": 5,
+      "elapsed_seconds": 0.459158
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-preparing",
+      "calls": 2,
+      "elapsed_seconds": 0.382454
+    },
+    {
+      "phase": "vc-proving",
+      "command": "finalize-delivery",
+      "calls": 16,
+      "elapsed_seconds": 612.8838
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-verify",
+      "calls": 1,
+      "elapsed_seconds": 169.015585
+    },
+    {
+      "phase": "final-check",
+      "command": "final-apply",
+      "calls": 1,
+      "elapsed_seconds": 170.679021
+    },
+    {
+      "phase": "done",
+      "command": "final-check",
+      "calls": 1,
+      "elapsed_seconds": 171.514065
+    }
+  ],
+  "annotation_attempts": [
+    {
+      "attempt_id": "SemaphoreObtainRuntime-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-11-18T22:03:58.852738Z",
+          "finished_at": "2026-11-18T22:03:58.887266Z",
+          "elapsed_seconds": 0.022653
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T22:28:53.909189Z",
+          "finished_at": "2026-11-18T22:28:56.330213Z",
+          "elapsed_seconds": 2.411814
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T22:02:23.230743Z",
+          "finished_at": "2026-11-18T22:28:53.922045Z",
+          "elapsed_seconds": 1590.691302
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-11-18T22:03:59.109160Z",
+          "calls": 12,
+          "finished_at": "2026-11-18T22:26:14.727792Z",
+          "elapsed_seconds": 19.08306
+        }
+      ]
+    },
+    {
+      "attempt_id": "SemaphoreObtainRuntime-annotation-r2",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-11-18T22:35:38.086035Z",
+          "finished_at": "2026-11-18T22:35:38.113063Z",
+          "elapsed_seconds": 0.018591
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T22:39:33.202105Z",
+          "finished_at": "2026-11-18T22:39:36.051488Z",
+          "elapsed_seconds": 2.838565
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T22:35:04.454838Z",
+          "finished_at": "2026-11-18T22:39:33.227042Z",
+          "elapsed_seconds": 268.772204
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-11-18T22:35:38.267007Z",
+          "calls": 2,
+          "finished_at": "2026-11-18T22:36:41.777618Z",
+          "elapsed_seconds": 4.526957
+        }
+      ]
+    },
+    {
+      "attempt_id": "SemaphoreObtainRuntime-annotation-r3",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-11-18T23:45:58.158554Z",
+          "finished_at": "2026-11-18T23:45:58.191967Z",
+          "elapsed_seconds": 0.022316
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T23:46:52.582697Z",
+          "calls": 2,
+          "finished_at": "2026-11-18T23:48:34.347748Z",
+          "elapsed_seconds": 4.553948
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T23:44:49.539524Z",
+          "calls": 2,
+          "finished_at": "2026-11-18T23:48:32.078185Z",
+          "elapsed_seconds": 203.787224
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-11-18T23:45:58.353224Z",
+          "finished_at": "2026-11-18T23:46:00.620018Z",
+          "elapsed_seconds": 2.252501
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "attempt_id": "SemaphoreObtainRuntime-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "blocked",
+      "stages": [
+        {
+          "name": "coq-debug",
+          "started_at": "2026-11-18T22:30:21.244126Z",
+          "finished_at": "2026-11-18T22:30:44.720514Z",
+          "elapsed_seconds": 23.466333
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T22:34:31.665968Z",
+          "finished_at": "2026-11-18T22:34:31.729082Z",
+          "elapsed_seconds": 0.056113
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T22:29:27.829963Z",
+          "finished_at": "2026-11-18T22:34:31.682000Z",
+          "elapsed_seconds": 303.852037
+        }
+      ]
+    },
+    {
+      "attempt_id": "SemaphoreObtainRuntime-vc-checking-r2",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-debug",
+          "started_at": "2026-11-18T22:40:51.663604Z",
+          "finished_at": "2026-11-18T22:41:14.453144Z",
+          "elapsed_seconds": 22.776296
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T22:47:02.073940Z",
+          "calls": 2,
+          "finished_at": "2026-11-18T22:48:11.303496Z",
+          "elapsed_seconds": 0.174046
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T22:40:05.758323Z",
+          "calls": 2,
+          "finished_at": "2026-11-18T22:48:11.232808Z",
+          "elapsed_seconds": 477.280081
+        }
+      ]
+    },
+    {
+      "attempt_id": "SemaphoreObtainRuntime-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "running",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T23:05:41.953980Z",
+          "calls": 6,
+          "finished_at": "2026-11-18T23:39:28.429789Z",
+          "elapsed_seconds": 176.99635
+        },
+        {
+          "name": "group-work",
+          "started_at": "2026-11-18T22:48:52.199664Z",
+          "calls": 6,
+          "finished_at": "2026-11-18T23:38:15.781006Z",
+          "elapsed_seconds": 7630.378923
+        },
+        {
+          "name": "vc-proving-preparing",
+          "started_at": "2026-11-18T22:48:20.461246Z",
+          "finished_at": "2026-11-18T22:48:20.654374Z",
+          "elapsed_seconds": 0.184133
+        }
+      ]
+    },
+    {
+      "attempt_id": "SemaphoreObtainRuntime-vc-checking-r3",
+      "phase": "vc-checking",
+      "status": "blocked",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T23:44:32.059248Z",
+          "finished_at": "2026-11-18T23:44:32.139093Z",
+          "elapsed_seconds": 0.069139
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T23:40:48.696283Z",
+          "finished_at": "2026-11-18T23:44:32.080551Z",
+          "elapsed_seconds": 223.384268
+        }
+      ]
+    },
+    {
+      "attempt_id": "SemaphoreObtainRuntime-vc-checking-r4",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-debug",
+          "started_at": "2026-11-18T23:51:37.860470Z",
+          "finished_at": "2026-11-18T23:52:01.563877Z",
+          "elapsed_seconds": 24.284212
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T23:54:13.025606Z",
+          "finished_at": "2026-11-18T23:54:13.199635Z",
+          "elapsed_seconds": 0.15986
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T23:49:05.346150Z",
+          "finished_at": "2026-11-18T23:54:13.052126Z",
+          "elapsed_seconds": 307.705976
+        }
+      ]
+    },
+    {
+      "attempt_id": "SemaphoreObtainRuntime-vc-proving-r2",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-19T00:06:41.928483Z",
+          "calls": 10,
+          "finished_at": "2026-11-19T00:34:14.617533Z",
+          "elapsed_seconds": 435.88745
+        },
+        {
+          "name": "group-work",
+          "started_at": "2026-11-18T23:54:42.637353Z",
+          "calls": 10,
+          "finished_at": "2026-11-19T00:33:50.445045Z",
+          "elapsed_seconds": 4093.263615
+        },
+        {
+          "name": "vc-proving-preparing",
+          "started_at": "2026-11-18T23:54:35.354167Z",
+          "finished_at": "2026-11-18T23:54:35.565950Z",
+          "elapsed_seconds": 0.198321
+        },
+        {
+          "name": "vc-proving-verify",
+          "started_at": "2026-11-19T00:34:20.480698Z",
+          "finished_at": "2026-11-19T00:37:06.270641Z",
+          "elapsed_seconds": 169.015585
+        }
+      ]
+    }
+  ]
+}

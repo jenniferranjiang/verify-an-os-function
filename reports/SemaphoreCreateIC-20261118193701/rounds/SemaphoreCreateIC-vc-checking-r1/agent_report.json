@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-premise",
+    "vcs": [
+      {
+        "name": "proof_of__SemaphoreCreate_entail_wit_1",
+        "parent": null,
+        "annotation_location": "post-memset which-implies: CharArray.full/os_inv to semaphore fields and frame"
+      }
+    ],
+    "message": "Both disjuncts quantify arbitrary val_pre:Z and require 0 <= val_pre <= 65535, but antecedent contains only malloc address facts plus CharArray.full ** os_inv, independent of val_pre. On any satisfying spatial heap choose val_pre=-1 (or 65536); both branches fail. Preserve actual UShort parameter ownership/range evidence through this annotation boundary.",
+    "repair_boundary": "C annotation"
+  }
+}

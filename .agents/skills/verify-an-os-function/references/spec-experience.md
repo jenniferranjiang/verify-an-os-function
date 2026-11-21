@@ -143,3 +143,83 @@ Require mutex != 0 && exists id,
 
 这条经验不适用于 `KMutexDelete(int32 id)` 这类真实以 `id` 为 C 形参的外层 API；
 该外层 spec 可以直接使用其 C 形参 `id`。也不适用于`_SemaphoreDelete(int32 id)`等本身传入`id` 为 C 形参的函数。
+
+5. QCP 的断言标注和 C spec 中，Record 变量的字段引用优先使用
+    `record_name.field_name`，嵌套字段使用连续的点号，避免多层投影函数调用影响阅读。
+    例如，使用 `sg.os_msgqueue_stable.msgqueue_done_ptr`，而不是
+    `msgqueue_done_ptr(os_msgqueue_stable(sg))`。
+
+    使用点号语法前，必须在 QCP 的 C 标注中通过 `Extern Coq Record ...` 引入相关
+    Record 及所用字段；嵌套访问涉及的各层 Record 都须有相应声明，并在使用处可见。
+    只有 Rocq 中的 Record 定义或普通投影函数声明不足以支持该语法，缺少 Record
+    声明会导致 QCP 符号执行报错。声明格式参考项目已有 C spec 或逻辑 header 中的
+    `/*@ Extern Coq Record ... { ... } */`，字段名和类型须与实际 Rocq 定义一致。
+
+    编写或修改这类字段引用时，应先复用或补齐相应 Record 声明，再使用点号写法，
+    不要为了避开声明问题退回难读的嵌套投影调用。这条经验针对 QCP 的 C 标注语法，
+    不要求将 Rocq `.v` 文件中的投影语法改成 C 标注写法。
+
+6. 根据函数的实际操作，使用合适的谓词描述其操作对象。不要仅因参数指向某个结构体，就要求完整结构体谓词；也不要仅因函数操作内存，就强制改用字节数组。
+以下以已授权的
+`KERNEL_FREE/x_free` 可信接口为例，对照错误写法和合适的写法。对于释放内存的函数，caller 交出合适的、描述待释放内存的 predicate
+即可，不应该先重组成完整对象 predicate 或完整字节数组。
+
+错误示例一：强制 caller 为释放事件描述符拼出完整 `EventRaw`。
+
+```c
+void x_free(void *ptr)
+/*@ event_object
+    Require EventRaw(ptr)
+    Ensure emp
+ */;
+```
+
+这里的设计错误是增加了不必要的完整对象交接要求。`x_free` 只是释放内存，
+不执行事件模块的业务操作；不应为了调用它，要求 caller 补齐事件全部字段、
+链表存储和 padding，再组装成完整 `EventRaw`。
+
+错误示例二：强制 caller 为释放 buffer 重组成完整字节数组。
+
+```c
+void x_free(void *p)
+/*@ With n
+    Require p != 0 && 0 < n && CharArray::undef_full(p, n)
+    Ensure emp
+ */;
+```
+
+这里的设计错误是强制使用完整字节布局，给 caller 增加不必要的长度参数
+和字节重组义务。已有合适的、描述待释放 buffer 内存的 predicate 时，
+直接交出该 predicate 描述的资源即可。
+
+当前应采用的示例：
+
+```c
+void x_free(void *ptr)
+/*@ msgqueue_free_buffer
+    With (mq : Z) (buffer : MsgQueueBufferAbs)
+    Require ptr == mqbAddress(buffer) && store_msgqueue_buffer(mq, buffer)
+    Ensure emp
+ */;
+
+void x_free(void *ptr)
+/*@ event_free_descriptor
+    Require store_event_free_ready(ptr) || (ptr == 0 && emp)
+    Ensure emp
+ */;
+```
+
+这两个示例分别用合适的 predicate 描述待释放的 buffer 和事件描述符内存。不能把 `store_event_free_ready` 当成换名后的完整
+`EventRaw`，继续要求它覆盖事件对象的每个字节。也不应仅因 predicate 没有
+表示 padding，就要求补齐完整对象或增加字节重组证明。上述错误指本场景中
+不必要的接口要求，不是说 `EventRaw` 或字节数组断言在所有场景都不可使用。
+
+适用边界是：指针须按分配与回收协议指向可释放的原始分配基址；释放后，不能
+把同一分配块内已经建模的其他字段资源 frame 出去，继续作为有效内存使用。
+未建模的 padding 不必补齐，已存在的对象内存资源则须由回收协议妥善处理。
+`Ensure emp` 表示交给该调用的资源不再返还，不表示调用者其他独立资源也被释放。
+空指针分支适用于实现确实支持 `x_free(NULL)` 的情形。
+
+本经验针对模块调用者使用可信回收接口，不将这些 spec 宣称为分配器实现的
+已证契约；若目标改为验证分配器本身，应按其实际实现处理分配来源、元数据及
+分配器状态，不能直接用上述模块视图代替实现证明。

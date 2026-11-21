@@ -1,0 +1,208 @@
+{
+  "schema_version": 4,
+  "generation": 23,
+  "run_id": "DataqueuePeak-20261119014233",
+  "case": "DataqueuePeak",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos-verify",
+  "run_root": "/home/xinra/crtos-verify/verification_runs/DataqueuePeak-20261119014233",
+  "report_root": "/home/xinra/crtos-verify/reports/DataqueuePeak-20261119014233",
+  "target_files": {
+    "c_file": "annotated_C/src/kernel/dataqueue/DataqueuePeak.c",
+    "formal_directory": "VC/dataqueue",
+    "formal_case_lib": "VC/dataqueue/DataqueuePeak_lib.v",
+    "goal_file": "VC/dataqueue/DataqueuePeak_goal.v",
+    "proof_auto_file": "VC/dataqueue/DataqueuePeak_proof_auto.v",
+    "proof_manual_file": "VC/dataqueue/DataqueuePeak_proof_manual.v",
+    "goal_check_file": "VC/dataqueue/DataqueuePeak_goal_check.v",
+    "case_name": "DataqueuePeak",
+    "active_case_theory": "CRTOS_Verify.VC.dataqueue"
+  },
+  "problem_context": {
+    "problem_statement": "Verify DataqueuePeak canonical current map+ABI spec: dq-predicate-map-20261117-r1/dq-spec-map-20261117-r1 and approved mapABI applicability. Actual scope one critical-section shared observation, empty returns -1 preserving optional output cells, nonempty returns0 copying front payload ptr/length without owning pointee. Existing approved source fix moves lock before front/rear read; source crtoslatest readonly. Use current global dataqueue_map os_inv, no new object model. CriticalAreaLock/UnLock existing trusted IRQ/API boundary. Default ReviewWhitelist001 applies dataqueue_peak_entry assertS, not VC exemption. TrustBase .agents/skills/verify-an-os-function/references/TrustBase.md. User removed all cumulative VC budgets and preapproved justified fixes, actual design reviews/checks remain. Preserve native auto/manual division and solver-trusted generated auto, no transfer. Only manual assigned spans handwritten, generated goal/auto/check tool-owned. No project source transmission via Rocq MCP after previous approval rejection; use local controller debug/check. Keep .vo. Existing InitDataqueue/DeInitDataqueue and all four SemaphoreCreate/Delete IC workflows now done; global libs unchanged. Formal no-case-lib policy, use current shared libs rather than duplicate models. Author/reviewer split and complete QCP workflow through final-check required."
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "DataqueuePeak"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "CriticalAreaLock::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) Require OutsideCritical(sg, before) Ensure exists observed, Crtos_RTrans(before, observed) && InsideCritical(sg, observed) * os_inv(sg, observed)",
+        "CriticalAreaUnLock::<default>": "With (sg : StableGlobalState) (held after : VarGlobalState) Require Crtos_GTrans(held, after) && InsideCritical(sg, held) * os_inv(sg, after) Ensure OutsideCritical(sg, after)",
+        "DataqueuePeak::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) (old_data old_length : option Z) X Require safeExec(LastSeen(before), abs_dataqueue_peak(sg, p_queue), X) && OutsideCritical(sg, before) * peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length) Ensure (exists after, __return == -1 && safeExec(LastSeen(after), return(None), X) && OutsideCritical(sg, after) * peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length)) || (exists after (e : DataqueueElem), __return == 0 && safeExec(LastSeen(after), return(Some(e)), X) && OutsideCritical(sg, after) * peak_data_slot(StartAddr, Some(dq_data(e))) * peak_length_slot(size, Some(dq_length(e))))"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-11-18T17:42:33.955951Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/dataqueue/DataqueuePeak_goal_check.vo",
+    "base_artifact_count": 216,
+    "current_source_count": 4,
+    "elapsed_seconds": 3.185795,
+    "snapshot": "verification_runs/DataqueuePeak-20261119014233/dependency_plan.json"
+  },
+  "attempts": {
+    "DataqueuePeak-annotation-r1": {
+      "attempt_id": "DataqueuePeak-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/DataqueuePeak-20261119014233",
+      "claimed_action": "deliver:DataqueuePeak-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T17:42:39.912504Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T17:42:48.398477Z",
+            "finished_at": "2026-11-18T17:47:02.083261Z",
+            "elapsed_seconds": 253.684784
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T17:47:02.083238Z",
+      "finished_at": "2026-11-18T17:47:02.494646Z"
+    },
+    "DataqueuePeak-vc-checking-r1": {
+      "attempt_id": "DataqueuePeak-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/DataqueuePeak-vc-checking-r1",
+      "claimed_action": "deliver:DataqueuePeak-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T17:47:12.659072Z",
+      "source_annotation": "DataqueuePeak-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T17:47:23.979956Z",
+            "finished_at": "2026-11-18T17:50:45.892172Z",
+            "elapsed_seconds": 201.912216
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T17:50:45.892133Z",
+      "finished_at": "2026-11-18T17:50:45.932948Z"
+    },
+    "DataqueuePeak-vc-proving-r1": {
+      "attempt_id": "DataqueuePeak-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-18T17:50:45.932970Z",
+      "source_annotation": "DataqueuePeak-annotation-r1",
+      "source_vc_checking": "DataqueuePeak-vc-checking-r1",
+      "groups": {
+        "observation_focus": {
+          "status": "accepted",
+          "owner": "group-worker/DataqueuePeak-vc-proving-r1:observation_focus",
+          "claimed_action": "deliver:DataqueuePeak-vc-proving-r1:observation_focus:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T17:51:03.071967Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T17:51:09.375003Z",
+                "finished_at": "2026-11-18T17:56:13.960354Z",
+                "elapsed_seconds": 304.585351
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T17:56:13.960328Z",
+          "finished_at": "2026-11-18T17:56:39.678584Z"
+        },
+        "slot_views": {
+          "status": "accepted",
+          "owner": "group-worker/DataqueuePeak-vc-proving-r1:slot_views",
+          "claimed_action": "deliver:DataqueuePeak-vc-proving-r1:slot_views:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T17:51:03.071985Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T17:51:09.624788Z",
+                "finished_at": "2026-11-18T17:57:17.297065Z",
+                "elapsed_seconds": 367.672277
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T17:57:17.297039Z",
+          "finished_at": "2026-11-18T17:57:37.860942Z"
+        },
+        "return_restore": {
+          "status": "accepted",
+          "owner": "group-worker/DataqueuePeak-vc-proving-r1:return_restore",
+          "claimed_action": "deliver:DataqueuePeak-vc-proving-r1:return_restore:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T17:51:03.071988Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T17:51:09.877257Z",
+                "finished_at": "2026-11-18T18:07:45.815514Z",
+                "elapsed_seconds": 995.938257
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T18:07:45.815487Z",
+          "finished_at": "2026-11-18T18:08:19.480230Z"
+        }
+      },
+      "finished_at": "2026-11-18T18:09:09.891199Z"
+    }
+  },
+  "current": {
+    "annotation": "DataqueuePeak-annotation-r1",
+    "vc-checking": "DataqueuePeak-vc-checking-r1",
+    "vc-proving": "DataqueuePeak-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/DataqueuePeak-20261119014233",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "DataqueuePeak-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-11-18T18:09:54.320295Z",
+    "files": [
+      "VC/dataqueue/DataqueuePeak_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-11-18T18:10:47.839563Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-11-18T17:42:33.955970Z",
+  "updated_at": "2026-11-18T18:10:47.851841Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-11-18T18:10:47.839543Z"
+}

@@ -1,0 +1,58 @@
+{
+  "groups": [
+    {
+      "id": "arithmetic_returns",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of_CalculateTickFromTimeMs_return_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CalculateTickFromTimeMs_return_wit_1_split_goal_1": "Pure equality, no spatial resources or existential. From 0<=ms<=UINT_MAX derive n=ms*100>=0 and q=n/1000 within unsigned32. Rewrite C quot as Z.div using nonnegative numerator and positive divisor, then unsigned_last_nbits(q,32)=q. The path guard gives q=0; unfold tick_from_time_ms, select its zero branch and conclude 1=1."
+          }
+        },
+        {
+          "name": "proof_of_CalculateTickFromTimeMs_return_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CalculateTickFromTimeMs_return_wit_2_split_goal_1": "Pure equality, no spatial resources or existential. From the UInt bound derive n>=0, 0<=q=n/1000<=429496730 and 0<=r=n mod 1000<1000. Convert C quot/rem to Z.div/mod and eliminate all unsigned32 truncations, including q+1. Guards give q<>0 and 5<=r<=9; unfold tick_from_time_ms and select the nonzero and true conjunction branches, yielding q+1. It is unnecessary to assume this arithmetic guard is reachable or add any premise."
+          }
+        },
+        {
+          "name": "proof_of_CalculateTickFromTimeMs_return_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CalculateTickFromTimeMs_return_wit_3_split_goal_1": "Pure equality, no spatial resources or existential. Use the UInt bound to prove nonnegative n, unsigned32 bounds for q=n/1000 and r=n mod 1000; convert quot/rem and eliminate truncations. The guards imply q<>0 and r<5. Unfold tick_from_time_ms, select its nonzero branch and show Z.leb 5 r=false, so the result is q."
+          }
+        },
+        {
+          "name": "proof_of_CalculateTickFromTimeMs_return_wit_4",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CalculateTickFromTimeMs_return_wit_4_split_goal_1": "Pure equality, no spatial resources or existential. Use the UInt bound to prove nonnegative n, unsigned32 bounds for q=n/1000 and r=n mod 1000; convert quot/rem and eliminate truncations. The guards imply q<>0, r>=5 and r>9. Unfold tick_from_time_ms; show the upper-bound test false, hence the conjunction false and result q."
+          }
+        }
+      ]
+    },
+    {
+      "id": "range_views",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_CalculateTickFromTimeMs_which_implies_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CalculateTickFromTimeMs_which_implies_wit_1_split_goal_spatial": "For every ms with the supplied pure UInt bounds, lhs owns the single typed UInt cell at the same address &(ms); rhs owns store_uinteger (Z.to_nat 4) 4 at that address/value. Unfold the existing store_uint representation and normalize Z.to_nat 4; the predicates are definitionally the same, so cancel. No existential, frame, new assumption or helper. In the parent, aggressive preprocessing extracts the integer range from the actual typed cell; the range is not assumed from emp."
+          }
+        },
+        {
+          "name": "proof_of_CalculateTickFromTimeMs_which_implies_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CalculateTickFromTimeMs_which_implies_wit_2_split_goal_spatial": "For arbitrary ms, lhs owns store_uinteger (Z.to_nat 4) 4 at &(ms), rhs the same typed UInt cell. Unfold store_uint and normalize the width, then cancel. This returns exactly the borrowed resource, not a new allocation, with no pure bound required for this representation equality."
+          }
+        }
+      ]
+    }
+  ]
+}

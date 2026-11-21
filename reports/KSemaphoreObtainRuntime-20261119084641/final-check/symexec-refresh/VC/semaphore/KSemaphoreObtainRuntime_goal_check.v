@@ -1,0 +1,6 @@
+From CRTOS_Verify.VC.semaphore Require Import KSemaphoreObtainRuntime_goal KSemaphoreObtainRuntime_proof_auto KSemaphoreObtainRuntime_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include KSemaphoreObtainRuntime_proof_auto.
+  Include KSemaphoreObtainRuntime_proof_manual.
+End VC_Correctness.

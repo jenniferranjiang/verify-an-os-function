@@ -1,0 +1,6 @@
+From CRTOS_Verify.VC.semaphore Require Import LinklistResumeSemaphore_goal LinklistResumeSemaphore_proof_auto LinklistResumeSemaphore_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include LinklistResumeSemaphore_proof_auto.
+  Include LinklistResumeSemaphore_proof_manual.
+End VC_Correctness.

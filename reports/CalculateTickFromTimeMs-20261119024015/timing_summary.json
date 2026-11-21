@@ -1,0 +1,250 @@
+{
+  "run": {
+    "status": "completed",
+    "phase": "done",
+    "created_at": "2026-11-18T18:40:15.074333Z",
+    "finished_at": "2026-11-18T19:07:02.539365Z",
+    "elapsed_seconds": 1607.465032
+  },
+  "commands": [
+    {
+      "phase": "annotation",
+      "command": "coq-check",
+      "calls": 2,
+      "elapsed_seconds": 0.039731
+    },
+    {
+      "phase": "annotation",
+      "command": "symexec",
+      "calls": 8,
+      "elapsed_seconds": 1.239851
+    },
+    {
+      "phase": "annotation",
+      "command": "finalize-delivery",
+      "calls": 3,
+      "elapsed_seconds": 0.71188
+    },
+    {
+      "phase": "vc-checking",
+      "command": "dune-build",
+      "calls": 2,
+      "elapsed_seconds": 4.920817
+    },
+    {
+      "phase": "vc-checking",
+      "command": "finalize-delivery",
+      "calls": 2,
+      "elapsed_seconds": 0.152054
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-preparing",
+      "calls": 2,
+      "elapsed_seconds": 0.174972
+    },
+    {
+      "phase": "vc-proving",
+      "command": "finalize-delivery",
+      "calls": 4,
+      "elapsed_seconds": 38.375362
+    },
+    {
+      "phase": "vc-checking",
+      "command": "coq-debug",
+      "calls": 1,
+      "elapsed_seconds": 18.425699
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-verify",
+      "calls": 1,
+      "elapsed_seconds": 18.476185
+    },
+    {
+      "phase": "final-check",
+      "command": "final-apply",
+      "calls": 1,
+      "elapsed_seconds": 18.301419
+    },
+    {
+      "phase": "done",
+      "command": "final-check",
+      "calls": 1,
+      "elapsed_seconds": 18.554501
+    }
+  ],
+  "annotation_attempts": [
+    {
+      "attempt_id": "CalculateTickFromTimeMs-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-11-18T18:41:16.594935Z",
+          "finished_at": "2026-11-18T18:41:16.614407Z",
+          "elapsed_seconds": 0.012925
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T18:46:27.623132Z",
+          "finished_at": "2026-11-18T18:46:27.901186Z",
+          "elapsed_seconds": 0.27069
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T18:40:28.781907Z",
+          "finished_at": "2026-11-18T18:46:27.637068Z",
+          "elapsed_seconds": 358.855161
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-11-18T18:41:24.139183Z",
+          "calls": 7,
+          "finished_at": "2026-11-18T18:45:30.874946Z",
+          "elapsed_seconds": 1.01579
+        }
+      ]
+    },
+    {
+      "attempt_id": "CalculateTickFromTimeMs-annotation-r2",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-11-18T18:54:38.106635Z",
+          "finished_at": "2026-11-18T18:54:38.143644Z",
+          "elapsed_seconds": 0.026806
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T18:55:37.278006Z",
+          "calls": 2,
+          "finished_at": "2026-11-18T18:56:33.524993Z",
+          "elapsed_seconds": 0.44119
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T18:53:58.621890Z",
+          "calls": 2,
+          "finished_at": "2026-11-18T18:56:33.303895Z",
+          "elapsed_seconds": 139.97124
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-11-18T18:54:38.310138Z",
+          "finished_at": "2026-11-18T18:54:38.545349Z",
+          "elapsed_seconds": 0.224063
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "attempt_id": "CalculateTickFromTimeMs-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T18:49:05.733038Z",
+          "finished_at": "2026-11-18T18:49:05.806352Z",
+          "elapsed_seconds": 0.065595
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T18:46:51.060073Z",
+          "finished_at": "2026-11-18T18:49:05.747272Z",
+          "elapsed_seconds": 134.687199
+        }
+      ]
+    },
+    {
+      "attempt_id": "CalculateTickFromTimeMs-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "running",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T18:53:30.812668Z",
+          "calls": 2,
+          "finished_at": "2026-11-18T18:53:42.226700Z",
+          "elapsed_seconds": 0.177151
+        },
+        {
+          "name": "group-work",
+          "started_at": "2026-11-18T18:49:18.075590Z",
+          "calls": 2,
+          "finished_at": "2026-11-18T18:53:42.142863Z",
+          "elapsed_seconds": 516.604639
+        },
+        {
+          "name": "vc-proving-preparing",
+          "started_at": "2026-11-18T18:49:10.894680Z",
+          "finished_at": "2026-11-18T18:49:10.983176Z",
+          "elapsed_seconds": 0.080136
+        }
+      ]
+    },
+    {
+      "attempt_id": "CalculateTickFromTimeMs-vc-checking-r2",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-debug",
+          "started_at": "2026-11-18T18:57:50.804188Z",
+          "finished_at": "2026-11-18T18:58:09.242575Z",
+          "elapsed_seconds": 18.425699
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T18:59:21.659717Z",
+          "finished_at": "2026-11-18T18:59:21.757153Z",
+          "elapsed_seconds": 0.086459
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T18:56:55.257436Z",
+          "finished_at": "2026-11-18T18:59:21.682827Z",
+          "elapsed_seconds": 146.425391
+        }
+      ]
+    },
+    {
+      "attempt_id": "CalculateTickFromTimeMs-vc-proving-r2",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T19:02:28.537082Z",
+          "calls": 2,
+          "finished_at": "2026-11-18T19:05:00.333635Z",
+          "elapsed_seconds": 38.198211
+        },
+        {
+          "name": "group-work",
+          "started_at": "2026-11-18T18:59:36.458797Z",
+          "calls": 2,
+          "finished_at": "2026-11-18T19:04:41.867918Z",
+          "elapsed_seconds": 477.283173
+        },
+        {
+          "name": "vc-proving-preparing",
+          "started_at": "2026-11-18T18:59:30.319867Z",
+          "finished_at": "2026-11-18T18:59:30.427050Z",
+          "elapsed_seconds": 0.094836
+        },
+        {
+          "name": "vc-proving-verify",
+          "started_at": "2026-11-18T19:05:15.636304Z",
+          "finished_at": "2026-11-18T19:05:34.127862Z",
+          "elapsed_seconds": 18.476185
+        }
+      ]
+    }
+  ]
+}

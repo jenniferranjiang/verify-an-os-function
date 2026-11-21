@@ -1,0 +1,404 @@
+{
+  "schema_version": 4,
+  "generation": 38,
+  "run_id": "CalculateTickFromTimeMs-20261119024015",
+  "case": "CalculateTickFromTimeMs",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos-verify",
+  "run_root": "/home/xinra/crtos-verify/verification_runs/CalculateTickFromTimeMs-20261119024015",
+  "report_root": "/home/xinra/crtos-verify/reports/CalculateTickFromTimeMs-20261119024015",
+  "target_files": {
+    "c_file": "annotated_C/src/kernel/common/CalculateTickFromTimeMs.c",
+    "formal_directory": "VC/common",
+    "formal_case_lib": "VC/common/CalculateTickFromTimeMs_lib.v",
+    "goal_file": "VC/common/CalculateTickFromTimeMs_goal.v",
+    "proof_auto_file": "VC/common/CalculateTickFromTimeMs_proof_auto.v",
+    "proof_manual_file": "VC/common/CalculateTickFromTimeMs_proof_manual.v",
+    "goal_check_file": "VC/common/CalculateTickFromTimeMs_goal_check.v",
+    "case_name": "CalculateTickFromTimeMs",
+    "active_case_theory": "CRTOS_Verify.VC.common"
+  },
+  "problem_context": {
+    "problem_statement": "Verify current CalculateTickFromTimeMs canonical, new Pop/Push runtime closure leaf (not reused old32bit spec). Reviewed dq-pop-push-predicate/spec-20261118-r1 current100Hz crtoslatest; uint64 cast before multiply, unsigned32 input, quotient cast uint32, min1 and original rem5..9 conditional must remain. tick_from_time_ms exact existing abstract definition, Require emp unchanged. No new library semantics needed. First stage and Pop root done/final-check; Pop closure pending. TrustBase .agents/skills/verify-an-os-function/references/TrustBase.md. User no cumulative proof time budget, preapproved justified fixes with actual review/checks required. Keep native auto/manual solver division; generated auto solver trust permitted, only manual assigned spans handwritten, no generated edits. No private source payload via Rocq MCP after previous rejection; use local controller checks/debug. Source root readonly, keep vo. Imported library abstract Prop not assumed. No trial or copied body. Complete workflow/final-check."
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "CalculateTickFromTimeMs"
+    ],
+    "baseline": {
+      "extern_coq": {
+        "tick_from_time_ms": "Z -> Z"
+      },
+      "import_coq": {
+        "CRTOS_Verify.lib.common.TickConversion": "CRTOS_Verify.lib.common.TickConversion"
+      },
+      "specs": {
+        "CalculateTickFromTimeMs::<default>": "Require emp Ensure __return == tick_from_time_ms(ms) && emp"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-11-18T18:40:15.074316Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/common/CalculateTickFromTimeMs_goal_check.vo",
+    "base_artifact_count": 180,
+    "current_source_count": 4,
+    "elapsed_seconds": 2.299801,
+    "snapshot": "verification_runs/CalculateTickFromTimeMs-20261119024015/dependency_plan.json"
+  },
+  "attempts": {
+    "CalculateTickFromTimeMs-annotation-r1": {
+      "attempt_id": "CalculateTickFromTimeMs-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/CalculateTickFromTimeMs-20261119024015",
+      "claimed_action": "deliver:CalculateTickFromTimeMs-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T18:40:21.973982Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T18:40:28.781907Z",
+            "finished_at": "2026-11-18T18:46:27.637068Z",
+            "elapsed_seconds": 358.855161
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T18:46:27.637046Z",
+      "finished_at": "2026-11-18T18:46:27.881557Z"
+    },
+    "CalculateTickFromTimeMs-vc-checking-r1": {
+      "attempt_id": "CalculateTickFromTimeMs-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/CalculateTickFromTimeMs-vc-checking-r1",
+      "claimed_action": "deliver:CalculateTickFromTimeMs-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T18:46:40.444691Z",
+      "source_annotation": "CalculateTickFromTimeMs-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T18:46:51.060073Z",
+            "finished_at": "2026-11-18T18:49:05.747272Z",
+            "elapsed_seconds": 134.687199
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T18:49:05.747249Z",
+      "finished_at": "2026-11-18T18:49:05.784486Z"
+    },
+    "CalculateTickFromTimeMs-vc-proving-r1": {
+      "attempt_id": "CalculateTickFromTimeMs-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "running",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-18T18:49:05.784505Z",
+      "source_annotation": "CalculateTickFromTimeMs-annotation-r1",
+      "source_vc_checking": "CalculateTickFromTimeMs-vc-checking-r1",
+      "groups": {
+        "arithmetic_returns": {
+          "status": "blocked",
+          "owner": "group-worker/CalculateTickFromTimeMs-vc-proving-r1:arithmetic_returns",
+          "claimed_action": "deliver:CalculateTickFromTimeMs-vc-proving-r1:arithmetic_returns:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T18:49:10.954118Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T18:49:18.075590Z",
+                "finished_at": "2026-11-18T18:53:30.829349Z",
+                "elapsed_seconds": 252.753759
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T18:53:30.829163Z",
+          "blocker": {
+            "failure_class": "annotation-gap",
+            "kind": "missing-import",
+            "vcs": [
+              {
+                "name": "proof_of_CalculateTickFromTimeMs_return_wit_1",
+                "parent": null,
+                "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+              },
+              {
+                "name": "proof_of_CalculateTickFromTimeMs_return_wit_2",
+                "parent": null,
+                "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+              },
+              {
+                "name": "proof_of_CalculateTickFromTimeMs_return_wit_3",
+                "parent": null,
+                "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+              },
+              {
+                "name": "proof_of_CalculateTickFromTimeMs_return_wit_4",
+                "parent": null,
+                "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+              }
+            ],
+            "message": "Generated goal prelude cannot elaborate Local Open Scope sac: VCPrelude and pure TickConversion do not export the project concrete assertion instance. All assigned return VCs fail before proof checking. Import existing CRTOS_Verify.lib.common.CrtosRules from C annotation and regenerate; no missing arithmetic premise or new assumption is requested.",
+            "repair_boundary": "C annotation import"
+          },
+          "finished_at": "2026-11-18T18:53:30.874016Z"
+        },
+        "range_views": {
+          "status": "blocked",
+          "owner": "group-worker/CalculateTickFromTimeMs-vc-proving-r1:range_views",
+          "claimed_action": "deliver:CalculateTickFromTimeMs-vc-proving-r1:range_views:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T18:49:10.954133Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T18:49:18.291983Z",
+                "finished_at": "2026-11-18T18:53:42.142863Z",
+                "elapsed_seconds": 263.85088
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T18:53:42.142838Z",
+          "blocker": {
+            "failure_class": "annotation-gap",
+            "kind": "missing-import",
+            "vcs": [
+              {
+                "name": "proof_of_CalculateTickFromTimeMs_which_implies_wit_1",
+                "parent": null,
+                "annotation_location": "CalculateTickFromTimeMs canonical C formal imports / generated goal prelude"
+              },
+              {
+                "name": "proof_of_CalculateTickFromTimeMs_which_implies_wit_2",
+                "parent": null,
+                "annotation_location": "CalculateTickFromTimeMs canonical C formal imports / generated goal prelude"
+              }
+            ],
+            "message": "The generated goal imports VCPrelude and TickConversion but no concrete CRTOS separation-logic rules instance under no_crules=true; compilation stops at Local Open Scope sac with Scope sac is not declared before either assigned view entailment can be checked. Import the existing CRTOS_Verify.lib.common.CrtosRules from the canonical C annotation and regenerate through the workflow. No new logical premise or assumption is needed.",
+            "repair_boundary": "C annotation import"
+          },
+          "finished_at": "2026-11-18T18:53:42.180213Z"
+        }
+      }
+    },
+    "CalculateTickFromTimeMs-annotation-r2": {
+      "attempt_id": "CalculateTickFromTimeMs-annotation-r2",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/CalculateTickFromTimeMs-20261119024015",
+      "claimed_action": "deliver:CalculateTickFromTimeMs-annotation-r2:1",
+      "repair_index": 1,
+      "created_at": "2026-11-18T18:53:52.842117Z",
+      "feedback_sources": [
+        {
+          "phase": "group",
+          "attempt_id": "CalculateTickFromTimeMs-vc-proving-r1:arithmetic_returns",
+          "evidence": [
+            "/home/xinra/crtos-verify/reports/CalculateTickFromTimeMs-20261119024015/rounds/CalculateTickFromTimeMs-vc-proving-r1/groups/group_00__arithmetic_returns/group_worker_report.json",
+            "/home/xinra/crtos-verify/reports/CalculateTickFromTimeMs-20261119024015/rounds/CalculateTickFromTimeMs-vc-proving-r1/groups/group_00__arithmetic_returns/group_worker_output.md"
+          ]
+        },
+        {
+          "phase": "group",
+          "attempt_id": "CalculateTickFromTimeMs-vc-proving-r1:range_views",
+          "evidence": [
+            "/home/xinra/crtos-verify/reports/CalculateTickFromTimeMs-20261119024015/rounds/CalculateTickFromTimeMs-vc-proving-r1/groups/group_01__range_views/group_worker_report.json",
+            "/home/xinra/crtos-verify/reports/CalculateTickFromTimeMs-20261119024015/rounds/CalculateTickFromTimeMs-vc-proving-r1/groups/group_01__range_views/group_worker_output.md"
+          ]
+        }
+      ],
+      "reason": "group-worker-annotation-gaps",
+      "failed_vcs": [
+        {
+          "source_attempt": "CalculateTickFromTimeMs-vc-proving-r1:arithmetic_returns",
+          "manual": "/home/xinra/crtos-verify/verification_runs/CalculateTickFromTimeMs-20261119024015/CalculateTickFromTimeMs-vc-proving-r1/groups/group_00__arithmetic_returns/CalculateTickFromTimeMs_proof_manual.v",
+          "message": "Generated goal prelude cannot elaborate Local Open Scope sac: VCPrelude and pure TickConversion do not export the project concrete assertion instance. All assigned return VCs fail before proof checking. Import existing CRTOS_Verify.lib.common.CrtosRules from C annotation and regenerate; no missing arithmetic premise or new assumption is requested.",
+          "name": "proof_of_CalculateTickFromTimeMs_return_wit_1",
+          "parent": null,
+          "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+        },
+        {
+          "source_attempt": "CalculateTickFromTimeMs-vc-proving-r1:arithmetic_returns",
+          "manual": "/home/xinra/crtos-verify/verification_runs/CalculateTickFromTimeMs-20261119024015/CalculateTickFromTimeMs-vc-proving-r1/groups/group_00__arithmetic_returns/CalculateTickFromTimeMs_proof_manual.v",
+          "message": "Generated goal prelude cannot elaborate Local Open Scope sac: VCPrelude and pure TickConversion do not export the project concrete assertion instance. All assigned return VCs fail before proof checking. Import existing CRTOS_Verify.lib.common.CrtosRules from C annotation and regenerate; no missing arithmetic premise or new assumption is requested.",
+          "name": "proof_of_CalculateTickFromTimeMs_return_wit_2",
+          "parent": null,
+          "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+        },
+        {
+          "source_attempt": "CalculateTickFromTimeMs-vc-proving-r1:arithmetic_returns",
+          "manual": "/home/xinra/crtos-verify/verification_runs/CalculateTickFromTimeMs-20261119024015/CalculateTickFromTimeMs-vc-proving-r1/groups/group_00__arithmetic_returns/CalculateTickFromTimeMs_proof_manual.v",
+          "message": "Generated goal prelude cannot elaborate Local Open Scope sac: VCPrelude and pure TickConversion do not export the project concrete assertion instance. All assigned return VCs fail before proof checking. Import existing CRTOS_Verify.lib.common.CrtosRules from C annotation and regenerate; no missing arithmetic premise or new assumption is requested.",
+          "name": "proof_of_CalculateTickFromTimeMs_return_wit_3",
+          "parent": null,
+          "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+        },
+        {
+          "source_attempt": "CalculateTickFromTimeMs-vc-proving-r1:arithmetic_returns",
+          "manual": "/home/xinra/crtos-verify/verification_runs/CalculateTickFromTimeMs-20261119024015/CalculateTickFromTimeMs-vc-proving-r1/groups/group_00__arithmetic_returns/CalculateTickFromTimeMs_proof_manual.v",
+          "message": "Generated goal prelude cannot elaborate Local Open Scope sac: VCPrelude and pure TickConversion do not export the project concrete assertion instance. All assigned return VCs fail before proof checking. Import existing CRTOS_Verify.lib.common.CrtosRules from C annotation and regenerate; no missing arithmetic premise or new assumption is requested.",
+          "name": "proof_of_CalculateTickFromTimeMs_return_wit_4",
+          "parent": null,
+          "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+        },
+        {
+          "source_attempt": "CalculateTickFromTimeMs-vc-proving-r1:range_views",
+          "manual": "/home/xinra/crtos-verify/verification_runs/CalculateTickFromTimeMs-20261119024015/CalculateTickFromTimeMs-vc-proving-r1/groups/group_01__range_views/CalculateTickFromTimeMs_proof_manual.v",
+          "message": "The generated goal imports VCPrelude and TickConversion but no concrete CRTOS separation-logic rules instance under no_crules=true; compilation stops at Local Open Scope sac with Scope sac is not declared before either assigned view entailment can be checked. Import the existing CRTOS_Verify.lib.common.CrtosRules from the canonical C annotation and regenerate through the workflow. No new logical premise or assumption is needed.",
+          "name": "proof_of_CalculateTickFromTimeMs_which_implies_wit_1",
+          "parent": null,
+          "annotation_location": "CalculateTickFromTimeMs canonical C formal imports / generated goal prelude"
+        },
+        {
+          "source_attempt": "CalculateTickFromTimeMs-vc-proving-r1:range_views",
+          "manual": "/home/xinra/crtos-verify/verification_runs/CalculateTickFromTimeMs-20261119024015/CalculateTickFromTimeMs-vc-proving-r1/groups/group_01__range_views/CalculateTickFromTimeMs_proof_manual.v",
+          "message": "The generated goal imports VCPrelude and TickConversion but no concrete CRTOS separation-logic rules instance under no_crules=true; compilation stops at Local Open Scope sac with Scope sac is not declared before either assigned view entailment can be checked. Import the existing CRTOS_Verify.lib.common.CrtosRules from the canonical C annotation and regenerate through the workflow. No new logical premise or assumption is needed.",
+          "name": "proof_of_CalculateTickFromTimeMs_which_implies_wit_2",
+          "parent": null,
+          "annotation_location": "CalculateTickFromTimeMs canonical C formal imports / generated goal prelude"
+        }
+      ],
+      "retry_reason": "group-worker-annotation-gaps",
+      "retry_previous_attempt": "CalculateTickFromTimeMs-vc-proving-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T18:53:58.621890Z",
+            "finished_at": "2026-11-18T18:55:37.297484Z",
+            "elapsed_seconds": 98.675594
+          },
+          {
+            "started_at": "2026-11-18T18:55:52.008249Z",
+            "finished_at": "2026-11-18T18:56:33.303895Z",
+            "elapsed_seconds": 41.295646
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T18:56:33.303860Z",
+      "finished_at": "2026-11-18T18:56:33.499702Z"
+    },
+    "CalculateTickFromTimeMs-vc-checking-r2": {
+      "attempt_id": "CalculateTickFromTimeMs-vc-checking-r2",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/CalculateTickFromTimeMs-vc-checking-r2",
+      "claimed_action": "deliver:CalculateTickFromTimeMs-vc-checking-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T18:56:42.630566Z",
+      "source_annotation": "CalculateTickFromTimeMs-annotation-r2",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T18:56:55.257436Z",
+            "finished_at": "2026-11-18T18:59:21.682827Z",
+            "elapsed_seconds": 146.425391
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T18:59:21.682799Z",
+      "finished_at": "2026-11-18T18:59:21.727994Z"
+    },
+    "CalculateTickFromTimeMs-vc-proving-r2": {
+      "attempt_id": "CalculateTickFromTimeMs-vc-proving-r2",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-18T18:59:21.728014Z",
+      "source_annotation": "CalculateTickFromTimeMs-annotation-r2",
+      "source_vc_checking": "CalculateTickFromTimeMs-vc-checking-r2",
+      "groups": {
+        "arithmetic_returns": {
+          "status": "accepted",
+          "owner": "group-worker/CalculateTickFromTimeMs-vc-proving-r2:arithmetic_returns",
+          "claimed_action": "deliver:CalculateTickFromTimeMs-vc-proving-r2:arithmetic_returns:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T18:59:30.383271Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T18:59:36.458797Z",
+                "finished_at": "2026-11-18T19:04:41.867918Z",
+                "elapsed_seconds": 305.409121
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T19:04:41.867892Z",
+          "finished_at": "2026-11-18T19:05:00.272192Z"
+        },
+        "range_views": {
+          "status": "accepted",
+          "owner": "group-worker/CalculateTickFromTimeMs-vc-proving-r2:range_views",
+          "claimed_action": "deliver:CalculateTickFromTimeMs-vc-proving-r2:range_views:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T18:59:30.383286Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T18:59:36.688038Z",
+                "finished_at": "2026-11-18T19:02:28.562090Z",
+                "elapsed_seconds": 171.874052
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T19:02:28.562064Z",
+          "finished_at": "2026-11-18T19:02:48.216236Z"
+        }
+      },
+      "finished_at": "2026-11-18T19:05:34.084640Z"
+    }
+  },
+  "current": {
+    "annotation": "CalculateTickFromTimeMs-annotation-r2",
+    "vc-checking": "CalculateTickFromTimeMs-vc-checking-r2",
+    "vc-proving": "CalculateTickFromTimeMs-vc-proving-r2"
+  },
+  "annotation_owner": "annotation/CalculateTickFromTimeMs-20261119024015",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "CalculateTickFromTimeMs-vc-proving-r2"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-11-18T19:06:17.248813Z",
+    "files": [
+      "VC/common/CalculateTickFromTimeMs_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-11-18T19:07:02.539383Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-11-18T18:40:15.074333Z",
+  "updated_at": "2026-11-18T19:07:02.555303Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-11-18T19:07:02.539365Z"
+}

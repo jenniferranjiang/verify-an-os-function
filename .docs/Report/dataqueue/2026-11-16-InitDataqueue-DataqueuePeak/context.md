@@ -1,5 +1,9 @@
 > 2026-11-21 更新：Dataqueue 已改为有效元素列表，本文旧 Dataqueue predicate/spec/实现结论不适用于新输入。Init、DeInit、Peak、Pop 的旧表示证明需重新适配；历史记录保留。见 [本轮设计与验证范围](../2026-11-21-FifoRepresentation/design.md)。
 
+> 最新用户授权：完成当前Semaphore Create/Delete IC闭包后，本窗口继续DataqueuePeak、PopDataqueue、PushDataqueue及必要非导入调用闭包。Pop/Push复用另一窗口已产出的设计，先核对版本及依赖；不设VC时间上限，必要修改提议预先批准，实际审阅/证明/final-check仍须通过。此指令更新此前仅第一阶段的窗口分工。
+
+> 当前恢复第一阶段Semaphore调用闭包验证：用户指出四个IC函数尚未证明，本窗口先准备并验证内部Create、wrapper Create、内部Delete、wrapper Delete，随后Peak；不再以caller已完成代替callee实现证明。
+
 > 当前证明文件已按用户要求恢复QCP原生auto/manual分工，Init和DeInit均重新final-check通过。最新文件、计数及信任说明见[native-auto-restoration.md](native-auto-restoration.md)。下文旧全部manual计数是历史记录。
 
 > 当前窗口分工（用户最新指示）：本窗口只推进第一阶段Init/DeInit/Peak及必要Semaphore IC闭包；用户将在另一窗口推进Pop/Push。共享map/ABI设计沿用现状，跨窗口共享lib/header修改需协调并复核受影响证明，不能把旧输入done套用到变化后的输入。
@@ -57,3 +61,9 @@ QCP工具已支持现有annotated_C输入和根Make依赖，但缺少预处理�
 用户已确认按原第一阶段、再Pop、再Push继续，并授权类似本次有依据的修改。DataqueueInv新增唯一具体ABI公理dataqueue_layout_abi，内容严格为既有dataqueue_layout陈述（两个sizeof及八个字段地址偏移），依据当前ILP32 GCC静态断言检查。此授权不把任何资源拆合、map操作或函数效果当作公理。TrustBase用户文件不修改，既有IRQ边界保持。map设计与canonical契约含义不变；布局缺失的阻塞已补入正式输入，实际VC是否通过仍由新workflow检查。
 
 QCP本地适配已审计并收窄：移除非路径unfreeze/resume扩展与额外时间戳门禁，当前生成参数保持一致，详见[adapter-audit.md](adapter-audit.md)。
+
+## 当前继续授权
+
+用户再次明确：完成当前Semaphore闭包后，串行完成DataqueuePeak、PopDataqueue、PushDataqueue及必要的非导入调用闭包，不设VC累计证明时限，有依据的修改建议预先授权。实际审阅、VC证明与final-check仍须通过；不能将预授权表述为检查结果。另一窗口的Pop/Push设计成果继续复用，本窗口承担后续实现证明。
+
+2026-11-19接续：四个Semaphore IC函数workflow均done/final-check；详见semaphore-ic-review.md。当前[DataqueuePeak-20261119014233](../../../../reports/DataqueuePeak-20261119014233/controller_state.json)已启动annotation。Peak完成后先Pop及其新调用闭包，再Push，共享接口复用，不另建trial或module_context。

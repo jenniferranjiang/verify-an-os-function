@@ -45,7 +45,7 @@ void DeInitDataqueue(DataQueueType *p_queue)
 /*@ init_cleanup
     With (sg : StableGlobalState) (before : VarGlobalState)
          (q : DataQueueAbs) (refs : DataqueueSemRefs) X
-    Require 
+    Require
       safeExec(LastSeen(before), abs_deinit_dataqueue(sg, p_queue, q, refs), X) &&
       store_dataqueue(p_queue, q) * OutsideCritical(sg, before)
     Ensure exists after,
@@ -61,20 +61,20 @@ x_err_t InitDataqueue(DataQueueType *p_queue, uint16 NodeNumber)
       DataqueueStorage(p_queue) * OutsideCritical(sg, before)
     Ensure
       (exists after q,
-        __return == 0 && dataqueue_map(os_dataqueues(after), p_queue) == Some(q) &&
-         dq_max_len(q) == NodeNumber &&
-        dq_slots(q) == nil && dq_front(q) == 0 && dq_rear(q) == 0 && dq_base(q) != 0 &&
-        0 <= dq_sem_blank(q) && 0 <= dq_sem_data(q) &&
-        dq_sem_blank(q) != dq_sem_data(q) &&
+        __return == 0 && (after.os_dataqueues.dataqueue_map)(p_queue) == Some(q) &&
+         q.dq_max_len == NodeNumber &&
+        q.dq_slots == nil && q.dq_front == 0 && q.dq_rear == 0 && q.dq_base != 0 &&
+        0 <= q.dq_sem_blank && 0 <= q.dq_sem_data &&
+        q.dq_sem_blank != q.dq_sem_data &&
         safeExec(LastSeen(after), return(0), X) && OutsideCritical(sg, after))
       ||
       (exists after q,
-        __return == -1 && 
-        dq_max_len(q) == NodeNumber && dq_slots(q) == nil && dq_front(q) == 0 && dq_rear(q) == 0 &&
-        dq_base(q) == 0 &&
-        ((dq_sem_blank(q) == -1 && dq_sem_data(q) == -1) ||
-         (dq_sem_blank(q) == -5 && dq_sem_data(q) == -1) ||
-         (dq_sem_blank(q) == -1 && dq_sem_data(q) == -5)) &&
+        __return == -1 &&
+        q.dq_max_len == NodeNumber && q.dq_slots == nil && q.dq_front == 0 && q.dq_rear == 0 &&
+        q.dq_base == 0 &&
+        ((q.dq_sem_blank == -1 && q.dq_sem_data == -1) ||
+         (q.dq_sem_blank == -5 && q.dq_sem_data == -1) ||
+         (q.dq_sem_blank == -1 && q.dq_sem_data == -5)) &&
         safeExec(LastSeen(after), return(-1), X) &&
         store_dataqueue(p_queue, q) * OutsideCritical(sg, after))
 */
@@ -113,7 +113,7 @@ x_err_t InitDataqueue(DataQueueType *p_queue, uint16 NodeNumber)
             break;
         }
 
-        // The semaphore is initialized to len-1, because the full condition of the loop queue is real + 1 = = front, 
+        // The semaphore is initialized to len-1, because the full condition of the loop queue is real + 1 = = front,
         // a vacancy is always wasted
         p_queue->sem_blank = KSemaphoreCreate( p_queue->max_len - 1);
         /* Original buggy check: if (!p_queue->sem_blank) */
@@ -129,10 +129,10 @@ x_err_t InitDataqueue(DataQueueType *p_queue, uint16 NodeNumber)
 
         /*@ Assert exists after q saved,
           lock == saved && p_queue == p_queue@pre && NodeNumber == NodeNumber@pre &&
-          dataqueue_map(os_dataqueues(after), p_queue) == Some(q) && 
-          dq_max_len(q) == NodeNumber && dq_slots(q) == nil && dq_front(q) == 0 && dq_rear(q) == 0 &&
-          dq_base(q) != 0 && 0 <= dq_sem_blank(q) && 0 <= dq_sem_data(q) &&
-          dq_sem_blank(q) != dq_sem_data(q) &&
+          (after.os_dataqueues.dataqueue_map)(p_queue) == Some(q) &&
+          q.dq_max_len == NodeNumber && q.dq_slots == nil && q.dq_front == 0 && q.dq_rear == 0 &&
+          q.dq_base != 0 && 0 <= q.dq_sem_blank && 0 <= q.dq_sem_data &&
+          q.dq_sem_blank != q.dq_sem_data &&
           safeExec(LastSeen(after), return(0), X) && Crtos_GTrans(observed, after) &&
           InsideCritical(sg, observed) * os_inv(sg, after) */
         /*@ Given after q saved */
@@ -142,11 +142,11 @@ x_err_t InitDataqueue(DataQueueType *p_queue, uint16 NodeNumber)
 
     /*@ Assert exists held after q refs Y saved,
       lock == saved && p_queue == p_queue@pre && NodeNumber == NodeNumber@pre &&
-       dq_max_len(q) == NodeNumber &&
-      dq_slots(q) == nil && dq_front(q) == 0 && dq_rear(q) == 0 &&
-      ((dq_sem_blank(q) == -1 && dq_sem_data(q) == -1) ||
-       (dq_sem_blank(q) == -5 && dq_sem_data(q) == -1) ||
-       (0 <= dq_sem_blank(q) && dq_sem_data(q) == -5)) &&
+       q.dq_max_len == NodeNumber &&
+      q.dq_slots == nil && q.dq_front == 0 && q.dq_rear == 0 &&
+      ((q.dq_sem_blank == -1 && q.dq_sem_data == -1) ||
+       (q.dq_sem_blank == -5 && q.dq_sem_data == -1) ||
+       (0 <= q.dq_sem_blank && q.dq_sem_data == -5)) &&
       safeExec(LastSeen(after), abs_deinit_dataqueue(sg, p_queue, q, refs), Y) &&
       (forall (final : VarGlobalState),
         safeExec(LastSeen(final), return(tt), Y) =>

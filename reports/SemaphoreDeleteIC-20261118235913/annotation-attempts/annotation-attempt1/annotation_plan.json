@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "_SemaphoreDelete",
+      "meaning": "Frozen quiescent IC deletion: invalid/missing ID preserves state; found empty-pending unreferenced object is unpublished and fully freed, returning os_inv."
+    },
+    {
+      "name": "IdGetObj",
+      "meaning": "Imported lookup returns missing or a found ID-manager view without changing abstract manager."
+    },
+    {
+      "name": "CONTAINER_OF_SEMAPHORE_ID",
+      "meaning": "Trusted exact embedding converts an IdNode address to its Semaphore base without memory access."
+    },
+    {
+      "name": "IsDoubleLinkListEmpty",
+      "meaning": "Imported DLL observation returns exactly whether nodes is nil while returning the same list ownership."
+    },
+    {
+      "name": "LinklistResumeAll",
+      "meaning": "Imported native semaphore-waiter effect; call is retained but unreachable in this empty-pending IC scenario."
+    },
+    {
+      "name": "IdRemoveObj",
+      "meaning": "Imported low-level removal returns unchanged miss or removed manager plus self-linked sentinel ID node; explicit IdNode field types disambiguate the same owned cells."
+    },
+    {
+      "name": "DoubleLinkListRmNode",
+      "meaning": "Imported selected member removal returns residual DLL and selected payload/self-linked node."
+    },
+    {
+      "name": "KTASK_ASSIGN",
+      "meaning": "Existing outside-critical scheduling model, retained but unreachable because resched stays zero here."
+    },
+    {
+      "name": "x_free",
+      "meaning": "Existing allocation model consumes the full positive-sized byte array at the original nonzero base."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

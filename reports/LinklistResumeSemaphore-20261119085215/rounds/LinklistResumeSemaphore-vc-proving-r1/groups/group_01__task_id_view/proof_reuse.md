@@ -1,0 +1,1 @@
+当前run无历史完成证明。按需参考正式SemaphoreObtainRuntime手工证明中task ID manager字段借还局部结构；本次新增pending→task登记桥，保留真实ID桶对应并完整重编译检查。没有引入旧证明为公理，也未读取当前sibling输出。

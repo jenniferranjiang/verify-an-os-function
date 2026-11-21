@@ -1,0 +1,117 @@
+{
+  "schema_version": 4,
+  "generation": 8,
+  "run_id": "SemaphoreAbandonRuntime-20261119094155",
+  "case": "SemaphoreAbandonRuntime",
+  "phase": "vc-checking",
+  "main_root": "/home/xinra/crtos-verify",
+  "run_root": "/home/xinra/crtos-verify/verification_runs/SemaphoreAbandonRuntime-20261119094155",
+  "report_root": "/home/xinra/crtos-verify/reports/SemaphoreAbandonRuntime-20261119094155",
+  "target_files": {
+    "c_file": "annotated_C/src/kernel/semaphore/_SemaphoreAbandon.c",
+    "formal_directory": "VC/semaphore",
+    "formal_case_lib": "VC/semaphore/SemaphoreAbandonRuntime_lib.v",
+    "goal_file": "VC/semaphore/SemaphoreAbandonRuntime_goal.v",
+    "proof_auto_file": "VC/semaphore/SemaphoreAbandonRuntime_proof_auto.v",
+    "proof_manual_file": "VC/semaphore/SemaphoreAbandonRuntime_proof_manual.v",
+    "goal_check_file": "VC/semaphore/SemaphoreAbandonRuntime_goal_check.v",
+    "case_name": "SemaphoreAbandonRuntime",
+    "active_case_theory": "CRTOS_Verify.VC.semaphore"
+  },
+  "problem_context": {
+    "problem_statement": "Verify current canonical _SemaphoreAbandon semaphore_abandon_oc, reviewed Pop/Push runtime design predicate/spec 20261118-r1. Preserve invalid ID/missing ID -1, empty pending saturated count -3, count increment success, nonempty pending head wakeup success and outside-critical KTASK_ASSIGN only for wakeup. LinklistResumeSemaphore-20261119085215 now done/final-check+root .vo restored; use same canonical semaphore_head_ic contract. IdGetObj/IsDoubleLinkListEmpty are existing reused-spec boundaries; IRQ/CONTAINER_OF/KTASK_ASSIGN approved model boundaries; don't copy bodies or expand trusted. TrustBase .agents/skills/verify-an-os-function/references/TrustBase.md, default whitelist001 applies original observations. Source_root /home/xinra/crtoslatest readonly, current ILP32 configuration. Global lib/annotated C/VC organization only, no trial/module_context/new case-lib. User no cumulative proof limit, preauthorizes justified changes but actual independent reviews/checks must pass. No arbitrary assumptions or Require/Ensure changes. Only assigned manual spans handwritten; native generated auto retained; goal/auto/check tool-owned. Local controller tools/checks/debug; no private source via Rocq MCP after prior approval rejection. Keep .vo. Named continuation extraction if needed must preserve definitions and receive independent review/dependency rebuild, not new unproved premise. Existing SemaphoreObtainRuntime and LinklistResumeSemaphore proofs can be read as relevant resource/wand/state examples. Complete workflow final-check."
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "_SemaphoreAbandon"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "CriticalAreaLock::ordinary": "ordinary With (sg : StableGlobalState) (st1 : VarGlobalState) Require OutsideCritical(sg, st1) Ensure exists st_lock, Crtos_RTrans(st1, st_lock) && InsideCritical(sg, st_lock) * os_inv(sg, st_lock)",
+        "CriticalAreaUnLock::stable": "stable With (sg : StableGlobalState) (st1 st2 : VarGlobalState) Require Crtos_GTrans(st1, st2) && InsideCritical(sg, st1) * os_inv(sg, st2) Ensure OutsideCritical(sg, st2)",
+        "IdGetObj::dataqueue_ic_import": "dataqueue_ic_import With (sm: StableIdmanager) (m: VarIdmanager) Require 0 <= id && id < 65536 && store_idmanager(sm, m, manager) Ensure (manager == 0 && __return == 0 && store_idmanager(sm, m, manager)) || (manager != 0 && __return == 0 && idmanager_query(m, id) == false && store_idmanager(sm, m, manager)) || (manager != 0 && __return != 0 && idmanager_query(m, id) == true && store_idmanager_found(sm, m, manager, __return, id))",
+        "CONTAINER_OF_SEMAPHORE_ID::dataqueue_ic_import": "dataqueue_ic_import With (sem_ptr : Z) Require id_ptr == field_addr(sem_ptr, struct Semaphore, id) && emp Ensure __return == sem_ptr && id_ptr == &(__return->id) && emp",
+        "KTASK_ASSIGN::outside_critical": "outside_critical With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_ktask_assign, X) && OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(tt), X) && OutsideCritical(sg, after)",
+        "IsDoubleLinkListEmpty::dataqueue_ic_dll": "dataqueue_ic_dll With {A} (storeA : Z -> A -> Assertion) (nodes : list(DL_Node A)) Require store_dll(storeA, linklist, nodes) Ensure ((__return == 1 && nodes == nil) || (__return == 0 && nodes != nil)) && store_dll(storeA, linklist, nodes)",
+        "LinklistResume::semaphore_head_ic": "semaphore_head_ic With (sg : StableGlobalState) (before : VarGlobalState) (sem : Z) (waiting : list Z) Require list == semaphore_pending_head(sem) && waiting != nil && semaphore_pending_nodes(sem, before, map(sched_link_node, waiting)) && os_inv(sg, before) Ensure __return == 0 && exists after, semaphore_resume_head_effect(sem, before, after) && os_inv(sg, after)",
+        "_SemaphoreAbandon::semaphore_abandon_oc": "semaphore_abandon_oc With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_abandon(sg, id), X) && OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after)"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "paused",
+    "pause_count": 1,
+    "updated_at": "2026-11-19T01:48:44.065998Z",
+    "reason": "User explicitly requested pause; VC-checking claimed but agent not started.",
+    "cancelled_action": "deliver:SemaphoreAbandonRuntime-vc-checking-r1:0"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/semaphore/SemaphoreAbandonRuntime_goal_check.vo",
+    "base_artifact_count": 221,
+    "current_source_count": 4,
+    "elapsed_seconds": 3.733888,
+    "snapshot": "verification_runs/SemaphoreAbandonRuntime-20261119094155/dependency_plan.json"
+  },
+  "attempts": {
+    "SemaphoreAbandonRuntime-annotation-r1": {
+      "attempt_id": "SemaphoreAbandonRuntime-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/SemaphoreAbandonRuntime-20261119094155",
+      "claimed_action": "deliver:SemaphoreAbandonRuntime-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-19T01:42:04.165236Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-19T01:42:13.005982Z",
+            "finished_at": "2026-11-19T01:48:05.056868Z",
+            "elapsed_seconds": 352.050886
+          }
+        ]
+      },
+      "returned_at": "2026-11-19T01:48:05.056840Z",
+      "finished_at": "2026-11-19T01:48:06.142804Z"
+    },
+    "SemaphoreAbandonRuntime-vc-checking-r1": {
+      "attempt_id": "SemaphoreAbandonRuntime-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "running",
+      "owner": "vc-checking/SemaphoreAbandonRuntime-vc-checking-r1",
+      "claimed_action": "deliver:SemaphoreAbandonRuntime-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-19T01:48:22.378201Z",
+      "source_annotation": "SemaphoreAbandonRuntime-annotation-r1",
+      "started_at": "2026-11-19T01:48:28.412819Z"
+    }
+  },
+  "current": {
+    "annotation": "SemaphoreAbandonRuntime-annotation-r1",
+    "vc-checking": "SemaphoreAbandonRuntime-vc-checking-r1",
+    "vc-proving": null
+  },
+  "annotation_owner": "annotation/SemaphoreAbandonRuntime-20261119094155",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": null,
+  "final_apply": null,
+  "final_check": null,
+  "created_at": "2026-11-19T01:41:55.009255Z",
+  "updated_at": "2026-11-19T01:48:44.104801Z"
+}

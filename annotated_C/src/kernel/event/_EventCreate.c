@@ -155,13 +155,13 @@ int32 _EventCreate(uint32 options)
     /*@ os_inv(sg, st_lock) * EventZero(event) * data_at(&options, unsigned int, options@pre)
         which implies
         event != 0 && addr_aligned(event, 4) &&
-        event_context(os_event_stable(sg)) &&
-        !(In(event, map(event_addr, os_events(st_lock)))) &&
+        event_context(sg.os_event_stable) &&
+        !(In(event, map(event_addr, st_lock.os_events))) &&
         event_create_frame(sg, st_lock) *
-        store_idmanager(event_manager_stable(os_event_stable(sg)),
-                        event_manager(os_events(st_lock)), &k_event_id_manager) *
-        store_dll(store_event(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock)))),
-                  &k_event_list, map(event_link_node, os_events(st_lock))) *
+        store_idmanager(sg.os_event_stable.event_manager_stable,
+                        event_manager(st_lock.os_events), &k_event_id_manager) *
+        store_dll(store_event(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map)),
+                  &k_event_list, map(event_link_node, st_lock.os_events)) *
         store_idnode_insert_ready(&event->id) *
         data_at(&event->options, unsigned int, 0) *
         data_at(&event->events, unsigned int, 0) *
@@ -169,20 +169,20 @@ int32 _EventCreate(uint32 options)
         data_at(&options, unsigned int, options@pre)
     */
     id = IdInsertObj(&k_event_id_manager, &event->id)
-      /*@ where sm = event_manager_stable(os_event_stable(sg)),
-                m = event_manager(os_events(st_lock)) */;
-    /*@ idmanager_min_free_id(event_manager_stable(os_event_stable(sg)),
-          event_manager(os_events(st_lock)), id) => (0 <= id && id < 128) by local */
+      /*@ where sm = sg.os_event_stable.event_manager_stable,
+                m = event_manager(st_lock.os_events) */;
+    /*@ idmanager_min_free_id(sg.os_event_stable.event_manager_stable,
+          event_manager(st_lock.os_events), id) => (0 <= id && id < 128) by local */
     if (id < 0) {
         /*@ event != 0 && addr_aligned(event, 4) &&
             &event->pend_list != 0 && &event->link != 0 &&
             safeExec(LastSeen(before), abs_event_create(sg, options@pre), X) &&
             Crtos_RTrans(before, st_lock) &&
             event_create_frame(sg, st_lock) *
-            store_idmanager(event_manager_stable(os_event_stable(sg)),
-                            event_manager(os_events(st_lock)), &k_event_id_manager) *
-            store_dll(store_event(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock)))),
-                      &k_event_list, map(event_link_node, os_events(st_lock))) *
+            store_idmanager(sg.os_event_stable.event_manager_stable,
+                            event_manager(st_lock.os_events), &k_event_id_manager) *
+            store_dll(store_event(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map)),
+                      &k_event_list, map(event_link_node, st_lock.os_events)) *
             store_idnode_insert_ready(&event->id) *
             data_at(&event->options, unsigned int, 0) *
             data_at(&event->events, unsigned int, 0) *
@@ -208,54 +208,54 @@ int32 _EventCreate(uint32 options)
     */
     InitDoubleLinkList(&event->pend_list);
     /*@ event != 0 && addr_aligned(event, 4) && &event->link != 0 &&
-        idmanager_min_free_id(event_manager_stable(os_event_stable(sg)),
-                             event_manager(os_events(st_lock)), id) &&
+        idmanager_min_free_id(sg.os_event_stable.event_manager_stable,
+                             event_manager(st_lock.os_events), id) &&
         data_at(&event->options, unsigned int, options@pre & 7) *
         data_at(&event->events, unsigned int, 0) *
         store_node_self_linked(&event->pend_list) * NodeZero(&event->link) * EventPadding(event) *
         data_at(&options, unsigned int, options@pre)
         which implies
         event != 0 && addr_aligned(event, 4) && &event->link != 0 &&
-        idmanager_min_free_id(event_manager_stable(os_event_stable(sg)),
-                             event_manager(os_events(st_lock)), id) &&
-        store_event(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock))),
+        idmanager_min_free_id(sg.os_event_stable.event_manager_stable,
+                             event_manager(st_lock.os_events), id) &&
+        store_event(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map),
                     &event->link, event_created(event, id, options@pre)) *
         occupy_dll_node(&event->link) * data_at(&options, unsigned int, options@pre)
     */
 
     DoubleLinkListInsertNodeAfter(&k_event_list, &event->link)
       /*@ where (dispatch_case)
-          storeA = store_event(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock)))),
-          nodes = map(event_link_node, os_events(st_lock)),
+          storeA = store_event(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map)),
+          nodes = map(event_link_node, st_lock.os_events),
           a = event_created(event, id, options@pre), head = &k_event_list; A = EventAbs */;
     /*@ event != 0 && addr_aligned(event, 4) &&
-        event_context(os_event_stable(sg)) &&
-        idmanager_min_free_id(event_manager_stable(os_event_stable(sg)),
-                             event_manager(os_events(st_lock)), id) &&
-        !(In(event, map(event_addr, os_events(st_lock)))) &&
+        event_context(sg.os_event_stable) &&
+        idmanager_min_free_id(sg.os_event_stable.event_manager_stable,
+                             event_manager(st_lock.os_events), id) &&
+        !(In(event, map(event_addr, st_lock.os_events))) &&
         safeExec(LastSeen(before), abs_event_create(sg, options@pre), X) &&
         Crtos_RTrans(before, st_lock) &&
         data_at(&options, unsigned int, options@pre) *
         event_create_frame(sg, st_lock) *
-        store_idmanager(event_manager_stable(os_event_stable(sg)),
-          idmanager_link(event_manager_stable(os_event_stable(sg)),
-            idmanager_add(event_manager(os_events(st_lock)), id), id, &event->id),
+        store_idmanager(sg.os_event_stable.event_manager_stable,
+          idmanager_link(sg.os_event_stable.event_manager_stable,
+            idmanager_add(event_manager(st_lock.os_events), id), id, &event->id),
           &k_event_id_manager) *
-        store_dll(store_event(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock)))),
+        store_dll(store_event(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map)),
           &k_event_list,
-          dll_insert_after_dispatch(&k_event_list, map(event_link_node, os_events(st_lock)),
+          dll_insert_after_dispatch(&k_event_list, map(event_link_node, st_lock.os_events),
             &k_event_list, Build_DL_Node(event_created(event, id, options@pre), &event->link)))
         which implies
         0 <= id && id < 128 &&
-        safeExec(LastSeen(replace_events(event_publish(event, id, options@pre, os_events(st_lock)), st_lock)),
+        safeExec(LastSeen(replace_events(event_publish(event, id, options@pre, st_lock.os_events), st_lock)),
                  return(id), X) &&
-        Crtos_GTrans(st_lock, replace_events(event_publish(event, id, options@pre, os_events(st_lock)), st_lock)) &&
-        os_inv(sg, replace_events(event_publish(event, id, options@pre, os_events(st_lock)), st_lock)) *
+        Crtos_GTrans(st_lock, replace_events(event_publish(event, id, options@pre, st_lock.os_events), st_lock)) &&
+        os_inv(sg, replace_events(event_publish(event, id, options@pre, st_lock.os_events), st_lock)) *
         data_at(&options, unsigned int, options@pre)
     */
     CriticalAreaUnLock(lock)
       /*@ where (stable) sg = sg, st1 = st_lock,
-          st2 = replace_events(event_publish(event, id, options@pre, os_events(st_lock)), st_lock) */;
+          st2 = replace_events(event_publish(event, id, options@pre, st_lock.os_events), st_lock) */;
 
     return id;
 }

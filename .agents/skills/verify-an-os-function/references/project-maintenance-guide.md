@@ -2,6 +2,18 @@
 
 本指南说明如何直接在全局lib、annotated C和VC中增量工作；工具与本机配置见 [CONFIGURATION.md](../CONFIGURATION.md)。
 
+## 接入已有验证工程
+
+用户可能已完成部分验证，只是尚未使用本 skill。开始时读取项目适用的 `AGENTS.md`、现有配置、构建入口及验证记录，确认已有 predicate、spec、证明和审阅结论所对应的版本、假设与状态。从现有进度继续，复用仍有效的检查和授权，不把已有文件或旧编译产物直接视为当前版本已证明。
+
+沿用项目已有目录、命名、逻辑前缀和构建方式，按[环境与路径配置](../CONFIGURATION.md)映射实际路径，只补充本次需要的配置，保留无关配置及用户未提交改动。不为接入而搬迁产物、重写已有定义或重新开始证明。
+
+## 用户 AGENTS.md 的处理规则
+
+- 项目没有 `AGENTS.md` 时，可以新建一个，默认写明：“验证 OS 函数时使用 `verify-an-os-function` skill，沿用项目已有配置和验证成果。”
+- 项目已有 `AGENTS.md` 时，读取并遵守，直接使用本 skill，无需修改、追加或合并该文件。
+- 用户 `AGENTS.md` 与本 skill 或参考文档冲突时，以用户 `AGENTS.md` 为准，并向用户报告冲突条款和采用的规则；系统、开发者指令及用户当前明确要求仍须遵守。
+
 ## 文件组织以用户为准
 
 本指南中的lib、annotated C和VC目录结构、文件名模板及路径示例都只是默认方案，不是要求用户工程满足的固定格式。三类产物分别按以下优先级确定实际位置：
@@ -32,7 +44,7 @@ CRTOS源码可由独立的上游仓库 `https://www.gitlink.org.cn/chos/crtos` �
 
 全局 `lib/` 是唯一项目库来源。已有定义直接import，需要改动就在所属文件原位修改，沿用项目的逻辑前缀与模型。QCP等外部基础库直接引用配置路径。
 
-根手写 `Makefile` 维护外部映射、全局lib和VC的实际输入，并生成 `_CoqProject`；`Makefile.coq` 仅转发到统一构建入口。编辑器、QCP与Rocq使用同一套路径和现有逻辑名称，不将两个物理目录映射为同一前缀来隐式替换定义。
+构建配置优先沿用用户指定和项目已有写法，只增量修改本轮必要的输入、路径和依赖，不为套用默认模板重写 Makefile 或替换构建系统。编辑器、QCP与Rocq使用同一套路径和现有逻辑名称，不将两个物理目录映射为同一前缀来隐式替换定义。
 
 共享接口改变时：
 
@@ -43,9 +55,27 @@ CRTOS源码可由独立的上游仓库 `https://www.gitlink.org.cn/chos/crtos` �
 
 新增dataqueue等模块时，直接修改现有CrtosGlobState/CrtosInv等文件，补入模块状态与资源，使用同一套系统状态和协议。必要的共享接口和依赖一致性随本轮修改处理。
 
-构建从工程根目录执行，例如 `make lib/<module>/<File>.vo` 构建所需目标及依赖，`make lib -j2` 构建共享库。新增输入或修改映射时编辑 `Makefile` 中的 `lib_FILES`、`VC_code_proof_FILES`、`COQ_FLAG`；构建自动更新 `_CoqProject` 和 `.depend`，不要再用 `coq_makefile` 覆盖手写入口。工具链沿用 `tools/rocq/toolchain.json`。默认保留.vo，其他缓存按[主skill保留边界](../SKILL.md#临时产物与保留边界)处理。提交时确保所提交构建配置引用的输入一并提供，不提交指向未提供文件或任务临时目录的必需依赖。
+构建从工程根目录执行，例如 `make lib/<module>/<File>.vo` 构建所需目标及依赖，`make lib -j2` 构建共享库。采用下述默认手写结构时，新增输入或修改映射编辑 `Makefile` 中的 `lib_FILES`、`VC_code_proof_FILES`、`COQ_FLAG`；构建自动更新 `_CoqProject` 和 `.depend`，不要再用 `coq_makefile` 覆盖手写入口。工具链沿用项目现有配置；本工程为 `tools/rocq/toolchain.json`。默认保留.vo，其他缓存按[主skill保留边界](../SKILL.md#临时产物与保留边界)处理。提交时确保所提交构建配置引用的输入一并提供，不提交指向未提供文件或任务临时目录的必需依赖。
 
 接续已有成果时，核对来源基线、当前文件及授权，逐文件整合有效差异，并检查受影响的结果。
+
+## 默认 Makefile 写法
+
+仅在用户未指定、项目也没有构建约定时采用以下默认方案。已有手写 Makefile、`coq_makefile` 生成规则或其他构建方式均优先沿用，以最小增量维护，不强制迁移。
+
+- 集中配置 `COQC`、`COQDEP`、`COQ_FLAG`，沿用实际工具链与逻辑路径，避免父子目录重复映射。
+- `lib_FILES` 列共享库；按模块定义 <module>_code_name 并汇总到 `VC_code_FILE_NAME`，统一展开 `_goal.v`、`_proof_auto.v`、`_proof_manual.v`、`_goal_check.v`。辅助证明单列 `VC_lib_FILES`，策略证明按实际布局登记，最终汇总到 `FILES`。只登记实际正式文件，不假设所有函数都有四类文件。
+- 用一条通用规则编译所有对象，不逐项追加 `.vo` 特殊规则：
+
+```make
+$(FILES:%.v=%.vo): %.vo: %.v
+	$(COQC) $(COQ_FLAG) $<
+```
+
+- 用 `coqdep` 自动生成并包含 `.depend`；源码、输入清单或映射变化时更新，并在并行编译前加载。先写临时文件，成功后替换，避免失败破坏旧依赖。
+- 从同一份映射与清单同步 `_CoqProject`；需要 `Makefile.coq` 兼容入口时仅转发到主 Makefile，不用 `coq_makefile` 覆盖手写入口。
+- `make` / `make all` 编译已登记证明，`make lib` 编译共享库，`make depend` 更新依赖；`make clean` 只清理编译产物和依赖缓存，保留 `.v` 源码，且不触发依赖生成。清理后重建用 `make clean && make -j2 all`。
+- 默认 `all` 不重新生成 C 的 VC；生成范围仍由获准的 QCP workflow 管理。已有项目入口不同则沿用并核对其实际执行范围。
 
 ## Implement 阶段的 QCP 路径配置
 
@@ -113,7 +143,7 @@ Controller的 `--main-root` 与MCP调用的 `workspace` 使用验证工程根目
 
 有调用场景事实时，保留原spec并新增具名特化。本轮实现目标的特化放在其全局canonical文件；复用边界的特化与原spec一起放在caller定义前，记录来源与推导义务，不复制body。
 
-同一IC/OC场景已有相似特化时复用结构与抽象操作，仅具体化真实对象、参数及资源。不能因为新增特化就删除原规格或宣称新的函数体证明已完成。维护规则见[Spec指南](spec-writing-guide.md#43-在全局文件中增量增加模块特化)。
+同一IC/OC场景已有相似特化时复用结构与抽象操作，仅具体化真实对象、参数及资源。不能因为新增特化就删除原规格或宣称新的函数体证明已完成。维护规则见[Spec指南](spec-writing-guide.md#44-在全局文件中增量增加模块特化)。
 
 ### 模块 header
 

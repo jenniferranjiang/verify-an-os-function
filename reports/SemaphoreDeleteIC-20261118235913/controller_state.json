@@ -1,0 +1,266 @@
+{
+  "schema_version": 4,
+  "generation": 26,
+  "run_id": "SemaphoreDeleteIC-20261118235913",
+  "case": "SemaphoreDeleteIC",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos-verify",
+  "run_root": "/home/xinra/crtos-verify/verification_runs/SemaphoreDeleteIC-20261118235913",
+  "report_root": "/home/xinra/crtos-verify/reports/SemaphoreDeleteIC-20261118235913",
+  "target_files": {
+    "c_file": "annotated_C/src/kernel/semaphore/_SemaphoreDelete.c",
+    "formal_directory": "VC/semaphore",
+    "formal_case_lib": "VC/semaphore/SemaphoreDeleteIC_lib.v",
+    "goal_file": "VC/semaphore/SemaphoreDeleteIC_goal.v",
+    "proof_auto_file": "VC/semaphore/SemaphoreDeleteIC_proof_auto.v",
+    "proof_manual_file": "VC/semaphore/SemaphoreDeleteIC_proof_manual.v",
+    "goal_check_file": "VC/semaphore/SemaphoreDeleteIC_goal_check.v",
+    "case_name": "SemaphoreDeleteIC",
+    "active_case_theory": "CRTOS_Verify.VC.semaphore"
+  },
+  "problem_context": {
+    "problem_statement": "Verify current canonical _SemaphoreDelete named dataqueue_cleanup_ic, default CRTOS_DATAQUEUE_SEMAPHORE_IC=1; preserve optional OC path and shared complete body. dq-semaphore-ic-canonical-20261118-r1 source/spec review passed. Scope quiescent private initialization cleanup, no pending waiters or published queue references; prove unreachable retained branches, do not delete them just to ease proofs. Current maps/global libs/ABI reviewed. Imported ID/DLL contracts and documented models remain boundaries, not new body targets. TrustBase .agents/skills/verify-an-os-function/references/TrustBase.md. User removed cumulative proof time limit and preapproved justified fixes; actual reviews/checks required. Native QCP auto/manual division unchanged, generated auto solver-trusted Admitted preserved, no transfer. Only manual assigned proof spans handwritten. No private-source transmission to Rocq MCP after prior approval rejection; use local controller checks/debug. Original crtoslatest readonly. Keep .vo, no manual edits generated goal/auto/check. Old OC SemaphoreDelete_lib may be stale; prefer current global library and full dataqueue frame. Follow workflow repair for real missing annotations, no ungrounded premises."
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "_SemaphoreDelete"
+    ],
+    "baseline": {
+      "extern_coq": {
+        "delete_global_frame": "StableGlobalState -> VarGlobalState -> Assertion",
+        "delete_manager_frame": "StableGlobalState -> VarGlobalState -> Assertion",
+        "delete_pending_restore": "StableGlobalState -> VarGlobalState -> addr -> list addr -> Assertion",
+        "delete_id_restore": "StableGlobalState -> VarGlobalState -> addr -> Z -> Assertion",
+        "os_semaphore_stable": "StableGlobalState -> SemaphoreStable",
+        "semaphore_manager_stable": "SemaphoreStable -> StableIdmanager",
+        "semaphore_manager": "SemaphoreState -> VarIdmanager",
+        "semaphore_context": "SemaphoreStable -> Prop",
+        "semaphore_link_node": "SemaphoreAbs -> DL_Node SemaphoreAbs",
+        "store_semaphore": "(addr -> addr -> Assertion) -> addr -> SemaphoreAbs -> Assertion",
+        "unsigned_last_nbits": "Z -> Z -> Z",
+        "NoDup": "{A} -> list A -> Prop",
+        "semaphore_id": "SemaphoreAbs -> Z",
+        "SemaphoreRetired": "addr -> Z -> Assertion"
+      },
+      "import_coq": {
+        "CRTOS_Verify.VC.semaphore.SemaphoreDelete_lib": "CRTOS_Verify.VC.semaphore.SemaphoreDelete_lib"
+      },
+      "specs": {
+        "IdGetObj::dataqueue_ic_import": "dataqueue_ic_import With (sm: StableIdmanager) (m: VarIdmanager) Require 0 <= id && id < 65536 && store_idmanager(sm, m, manager) Ensure (manager == 0 && __return == 0 && store_idmanager(sm, m, manager)) || (manager != 0 && __return == 0 && idmanager_query(m, id) == false && store_idmanager(sm, m, manager)) || (manager != 0 && __return != 0 && idmanager_query(m, id) == true && store_idmanager_found(sm, m, manager, __return, id))",
+        "CONTAINER_OF_SEMAPHORE_ID::dataqueue_ic_import": "dataqueue_ic_import With (sem_ptr : Z) Require id_ptr == field_addr(sem_ptr, struct Semaphore, id) && emp Ensure __return == sem_ptr && id_ptr == &(__return->id) && emp",
+        "IsDoubleLinkListEmpty::dataqueue_ic_dll": "dataqueue_ic_dll With {A} (storeA : Z -> A -> Assertion) (nodes : list(DL_Node A)) Require store_dll(storeA, linklist, nodes) Ensure ((__return == 1 && nodes == nil) || (__return == 0 && nodes != nil)) && store_dll(storeA, linklist, nodes)",
+        "LinklistResumeAll::dataqueue_ic_semaphore_waiters": "dataqueue_ic_semaphore_waiters With (sg : StableGlobalState) (before : VarGlobalState) (sem : Z) (waiting : list Z) Require list == semaphore_pending_head(sem) && semaphore_pending_nodes_ic(sem, before, map(sched_link_node, waiting)) && os_inv(sg, before) Ensure __return == 0 && exists after, semaphore_resume_all_ic_effect(sem, waiting, before, after) && semaphore_pending_nodes_ic(sem, after, nil) && os_inv(sg, after)",
+        "IdRemoveObj::dataqueue_ic_low_level_spec": "dataqueue_ic_low_level_spec With (sm: StableIdmanager) (m: VarIdmanager) Require manager != 0 && 0 <= id && id < 65536 && store_idmanager(sm, m, manager) Ensure (idmanager_query(m, id) == false && store_idmanager(sm, m, manager)) || (exists idnode, idmanager_query(m, id) == true && idmanager_contains(sm, m, id, idnode) && idnode != 0 && &(idnode->link) != 0 && store_idmanager(sm, idmanager_remove(sm, m, id), manager) * (idnode->id == 65535) * (idnode->link.node_prev == &(idnode->link)) * (idnode->link.node_next == &(idnode->link)))",
+        "DoubleLinkListRmNode::dataqueue_ic_remove_member": "dataqueue_ic_remove_member With {A} (storeA: addr -> A -> Assertion) (head: addr) (a: A) (prefix: list(DL_Node A)) (suffix: list(DL_Node A)) Require store_dll(storeA, head, app(prefix, cons(Build_DL_Node(a, linklist_node), suffix))) Ensure store_dll(storeA, head, app(prefix, suffix)) * storeA(linklist_node, a) * store_node_self_linked(linklist_node)",
+        "KTASK_ASSIGN::dataqueue_ic_outside_critical": "dataqueue_ic_outside_critical With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_ktask_assign, X) && OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(tt), X) && OutsideCritical(sg, after)",
+        "x_free::dataqueue_ic_import": "dataqueue_ic_import With n Require p != 0 && 0 < n && CharArray::undef_full(p, n) Ensure emp",
+        "CriticalAreaLock::ordinary": "ordinary With (sg : StableGlobalState) (st1 : VarGlobalState) Require OutsideCritical(sg, st1) Ensure exists st_lock, Crtos_RTrans(st1, st_lock) && InsideCritical(sg, st_lock) * os_inv(sg, st_lock)",
+        "IdGetObj::<default>": "With (sm: StableIdmanager) (m: VarIdmanager) Require 0 <= id && id < 65536 && store_idmanager(sm, m, manager) Ensure (manager == 0 && __return == 0 && store_idmanager(sm, m, manager)) || (manager != 0 && __return == 0 && idmanager_query(m, id) == false && store_idmanager(sm, m, manager)) || (manager != 0 && __return != 0 && idmanager_query(m, id) == true && store_idmanager_found(sm, m, manager, __return, id))",
+        "CriticalAreaUnLock::stable": "stable With (sg : StableGlobalState) (st1 st2 : VarGlobalState) Require Crtos_GTrans(st1, st2) && InsideCritical(sg, st1) * os_inv(sg, st2) Ensure OutsideCritical(sg, st2)",
+        "CONTAINER_OF_SEMAPHORE_ID::<default>": "With (sem_ptr : addr) Require id_ptr == field_addr(sem_ptr, struct Semaphore, id) && emp Ensure __return == sem_ptr && id_ptr == &(__return->id) && emp",
+        "IsDoubleLinkListEmpty::ready_dll": "ready_dll With (nodes : list(DL_Node Z)) Require store_priority_ready_bucket(linklist, nodes) Ensure ((__return == 1 && nodes == nil) || (__return == 0 && nodes != nil)) && store_priority_ready_bucket(linklist, nodes)",
+        "IsDoubleLinkListEmpty::dll": "dll With {A} (storeA : Z -> A -> Assertion) (nodes : list(DL_Node A)) Require store_dll(storeA, linklist, nodes) Ensure ((__return == 1 && nodes == nil) || (__return == 0 && nodes != nil)) && store_dll(storeA, linklist, nodes)",
+        "LinklistResumeAll::semaphore_waiters": "semaphore_waiters With (sg : StableGlobalState) (before : VarGlobalState) (sem : addr) (waiting : list addr) Require list == semaphore_pending_head(sem) && semaphore_pending_nodes(sem, before, map(sched_link_node, waiting)) && os_inv(sg, before) Ensure __return == KOK && exists after, semaphore_resume_all_effect(sem, waiting, before, after) && semaphore_pending_nodes(sem, after, nil) && os_inv(sg, after)",
+        "IdRemoveObj::high_level_spec": "high_level_spec With (sm: StableIdmanager) (m: VarIdmanager) (idnode: addr) Require manager != 0 && 0 <= id && id < 65536 && idmanager_query( idmanager_link(sm, idmanager_add(m, id), id, idnode), id) == true && store_idmanager(sm, idmanager_link(sm, idmanager_add(m, id), id, idnode), manager) Ensure idnode != 0 && &(idnode->link) != 0 && store_idmanager(sm, idmanager_remove(sm, idmanager_link(sm, idmanager_add(m, id), id, idnode), id), manager) * (idnode->id == 65535) * (idnode->link.node_prev == &(idnode->link)) * (idnode->link.node_next == &(idnode->link))",
+        "IdRemoveObj::low_level_spec": "low_level_spec With (sm: StableIdmanager) (m: VarIdmanager) Require manager != 0 && 0 <= id && id < 65536 && store_idmanager(sm, m, manager) Ensure (idmanager_query(m, id) == false && store_idmanager(sm, m, manager)) || (exists idnode, idmanager_query(m, id) == true && idmanager_contains(sm, m, id, idnode) && idnode != 0 && &(idnode->link) != 0 && store_idmanager(sm, idmanager_remove(sm, m, id), manager) * (idnode->id == 65535) * (idnode->link.node_prev == &(idnode->link)) * (idnode->link.node_next == &(idnode->link)))",
+        "DoubleLinkListRmNode::remove_ready_member": "remove_ready_member With (task head : Z) (prefix suffix : list(DL_Node Z)) Require linklist_node == sched_link_of(task) && store_priority_ready_bucket( head, app(prefix, cons(sched_link_node(task), suffix))) Ensure linklist_node == sched_link_of(task) && store_priority_ready_bucket(head, app(prefix, suffix)) * store_node_self_linked(linklist_node)",
+        "DoubleLinkListRmNode::remove_sched_self": "remove_sched_self With (task : Z) (sched : TaskSchedMemberAbs) Require linklist_node == sched_link_of(task) && linklist_node != 0 && store_task_sched_member(sched_link_of(task), sched) * store_node_self_linked(sched_link_of(task)) Ensure store_task_sched_member(sched_link_of(task), sched) * store_node_self_linked(sched_link_of(task))",
+        "DoubleLinkListRmNode::remove_self": "remove_self With (node : Z) Require linklist_node == node && node != 0 && store_node_self_linked(node) Ensure store_node_self_linked(node)",
+        "DoubleLinkListRmNode::remove_member": "remove_member With {A} (storeA: addr -> A -> Assertion) (head: addr) (a: A) (prefix: list(DL_Node A)) (suffix: list(DL_Node A)) Require store_dll(storeA, head, app(prefix, cons(Build_DL_Node(a, linklist_node), suffix))) Ensure store_dll(storeA, head, app(prefix, suffix)) * storeA(linklist_node, a) * store_node_self_linked(linklist_node)",
+        "DoubleLinkListRmNode::remove_from_head": "remove_from_head With {A} (storeA: addr -> A -> Assertion) (head: addr) (a: A) (suffix: list(DL_Node A)) Require linklist_node != 0 && store_dll(storeA, head, cons(Build_DL_Node(a, linklist_node), suffix)) Ensure store_dll(storeA, head, suffix) * storeA(linklist_node, a) * store_node_self_linked(linklist_node)",
+        "x_free::<default>": "Require SemaphoreRaw(ptr) Ensure emp",
+        "KTASK_ASSIGN::outside_critical": "outside_critical With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_ktask_assign, X) && OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(tt), X) && OutsideCritical(sg, after)",
+        "_SemaphoreDelete::dataqueue_cleanup_ic": "dataqueue_cleanup_ic With (sg : StableGlobalState) (before : VarGlobalState) Require semaphore_delete_quiescent(id, before) && os_inv(sg, before) Ensure exists after, semaphore_delete_ic_effect(id, before, after) && os_inv(sg, after)",
+        "_SemaphoreDelete::outside_critical": "outside_critical With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_delete(sg, id), X) && OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(tt), X) && OutsideCritical(sg, after)"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-11-18T15:59:13.246192Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/semaphore/SemaphoreDeleteIC_goal_check.vo",
+    "base_artifact_count": 217,
+    "current_source_count": 4,
+    "elapsed_seconds": 4.300444,
+    "snapshot": "verification_runs/SemaphoreDeleteIC-20261118235913/dependency_plan.json"
+  },
+  "attempts": {
+    "SemaphoreDeleteIC-annotation-r1": {
+      "attempt_id": "SemaphoreDeleteIC-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/SemaphoreDeleteIC-20261118235913",
+      "claimed_action": "deliver:SemaphoreDeleteIC-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T15:59:20.682149Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T15:59:25.669667Z",
+            "finished_at": "2026-11-18T16:06:25.834398Z",
+            "elapsed_seconds": 420.164731
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T16:06:25.834368Z",
+      "finished_at": "2026-11-18T16:06:26.815373Z"
+    },
+    "SemaphoreDeleteIC-vc-checking-r1": {
+      "attempt_id": "SemaphoreDeleteIC-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/SemaphoreDeleteIC-vc-checking-r1",
+      "claimed_action": "deliver:SemaphoreDeleteIC-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T16:06:50.380724Z",
+      "source_annotation": "SemaphoreDeleteIC-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T16:06:59.628879Z",
+            "finished_at": "2026-11-18T16:12:25.873477Z",
+            "elapsed_seconds": 326.244598
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T16:12:25.873433Z",
+      "finished_at": "2026-11-18T16:12:25.947770Z"
+    },
+    "SemaphoreDeleteIC-vc-proving-r1": {
+      "attempt_id": "SemaphoreDeleteIC-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-18T16:12:25.947809Z",
+      "source_annotation": "SemaphoreDeleteIC-annotation-r1",
+      "source_vc_checking": "SemaphoreDeleteIC-vc-checking-r1",
+      "groups": {
+        "retire_object": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreDeleteIC-vc-proving-r1:retire_object",
+          "claimed_action": "deliver:SemaphoreDeleteIC-vc-proving-r1:retire_object:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T16:12:30.696753Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T16:12:36.328601Z",
+                "finished_at": "2026-11-18T17:19:52.645310Z",
+                "elapsed_seconds": 4036.316709
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T17:19:52.645234Z",
+          "finished_at": "2026-11-18T17:22:40.946630Z"
+        },
+        "borrow_fields": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreDeleteIC-vc-proving-r1:borrow_fields",
+          "claimed_action": "deliver:SemaphoreDeleteIC-vc-proving-r1:borrow_fields:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T16:12:30.696772Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T16:12:36.695372Z",
+                "finished_at": "2026-11-18T16:45:25.212722Z",
+                "elapsed_seconds": 1968.51735
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T16:45:25.212693Z",
+          "finished_at": "2026-11-18T16:46:12.683735Z"
+        },
+        "select_object": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreDeleteIC-vc-proving-r1:select_object",
+          "claimed_action": "deliver:SemaphoreDeleteIC-vc-proving-r1:select_object:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T16:12:30.696776Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T16:12:37.074503Z",
+                "finished_at": "2026-11-18T16:24:49.538109Z",
+                "elapsed_seconds": 732.463606
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T16:24:49.538082Z",
+          "finished_at": "2026-11-18T16:25:39.858868Z"
+        },
+        "early_returns": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreDeleteIC-vc-proving-r1:early_returns",
+          "claimed_action": "deliver:SemaphoreDeleteIC-vc-proving-r1:early_returns:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T16:12:30.696778Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T16:26:02.501421Z",
+                "finished_at": "2026-11-18T16:30:34.054188Z",
+                "elapsed_seconds": 271.552767
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T16:30:34.054157Z",
+          "finished_at": "2026-11-18T16:31:20.191257Z"
+        }
+      },
+      "finished_at": "2026-11-18T17:27:03.626179Z"
+    }
+  },
+  "current": {
+    "annotation": "SemaphoreDeleteIC-annotation-r1",
+    "vc-checking": "SemaphoreDeleteIC-vc-checking-r1",
+    "vc-proving": "SemaphoreDeleteIC-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/SemaphoreDeleteIC-20261118235913",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "SemaphoreDeleteIC-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-11-18T17:31:53.984604Z",
+    "files": [
+      "VC/semaphore/SemaphoreDeleteIC_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-11-18T17:36:47.515155Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-11-18T15:59:13.246229Z",
+  "updated_at": "2026-11-18T17:36:47.527044Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-11-18T17:36:47.515133Z"
+}

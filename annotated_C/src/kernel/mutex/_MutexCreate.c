@@ -27,6 +27,19 @@
   (MutexPadding : addr -> Assertion)
   (NodeZero : addr -> Assertion)
 */
+/*@ Extern Coq Record StableGlobalState {
+  os_mutex_stable: MutexStable;
+} */
+/*@ Extern Coq Record VarGlobalState {
+  os_mutexes: MutexState;
+  os_tasks: TaskState;
+} */
+/*@ Extern Coq Record MutexStable {
+  mutex_manager_stable: StableIdmanager;
+} */
+/*@ Extern Coq Record TaskState {
+  task_desc_map: addr -> option TaskDescriptorAbs;
+} */
 
 /* Source: kernel/thread/mutex.c::_MutexCreate; static-to-slice-external only. */
 void *x_malloc(x_size_t size)
@@ -153,11 +166,11 @@ int32 _MutexCreate(void)
     /*@ os_inv(sg, st_lock) * MutexZero(mutex)
         which implies
         mutex != 0 && addr_aligned(mutex, 4) &&
-        mutex_context(os_mutex_stable(sg)) &&
-        !(In(mutex, map(mutex_addr, os_mutexes(st_lock)))) &&
+        mutex_context(sg.os_mutex_stable) &&
+        !(In(mutex, map(mutex_addr, st_lock.os_mutexes))) &&
         mutex_create_frame(sg, st_lock) *
-        store_idmanager(mutex_manager_stable(os_mutex_stable(sg)), mutex_manager(os_mutexes(st_lock)), &k_mutex_id_manager) *
-        store_dll(store_mutex(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock)))), &k_mutex_list, map(mutex_link_node, os_mutexes(st_lock))) *
+        store_idmanager(sg.os_mutex_stable.mutex_manager_stable, mutex_manager(st_lock.os_mutexes), &k_mutex_id_manager) *
+        store_dll(store_mutex(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map)), &k_mutex_list, map(mutex_link_node, st_lock.os_mutexes)) *
         store_idnode_insert_ready(&mutex->id) *
         data_at(&mutex->val, unsigned short, 0) *
         data_at(&mutex->recursive_cnt, unsigned char, 0) *
@@ -167,15 +180,15 @@ int32 _MutexCreate(void)
     */
 
     id = IdInsertObj(&k_mutex_id_manager, &mutex->id)
-      /*@ where sm = mutex_manager_stable(os_mutex_stable(sg)), m = mutex_manager(os_mutexes(st_lock)) */;
-    /*@ idmanager_min_free_id(mutex_manager_stable(os_mutex_stable(sg)),
-          mutex_manager(os_mutexes(st_lock)), id) => (0 <= id && id < 128) by local */
+      /*@ where sm = sg.os_mutex_stable.mutex_manager_stable, m = mutex_manager(st_lock.os_mutexes) */;
+    /*@ idmanager_min_free_id(sg.os_mutex_stable.mutex_manager_stable,
+          mutex_manager(st_lock.os_mutexes), id) => (0 <= id && id < 128) by local */
     if (id < 0) {
         /*@ mutex != 0 && addr_aligned(mutex, 4) &&
             &mutex->pend_list != 0 && &mutex->link != 0 &&
             safeExec(LastSeen(before), abs_mutex_create(sg), X) &&
             Crtos_RTrans(before, st_lock) &&
-            mutex_create_frame(sg, st_lock) * store_idmanager(mutex_manager_stable(os_mutex_stable(sg)), mutex_manager(os_mutexes(st_lock)), &k_mutex_id_manager) * store_dll(store_mutex(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock)))), &k_mutex_list, map(mutex_link_node, os_mutexes(st_lock))) *
+            mutex_create_frame(sg, st_lock) * store_idmanager(sg.os_mutex_stable.mutex_manager_stable, mutex_manager(st_lock.os_mutexes), &k_mutex_id_manager) * store_dll(store_mutex(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map)), &k_mutex_list, map(mutex_link_node, st_lock.os_mutexes)) *
             store_idnode_insert_ready(&mutex->id) *
         data_at(&mutex->val, unsigned short, 0) *
         data_at(&mutex->recursive_cnt, unsigned char, 0) *
@@ -205,41 +218,41 @@ int32 _MutexCreate(void)
     mutex->recursive_cnt = 0;
 
     /*@ mutex != 0 && addr_aligned(mutex, 4) && &mutex->link != 0 &&
-        idmanager_min_free_id(mutex_manager_stable(os_mutex_stable(sg)),
-          mutex_manager(os_mutexes(st_lock)), id) &&
+        idmanager_min_free_id(sg.os_mutex_stable.mutex_manager_stable,
+          mutex_manager(st_lock.os_mutexes), id) &&
         data_at(&mutex->val, unsigned short, 1) *
         data_at(&mutex->recursive_cnt, unsigned char, 0) *
         data_at(&mutex->origin_prio, unsigned char, 255) *
         data_at(&mutex->holder, struct TaskDescriptor *, 0) *
         store_node_self_linked(&mutex->pend_list) * NodeZero(&mutex->link) * MutexPadding(mutex)
         which implies
-        idmanager_min_free_id(mutex_manager_stable(os_mutex_stable(sg)),
-          mutex_manager(os_mutexes(st_lock)), id) &&
-        store_mutex(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock))), &mutex->link, mutex_created(mutex, id)) *
+        idmanager_min_free_id(sg.os_mutex_stable.mutex_manager_stable,
+          mutex_manager(st_lock.os_mutexes), id) &&
+        store_mutex(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), &mutex->link, mutex_created(mutex, id)) *
         occupy_dll_node(&mutex->link)
     */
 	DoubleLinkListInsertNodeAfter(&k_mutex_list, &mutex->link)
       /*@ where (dispatch_case)
-          storeA = store_mutex(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock)))), nodes = map(mutex_link_node, os_mutexes(st_lock)),
+          storeA = store_mutex(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map)), nodes = map(mutex_link_node, st_lock.os_mutexes),
           a = mutex_created(mutex, id), head = &k_mutex_list; A = MutexAbs */;
     
     /*@ mutex != 0 && addr_aligned(mutex, 4) &&
-        mutex_context(os_mutex_stable(sg)) &&
-        idmanager_min_free_id(mutex_manager_stable(os_mutex_stable(sg)), mutex_manager(os_mutexes(st_lock)), id) &&
-        !(In(mutex, map(mutex_addr, os_mutexes(st_lock)))) &&
+        mutex_context(sg.os_mutex_stable) &&
+        idmanager_min_free_id(sg.os_mutex_stable.mutex_manager_stable, mutex_manager(st_lock.os_mutexes), id) &&
+        !(In(mutex, map(mutex_addr, st_lock.os_mutexes))) &&
         safeExec(LastSeen(before), abs_mutex_create(sg), X) && Crtos_RTrans(before, st_lock) &&
         mutex_create_frame(sg, st_lock) *
-        store_idmanager(mutex_manager_stable(os_mutex_stable(sg)), idmanager_link(mutex_manager_stable(os_mutex_stable(sg)), idmanager_add(mutex_manager(os_mutexes(st_lock)), id), id, &mutex->id), &k_mutex_id_manager) *
-        store_dll(store_mutex(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock)))), &k_mutex_list,
-          dll_insert_after_dispatch(&k_mutex_list, map(mutex_link_node, os_mutexes(st_lock)), &k_mutex_list,
+        store_idmanager(sg.os_mutex_stable.mutex_manager_stable, idmanager_link(sg.os_mutex_stable.mutex_manager_stable, idmanager_add(mutex_manager(st_lock.os_mutexes), id), id, &mutex->id), &k_mutex_id_manager) *
+        store_dll(store_mutex(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map)), &k_mutex_list,
+          dll_insert_after_dispatch(&k_mutex_list, map(mutex_link_node, st_lock.os_mutexes), &k_mutex_list,
             Build_DL_Node(mutex_created(mutex, id), &mutex->link)))
         which implies
         0 <= id && id < 128 &&
-        safeExec(LastSeen(replace_mutexes(mutex_publish(mutex, id, os_mutexes(st_lock)), st_lock)), return(id), X) &&
-        Crtos_GTrans(st_lock, replace_mutexes(mutex_publish(mutex, id, os_mutexes(st_lock)), st_lock)) && os_inv(sg, replace_mutexes(mutex_publish(mutex, id, os_mutexes(st_lock)), st_lock))
+        safeExec(LastSeen(replace_mutexes(mutex_publish(mutex, id, st_lock.os_mutexes), st_lock)), return(id), X) &&
+        Crtos_GTrans(st_lock, replace_mutexes(mutex_publish(mutex, id, st_lock.os_mutexes), st_lock)) && os_inv(sg, replace_mutexes(mutex_publish(mutex, id, st_lock.os_mutexes), st_lock))
     */
     CriticalAreaUnLock(lock)
-      /*@ where (stable) sg = sg, st1 = st_lock, st2 = replace_mutexes(mutex_publish(mutex, id, os_mutexes(st_lock)), st_lock) */;
+      /*@ where (stable) sg = sg, st1 = st_lock, st2 = replace_mutexes(mutex_publish(mutex, id, st_lock.os_mutexes), st_lock) */;
     
     return id;
 }

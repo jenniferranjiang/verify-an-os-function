@@ -41,8 +41,8 @@ x_err_t DataqueuePeak(DataQueueType *p_queue, const void **StartAddr, x_size_t *
       (exists after (e : DataqueueElem),
         __return == 0 && safeExec(LastSeen(after), return(Some(e)), X) &&
         OutsideCritical(sg, after) *
-        peak_data_slot(StartAddr, Some(dq_data(e))) *
-        peak_length_slot(size, Some(dq_length(e))))
+        peak_data_slot(StartAddr, Some(e.dq_data)) *
+        peak_length_slot(size, Some(e.dq_length)))
 */
 {
     x_base lock = 0;
@@ -60,7 +60,7 @@ x_err_t DataqueuePeak(DataQueueType *p_queue, const void **StartAddr, x_size_t *
       p_queue == p_queue@pre && StartAddr == StartAddr@pre && size == size@pre && lock == saved &&
       Crtos_RTrans(before, observed) &&
       safeExec(LastSeen(before), abs_dataqueue_peak(sg, p_queue), X) &&
-      dataqueue_map(os_dataqueues(observed), p_queue) == Some(q) &&
+      (observed.os_dataqueues.dataqueue_map)(p_queue) == Some(q) &&
       dataqueue_ready(q) &&
       InsideCritical(sg, observed) * store_dataqueue(p_queue, q) *
       wand(store_dataqueue(p_queue, q), os_inv(sg, observed)) *
@@ -68,24 +68,24 @@ x_err_t DataqueuePeak(DataQueueType *p_queue, const void **StartAddr, x_size_t *
     /*@ Given q saved */
     /*@ store_dataqueue(p_queue, q)
         which implies p_queue != 0 && addr_aligned(p_queue, 4) &&
-          p_queue->front == dq_front(q) && p_queue->rear == dq_rear(q) &&
-          p_queue->max_len == dq_max_len(q) && p_queue->base == dq_base(q) &&
-          p_queue->sem_blank == dq_sem_blank(q) && p_queue->sem_data == dq_sem_data(q) &&
+          p_queue->front == q.dq_front && p_queue->rear == q.dq_rear &&
+          p_queue->max_len == q.dq_max_len && p_queue->base == q.dq_base &&
+          p_queue->sem_blank == q.dq_sem_blank && p_queue->sem_data == q.dq_sem_data &&
           CharArray::undef_full((char *)p_queue + 6, 2) * dataqueue_buffer(q) */
     if (p_queue->front != p_queue->rear) {
         
         /* Original lock position: lock = CriticalAreaLock(); */
-        /*@ dataqueue_ready(q) && dq_front(q) != dq_rear(q) && dataqueue_buffer(q)
+        /*@ dataqueue_ready(q) && q.dq_front != q.dq_rear && dataqueue_buffer(q)
           which implies exists (e : DataqueueElem) (rest : list DataqueueElem),
-            dq_slots(q) == cons(e, rest) &&
+            q.dq_slots == cons(e, rest) &&
             dataqueue_peak(q) == Some(e) &&
-            dataqueue_slot(dq_base(q), dq_front(q), e) *
-            wand(dataqueue_slot(dq_base(q), dq_front(q), e), dataqueue_buffer(q)) */
+            dataqueue_slot(q.dq_base, q.dq_front, e) *
+            wand(dataqueue_slot(q.dq_base, q.dq_front, e), dataqueue_buffer(q)) */
         /*@ Given e rest */
-        /*@ dataqueue_slot(dq_base(q), dq_front(q), e)
+        /*@ dataqueue_slot(q.dq_base, q.dq_front, e)
           which implies
-            store(field_addr(pointer_offset(dq_base(q), dq_front(q), struct DataElem), struct DataElem, data), void *, dq_data(e)) *
-            store(field_addr(pointer_offset(dq_base(q), dq_front(q), struct DataElem), struct DataElem, length), unsigned int, dq_length(e)) */
+            store(field_addr(pointer_offset(q.dq_base, q.dq_front, struct DataElem), struct DataElem, data), void *, e.dq_data) *
+            store(field_addr(pointer_offset(q.dq_base, q.dq_front, struct DataElem), struct DataElem, length), unsigned int, e.dq_length) */
         /*@ peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length)
           which implies undef_data_at(StartAddr) * undef_data_at(size) */
         DataElemType *pElem = &(p_queue->base[p_queue->front]);
@@ -93,10 +93,10 @@ x_err_t DataqueuePeak(DataQueueType *p_queue, const void **StartAddr, x_size_t *
         *size = pElem->length;
         /*@ Assert
           p_queue == p_queue@pre && StartAddr == StartAddr@pre && size == size@pre &&
-          pElem == pointer_offset(dq_base(q), dq_front(q), struct DataElem) && lock == saved &&
+          pElem == pointer_offset(q.dq_base, q.dq_front, struct DataElem) && lock == saved &&
           safeExec(LastSeen(observed), return(Some(e)), X) && Crtos_GTrans(observed, observed) &&
           InsideCritical(sg, observed) * os_inv(sg, observed) *
-          peak_data_slot(StartAddr, Some(dq_data(e))) * peak_length_slot(size, Some(dq_length(e))) */
+          peak_data_slot(StartAddr, Some(e.dq_data)) * peak_length_slot(size, Some(e.dq_length)) */
         CriticalAreaUnLock(lock);
         return EOK;
     } else {

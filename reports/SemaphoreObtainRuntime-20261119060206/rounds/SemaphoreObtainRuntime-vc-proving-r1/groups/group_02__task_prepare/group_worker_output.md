@@ -1,0 +1,11 @@
+# task_prepare: annotation gap
+
+Assigned `proof_of__SemaphoreObtain_entail_wit_8` remains unproved (Abort). Its spatial branch has os_inv held, a registered/admissible current task, nonzero wait, and the carried future-delay condition, but requires `assignRunningTask (os_assign held) <> 0`.
+
+The existing premises do not supply that fact: `lib/pendlist/LinklistSuspend.v:15` admits a registered RUNNING/SUSPEND descriptor at address zero; `lib/assign/AssignState.v:222` expressly permits running=0; `lib/task/TaskInv.v:41` expressly excludes a new base-address nonzero condition. QCP `Rocq/SeparationLogic/CArch.v:29` allows 0 <= p in valid_addr_range, and CommonAssertion.store_ptr therefore does not exclude address zero. TaskDescriptor.id is at base+104 (`lib/common/StructFieldOffsetAxiom.v:181`), so ID-node nonzero is not base nonzero. os_world_wf adds ownership/domain/service consistency, not that missing base constraint. The future-delay premise only constrains successful suspend results and cannot establish existence/nonzero beforehand.
+
+The annotation demanding the missing fact is `annotated_C/src/kernel/semaphore/_SemaphoreObtain.c:260-263`; the waiting-entry contract is `lib/semaphore/KSemaphoreObtain.v:51-65`. Main must review the actual waiting-path access domain and fix the supported contract/annotation before regeneration. This worker has not strengthened any Require, changed the invariant, or added an assumption. Merely fixing nonzero does not complete entail8: field focus and the full exstatus-update os_inv restoration wand remain to prove.
+
+Preserved candidates: entail7 uses actual os_inv and safeExec/assertS to establish admissibility/future-delay; entail9 proves preservation under clear_status and consumes the update wand; entail10 extracts the suspended task descriptor and applies the carried quantified delay premise. which_implies7/8 focus and restore the running-task cell. No current sibling output was read, no library was changed, and all edits are inside assigned spans. Protected split Abort blocks remain untouched.
+
+Latest controller group-development returned exit 0 / status passed (38.533491 seconds). This checks the retained Qed candidates while entail8 remains Abort; it is not group-check completion or final-check. No proof budget was exhausted.

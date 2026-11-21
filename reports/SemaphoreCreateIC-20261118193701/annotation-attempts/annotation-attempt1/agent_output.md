@@ -1,0 +1,13 @@
+# SemaphoreCreateIC annotation delivery
+
+Signature: int32 _SemaphoreCreate(uint16 val).
+Preconditions: the frozen named dataqueue_ic contract owns os_inv(sg,before); the typed uint16 parameter supplies its machine range.
+Output: failure returns -5 and restores the same global state, or a fresh semaphore initialized to val is published under the minimum free ID; the full os_inv is restored. This is exactly the existing semaphore_create_ic_effect and C Ensure. The frozen target and imported contracts were unchanged.
+
+Four IC-only resource cut assertions expose the private zeroed object and complete existing global state before ID insertion, reclaim all 32 bytes on ID failure, expose the pending-list fields before initialization, and package the new DLL payload before publication. The old OC branches remain selectable and unchanged. No ordinary C statements were changed. IC vocabulary refers to existing library definitions and is local to the canonical C; no shared header or global library was edited. The explicit frame uses current ServiceSlotAbs/service_id, contains dataqueue_inv, and does not copy the obsolete OC msgqueue frame.
+
+First symexec failed at IdInsertObj because os_inv and CharArray.full were opaque; the resource cuts resolve that call-interface gap and leave real entailment VCs for all conversions. The subsequent DLL import required explicit polymorphic instantiation; the existing named where now selects {A = SemaphoreAbs} and its matching payload/list parameters. This is a caller-interface instantiation, not a new contract or trusted assumption. The attempt has no loops or new predicates.
+
+Checks: controller formal-case-lib-design passed (absent policy, skipped); final controller symexec passed with committed publication of all four formal VC files. Both gcc -m32 IC and OC syntax checks passed. Direct local coqc using current _CoqProject loadpaths compiled SemaphoreCreateIC_goal.v, retaining its .vo. The existing Makefile.coq does not yet enumerate the new case and its direct goal target reported no rule; no Makefile was modified. No case-lib exists, so post-generation case-lib check is inapplicable.
+
+Generated manual contains pending obligations for byte-to-field conversion and fresh address, failure reclamation, initialized payload packing, and final global publication including preservation of dataqueue associations. These are not proved by annotation or by successful elaboration. Native auto/manual division and generator-produced placeholders were untouched; no handwritten proof was added. Original crtoslatest was not edited. No terminal final-check or implementation-proof completion is claimed.

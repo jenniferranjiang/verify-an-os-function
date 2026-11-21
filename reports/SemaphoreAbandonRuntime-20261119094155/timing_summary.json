@@ -1,0 +1,75 @@
+{
+  "run": {
+    "status": "running",
+    "phase": "vc-checking",
+    "created_at": "2026-11-19T01:41:55.009255Z"
+  },
+  "commands": [
+    {
+      "phase": "annotation",
+      "command": "coq-check",
+      "calls": 1,
+      "elapsed_seconds": 0.0304
+    },
+    {
+      "phase": "annotation",
+      "command": "symexec",
+      "calls": 3,
+      "elapsed_seconds": 1.880809
+    },
+    {
+      "phase": "annotation",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 1.126185
+    },
+    {
+      "phase": "vc-checking",
+      "command": "dune-build",
+      "calls": 1,
+      "elapsed_seconds": 3.838812
+    }
+  ],
+  "annotation_attempts": [
+    {
+      "attempt_id": "SemaphoreAbandonRuntime-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-11-19T01:45:37.305316Z",
+          "finished_at": "2026-11-19T01:45:37.347320Z",
+          "elapsed_seconds": 0.0304
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-19T01:48:05.033013Z",
+          "finished_at": "2026-11-19T01:48:06.168928Z",
+          "elapsed_seconds": 1.126185
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-19T01:42:13.005982Z",
+          "finished_at": "2026-11-19T01:48:05.056868Z",
+          "elapsed_seconds": 352.050886
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-11-19T01:45:43.159733Z",
+          "calls": 3,
+          "finished_at": "2026-11-19T01:46:47.134047Z",
+          "elapsed_seconds": 1.880808
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "attempt_id": "SemaphoreAbandonRuntime-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "prepared",
+      "stages": []
+    }
+  ]
+}

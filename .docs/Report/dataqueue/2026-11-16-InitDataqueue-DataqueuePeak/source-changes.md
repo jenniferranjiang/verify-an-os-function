@@ -318,3 +318,15 @@ return result;
 ## 2026-11-17 QCP语法适配
 
 InitDataqueue唯一active body中的 `p_queue->front = p_queue->rear = 0;` 拆为 `p_queue->rear = 0; p_queue->front = 0;`，原表达式保留于注释。两个不同结构字段按原C求值顺序赋相同值，无额外调用或路径变化。这是QCP解析适配，不是新算法修复。header的Extern Coq按kind/term分块，声明内容和顺序不变。新增which-implies及Assert只生成证明义务，不改变C执行。
+
+## LinklistSuspend IC实参读取注解边界
+
+2026-11-19，验证副本将`SuspendKTask(task->id.id)`拆为`int32 suspend_id`局部变量、单次赋值及`SuspendKTask(suspend_id)`。目的为读取ID后将借出的ushort字段归还os_inv再调用callee；不改变读取/调用次数、类型转换值、非法flag提前返回或算法。独立源码等价审阅`dq-suspend-id-evaluate-once-20261119-r1`通过，见[运行时审阅](../2026-11-18-PopDataqueue-PushDataqueue/review.md)。这不是原始源码缺陷修复，不修改source_root。
+
+LinklistSuspend后续等价降级：两个无贯穿switch分支改为if/else-if，保留循环break和全部分支内容；目的是支持当前QCP控制值/Assert组合，非源码缺陷修复。独立行为等价审阅`dq-suspend-switch-lowering-20261119-r1`通过，formal规格不变，见同一运行时review记录。
+
+归因更正：随后发现双spec作为body入口布局导致跨spec状态合并，尚不能将先前局部值错位归因于switch工具缺陷；保留if降级是已审阅的等价适配，不宣称其为唯一必要修复。原始C本身没有因此新增缺陷结论。
+
+Obtain SetDelay失败路径的Wakeup ID实参按同一evaluate-once规则拆为局部int32后调用，行为/规格保持；审阅dq-obtain-wakeup-id-evaluate-once-20261119-r1见运行时review。不是原始源码缺陷修复，不改原仓库。
+
+LinklistResume `dq-resume-id-evaluate-once-20261119-r1`：仅在canonical将KTaskWakeup的task->id.id参数读入int32局部变量再调用，以便字段资源先归还；独立逆变换/类型/严格GCC检查通过，formal注解不变。详见第二阶段review.md；不是算法修复或新增信任。

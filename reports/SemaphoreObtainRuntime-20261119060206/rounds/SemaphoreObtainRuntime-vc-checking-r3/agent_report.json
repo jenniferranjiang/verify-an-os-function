@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-premise",
+    "vcs": [
+      {
+        "name": "proof_of__SemaphoreObtain_entail_wit_8",
+        "parent": null,
+        "annotation_location": "annotated_C/src/kernel/semaphore/_SemaphoreObtain.c:260-263 (pre-LinklistSuspend task focus Assert)"
+      }
+    ],
+    "message": "The unchanged whole VC requires assignRunningTask(os_assign held) <> 0 in both consequent alternatives before LinklistSuspend, but current os_inv, admissibility and the universal future-delay condition do not establish it. A registered task at base zero with wait_time = -1 is not excluded by these premises. The prior task_prepare annotation gap remains unresolved.",
+    "repair_boundary": "Return to annotation for a justified correction of the early task-nonzero Assert and regeneration. Keep public contracts, task invariant and trust unchanged unless independently justified; a later successful suspension fact cannot be assumed before the call."
+  }
+}

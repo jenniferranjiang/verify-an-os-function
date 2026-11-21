@@ -82,6 +82,15 @@
       (SemaphoreRaw : Z -> Assertion)
       (SemaphoreZero : Z -> Assertion)
  */
+/*@ Extern Coq Record VarGlobalState {
+  os_semaphores: SemaphoreState;
+} */
+/*@ Extern Coq Record StableGlobalState {
+  os_semaphore_stable: SemaphoreStable;
+} */
+/*@ Extern Coq Record SemaphoreStable {
+  semaphore_manager_stable: StableIdmanager;
+} */
 /*@ Printing Coq Name safeExec := monadesafe_lib.safeExec */
 /*@ Printing Coq Name return := MonadErr.ret */
 #endif

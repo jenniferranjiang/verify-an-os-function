@@ -1,0 +1,21 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-import",
+    "vcs": [
+      {
+        "name": "proof_of_CalculateTickFromTimeMs_which_implies_wit_1",
+        "parent": null,
+        "annotation_location": "CalculateTickFromTimeMs canonical C formal imports / generated goal prelude"
+      },
+      {
+        "name": "proof_of_CalculateTickFromTimeMs_which_implies_wit_2",
+        "parent": null,
+        "annotation_location": "CalculateTickFromTimeMs canonical C formal imports / generated goal prelude"
+      }
+    ],
+    "message": "The generated goal imports VCPrelude and TickConversion but no concrete CRTOS separation-logic rules instance under no_crules=true; compilation stops at Local Open Scope sac with Scope sac is not declared before either assigned view entailment can be checked. Import the existing CRTOS_Verify.lib.common.CrtosRules from the canonical C annotation and regenerate through the workflow. No new logical premise or assumption is needed.",
+    "repair_boundary": "C annotation import"
+  }
+}

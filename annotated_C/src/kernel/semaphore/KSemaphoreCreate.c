@@ -1,14 +1,16 @@
 /* Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c; SHA-256 dafd02bf7c6fa5a7324c6e0f824d9a1ddc1544c43f9e71aabeb902d832f30ab8.
  * Selected 32-bit non-SMP config: KERNEL_STATIC_OBJECTS and KERNEL_DEFER_IPC_SCHED undefined. */
-/* Dataqueue IC design input (not an additional implementation proof).
- * The OC definition is synchronized to the latest source; its contracts and proof annotations are retained.
- * This named IC contract targets a temporary slice adapted from that same body:
- * remove nested CriticalAreaLock/UnLock calls and OC-only proof annotations;
- * select the dataqueue_ic* callee contracts recorded below.
- * Wrapper bodies themselves need no lock removal. The OC body is NOT asserted
- * to satisfy the IC contract without that documented source adaptation.
- * See .docs/Report/dataqueue/2026-11-16-InitDataqueue-DataqueuePeak/design.md for the complete reconstruction choices.
+/* One canonical body, with selectable calling context.
+ * CRTOS_DATAQUEUE_SEMAPHORE_IC defaults to 1 for this dataqueue verification.
+ * Define it as 0 to retain the original OC contracts, annotations and locks.
+ * IC uses the reviewed dataqueue contract and removes only nested lock/unlock
+ * operations under the source-processing rule; all other C paths are shared.
+ * Selecting a contract is not an implementation-proof result.
  */
+#ifndef CRTOS_DATAQUEUE_SEMAPHORE_IC
+#define CRTOS_DATAQUEUE_SEMAPHORE_IC 1
+#endif
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
 #include "dataqueue.h"
 #include "dataqueue_semaphore_logic.h"
 
@@ -28,16 +30,8 @@ int32 _SemaphoreCreate(uint16 val)
 */;
 
 
-/* IC target contract; original OC target contract remains below. */
-int32 KSemaphoreCreate(uint16 val)
-/*@ dataqueue_ic
-    With (sg : StableGlobalState) (before : VarGlobalState)
-    Require os_inv(sg, before)
-    Ensure exists after,
-      ((__return == -5) || (0 <= __return && __return < 128)) &&
-      semaphore_create_ic_effect(sg, val, before, __return, after) &&
-      os_inv(sg, after)
-*/;
+#else
+
 
 /* OC input: existing contracts/annotations retained; latest-source adaptations marked below. */
 #include "m_semaphore.h"
@@ -61,7 +55,19 @@ int32 _SemaphoreCreate(uint16 val)
 */;
 
 /* Canonical: KSemaphoreCreate. Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c:259. */
+#endif
+
 int32 KSemaphoreCreate(uint16 val)
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ dataqueue_ic
+    With (sg : StableGlobalState) (before : VarGlobalState)
+    Require os_inv(sg, before)
+    Ensure exists after,
+      ((__return == -5) || (0 <= __return && __return < 128)) &&
+      semaphore_create_ic_effect(sg, val, before, __return, after) &&
+      os_inv(sg, after)
+*/
+#else
 /*@ With (sg : StableGlobalState) (before : VarGlobalState) X
     Require
       safeExec(LastSeen(before), abs_semaphore_create(sg, val), X) &&
@@ -77,9 +83,14 @@ int32 KSemaphoreCreate(uint16 val)
         safeExec(LastSeen(after), return(__return), X) &&
         OutsideCritical(sg, after))
 */
+#endif
 {
     ;
     /* KDEBUG_NOT_IN_INTERRUPT: TrustBase debug removal.
      * KERNEL_OBJECT_LIFECYCLE_CHECK_RET(-ERROR): empty because KERNEL_STATIC_OBJECTS is undefined. */
-    return _SemaphoreCreate(val);
+    return _SemaphoreCreate(val)
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ where (dataqueue_ic) */
+#endif
+;
 }

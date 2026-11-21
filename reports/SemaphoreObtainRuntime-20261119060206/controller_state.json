@@ -1,0 +1,727 @@
+{
+  "schema_version": 4,
+  "generation": 89,
+  "run_id": "SemaphoreObtainRuntime-20261119060206",
+  "case": "SemaphoreObtainRuntime",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos-verify",
+  "run_root": "/home/xinra/crtos-verify/verification_runs/SemaphoreObtainRuntime-20261119060206",
+  "report_root": "/home/xinra/crtos-verify/reports/SemaphoreObtainRuntime-20261119060206",
+  "target_files": {
+    "c_file": "annotated_C/src/kernel/semaphore/_SemaphoreObtain.c",
+    "formal_directory": "VC/semaphore",
+    "formal_case_lib": "VC/semaphore/SemaphoreObtainRuntime_lib.v",
+    "goal_file": "VC/semaphore/SemaphoreObtainRuntime_goal.v",
+    "proof_auto_file": "VC/semaphore/SemaphoreObtainRuntime_proof_auto.v",
+    "proof_manual_file": "VC/semaphore/SemaphoreObtainRuntime_proof_manual.v",
+    "goal_check_file": "VC/semaphore/SemaphoreObtainRuntime_goal_check.v",
+    "case_name": "SemaphoreObtainRuntime",
+    "active_case_theory": "CRTOS_Verify.VC.semaphore"
+  },
+  "problem_context": {
+    "problem_statement": "Verify current canonical _SemaphoreObtain semaphore_obtain_oc, reviewed Pop/Push runtime closure dq-pop-push-predicate/spec-20261118-r1. Current Tick conversion and LinklistSuspendSemaphore including semaphore_prio_ic derived entail now done/final-check; use exact caller contracts. Full id/msec errors, positive value decrement, immediate timeout, running task exstatus clear, priority suspend, finite delay failure rollback, infinite/finite scheduling and protected resumed exstatus read all retained. No blocking termination guarantee beyond current partial-correctness spec. IdGetObj/GetKTaskDescriptor/KTaskSetDelay/KTaskWakeup imported contracts are reused boundaries; IRQ/KTASK_ASSIGN/CONTAINER_OF approved model boundaries; do not copy bodies or silently trust new symbols. Real registered task call applicability still must prove. TrustBase .agents/skills/verify-an-os-function/references/TrustBase.md, whitelist001 applies original assertS observations only. Shared runtime header macro fix reviewed dq-runtime-align-decl-20261119-r1. Canonical body original reviewed repaired/adapted version, source_root readonly. User no proof time limit, justified modifications preapproved but real reviews/checks required; no arbitrary Require/Ensure or assumptions. Keep global organization, no trial/module_context/body analysis copies. Only assigned manual proof spans handwritten, native auto solver-trusted generation kept unchanged. Local controller checks/debug, no private source via Rocq MCP after prior approval rejection. Keep vo. Missing named continuation/library interfaces must request narrow design author+review, not invent unproved obligations. Complete full workflow/final-check."
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "_SemaphoreObtain"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "CriticalAreaLock::ordinary": "ordinary With (sg : StableGlobalState) (st1 : VarGlobalState) Require OutsideCritical(sg, st1) Ensure exists st_lock, Crtos_RTrans(st1, st_lock) && InsideCritical(sg, st_lock) * os_inv(sg, st_lock)",
+        "CriticalAreaUnLock::stable": "stable With (sg : StableGlobalState) (st1 st2 : VarGlobalState) Require Crtos_GTrans(st1, st2) && InsideCritical(sg, st1) * os_inv(sg, st2) Ensure OutsideCritical(sg, st2)",
+        "IdGetObj::dataqueue_ic_import": "dataqueue_ic_import With (sm: StableIdmanager) (m: VarIdmanager) Require 0 <= id && id < 65536 && store_idmanager(sm, m, manager) Ensure (manager == 0 && __return == 0 && store_idmanager(sm, m, manager)) || (manager != 0 && __return == 0 && idmanager_query(m, id) == false && store_idmanager(sm, m, manager)) || (manager != 0 && __return != 0 && idmanager_query(m, id) == true && store_idmanager_found(sm, m, manager, __return, id))",
+        "CONTAINER_OF_SEMAPHORE_ID::dataqueue_ic_import": "dataqueue_ic_import With (sem_ptr : Z) Require id_ptr == field_addr(sem_ptr, struct Semaphore, id) && emp Ensure __return == sem_ptr && id_ptr == &(__return->id) && emp",
+        "KTASK_ASSIGN::outside_critical": "outside_critical With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_ktask_assign, X) && OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(tt), X) && OutsideCritical(sg, after)",
+        "CalculateTickFromTimeMs::<default>": "Require emp Ensure __return == tick_from_time_ms(ms) && emp",
+        "GetKTaskDescriptor::inside_critical": "inside_critical With (running_task : Z) Require store_ptr(&(Assign.os_running_task), running_task) Ensure __return == running_task && store_ptr(&(Assign.os_running_task), running_task)",
+        "LinklistSuspend::semaphore_ic": "semaphore_ic With (sg : StableGlobalState) (before : VarGlobalState) (sem : Z) (waiting : list Z) Require list == semaphore_pending_head(sem) && semaphore_pending_nodes(sem, before, map(sched_link_node, waiting)) && linklist_suspend_admissible(task, flag, before) && os_inv(sg, before) Ensure exists after, linklist_suspend_step(sem, task, flag, before, __return, after) && os_inv(sg, after)",
+        "LinklistSuspend::semaphore_prio_ic": "semaphore_prio_ic <= semaphore_ic With (sg : StableGlobalState) (before : VarGlobalState) (sem : Z) (waiting : list Z) Require list == semaphore_pending_head(sem) && flag == 1 && semaphore_pending_nodes(sem, before, map(sched_link_node, waiting)) && linklist_suspend_admissible(task, flag, before) && os_inv(sg, before) Ensure __return == 0 && exists after, linklist_suspend_prio(sem, task, before, after) && os_inv(sg, after)",
+        "KTaskSetDelay::for_null_inactive": "for_null_inactive With (sg : StableGlobalState) (st_before : VarGlobalState) (desc : TaskDescriptorAbs) Require 0 <= ticks && ticks < KTICK_HALF_RANGE && st_before.os_tasks.task_desc_map(task) == Some(desc) && os_global_context(sg) && (desc.tdDelay == 0 || st_before.os_delays.delay_inactive_map(desc.tdDelay) != None) && delay_list_window(st_before.os_tick, st_before.os_delays.delay_active_nodes) && store_ptr(&(task->task_dync_sched_member.delay), desc.tdDelay) * delay_inv(sg, st_before) * tick_inv(sg, st_before) Ensure exists st_after delay_after, ktask_set_delay_step(task, desc, ticks, delay_after, st_before, __return, st_after) && store_ptr(&(task->task_dync_sched_member.delay), delay_after) * delay_inv(sg, st_after) * tick_inv(sg, st_after)",
+        "KTaskSetDelay::tick_out_of_bound": "tick_out_of_bound Require ticks >= KTICK_HALF_RANGE && emp Ensure __return == -10 && emp",
+        "KTaskWakeup::wakeup_by_id_ic": "wakeup_by_id_ic With (sg : StableGlobalState) (before : VarGlobalState) Require id < 65536 && os_inv(sg, before) Ensure exists (task : Z) (desc : TaskDescriptorAbs) (after : VarGlobalState), task != 0 && get_task_with_idnode_success(sg, before, id, task) && before.os_tasks.task_desc_map(task) == Some(desc) && ((desc.tdSchedMember.tsmStat != TSK_SUSPEND && __return == -1 && after == before) || (desc.tdSchedMember.tsmStat == TSK_SUSPEND && __return == 0 && ktask_wakeup_step(task, desc, before, after))) && os_inv(sg, after)",
+        "KTaskWakeup::detached_sched_null_delay": "detached_sched_null_delay <= wakeup_by_id_ic With (sg : StableGlobalState) (before : VarGlobalState) Require id < 65536 && ktask_wakeup_detached_null_condition(sg, before, id) && os_inv(sg, before) Ensure exists (task : Z) (desc : TaskDescriptorAbs) (after : VarGlobalState), task != 0 && get_task_with_idnode_success(sg, before, id, task) && before.os_tasks.task_desc_map(task) == Some(desc) && desc.tdDelay == 0 && ((desc.tdSchedMember.tsmStat != TSK_SUSPEND && __return == -1 && after == before) || (desc.tdSchedMember.tsmStat == TSK_SUSPEND && __return == 0 && ktask_wakeup_detached_null_step(task, desc, before, after))) && os_inv(sg, after)",
+        "KTaskWakeup::semaphore_pending_head_ic": "semaphore_pending_head_ic <= wakeup_by_id_ic With (sg : StableGlobalState) (before : VarGlobalState) (sem task : Z) (rest : list(DL_Node Z)) Require id < 65536 && get_task_with_idnode_success(sg, before, id, task) && semaphore_pending_nodes(sem, before, cons(sched_link_node(task), rest)) && os_inv(sg, before) Ensure exists (desc : TaskDescriptorAbs) (after : VarGlobalState), __return == 0 && task != 0 && before.os_tasks.task_desc_map(task) == Some(desc) && desc.tdSchedMember.tsmStat == TSK_SUSPEND && wakeup_semaphore_head(sem, task, desc, before, after) && semaphore_pending_nodes(sem, after, rest) && os_inv(sg, after)",
+        "_SemaphoreObtain::semaphore_obtain_oc": "semaphore_obtain_oc With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_obtain(sg, id, msec), X) && OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after)"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-11-18T22:02:06.695094Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/semaphore/SemaphoreObtainRuntime_goal_check.vo",
+    "base_artifact_count": 221,
+    "current_source_count": 4,
+    "elapsed_seconds": 2.647302,
+    "snapshot": "verification_runs/SemaphoreObtainRuntime-20261119060206/dependency_plan.json"
+  },
+  "attempts": {
+    "SemaphoreObtainRuntime-annotation-r1": {
+      "attempt_id": "SemaphoreObtainRuntime-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/SemaphoreObtainRuntime-20261119060206",
+      "claimed_action": "deliver:SemaphoreObtainRuntime-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T22:02:15.403046Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T22:02:23.230743Z",
+            "finished_at": "2026-11-18T22:28:53.922045Z",
+            "elapsed_seconds": 1590.691302
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T22:28:53.922023Z",
+      "finished_at": "2026-11-18T22:28:56.305827Z"
+    },
+    "SemaphoreObtainRuntime-vc-checking-r1": {
+      "attempt_id": "SemaphoreObtainRuntime-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "blocked",
+      "owner": "vc-checking/SemaphoreObtainRuntime-vc-checking-r1",
+      "claimed_action": "deliver:SemaphoreObtainRuntime-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T22:29:16.267478Z",
+      "source_annotation": "SemaphoreObtainRuntime-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T22:29:27.829963Z",
+            "finished_at": "2026-11-18T22:34:31.682000Z",
+            "elapsed_seconds": 303.852037
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T22:34:31.681977Z",
+      "blocker": {
+        "failure_class": "annotation-gap",
+        "kind": "wrong-call-precondition-branch",
+        "vcs": [
+          {
+            "name": "proof_of__SemaphoreObtain_partial_solve_wit_21_pure",
+            "parent": null,
+            "annotation_location": "KTaskSetDelay finite-wait call / for_null_inactive null-delay precondition branch"
+          }
+        ],
+        "message": "Both alternatives of the current top-level partial_solve_wit_21_pure require suspended.delay_inactive_map(0) <> None although this is the branch with sd.tdDelay = 0 and the imported for_null_inactive Require permits null OR inactive. A zero-delay task with empty inactive-map resources is the permitted null case; the current call VC incorrectly demands the other disjunct. Repair call-site annotation/spec selection to establish the actual null-or-inactive precondition, without assuming an object at zero or strengthening Require.",
+        "repair_boundary": "C annotation call precondition / equivalent caller-local contract selection"
+      },
+      "finished_at": "2026-11-18T22:34:31.709887Z"
+    },
+    "SemaphoreObtainRuntime-annotation-r2": {
+      "attempt_id": "SemaphoreObtainRuntime-annotation-r2",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/SemaphoreObtainRuntime-20261119060206",
+      "claimed_action": "deliver:SemaphoreObtainRuntime-annotation-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T22:34:56.905772Z",
+      "feedback_sources": [
+        {
+          "phase": "vc-checking",
+          "attempt_id": "SemaphoreObtainRuntime-vc-checking-r1",
+          "evidence": [
+            "/home/xinra/crtos-verify/reports/SemaphoreObtainRuntime-20261119060206/rounds/SemaphoreObtainRuntime-vc-checking-r1/agent_report.json",
+            "/home/xinra/crtos-verify/reports/SemaphoreObtainRuntime-20261119060206/rounds/SemaphoreObtainRuntime-vc-checking-r1/agent_output.md"
+          ]
+        }
+      ],
+      "reason": "vc-checking-annotation-gap",
+      "failed_vcs": [
+        {
+          "source_attempt": "SemaphoreObtainRuntime-vc-checking-r1",
+          "manual": "/home/xinra/crtos-verify/verification_runs/SemaphoreObtainRuntime-20261119060206/annotation_history/annotation-attempt1/after/VC/semaphore/SemaphoreObtainRuntime_proof_manual.v",
+          "message": "Both alternatives of the current top-level partial_solve_wit_21_pure require suspended.delay_inactive_map(0) <> None although this is the branch with sd.tdDelay = 0 and the imported for_null_inactive Require permits null OR inactive. A zero-delay task with empty inactive-map resources is the permitted null case; the current call VC incorrectly demands the other disjunct. Repair call-site annotation/spec selection to establish the actual null-or-inactive precondition, without assuming an object at zero or strengthening Require.",
+          "name": "proof_of__SemaphoreObtain_partial_solve_wit_21_pure",
+          "parent": null,
+          "annotation_location": "KTaskSetDelay finite-wait call / for_null_inactive null-delay precondition branch"
+        }
+      ],
+      "retry_reason": "vc-checking-annotation-gap",
+      "retry_previous_attempt": "SemaphoreObtainRuntime-vc-checking-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T22:35:04.454838Z",
+            "finished_at": "2026-11-18T22:39:33.227042Z",
+            "elapsed_seconds": 268.772204
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T22:39:33.227015Z",
+      "finished_at": "2026-11-18T22:39:36.024679Z"
+    },
+    "SemaphoreObtainRuntime-vc-checking-r2": {
+      "attempt_id": "SemaphoreObtainRuntime-vc-checking-r2",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/SemaphoreObtainRuntime-vc-checking-r2",
+      "claimed_action": "deliver:SemaphoreObtainRuntime-vc-checking-r2:1",
+      "repair_index": 1,
+      "created_at": "2026-11-18T22:39:55.295024Z",
+      "source_annotation": "SemaphoreObtainRuntime-annotation-r2",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T22:40:05.758323Z",
+            "finished_at": "2026-11-18T22:47:02.093384Z",
+            "elapsed_seconds": 416.335061
+          },
+          {
+            "started_at": "2026-11-18T22:47:10.287788Z",
+            "finished_at": "2026-11-18T22:48:11.232808Z",
+            "elapsed_seconds": 60.94502
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T22:48:11.232782Z",
+      "finished_at": "2026-11-18T22:48:11.277312Z"
+    },
+    "SemaphoreObtainRuntime-vc-proving-r1": {
+      "attempt_id": "SemaphoreObtainRuntime-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "running",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-18T22:48:11.277334Z",
+      "source_annotation": "SemaphoreObtainRuntime-annotation-r2",
+      "source_vc_checking": "SemaphoreObtainRuntime-vc-checking-r2",
+      "groups": {
+        "delay_frame_restoration": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r1:delay_frame_restoration",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r1:delay_frame_restoration:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T22:48:20.610593Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T22:48:52.199664Z",
+                "finished_at": "2026-11-18T23:38:15.781006Z",
+                "elapsed_seconds": 2963.581342
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T23:38:15.780977Z",
+          "finished_at": "2026-11-18T23:39:28.361348Z"
+        },
+        "semaphore_views": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r1:semaphore_views",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r1:semaphore_views:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T22:48:20.610611Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T22:48:52.456359Z",
+                "finished_at": "2026-11-18T23:26:22.593236Z",
+                "elapsed_seconds": 2250.136877
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T23:26:22.593206Z",
+          "finished_at": "2026-11-18T23:27:17.639893Z"
+        },
+        "task_prepare": {
+          "status": "blocked",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r1:task_prepare",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r1:task_prepare:1",
+          "repair_index": 1,
+          "created_at": "2026-11-18T22:48:20.610654Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T22:48:52.717435Z",
+                "finished_at": "2026-11-18T23:05:41.988494Z",
+                "elapsed_seconds": 1009.271059
+              },
+              {
+                "started_at": "2026-11-18T23:06:00.046818Z",
+                "finished_at": "2026-11-18T23:07:21.036756Z",
+                "elapsed_seconds": 80.989938
+              }
+            ]
+          },
+          "feedback": "blocker parent differs from the current manual: proof_of__SemaphoreObtain_entail_wit_8",
+          "returned_at": "2026-11-18T23:07:21.036722Z",
+          "blocker": {
+            "failure_class": "annotation-gap",
+            "kind": "missing-premise",
+            "vcs": [
+              {
+                "name": "proof_of__SemaphoreObtain_entail_wit_8",
+                "parent": null,
+                "annotation_location": "annotated_C/src/kernel/semaphore/_SemaphoreObtain.c:260-263"
+              }
+            ],
+            "message": "os_inv plus linklist_suspend_admissible supplies current-task registration and scheduling conditions, but does not imply the required assignRunningTask(os_assign held) <> 0. Task invariants intentionally omit base nonzero, assign_world_wf permits running=0, and QCP valid_object permits address zero. The carried universal future-delay condition also supplies no nonzero premise.",
+            "repair_boundary": "Main annotation/spec review of the actual waiting-path domain in semaphore_obtain_entry and the Assert at _SemaphoreObtain.c:260-263; regenerate affected VCs after justified repair. No worker-side assumption or global invariant change."
+          },
+          "finished_at": "2026-11-18T23:07:21.157950Z"
+        },
+        "delay_failure_restoration": {
+          "status": "blocked",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r1:delay_failure_restoration",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r1:delay_failure_restoration:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T22:48:20.610657Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T23:15:17.660252Z",
+                "finished_at": "2026-11-18T23:29:43.932212Z",
+                "elapsed_seconds": 866.27196
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T23:29:43.932184Z",
+          "blocker": {
+            "failure_class": "plan-defect",
+            "kind": "proof-mode-composition-mismatch",
+            "vcs": [
+              {
+                "name": "proof_of__SemaphoreObtain_entail_wit_12_1",
+                "parent": "_SemaphoreObtain_entail_wit_12_1",
+                "annotation_location": "annotated_C/src/kernel/semaphore/_SemaphoreObtain.c:338"
+              },
+              {
+                "name": "proof_of__SemaphoreObtain_entail_wit_12_2",
+                "parent": "_SemaphoreObtain_entail_wit_12_2",
+                "annotation_location": "annotated_C/src/kernel/semaphore/_SemaphoreObtain.c:338"
+              }
+            ],
+            "message": "All four generated split obligations are Qed and pass group-development. aggressive_pre_process extracts the os_global_context coq_prop wrapper from delay_frame, whereas split statements retain it; fully instantiated Goal_apply cannot compose the spatial or pure split with the normalized antecedent. Two top-level proofs remain Abort.",
+            "repair_boundary": "Replan these two top-level witnesses to whole LLM_pre_process mode through the controller; no annotation/specification/trusted/tactic change is required."
+          },
+          "finished_at": "2026-11-18T23:29:43.985117Z"
+        },
+        "rollback_identity": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r1:rollback_identity",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r1:rollback_identity:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T22:48:20.610659Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T23:28:45.228086Z",
+                "finished_at": "2026-11-18T23:36:25.355833Z",
+                "elapsed_seconds": 460.127747
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T23:36:25.355804Z",
+          "finished_at": "2026-11-18T23:37:10.863153Z"
+        },
+        "assignment_continuation": {
+          "status": "prepared",
+          "owner": null,
+          "claimed_action": null,
+          "repair_index": 0,
+          "created_at": "2026-11-18T22:48:20.610660Z"
+        },
+        "resume_status": {
+          "status": "prepared",
+          "owner": null,
+          "claimed_action": null,
+          "repair_index": 0,
+          "created_at": "2026-11-18T22:48:20.610662Z"
+        },
+        "time_and_representation": {
+          "status": "prepared",
+          "owner": null,
+          "claimed_action": null,
+          "repair_index": 0,
+          "created_at": "2026-11-18T22:48:20.610663Z"
+        },
+        "immediate_results": {
+          "status": "prepared",
+          "owner": null,
+          "claimed_action": null,
+          "repair_index": 0,
+          "created_at": "2026-11-18T22:48:20.610665Z"
+        },
+        "invalid_input_return": {
+          "status": "prepared",
+          "owner": null,
+          "claimed_action": null,
+          "repair_index": 0,
+          "created_at": "2026-11-18T22:48:20.610666Z"
+        }
+      }
+    },
+    "SemaphoreObtainRuntime-vc-checking-r3": {
+      "attempt_id": "SemaphoreObtainRuntime-vc-checking-r3",
+      "phase": "vc-checking",
+      "status": "blocked",
+      "owner": "vc-checking/SemaphoreObtainRuntime-vc-checking-r3",
+      "claimed_action": "deliver:SemaphoreObtainRuntime-vc-checking-r3:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T23:40:42.729433Z",
+      "feedback_sources": [
+        {
+          "phase": "group",
+          "attempt_id": "SemaphoreObtainRuntime-vc-proving-r1:task_prepare",
+          "evidence": [
+            "/home/xinra/crtos-verify/reports/SemaphoreObtainRuntime-20261119060206/rounds/SemaphoreObtainRuntime-vc-proving-r1/groups/group_02__task_prepare/group_worker_report.json",
+            "/home/xinra/crtos-verify/reports/SemaphoreObtainRuntime-20261119060206/rounds/SemaphoreObtainRuntime-vc-proving-r1/groups/group_02__task_prepare/group_worker_output.md"
+          ]
+        },
+        {
+          "phase": "group",
+          "attempt_id": "SemaphoreObtainRuntime-vc-proving-r1:delay_failure_restoration",
+          "evidence": [
+            "/home/xinra/crtos-verify/reports/SemaphoreObtainRuntime-20261119060206/rounds/SemaphoreObtainRuntime-vc-proving-r1/groups/group_03__delay_failure_restoration/group_worker_report.json",
+            "/home/xinra/crtos-verify/reports/SemaphoreObtainRuntime-20261119060206/rounds/SemaphoreObtainRuntime-vc-proving-r1/groups/group_03__delay_failure_restoration/group_worker_output.md"
+          ]
+        }
+      ],
+      "reason": "group-plan-defect",
+      "source_annotation": "SemaphoreObtainRuntime-annotation-r2",
+      "retry_reason": "group-plan-defect",
+      "retry_previous_attempt": "SemaphoreObtainRuntime-vc-proving-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T23:40:48.696283Z",
+            "finished_at": "2026-11-18T23:44:32.080551Z",
+            "elapsed_seconds": 223.384268
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T23:44:32.080524Z",
+      "blocker": {
+        "failure_class": "annotation-gap",
+        "kind": "missing-premise",
+        "vcs": [
+          {
+            "name": "proof_of__SemaphoreObtain_entail_wit_8",
+            "parent": null,
+            "annotation_location": "annotated_C/src/kernel/semaphore/_SemaphoreObtain.c:260-263 (pre-LinklistSuspend task focus Assert)"
+          }
+        ],
+        "message": "The unchanged whole VC requires assignRunningTask(os_assign held) <> 0 in both consequent alternatives before LinklistSuspend, but current os_inv, admissibility and the universal future-delay condition do not establish it. A registered task at base zero with wait_time = -1 is not excluded by these premises. The prior task_prepare annotation gap remains unresolved.",
+        "repair_boundary": "Return to annotation for a justified correction of the early task-nonzero Assert and regeneration. Keep public contracts, task invariant and trust unchanged unless independently justified; a later successful suspension fact cannot be assumed before the call."
+      },
+      "finished_at": "2026-11-18T23:44:32.113320Z"
+    },
+    "SemaphoreObtainRuntime-annotation-r3": {
+      "attempt_id": "SemaphoreObtainRuntime-annotation-r3",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/SemaphoreObtainRuntime-20261119060206",
+      "claimed_action": "deliver:SemaphoreObtainRuntime-annotation-r3:1",
+      "repair_index": 1,
+      "created_at": "2026-11-18T23:44:40.905938Z",
+      "feedback_sources": [
+        {
+          "phase": "vc-checking",
+          "attempt_id": "SemaphoreObtainRuntime-vc-checking-r3",
+          "evidence": [
+            "/home/xinra/crtos-verify/reports/SemaphoreObtainRuntime-20261119060206/rounds/SemaphoreObtainRuntime-vc-checking-r3/agent_report.json",
+            "/home/xinra/crtos-verify/reports/SemaphoreObtainRuntime-20261119060206/rounds/SemaphoreObtainRuntime-vc-checking-r3/agent_output.md"
+          ]
+        }
+      ],
+      "reason": "vc-checking-annotation-gap",
+      "failed_vcs": [
+        {
+          "source_attempt": "SemaphoreObtainRuntime-vc-checking-r3",
+          "manual": "/home/xinra/crtos-verify/verification_runs/SemaphoreObtainRuntime-20261119060206/annotation_history/annotation-attempt2/after/VC/semaphore/SemaphoreObtainRuntime_proof_manual.v",
+          "message": "The unchanged whole VC requires assignRunningTask(os_assign held) <> 0 in both consequent alternatives before LinklistSuspend, but current os_inv, admissibility and the universal future-delay condition do not establish it. A registered task at base zero with wait_time = -1 is not excluded by these premises. The prior task_prepare annotation gap remains unresolved.",
+          "name": "proof_of__SemaphoreObtain_entail_wit_8",
+          "parent": null,
+          "annotation_location": "annotated_C/src/kernel/semaphore/_SemaphoreObtain.c:260-263 (pre-LinklistSuspend task focus Assert)"
+        }
+      ],
+      "retry_reason": "vc-checking-annotation-gap",
+      "retry_previous_attempt": "SemaphoreObtainRuntime-vc-checking-r3",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T23:44:49.539524Z",
+            "finished_at": "2026-11-18T23:46:52.608874Z",
+            "elapsed_seconds": 123.06935
+          },
+          {
+            "started_at": "2026-11-18T23:47:11.360311Z",
+            "finished_at": "2026-11-18T23:48:32.078185Z",
+            "elapsed_seconds": 80.717874
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T23:48:32.078159Z",
+      "finished_at": "2026-11-18T23:48:34.312575Z"
+    },
+    "SemaphoreObtainRuntime-vc-checking-r4": {
+      "attempt_id": "SemaphoreObtainRuntime-vc-checking-r4",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/SemaphoreObtainRuntime-vc-checking-r4",
+      "claimed_action": "deliver:SemaphoreObtainRuntime-vc-checking-r4:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T23:48:53.577421Z",
+      "source_annotation": "SemaphoreObtainRuntime-annotation-r3",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T23:49:05.346150Z",
+            "finished_at": "2026-11-18T23:54:13.052126Z",
+            "elapsed_seconds": 307.705976
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T23:54:13.052098Z",
+      "finished_at": "2026-11-18T23:54:13.146740Z"
+    },
+    "SemaphoreObtainRuntime-vc-proving-r2": {
+      "attempt_id": "SemaphoreObtainRuntime-vc-proving-r2",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-18T23:54:13.146766Z",
+      "source_annotation": "SemaphoreObtainRuntime-annotation-r3",
+      "source_vc_checking": "SemaphoreObtainRuntime-vc-checking-r4",
+      "groups": {
+        "task_prepare": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r2:task_prepare",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r2:task_prepare:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T23:54:35.513407Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T23:54:42.637353Z",
+                "finished_at": "2026-11-19T00:06:41.954264Z",
+                "elapsed_seconds": 719.316911
+              }
+            ]
+          },
+          "returned_at": "2026-11-19T00:06:41.954236Z",
+          "finished_at": "2026-11-19T00:07:40.052561Z"
+        },
+        "delay_frame_restoration": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r2:delay_frame_restoration",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r2:delay_frame_restoration:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T23:54:35.513424Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-19T00:08:44.877862Z",
+                "finished_at": "2026-11-19T00:12:47.769944Z",
+                "elapsed_seconds": 242.892082
+              }
+            ]
+          },
+          "returned_at": "2026-11-19T00:12:47.769910Z",
+          "finished_at": "2026-11-19T00:14:23.316324Z"
+        },
+        "semaphore_views": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r2:semaphore_views",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r2:semaphore_views:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T23:54:35.513428Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-19T00:08:45.140195Z",
+                "finished_at": "2026-11-19T00:15:34.783927Z",
+                "elapsed_seconds": 409.643732
+              }
+            ]
+          },
+          "returned_at": "2026-11-19T00:15:34.783900Z",
+          "finished_at": "2026-11-19T00:16:17.984320Z"
+        },
+        "delay_failure_restoration": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r2:delay_failure_restoration",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r2:delay_failure_restoration:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T23:54:35.513431Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-19T00:08:45.418614Z",
+                "finished_at": "2026-11-19T00:17:15.141787Z",
+                "elapsed_seconds": 509.723173
+              }
+            ]
+          },
+          "returned_at": "2026-11-19T00:17:15.141759Z",
+          "finished_at": "2026-11-19T00:17:42.663837Z"
+        },
+        "rollback_identity": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r2:rollback_identity",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r2:rollback_identity:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T23:54:35.513432Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-19T00:14:58.234979Z",
+                "finished_at": "2026-11-19T00:19:18.006891Z",
+                "elapsed_seconds": 259.771912
+              }
+            ]
+          },
+          "returned_at": "2026-11-19T00:19:18.006865Z",
+          "finished_at": "2026-11-19T00:19:55.322890Z"
+        },
+        "schedule_continuation": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r2:schedule_continuation",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r2:schedule_continuation:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T23:54:35.513434Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-19T00:16:39.597588Z",
+                "finished_at": "2026-11-19T00:21:53.982993Z",
+                "elapsed_seconds": 314.385405
+              }
+            ]
+          },
+          "returned_at": "2026-11-19T00:21:53.982967Z",
+          "finished_at": "2026-11-19T00:22:25.245847Z"
+        },
+        "status_observation": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r2:status_observation",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r2:status_observation:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T23:54:35.513435Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-19T00:18:45.292697Z",
+                "finished_at": "2026-11-19T00:28:27.348342Z",
+                "elapsed_seconds": 582.055645
+              }
+            ]
+          },
+          "returned_at": "2026-11-19T00:28:27.348313Z",
+          "finished_at": "2026-11-19T00:29:24.064707Z"
+        },
+        "tick_and_scalar_views": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r2:tick_and_scalar_views",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r2:tick_and_scalar_views:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T23:54:35.513437Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-19T00:20:32.545621Z",
+                "finished_at": "2026-11-19T00:26:53.218550Z",
+                "elapsed_seconds": 380.672929
+              }
+            ]
+          },
+          "returned_at": "2026-11-19T00:26:53.218519Z",
+          "finished_at": "2026-11-19T00:27:20.507831Z"
+        },
+        "immediate_results": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r2:immediate_results",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r2:immediate_results:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T23:54:35.513438Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-19T00:24:41.682560Z",
+                "finished_at": "2026-11-19T00:33:50.445045Z",
+                "elapsed_seconds": 548.762485
+              }
+            ]
+          },
+          "returned_at": "2026-11-19T00:33:50.445010Z",
+          "finished_at": "2026-11-19T00:34:14.533078Z"
+        },
+        "invalid_inputs": {
+          "status": "accepted",
+          "owner": "group-worker/SemaphoreObtainRuntime-vc-proving-r2:invalid_inputs",
+          "claimed_action": "deliver:SemaphoreObtainRuntime-vc-proving-r2:invalid_inputs:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T23:54:35.513439Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-19T00:27:26.232628Z",
+                "finished_at": "2026-11-19T00:29:32.271969Z",
+                "elapsed_seconds": 126.039341
+              }
+            ]
+          },
+          "returned_at": "2026-11-19T00:29:32.271942Z",
+          "finished_at": "2026-11-19T00:29:57.232463Z"
+        }
+      },
+      "finished_at": "2026-11-19T00:37:06.220134Z"
+    }
+  },
+  "current": {
+    "annotation": "SemaphoreObtainRuntime-annotation-r3",
+    "vc-checking": "SemaphoreObtainRuntime-vc-checking-r4",
+    "vc-proving": "SemaphoreObtainRuntime-vc-proving-r2"
+  },
+  "annotation_owner": "annotation/SemaphoreObtainRuntime-20261119060206",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "SemaphoreObtainRuntime-vc-proving-r2"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-11-19T00:40:11.494669Z",
+    "files": [
+      "VC/semaphore/SemaphoreObtainRuntime_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-11-19T00:43:09.837454Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-11-18T22:02:06.695111Z",
+  "updated_at": "2026-11-19T00:43:09.856590Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-11-19T00:43:09.837435Z"
+}

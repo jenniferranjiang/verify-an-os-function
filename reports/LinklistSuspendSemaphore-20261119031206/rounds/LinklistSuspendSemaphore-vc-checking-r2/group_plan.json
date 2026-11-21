@@ -1,0 +1,188 @@
+{
+  "groups": [
+    {
+      "id": "spec_and_results",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistSuspend_semaphore_ic_entail_semaphore_prio_ic",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "P is the priority caller precondition with flag=1 and os_inv(sg,before). Choose the same sg,before,sem,waiting as the existential base-spec parameters. Frame the unchanged base precondition and introduce the universally quantified return-value wand on emp. On its antecedent, unpack after and linklist_suspend_step; the invalid-flag arm contradicts flag=1 and the valid arm forces retval=0. Rewrite flag=1 and select this same after to establish linklist_suspend_prio (its definition is the base step at flag1/result0), returning exactly the same os_inv. This proves the real derived-contract entailment without adding a function-body assumption."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_return_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistSuspend_return_wit_1_split_goal_1": "Pure split only: instantiate the valid-flag arm of linklist_suspend_step with flag=0, result=0 and the existing staged/ignored witnesses. The antecedent already supplies ktask_suspend_step and FIFO linklist_semaphore_enqueue. No new state is constructed and spatial os_inv remains handled by the generated split route."
+          }
+        },
+        {
+          "name": "proof_of_LinklistSuspend_return_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistSuspend_return_wit_2_split_goal_1": "Pure split only: select valid flag=1, result=0 in linklist_suspend_step; use the existing staged/ignored and after_prio together with their suspend/enqueue facts. The break-position insertion evidence is already established earlier; do not assume any global sorting."
+          }
+        },
+        {
+          "name": "proof_of_LinklistSuspend_return_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistSuspend_return_wit_3_split_goal_1": "Pure split only: same valid priority arm, now the end-of-list after_prio is the target state. Reuse the given ktask_suspend_step and linklist_semaphore_enqueue, with result zero; tail pointer and dispatch equations need no additional semantic strengthening."
+          }
+        },
+        {
+          "name": "proof_of_LinklistSuspend_return_wit_4",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistSuspend_return_wit_4_split_goal_1": "Pure split only: take the invalid-flag arm of linklist_suspend_step using both guards flag<>0 and flag<>1, result -10, and unchanged before state. No call to SuspendKTask or ownership transfer is required."
+          }
+        }
+      ]
+    },
+    {
+      "id": "suspend_identity",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistSuspend_entail_wit_1_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the spatial arm of this whole-goal disjunction. From linklist_suspend_admissible obtain the registered TaskDescriptor for task_pre; from task_inv/os_inv and its ID-manager/descriptor consistency obtain its uint16 ID and get_task_with_idnode_success. Split the relevant ID bucket/member and descriptor resource only as necessary to expose the nested id.id UShort cell; its valid typed store supplies 0<=id<65536. Construct the return wand by reassembling the same ID/descriptor map and untouched os_inv frame. All current/pre pointer facts already use task_pre and the branch flag; retain them, with the existential task_id chosen from the actual registered descriptor. Do not merely use a pure lookup as ownership. This instance has flag0."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_entail_wit_1_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Choose the spatial arm of this whole-goal disjunction. From linklist_suspend_admissible obtain the registered TaskDescriptor for task_pre; from task_inv/os_inv and its ID-manager/descriptor consistency obtain its uint16 ID and get_task_with_idnode_success. Split the relevant ID bucket/member and descriptor resource only as necessary to expose the nested id.id UShort cell; its valid typed store supplies 0<=id<65536. Construct the return wand by reassembling the same ID/descriptor map and untouched os_inv frame. All current/pre pointer facts already use task_pre and the branch flag; retain them, with the existential task_id chosen from the actual registered descriptor. Do not merely use a pure lookup as ownership. This instance has flag1."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_entail_wit_2_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use the spatial disjunct so os_inv(after) is available. The two get_task_with_idnode_success facts at the same before/id identify found=task_pre via the functional/unique ID-to-task relation in the registered task model. Unpack admissibility and ktask_suspend_step: a valid branch either keeps an already SUSPEND self-owned task unchanged or suspends the running READY/RUNNING task then unsets delay. In each case choose staged=after and ignored=retval, obtain the actual post descriptor with status SUSPEND and membership in sched_owned_tasks, and transport semaphore pending nodes and non-service facts using the step frame fields, including the unset-delay relation. Preserve after os_inv unchanged. The no-resource pure disjunct need not be used if it would discard model consistency. This instance retains flag1."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_entail_wit_2_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use the spatial disjunct so os_inv(after) is available. The two get_task_with_idnode_success facts at the same before/id identify found=task_pre via the functional/unique ID-to-task relation in the registered task model. Unpack admissibility and ktask_suspend_step: a valid branch either keeps an already SUSPEND self-owned task unchanged or suspends the running READY/RUNNING task then unsets delay. In each case choose staged=after and ignored=retval, obtain the actual post descriptor with status SUSPEND and membership in sched_owned_tasks, and transport semaphore pending nodes and non-service facts using the step frame fields, including the unset-delay relation. Preserve after os_inv unchanged. The no-resource pure disjunct need not be used if it would discard model consistency. This instance retains flag0."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_which_implies_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistSuspend_which_implies_wit_1_split_goal_spatial": "Introduce the pure equalities and substitute the actual DLL result/address before spatial normalization. P owns exactly the field or updated DLL and the wand consuming that same resource; reorder/associate sepcon and apply wand elimination to obtain Q. Keep the same sg/staged/after and all framed resources; no os_inv unfolding or new assumptions are needed."
+          }
+        }
+      ]
+    },
+    {
+      "id": "fifo_enqueue",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistSuspend_entail_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "From staged os_inv, pending_nodes at sem, descriptor status SUSPEND, self-owned task membership and ktask_not_os_service, isolate the selected Semaphore waiting DLL and the task self-loop sched_link. Use global scheduler-owner NoDup/spatial exclusion to show task is not already in any waiting chain and to remove it exactly once from sched_owned_tasks. Choose after as replace_sched_owned_tasks(remove task owned)(semaphore_enqueue_state sem new_waiting staged). Establish linklist_semaphore_enqueue with the actual sem/desc and chosen node list. Expose the DLL plus pure_suspend_sched_link payload plus occupy_dll_node, and build the wand accepting the updated DLL then rebuilding all os_inv components. Prove descriptor/ID/manager frames unchanged, scheduler ownership is a permutation moving task from owned to sem waiting, service restrictions persist, and Dataqueue associations are unchanged because semaphore address/ID/value remain unchanged. Preserve all other task/ready/delay/mutex/event/zombie/service/dataqueue resources; no new readiness/sorting premise. For FIFO take new_waiting=waiting++[task_pre]; derive canonical sched_link address/nonzero from the owned task cell and layout. The head anchor and dll_insert_before_dispatch equation follow from inserting before the sentinel and map_app; choose after_fifo as above."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_which_implies_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistSuspend_which_implies_wit_2_split_goal_spatial": "Introduce the pure equalities and substitute the actual DLL result/address before spatial normalization. P owns exactly the field or updated DLL and the wand consuming that same resource; reorder/associate sepcon and apply wand elimination to obtain Q. Keep the same sg/staged/after and all framed resources; no os_inv unfolding or new assumptions are needed."
+          }
+        }
+      ]
+    },
+    {
+      "id": "priority_enqueue",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistSuspend_entail_wit_7_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use prefix_done=waiting and suffix_done=[] after rewriting the loop decomposition; build linklist_priority_insert with prefix=map sched_link_node waiting, suffix=[], actual desc and Forall obtained from the quantified scanned-member premise. The end-of-list guard makes the non-head anchor implication vacuous and forces append new_nodes. From staged os_inv, pending_nodes at sem, descriptor status SUSPEND, self-owned task membership and ktask_not_os_service, isolate the selected Semaphore waiting DLL and the task self-loop sched_link. Use global scheduler-owner NoDup/spatial exclusion to show task is not already in any waiting chain and to remove it exactly once from sched_owned_tasks. Choose after as replace_sched_owned_tasks(remove task owned)(semaphore_enqueue_state sem new_waiting staged). Establish linklist_semaphore_enqueue with the actual sem/desc and chosen node list. Expose the DLL plus pure_suspend_sched_link payload plus occupy_dll_node, and build the wand accepting the updated DLL then rebuilding all os_inv components. Prove descriptor/ID/manager frames unchanged, scheduler ownership is a permutation moving task from owned to sem waiting, service restrictions persist, and Dataqueue associations are unchanged because semaphore address/ID/value remain unchanged. Preserve all other task/ready/delay/mutex/event/zombie/service/dataqueue resources; no new readiness/sorting premise. Use the first or normalized spatial disjunct; end suffix is already empty."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_entail_wit_7_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "The antecedent says node=head but also node=sched_link_of(first_task) for a member of the nonempty suffix. Extract the matching managed semaphore DLL from staged os_inv. Its sentinel is disjoint from every member node; derive contradiction (or duplicate field ownership) and close either whole-goal arm. Do not infer suffix=[] solely from the pointer equality without using spatial ownership."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_entail_wit_7_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "First consume the two priority cells and next cell with their saved wand to restore staged os_inv (using retval=current_task and address bridges; preserve the local list cell where present). Choose prefix_done=prefix_loop, suffix_done=current_task::rest_tasks and new_nodes=map sched_link_node(prefix_loop++task_pre::suffix_done). The loop prefix premise gives Forall of non-lower priorities; the strict break guard and lookup current_desc prove the first suffix item is strictly lower. Translate map/app/cons to the exact linklist_priority_insert relation and prove the before-anchor dispatch equation using node=current sched_link, node<>head and NoDup node addresses from the owned DLL. From staged os_inv, pending_nodes at sem, descriptor status SUSPEND, self-owned task membership and ktask_not_os_service, isolate the selected Semaphore waiting DLL and the task self-loop sched_link. Use global scheduler-owner NoDup/spatial exclusion to show task is not already in any waiting chain and to remove it exactly once from sched_owned_tasks. Choose after as replace_sched_owned_tasks(remove task owned)(semaphore_enqueue_state sem new_waiting staged). Establish linklist_semaphore_enqueue with the actual sem/desc and chosen node list. Expose the DLL plus pure_suspend_sched_link payload plus occupy_dll_node, and build the wand accepting the updated DLL then rebuilding all os_inv components. Prove descriptor/ID/manager frames unchanged, scheduler ownership is a permutation moving task from owned to sem waiting, service restrictions persist, and Dataqueue associations are unchanged because semaphore address/ID/value remain unchanged. Preserve all other task/ready/delay/mutex/event/zombie/service/dataqueue resources; no new readiness/sorting premise. This break has nonempty remaining rest; preserve its next-link resource when restoring the wand."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_entail_wit_7_4",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "First consume the two priority cells and next cell with their saved wand to restore staged os_inv (using retval=current_task and address bridges; preserve the local list cell where present). Choose prefix_done=prefix_loop, suffix_done=current_task::rest_tasks and new_nodes=map sched_link_node(prefix_loop++task_pre::suffix_done). The loop prefix premise gives Forall of non-lower priorities; the strict break guard and lookup current_desc prove the first suffix item is strictly lower. Translate map/app/cons to the exact linklist_priority_insert relation and prove the before-anchor dispatch equation using node=current sched_link, node<>head and NoDup node addresses from the owned DLL. From staged os_inv, pending_nodes at sem, descriptor status SUSPEND, self-owned task membership and ktask_not_os_service, isolate the selected Semaphore waiting DLL and the task self-loop sched_link. Use global scheduler-owner NoDup/spatial exclusion to show task is not already in any waiting chain and to remove it exactly once from sched_owned_tasks. Choose after as replace_sched_owned_tasks(remove task owned)(semaphore_enqueue_state sem new_waiting staged). Establish linklist_semaphore_enqueue with the actual sem/desc and chosen node list. Expose the DLL plus pure_suspend_sched_link payload plus occupy_dll_node, and build the wand accepting the updated DLL then rebuilding all os_inv components. Prove descriptor/ID/manager frames unchanged, scheduler ownership is a permutation moving task from owned to sem waiting, service restrictions persist, and Dataqueue associations are unchanged because semaphore address/ID/value remain unchanged. Preserve all other task/ready/delay/mutex/event/zombie/service/dataqueue resources; no new readiness/sorting premise. Here rest_tasks=[] and next_link=head; rewrite the explicit next_link=list_pre bridge, preserving the local list cell in the chosen arm. The break position is still before the current last task, not append."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_which_implies_wit_4",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistSuspend_which_implies_wit_4_split_goal_spatial": "Introduce the pure equalities and substitute the actual DLL result/address before spatial normalization. P owns exactly the field or updated DLL and the wand consuming that same resource; reorder/associate sepcon and apply wand elimination to obtain Q. Keep the same sg/staged/after and all framed resources; no os_inv unfolding or new assumptions are needed."
+          }
+        },
+        {
+          "name": "proof_of_LinklistSuspend_which_implies_wit_7",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistSuspend_which_implies_wit_7_split_goal_spatial": "Introduce the pure equalities and substitute the actual DLL result/address before spatial normalization. P owns exactly the field or updated DLL and the wand consuming that same resource; reorder/associate sepcon and apply wand elimination to obtain Q. Keep the same sg/staged/after and all framed resources; no os_inv unfolding or new assumptions are needed."
+          }
+        }
+      ]
+    },
+    {
+      "id": "loop_progress",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistSuspend_entail_wit_4_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "P owns head.next and its exact restoration wand plus the given staged/global pure facts. Eliminate the wand to restore os_inv. Choose prefix_loop=[] and suffix_loop=waiting; scanned-prefix property is vacuous and map/append identities are immediate. Select the branch matching the actual waiting shape and first_link equation. Preserve task lookup/status/self-owned/non-service and staged suspend/pending facts. Waiting is nil: take the first branch."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_entail_wit_4_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "P owns head.next and its exact restoration wand plus the given staged/global pure facts. Eliminate the wand to restore os_inv. Choose prefix_loop=[] and suffix_loop=waiting; scanned-prefix property is vacuous and map/append identities are immediate. Select the branch matching the actual waiting shape and first_link equation. Preserve task lookup/status/self-owned/non-service and staged suspend/pending facts. Waiting is first_task_2::rest_tasks_2: choose those witnesses and the second branch."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_entail_wit_6_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Normalize retval=current_task and the concrete sched-link address. Consume the two UChar priority cells and next Ptr cell with their precise wand to restore the identical staged os_inv, retaining any local list cell. Choose prefix_loop=old_prefix++[current_task], suffix_loop=rest_tasks; establish decomposition by app_assoc and extend the quantified prefix property using the actual current_desc lookup and the non-break <= guard. Select the nil/cons successor branch using the supplied rest/next_link shape. All before/staged/flag/ret facts are retained; no state mutation occurs in the loop. Rest is next_task::next_rest and next_link is its canonical sched_link: use the nonempty branch."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_entail_wit_6_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Normalize retval=current_task and the concrete sched-link address. Consume the two UChar priority cells and next Ptr cell with their precise wand to restore the identical staged os_inv, retaining any local list cell. Choose prefix_loop=old_prefix++[current_task], suffix_loop=rest_tasks; establish decomposition by app_assoc and extend the quantified prefix property using the actual current_desc lookup and the non-break <= guard. Select the nil/cons successor branch using the supplied rest/next_link shape. All before/staged/flag/ret facts are retained; no state mutation occurs in the loop. Rest is empty and next_link=list_pre: use the empty branch; explicitly rewrite the local list cell value via that bridge."
+        }
+      ]
+    },
+    {
+      "id": "loop_borrows",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistSuspend_entail_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "From staged os_inv and pending_nodes/decomposition locate the current member of the sem waiting DLL. Its pure_suspend_sched_link payload supplies an actual current task descriptor, lookup and alignment. Self-owned task_pre and waiting-member current_task are distinct by global scheduler ownership uniqueness; split the task descriptor map at both addresses and expose their UChar cur_prio fields without duplicate ownership. Split the DLL at the current node to expose node_next. Choose current_task=first_task, current_desc from the real map, rest_tasks=rest_tasks_2; split rest to choose either successor=head or successor=sched_link_of(next_task). Build the single wand consuming both priority fields and the next pointer and restoring the exact same staged os_inv. All prefix/comparison/decomposition facts are retained; distinguish pure member facts from spatial resource extraction."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_which_implies_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Locate the selected sem in os_inv using semaphore_pending_nodes, expose its pending store_dll, and inspect waiting nil/cons. The head.next field is head for empty, sched_link_of first_task for nonempty. Split that one Ptr field and construct the return wand by rebuilding the same DLL, Semaphore and global frame. Choose first_link and list witnesses from this actual list shape, not arbitrary pointers."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_which_implies_wit_5",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Unfold the owned waiting store_dll just enough to borrow its sentinel node_prev Ptr. Choose last_link=head for empty waiting, otherwise the canonical address of the last node. Derive the dll_insert_anchor and dll_insert_after_dispatch-at-last equation equals map sched_link_node(waiting++[task_pre]); use the existing new_nodes equality and sched_link_node definition. Build the field return wand retaining all DLL segments and payloads, so no node resource is lost."
+        },
+        {
+          "name": "proof_of_LinklistSuspend_which_implies_wit_6",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistSuspend_which_implies_wit_6_split_goal_spatial": "Introduce the pure equalities and substitute the actual DLL result/address before spatial normalization. P owns exactly the field or updated DLL and the wand consuming that same resource; reorder/associate sepcon and apply wand elimination to obtain Q. Keep the same sg/staged/after and all framed resources; no os_inv unfolding or new assumptions are needed."
+          }
+        }
+      ]
+    }
+  ]
+}

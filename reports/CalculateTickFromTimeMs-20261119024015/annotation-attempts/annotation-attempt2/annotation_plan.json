@@ -1,0 +1,92 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "CalculateTickFromTimeMs",
+      "meaning": "Return the unchanged reviewed 100Hz tick_from_time_ms result for the UInt input and preserve emp."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": [
+    {
+      "source": {
+        "attempt": "CalculateTickFromTimeMs-vc-proving-r1:arithmetic_returns",
+        "name": "proof_of_CalculateTickFromTimeMs_return_wit_1",
+        "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+      },
+      "current": [
+        "proof_of_CalculateTickFromTimeMs_return_wit_1"
+      ],
+      "old_gap": "Generated prelude lacked the existing project concrete assertion instance, so sac scope was unavailable before this unchanged obligation could elaborate.",
+      "change": "Import existing CRTOS_Verify.lib.common.CrtosRules from canonical C and regenerate; all obligation statements, premises/resources, witnesses and split mapping remain byte-identical after removing this import line.",
+      "result": "resolved"
+    },
+    {
+      "source": {
+        "attempt": "CalculateTickFromTimeMs-vc-proving-r1:arithmetic_returns",
+        "name": "proof_of_CalculateTickFromTimeMs_return_wit_2",
+        "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+      },
+      "current": [
+        "proof_of_CalculateTickFromTimeMs_return_wit_2"
+      ],
+      "old_gap": "Generated prelude lacked the existing project concrete assertion instance, so sac scope was unavailable before this unchanged obligation could elaborate.",
+      "change": "Import existing CRTOS_Verify.lib.common.CrtosRules from canonical C and regenerate; all obligation statements, premises/resources, witnesses and split mapping remain byte-identical after removing this import line.",
+      "result": "resolved"
+    },
+    {
+      "source": {
+        "attempt": "CalculateTickFromTimeMs-vc-proving-r1:arithmetic_returns",
+        "name": "proof_of_CalculateTickFromTimeMs_return_wit_3",
+        "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+      },
+      "current": [
+        "proof_of_CalculateTickFromTimeMs_return_wit_3"
+      ],
+      "old_gap": "Generated prelude lacked the existing project concrete assertion instance, so sac scope was unavailable before this unchanged obligation could elaborate.",
+      "change": "Import existing CRTOS_Verify.lib.common.CrtosRules from canonical C and regenerate; all obligation statements, premises/resources, witnesses and split mapping remain byte-identical after removing this import line.",
+      "result": "resolved"
+    },
+    {
+      "source": {
+        "attempt": "CalculateTickFromTimeMs-vc-proving-r1:arithmetic_returns",
+        "name": "proof_of_CalculateTickFromTimeMs_return_wit_4",
+        "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+      },
+      "current": [
+        "proof_of_CalculateTickFromTimeMs_return_wit_4"
+      ],
+      "old_gap": "Generated prelude lacked the existing project concrete assertion instance, so sac scope was unavailable before this unchanged obligation could elaborate.",
+      "change": "Import existing CRTOS_Verify.lib.common.CrtosRules from canonical C and regenerate; all obligation statements, premises/resources, witnesses and split mapping remain byte-identical after removing this import line.",
+      "result": "resolved"
+    },
+    {
+      "source": {
+        "attempt": "CalculateTickFromTimeMs-vc-proving-r1:range_views",
+        "name": "proof_of_CalculateTickFromTimeMs_which_implies_wit_1",
+        "annotation_location": "CalculateTickFromTimeMs canonical C formal imports / generated goal prelude"
+      },
+      "current": [
+        "proof_of_CalculateTickFromTimeMs_which_implies_wit_1"
+      ],
+      "old_gap": "Generated prelude lacked the existing project concrete assertion instance, so sac scope was unavailable before this unchanged obligation could elaborate.",
+      "change": "Import existing CRTOS_Verify.lib.common.CrtosRules from canonical C and regenerate; all obligation statements, premises/resources, witnesses and split mapping remain byte-identical after removing this import line.",
+      "result": "resolved"
+    },
+    {
+      "source": {
+        "attempt": "CalculateTickFromTimeMs-vc-proving-r1:range_views",
+        "name": "proof_of_CalculateTickFromTimeMs_which_implies_wit_2",
+        "annotation_location": "CalculateTickFromTimeMs canonical C formal imports / generated goal prelude"
+      },
+      "current": [
+        "proof_of_CalculateTickFromTimeMs_which_implies_wit_2"
+      ],
+      "old_gap": "Generated prelude lacked the existing project concrete assertion instance, so sac scope was unavailable before this unchanged obligation could elaborate.",
+      "change": "Import existing CRTOS_Verify.lib.common.CrtosRules from canonical C and regenerate; all obligation statements, premises/resources, witnesses and split mapping remain byte-identical after removing this import line.",
+      "result": "resolved"
+    }
+  ]
+}

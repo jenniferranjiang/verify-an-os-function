@@ -1,0 +1,9 @@
+# arithmetic_returns — annotation import gap
+
+The assigned proof candidate covers the four return splits and their aggressive dispatch top-level lemmas. It normalizes nonnegative C quotient/remainder, derives quotient and remainder bounds, removes 32-bit truncations and selects the matching tick_from_time_ms guard. This candidate has not yet been typechecked: controller group-development fails before reading its proofs.
+
+Exact diagnostic: generated `VC/common/CalculateTickFromTimeMs_goal.v`, line 3, `Local Open Scope sac.` reports `Scope sac is not declared.` The local tool record is `tool_calls.jsonl` in this report directory, and staged diagnostic target is `verification_runs/CalculateTickFromTimeMs-20261119024015/_coq_builds/CalculateTickFromTimeMs-vc-proving-r1/group_00/dev/VC/common/CalculateTickFromTimeMs_goal.v`. Command exits 1, status failed.
+
+Main independently identified that the scope declaration in CommonAssertion is inside a module type; VCPrelude exports the library but not this project's concrete assertion instance. The current pure TickConversion import supplies ZArith only. The necessary repair is a C annotation import of the existing canonical `CRTOS_Verify.lib.common.CrtosRules` instance, followed by normal workflow regeneration. This does not request a new predicate, assumption, or stronger spec. The group owner cannot repair generated preludes or canonical imports. No generated file, import/prelude, unassigned proof span, or global library was modified.
+
+All four assigned return VCs are blocked by the same prelude elaboration failure. The existing UInt premises have not been shown insufficient; this is a missing annotation import, not an arithmetic counterexample. The candidate is retained only as unverified proof work for a later round. No exact group-check was claimed.

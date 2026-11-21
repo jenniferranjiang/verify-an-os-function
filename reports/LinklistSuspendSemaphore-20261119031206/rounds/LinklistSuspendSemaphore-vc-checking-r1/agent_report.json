@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-import",
+    "vcs": [
+      {
+        "name": "proof_of_LinklistSuspend_semaphore_ic_entail_semaphore_prio_ic",
+        "parent": null,
+        "annotation_location": "LinklistSuspend canonical C formal imports / generated shallow FuncSig and Spec prelude"
+      }
+    ],
+    "message": "Current generated goal fails to elaborate LinklistSuspend_sig at line 1824: pointer/struct ctype syntax is unavailable because the prelude does not import existing SimpleCtypeNotations. Import the existing SimpleC.CoreLang.CTypes.SimpleCtypeNotations module from the canonical C formal prelude and regenerate; preserve the current CRTOS assertion instance and derived-spec obligation. No mathematical premise or new assumption is requested. Actual subsequent elaboration remains to be checked.",
+    "repair_boundary": "C annotation import"
+  }
+}

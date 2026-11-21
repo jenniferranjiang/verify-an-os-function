@@ -9,6 +9,8 @@ description: 验证 CRTOS 等非 SMP OS 的 C 函数与模块：设计并审阅 
 
 验证记录默认保存在工程的 `.docs/Report/<module>/<YYYY-MM-DD>-<目标函数>/` 中，以用户和项目约定为准。长期保留的设计说明解释本轮新增或修改的lib/spec/VC及spec中需要人重点审阅的内容，实验完成后也保留；验证结果整理为最终报告，源码缺陷记录单独保留。存放与清理规则见 [验证记录指南](references/reporting-guide.md)。
 
+接入已有验证工作及处理用户 `AGENTS.md` 时，遵循[工程适配说明](references/project-maintenance-guide.md#接入已有验证工程)：复用已有成果，保留已有 `AGENTS.md`；与 skill 要求冲突时，以用户规则为准并报告。
+
 ## 总流程
 
 用户要求验证一个函数时，任务同时包括完成该函数所属模块的 `lib` 设计。模块 `lib` 应依据该模块全部函数及对象生命周期，补齐模块状态、内存 predicate/invariant、共享接口，以及按资源归属所需的 OS 总状态和 `os_inv` 集成（判断条件见 [Predicate 指南第 7.4 节](references/predicate-lemma-design-guide.md#74-组合模块-predicate)）；已有定义直接复用。函数 spec 和 C 实现证明的范围仍按目标函数的调用闭包确定，不因此自动扩展为模块全部函数的实现证明。仅设计和审阅的任务也适用这一模块 `lib` 范围，但不要求提前完成引理或 C 实现证明。

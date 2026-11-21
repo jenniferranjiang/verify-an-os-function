@@ -1,0 +1,117 @@
+{
+  "groups": [
+    {
+      "id": "retire_object",
+      "estimated_difficulty": 5,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreDelete_entail_wit_3_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use LLM_pre_process on the whole goal; choose after = replace_semaphores (prefix ++ suffix) before. Preserve the entire non-semaphore frame, including dataqueue_inv. From idmanager_contains in the original derived 16-bucket manager and NoDup(map semaphore_id old), identify idnode_2 with the embedded IdNode of original. From the removed payload plus remaining management DLL, derive that no remaining semaphore has the removed base address: a same-base object would duplicate its UShort value ownership. Hence semaphore_unpublish base old = prefix ++ suffix. Prove idmanager_remove stable (semaphore_manager old) original.id = semaphore_manager (prefix ++ suffix), using old = prefix ++ original :: suffix, NoDup IDs and the fixed hoffset=16; reason pointwise about filtered buckets/replace_Znth. Empty pending removes no scheduler owners, so os_world_wf is preserved. Unfold dataqueue_inv and use quiescent for every map lookup: referenced semaphore IDs differ from the removed ID, so their existing witnesses remain; preserve the complete store_map. For the freed object combine removed self-linked management node, empty pending list, value/padding payload, returned ID=65535 and self-linked ID node. Derive alignment from store_semaphore; apply existing trusted field-layout facts, forget typed values and assemble all 32 bytes, including both padding intervals. Package the public delete effect using original as witness and normalized query ID. Keep helper facts local inside the assigned proof (case lib absent); do not assume any unpublish/manager/resource obligation."
+        }
+      ]
+    },
+    {
+      "id": "borrow_fields",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreDelete_which_implies_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreDelete_which_implies_wit_2_split_goal_spatial": "Borrow the empty pending DLL from the payload of original in the global management DLL. Substitute sem=original.addr and use In to split the list around original. Unfold os_inv/semaphore_inv/store_semaphore only as needed; pending_addrs=nil makes its mapped pending list empty. Keep all remaining cells and global modules, including dataqueue_inv, in the residual frame. Use separating implication introduction to construct the exact wand from the borrowed DLL back to the original os_inv; no ownership may be dropped."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreDelete_which_implies_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreDelete_which_implies_wit_3_split_goal_spatial": "The left spatial assertion is exactly pending_DLL ** wand pending_DLL os_inv at the same sem address. Apply wand elimination, preserving the equality bridge from the antecedent; there are no existential state changes."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreDelete_which_implies_wit_4",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreDelete_which_implies_wit_4_split_goal_spatial": "Borrow original.id UShort from the ID manager, not from store_semaphore (which owns no ID fields). In original old supplies its semaphore_idnode in the derived bucket. Expose store_idmanager/idbucket containing that node, split its DLL around the matching node, and expose store_idnode. The embedded/nested IdNode address is the same generated address; use the established layout/nested-field identities if necessary. Carry the remaining manager and every module into a wand restoring the same os_inv, using wand introduction. Do not change the value or state, and do not assume extra address uniqueness."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreDelete_which_implies_wit_5",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreDelete_which_implies_wit_5_split_goal_spatial": "Identify the generated UShort notation with store_ushort at the identical nested address. Apply wand elimination to UShort ** wand UShort os_inv. No list change or abstract transition is involved."
+          }
+        }
+      ]
+    },
+    {
+      "id": "select_object",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreDelete_which_implies_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreDelete_which_implies_wit_1_split_goal_1": "Unfold os_inv/semaphore_inv/store_idmanager sufficiently to extract id_map_bytes_ok or idbuckets_ok, whose idlist_ok contains NoDup. The derived semaphore_manager idlist reduces to map semaphore_id old. Frame all resources while deriving this pure fact.",
+            "proof_of__SemaphoreDelete_which_implies_wit_1_split_goal_2": "Extract semaphore_context from the semaphore_inv component of os_inv; no strengthening of global context is needed.",
+            "proof_of__SemaphoreDelete_which_implies_wit_1_split_goal_3": "Extract os_world_wf, the outer pure conjunct of os_inv.",
+            "proof_of__SemaphoreDelete_which_implies_wit_1_split_goal_spatial": "Unfold os_inv and semaphore_inv; use semaphore_context equalities to replace manager_ptr/list_head by k_sem_id_manager/k_sem_list. Reorder/cancel all unchanged resource components. The explicit right frame contains task/tick/delay/assign/prio/zombie/recycler/idle/mutex/event/isr/exstatus/dataqueue exactly once."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreDelete_entail_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use LLM_pre_process on a whole disjunct. Open store_idmanager_found to obtain the matching Build_IdNodeAbs in its bucket. With semaphore_context.hoffset=16 and the definition of semaphore_manager, use Znth/map/filter membership to find original in old with matching id and embedded address retval. Reconstitute store_idmanager using its found-to-manager lemma and preserve the complete frame. Extract original base nonzero from its management-DLL payload. Normalize semaphore_query_id id=id with 0<=id<=65535, apply quiescent to obtain original.pending=nil, then choose this original and reconstruct os_inv; all remaining local equalities are antecedent facts."
+        },
+        {
+          "name": "proof_of__SemaphoreDelete_entail_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use LLM_pre_process; In original old gives prefix/suffix with old=prefix++original::suffix. Extract NoDup IDs from manager metadata, query=true from membership in map semaphore_id, and context/world from os_inv. Substitute sem and id equalities already present. Instantiate prefix/suffix, rewrite map_app/map_cons and semaphore_link_node to the explicit Build_DL_Node, unfold only semaphore_inv, and cancel every global frame component including dataqueue_inv."
+        },
+        {
+          "name": "proof_of__SemaphoreDelete_partial_solve_wit_9_pure",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreDelete_partial_solve_wit_9_pure_split_goal_1": "The goal is the nonzero address of the named global k_sem_id_manager. Apply the existing QCP CNotation addr_of_LE_var_not_zero fact (same instantiated C notation module), which is already part of the frontend model, not a new axiom. The spatial resources can be framed; no missing base-field offset premise is needed. This split asks only pointer nonzero."
+          }
+        }
+      ]
+    },
+    {
+      "id": "early_returns",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of__SemaphoreDelete_entail_wit_3_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use LLM_pre_process. The antecedent simultaneously states query(old,delete_sem_id)=false and query(old,original.id)=true, with delete_sem_id=original.id. Substitute and discriminate; the purported absent-ID branch is impossible. No after witness or memory conversion is needed on this contradictory branch."
+        },
+        {
+          "name": "proof_of__SemaphoreDelete_return_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use LLM_pre_process. This is the imported IdGet null-manager branch: k_sem_id_manager=0 contradicts the existing QCP CNotation addr_of_LE_var_not_zero fact for the named global address. Derive False; do not claim a lookup-miss effect without query=false or introduce a new address axiom."
+        },
+        {
+          "name": "proof_of__SemaphoreDelete_return_wit_2",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Use LLM_pre_process. Choose after=before and reconstruct os_inv from its opened manager/DLL/global frame. Normalize query ID by the retained 0<=id<=65535 bounds. query(semaphore_manager old,id)=false means no member of map semaphore_id old equals id, hence every old semaphore has a different queried ID. Establish the valid-ID no-match branch of semaphore_delete_ic_effect; the full dataqueue and all other resources remain unchanged."
+        },
+        {
+          "name": "proof_of__SemaphoreDelete_return_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreDelete_return_wit_3_split_goal_1": "Unfold semaphore_delete_ic_effect and choose its invalid-ID/state-unchanged disjunct. Use id<0 and reflexive before=before; quiescent is not needed to force valid range."
+          }
+        },
+        {
+          "name": "proof_of__SemaphoreDelete_return_wit_4",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of__SemaphoreDelete_return_wit_4_split_goal_1": "Unfold semaphore_delete_ic_effect and choose invalid-ID/state-unchanged. The guard id>65535 directly proves the high-ID alternative and state equality is reflexive."
+          }
+        }
+      ]
+    }
+  ]
+}

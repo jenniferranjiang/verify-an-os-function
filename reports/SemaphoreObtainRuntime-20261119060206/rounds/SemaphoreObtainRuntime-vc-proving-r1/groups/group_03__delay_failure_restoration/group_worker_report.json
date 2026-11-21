@@ -1,0 +1,21 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "plan-defect",
+    "kind": "proof-mode-composition-mismatch",
+    "vcs": [
+      {
+        "name": "proof_of__SemaphoreObtain_entail_wit_12_1",
+        "parent": "_SemaphoreObtain_entail_wit_12_1",
+        "annotation_location": "annotated_C/src/kernel/semaphore/_SemaphoreObtain.c:338"
+      },
+      {
+        "name": "proof_of__SemaphoreObtain_entail_wit_12_2",
+        "parent": "_SemaphoreObtain_entail_wit_12_2",
+        "annotation_location": "annotated_C/src/kernel/semaphore/_SemaphoreObtain.c:338"
+      }
+    ],
+    "message": "All four generated split obligations are Qed and pass group-development. aggressive_pre_process extracts the os_global_context coq_prop wrapper from delay_frame, whereas split statements retain it; fully instantiated Goal_apply cannot compose the spatial or pure split with the normalized antecedent. Two top-level proofs remain Abort.",
+    "repair_boundary": "Replan these two top-level witnesses to whole LLM_pre_process mode through the controller; no annotation/specification/trusted/tactic change is required."
+  }
+}

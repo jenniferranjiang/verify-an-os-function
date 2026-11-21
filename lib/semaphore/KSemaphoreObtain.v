@@ -76,6 +76,24 @@ Definition semaphore_read_status (task : Z) : program VarGlobalState Z :=
   {| nrm := fun before r after => after = before /\ exists d,
        before.(os_tasks).(task_desc_map) task = Some d /\ r = d.(tdExstatus);
      err := fun _ => False |}.
+
+(** KTASK_ASSIGN正常返回后的原有后续：检查缓存任务仍存在，再在新的
+    临界区观察中只读exstatus。具名接口供调用注解连接continuation，
+    不要求调度前后状态相等，也不承诺调度终止。 *)
+Definition semaphore_obtain_after_assign (sg : StableGlobalState) (task : Z)
+    : program (VarGlobalState -> Prop) Z :=
+  assertS (semaphore_status_entry sg task) ;;
+  task_atomic_cmd (semaphore_read_status task).
+
+(** 锁内结果为inl时直接返回；inr保留待调度任务，先调度再读取恢复状态。
+    这是原abs_semaphore_obtain的结果分支提取，保持顺序及错误/等待路径。 *)
+Definition semaphore_obtain_after_locked (sg : StableGlobalState) (result : Z + Z)
+    : program (VarGlobalState -> Prop) Z :=
+  match result with
+  | inl r => ret r
+  | inr task => abs_ktask_assign ;; semaphore_obtain_after_assign sg task
+  end.
+
 Definition abs_semaphore_obtain (sg : StableGlobalState) (id msec : Z)
     : program (VarGlobalState -> Prop) Z :=
   if orb (semaphore_id_invalid id) (andb (Z.ltb msec 0) (negb (Z.eqb msec (-1))))
@@ -83,9 +101,4 @@ Definition abs_semaphore_obtain (sg : StableGlobalState) (id msec : Z)
   else let ticks := semaphore_wait_ticks msec in
     assertS (semaphore_obtain_entry sg id ticks) ;;
     result <- task_atomic_cmd (abs_semaphore_obtain_locked id ticks) ;;
-    match result with
-    | inl r => ret r
-    | inr task => abs_ktask_assign ;;
-        assertS (semaphore_status_entry sg task) ;;
-        task_atomic_cmd (semaphore_read_status task)
-    end.
+    semaphore_obtain_after_locked sg result.

@@ -1,0 +1,37 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "_SemaphoreCreate",
+      "meaning": "Under the held os_inv, return -5 with unchanged state or publish a fresh semaphore with value val at the minimum free ID and restore the complete invariant."
+    },
+    {
+      "name": "x_malloc",
+      "meaning": "Trusted allocation may fail; successful allocation returns aligned, bounded, privately owned bytes."
+    },
+    {
+      "name": "memset",
+      "meaning": "Trusted byte initialization returns the original pointer and owns the full repeated-byte array."
+    },
+    {
+      "name": "x_free",
+      "meaning": "Trusted reclamation consumes the complete private allocation."
+    },
+    {
+      "name": "IdInsertObj",
+      "meaning": "Imported ID contract either leaves the manager unchanged with private node storage or links the node at a minimum free ID."
+    },
+    {
+      "name": "InitDoubleLinkList",
+      "meaning": "Imported contract overwrites the two owned pointer fields with a self-linked node."
+    },
+    {
+      "name": "DoubleLinkListInsertNodeAfter",
+      "meaning": "Imported polymorphic DLL contract inserts the new node at the specified valid anchor."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

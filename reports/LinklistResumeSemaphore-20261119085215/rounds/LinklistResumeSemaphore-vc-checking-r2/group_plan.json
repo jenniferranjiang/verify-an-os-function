@@ -1,0 +1,53 @@
+{
+  "groups": [
+    {
+      "id": "pending_head_view",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResume_which_implies_wit_1",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "Destruct nonempty waiting into first::rest. From semaphore_pending_nodes choose the actual obj in os_semaphores and its address; injectivity of map sched_link_node (project getData) identifies its pending addresses with first::rest. Open only the semaphore component of os_inv, focus obj payload in the management DLL, then its nonempty pending DLL. Borrow head.node_next pointing to sched_link_of first. The head payload pure_suspend_sched_link supplies first task-map lookup; the owned published descriptor supplies addr_aligned first 4. Frame every other object/module, task descriptor and list remainder, and introduce the same-value wand rebuilding the exact original os_inv. Existentials are the actual head/tail, not arbitrary addresses. Preserve pending-node relation and list_pre=head equality. Both generated alternatives have the same shape; select the whole route."
+        },
+        {
+          "name": "proof_of_LinklistResume_which_implies_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistResume_which_implies_wit_2_split_goal_spatial": "Normalize store_ptr to the concrete pointer-cell assertion, then apply wand elimination to head.node_next and its exact same-value restoration wand. No state update or extra frame hypothesis is needed."
+          }
+        }
+      ]
+    },
+    {
+      "id": "task_id_view",
+      "estimated_difficulty": 4,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResume_which_implies_wit_3",
+          "proof_mode": "LLM_pre_process",
+          "strategy": "From the nonempty semaphore_pending_nodes witness and os_inv derive first is a published suspended task (pending DLL pure payload, or world ownership-domain). Obtain its descriptor lookup and focus store_published_task in task_inv.store_map. Choose task_id=desc.tdId. Use task_world_wf/registered ID correspondence plus the owned task ID manager to establish get_task_with_idnode_success at this same task; extract unsigned-short range 0<=task_id<65536 from the real id.id cell. Borrow that cell and construct a same-value wand restoring task ID/descriptor map and the exact original os_inv; retain all semaphore and other module resources. The pending relation is unchanged. Do not infer task identity from a bare numeric ID or strengthen the contract."
+        },
+        {
+          "name": "proof_of_LinklistResume_which_implies_wit_4",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistResume_which_implies_wit_4_split_goal_spatial": "Normalize store_ushort to the UShort cell and eliminate its same-value wand, recovering os_inv at the unchanged before state."
+          }
+        }
+      ]
+    },
+    {
+      "id": "resume_result",
+      "estimated_difficulty": 2,
+      "witnesses": [
+        {
+          "name": "proof_of_LinklistResume_return_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_LinklistResume_return_wit_1_split_goal_1": "Unfold semaphore_resume_head_effect. From the carried semaphore_pending_nodes before relation obtain obj membership/address and map sched_link_node pending=first-node::map rest; use getData/map projection to show pending=first::rest. Instantiate obj, first, rest, desc. The task-map lookup and wakeup_semaphore_head before after_2 are explicit callee postcondition premises, so all conjuncts follow. No spatial resource or new transition premise is required."
+          }
+        }
+      ]
+    }
+  ]
+}

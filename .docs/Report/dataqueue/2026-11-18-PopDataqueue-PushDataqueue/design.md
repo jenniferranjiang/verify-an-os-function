@@ -1,6 +1,6 @@
 # PopDataqueue / PushDataqueue 设计说明
 
-本轮是独立的新设计实验，仅完成 predicate、完整调用闭包规格及审阅。没有启动 verification-orchestrator、symbolic、VC 生成或 C 实现证明。审阅版本和结果见 [独立审阅记录](review.md)；本说明解释设计选择，不把正式文件的存在称为验证完成。
+本实验最初只完成设计，后经用户明确授权进入实现验证。当前 Pop 本体、Tick 转换、LinklistSuspend、_SemaphoreObtain 和 KSemaphoreObtain 已分别通过 QCP workflow/final-check；LinklistResume 也已通过 final-check，Abandon 与 Push 尚待推进，Pop 的完整调用闭包尚未完成。当前逐函数结论见[任务总表](../2026-11-16-InitDataqueue-DataqueuePeak/function-status.md)，设计审阅见[审阅记录](review.md)。下文保留设计依据，并在实现结果部分说明实际证明；历史阶段中的待证描述不覆盖后文已完成的结果。
 
 本轮新增 9 个 canonical 函数规格：PopDataqueue、PushDataqueue、KSemaphoreObtain、_SemaphoreObtain、KSemaphoreAbandon、_SemaphoreAbandon、LinklistResume、LinklistSuspend、CalculateTickFromTimeMs；另复用下文说明的已有契约边界。新增 8 个 Rocq 库文件提供对应语义及依赖适配。
 
@@ -78,3 +78,45 @@ Pop 的两个输出 cell 直接复用 Peak 的 `peak_data_slot` 与 `peak_length
 `lib/delay/KTaskSetDelayState.v` 移植 VRTOS 的 null/inactive delay 设置关系，保留当前 tick 加 ticks、按循环比较插入、malloc失败保持原态等行为，更新只涉及 task.delay、inactive map、active DLL。共同半区间窗口与 null/inactive 前提由 Obtain 等待路径的观察检查承担，不假称原 os_inv 自动蕴含。相关资源拆分与恢复仍是后续证明义务；本阶段只检查语义、类型及契约适用性。
 
 `lib/common/TickConversion.v` 与 `kernel/common/CalculateTickFromTimeMs.c` 是新写规格：当前源码先将 ms 扩宽为64位再乘100，而 VRTOS 旧契约先按32位回绕，不能保持语义地复用。当前uint32毫秒输入乘100不溢出uint64，结果保留最少1 tick和余数5至9才加1的原规则。此叶子无callee，也不拥有共享内存。
+
+## 实现阶段具名后续步骤
+
+QCP caller的safeExec后续条件需要可命名子程序，因此在KPop原文件提取三个保持定义等价的continuation：after_id连接Obtain，after_obtain处理失败或下一次锁内ring操作，after_ring连接Abandon并返回Empty/Item。它们仍使用原全局状态及结果类型，未改变任何路径或输出保证。独立审阅与新旧定义reflexivity检查见review.md的`dq-pop-continuations-20261119-r1`；后续VC负责证明实际调用与这些子程序的连接。
+
+## Pop本体实现结果
+
+`PopDataqueue-20261119021132`已done/final-check passed，14个manual顶层/9split全部Qed，34个原生auto结果。关键新增证明是非空Pop后count减少1、FIFO新区间映射旧尾部从而ready保持；以store_map更新同一地址且保留其余资源，证明C rem与Z.mod及16bit写回一致；用weakestpre为Obtain/Abandon构造callee后续并验证所有返回状态的caller桥。失败/Empty/Item三个结果与输出槽保证分别证明。无新信任或规格弱化，业务token与已批准修复输入一致。新Obtain/Abandon闭包仍待证明，本体完成不等于该闭包完成。
+
+## Tick转换实现结果
+
+`CalculateTickFromTimeMs-20261119024015`已done/final-check passed。6手工顶层/6split全Qed，15原生auto；已证明UInt输入范围来自实际cell、uint64乘除余与Z运算一致、商/余数/加一的32位截断恒等及四返回路径。注解用已有store_uinteger视图借还避免范围提取前cell被抵消，没有加强Require。r1实际证明检查暴露缺少具体断言实例：no_crules配置下VCPrelude并不导出Crtos_C_Rules；r2仅在C formal import现有CrtosRules，义务除import逐字节不变。通过controller coq-debug验证加载后才重新证明；未据推测删除缓存或修改适配层。最终业务token与初始源码一致，.vo保留。
+
+## LinklistSuspend Semaphore场景实现输入
+
+当前`VC/pendlist/LinklistSuspendSemaphore_*`对应同一canonical的基础`semaphore_ic`与前置声明中的派生`semaphore_prio_ic`；原两份合同文本保持，派生蕴含由独立VC及goal_check强制要求。两个源等价适配和共享header冲突修复见review.md。循环记录已扫描前缀及未扫描后缀，仅对前缀量化实际优先级比较关系，不假设整链排序；next和priority字段以wand借还，插入时将自持sched_link转交等待链并恢复全局os_inv。当前26manual顶层/9split尚在证明，46auto保持原生结果。第一轮实际加载失败于ctype记号缺失；第二轮仅补既有SimpleCtypeNotations import，实际controller coq-debug加载完整FuncSig/Spec/HoareFun通过，未换断言实例或改生成文件。
+
+LinklistSuspend当前实现结果：`LinklistSuspendSemaphore-20261119031206`已done/final-check passed。26个manual顶层/9split全部Qed，其中包含基础→优先级特化的合同蕴含；46原生auto结果。实际证明ID字段借还与挂起任务身份、FIFO/PRIO自持节点转交、scheduler owner置换、Task/service/world/Dataqueue保持、无排序前提的首次anchor选择，以及next/两priority字段的联合借还。最终函数体经独立预处理比较，恰与初始输入应用两项已审阅变换后的token一致。未新增库/假设或削弱合同；SuspendKTask和DLL继续是导入契约边界。四VC登记根构建，.vo已恢复。
+
+Obtain实现阶段为KTASK_ASSIGN的safeExec后续提取`semaphore_obtain_after_assign`及`semaphore_obtain_after_locked`两个具名子程序，仍使用同一抽象状态与原观察/原子操作。定义等价已独立检查，公开语义不变；用途是表达caller continuation桥，真正调用精化仍由VC证明。受影响Pop/Suspend证明需要按新依赖重编译，不改其目标或证明。
+
+## Obtain实现阶段VC组织
+
+当前`VC/semaphore/SemaphoreObtainRuntime_*`有36manual顶层/47split/107native auto，独立checker实际加载前导通过，分10组。有限等待用存在Assertion残余frame与针对真实ktask_set_delay_step的恢复蕴含连接局部callee资源和os_inv，该存在性/恢复性本身由entail_wit_11证明，绝非新增假设。零delay路径的调用前条件错分已用复用契约逻辑等价适配修复并独立审阅；3项包含全局纯事实的义务选择whole路线，其余按各自计划拆分，未使用的split不当作另增证明目标。当前仅开始实现证明，无Obtain final-check结论。
+
+Obtain非零注解缺口的只读分析结论：entail8在调用前过早要求current task<>0，TaskInv刻意不保证基址非零，不能从field store假推。未实施曾考虑的入口收紧/全局不变量修改。现有已done LinklistSuspend prio后条件经linklist_suspend_step有效flag分支中的ktask_suspend_step可推出task<>0，因此最小修复只移除调用前两处内部Assert的非零，调用后再由真实callee关系导出。登记/对齐/资源和未来Delay条件都保持，exstatus更新wand仍须证明；入口、Ensure、全局模型不改。此修复已在controller受控annotation r3落实；checking r4复查后，proving r2的task_prepare组6个顶层义务已实际证明并接纳，未通过修改入口取得结论。证明仍相对于既有reused SuspendKTask等边界，不外推为空任务上下文下真实C安全性。
+
+## Obtain当前实现结果
+
+`SemaphoreObtainRuntime-20261119060206`已done/final-check passed。36manual顶层和37所需split全部Qed；whole路线未采用的10split保持生成Abort，107native auto保持原生求解结果。真实证明包括：非法参数/缺失ID/正计数减一/零等待返回；任务exstatus清零及挂起后非零；存在残余frame的SetDelay资源借还；分配失败后任务身份唯一性和唤醒回滚；有限/无限等待到KTASK_ASSIGN的continuation；调度后原缓存任务的exstatus观察及完整os_inv归还。十组均经精确检查接纳，合并parent、final-apply和独立replay final-check通过。没有新增假设或收紧入口；不证明调度终止及导入callee函数体。
+
+原始data_queue/semaphore/linklist源码SHA仍与记录一致。最终Obtain经GCC预处理后的可执行tokens严格等于初始canonical加已审阅wakeup_id求值拆分，严格GCC语法检查通过；内部Assert、具名continuation和等价Delay前条件修复不改变执行行为。四VC已登记根构建，根make编译至goal_check退出0，全部.vo已恢复并保留。
+
+KSemaphoreObtain wrapper `KSemaphoreObtainRuntime-20261119084641`已done/final-check，3native auto、无manual义务。源码SHA与设计审阅记录完全相同，caller-local _SemaphoreObtain contract与已done canonical精确一致。所有工具阶段实际通过，四VC登记根构建，根make至goal_check退出0，.vo已保留。
+
+## LinklistResume实现输入与当前检查
+
+规范继续描述非空Semaphore等待链首唤醒的整体effect。VC局部which-implies只借还队首node_next与任务ID，调用前恢复os_inv。resume_task_id求值拆分和reused-spec导入整理分别独立审阅通过（见review.md），没有新增lib或模型。第一轮5manual顶层/3split/12auto；实际coq-debug发现C参数list遮蔽EX内Coq list类型，goal不能加载，故checking未通过。controller原生进入annotation r2修复，未手改generated files，不将该工具命名问题误报为真实源码缺陷或已完成证明。
+
+LinklistResume r2仅在内部which-implies两侧显式记录list==list@pre，生成binder变为list_pre；目标合同和body不变，受影响目标除binder名称逐字节一致。独立checking r2实际coq-debug加载通过，全部5顶层/3split分析通过；proving r1的pending_head_view已接纳（2顶层+1split Qed），task_id_view/resume_result继续中，当前仍无函数final-check。
+
+LinklistResume最终实现结果：`LinklistResumeSemaphore-20261119085215`已done/final-check。5手工顶层/3split全部Qed，12原生auto；证明从Semaphore管理DLL定位对象、非空pending首指针借还、全局覆盖与task登记/对齐、实际ID manager拥有的id.id读取及原os_inv归还、唤醒后的整体resume effect。未重复拥有descriptor/ID字段，未把导入KTaskWakeup本体或派生证明计入成果。三组精确检查、parent合并、final-apply和独立replay final-check均通过；最终可执行tokens仅含已审阅resume_task_id求值拆分。四VC登记根构建，根make至goal_check退出0，.vo已恢复并保留。

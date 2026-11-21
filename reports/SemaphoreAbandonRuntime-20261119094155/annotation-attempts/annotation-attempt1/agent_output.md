@@ -1,0 +1,13 @@
+# _SemaphoreAbandon annotation r1
+
+Signature: int32 _SemaphoreAbandon(int32 id)。Preconditions沿用冻结的safeExec(abs_semaphore_abandon)/OutsideCritical；不新增入口范围，非法ID由原代码拒绝。Output沿用同一X的safeExec ret与OutsideCritical，真实release语义及所有错误/唤醒/调度分支由既有KSemaphoreAbandon程序给出。
+
+本次只改canonical C注解：添加已有全局词汇的Extern及SimpleCtypeNotations；manager借还建立找到的original对象；pending DLL由os_inv借出给IsDoubleLinkListEmpty，再原样归还；计数字段分饱和原值归还及合法加一归还。后者恢复全部os_inv和Dataqueue frame仍是VC义务，未假定成立。非空路径显式使用已完成LinklistResume的同名完整合同，不改callee spec。
+
+分支合流处存在released/Y与forall状态的ret(tt)→ret(0) continuation桥。它把真实计数/唤醒effect连接到原抽象程序，存在性与GTrans仍须实现证明；并非添加入口假设。无需新具名continuation、case-lib或全局lib。所有C可执行tokens经GCC预处理比较与本attempt真实before完全一致；冻结目标spec逐字节一致。ID/DLL复用边界、IRQ/CONTAINER/KTASK_ASSIGN模型及TrustBase保持，未复制函数体、未新增trusted。没有循环。
+
+按照OS implementation-and-validation-guide允许的注解适配，使用必要which-implies/Given及call where。IsEmpty显式实例化{A=Z}；LinklistResume和KTASK_ASSIGN按当前具名合同实例化。
+
+第一次symexec在IsDoubleLinkListEmpty调用处报Need to Fill the Type Arguments，属于调用实例化缺口；补已有类型Z，不改变合同。第二次在Given Y处报Y不在exist列表：QCP析取拆分时false分支不引用Y而删去它；将真实forall continuation桥提出析取，使统一Y在两路均有明确含义，未改变目标spec。最终symexec exit0/status passed，生成16manual顶层、19split、68native auto。formal-case-lib-design exit0 passed/skipped（absent policy），不创建case lib；未手改任何generated文件或证明。
+
+后续独立checker应实际coq-debug加载生成前导，再完成全量VC分析；这里仅称annotation/symexec通过，不称Rocq实现证明完成。新manual义务覆盖manager缺失/命中、pending/value视图、错误返回、真实release到锁外调度及最终结果。全部路径保留。

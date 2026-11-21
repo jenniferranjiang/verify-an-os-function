@@ -58,22 +58,22 @@ void DeInitDataqueue(DataQueueType *p_queue)
       p_queue == p_queue@pre && lock == saved &&
       Crtos_RTrans(before, observed) &&
       safeExec(LastSeen(before), abs_deinit_dataqueue(sg, p_queue, q, refs), X) &&
-      semaphore_delete_quiescent(dq_sem_blank(q), observed) &&
-      semaphore_delete_quiescent(dq_sem_data(q), observed) &&
+      semaphore_delete_quiescent(q.dq_sem_blank, observed) &&
+      semaphore_delete_quiescent(q.dq_sem_data, observed) &&
       InsideCritical(sg, observed) * os_inv(sg, observed) * store_dataqueue(p_queue, q) */
     /*@ Given saved */
     /*@ store_dataqueue(p_queue, q)
         which implies p_queue != 0 && addr_aligned(p_queue, 4) &&
-          p_queue->front == dq_front(q) && p_queue->rear == dq_rear(q) &&
-          p_queue->max_len == dq_max_len(q) && p_queue->base == dq_base(q) &&
-          p_queue->sem_blank == dq_sem_blank(q) && p_queue->sem_data == dq_sem_data(q) &&
+          p_queue->front == q.dq_front && p_queue->rear == q.dq_rear &&
+          p_queue->max_len == q.dq_max_len && p_queue->base == q.dq_base &&
+          p_queue->sem_blank == q.dq_sem_blank && p_queue->sem_data == q.dq_sem_data &&
           CharArray::undef_full((char *)p_queue + 6, 2) *
-          ((dq_base(q) == 0 && emp) ||
-           (dq_base(q) != 0 && 0 < dq_max_len(q) &&
-            CharArray::undef_full(dq_base(q), dq_max_len(q) * 8))) */
+          ((q.dq_base == 0 && emp) ||
+           (q.dq_base != 0 && 0 < q.dq_max_len &&
+            CharArray::undef_full(q.dq_base, q.dq_max_len * 8))) */
 
     if (p_queue->base) {
-        x_free(p_queue->base) /*@ where n = dq_max_len(q) * 8 */;
+        x_free(p_queue->base) /*@ where n = q.dq_max_len * 8 */;
         p_queue->base = NONE;
     }
 
@@ -89,13 +89,13 @@ void DeInitDataqueue(DataQueueType *p_queue)
       p_queue == p_queue@pre && lock == saved && p_queue != 0 && addr_aligned(p_queue, 4) &&
       Crtos_RTrans(before, observed) &&
       safeExec(LastSeen(before), abs_deinit_dataqueue(sg, p_queue, q, refs), X) &&
-      ((0 <= dq_sem_blank(q) && semaphore_delete_ic_effect(dq_sem_blank(q), observed, middle)) ||
-       (dq_sem_blank(q) < 0 && middle == observed)) &&
-      semaphore_delete_quiescent(dq_sem_data(q), middle) &&
-      p_queue->front == dq_front(q) && p_queue->rear == dq_rear(q) &&
-      p_queue->max_len == dq_max_len(q) && p_queue->base == 0 &&
-      p_queue->sem_blank == dq_sem_blank(dataqueue_retired(q)) &&
-      p_queue->sem_data == dq_sem_data(q) &&
+      ((0 <= q.dq_sem_blank && semaphore_delete_ic_effect(q.dq_sem_blank, observed, middle)) ||
+       (q.dq_sem_blank < 0 && middle == observed)) &&
+      semaphore_delete_quiescent(q.dq_sem_data, middle) &&
+      p_queue->front == q.dq_front && p_queue->rear == q.dq_rear &&
+      p_queue->max_len == q.dq_max_len && p_queue->base == 0 &&
+      p_queue->sem_blank == (dataqueue_retired(q)).dq_sem_blank &&
+      p_queue->sem_data == q.dq_sem_data &&
       InsideCritical(sg, observed) * os_inv(sg, middle) *
       CharArray::undef_full((char *)p_queue + 6, 2) */
     /*@ Given middle */

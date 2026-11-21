@@ -1,0 +1,133 @@
+{
+  "schema_version": 4,
+  "generation": 11,
+  "run_id": "KSemaphoreCreateIC-20261118235343",
+  "case": "KSemaphoreCreateIC",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos-verify",
+  "run_root": "/home/xinra/crtos-verify/verification_runs/KSemaphoreCreateIC-20261118235343",
+  "report_root": "/home/xinra/crtos-verify/reports/KSemaphoreCreateIC-20261118235343",
+  "target_files": {
+    "c_file": "annotated_C/src/kernel/semaphore/KSemaphoreCreate.c",
+    "formal_directory": "VC/semaphore",
+    "formal_case_lib": "VC/semaphore/KSemaphoreCreateIC_lib.v",
+    "goal_file": "VC/semaphore/KSemaphoreCreateIC_goal.v",
+    "proof_auto_file": "VC/semaphore/KSemaphoreCreateIC_proof_auto.v",
+    "proof_manual_file": "VC/semaphore/KSemaphoreCreateIC_proof_manual.v",
+    "goal_check_file": "VC/semaphore/KSemaphoreCreateIC_goal_check.v",
+    "case_name": "KSemaphoreCreateIC",
+    "active_case_theory": "CRTOS_Verify.VC.semaphore"
+  },
+  "problem_context": {
+    "problem_statement": "Verify current canonical KSemaphoreCreate named dataqueue_ic, default CRTOS_DATAQUEUE_SEMAPHORE_IC=1; preserve optional OC path. Underlying _SemaphoreCreate IC has completed SemaphoreCreateIC-20261118193701 done/final-check. Reviewed canonical source/spec dq-semaphore-ic-canonical-20261118-r1, map/ABI global library unchanged. Only new IC wrapper implementation is target. TrustBase .agents/skills/verify-an-os-function/references/TrustBase.md. User removed cumulative proof time limit and preapproved justified fixes, actual checks still required. Native auto/manual division remains, no moving auto obligations. Generated auto solver-trusted placeholders allowed as native behavior; manual must prove required obligations. No source transmission to Rocq MCP following prior automatic approval rejection; use local controller checks/debug. Do not modify generated goal/auto/check or readonly crtoslatest. Keep .vo. Main updates reports and root build list after done."
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "KSemaphoreCreate"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "_SemaphoreCreate::dataqueue_ic": "dataqueue_ic With (sg : StableGlobalState) (before : VarGlobalState) Require os_inv(sg, before) Ensure exists after, ((__return == -5) || (0 <= __return && __return < 128)) && semaphore_create_ic_effect(sg, val, before, __return, after) && os_inv(sg, after)",
+        "_SemaphoreCreate::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_create(sg, val), X) && OutsideCritical(sg, before) Ensure (exists after, __return == -5 && safeExec(LastSeen(after), return(-5), X) && OutsideCritical(sg, after)) || (exists after, 0 <= __return && __return < 128 && safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after))",
+        "KSemaphoreCreate::dataqueue_ic": "dataqueue_ic With (sg : StableGlobalState) (before : VarGlobalState) Require os_inv(sg, before) Ensure exists after, ((__return == -5) || (0 <= __return && __return < 128)) && semaphore_create_ic_effect(sg, val, before, __return, after) && os_inv(sg, after)",
+        "KSemaphoreCreate::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_create(sg, val), X) && OutsideCritical(sg, before) Ensure (exists after, __return == -5 && safeExec(LastSeen(after), return(-5), X) && OutsideCritical(sg, after)) || (exists after, 0 <= __return && __return < 128 && safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after))"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-11-18T15:53:43.880277Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/semaphore/KSemaphoreCreateIC_goal_check.vo",
+    "base_artifact_count": 217,
+    "current_source_count": 4,
+    "elapsed_seconds": 3.640273,
+    "snapshot": "verification_runs/KSemaphoreCreateIC-20261118235343/dependency_plan.json"
+  },
+  "attempts": {
+    "KSemaphoreCreateIC-annotation-r1": {
+      "attempt_id": "KSemaphoreCreateIC-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/KSemaphoreCreateIC-20261118235343",
+      "claimed_action": "deliver:KSemaphoreCreateIC-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T15:53:48.417394Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T15:53:56.076072Z",
+            "finished_at": "2026-11-18T15:55:45.118595Z",
+            "elapsed_seconds": 109.042523
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T15:55:45.118570Z",
+      "finished_at": "2026-11-18T15:55:45.434996Z"
+    },
+    "KSemaphoreCreateIC-vc-proving-r1": {
+      "attempt_id": "KSemaphoreCreateIC-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-18T15:55:54.886133Z",
+      "source_annotation": "KSemaphoreCreateIC-annotation-r1",
+      "source_vc_checking": null,
+      "groups": {},
+      "finished_at": "2026-11-18T15:56:31.655685Z"
+    }
+  },
+  "current": {
+    "annotation": "KSemaphoreCreateIC-annotation-r1",
+    "vc-checking": null,
+    "vc-proving": "KSemaphoreCreateIC-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/KSemaphoreCreateIC-20261118235343",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "KSemaphoreCreateIC-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-11-18T15:57:49.249082Z",
+    "files": [
+      "VC/semaphore/KSemaphoreCreateIC_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-11-18T15:58:32.333978Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-11-18T15:53:43.880294Z",
+  "updated_at": "2026-11-18T15:58:32.343954Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-11-18T15:58:32.333961Z"
+}

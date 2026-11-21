@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "CalculateTickFromTimeMs",
+      "meaning": "Return the reviewed 100Hz tick_from_time_ms conversion for the actual UInt millisecond input and preserve emp."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

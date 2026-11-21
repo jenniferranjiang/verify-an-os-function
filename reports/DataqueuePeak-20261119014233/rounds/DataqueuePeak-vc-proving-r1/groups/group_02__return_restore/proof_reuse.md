@@ -1,0 +1,1 @@
+Read-only reference: canonical DeInitDataqueue manual atomic hs_eval/highstependret_derive pattern, adapted to Peak result and unchanged observed state. Spatial proof was constructed for the current queue/slot wands. Both were checked against current generated goals.

@@ -1,0 +1,1 @@
+Prior r1 range_views candidate supplied the typed/view proof structure. Current statements are unchanged except the repaired prelude import. Reused only assigned top-level Goal_apply dispatch; split bodies reduced to the required preprocessing because it closes the definitional equality in the loaded instance. Current exact group-check passed.

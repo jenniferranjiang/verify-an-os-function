@@ -1,0 +1,113 @@
+{
+  "run": {
+    "status": "completed",
+    "phase": "done",
+    "created_at": "2026-11-19T00:46:41.780361Z",
+    "finished_at": "2026-11-19T00:51:23.881429Z",
+    "elapsed_seconds": 282.101068
+  },
+  "commands": [
+    {
+      "phase": "annotation",
+      "command": "coq-check",
+      "calls": 1,
+      "elapsed_seconds": 0.01934
+    },
+    {
+      "phase": "annotation",
+      "command": "symexec",
+      "calls": 1,
+      "elapsed_seconds": 0.16098
+    },
+    {
+      "phase": "annotation",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 0.251166
+    },
+    {
+      "phase": "vc-proving",
+      "command": "dune-build",
+      "calls": 1,
+      "elapsed_seconds": 3.799286
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-preparing",
+      "calls": 1,
+      "elapsed_seconds": 0.0642
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-verify",
+      "calls": 1,
+      "elapsed_seconds": 25.009523
+    },
+    {
+      "phase": "final-check",
+      "command": "final-apply",
+      "calls": 1,
+      "elapsed_seconds": 25.487759
+    },
+    {
+      "phase": "done",
+      "command": "final-check",
+      "calls": 1,
+      "elapsed_seconds": 21.643223
+    }
+  ],
+  "annotation_attempts": [
+    {
+      "attempt_id": "KSemaphoreObtainRuntime-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-11-19T00:48:30.881453Z",
+          "finished_at": "2026-11-19T00:48:30.909291Z",
+          "elapsed_seconds": 0.01934
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-19T00:49:25.786313Z",
+          "finished_at": "2026-11-19T00:49:26.047192Z",
+          "elapsed_seconds": 0.251166
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-19T00:46:53.825980Z",
+          "finished_at": "2026-11-19T00:49:25.814986Z",
+          "elapsed_seconds": 151.989006
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-11-19T00:48:39.628005Z",
+          "finished_at": "2026-11-19T00:48:39.798650Z",
+          "elapsed_seconds": 0.16098
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "attempt_id": "KSemaphoreObtainRuntime-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "vc-proving-preparing",
+          "started_at": "2026-11-19T00:49:44.193060Z",
+          "finished_at": "2026-11-19T00:49:44.267588Z",
+          "elapsed_seconds": 0.0642
+        },
+        {
+          "name": "vc-proving-verify",
+          "started_at": "2026-11-19T00:49:52.461619Z",
+          "finished_at": "2026-11-19T00:50:16.874012Z",
+          "elapsed_seconds": 25.009523
+        }
+      ]
+    }
+  ]
+}

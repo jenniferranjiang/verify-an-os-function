@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "_SemaphoreObtain",
+      "meaning": "采用当前已证 semaphore_obtain_oc：按 abs_semaphore_obtain 精化并返回其结果及 OutsideCritical 资源。"
+    },
+    {
+      "name": "KSemaphoreObtain",
+      "meaning": "对 id/msec 原样转发并返回底层 Obtain 的状态，保持相同 safeExec 后续及 OutsideCritical 协议。"
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

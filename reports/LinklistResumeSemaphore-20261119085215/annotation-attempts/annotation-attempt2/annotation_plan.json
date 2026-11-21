@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "LinklistResume",
+      "meaning": "临界区内唤醒信号量非空等待链首任务，返回0并恢复完整os_inv；不写exstatus。"
+    },
+    {
+      "name": "CONTAINER_OF_TASK_SCHED",
+      "meaning": "由已知对齐任务的sched_link地址恢复容器地址，现有模型边界。"
+    },
+    {
+      "name": "KTaskWakeup",
+      "meaning": "复用已登记任务按ID唤醒及信号量队首特化契约，不复制函数体。"
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": [
+    {
+      "source": {
+        "attempt": "LinklistResumeSemaphore-vc-checking-r1",
+        "name": "proof_of_LinklistResume_which_implies_wit_1",
+        "annotation_location": "annotated_C/src/kernel/semaphore/LinklistResume.c:50-57 first which implies (pending head field borrow)"
+      },
+      "current": [
+        "proof_of_LinklistResume_which_implies_wit_1"
+      ],
+      "old_gap": "Generated (list : Z) binder shadows Coq list type in existential tail, causing actual goal load failure.",
+      "change": "Add unchanged C-parameter bridge list == list@pre on both sides of first local view. Native generator now uses list_pre binder; executable body and public/callee specs unchanged.",
+      "result": "resolved"
+    }
+  ]
+}

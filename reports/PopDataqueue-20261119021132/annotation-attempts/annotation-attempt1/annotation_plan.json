@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "CriticalAreaLock",
+      "meaning": "Existing IRQ boundary transfers one observed global invariant into the critical section."
+    },
+    {
+      "name": "CriticalAreaUnLock",
+      "meaning": "Returns the held invariant to the existing outside-critical protocol after a permitted state change."
+    },
+    {
+      "name": "KSemaphoreObtain",
+      "meaning": "Existing reviewed OC contract executes the obtain program with the original ID and timeout; body proof remains separate."
+    },
+    {
+      "name": "KSemaphoreAbandon",
+      "meaning": "Existing reviewed OC contract executes abandon; this caller intentionally ignores its return code."
+    },
+    {
+      "name": "PopDataqueue",
+      "meaning": "Frozen repaired-copy spec: obtain failure returns -1 with unchanged output cells; obtain success returns0 with either empty unchanged output or one dequeued head element."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

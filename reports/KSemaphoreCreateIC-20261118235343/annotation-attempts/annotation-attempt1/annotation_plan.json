@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "_SemaphoreCreate",
+      "meaning": "Imported proven IC callee returns failure -5 with unchanged state, or publishes a fresh initialized semaphore under the minimum free ID; restores os_inv."
+    },
+    {
+      "name": "KSemaphoreCreate",
+      "meaning": "Returns the same IC create result and resulting os_inv as its internal creation call, preserving the frozen semaphore_create_ic_effect."
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

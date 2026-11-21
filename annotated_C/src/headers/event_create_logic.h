@@ -56,4 +56,17 @@
  (store_ready_dll_tail_view : addr -> list (DL_Node Z) -> addr -> Assertion)
  (store_priority_ready_bucket : addr -> list (DL_Node Z) -> Assertion)
 */
+/*@ Extern Coq Record StableGlobalState {
+  os_event_stable: EventStable;
+} */
+/*@ Extern Coq Record VarGlobalState {
+  os_events: EventState;
+  os_tasks: TaskState;
+} */
+/*@ Extern Coq Record EventStable {
+  event_manager_stable: StableIdmanager;
+} */
+/*@ Extern Coq Record TaskState {
+  task_desc_map: addr -> option TaskDescriptorAbs;
+} */
 #endif

@@ -1,0 +1,113 @@
+{
+  "run": {
+    "status": "completed",
+    "phase": "done",
+    "created_at": "2026-11-18T17:37:10.607186Z",
+    "finished_at": "2026-11-18T17:41:47.536289Z",
+    "elapsed_seconds": 276.929103
+  },
+  "commands": [
+    {
+      "phase": "annotation",
+      "command": "coq-check",
+      "calls": 1,
+      "elapsed_seconds": 0.021502
+    },
+    {
+      "phase": "annotation",
+      "command": "symexec",
+      "calls": 1,
+      "elapsed_seconds": 0.203424
+    },
+    {
+      "phase": "annotation",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 0.278875
+    },
+    {
+      "phase": "vc-proving",
+      "command": "dune-build",
+      "calls": 1,
+      "elapsed_seconds": 5.536478
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-preparing",
+      "calls": 1,
+      "elapsed_seconds": 0.086616
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-verify",
+      "calls": 1,
+      "elapsed_seconds": 28.484657
+    },
+    {
+      "phase": "final-check",
+      "command": "final-apply",
+      "calls": 1,
+      "elapsed_seconds": 28.058725
+    },
+    {
+      "phase": "done",
+      "command": "final-check",
+      "calls": 1,
+      "elapsed_seconds": 21.168897
+    }
+  ],
+  "annotation_attempts": [
+    {
+      "attempt_id": "KSemaphoreDeleteIC-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-11-18T17:38:39.477013Z",
+          "finished_at": "2026-11-18T17:38:39.509967Z",
+          "elapsed_seconds": 0.021502
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T17:39:17.321663Z",
+          "finished_at": "2026-11-18T17:39:17.612110Z",
+          "elapsed_seconds": 0.278875
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T17:37:34.196149Z",
+          "finished_at": "2026-11-18T17:39:17.343384Z",
+          "elapsed_seconds": 103.147235
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-11-18T17:38:45.337440Z",
+          "finished_at": "2026-11-18T17:38:45.552674Z",
+          "elapsed_seconds": 0.203424
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "attempt_id": "KSemaphoreDeleteIC-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "vc-proving-preparing",
+          "started_at": "2026-11-18T17:39:38.866776Z",
+          "finished_at": "2026-11-18T17:39:38.974756Z",
+          "elapsed_seconds": 0.086616
+        },
+        {
+          "name": "vc-proving-verify",
+          "started_at": "2026-11-18T17:39:46.658737Z",
+          "finished_at": "2026-11-18T17:40:15.155772Z",
+          "elapsed_seconds": 28.484657
+        }
+      ]
+    }
+  ]
+}

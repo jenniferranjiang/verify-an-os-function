@@ -1,0 +1,6 @@
+From CRTOS_Verify.VC.pendlist Require Import LinklistSuspendSemaphore_goal LinklistSuspendSemaphore_proof_auto LinklistSuspendSemaphore_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include LinklistSuspendSemaphore_proof_auto.
+  Include LinklistSuspendSemaphore_proof_manual.
+End VC_Correctness.

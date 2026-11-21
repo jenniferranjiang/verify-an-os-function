@@ -1,0 +1,8 @@
+{
+  "run_id": "SemaphoreAbandonRuntime-20261119094155",
+  "status": "paused",
+  "pause_count": 1,
+  "updated_at": "2026-11-19T01:48:44.065998Z",
+  "reason": "User explicitly requested pause; VC-checking claimed but agent not started.",
+  "cancelled_action": "deliver:SemaphoreAbandonRuntime-vc-checking-r1:0"
+}

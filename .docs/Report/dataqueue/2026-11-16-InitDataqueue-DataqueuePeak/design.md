@@ -78,16 +78,16 @@ ID与DLL等已有接口以caller-local完整契约复用；其实现证明状态
 
 ## Semaphore IC设计的单canonical保存方式
 
-四份Semaphore全局canonical保留OC和具名IC两种接口。OC函数体已同步新源码的ID范围检查和当前配置下的宏归一，其余既有OC专用注解继续保留；IC契约和完整callee接口在同一文件前部。每个文件仍只有一个active定义，没有另存第二份IC权威body。原证明文件保留；涉及新行为的旧VC不能直接视为当前输入的已证结论。新增IC契约不表示原OC body无需适配即可满足它，也不表示IC实现已有证明。
+四份Semaphore canonical现在使用`CRTOS_DATAQUEUE_SEMAPHORE_IC`选择调用场景：默认1为本轮IC，显式0选择原OC。每份文件仍只有一份实际函数体；预处理选择对应callee声明、目标contract及注解。IC仅去除内部nested Lock/Unlock，其他语句、失败路径、Delete等待/调度分支保留；wrapper没有锁操作可去除。原OC contract、body及证明注解经基线归一比较完整保留。无需构造临时IC切片或增加第二个canonical body。
 
-| canonical | IC目标选择 | body适配 |
+| canonical | 默认IC目标 | 源码适配 |
 | --- | --- | --- |
-| `annotated_C/src/kernel/semaphore/KSemaphoreCreate.c` | `dataqueue_ic` | wrapper无锁操作，仅选择内部create的IC契约 |
-| `annotated_C/src/kernel/semaphore/_SemaphoreCreate.c` | `dataqueue_ic` | 去除一次内嵌Lock赋值及两处Unlock，其他行为保持 |
-| `annotated_C/src/kernel/semaphore/KSemaphoreDelete.c` | `dataqueue_cleanup_ic` | wrapper无锁操作，仅选择内部delete的IC契约 |
-| `annotated_C/src/kernel/semaphore/_SemaphoreDelete.c` | `dataqueue_cleanup_ic` | 去除一次内嵌Lock赋值及两处Unlock，其他行为保持 |
+| KSemaphoreCreate.c | dataqueue_ic | 仅选择内部Create的IC contract |
+| _SemaphoreCreate.c | dataqueue_ic | 批准规则下移除一次Lock及两次Unlock；业务语句保持 |
+| KSemaphoreDelete.c | dataqueue_cleanup_ic | 仅选择内部Delete的IC contract |
+| _SemaphoreDelete.c | dataqueue_cleanup_ic | 批准规则下移除一次Lock及两次Unlock；等待分支保留 |
 
-正式IC实现尚未启动。后续在获准实施时，从同一canonical构造工具管理的临时切片：选择前部IC目标契约和下表的完整callee声明；使用`dataqueue.h`及`dataqueue_semaphore_logic.h`词汇；提取唯一原body，按上表删除内嵌锁调用；去除body内OC专用的Assert/Given/which-implies/where等证明注解，再按IC契约补证明注解。保留负ID/查找失败/分配失败/空pending分支及所有真实字段操作；不可把不可达的ResumeAll或KTASK_ASSIGN分支直接删掉。OC专用顶层契约、旧callee选择及VC proof imports不混入该临时IC输入。旧OC路径继续使用原body及原注解，未被此记录重新声明为IC证明。
+主agent复跑检查：双模式均唯一active定义、gcc -m32通过；OC contract/body/注解与真实修改前基线一致；IC只出现批准锁移除差异；原crtoslatest经已记录debug/dispatch/model/ILP32归一后逐语句匹配；四IC target与Init/DeInit及wrapper调用接口一致。此为实现输入准备，不是C实现证明。共享lib/header/原有VC未改，待独立审阅后从内部函数开始串行QCP workflow。
 
 原global内部create以32字节常量分配/清零，trial设计以`sizeof(struct Semaphore)`表达；当前ILP32两者相等。原global内部delete在删除前缓存`sem->id.id`，trial设计直接传该字段；锁内两者无中间改写，保留原缓存即可。两wrapper仅有空调试语句/注释差别。以上是同一算法的已有切片表示差异，不是新的源码修复。
 
@@ -163,3 +163,17 @@ Push/Pop及Obtain/Abandon的完整新spec还未编写，后续需据新源码设
 ## Init实现证明完成
 
 InitDataqueue-20261117224043 controller完成第二轮9组63个顶层VC，parent整文件检查、final-apply、final-check均通过，phase=done。正式manual位于VC/dataqueue/InitDataqueue_proof_manual.v。关键证明以具体ABI为布局依据，构造字节/数组转换、map freshness与发布、三类失败cleanup续体、返回和安全目标。第二轮修复了memset局部which-implies遗漏对齐前提，未改公开Require或函数行为。结论相对于KSemaphoreCreate和DeInit的canonical contracts，不能代替这些callee实现证明；后续串行验证闭包。
+
+## SemaphoreCreateIC 实现证明用途
+
+当前`VC/semaphore/SemaphoreCreateIC_*`对应默认IC模式的`_SemaphoreCreate`，保留旧OC文件。9个手工顶层VC/13个split全部Qed，26个原生auto结果保留生成器形式；workflow done/final-check通过。关键证明直接在manual中完成零字节对象拆解、DLL重复所有权排除旧地址、失败时typed字段和padding重组32字节、成功时16桶ID manager与新集合一致，以及dataqueue引用的两个旧成员仍存在。没有为证明新增库接口、公理或强化规格；调用ID/DLL仍依已导入契约。KSemaphoreCreate wrapper已复用这个完成的IC合同，3个原生auto VC的完整workflow/final-check也已通过；canonical合同与函数体未改。
+
+## SemaphoreDeleteIC 实现证明用途
+
+`VC/semaphore/SemaphoreDeleteIC_*`证明默认IC quiescent清理合同，保留OC canonical模式与旧VC。14个manual顶层和11split全部Qed；35个原生auto沿用求解器信任。借出pending/ID字段使用wand，读后归还同一全局资源；ID由实际mod16桶成员性定位。退役证明利用所有权和NoDup排除剩余链含被删对象、证明16桶manager删除与抽象过滤一致，以quiescent排除queue引用被删ID并保持原map资源，最后回收全部32字节。需要人关注的范围仍是无等待者、无已发布queue引用的初始化回滚，不是通用并发销毁。无新信任假设或规格弱化。
+
+## Peak实现阶段资源视图
+
+当前`VC/dataqueue/DataqueuePeak_*`由canonical注解生成。锁后使用safeExec中的assertS观察条件与os_inv取得map登记对象，借出store_dataqueue并以wand保持精确归还关系；非空分支再借front数组槽，读取后归还同一队列。输出slot允许None或Some，成功覆写、失败保持。7个manual顶层/10split分为观察、槽视图、返回恢复三组，正在实际证明；库内focus_obligation仍只是待证Prop，未作为已证引理。公开spec与业务代码未改。
+
+Peak当前结果：`DataqueuePeak-20261119014233`已done/final-check passed；7个manual顶层/10split全部Qed，18原生auto沿用求解器信任。已实际证明assertS观察到map lookup、store_map拆借归还、非空FIFO首槽Some、store_array单槽wand、两分支原子精化和输出保留/覆写。未新增lib/import/假设或改冻结规格。最终预处理业务代码与审阅后初始输入一致。

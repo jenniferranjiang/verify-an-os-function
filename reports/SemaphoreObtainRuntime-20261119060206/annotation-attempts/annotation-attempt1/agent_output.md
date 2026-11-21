@@ -1,0 +1,15 @@
+# SemaphoreObtainRuntime annotation attempt 1
+
+Frozen semaphore_obtain_oc is byte-identical to intake: partial correctness of abs_semaphore_obtain, preserving OutsideCritical. No target Require/Ensure changes. No loops or case library. All annotations reuse global predicates.
+
+Ownership views now expose and restore manager lookup, semaphore value, running task pointer, task status, delay resources and rollback task ID. Branch assertions preserve the original continuation through missing-ID, positive decrement, immediate timeout, suspend/delay rollback and scheduled return paths. Valid msec is expressed by the integer-equivalent lower bound -1 <= msec. The finite-delay residual Assertion frame has an explicit quantified reconstruction obligation; its existence must be proved in generated manual VCs, and is not an assumed library lemma. The existing os_global_context conjunct wrapped around that frame accommodates QCP Assertion printing.
+
+The original entry observation's finite-delay admissibility is retained across exstatus clearing and suspension. Explicit call where bindings select existing full caller contracts; main approved this applicability mechanism under the OS workflow/user authorization. No new trusted symbol or axiom was added.
+
+Parent-reviewed revisions: dq-obtain-continuations-20261119-r1 extracts definitionally equal global continuations; dq-obtain-wakeup-id-evaluate-once-20261119-r1 reads task ID once into wakeup_id before the rollback call. Parent authors performed those library/source changes. This owner edited annotations only.
+
+Caller-local imports retain the full selected Wakeup wakeup_by_id_ic and LinklistSuspend semaphore_prio_ic; unused derived contracts were removed only from this caller, with main authorization, so their already-covered derivation is not regenerated. Wakeup base contract and target contract are byte-identical to intake. Suspend With/Require/Ensure matches canonical modulo whitespace. Delay contract changes only equivalent projection spelling st_before.os_tick to os_tick(st_before). Canonical imported contracts were not edited.
+
+Checks: formal-case-lib-design passed/skipped for absent library. Latest controller symexec exited 0, status passed, at 2026-11-18T22:26:14Z; generated 37 manual top-level witnesses with 49 split witnesses and 106 native auto lemmas. Generated files were changed only by symexec. GCC ILP32 syntax check passed. Preprocessed executable source equals intake after exactly the reviewed wakeup_id single-evaluation split. Final C SHA256: 762f30b23a83865a159d5e1ab807690985b48d351bcc8c6f899146529a93b5d1.
+
+This is annotation delivery, not implementation proof completion. Native auto/manual division is preserved. Main must run VC checking and proving, including actual Rocq elaboration of the existential Assertion frame and reconstruction derivable1. No failed VC feedback was supplied for this first attempt, so vc_comparisons is empty. No raw coqc or remote source payload was used by this owner.

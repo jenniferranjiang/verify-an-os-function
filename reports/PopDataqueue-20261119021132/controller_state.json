@@ -1,0 +1,228 @@
+{
+  "schema_version": 4,
+  "generation": 26,
+  "run_id": "PopDataqueue-20261119021132",
+  "case": "PopDataqueue",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos-verify",
+  "run_root": "/home/xinra/crtos-verify/verification_runs/PopDataqueue-20261119021132",
+  "report_root": "/home/xinra/crtos-verify/reports/PopDataqueue-20261119021132",
+  "target_files": {
+    "c_file": "annotated_C/src/kernel/dataqueue/PopDataqueue.c",
+    "formal_directory": "VC/dataqueue",
+    "formal_case_lib": "VC/dataqueue/PopDataqueue_lib.v",
+    "goal_file": "VC/dataqueue/PopDataqueue_goal.v",
+    "proof_auto_file": "VC/dataqueue/PopDataqueue_proof_auto.v",
+    "proof_manual_file": "VC/dataqueue/PopDataqueue_proof_manual.v",
+    "goal_check_file": "VC/dataqueue/PopDataqueue_goal_check.v",
+    "case_name": "PopDataqueue",
+    "active_case_theory": "CRTOS_Verify.VC.dataqueue"
+  },
+  "problem_context": {
+    "problem_statement": "Verify PopDataqueue current canonical approved repaired copy. Predicate/spec dq-pop-push-predicate-20261118-r1/dq-pop-push-spec-20261118-r1 independently reviewed; lib72 hash and nine canonical+headers match reviewed revisions including header guard update. DQ02/03 already approved and canonical: every timeout passed once, Obtain error returns -1 preserving output, no ring/Abandon; success retains empty branch with return0 and Abandon, nonempty reads front then increments modulo max_len; Abandon return ignored per source/spec. Protect shared semaphore ID reads using current approved source adaptation. Preserve full public spec/no weakening. New KSemaphoreObtain/Abandon and recursive non-imported closure still must be proved serially after Pop root before Push; not trusted, root conclusion conditional until completed. Existing ID/DLL/task helpers remain reused-contract boundaries. TrustBase .agents/skills/verify-an-os-function/references/TrustBase.md and ReviewWhitelist001 apply. Use one current dataqueue_map os_inv; no new model duplication/trial/module_context/body analysis copies. First stage Init/DeInit/Peak and four Semaphore Create/Delete IC now done/final-check; global libs unchanged. User no per-function time limit, preapproved justified fixes but actual reviews mandatory. Native auto/manual preserved, generated auto solver trust allowed, only assigned manual spans handwritten. No project source via Rocq MCP after previous approval rejection; use local controller checks/debug. Readonly crtoslatest, keep .vo. Existing Peak proof is useful for map/slot/wand/read outputs, but must verify actual Pop update/continuations."
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "PopDataqueue"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "CriticalAreaLock::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) Require OutsideCritical(sg, before) Ensure exists observed, Crtos_RTrans(before, observed) && InsideCritical(sg, observed) * os_inv(sg, observed)",
+        "CriticalAreaUnLock::<default>": "With (sg : StableGlobalState) (held after : VarGlobalState) Require Crtos_GTrans(held, after) && InsideCritical(sg, held) * os_inv(sg, after) Ensure OutsideCritical(sg, after)",
+        "KSemaphoreObtain::semaphore_obtain_oc": "semaphore_obtain_oc With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_obtain(sg, id, msec), X) && OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after)",
+        "KSemaphoreAbandon::semaphore_abandon_oc": "semaphore_abandon_oc With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_abandon(sg, id), X) && OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after)",
+        "PopDataqueue::<default>": "With (sg : StableGlobalState) (before : VarGlobalState) (old_data old_length : option Z) X Require safeExec(LastSeen(before), abs_pop_dataqueue(sg, p_queue, timeout), X) && OutsideCritical(sg, before) * peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length) Ensure (exists after, __return == -1 && safeExec(LastSeen(after), return(DqPopFailed), X) && OutsideCritical(sg, after) * peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length)) || (exists after, __return == 0 && safeExec(LastSeen(after), return(DqPopEmpty), X) && OutsideCritical(sg, after) * peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length)) || (exists after (e : DataqueueElem), __return == 0 && safeExec(LastSeen(after), return(DqPopItem(e)), X) && OutsideCritical(sg, after) * peak_data_slot(StartAddr, Some(dq_data(e))) * peak_length_slot(size, Some(dq_length(e))))"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-11-18T18:11:32.752467Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/dataqueue/PopDataqueue_goal_check.vo",
+    "base_artifact_count": 224,
+    "current_source_count": 4,
+    "elapsed_seconds": 3.211523,
+    "snapshot": "verification_runs/PopDataqueue-20261119021132/dependency_plan.json"
+  },
+  "attempts": {
+    "PopDataqueue-annotation-r1": {
+      "attempt_id": "PopDataqueue-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/PopDataqueue-20261119021132",
+      "claimed_action": "deliver:PopDataqueue-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T18:11:38.147606Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T18:11:43.562291Z",
+            "finished_at": "2026-11-18T18:19:49.009491Z",
+            "elapsed_seconds": 485.4472
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T18:19:49.009471Z",
+      "finished_at": "2026-11-18T18:19:49.881481Z"
+    },
+    "PopDataqueue-vc-checking-r1": {
+      "attempt_id": "PopDataqueue-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/PopDataqueue-vc-checking-r1",
+      "claimed_action": "deliver:PopDataqueue-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T18:19:58.719611Z",
+      "source_annotation": "PopDataqueue-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T18:20:06.794985Z",
+            "finished_at": "2026-11-18T18:23:12.424804Z",
+            "elapsed_seconds": 185.629819
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T18:23:12.424782Z",
+      "finished_at": "2026-11-18T18:23:12.464040Z"
+    },
+    "PopDataqueue-vc-proving-r1": {
+      "attempt_id": "PopDataqueue-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-18T18:23:12.464059Z",
+      "source_annotation": "PopDataqueue-annotation-r1",
+      "source_vc_checking": "PopDataqueue-vc-checking-r1",
+      "groups": {
+        "map_updates": {
+          "status": "accepted",
+          "owner": "group-worker/PopDataqueue-vc-proving-r1:map_updates",
+          "claimed_action": "deliver:PopDataqueue-vc-proving-r1:map_updates:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T18:23:19.429482Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T18:23:26.757130Z",
+                "finished_at": "2026-11-18T18:30:12.808210Z",
+                "elapsed_seconds": 406.05108
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T18:30:12.808178Z",
+          "finished_at": "2026-11-18T18:30:47.762718Z"
+        },
+        "call_transitions": {
+          "status": "accepted",
+          "owner": "group-worker/PopDataqueue-vc-proving-r1:call_transitions",
+          "claimed_action": "deliver:PopDataqueue-vc-proving-r1:call_transitions:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T18:23:19.429498Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T18:23:26.967799Z",
+                "finished_at": "2026-11-18T18:36:20.124419Z",
+                "elapsed_seconds": 773.15662
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T18:36:20.124398Z",
+          "finished_at": "2026-11-18T18:36:49.432264Z"
+        },
+        "resource_views": {
+          "status": "accepted",
+          "owner": "group-worker/PopDataqueue-vc-proving-r1:resource_views",
+          "claimed_action": "deliver:PopDataqueue-vc-proving-r1:resource_views:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T18:23:19.429501Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T18:23:27.193786Z",
+                "finished_at": "2026-11-18T18:27:16.775729Z",
+                "elapsed_seconds": 229.581943
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T18:27:16.775698Z",
+          "finished_at": "2026-11-18T18:27:48.455733Z"
+        },
+        "returns": {
+          "status": "accepted",
+          "owner": "group-worker/PopDataqueue-vc-proving-r1:returns",
+          "claimed_action": "deliver:PopDataqueue-vc-proving-r1:returns:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T18:23:19.429503Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T18:27:58.306856Z",
+                "finished_at": "2026-11-18T18:31:34.100767Z",
+                "elapsed_seconds": 215.793911
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T18:31:34.100740Z",
+          "finished_at": "2026-11-18T18:31:54.223396Z"
+        }
+      },
+      "finished_at": "2026-11-18T18:37:39.747072Z"
+    }
+  },
+  "current": {
+    "annotation": "PopDataqueue-annotation-r1",
+    "vc-checking": "PopDataqueue-vc-checking-r1",
+    "vc-proving": "PopDataqueue-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/PopDataqueue-20261119021132",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "PopDataqueue-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-11-18T18:38:35.120078Z",
+    "files": [
+      "VC/dataqueue/PopDataqueue_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-11-18T18:39:35.718963Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-11-18T18:11:32.752482Z",
+  "updated_at": "2026-11-18T18:39:35.728968Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-11-18T18:39:35.718947Z"
+}

@@ -1,0 +1,31 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-import",
+    "vcs": [
+      {
+        "name": "proof_of_CalculateTickFromTimeMs_return_wit_1",
+        "parent": null,
+        "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+      },
+      {
+        "name": "proof_of_CalculateTickFromTimeMs_return_wit_2",
+        "parent": null,
+        "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+      },
+      {
+        "name": "proof_of_CalculateTickFromTimeMs_return_wit_3",
+        "parent": null,
+        "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+      },
+      {
+        "name": "proof_of_CalculateTickFromTimeMs_return_wit_4",
+        "parent": null,
+        "annotation_location": "CalculateTickFromTimeMs.c formal import prelude"
+      }
+    ],
+    "message": "Generated goal prelude cannot elaborate Local Open Scope sac: VCPrelude and pure TickConversion do not export the project concrete assertion instance. All assigned return VCs fail before proof checking. Import existing CRTOS_Verify.lib.common.CrtosRules from C annotation and regenerate; no missing arithmetic premise or new assumption is requested.",
+    "repair_boundary": "C annotation import"
+  }
+}

@@ -504,7 +504,7 @@ QCP 当前接口可以让 `RTrans` 和 `GTrans` 指向同一个 `critical_STS_tr
 `OutsideCritical/InsideCritical` 说明共享内存资源处于临界区外还是已交给当前执行；`safeExec/LastSeen` 说明抽象命令
 允许哪些状态和结果。一个调用过程中负责进入和退出临界区的对外公开函数往往两组都需要。
 临界区内辅助函数是否在 spec 中使用 `os_inv`，以及如何保留 `InsideCritical`，见
-[Spec 指南第 4.4.3 节](spec-writing-guide.md#443-在临界区内更新)。
+[Spec 指南第 4.5.3 节](spec-writing-guide.md#453-在临界区内更新)。
 
 ## 7. 定义具体内存 Predicate
 

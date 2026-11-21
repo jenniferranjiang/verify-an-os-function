@@ -1,0 +1,342 @@
+{
+  "schema_version": 4,
+  "generation": 40,
+  "run_id": "LinklistSuspendSemaphore-20261119031206",
+  "case": "LinklistSuspendSemaphore",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos-verify",
+  "run_root": "/home/xinra/crtos-verify/verification_runs/LinklistSuspendSemaphore-20261119031206",
+  "report_root": "/home/xinra/crtos-verify/reports/LinklistSuspendSemaphore-20261119031206",
+  "target_files": {
+    "c_file": "annotated_C/src/kernel/pendlist/LinklistSuspend.c",
+    "formal_directory": "VC/pendlist",
+    "formal_case_lib": "VC/pendlist/LinklistSuspendSemaphore_lib.v",
+    "goal_file": "VC/pendlist/LinklistSuspendSemaphore_goal.v",
+    "proof_auto_file": "VC/pendlist/LinklistSuspendSemaphore_proof_auto.v",
+    "proof_manual_file": "VC/pendlist/LinklistSuspendSemaphore_proof_manual.v",
+    "goal_check_file": "VC/pendlist/LinklistSuspendSemaphore_goal_check.v",
+    "case_name": "LinklistSuspendSemaphore",
+    "active_case_theory": "CRTOS_Verify.VC.pendlist"
+  },
+  "problem_context": {
+    "problem_statement": "Verify canonical LinklistSuspend current semaphore_ic and derived semaphore_prio_ic contracts, Pop/Push runtime closure. dq-pop-push-predicate/spec-20261118-r1 reviewed; shared header macro repair dq-runtime-align-decl-20261119-r1 independently reviewed behavior/spec preserving. Original crtoslatest full branch shape retained: invalid flag returns before suspension, FIFO inserts before head, priority loop breaks at first strictly lower priority; no sorted-list premise, equal priority remain before new task. IC nested lock removal per approved source processing. SuspendKTask and DLL insertion specs imported reused boundaries (check actual applicability and canonical interfaces, don't prove/copy bodies). CONTAINER_OF model existing boundary. Need actual loop invariant/ownership, original source readonly. Use current global library, no duplicate state model/trial/module_context. TrustBase .agents/skills/verify-an-os-function/references/TrustBase.md, default whitelist as applicable. User no cumulative proof limit, preapproves justified fixes with actual reviews/checks mandatory. Native auto/manual preserved; generated auto solver trust allowed; only assigned manual spans handwritten. Local controller checks/debug, no private source via Rocq MCP after previous rejection. Keep vo. First stage, Pop root and Tick leaf done/final-check; this new contract body is not yet proved. Complete workflow/final-check. Existing Prop obligations are not lemmas."
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "LinklistSuspend"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "CONTAINER_OF_TASK_SCHED::<default>": "With task_ptr Require addr_aligned(task_ptr, ALIGN_SIZE) && sched_link_ptr == sched_link_of(task_ptr) && emp Ensure __return == task_ptr && addr_aligned(__return, ALIGN_SIZE) && sched_link_ptr == &(__return->task_dync_sched_member.sched_link)",
+        "SuspendKTask::suspend_by_id_ic": "suspend_by_id_ic With (sg : StableGlobalState) (before : VarGlobalState) Require id < 65536 && os_inv(sg, before) Ensure exists (found : Z) (after : VarGlobalState), found != 0 && get_task_with_idnode_success(sg, before, id, found) && ktask_suspend_step(found, before, __return, after) && os_inv(sg, after)",
+        "DoubleLinkListInsertNodeBefore::dispatch_case": "dispatch_case With {A} (storeA: Z -> A -> Assertion) (head: Z) (nodes: list(DL_Node A)) (inserted_data: A) Require dll_insert_anchor(head, nodes, linklist) && linklist_node != 0 && store_dll(storeA, head, nodes) * storeA(linklist_node, inserted_data) * occupy_dll_node(linklist_node) Ensure store_dll( storeA, head, dll_insert_before_dispatch( head, nodes, linklist, Build_DL_Node(inserted_data, linklist_node)))",
+        "DoubleLinkListInsertNodeAfter::dispatch_case": "dispatch_case With {A} (storeA: addr -> A -> Assertion) (nodes: list(DL_Node A)) (a: A) (head: addr) Require dll_insert_anchor(head, nodes, linklist) && linklist_node != 0 && store_dll(storeA, head, nodes) * storeA(linklist_node, a) * occupy_dll_node(linklist_node) Ensure store_dll( storeA, head, dll_insert_after_dispatch( head, nodes, linklist, Build_DL_Node(a, linklist_node)))",
+        "LinklistSuspend::semaphore_ic": "semaphore_ic With (sg : StableGlobalState) (before : VarGlobalState) (sem : Z) (waiting : list Z) Require list == semaphore_pending_head(sem) && semaphore_pending_nodes(sem, before, map(sched_link_node, waiting)) && linklist_suspend_admissible(task, flag, before) && os_inv(sg, before) Ensure exists after, linklist_suspend_step(sem, task, flag, before, __return, after) && os_inv(sg, after)",
+        "LinklistSuspend::semaphore_prio_ic": "semaphore_prio_ic <= semaphore_ic With (sg : StableGlobalState) (before : VarGlobalState) (sem : Z) (waiting : list Z) Require list == semaphore_pending_head(sem) && flag == 1 && semaphore_pending_nodes(sem, before, map(sched_link_node, waiting)) && linklist_suspend_admissible(task, flag, before) && os_inv(sg, before) Ensure __return == 0 && exists after, linklist_suspend_prio(sem, task, before, after) && os_inv(sg, after)"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-11-18T19:12:06.162078Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/pendlist/LinklistSuspendSemaphore_goal_check.vo",
+    "base_artifact_count": 221,
+    "current_source_count": 4,
+    "elapsed_seconds": 2.611742,
+    "snapshot": "verification_runs/LinklistSuspendSemaphore-20261119031206/dependency_plan.json"
+  },
+  "attempts": {
+    "LinklistSuspendSemaphore-annotation-r1": {
+      "attempt_id": "LinklistSuspendSemaphore-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/LinklistSuspendSemaphore-20261119031206",
+      "claimed_action": "deliver:LinklistSuspendSemaphore-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T19:12:12.335032Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T19:12:20.293588Z",
+            "finished_at": "2026-11-18T19:38:54.410626Z",
+            "elapsed_seconds": 1594.117038
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T19:38:54.410577Z",
+      "finished_at": "2026-11-18T19:38:55.661291Z"
+    },
+    "LinklistSuspendSemaphore-vc-checking-r1": {
+      "attempt_id": "LinklistSuspendSemaphore-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "blocked",
+      "owner": "vc-checking/LinklistSuspendSemaphore-vc-checking-r1",
+      "claimed_action": "deliver:LinklistSuspendSemaphore-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T19:39:11.817648Z",
+      "source_annotation": "LinklistSuspendSemaphore-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T19:39:27.690349Z",
+            "finished_at": "2026-11-18T19:41:40.652916Z",
+            "elapsed_seconds": 132.962567
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T19:41:40.652890Z",
+      "blocker": {
+        "failure_class": "annotation-gap",
+        "kind": "missing-import",
+        "vcs": [
+          {
+            "name": "proof_of_LinklistSuspend_semaphore_ic_entail_semaphore_prio_ic",
+            "parent": null,
+            "annotation_location": "LinklistSuspend canonical C formal imports / generated shallow FuncSig and Spec prelude"
+          }
+        ],
+        "message": "Current generated goal fails to elaborate LinklistSuspend_sig at line 1824: pointer/struct ctype syntax is unavailable because the prelude does not import existing SimpleCtypeNotations. Import the existing SimpleC.CoreLang.CTypes.SimpleCtypeNotations module from the canonical C formal prelude and regenerate; preserve the current CRTOS assertion instance and derived-spec obligation. No mathematical premise or new assumption is requested. Actual subsequent elaboration remains to be checked.",
+        "repair_boundary": "C annotation import"
+      },
+      "finished_at": "2026-11-18T19:41:40.670569Z"
+    },
+    "LinklistSuspendSemaphore-annotation-r2": {
+      "attempt_id": "LinklistSuspendSemaphore-annotation-r2",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/LinklistSuspendSemaphore-20261119031206",
+      "claimed_action": "deliver:LinklistSuspendSemaphore-annotation-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T19:41:56.769455Z",
+      "feedback_sources": [
+        {
+          "phase": "vc-checking",
+          "attempt_id": "LinklistSuspendSemaphore-vc-checking-r1",
+          "evidence": [
+            "/home/xinra/crtos-verify/reports/LinklistSuspendSemaphore-20261119031206/rounds/LinklistSuspendSemaphore-vc-checking-r1/agent_report.json",
+            "/home/xinra/crtos-verify/reports/LinklistSuspendSemaphore-20261119031206/rounds/LinklistSuspendSemaphore-vc-checking-r1/agent_output.md"
+          ]
+        }
+      ],
+      "reason": "vc-checking-annotation-gap",
+      "failed_vcs": [
+        {
+          "source_attempt": "LinklistSuspendSemaphore-vc-checking-r1",
+          "manual": "/home/xinra/crtos-verify/verification_runs/LinklistSuspendSemaphore-20261119031206/annotation_history/annotation-attempt1/after/VC/pendlist/LinklistSuspendSemaphore_proof_manual.v",
+          "message": "Current generated goal fails to elaborate LinklistSuspend_sig at line 1824: pointer/struct ctype syntax is unavailable because the prelude does not import existing SimpleCtypeNotations. Import the existing SimpleC.CoreLang.CTypes.SimpleCtypeNotations module from the canonical C formal prelude and regenerate; preserve the current CRTOS assertion instance and derived-spec obligation. No mathematical premise or new assumption is requested. Actual subsequent elaboration remains to be checked.",
+          "name": "proof_of_LinklistSuspend_semaphore_ic_entail_semaphore_prio_ic",
+          "parent": null,
+          "annotation_location": "LinklistSuspend canonical C formal imports / generated shallow FuncSig and Spec prelude"
+        }
+      ],
+      "retry_reason": "vc-checking-annotation-gap",
+      "retry_previous_attempt": "LinklistSuspendSemaphore-vc-checking-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T19:42:03.291859Z",
+            "finished_at": "2026-11-18T19:44:03.640764Z",
+            "elapsed_seconds": 120.348905
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T19:44:03.640738Z",
+      "finished_at": "2026-11-18T19:44:04.921434Z"
+    },
+    "LinklistSuspendSemaphore-vc-checking-r2": {
+      "attempt_id": "LinklistSuspendSemaphore-vc-checking-r2",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/LinklistSuspendSemaphore-vc-checking-r2",
+      "claimed_action": "deliver:LinklistSuspendSemaphore-vc-checking-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-11-18T19:44:21.548451Z",
+      "source_annotation": "LinklistSuspendSemaphore-annotation-r2",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-18T19:44:32.654706Z",
+            "finished_at": "2026-11-18T19:50:03.964107Z",
+            "elapsed_seconds": 331.309401
+          }
+        ]
+      },
+      "returned_at": "2026-11-18T19:50:03.964086Z",
+      "finished_at": "2026-11-18T19:50:04.008233Z"
+    },
+    "LinklistSuspendSemaphore-vc-proving-r1": {
+      "attempt_id": "LinklistSuspendSemaphore-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-18T19:50:04.008251Z",
+      "source_annotation": "LinklistSuspendSemaphore-annotation-r2",
+      "source_vc_checking": "LinklistSuspendSemaphore-vc-checking-r2",
+      "groups": {
+        "spec_and_results": {
+          "status": "accepted",
+          "owner": "group-worker/LinklistSuspendSemaphore-vc-proving-r1:spec_and_results",
+          "claimed_action": "deliver:LinklistSuspendSemaphore-vc-proving-r1:spec_and_results:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T19:50:09.587964Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T19:50:18.511189Z",
+                "finished_at": "2026-11-18T19:57:37.384440Z",
+                "elapsed_seconds": 438.873251
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T19:57:37.384414Z",
+          "finished_at": "2026-11-18T19:57:59.811995Z"
+        },
+        "suspend_identity": {
+          "status": "accepted",
+          "owner": "group-worker/LinklistSuspendSemaphore-vc-proving-r1:suspend_identity",
+          "claimed_action": "deliver:LinklistSuspendSemaphore-vc-proving-r1:suspend_identity:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T19:50:09.587980Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T19:58:28.119994Z",
+                "finished_at": "2026-11-18T20:24:58.757213Z",
+                "elapsed_seconds": 1590.637219
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T20:24:58.756623Z",
+          "finished_at": "2026-11-18T20:26:06.852714Z"
+        },
+        "fifo_enqueue": {
+          "status": "accepted",
+          "owner": "group-worker/LinklistSuspendSemaphore-vc-proving-r1:fifo_enqueue",
+          "claimed_action": "deliver:LinklistSuspendSemaphore-vc-proving-r1:fifo_enqueue:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T19:50:09.587983Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T19:58:28.352240Z",
+                "finished_at": "2026-11-18T20:49:37.392351Z",
+                "elapsed_seconds": 3069.040111
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T20:49:37.392324Z",
+          "finished_at": "2026-11-18T20:52:29.312393Z"
+        },
+        "priority_enqueue": {
+          "status": "accepted",
+          "owner": "group-worker/LinklistSuspendSemaphore-vc-proving-r1:priority_enqueue",
+          "claimed_action": "deliver:LinklistSuspendSemaphore-vc-proving-r1:priority_enqueue:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T19:50:09.587985Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T19:58:28.595518Z",
+                "finished_at": "2026-11-18T21:08:34.294598Z",
+                "elapsed_seconds": 4205.69908
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T21:08:34.294569Z",
+          "finished_at": "2026-11-18T21:10:16.491523Z"
+        },
+        "loop_progress": {
+          "status": "accepted",
+          "owner": "group-worker/LinklistSuspendSemaphore-vc-proving-r1:loop_progress",
+          "claimed_action": "deliver:LinklistSuspendSemaphore-vc-proving-r1:loop_progress:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T19:50:09.587987Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T20:26:44.179849Z",
+                "finished_at": "2026-11-18T20:33:52.724138Z",
+                "elapsed_seconds": 428.544289
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T20:33:52.724106Z",
+          "finished_at": "2026-11-18T20:34:33.344537Z"
+        },
+        "loop_borrows": {
+          "status": "accepted",
+          "owner": "group-worker/LinklistSuspendSemaphore-vc-proving-r1:loop_borrows",
+          "claimed_action": "deliver:LinklistSuspendSemaphore-vc-proving-r1:loop_borrows:0",
+          "repair_index": 0,
+          "created_at": "2026-11-18T19:50:09.587989Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-18T20:35:02.287746Z",
+                "finished_at": "2026-11-18T21:43:50.831196Z",
+                "elapsed_seconds": 4128.54345
+              }
+            ]
+          },
+          "returned_at": "2026-11-18T21:43:50.831177Z",
+          "finished_at": "2026-11-18T21:45:04.185148Z"
+        }
+      },
+      "finished_at": "2026-11-18T21:50:12.730572Z"
+    }
+  },
+  "current": {
+    "annotation": "LinklistSuspendSemaphore-annotation-r2",
+    "vc-checking": "LinklistSuspendSemaphore-vc-checking-r2",
+    "vc-proving": "LinklistSuspendSemaphore-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/LinklistSuspendSemaphore-20261119031206",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "LinklistSuspendSemaphore-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-11-18T21:56:15.245629Z",
+    "files": [
+      "VC/pendlist/LinklistSuspendSemaphore_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-11-18T22:01:16.580238Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-11-18T19:12:06.162090Z",
+  "updated_at": "2026-11-18T22:01:16.599071Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-11-18T22:01:16.580217Z"
+}

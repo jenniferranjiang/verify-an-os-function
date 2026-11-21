@@ -1,0 +1,287 @@
+{
+  "schema_version": 4,
+  "generation": 31,
+  "run_id": "LinklistResumeSemaphore-20261119085215",
+  "case": "LinklistResumeSemaphore",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos-verify",
+  "run_root": "/home/xinra/crtos-verify/verification_runs/LinklistResumeSemaphore-20261119085215",
+  "report_root": "/home/xinra/crtos-verify/reports/LinklistResumeSemaphore-20261119085215",
+  "target_files": {
+    "c_file": "annotated_C/src/kernel/semaphore/LinklistResume.c",
+    "formal_directory": "VC/semaphore",
+    "formal_case_lib": "VC/semaphore/LinklistResumeSemaphore_lib.v",
+    "goal_file": "VC/semaphore/LinklistResumeSemaphore_goal.v",
+    "proof_auto_file": "VC/semaphore/LinklistResumeSemaphore_proof_auto.v",
+    "proof_manual_file": "VC/semaphore/LinklistResumeSemaphore_proof_manual.v",
+    "goal_check_file": "VC/semaphore/LinklistResumeSemaphore_goal_check.v",
+    "case_name": "LinklistResumeSemaphore",
+    "active_case_theory": "CRTOS_Verify.VC.semaphore"
+  },
+  "problem_context": {
+    "problem_statement": "Verify canonical LinklistResume semaphore_head_ic, reviewed Pop/Push runtime closure predicate/spec 20261118-r1. Current source_root /home/xinra/crtoslatest readonly, existing IC nested-lock adaptation approved; retain true pending head wakeup behavior and no exstatus write. KTaskWakeup contracts reused from existing canonical LinklistResumeAll.c; applicability/id registration/pending-head identity must prove, do not copy/prove imported function bodies. CONTAINER_OF approved model boundary. Existing global lib only, no new case-lib/trial/module_context. TrustBase .agents/skills/verify-an-os-function/references/TrustBase.md and default review whitelist apply. User no cumulative proof time limit, justified changes preauthorized but actual independent design checks required. Do not add arbitrary Require/Ensure changes, axioms, trusted functions. Only assigned manual proof spans handwritten, generated goal/auto/check tool-owned; retain native auto. Use local controller tools/debug, no private source Rocq MCP after prior approval rejection. Keep .vo. Derivative spec declarations imported do not become new body targets. If necessary evaluate-once argument split needs narrow source-equivalence review; no algorithm changes silently. Complete workflow final-check."
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "LinklistResume"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "CONTAINER_OF_TASK_SCHED::<default>": "With task_ptr Require addr_aligned(task_ptr, ALIGN_SIZE) && sched_link_ptr == sched_link_of(task_ptr) && emp Ensure __return == task_ptr && addr_aligned(__return, ALIGN_SIZE) && sched_link_ptr == &(__return->task_dync_sched_member.sched_link)",
+        "KTaskWakeup::wakeup_by_id_ic": "wakeup_by_id_ic With (sg : StableGlobalState) (before : VarGlobalState) Require id < 65536 && os_inv(sg, before) Ensure exists (task : Z) (desc : TaskDescriptorAbs) (after : VarGlobalState), task != 0 && get_task_with_idnode_success(sg, before, id, task) && before.os_tasks.task_desc_map(task) == Some(desc) && ((desc.tdSchedMember.tsmStat != TSK_SUSPEND && __return == -1 && after == before) || (desc.tdSchedMember.tsmStat == TSK_SUSPEND && __return == 0 && ktask_wakeup_step(task, desc, before, after))) && os_inv(sg, after)",
+        "KTaskWakeup::detached_sched_null_delay": "detached_sched_null_delay <= wakeup_by_id_ic With (sg : StableGlobalState) (before : VarGlobalState) Require id < 65536 && ktask_wakeup_detached_null_condition(sg, before, id) && os_inv(sg, before) Ensure exists (task : Z) (desc : TaskDescriptorAbs) (after : VarGlobalState), task != 0 && get_task_with_idnode_success(sg, before, id, task) && before.os_tasks.task_desc_map(task) == Some(desc) && desc.tdDelay == 0 && ((desc.tdSchedMember.tsmStat != TSK_SUSPEND && __return == -1 && after == before) || (desc.tdSchedMember.tsmStat == TSK_SUSPEND && __return == 0 && ktask_wakeup_detached_null_step(task, desc, before, after))) && os_inv(sg, after)",
+        "KTaskWakeup::semaphore_pending_head_ic": "semaphore_pending_head_ic <= wakeup_by_id_ic With (sg : StableGlobalState) (before : VarGlobalState) (sem task : Z) (rest : list(DL_Node Z)) Require id < 65536 && get_task_with_idnode_success(sg, before, id, task) && semaphore_pending_nodes(sem, before, cons(sched_link_node(task), rest)) && os_inv(sg, before) Ensure exists (desc : TaskDescriptorAbs) (after : VarGlobalState), __return == 0 && task != 0 && before.os_tasks.task_desc_map(task) == Some(desc) && desc.tdSchedMember.tsmStat == TSK_SUSPEND && wakeup_semaphore_head(sem, task, desc, before, after) && semaphore_pending_nodes(sem, after, rest) && os_inv(sg, after)",
+        "LinklistResume::semaphore_head_ic": "semaphore_head_ic With (sg : StableGlobalState) (before : VarGlobalState) (sem : Z) (waiting : list Z) Require list == semaphore_pending_head(sem) && waiting != nil && semaphore_pending_nodes(sem, before, map(sched_link_node, waiting)) && os_inv(sg, before) Ensure __return == 0 && exists after, semaphore_resume_head_effect(sem, before, after) && os_inv(sg, after)"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-11-19T00:52:15.144346Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/semaphore/LinklistResumeSemaphore_goal_check.vo",
+    "base_artifact_count": 221,
+    "current_source_count": 4,
+    "elapsed_seconds": 2.632478,
+    "snapshot": "verification_runs/LinklistResumeSemaphore-20261119085215/dependency_plan.json"
+  },
+  "attempts": {
+    "LinklistResumeSemaphore-annotation-r1": {
+      "attempt_id": "LinklistResumeSemaphore-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/LinklistResumeSemaphore-20261119085215",
+      "claimed_action": "deliver:LinklistResumeSemaphore-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-19T00:52:21.286763Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-19T00:52:25.444628Z",
+            "finished_at": "2026-11-19T01:02:30.705451Z",
+            "elapsed_seconds": 605.260823
+          }
+        ]
+      },
+      "returned_at": "2026-11-19T01:02:30.705431Z",
+      "finished_at": "2026-11-19T01:02:30.983729Z"
+    },
+    "LinklistResumeSemaphore-vc-checking-r1": {
+      "attempt_id": "LinklistResumeSemaphore-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "blocked",
+      "owner": "vc-checking/LinklistResumeSemaphore-vc-checking-r1",
+      "claimed_action": "deliver:LinklistResumeSemaphore-vc-checking-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-19T01:02:42.560746Z",
+      "source_annotation": "LinklistResumeSemaphore-annotation-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-19T01:02:55.590454Z",
+            "finished_at": "2026-11-19T01:06:22.876222Z",
+            "elapsed_seconds": 207.285768
+          }
+        ]
+      },
+      "returned_at": "2026-11-19T01:06:22.876202Z",
+      "blocker": {
+        "failure_class": "annotation-gap",
+        "kind": "generated-name-shadowing",
+        "vcs": [
+          {
+            "name": "proof_of_LinklistResume_which_implies_wit_1",
+            "parent": null,
+            "annotation_location": "annotated_C/src/kernel/semaphore/LinklistResume.c:50-57 first which implies (pending head field borrow)"
+          }
+        ],
+        "message": "Actual controller coq-debug fails compiling current goal.v:232:25-31: C parameter binder (list : Z) shadows Coq list in subsequent EX (rest : (@list Z)). No mathematical missing premise: current obligation is ill-typed. Repair local annotation naming/view and regenerate through native annotation workflow; do not patch generated files.",
+        "repair_boundary": "C annotation"
+      },
+      "finished_at": "2026-11-19T01:06:22.901615Z"
+    },
+    "LinklistResumeSemaphore-annotation-r2": {
+      "attempt_id": "LinklistResumeSemaphore-annotation-r2",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/LinklistResumeSemaphore-20261119085215",
+      "claimed_action": "deliver:LinklistResumeSemaphore-annotation-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-11-19T01:06:28.066305Z",
+      "feedback_sources": [
+        {
+          "phase": "vc-checking",
+          "attempt_id": "LinklistResumeSemaphore-vc-checking-r1",
+          "evidence": [
+            "/home/xinra/crtos-verify/reports/LinklistResumeSemaphore-20261119085215/rounds/LinklistResumeSemaphore-vc-checking-r1/agent_report.json",
+            "/home/xinra/crtos-verify/reports/LinklistResumeSemaphore-20261119085215/rounds/LinklistResumeSemaphore-vc-checking-r1/agent_output.md"
+          ]
+        }
+      ],
+      "reason": "vc-checking-annotation-gap",
+      "failed_vcs": [
+        {
+          "source_attempt": "LinklistResumeSemaphore-vc-checking-r1",
+          "manual": "/home/xinra/crtos-verify/verification_runs/LinklistResumeSemaphore-20261119085215/annotation_history/annotation-attempt1/after/VC/semaphore/LinklistResumeSemaphore_proof_manual.v",
+          "message": "Actual controller coq-debug fails compiling current goal.v:232:25-31: C parameter binder (list : Z) shadows Coq list in subsequent EX (rest : (@list Z)). No mathematical missing premise: current obligation is ill-typed. Repair local annotation naming/view and regenerate through native annotation workflow; do not patch generated files.",
+          "name": "proof_of_LinklistResume_which_implies_wit_1",
+          "parent": null,
+          "annotation_location": "annotated_C/src/kernel/semaphore/LinklistResume.c:50-57 first which implies (pending head field borrow)"
+        }
+      ],
+      "retry_reason": "vc-checking-annotation-gap",
+      "retry_previous_attempt": "LinklistResumeSemaphore-vc-checking-r1",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-19T01:06:37.084533Z",
+            "finished_at": "2026-11-19T01:08:10.549359Z",
+            "elapsed_seconds": 93.464826
+          }
+        ]
+      },
+      "returned_at": "2026-11-19T01:08:10.549340Z",
+      "finished_at": "2026-11-19T01:08:10.828247Z"
+    },
+    "LinklistResumeSemaphore-vc-checking-r2": {
+      "attempt_id": "LinklistResumeSemaphore-vc-checking-r2",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "owner": "vc-checking/LinklistResumeSemaphore-vc-checking-r2",
+      "claimed_action": "deliver:LinklistResumeSemaphore-vc-checking-r2:0",
+      "repair_index": 0,
+      "created_at": "2026-11-19T01:08:19.855942Z",
+      "source_annotation": "LinklistResumeSemaphore-annotation-r2",
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-19T01:08:29.251357Z",
+            "finished_at": "2026-11-19T01:11:55.513370Z",
+            "elapsed_seconds": 206.262013
+          }
+        ]
+      },
+      "returned_at": "2026-11-19T01:11:55.513343Z",
+      "finished_at": "2026-11-19T01:11:55.556605Z"
+    },
+    "LinklistResumeSemaphore-vc-proving-r1": {
+      "attempt_id": "LinklistResumeSemaphore-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-19T01:11:55.556625Z",
+      "source_annotation": "LinklistResumeSemaphore-annotation-r2",
+      "source_vc_checking": "LinklistResumeSemaphore-vc-checking-r2",
+      "groups": {
+        "pending_head_view": {
+          "status": "accepted",
+          "owner": "group-worker/LinklistResumeSemaphore-vc-proving-r1:pending_head_view",
+          "claimed_action": "deliver:LinklistResumeSemaphore-vc-proving-r1:pending_head_view:0",
+          "repair_index": 0,
+          "created_at": "2026-11-19T01:12:02.966767Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-19T01:12:10.739252Z",
+                "finished_at": "2026-11-19T01:29:29.887917Z",
+                "elapsed_seconds": 1039.148665
+              }
+            ]
+          },
+          "returned_at": "2026-11-19T01:29:29.887734Z",
+          "finished_at": "2026-11-19T01:30:08.546103Z"
+        },
+        "task_id_view": {
+          "status": "accepted",
+          "owner": "group-worker/LinklistResumeSemaphore-vc-proving-r1:task_id_view",
+          "claimed_action": "deliver:LinklistResumeSemaphore-vc-proving-r1:task_id_view:0",
+          "repair_index": 0,
+          "created_at": "2026-11-19T01:12:02.966786Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-19T01:30:33.736565Z",
+                "finished_at": "2026-11-19T01:35:45.473398Z",
+                "elapsed_seconds": 311.736833
+              }
+            ]
+          },
+          "returned_at": "2026-11-19T01:35:45.473360Z",
+          "finished_at": "2026-11-19T01:36:26.699986Z"
+        },
+        "resume_result": {
+          "status": "accepted",
+          "owner": "group-worker/LinklistResumeSemaphore-vc-proving-r1:resume_result",
+          "claimed_action": "deliver:LinklistResumeSemaphore-vc-proving-r1:resume_result:0",
+          "repair_index": 0,
+          "created_at": "2026-11-19T01:12:02.966789Z",
+          "timing": {
+            "owner-work": [
+              {
+                "started_at": "2026-11-19T01:30:34.073139Z",
+                "finished_at": "2026-11-19T01:34:56.485074Z",
+                "elapsed_seconds": 262.411935
+              }
+            ]
+          },
+          "returned_at": "2026-11-19T01:34:56.485045Z",
+          "finished_at": "2026-11-19T01:35:23.321447Z"
+        }
+      },
+      "finished_at": "2026-11-19T01:37:38.047205Z"
+    }
+  },
+  "current": {
+    "annotation": "LinklistResumeSemaphore-annotation-r2",
+    "vc-checking": "LinklistResumeSemaphore-vc-checking-r2",
+    "vc-proving": "LinklistResumeSemaphore-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/LinklistResumeSemaphore-20261119085215",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "LinklistResumeSemaphore-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-11-19T01:39:00.598455Z",
+    "files": [
+      "VC/semaphore/LinklistResumeSemaphore_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-11-19T01:40:14.653083Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-11-19T00:52:15.144363Z",
+  "updated_at": "2026-11-19T01:40:14.670104Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-11-19T01:40:14.653063Z"
+}

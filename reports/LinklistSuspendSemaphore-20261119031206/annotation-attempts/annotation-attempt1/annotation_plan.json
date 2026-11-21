@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "LinklistSuspend",
+      "meaning": "Frozen semaphore_ic: invalid flag returns -10 unchanged; valid flag suspends through imported API and transfers the sched node into the selected Semaphore FIFO/priority position, restoring os_inv. Derived semaphore_prio_ic fixes flag1 and return0."
+    },
+    {
+      "name": "SuspendKTask",
+      "meaning": "Imported suspend_by_id_ic returns identified task and existing suspension effect with complete os_inv; actual registered ID is read then restored before call."
+    },
+    {
+      "name": "CONTAINER_OF_TASK_SCHED",
+      "meaning": "Existing trusted layout model maps canonical aligned sched link back to the containing TaskDescriptor."
+    },
+    {
+      "name": "DoubleLinkListInsertNodeBefore",
+      "meaning": "Existing polymorphic dispatch_case inserts the owned node before the actual anchor; explicitly instantiated at Z without changing contract."
+    },
+    {
+      "name": "DoubleLinkListInsertNodeAfter",
+      "meaning": "Existing polymorphic dispatch_case inserts the owned node after the actual tail; explicitly instantiated at Z without changing contract."
+    }
+  ],
+  "loop_invariants": [
+    {
+      "location": "LinklistSuspend: PRIO for traversal",
+      "progress": "waiting splits into scanned prefix and unscanned suffix; every scanned task has priority at least the target, node denotes the suffix head or list sentinel, and the full staged os_inv is restored between iterations."
+    }
+  ],
+  "new_predicates": [],
+  "vc_comparisons": []
+}

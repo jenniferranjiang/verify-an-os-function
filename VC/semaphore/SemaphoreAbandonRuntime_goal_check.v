@@ -1,0 +1,6 @@
+From CRTOS_Verify.VC.semaphore Require Import SemaphoreAbandonRuntime_goal SemaphoreAbandonRuntime_proof_auto SemaphoreAbandonRuntime_proof_manual.
+
+Module VC_Correctness : VC_Correct.
+  Include SemaphoreAbandonRuntime_proof_auto.
+  Include SemaphoreAbandonRuntime_proof_manual.
+End VC_Correctness.

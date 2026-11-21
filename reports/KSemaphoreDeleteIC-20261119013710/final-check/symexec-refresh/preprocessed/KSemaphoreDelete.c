@@ -1,0 +1,389 @@
+# 0 "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/KSemaphoreDelete.c"
+# 0 "<built-in>"
+#define __STDC__ 1
+# 0 "<built-in>"
+#define __STDC_VERSION__ 201710L
+# 0 "<built-in>"
+#define __STDC_UTF_16__ 1
+# 0 "<built-in>"
+#define __STDC_UTF_32__ 1
+# 0 "<built-in>"
+#define __STDC_HOSTED__ 0
+# 0 "<command-line>"
+# 1 "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/KSemaphoreDelete.c"
+/* Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c; SHA-256 dafd02bf7c6fa5a7324c6e0f824d9a1ddc1544c43f9e71aabeb902d832f30ab8.
+ * Selected 32-bit non-SMP config: KERNEL_STATIC_OBJECTS and KERNEL_DEFER_IPC_SCHED undefined. */
+/* One canonical body, with selectable calling context.
+ * CRTOS_DATAQUEUE_SEMAPHORE_IC defaults to 1 for this dataqueue verification.
+ * Define it as 0 to retain the original OC contracts, annotations and locks.
+ * IC uses the reviewed dataqueue contract and removes only nested lock/unlock
+ * operations under the source-processing rule; all other C paths are shared.
+ * Selecting a contract is not an implementation-proof result.
+ */
+
+#define CRTOS_DATAQUEUE_SEMAPHORE_IC 1
+
+
+# 1 "annotated_C/src/headers/dataqueue.h" 1
+
+#define CRTOS_DATAQUEUE_H 
+/* Source ABI: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_dataqueue.h; current ILP32 non-SMP configuration.
+ * Source SHA-256: fb10a4ae331e8646d0cf26c3302c63d0b199e3bb6562d351a9130aa705454df8.
+ * Shared scalar, ID and semaphore layouts are imported without copying.
+ * Latest NULL_PARAM_CHECK is log/count-only and supplies no non-null fact. */
+# 1 "annotated_C/src/headers/m_semaphore.h" 1
+
+#define CRTOS_M_SEMAPHORE_H 
+
+/*
+ * Shared Semaphore ABI for the current 32-bit, non-SMP verification model.
+ * Function contracts and scenario-specific Rocq vocabulary remain in the
+ * annotated C files or logic adapters; this header is stable across APIs.
+ */
+typedef signed int int32;
+typedef unsigned char uint8;
+typedef unsigned short uint16;
+typedef unsigned int uint32;
+typedef signed long x_base;
+typedef unsigned long x_ubase;
+typedef x_base x_err_t;
+typedef unsigned int x_ticks_t;
+typedef x_ubase x_size_t;
+typedef unsigned int size_t;
+typedef unsigned char BOOL;
+
+#define NONE ((void *)0)
+#define EOK 0
+#define ERROR 1
+#define ENOMEMORY 5
+#define RET_TRUE 1
+#define UINT_MAX 4294967295U
+#define ALIGN_SIZE 4
+#define ID_NUM_MAX 128
+#define ID_HTABLE_SIZE 16
+#define KTASK_READY 1
+#define KTASK_SUSPEND 2
+#define KTASK_STAT_MASK 7
+#define KTASK_MAX_ADVANCE_PROCESS_TIME 1
+#define TASK_DELAY_INACTIVE 0
+#define TASK_DELAY_ACTIVE 1
+#define KERNEL_SEMAPHORE 
+
+struct SysDoubleLinklistNode {
+    struct SysDoubleLinklistNode *node_next;
+    struct SysDoubleLinklistNode *node_prev;
+};
+typedef struct SysDoubleLinklistNode DoubleLinklistType;
+
+struct IdNode {
+    uint16 id;
+    DoubleLinklistType link;
+};
+
+struct IdManager {
+    uint16 id_max;
+    uint16 hoffset;
+    uint8 *id_map;
+    DoubleLinklistType *htable;
+};
+
+struct Semaphore {
+    struct IdNode id;
+    uint16 value;
+    DoubleLinklistType pend_list;
+    DoubleLinklistType link;
+};
+
+struct TaskDescriptor;
+struct Delay {
+    struct TaskDescriptor *task;
+    x_ticks_t ticks;
+    uint8 status;
+    DoubleLinklistType link;
+};
+typedef struct Delay *DelayType;
+
+struct TaskBaseInfo {
+    char name[32];
+    void *func_entry;
+    void *func_param;
+    uint8 origin_prio;
+    uint32 stack_depth;
+    void *stack_start;
+};
+typedef struct TaskBaseInfo TaskBaseInfoType;
+
+struct TaskDyncSchedMember {
+    uint8 stat;
+    uint8 advance_cnt;
+    uint8 cur_prio;
+    x_ubase origin_timeslice;
+    x_ubase rest_timeslice;
+    DoubleLinklistType sched_link;
+    uint32 bitmap_column;
+    DelayType delay;
+};
+typedef struct TaskDyncSchedMember TaskDyncSchedMembeType;
+
+struct KTaskDone;
+struct TaskDescriptor {
+    void *stack_point;
+    TaskDyncSchedMembeType task_dync_sched_member;
+    TaskBaseInfoType task_base_info;
+    uint32 event_id_trigger;
+    uint32 event_mode;
+    x_err_t exstatus;
+    DoubleLinklistType link;
+    struct IdNode id;
+    struct KTaskDone *Done;
+};
+typedef struct TaskDescriptor *KTaskDescriptorType;
+
+struct OsAssignReadyVector {
+    DoubleLinklistType priority_ready_vector[32];
+    uint32 priority_ready_group;
+    x_ubase highest_prio;
+};
+
+struct PriorityReadyVectorDone;
+struct Assign {
+    struct OsAssignReadyVector os_assign_ready_vector;
+    struct TaskDescriptor *os_running_task;
+    struct PriorityReadyVectorDone *ready_vector_done;
+    uint8 current_priority;
+};
+
+extern uint16 KTaskOsAssignLockNest;
+extern struct IdManager k_sem_id_manager;
+extern struct IdManager k_task_id_manager;
+extern DoubleLinklistType k_sem_list;
+extern DoubleLinklistType xiaoshan_delay_head;
+extern struct Assign Assign;
+# 8 "annotated_C/src/headers/dataqueue.h" 2
+
+typedef struct DataElem {
+    const void *data;
+    x_size_t length;
+} DataElemType;
+typedef struct DataQueue {
+    uint16 front;
+    uint16 rear;
+    uint16 max_len;
+    DataElemType *base;
+    int sem_blank;
+    int sem_data;
+} DataQueueType;
+/*@ Import Coq Require Import CRTOS_Verify.lib.dataqueue.KInitDataqueue CRTOS_Verify.lib.dataqueue.KDataqueuePeak */
+/*@ Import Coq From MonadLib.MonadErr Require Import MonadErrBasic MonadErrHoare monadesafe_lib */
+/*@ Import Coq Import Monad MonadNotation */
+/*@ Import Coq Local Open Scope monad */
+/*@ Extern Coq
+  (program :: * => * => *) (unit :: *)
+*/
+/*@ Extern Coq
+  (tt : unit)
+  (safeExec : {Sigma} {A} -> (Sigma -> Prop) -> program Sigma A -> (A -> Sigma -> Prop) -> Prop)
+  (return : {Sigma} {A} -> A -> program Sigma A)
+  (addr_aligned : Z -> Z -> Prop)
+  (CharArray::undef_full : Z -> Z -> Assertion)
+  (CharArray::full : Z -> Z -> list Z -> Assertion)
+  (repeat_Z : {A} -> A -> Z -> list A)
+*/
+/*@ Printing Coq Name program := MonadErr.M */
+/*@ Printing Strategy Name program := MonadErr.M */
+/*@ Printing Coq Name safeExec := monadesafe_lib.safeExec */
+/*@ Printing Coq Name return := MonadErr.ret */
+
+#define CRTOS_DATAQUEUE_COQ_OPTION 
+/*@ Extern Coq
+  (option :: * => *)
+*/
+/*@ Extern Coq
+  (Some : {A} -> A -> option A) (None : {A} -> option A)
+*/
+
+/*@ Extern Coq
+  (StableGlobalState :: *) (VarGlobalState :: *)
+  (DataQueueAbs :: *) (DataqueueState :: *) (DataqueueSemRefs :: *)
+*/
+/*@ Extern Coq
+  (InsideCritical : StableGlobalState -> VarGlobalState -> Assertion)
+  (OutsideCritical : StableGlobalState -> VarGlobalState -> Assertion)
+  (os_inv : StableGlobalState -> VarGlobalState -> Assertion)
+  (Crtos_RTrans : VarGlobalState -> VarGlobalState -> Prop)
+  (Crtos_GTrans : VarGlobalState -> VarGlobalState -> Prop)
+  (LastSeen : VarGlobalState -> (VarGlobalState -> Prop) -> Prop)
+  (DataqueueStorage : Z -> Assertion)
+  (store_dataqueue : Z -> DataQueueAbs -> Assertion)
+  (dataqueue_retired : DataQueueAbs -> DataQueueAbs)
+  (dq_base : DataQueueAbs -> Z)
+  (dq_max_len : DataQueueAbs -> Z) (dq_front : DataQueueAbs -> Z)
+  (dq_rear : DataQueueAbs -> Z) (dq_sem_blank : DataQueueAbs -> Z)
+  (dq_sem_data : DataQueueAbs -> Z)
+  (os_dataqueues : VarGlobalState -> DataqueueState)
+  (dataqueue_map : DataqueueState -> Z -> option DataQueueAbs)
+  (In : {A} -> A -> list A -> Prop)
+  (abs_init_dataqueue : StableGlobalState -> Z -> Z -> program (VarGlobalState -> Prop) Z)
+  (abs_deinit_dataqueue : StableGlobalState -> Z -> DataQueueAbs -> DataqueueSemRefs -> program (VarGlobalState -> Prop) unit)
+  (semaphore_create_ic_effect : StableGlobalState -> Z -> VarGlobalState -> Z -> VarGlobalState -> Prop)
+  (semaphore_delete_quiescent : Z -> VarGlobalState -> Prop)
+  (semaphore_delete_ic_effect : Z -> VarGlobalState -> VarGlobalState -> Prop)
+*/
+/*@ Printing Coq Name StableGlobalState := CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState */
+/*@ Printing Coq Name VarGlobalState := CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState */
+/*@ Printing Coq Name os_dataqueues := CRTOS_Verify.lib.common.CrtosGlobState.os_dataqueues */
+/*@ Printing Coq Name InsideCritical := CRTOS_Verify.lib.common.CrtosRules.InsideCritical */
+/*@ Printing Coq Name OutsideCritical := CRTOS_Verify.lib.common.CrtosRules.OutsideCritical */
+/*@ Printing Coq Name Crtos_RTrans := CRTOS_Verify.lib.common.CrtosRules.Crtos_RTrans */
+/*@ Printing Coq Name Crtos_GTrans := CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans */
+/*@ Printing Coq Name LastSeen := CRTOS_Verify.lib.common.CrtosRules.LastSeen */
+/*@ Printing Coq Name os_inv := CRTOS_Verify.lib.common.CrtosInv.os_inv */
+/*@ Printing Coq Name DataqueueState := CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueState */
+/*@ Printing Coq Name dataqueue_map := CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_map */
+/*@ Printing Coq Name DataQueueAbs := CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs */
+/*@ Printing Coq Name dataqueue_retired := CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired */
+/*@ Printing Coq Name dq_base := CRTOS_Verify.lib.dataqueue.DataqueueState.dq_base */
+/*@ Printing Coq Name dq_max_len := CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len */
+/*@ Printing Coq Name dq_front := CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front */
+/*@ Printing Coq Name dq_rear := CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear */
+/*@ Printing Coq Name dq_sem_blank := CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank */
+/*@ Printing Coq Name dq_sem_data := CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data */
+/*@ Printing Coq Name DataqueueStorage := CRTOS_Verify.lib.common.DataqueueInv.DataqueueStorage */
+/*@ Printing Coq Name store_dataqueue := CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue */
+/*@ Printing Coq Name DataqueueSemRefs := CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs */
+/*@ Printing Coq Name abs_deinit_dataqueue := CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue */
+/*@ Printing Coq Name abs_init_dataqueue := CRTOS_Verify.lib.dataqueue.KInitDataqueue.abs_init_dataqueue */
+/*@ Printing Coq Name semaphore_create_ic_effect := CRTOS_Verify.lib.semaphore.KSemaphoreCreate.semaphore_create_ic_effect */
+/*@ Printing Coq Name semaphore_delete_quiescent := CRTOS_Verify.lib.semaphore.KSemaphoreDelete.semaphore_delete_quiescent */
+/*@ Printing Coq Name semaphore_delete_ic_effect := CRTOS_Verify.lib.semaphore.KSemaphoreDelete.semaphore_delete_ic_effect */
+/*@ Extern Coq
+  (DataqueueElem :: *)
+*/
+/*@ Extern Coq
+  (dq_data : DataqueueElem -> Z) (dq_length : DataqueueElem -> Z)
+  (peak_data_slot : Z -> option Z -> Assertion)
+  (peak_length_slot : Z -> option Z -> Assertion)
+  (abs_dataqueue_peak : StableGlobalState -> Z -> program (VarGlobalState -> Prop) (option DataqueueElem))
+*/
+/*@ Printing Coq Name DataqueueElem := CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem */
+/*@ Printing Coq Name dq_data := CRTOS_Verify.lib.dataqueue.DataqueueState.dq_data */
+/*@ Printing Coq Name dq_length := CRTOS_Verify.lib.dataqueue.DataqueueState.dq_length */
+/*@ Printing Coq Name peak_data_slot := CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot */
+/*@ Printing Coq Name peak_length_slot := CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot */
+/*@ Printing Coq Name abs_dataqueue_peak := CRTOS_Verify.lib.dataqueue.KDataqueuePeak.abs_dataqueue_peak */
+# 15 "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/KSemaphoreDelete.c" 2
+# 1 "annotated_C/src/headers/dataqueue_semaphore_logic.h" 1
+
+#define CRTOS_DATAQUEUE_SEMAPHORE_LOGIC_H 
+
+/* Native shared predicates: vocabulary only; contracts remain in each C file.
+ * Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_sem.h; SHA-256 c2c6edfde22823863a655d6d2a3f59fb749085a8b426166c885c2d5354174fab.
+ * Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_assign.h; SHA-256 939b9f9b498ef33a02863dd0063220017610364f423e36c93a9be7c66848a472.
+ * Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/include/xs_static_objects.h; SHA-256 7299746e499097857ca3a2f0fbb67352fba9f4efbb94c7b52280b998d61d1576.
+ * Selected annotated_C/src/include/xsconfig.h leaves KERNEL_DEFER_IPC_SCHED
+ * and KERNEL_STATIC_OBJECTS undefined: ON_WAKE uses DO_KTASK_ASSIGN and
+ * lifecycle-check macros are empty. Other configurations require new review. */
+/*@ Import Coq Require Import CRTOS_Verify.lib.semaphore.KSemaphoreDelete */
+/*@ Import Coq Require Import CRTOS_Verify.lib.id.idnode CRTOS_Verify.lib.id.IdModuleSpec CRTOS_Verify.lib.common.dll CRTOS_Verify.lib.list.NodeSelfLinked */
+/*@ Import Coq Import IDNode DLL */
+# 23 "annotated_C/src/headers/dataqueue_semaphore_logic.h"
+/*@ Extern Coq addr := Z */
+/*@ Extern Coq Record StableIdmanager { idmax: Z; hoffset: Z; id_map: Z; htable: Z; } */
+/*@ Extern Coq
+  (VarIdmanager :: *) (IdNodeAbs :: *) (DL_Node :: * => *)
+*/
+/*@ Extern Coq
+  (store_idmanager : StableIdmanager -> VarIdmanager -> Z -> Assertion)
+  (Build_IdNodeAbs : Z -> Z -> IdNodeAbs)
+  (store_idmanager_allocated_unlinked : StableIdmanager -> VarIdmanager -> Z -> Z -> Assertion)
+  (store_idmanager_remove_ready : StableIdmanager -> VarIdmanager -> Z -> Z -> Z -> Assertion)
+  (store_idmanager_removeobj_post : StableIdmanager -> VarIdmanager -> Z -> Z -> Z -> Assertion)
+  (store_idnode_unlinked : Z -> IdNodeAbs -> Assertion)
+  (idmanager_first_free_id : StableIdmanager -> VarIdmanager -> option Z)
+  (store_idmanager_found : StableIdmanager -> VarIdmanager -> Z -> Z -> Z -> Assertion)
+  (store_idnode_insert_ready : Z -> Assertion)
+  (idmanager_min_free_id : StableIdmanager -> VarIdmanager -> Z -> Prop)
+  (idmanager_add : VarIdmanager -> Z -> VarIdmanager)
+  (idmanager_link : StableIdmanager -> VarIdmanager -> Z -> Z -> VarIdmanager)
+  (idmanager_query : VarIdmanager -> Z -> bool)
+  (idmanager_contains : StableIdmanager -> VarIdmanager -> Z -> Z -> Prop)
+  (idmanager_remove : StableIdmanager -> VarIdmanager -> Z -> VarIdmanager)
+  (store_node_self_linked : Z -> Assertion)
+  (occupy_dll_node : Z -> Assertion)
+  (store_dll : {A} -> (Z -> A -> Assertion) -> Z -> list(DL_Node A) -> Assertion)
+  (Build_DL_Node : {A} -> A -> Z -> DL_Node A)
+  (dll_insert_anchor : {A} -> Z -> list(DL_Node A) -> Z -> Prop)
+  (dll_insert_after_dispatch : {A} -> Z -> list(DL_Node A) -> Z -> DL_Node A -> list(DL_Node A))
+  (map : {A} {B} -> (A -> B) -> list A -> list B)
+  (app : {A} -> list A -> list A -> list A)
+  (semaphore_pending_head : Z -> Z)
+  (sched_link_node : Z -> DL_Node Z)
+  (semaphore_pending_nodes_ic : Z -> VarGlobalState -> list(DL_Node Z) -> Prop)
+  (semaphore_resume_all_ic_effect : Z -> list Z -> VarGlobalState -> VarGlobalState -> Prop)
+  (abs_ktask_assign : program (VarGlobalState -> Prop) unit)
+*/
+/*@ Printing Coq Name semaphore_pending_nodes_ic := CRTOS_Verify.lib.semaphore.KSemaphoreDelete.semaphore_pending_nodes_ic */
+/*@ Printing Coq Name semaphore_resume_all_ic_effect := CRTOS_Verify.lib.semaphore.KSemaphoreDelete.semaphore_resume_all_ic_effect */
+/*@ Printing Coq Name abs_ktask_assign := CRTOS_Verify.lib.assign.KTaskOsAssign.abs_ktask_assign */
+/*@ Printing Coq Name store_idmanager := CRTOS_Verify.lib.id.idnode.IDNode.store_idmanager */
+/*@ Printing Coq Name store_idmanager_allocated_unlinked := CRTOS_Verify.lib.id.idnode.IDNode.store_idmanager_allocated_unlinked */
+/*@ Printing Coq Name store_idmanager_remove_ready := CRTOS_Verify.lib.id.idnode.IDNode.store_idmanager_remove_ready */
+/*@ Printing Coq Name store_idmanager_removeobj_post := CRTOS_Verify.lib.id.idnode.IDNode.store_idmanager_removeobj_post */
+/*@ Printing Coq Name store_idnode_unlinked := CRTOS_Verify.lib.id.idnode.IDNode.store_idnode_unlinked */
+/*@ Printing Coq Name store_idmanager_found := CRTOS_Verify.lib.id.idnode.IDNode.store_idmanager_found */
+/*@ Printing Coq Name store_idnode_insert_ready := CRTOS_Verify.lib.id.idnode.IDNode.store_idnode_insert_ready */
+/*@ Printing Coq Name occupy_dll_node := CRTOS_Verify.lib.common.dll.DLL.occupy_dll_node */
+/*@ Printing Coq Name store_dll := CRTOS_Verify.lib.common.dll.DLL.store_dll */
+/*@ Printing Coq Name store_node_self_linked := CRTOS_Verify.lib.list.NodeSelfLinked.store_node_self_linked */
+/*@ Printing Coq Name idmanager_min_free_id := CRTOS_Verify.lib.id.idnode.IDNode.idmanager_min_free_id */
+/*@ Printing Coq Name idmanager_first_free_id := CRTOS_Verify.lib.id.idnode.IDNode.idmanager_first_free_id */
+/*@ Printing Coq Name idmanager_remove := CRTOS_Verify.lib.id.idnode.IDNode.idmanager_remove */
+/*@ Printing Coq Name idmanager_add := CRTOS_Verify.lib.id.idnode_abs.IDNodePure.idmanager_add */
+/*@ Printing Coq Name idmanager_link := CRTOS_Verify.lib.id.idnode_abs.IDNodePure.idmanager_link */
+/*@ Printing Coq Name idmanager_query := CRTOS_Verify.lib.id.idnode_abs.IDNodePure.idmanager_query */
+/*@ Printing Coq Name idmanager_contains := CRTOS_Verify.lib.id.IdModuleSpec.idmanager_contains */
+/*@ Printing Coq Name StableIdmanager := CRTOS_Verify.lib.id.idnode_abs.StableIdmanager */
+/*@ Printing Coq Name VarIdmanager := CRTOS_Verify.lib.id.idnode_abs.VarIdmanager */
+/*@ Printing Coq Name IdNodeAbs := CRTOS_Verify.lib.id.idnode_abs.IdNodeAbs */
+/*@ Printing Coq Name Build_IdNodeAbs := CRTOS_Verify.lib.id.idnode_abs.Build_IdNodeAbs */
+/*@ Printing Coq Name DL_Node := CRTOS_Verify.lib.common.dll_abs.DL_Node */
+/*@ Printing Coq Name Build_DL_Node := CRTOS_Verify.lib.common.dll_abs.Build_DL_Node */
+/*@ Printing Coq Name dll_insert_anchor := CRTOS_Verify.lib.list.DoubleLinkListSpec.dll_insert_anchor */
+/*@ Printing Coq Name dll_insert_after_dispatch := CRTOS_Verify.lib.list.DoubleLinkListSpec.dll_insert_after_dispatch */
+# 16 "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/KSemaphoreDelete.c" 2
+
+/* Current source: kernel/thread/semaphore.c; non-SMP ILP32.
+ * New IC contract for dataqueue's existing locked call site. The global
+ * OC contract and IC specialization remain separate design interfaces.
+ */
+
+void _SemaphoreDelete(int32 id)
+/*@ dataqueue_cleanup_ic
+    With (sg : StableGlobalState) (before : VarGlobalState)
+    Require semaphore_delete_quiescent(id, before) && os_inv(sg, before)
+    Ensure exists after,
+      semaphore_delete_ic_effect(id, before, after) && os_inv(sg, after)
+*/;
+# 50 "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/KSemaphoreDelete.c"
+void KSemaphoreDelete(int32 id)
+
+/*@ dataqueue_cleanup_ic
+    With (sg : StableGlobalState) (before : VarGlobalState)
+    Require semaphore_delete_quiescent(id, before) && os_inv(sg, before)
+    Ensure exists after,
+      semaphore_delete_ic_effect(id, before, after) && os_inv(sg, after)
+*/
+# 67 "/home/xinra/crtos-verify/annotated_C/src/kernel/semaphore/KSemaphoreDelete.c"
+{
+
+
+    /* KDEBUG_NOT_IN_INTERRUPT: TrustBase debug removal.
+     * KERNEL_OBJECT_LIFECYCLE_CHECK_VOID(): empty because KERNEL_STATIC_OBJECTS is undefined. */
+    _SemaphoreDelete(id)
+
+/*@ where (dataqueue_cleanup_ic) */
+
+
+
+;
+}

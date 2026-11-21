@@ -1,5 +1,13 @@
 > 2026-11-21 更新：Dataqueue 已改为有效元素列表，本文旧 Dataqueue predicate/spec/实现结论不适用于新输入。Init、DeInit、Peak、Pop 的旧表示证明需重新适配；历史记录保留。见 [本轮设计与验证范围](../2026-11-21-FifoRepresentation/design.md)。
 
+> 最新用户授权：完成当前Semaphore Create/Delete IC闭包后，本窗口继续DataqueuePeak、PopDataqueue、PushDataqueue及必要非导入调用闭包。Pop/Push复用另一窗口已产出的设计，先核对版本及依赖；不设VC时间上限，必要修改提议预先批准，实际审阅/证明/final-check仍须通过。此指令更新此前仅第一阶段的窗口分工。
+
+> 当前结果：Init/DeInit、_SemaphoreCreate IC、KSemaphoreCreate IC及_SemaphoreDelete IC均已获得各自QCP done/final-check；KSemaphoreDelete IC也已done/final-check；Peak也已done/final-check；Pop本体已done/final-check，新增Obtain/Abandon闭包进行中，Push尚未完成。Create内部9个manual顶层+13个split Qed、26个原生auto；wrapper 3个原生auto。Create结论依赖导入ID/DLL契约及既有模型，第一阶段Init/DeInit/Peak及必要新增IC调用闭包已完成；Pop/Push整体任务尚未完成。见[semaphore-ic-review.md](semaphore-ic-review.md)和[当前任务表](function-status.md)。
+
+## 历史过程记录
+
+以下按既有实验保留，旧“当前/最新”、预算和暂停范围不覆盖上方现行状态。现行总表见[function-status.md](function-status.md)。
+
 > 当前证明文件已按用户要求恢复QCP原生auto/manual分工，Init和DeInit均重新final-check通过。最新文件、计数及信任说明见[native-auto-restoration.md](native-auto-restoration.md)。下文旧全部manual计数是历史记录。
 
 > 当前任务变更：用户仅要求修正已有Init/DeInit证明的auto/manual分工，暂不推进其他函数。已移除本地auto转manual适配；正在新run恢复原生生成并复用已完成manual证明。原done两run保留历史证据，不伪造原状态。auto由QCP求解器给出且可能为Admitted，不报告为Rocq闭合证明；manual仍须实际Qed及final-check。

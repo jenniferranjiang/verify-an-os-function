@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "missing-premise",
+    "vcs": [
+      {
+        "name": "proof_of__SemaphoreObtain_entail_wit_8",
+        "parent": null,
+        "annotation_location": "annotated_C/src/kernel/semaphore/_SemaphoreObtain.c:260-263"
+      }
+    ],
+    "message": "os_inv plus linklist_suspend_admissible supplies current-task registration and scheduling conditions, but does not imply the required assignRunningTask(os_assign held) <> 0. Task invariants intentionally omit base nonzero, assign_world_wf permits running=0, and QCP valid_object permits address zero. The carried universal future-delay condition also supplies no nonzero premise.",
+    "repair_boundary": "Main annotation/spec review of the actual waiting-path domain in semaphore_obtain_entry and the Assert at _SemaphoreObtain.c:260-263; regenerate affected VCs after justified repair. No worker-side assumption or global invariant change."
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "version": 2,
+  "status": "ready",
+  "function_specs": [
+    {
+      "name": "_SemaphoreObtain",
+      "meaning": "实现现有信号量获取抽象程序的返回关系并归还 OutsideCritical；仅部分正确性。"
+    },
+    {
+      "name": "CriticalAreaLock",
+      "meaning": "取得临界区资源及 rely 可达状态。"
+    },
+    {
+      "name": "CriticalAreaUnLock",
+      "meaning": "在 guarantee 关系成立时归还临界区资源。"
+    },
+    {
+      "name": "IdGetObj",
+      "meaning": "按既有导入契约查找 ID 并保留或拆出管理器资源。"
+    },
+    {
+      "name": "CONTAINER_OF_SEMAPHORE_ID",
+      "meaning": "按既定布局边界将 ID 节点地址还原为信号量地址。"
+    },
+    {
+      "name": "KTASK_ASSIGN",
+      "meaning": "按既定调度模型返回满足 continuation 的状态。"
+    },
+    {
+      "name": "CalculateTickFromTimeMs",
+      "meaning": "返回已验证的毫秒转换 tick 值。"
+    },
+    {
+      "name": "GetKTaskDescriptor",
+      "meaning": "读取并保留当前运行任务指针。"
+    },
+    {
+      "name": "LinklistSuspend",
+      "meaning": "按已证明 semaphore_prio_ic 契约将任务加入信号量优先级等待链表。"
+    },
+    {
+      "name": "KTaskSetDelay",
+      "meaning": "按导入契约返回延时设置关系并归还 delay 和 tick 资源。"
+    },
+    {
+      "name": "KTaskWakeup",
+      "meaning": "按导入 ID 唤醒契约返回任务唤醒关系和全局资源。"
+    }
+  ],
+  "loop_invariants": [],
+  "new_predicates": [],
+  "vc_comparisons": [
+    {
+      "source": {
+        "attempt": "SemaphoreObtainRuntime-vc-checking-r1",
+        "name": "proof_of__SemaphoreObtain_partial_solve_wit_21_pure",
+        "annotation_location": "KTaskSetDelay finite-wait call / for_null_inactive null-delay precondition branch"
+      },
+      "current": [
+        "proof_of__SemaphoreObtain_partial_solve_wit_21_pure"
+      ],
+      "old_gap": "Both old alternatives incorrectly demanded inactive_map(0) <> None for the permitted null-delay case.",
+      "change": "Equivalent caller-local null-or-inactive proposition written as tdDelay != 0 => inactive_map(tdDelay) != None; no change to canonical contract or public target spec.",
+      "result": "resolved"
+    }
+  ]
+}

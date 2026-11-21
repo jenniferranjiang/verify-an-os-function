@@ -1,0 +1,58 @@
+{
+  "groups": [
+    {
+      "id": "arithmetic_returns",
+      "estimated_difficulty": 3,
+      "witnesses": [
+        {
+          "name": "proof_of_CalculateTickFromTimeMs_return_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CalculateTickFromTimeMs_return_wit_1_split_goal_1": "All resources are emp; ms_pre is the sole scalar witness and already has 0 <= ms_pre <= UINT_MAX. Normalize C nonnegative quotient/remainder to Z.div/Z.mod using positivity of 1000. Derive q=(ms_pre*100)/1000 in [0,429496729] and r=(ms_pre*100) mod 1000 in [0,999]; therefore unsigned_last_nbits q 32=q, unsigned_last_nbits r 32=r, and unsigned_last_nbits (q+1) 32=q+1. Unfold tick_from_time_ms and use the normalized C guard to select the same mathematical branch. Use local assertions inside the assigned proof for these facts, no helper declaration/case lib. This branch has truncated quotient zero, hence q=0; the specification reduces to 1. No existential or memory transformation remains."
+          }
+        },
+        {
+          "name": "proof_of_CalculateTickFromTimeMs_return_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CalculateTickFromTimeMs_return_wit_2_split_goal_1": "All resources are emp; ms_pre is the sole scalar witness and already has 0 <= ms_pre <= UINT_MAX. Normalize C nonnegative quotient/remainder to Z.div/Z.mod using positivity of 1000. Derive q=(ms_pre*100)/1000 in [0,429496729] and r=(ms_pre*100) mod 1000 in [0,999]; therefore unsigned_last_nbits q 32=q, unsigned_last_nbits r 32=r, and unsigned_last_nbits (q+1) 32=q+1. Unfold tick_from_time_ms and use the normalized C guard to select the same mathematical branch. Use local assertions inside the assigned proof for these facts, no helper declaration/case lib. This branch has q<>0 and 5<=r<=9. Reduce Z.eq_dec and both Z.leb tests, then match q+1 after removing the final 32-bit truncation. It is unnecessary to assert reachability or to introduce a new modulo-100 assumption; even this guarded branch is handled by the exact specification."
+          }
+        },
+        {
+          "name": "proof_of_CalculateTickFromTimeMs_return_wit_3",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CalculateTickFromTimeMs_return_wit_3_split_goal_1": "All resources are emp; ms_pre is the sole scalar witness and already has 0 <= ms_pre <= UINT_MAX. Normalize C nonnegative quotient/remainder to Z.div/Z.mod using positivity of 1000. Derive q=(ms_pre*100)/1000 in [0,429496729] and r=(ms_pre*100) mod 1000 in [0,999]; therefore unsigned_last_nbits q 32=q, unsigned_last_nbits r 32=r, and unsigned_last_nbits (q+1) 32=q+1. Unfold tick_from_time_ms and use the normalized C guard to select the same mathematical branch. Use local assertions inside the assigned proof for these facts, no helper declaration/case lib. This branch has q<>0 and r<5. Z.leb 5 r is false so the andb rounding guard is false, and the result is q. No additional lower-bound premise is needed beyond the explicit UInt range."
+          }
+        },
+        {
+          "name": "proof_of_CalculateTickFromTimeMs_return_wit_4",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CalculateTickFromTimeMs_return_wit_4_split_goal_1": "All resources are emp; ms_pre is the sole scalar witness and already has 0 <= ms_pre <= UINT_MAX. Normalize C nonnegative quotient/remainder to Z.div/Z.mod using positivity of 1000. Derive q=(ms_pre*100)/1000 in [0,429496729] and r=(ms_pre*100) mod 1000 in [0,999]; therefore unsigned_last_nbits q 32=q, unsigned_last_nbits r 32=r, and unsigned_last_nbits (q+1) 32=q+1. Unfold tick_from_time_ms and use the normalized C guard to select the same mathematical branch. Use local assertions inside the assigned proof for these facts, no helper declaration/case lib. This branch has q<>0 and r>9 (also r>=5). Z.leb r 9 is false, so the rounding conjunction is false and the result is q."
+          }
+        }
+      ]
+    },
+    {
+      "id": "range_views",
+      "estimated_difficulty": 1,
+      "witnesses": [
+        {
+          "name": "proof_of_CalculateTickFromTimeMs_which_implies_wit_1",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CalculateTickFromTimeMs_which_implies_wit_1_split_goal_spatial": "The antecedent is the actual UInt cell at the local ms address storing ms_pre; explicit UInt range hypotheses are available in this split. The consequent is the same existing store_uinteger (Z.to_nat 4) 4 cell. Normalize the UInt/store_uint notation and Z.to_nat 4 to their definitionally identical store_uinteger instance, then close by entailment reflexivity/cancellation. Preserve the cell; no existential, allocation, or new range assumption is needed. The parent unconditional resource view genuinely contains the typed cell that entails the range, rather than emp."
+          }
+        },
+        {
+          "name": "proof_of_CalculateTickFromTimeMs_which_implies_wit_2",
+          "proof_mode": "aggressive_pre_process",
+          "split_strategies": {
+            "proof_of_CalculateTickFromTimeMs_which_implies_wit_2_split_goal_spatial": "The antecedent is store_uinteger (Z.to_nat 4) 4 at the local ms address with the same ms_pre; consequent is the UInt cell at exactly that address/value. Normalize the existing UInt/store_uint definition and close the identity entailment. There is no range strengthening or resource loss."
+          }
+        }
+      ]
+    }
+  ]
+}

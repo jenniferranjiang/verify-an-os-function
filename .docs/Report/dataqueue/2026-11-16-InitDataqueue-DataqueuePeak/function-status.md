@@ -1,54 +1,31 @@
 > 2026-11-21 更新：Dataqueue 已改为有效元素列表，本文旧 Dataqueue predicate/spec/实现结论不适用于新输入。Init、DeInit、Peak、Pop 的旧表示证明需重新适配；历史记录保留。见 [本轮设计与验证范围](../2026-11-21-FifoRepresentation/design.md)。
 
-> 当前证明文件已按用户要求恢复QCP原生auto/manual分工，Init和DeInit均重新final-check通过。最新文件、计数及信任说明见[native-auto-restoration.md](native-auto-restoration.md)。下文旧全部manual计数是历史记录。
+# Dataqueue 当前任务总表
 
-> 最新结果：InitDataqueue run InitDataqueue-20261117224043 已由controller返回done，final-check passed（63个顶层VC）。这是相对于callee契约的Init函数证明；第一阶段闭包尚未完成。当前串行进入DeInitDataqueue run DeInitDataqueue-20261118121138。用户已取消VC预算上限。下文早期预算/部分VC计数为历史记录。
+本表替代此前叠加的历史状态。用户已取消VC累计证明时限，并授权完成Semaphore后串行推进Peak、Pop、Push及必要非导入调用闭包。实际检查仍须通过。
 
-> 2026-11-18最新状态：Init已接纳44/62顶层VC（10组），累计预算约99–100分钟，停止新增证明尝试；无函数final-check。余18个目标、局部对齐注解修复及重试，详见[implementation-result.md](implementation-result.md)。
+逐函数实际用时及统计口径见[证明用时表](proof-timing.md)，包括已完成、进行中和未开始项。
 
-> 当前恢复说明：用户已授权具体DataQueue/DataElem布局事实，已接入dataqueue_layout_abi；下文旧ABI缺失记录是历史阻塞。当前正在map版本重编译与验证，尚无新的实现完成结论。
+| 函数 | 本轮目标或依赖分类 | predicate/spec 状态 | 实现证明及 final-check | 依赖假设或未完成原因 | 文件/报告 |
+| --- | --- | --- | --- | --- | --- |
+| InitDataqueue | 第一阶段目标 | map/ABI版本审阅通过 | 当前原生auto/manual workflow done，final-check通过 | Create/DeInit及其新增IC闭包已完成；保留导入契约和可信边界 | [当前证明说明](native-auto-restoration.md) |
+| DeInitDataqueue | 私有初始化回滚目标 | init_cleanup审阅通过 | 当前原生auto/manual workflow done，final-check通过 | Delete IC闭包已完成；不涵盖已发布对象并发销毁 | [当前证明说明](native-auto-restoration.md) |
+| _SemaphoreCreate | 本轮新IC契约调用闭包 | 审阅通过，冻结规格未变 | done，final-check通过；9顶层+13split Qed | 原生auto 26个；ID/DLL导入契约、分配模型及ABI依赖保持 | [IC记录](semaphore-ic-review.md) |
+| KSemaphoreCreate | 本轮新IC契约wrapper | 审阅通过 | done，final-check通过；3个原生auto VC | 内部Create已done，采用原生自动求解路径 | [canonical](../../../../annotated_C/src/kernel/semaphore/KSemaphoreCreate.c) |
+| _SemaphoreDelete | 本轮新IC契约调用闭包 | quiescent清理契约审阅通过 | done，final-check通过；14顶层+11split Qed | 35个原生auto；quiescent清理范围，ID/DLL导入边界 | [canonical](../../../../annotated_C/src/kernel/semaphore/_SemaphoreDelete.c) |
+| KSemaphoreDelete | 本轮新IC契约wrapper | 同上 | done，final-check通过；3个原生auto VC | 内部Delete已done | [canonical](../../../../annotated_C/src/kernel/semaphore/KSemaphoreDelete.c) |
+| DataqueuePeak | 第一阶段目标 | map版本设计审阅通过 | done，final-check通过；7顶层+10split Qed | 18原生auto，IRQ和已授权ABI边界 | [canonical](../../../../annotated_C/src/kernel/dataqueue/DataqueuePeak.c) |
+| PopDataqueue | 第二阶段首目标 | predicate/spec r1审阅通过 | 本体done/final-check通过；14顶层+9split Qed | 34原生auto；Obtain/Abandon新增闭包尚未完成 | [设计审阅](../2026-11-18-PopDataqueue-PushDataqueue/review.md) |
+| PushDataqueue | 第二阶段后目标 | predicate/spec r1审阅通过 | 尚未开始QCP实现证明 | Pop之后推进，复用共有接口和依赖 | [设计审阅](../2026-11-18-PopDataqueue-PushDataqueue/review.md) |
+| _SemaphoreObtain | Pop/Push新增调用闭包 | 设计审阅通过 | done，final-check通过；36顶层+37所需split Qed | 107原生auto；有限Delay恢复、失败回滚和调度后status已证；导入任务契约保持 | [闭包设计](../2026-11-18-PopDataqueue-PushDataqueue/source-analysis.md) |
+| KSemaphoreObtain | Pop/Push新增wrapper | 设计审阅通过 | done，final-check通过；3原生auto | 内部Obtain已done，caller契约一致 | [闭包设计](../2026-11-18-PopDataqueue-PushDataqueue/source-analysis.md) |
+| KSemaphoreAbandon / _SemaphoreAbandon | Pop/Push新增调用闭包 | 设计审阅通过 | 内部Abandon在VC-checking已暂停；wrapper尚未开始；无final-check | 包含计数和唤醒路径 | [闭包设计](../2026-11-18-PopDataqueue-PushDataqueue/source-analysis.md) |
+| LinklistSuspend | 新场景契约调用闭包 | 设计审阅通过 | done，final-check通过；26顶层+9split Qed | FIFO/优先级插入，含派生spec蕴含，不假设等待链排序 | [闭包设计](../2026-11-18-PopDataqueue-PushDataqueue/source-analysis.md) |
+| LinklistResume | 新场景契约调用闭包 | 设计审阅通过 | done，final-check通过；5顶层+3split Qed | 12原生auto；KTaskWakeup保持已导入契约边界 | [闭包设计](../2026-11-18-PopDataqueue-PushDataqueue/source-analysis.md) |
+| CalculateTickFromTimeMs | 新规格叶子 | 64位转换设计审阅通过 | done，final-check通过；6顶层+6split Qed | 15原生auto；当前64位乘法、100Hz契约 | [canonical](../../../../annotated_C/src/kernel/common/CalculateTickFromTimeMs.c) |
+| ID/DLL helpers；GetKTaskDescriptor、KTaskSetDelay、KTaskWakeup、SuspendKTask等 | reused-spec | 按各caller核对适用性及接口 | 不作为本轮新证函数计数 | 使用导入契约，不因来源证明未完成扩大闭包 | [闭包及来源](../2026-11-18-PopDataqueue-PushDataqueue/source-analysis.md) |
+| Lock/Unlock、分配/释放/清零及其他规定模型 | 已授权可信或模型/API边界 | 依既有契约和适用条件 | 不宣称本轮证明硬件或模型实现 | IRQ、C库及ABI假设分别记录，未扩大trusted函数集 | [TrustBase](../../../../.agents/skills/verify-an-os-function/references/TrustBase.md) |
 
-> **2026-11-17 当前变更：** 用户已授权地址map改造，本文r1列表版本及旧Init VC适用性已invalidated；历史证据保留。当前设计与迁移检查见 [map-refactor.md](map-refactor.md)。ABI布局连接缺口仍待解决。
+Init/DeInit当前采用原生QCP自动求解结果与手工Rocq证明的组合；auto中生成器保留的Admitted不能称为完整Rocq证明项。准确数量及done记录见native-auto-restoration.md。设计通过、goal编译通过和依赖构建通过均不等于实现证明完成。
 
-# Dataqueue 当前函数进度
-
-当前成果位于全局lib、annotated C和本报告目录，已有实验输入已按crtoslatest同步。用户要求的整合已完成，检查见 [integration-review.md](integration-review.md)。**设计审阅通过不等于实现证明完成；本轮Dataqueue没有新增VC或C实现证明。**
-
-## 已完成的设计及全局位置
-
-| 函数 | Predicate / 抽象程序 | Spec | 适用范围 |
-| --- | --- | --- | --- |
-| [InitDataqueue](../../../../annotated_C/src/kernel/dataqueue/InitDataqueue.c) | 定义沿用，依赖已按新源码同步 | 已按新源码同步，当前审阅见spec-review | 初始化、三类失败和回滚，含n=0/1 |
-| [DeInitDataqueue](../../../../annotated_C/src/kernel/dataqueue/DeInitDataqueue.c) | 同上 | init_cleanup已迁入 | 未发布对象的初始化失败清理，非通用并发销毁 |
-| [KSemaphoreCreate](../../../../annotated_C/src/kernel/semaphore/KSemaphoreCreate.c) | IC效果已迁入，原OC接口保留 | dataqueue_ic已增补 | Init实际持锁创建场景 |
-| [_SemaphoreCreate](../../../../annotated_C/src/kernel/semaphore/_SemaphoreCreate.c) | 同上 | dataqueue_ic已增补 | IC以规则去除嵌套锁的切片为对象，OC body完整保留 |
-| [KSemaphoreDelete](../../../../annotated_C/src/kernel/semaphore/KSemaphoreDelete.c) | IC效果已迁入，原OC接口保留 | dataqueue_cleanup_ic已增补 | 回滚中无等待者且无queue引用的删除 |
-| [_SemaphoreDelete](../../../../annotated_C/src/kernel/semaphore/_SemaphoreDelete.c) | 同上 | dataqueue_cleanup_ic已增补 | IC需源码规则适配；通用OC删除生命周期另有待处理项 |
-| [DataqueuePeak](../../../../annotated_C/src/kernel/dataqueue/DataqueuePeak.c) | 定义沿用，依赖已按新源码同步 | 已按新源码同步，当前审阅见spec-review | 同锁观察队首；支持未知输出槽 |
-
-当前审阅版本为 `dq-predicate-crtoslatest-20261116-r1` 和 `dq-spec-crtoslatest-20261116-r1`，均已通过当前实验范围的设计审阅，见[predicate-review.md](predicate-review.md)与[spec-review.md](spec-review.md)。此前整合记录保留为历史依据。本轮修改两份Semaphore库文件，64份全局lib编译通过，.vo保留供交互式使用。
-
-## 尚未完成的新增设计
-
-| 函数/接口 | 当前状态与下一步 |
-| --- | --- |
-| `PopDataqueue` / `PushDataqueue` | 已批准修复代码保留在报告；分析副本已删除，无完整新spec/函数抽象 |
-| KSemaphoreObtain / `_SemaphoreObtain` | 缺少适用既有spec；分析副本已删除，新版等待行为及共享读取适配见source-changes，完整等待语义仍待设计 |
-| KSemaphoreAbandon / _SemaphoreAbandon | 缺少适用既有spec；尚未建立本轮canonical |
-| LinklistSuspend / LinklistResume的Semaphore场景 | 现有参考契约不覆盖该场景，需相应新接口及body目标，下层已有适用契约可复用 |
-| KTaskSetDelay | 新来源已修改排序与时间窗口处理，后续按新实现核对可用参考契约 |
-| CalculateTickFromTimeMs / GetKTaskDescriptor等 | 已找到参考契约，按实际调用条件核对后复用，不因证明状态复制body |
-
-新来源已处理原来的等待路径缺陷。2026-11-17按用户要求删除Push/Pop/_Obtain分析副本，保留报告中的修复和适配说明；后续正式写spec时落实到canonical文件。当前错误报告仍只列新源码中的四项问题。
-
-## 原有证明与复用边界
-
-Init闭包复用IdInsertObj、IdGetObj、IdRemoveObj、四个DLL接口及LinklistResumeAll等已记录契约；它们不因来源证明状态而自动扩为本轮body证明目标。
-
-既有46份VC原样保留，回归有7个首要错误；与合并前隔离构建逐项一致，后续被阻塞证明仍未检查完成。另有通用OC SemaphoreDelete可能删除live queue引用ID的语义问题，新os_inv下的原通用保证需重新处理生命周期条件。这些均在integration-review中明确区分，不能把“库已编译”说成“全局证明全部通过”。
-
-长期解释见 [design.md](design.md)，源码前后及原因见 [source-changes.md](source-changes.md)。
-
-2026-11-17 当前实现状态：Init已生成VC并接纳annotation/VC-checking，首组因缺少正式DataQueue/DataElem ABI连接被controller接纳为blocked；无实现证明或final-check完成，后续阶段未启动。当前结果、任务表与待决方案见[implementation-result.md](implementation-result.md)。
-
-本轮map改造已分别独立审阅通过：`dq-predicate-map-20261117-r1` / `dq-spec-map-20261117-r1`。64份lib依赖编译通过、.vo保留；无新实现证明。当前正式输入与检查见[map-refactor.md](map-refactor.md)。
+长期语义说明见[design.md](design.md)，原始源码缺陷及批准副本修复见[source-errors.md](source-errors.md)和[source-changes.md](source-changes.md)。历史运行细节保留于对应workflow及其他报告，本表只呈现当前状态。

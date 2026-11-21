@@ -1,0 +1,131 @@
+{
+  "schema_version": 4,
+  "generation": 11,
+  "run_id": "KSemaphoreObtainRuntime-20261119084641",
+  "case": "KSemaphoreObtainRuntime",
+  "phase": "done",
+  "main_root": "/home/xinra/crtos-verify",
+  "run_root": "/home/xinra/crtos-verify/verification_runs/KSemaphoreObtainRuntime-20261119084641",
+  "report_root": "/home/xinra/crtos-verify/reports/KSemaphoreObtainRuntime-20261119084641",
+  "target_files": {
+    "c_file": "annotated_C/src/kernel/semaphore/KSemaphoreObtain.c",
+    "formal_directory": "VC/semaphore",
+    "formal_case_lib": "VC/semaphore/KSemaphoreObtainRuntime_lib.v",
+    "goal_file": "VC/semaphore/KSemaphoreObtainRuntime_goal.v",
+    "proof_auto_file": "VC/semaphore/KSemaphoreObtainRuntime_proof_auto.v",
+    "proof_manual_file": "VC/semaphore/KSemaphoreObtainRuntime_proof_manual.v",
+    "goal_check_file": "VC/semaphore/KSemaphoreObtainRuntime_goal_check.v",
+    "case_name": "KSemaphoreObtainRuntime",
+    "active_case_theory": "CRTOS_Verify.VC.semaphore"
+  },
+  "problem_context": {
+    "problem_statement": "Verify current canonical KSemaphoreObtain wrapper semaphore_obtain_oc. Reviewed runtime predicate/spec dq-pop-push-20261118-r1, latest KObtain continuation extraction definitionally equal and reviewed. Callee _SemaphoreObtain now done/final-check in SemaphoreObtainRuntime-20261119060206 with root .vo restored; ensure caller exact contract consistency. Static done dispatch only, source_root /home/xinra/crtoslatest readonly. TrustBase .agents/skills/verify-an-os-function/references/TrustBase.md and default whitelist apply. User authorizes justified modifications, no cumulative proof time limit; actual reviews/checks required. No arbitrary strengthening/weakening/axioms/new trusted symbols. Keep global organization and native generated auto/manual split; handwritten proofs only assigned manual spans. Use local controller checks/debug, no private-source Rocq MCP payload after approval rejection. Keep .vo, complete workflow final-check."
+  },
+  "formal_case_lib_policy": "absent",
+  "spec_freeze": {
+    "functions": [
+      "KSemaphoreObtain"
+    ],
+    "baseline": {
+      "extern_coq": {},
+      "import_coq": {},
+      "specs": {
+        "_SemaphoreObtain::semaphore_obtain_oc": "semaphore_obtain_oc With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_obtain(sg, id, msec), X) && OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after)",
+        "KSemaphoreObtain::semaphore_obtain_oc": "semaphore_obtain_oc With (sg : StableGlobalState) (before : VarGlobalState) X Require safeExec(LastSeen(before), abs_semaphore_obtain(sg, id, msec), X) && OutsideCritical(sg, before) Ensure exists after, safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after)"
+      },
+      "lib": {}
+    }
+  },
+  "run_control": {
+    "status": "active",
+    "pause_count": 0,
+    "updated_at": "2026-11-19T00:46:41.780348Z"
+  },
+  "symexec_profile": {
+    "name": "standard",
+    "timeout_seconds": 3600,
+    "heartbeat_seconds": 30,
+    "poll_interval_seconds": 5
+  },
+  "max_witnesses_per_group": 12,
+  "max_parallel_group_workers": 3,
+  "dune_preparation": {
+    "status": "passed",
+    "returncode": 0,
+    "build_mode": "makefile",
+    "target": "VC/semaphore/KSemaphoreObtainRuntime_goal_check.vo",
+    "base_artifact_count": 221,
+    "current_source_count": 4,
+    "elapsed_seconds": 3.732152,
+    "snapshot": "verification_runs/KSemaphoreObtainRuntime-20261119084641/dependency_plan.json"
+  },
+  "attempts": {
+    "KSemaphoreObtainRuntime-annotation-r1": {
+      "attempt_id": "KSemaphoreObtainRuntime-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "owner": "annotation/KSemaphoreObtainRuntime-20261119084641",
+      "claimed_action": "deliver:KSemaphoreObtainRuntime-annotation-r1:0",
+      "repair_index": 0,
+      "created_at": "2026-11-19T00:46:46.932473Z",
+      "failed_vcs": [],
+      "timing": {
+        "owner-work": [
+          {
+            "started_at": "2026-11-19T00:46:53.825980Z",
+            "finished_at": "2026-11-19T00:49:25.814986Z",
+            "elapsed_seconds": 151.989006
+          }
+        ]
+      },
+      "returned_at": "2026-11-19T00:49:25.814953Z",
+      "finished_at": "2026-11-19T00:49:26.023376Z"
+    },
+    "KSemaphoreObtainRuntime-vc-proving-r1": {
+      "attempt_id": "KSemaphoreObtainRuntime-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "owner": null,
+      "claimed_action": null,
+      "repair_index": 0,
+      "created_at": "2026-11-19T00:49:37.022848Z",
+      "source_annotation": "KSemaphoreObtainRuntime-annotation-r1",
+      "source_vc_checking": null,
+      "groups": {},
+      "finished_at": "2026-11-19T00:50:16.842194Z"
+    }
+  },
+  "current": {
+    "annotation": "KSemaphoreObtainRuntime-annotation-r1",
+    "vc-checking": null,
+    "vc-proving": "KSemaphoreObtainRuntime-vc-proving-r1"
+  },
+  "annotation_owner": "annotation/KSemaphoreObtainRuntime-20261119084641",
+  "pending_retry": null,
+  "current_blockers": [],
+  "final_candidate": {
+    "round": "KSemaphoreObtainRuntime-vc-proving-r1"
+  },
+  "final_apply": {
+    "status": "applied",
+    "applied_at": "2026-11-19T00:50:47.206797Z",
+    "files": [
+      "VC/semaphore/KSemaphoreObtainRuntime_proof_manual.v"
+    ]
+  },
+  "final_check": {
+    "status": "passed",
+    "checked_at": "2026-11-19T00:51:23.881447Z",
+    "errors": [],
+    "cleanup_removed_count": 0
+  },
+  "created_at": "2026-11-19T00:46:41.780361Z",
+  "updated_at": "2026-11-19T00:51:23.891789Z",
+  "final_apply_transaction": {
+    "roles": [
+      "proof_manual_file"
+    ],
+    "status": "applied"
+  },
+  "finished_at": "2026-11-19T00:51:23.881429Z"
+}

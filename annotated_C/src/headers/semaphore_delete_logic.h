@@ -2,6 +2,12 @@
 #define CRTOS_SEMAPHORE_DELETE_LOGIC_H
 /*@ Import Coq Require Import CRTOS_Verify.lib.id.IdModuleSpec */
 /* Formal types and semantic vocabulary only. Contracts are caller-local. */
+/* A C ALIGN_SIZE macro supplies numeric uses directly; do not redeclare its
+ * expanded value as a formal identifier. Keep the logical name for inputs
+ * that do not define the C macro. */
+#ifndef ALIGN_SIZE
+/*@ Extern Coq (ALIGN_SIZE : Z) */
+#endif
 /*@ Import Coq Require Import CRTOS_Verify.lib.semaphore.KSemaphoreDelete CRTOS_Verify.lib.delay.KTaskUnSetDelay */
 /*@ Import Coq Require Import CRTOS_Verify.lib.list.DoubleLinkListSpec CRTOS_Verify.lib.task.TaskStatusMemory CRTOS_Verify.lib.task.KTaskParseInfo */
 /*@ Import Coq Import IDNode DLL */
@@ -76,7 +82,7 @@
   (dll_insert_anchor : {A} -> addr -> list(DL_Node A) -> addr -> Prop)
   (dll_insert_after_dispatch : {A} -> addr -> list(DL_Node A) -> addr -> DL_Node A -> list(DL_Node A))
   (dll_insert_before_dispatch : {A} -> addr -> list(DL_Node A) -> addr -> DL_Node A -> list(DL_Node A))
-  (ALIGN_SIZE : Z) (addr_aligned : addr -> Z -> Prop)
+  (addr_aligned : addr -> Z -> Prop)
   (KOK : Z) (KERROR : Z) (PRIORITY_MAX : Z)
   (TSK_SUSPEND : TaskStatus) (TSK_READY : TaskStatus)
   (decode_task_status : Z -> TaskStatus)

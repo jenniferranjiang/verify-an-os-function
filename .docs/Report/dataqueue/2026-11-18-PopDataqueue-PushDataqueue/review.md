@@ -97,3 +97,41 @@ main 提交并审阅复用的检查证据：根 Makefile 对 Pop/Push `.vo` 目�
 - `annotated_C/src/headers/dataqueue.h`：`95fc4e87bb93606957b80da5e6796dee98229b51ff26f68ec5271b0cc5934c79`
 - `annotated_C/src/kernel/dataqueue/PopDataqueue.c`：`0466f1d8340af4bb0535f65ac6eca45b5f7ab66f30a29b35ffdcf4c23eb9e569`
 - `annotated_C/src/kernel/dataqueue/PushDataqueue.c`：`767436057dcae1d30a979210db1c9e2a76d5f0132f1e2695de8f8252a0fc073e`
+
+## 实现阶段 continuation 提取审阅
+
+Revision `dq-pop-continuations-20261119-r1`：独立作者pop_continuations、只读reviewer pop_continuations_review。predicate适用性review-passed，spec语义保持review-passed。仅在原`lib/dataqueue/KPopDataqueue.v`将inline后续子程序提取为`dataqueue_pop_after_ring`、`dataqueue_pop_after_obtain`、`dataqueue_pop_after_id`，顺序和分支不变；没有新状态/内存predicate/Require/Ensure/假设。作者和reviewer分别将真实修改前body定义为old_abs，运行`forall sg p timeout, abs_pop_dataqueue sg p timeout = old_abs sg p timeout`的`reflexivity; Qed`检查通过。root make KPop.vo通过、KPush.vo有效，.vo保留。旧KPop哈希`64cbfa028585131ce06264e2f7f49ab9ab66a2a90284f0cea54641a70173df34`，新`09b2b12e2d9d3579d91a76736f54ca3a98b4872c72f8638461842a78632481a8`。旧设计语义结论继续适用；实现证明仍由当前Pop workflow完成，不能把定义等价当作实现证明。临时基线和等价检查在记录后清理。
+
+## 运行时共享header宏声明修复
+
+Revision `dq-runtime-align-decl-20261119-r1`，作者runtime_header_fix，独立reviewer runtime_header_review：predicate适用性保持、formal接口/spec语义保持review-passed。`semaphore_delete_logic.h`只将`(ALIGN_SIZE : Z)`移至`#ifndef ALIGN_SIZE`保护的独立Extern，原addr_aligned不变。C宏已存在时避免宏展开产生非法逻辑标识符；无宏时逻辑名称仍恰声明一次。19个配置独立预处理对比和GCC-m32检查均通过，当前9个done函数默认输入的完整formal/executable签名都与真实before相同，既有完成结论不失效。其余runtime caller和旧DeleteOC/ResumeAll仅去掉这一冲突声明，仍需后续QCP验证。旧SHA`dd14a8e4740be56d4eb1efd13430849577717c7f91afdbd2df1450c4da751314`，新`632a83680c45f0e6de840936cdac22867ea0e38efa2f8ee69f4aa34806736a9c`。未改lib/spec语义/VC/adapter/vo，临时检查材料在记录后清理。
+
+## LinklistSuspend实参单次求值拆分
+
+Revision `dq-suspend-id-evaluate-once-20261119-r1`，作者suspend_source_split、独立reviewer suspend_split_review：源码等价、predicate适用性保持、spec未变均review-passed。原`SuspendKTask(task->id.id)`改为局部`int32 suspend_id`接收单次字段读取后调用，供注解在二者之间归还ID字段资源。uint16字段的全部值均精确转换为int32，与原隐式实参转换一致；临时变量不逃逸、非法flag仍在读取前返回、业务次序和完整分支保持。formal注释逐字节不变，独立反向替换可恢复before逐字节相同。before/after GCC-m32及额外-Werror/-Wconversion/-Wsign-conversion检查通过。前SHA`c5cc6aade00bc4cc0506244233f0ba12e220d1c86227b29534037ff717bc028c`，后`e391c650bc5ca4d3e21f93e6bd2673d9258ae666157a4446cd903ac57fd52bf5`；原source哈希不变。未改lib/VC/adapter/vo，实际实现证明仍待QCP完成，临时材料记录后清理。
+
+## LinklistSuspend switch等价降级
+
+Revision `dq-suspend-switch-lowering-20261119-r1`，作者suspend_switch_lower、独立reviewer suspend_switch_review。源码行为等价、predicate适用性保持、冻结spec不变均review-passed。为绕开当前symbolic对switch控制值与Assert局部状态重建的交互，将无fallthrough的case0/case1改为if0/else-if1，仅移除两个case终止break，循环内部break保留。独立核对256个uint8选择一致；flag为非volatile、不赋值、不取址的局部参数，多出的纯比较无可观察效果。两个分支语句、分支前prefix及formal注释逐字节保持，反向变换恢复before，GCC-m32严格检查通过。O2汇编不相同，不宣称机器码相同。前SHA`8cdf179eab14f048d000486e2d6f2dca8c7e0e664715f6d8da5e978ba4612aa3`，后`1493b3d1b8731df0398e3e772521c05e7efca5b9617d5010dfa03459b562f8a1`。此结论只审阅适配delta，不证明当前注解或函数实现；原仓库不改，临时材料记录后清理。
+
+归因补充：后续annotation发现基础与派生spec同时附在body上，引发不同规格入口状态合并；此前switch/Assert局部值错位尚不能归因于switch自身工具缺陷。已审阅if降级仍行为等价，但不声称它是唯一必需修复。将按QCP原生示例把派生合同放前置声明，保留基础合同在唯一body并检查派生蕴含VC；这项组织调整的实际检查另记。
+
+## Obtain continuation提取
+
+Revision `dq-obtain-continuations-20261119-r1`，作者obtain_continuations、独立reviewer obtain_continuations_review：predicate适用性保持、spec语义保持review-passed。仅在`KSemaphoreObtain.v`提取after_assign（原status assertS+atomic read）及after_locked（原sum match，inl return / inr assign再after_assign）。guards、ticks、首次观察和原子操作顺序、错误/阻塞语义完全不变；无新假设/状态/内存predicate/Require/Ensure。作者与reviewer分别检查真实before旧body并以`forall sg id msec,new_abs=old_abs`的`reflexivity;Qed`通过coqc。独立coqdep影响集为KObtain/KPop/KPush三库及Pop/Suspend各4VC。三库编译通过，重VC由main审阅后重编译。旧SHA`7a7047ead49087f8c6c2a6b0edb51ed5bd71bbeb16405ed086481589af0de348`，新`f4b64d091e13008aafaa7c8187828133c413c4bc57d7f1e5d15ccea52b85239a`。未改C/VC或适配层，临时等价检查记录后清理。
+
+## Obtain失败回滚ID单次读取适配
+
+Revision `dq-obtain-wakeup-id-evaluate-once-20261119-r1`，作者obtain_wakeup_split、独立reviewer obtain_wakeup_review：source行为等价、predicate适用性保持、spec未变均review-passed。仅SetDelay失败分支将Wakeup的`task->id.id`实参拆为`int32 wakeup_id`单次读取后原调用，供注解归还字段资源。uint16到int32与原实参隐式转换一致，局部不逃逸、失败路径和调用/解锁/返回顺序不变，完整formal注释逐字保持。独立逆变换恢复before、GCC-m32严格语法与类型范围检查通过。前SHA`d47091d0626b2288ed35ee188e39065c78c5dd1104fbaad3175a3eb9c17661ae`，后`5f545b28081d0579efaedff1eec0a4b507d0addb0d0b562becea9c880abe4661`。原source只读不变，无lib/VC/adapter/vo修改，临时材料记录后清理。
+
+## Obtain复用Delay契约等价逻辑适配
+
+Revision `dq-obtain-delay-condition-20261119-r1`，独立reviewer obtain_delay_or_review：predicate适用性保持、reused-spec语义保持review-passed。原KTaskSetDelay for_null_inactive调用前条件`p=0 OR inactive(p)<>None`被本地注解等价写为`p<>0 -> inactive(p)<>None`，避免QCP把合法null路径错选为必须inactive(0)的分支。独立pure Coq以Z.eq_dec构造证明`forall p:Z,P:Prop,(p=0\/P)<->(p<>0->P)`，coqc exit0，Print Assumptions为Closed under global context；不引入公理。With/空间/Ensure/目标/body保持，逆变换恢复r2-before逐字节；与VRTOS原for_null_inactive完整契约比较，逆转本次逻辑和既有os_tick投影写法后规范化相同。这是语义等价适配，不冒称alpha文本相同。新null wit21保留p=0且只要求条件蕴含，nonnull wit20仍有实际inactive前提；由QCP原生生成107auto/36manual顶层/47split，wit21自动进入auto而非手工移动。旧SHA`762f30b23a83865a159d5e1ab807690985b48d351bcc8c6f899146529a93b5d1`，新`25a380ccbb1cf3c6a08fef37d477821f98030d76b7d8aba5d4859ee4b4844956`。原canonical/外部源码未改，实际函数证明仍待完成。
+
+## LinklistResume参数求值拆分
+
+Revision `dq-resume-id-evaluate-once-20261119-r1`：source作者resume_source_author，独立reviewer resume_source_review，review-passed。唯一变换把KTaskWakeup(task->id.id)改为int32 resume_task_id读取后调用，为归还字段wand后匹配os_inv留出注解点。实际uint16字段到int32局部/形参是原本的无损转换，读取次数、顺序、分支及返回不变。逆变换与真实基线逐字节一致，formal注解全部不变；作者和reviewer独立严格GCC m32语法检查退出0。旧SHA3513925998c3c8d6f07f555675f126c25e99ac1b69a81ada113bcff74b02a166，新SHA74f91fa559b13e817778050b91feeae34a152d03c21a3fd0a8998029c22db712。无新源码缺陷、规格或信任变化；源仓库只读，临时基线记录后清理。
+
+## LinklistResume既有契约导入整理
+
+Revision `dq-resume-reused-contract-20261119-r1`，annotation作者resume_annotation，独立reviewer resume_import_review：predicate适用性保持、spec review-passed。caller仅保留KTaskWakeup实际使用的semaphore_pending_head_ic完整接口，删除未用base/detached声明及该已导入契约的派生标记；名称/With/Require/Ensure与既有LinklistResumeAll.c完全一致，来源SHA29ca9f354357150f450eed11198bff152a258c1611f8a3e3d153330f70a13b05，已有于43a2b34e，并非本轮新增特化。当前目标公开规格、其他注解、可执行tokens均不变；调用实例对应实际队首及其ID，其前提资源依然由本轮VC证明。before SHA c87caa464ec627471a9b181e4e19970b160d879bf6dc1ae9c04917d337d3895e，after86e19c162089c20d3172bf3852a6bcf42285c39f28d6162af064c124b1ee08c6。此整理遵循用户reused-spec边界，不将来源函数体或派生义务声称已证明，也不新增trusted；本次不对既有Obtain已完成结果作无关改写。临时基线在记录后清理。

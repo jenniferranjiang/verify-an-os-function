@@ -1,16 +1,115 @@
 /* Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c; SHA-256 dafd02bf7c6fa5a7324c6e0f824d9a1ddc1544c43f9e71aabeb902d832f30ab8.
  * Selected 32-bit non-SMP config: KERNEL_STATIC_OBJECTS and KERNEL_DEFER_IPC_SCHED undefined. */
-/* Dataqueue IC design input (not an additional implementation proof).
- * The OC definition is synchronized to the latest source; its contracts and proof annotations are retained.
- * This named IC contract targets a temporary slice adapted from that same body:
- * remove nested CriticalAreaLock/UnLock calls and OC-only proof annotations;
- * select the dataqueue_ic* callee contracts recorded below.
- * Wrapper bodies themselves need no lock removal. The OC body is NOT asserted
- * to satisfy the IC contract without that documented source adaptation.
- * See .docs/Report/dataqueue/2026-11-16-InitDataqueue-DataqueuePeak/design.md for the complete reconstruction choices.
+/* One canonical body, with selectable calling context.
+ * CRTOS_DATAQUEUE_SEMAPHORE_IC defaults to 1 for this dataqueue verification.
+ * Define it as 0 to retain the original OC contracts, annotations and locks.
+ * IC uses the reviewed dataqueue contract and removes only nested lock/unlock
+ * operations under the source-processing rule; all other C paths are shared.
+ * Selecting a contract is not an implementation-proof result.
  */
+#ifndef CRTOS_DATAQUEUE_SEMAPHORE_IC
+#define CRTOS_DATAQUEUE_SEMAPHORE_IC 1
+#endif
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
 #include "dataqueue.h"
 #include "dataqueue_semaphore_logic.h"
+
+/*@ Extern Coq (SemaphoreStable :: *) (SemaphoreAbs :: *) */
+/*@ Extern Coq SemaphoreState := list SemaphoreAbs */
+/*@ Extern Coq
+ (os_semaphores : VarGlobalState -> SemaphoreState)
+ (os_semaphore_stable : StableGlobalState -> SemaphoreStable)
+ (semaphore_manager_stable : SemaphoreStable -> StableIdmanager)
+ (semaphore_manager : SemaphoreState -> VarIdmanager)
+ (dataqueue_inv : SemaphoreState -> DataqueueState -> Assertion)
+*/
+/*@ Extern Coq Record VarGlobalState {
+  os_semaphores: SemaphoreState;
+} */
+/*@ Extern Coq Record StableGlobalState {
+  os_semaphore_stable: SemaphoreStable;
+} */
+/*@ Extern Coq Record SemaphoreStable {
+  semaphore_manager_stable: StableIdmanager;
+} */
+/* Existing semantic interfaces used only to expose call-site resources. */
+/*@ Extern Coq
+      (TaskState :: *)
+      (TaskDescriptorAbs :: *)
+      (ServiceSlotAbs :: *)
+      (ZombieQueueAbs :: *)
+      (MutexStable :: *)
+      (MutexState :: *)
+      (EventStable :: *)
+      (EventState :: *)
+      (IsrStable :: *)
+      (IsrAbs :: *)
+*/
+/*@ Extern Coq
+      (os_world_wf : StableGlobalState -> VarGlobalState -> Prop)
+      (semaphore_context : SemaphoreStable -> Prop)
+      (os_tasks : VarGlobalState -> TaskState)
+      (task_desc_map : TaskState -> Z -> option TaskDescriptorAbs)
+      (pure_suspend_sched_link : (Z -> option TaskDescriptorAbs) -> Z -> Z -> Assertion)
+      (os_zombie_head : StableGlobalState -> Z)
+      (zombie_queue : VarGlobalState -> ZombieQueueAbs)
+      (os_recycler_slot : StableGlobalState -> Z)
+      (os_recycle : VarGlobalState -> ServiceSlotAbs)
+      (service_id : ServiceSlotAbs -> Z)
+      (os_idle_array : StableGlobalState -> Z)
+      (os_idle : VarGlobalState -> list ServiceSlotAbs)
+      (CORE_COUNT : Z)
+      (os_mutex_stable : StableGlobalState -> MutexStable)
+      (os_mutexes : VarGlobalState -> MutexState)
+      (os_event_stable : StableGlobalState -> EventStable)
+      (os_events : VarGlobalState -> EventState)
+      (os_isr_stable : StableGlobalState -> IsrStable)
+      (os_isr : VarGlobalState -> IsrAbs)
+      (store_prio_lookup_table : Assertion)
+      (store_zombie_queue : (Z -> option TaskDescriptorAbs) -> Z -> ZombieQueueAbs -> Assertion)
+      (mutex_inv : (Z -> Z -> Assertion) -> MutexStable -> MutexState -> Assertion)
+      (event_inv : (Z -> Z -> Assertion) -> EventStable -> EventState -> Assertion)
+      (isrmanager_inv : IsrStable -> IsrAbs -> Assertion)
+      (NodeZero : Z -> Assertion)
+      (SemaphorePadding : Z -> Assertion)
+      (semaphore_created : Z -> Z -> Z -> SemaphoreAbs)
+      (semaphore_addr : SemaphoreAbs -> Z)
+      (semaphore_link_node : SemaphoreAbs -> DL_Node SemaphoreAbs)
+      (store_semaphore : (Z -> Z -> Assertion) -> Z -> SemaphoreAbs -> Assertion)
+      (dll_nodes_nonzero : {A} -> list(DL_Node A) -> Prop)
+      (dllseg_shift_rev : {A} -> (Z -> A -> Assertion) -> Z -> Z -> list(DL_Node A) -> Assertion)
+      (task_inv : StableGlobalState -> VarGlobalState -> Assertion)
+      (tick_inv : StableGlobalState -> VarGlobalState -> Assertion)
+      (delay_inv : StableGlobalState -> VarGlobalState -> Assertion)
+      (assign_inv : StableGlobalState -> VarGlobalState -> Assertion)
+      (exstatus_inv : StableGlobalState -> VarGlobalState -> Assertion)
+*/
+/*@ Extern Coq Record VarGlobalState {
+  os_tasks: TaskState;
+  zombie_queue: ZombieQueueAbs;
+  os_recycle: ServiceSlotAbs;
+  os_idle: list ServiceSlotAbs;
+  os_mutexes: MutexState;
+  os_events: EventState;
+  os_isr: IsrAbs;
+} */
+/*@ Extern Coq Record TaskState {
+  task_desc_map: Z -> option TaskDescriptorAbs;
+} */
+/*@ Extern Coq Record StableGlobalState {
+  os_zombie_head: Z;
+  os_recycler_slot: Z;
+  os_idle_array: Z;
+  os_mutex_stable: MutexStable;
+  os_event_stable: EventStable;
+  os_isr_stable: IsrStable;
+} */
+/*@ Extern Coq Record ServiceSlotAbs {
+  service_id: Z;
+} */
+/*@ Extern Coq Record SemaphoreAbs {
+  semaphore_addr: Z;
+} */
 
 /* Current source: kernel/thread/semaphore.c; non-SMP ILP32.
  * New IC contract for dataqueue's existing locked call site. The global
@@ -92,16 +191,8 @@ void DoubleLinkListInsertNodeAfter(DoubleLinklistType *linklist, DoubleLinklistT
 */;
 
 
-/* IC target contract; original OC target contract remains below. */
-int32 _SemaphoreCreate(uint16 val)
-/*@ dataqueue_ic
-    With (sg : StableGlobalState) (before : VarGlobalState)
-    Require os_inv(sg, before)
-    Ensure exists after,
-      ((__return == -5) || (0 <= __return && __return < 128)) &&
-      semaphore_create_ic_effect(sg, val, before, __return, after) &&
-      os_inv(sg, after)
-*/;
+#else
+
 
 /* OC input: existing contracts/annotations retained; latest-source adaptations marked below. */
 #include "m_semaphore.h"
@@ -167,6 +258,29 @@ int32 _SemaphoreCreate(uint16 val)
       (assign_inv : StableGlobalState -> VarGlobalState -> Assertion)
       (exstatus_inv : StableGlobalState -> VarGlobalState -> Assertion)
 */
+/*@ Extern Coq Record VarGlobalState {
+  os_tasks: TaskState;
+  zombie_queue: ZombieQueueAbs;
+  os_recycle: RoleSlotAbs;
+  os_idle: list RoleSlotAbs;
+  os_mutexes: MutexState;
+  os_events: EventState;
+  os_isr: IsrAbs;
+} */
+/*@ Extern Coq Record TaskState {
+  task_desc_map: Z -> option TaskDescriptorAbs;
+} */
+/*@ Extern Coq Record StableGlobalState {
+  os_zombie_head: Z;
+  os_recycler_slot: Z;
+  os_idle_array: Z;
+  os_mutex_stable: MutexStable;
+  os_event_stable: EventStable;
+  os_isr_stable: IsrStable;
+} */
+/*@ Extern Coq Record SemaphoreAbs {
+  semaphore_addr: Z;
+} */
 
 
 void *x_malloc(x_size_t size)
@@ -263,7 +377,19 @@ void CriticalAreaUnLock(x_base lock)
 /* Trusted debug removal (TrustBase.md): variadic KPrintf declaration omitted. */
 
 /* Canonical: _SemaphoreCreate. Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c:32. */
+#endif
+
 int32 _SemaphoreCreate(uint16 val)
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ dataqueue_ic
+    With (sg : StableGlobalState) (before : VarGlobalState)
+    Require os_inv(sg, before)
+    Ensure exists after,
+      ((__return == -5) || (0 <= __return && __return < 128)) &&
+      semaphore_create_ic_effect(sg, val, before, __return, after) &&
+      os_inv(sg, after)
+*/
+#else
 /*@ With (sg : StableGlobalState) (before : VarGlobalState) X
     Require
       safeExec(LastSeen(before), abs_semaphore_create(sg, val), X) &&
@@ -279,140 +405,289 @@ int32 _SemaphoreCreate(uint16 val)
         safeExec(LastSeen(after), return(__return), X) &&
         OutsideCritical(sg, after))
 */
+#endif
 {
-    /*@ 0 <= val && val <= 65535 by local */
+    
+#if !CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ 0 <= val && val <= 65535 by local */
+#endif
+
     int32 id = 0;
     x_base lock = 0;
     struct Semaphore *sem = (0);
 
-    sem = (struct Semaphore *)x_malloc(32);
+    sem = (struct Semaphore *)x_malloc(32)
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ where (dataqueue_ic_import) */
+#endif
+;
     if (sem == (0))
         return -5;
 
-    memset(sem, 0, 32);
+    memset(sem, 0, 32)
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ where (dataqueue_ic_import) */
+#endif
+;
     /* Convert the complete zero byte array, retaining embedded-node validity. */
-    /*@ Assert val == val@pre && 0 <= val && val <= 65535 &&
+    
+#if !CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ Assert val == val@pre && 0 <= val && val <= 65535 &&
       sem != 0 && addr_aligned(sem, 4) &&
       &sem->pend_list != 0 && &sem->link != 0 &&
       id == 0 && lock == 0 &&
       safeExec(LastSeen(before), abs_semaphore_create(sg, val), X) &&
       OutsideCritical(sg, before) * SemaphoreZero(sem)
     */
-    lock = CriticalAreaLock();
-    /*@ Given st_lock */
+#endif
+
+    
+#if !CRTOS_DATAQUEUE_SEMAPHORE_IC
+lock = CriticalAreaLock();
+#endif
+
+    
+#if !CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ Given st_lock */
+#endif
+
     /* Expose the frozen ID interface while framing the complete payload. */
-    /*@ Assert exists (saved_lock : Z), lock == saved_lock &&
+    
+#if !CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ Assert exists (saved_lock : Z), lock == saved_lock &&
       val == val@pre && 0 <= val && val <= 65535 &&
       sem != 0 && addr_aligned(sem, 4) &&
       &sem->pend_list != 0 && &sem->link != 0 &&
       Crtos_RTrans(before, st_lock) &&
       safeExec(LastSeen(before), abs_semaphore_create(sg, val), X) && id == 0 &&
-      os_world_wf(sg, st_lock) && semaphore_context(os_semaphore_stable(sg)) &&
-      !(In(sem, map(semaphore_addr, os_semaphores(st_lock)))) &&
+      os_world_wf(sg, st_lock) && semaphore_context(sg.os_semaphore_stable) &&
+      !(In(sem, map(semaphore_addr, st_lock.os_semaphores))) &&
       InsideCritical(sg, st_lock) *
       task_inv(sg, st_lock) * tick_inv(sg, st_lock) * delay_inv(sg, st_lock) *
       assign_inv(sg, st_lock) * store_prio_lookup_table *
-      store_zombie_queue(task_desc_map(os_tasks(st_lock)), os_zombie_head(sg), zombie_queue(st_lock)) *
-      data_at(os_recycler_slot(sg), int, role_id(os_recycle(st_lock))) *
-      IntArray::full(os_idle_array(sg), CORE_COUNT, map(role_id, os_idle(st_lock))) *
-      mutex_inv(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock))), os_mutex_stable(sg), os_mutexes(st_lock)) *
-      msgqueue_inv(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock))), os_msgqueue_stable(sg), os_msgqueues(st_lock)) *
-      event_inv(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock))), os_event_stable(sg), os_events(st_lock)) *
-      isrmanager_inv(os_isr_stable(sg), os_isr(st_lock)) * exstatus_inv(sg, st_lock) *
-      store_idmanager(semaphore_manager_stable(os_semaphore_stable(sg)), semaphore_manager(os_semaphores(st_lock)), &k_sem_id_manager) *
-      store_dll(store_semaphore(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock)))), &k_sem_list, map(semaphore_link_node, os_semaphores(st_lock))) *
+      store_zombie_queue(st_lock.os_tasks.task_desc_map, sg.os_zombie_head, st_lock.zombie_queue) *
+      data_at(sg.os_recycler_slot, int, role_id(st_lock.os_recycle)) *
+      IntArray::full(sg.os_idle_array, CORE_COUNT, map(role_id, st_lock.os_idle)) *
+      mutex_inv(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), sg.os_mutex_stable, st_lock.os_mutexes) *
+      msgqueue_inv(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), os_msgqueue_stable(sg), os_msgqueues(st_lock)) *
+      event_inv(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), sg.os_event_stable, st_lock.os_events) *
+      isrmanager_inv(sg.os_isr_stable, st_lock.os_isr) * exstatus_inv(sg, st_lock) *
+      store_idmanager(sg.os_semaphore_stable.semaphore_manager_stable, semaphore_manager(st_lock.os_semaphores), &k_sem_id_manager) *
+      store_dll(store_semaphore(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map)), &k_sem_list, map(semaphore_link_node, st_lock.os_semaphores)) *
       store_idnode_insert_ready(&sem->id) * data_at(&sem->value, unsigned short, 0) *
       NodeZero(&sem->pend_list) * NodeZero(&sem->link) * SemaphorePadding(sem)
     */
-    id = IdInsertObj(&k_sem_id_manager, &sem->id);
+#endif
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ Assert lock == 0 && id == 0 &&
+      val == val@pre &&
+      sem != 0 && addr_aligned(sem, 4) &&
+      &sem->pend_list != 0 && &sem->link != 0 &&
+      os_world_wf(sg, before) && semaphore_context(sg.os_semaphore_stable) &&
+      !(In(sem, map(semaphore_addr, before.os_semaphores))) &&
+      dataqueue_inv(before.os_semaphores, before.os_dataqueues) *
+      task_inv(sg, before) * tick_inv(sg, before) * delay_inv(sg, before) *
+      assign_inv(sg, before) * store_prio_lookup_table *
+      store_zombie_queue(before.os_tasks.task_desc_map, sg.os_zombie_head, before.zombie_queue) *
+      data_at(sg.os_recycler_slot, int, before.os_recycle.service_id) *
+      IntArray::full(sg.os_idle_array, CORE_COUNT, map(service_id, before.os_idle)) *
+      mutex_inv(pure_suspend_sched_link(before.os_tasks.task_desc_map), sg.os_mutex_stable, before.os_mutexes) *
+      event_inv(pure_suspend_sched_link(before.os_tasks.task_desc_map), sg.os_event_stable, before.os_events) *
+      isrmanager_inv(sg.os_isr_stable, before.os_isr) * exstatus_inv(sg, before) *
+      store_idmanager(sg.os_semaphore_stable.semaphore_manager_stable, semaphore_manager(before.os_semaphores), &k_sem_id_manager) *
+      store_dll(store_semaphore(pure_suspend_sched_link(before.os_tasks.task_desc_map)), &k_sem_list, map(semaphore_link_node, before.os_semaphores)) *
+      store_idnode_insert_ready(&sem->id) * data_at(&sem->value, unsigned short, 0) *
+      NodeZero(&sem->pend_list) * NodeZero(&sem->link) * SemaphorePadding(sem)
+    */
+#endif
+
+    id = IdInsertObj(&k_sem_id_manager, &sem->id)
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ where (dataqueue_ic_import) */
+#endif
+;
     if (id < 0) {
         /* The ID API returns unknown-owned fields, sufficient for full reclamation. */
-        /*@ Assert exists (saved_lock : Z), lock == saved_lock &&
+        
+#if !CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ Assert exists (saved_lock : Z), lock == saved_lock &&
       val == val@pre && 0 <= val && val <= 65535 &&
       sem != 0 && addr_aligned(sem, 4) &&
       &sem->pend_list != 0 && &sem->link != 0 &&
       Crtos_RTrans(before, st_lock) &&
       safeExec(LastSeen(before), abs_semaphore_create(sg, val), X) && id == -1 &&
-      idmanager_full(semaphore_manager_stable(os_semaphore_stable(sg)), semaphore_manager(os_semaphores(st_lock))) &&
+      idmanager_full(sg.os_semaphore_stable.semaphore_manager_stable, semaphore_manager(st_lock.os_semaphores)) &&
       InsideCritical(sg, st_lock) * os_inv(sg, st_lock) * SemaphoreRaw(sem)
         */
-        x_free(sem);
-        CriticalAreaUnLock(lock);
+#endif
+
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ Assert val == val@pre && lock == 0 && id == -1 && sem != 0 &&
+      os_inv(sg, before) * CharArray::undef_full(sem, 32)
+*/
+#endif
+
+        x_free(sem)
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ where (dataqueue_ic_import) */
+#endif
+;
+        
+#if !CRTOS_DATAQUEUE_SEMAPHORE_IC
+CriticalAreaUnLock(lock);
+#endif
+
         return -5;
     }
     sem->value = val;
 
     /* Expose exactly the pending-list fields overwritten by initialization. */
-    /*@ Assert exists (saved_lock : Z), lock == saved_lock &&
+    
+#if !CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ Assert exists (saved_lock : Z), lock == saved_lock &&
       val == val@pre && 0 <= val && val <= 65535 &&
       sem != 0 && addr_aligned(sem, 4) &&
       &sem->pend_list != 0 && &sem->link != 0 &&
       Crtos_RTrans(before, st_lock) &&
       safeExec(LastSeen(before), abs_semaphore_create(sg, val), X) && 0 <= id && id < 128 &&
-      idmanager_min_free_id(semaphore_manager_stable(os_semaphore_stable(sg)), semaphore_manager(os_semaphores(st_lock)), id) &&
-      os_world_wf(sg, st_lock) && semaphore_context(os_semaphore_stable(sg)) &&
-      !(In(sem, map(semaphore_addr, os_semaphores(st_lock)))) &&
+      idmanager_min_free_id(sg.os_semaphore_stable.semaphore_manager_stable, semaphore_manager(st_lock.os_semaphores), id) &&
+      os_world_wf(sg, st_lock) && semaphore_context(sg.os_semaphore_stable) &&
+      !(In(sem, map(semaphore_addr, st_lock.os_semaphores))) &&
       InsideCritical(sg, st_lock) *
       task_inv(sg, st_lock) * tick_inv(sg, st_lock) * delay_inv(sg, st_lock) *
       assign_inv(sg, st_lock) * store_prio_lookup_table *
-      store_zombie_queue(task_desc_map(os_tasks(st_lock)), os_zombie_head(sg), zombie_queue(st_lock)) *
-      data_at(os_recycler_slot(sg), int, role_id(os_recycle(st_lock))) *
-      IntArray::full(os_idle_array(sg), CORE_COUNT, map(role_id, os_idle(st_lock))) *
-      mutex_inv(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock))), os_mutex_stable(sg), os_mutexes(st_lock)) *
-      msgqueue_inv(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock))), os_msgqueue_stable(sg), os_msgqueues(st_lock)) *
-      event_inv(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock))), os_event_stable(sg), os_events(st_lock)) *
-      isrmanager_inv(os_isr_stable(sg), os_isr(st_lock)) * exstatus_inv(sg, st_lock) *
-      store_idmanager(semaphore_manager_stable(os_semaphore_stable(sg)), idmanager_link(semaphore_manager_stable(os_semaphore_stable(sg)), idmanager_add(semaphore_manager(os_semaphores(st_lock)), id), id, &sem->id), &k_sem_id_manager) *
-      store_dll(store_semaphore(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock)))), &k_sem_list, map(semaphore_link_node, os_semaphores(st_lock))) *
+      store_zombie_queue(st_lock.os_tasks.task_desc_map, sg.os_zombie_head, st_lock.zombie_queue) *
+      data_at(sg.os_recycler_slot, int, role_id(st_lock.os_recycle)) *
+      IntArray::full(sg.os_idle_array, CORE_COUNT, map(role_id, st_lock.os_idle)) *
+      mutex_inv(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), sg.os_mutex_stable, st_lock.os_mutexes) *
+      msgqueue_inv(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), os_msgqueue_stable(sg), os_msgqueues(st_lock)) *
+      event_inv(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), sg.os_event_stable, st_lock.os_events) *
+      isrmanager_inv(sg.os_isr_stable, st_lock.os_isr) * exstatus_inv(sg, st_lock) *
+      store_idmanager(sg.os_semaphore_stable.semaphore_manager_stable, idmanager_link(sg.os_semaphore_stable.semaphore_manager_stable, idmanager_add(semaphore_manager(st_lock.os_semaphores), id), id, &sem->id), &k_sem_id_manager) *
+      store_dll(store_semaphore(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map)), &k_sem_list, map(semaphore_link_node, st_lock.os_semaphores)) *
       data_at(&sem->value, unsigned short, val) * SemaphorePadding(sem) *
       undef_data_at(&sem->pend_list.node_prev) * undef_data_at(&sem->pend_list.node_next) *
       NodeZero(&sem->link)
     */
-    InitDoubleLinkList(&sem->pend_list);
+#endif
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ Assert lock == 0 && 0 <= id && id < 128 &&
+      val == val@pre &&
+      sem != 0 && addr_aligned(sem, 4) &&
+      &sem->pend_list != 0 && &sem->link != 0 &&
+      idmanager_min_free_id(sg.os_semaphore_stable.semaphore_manager_stable, semaphore_manager(before.os_semaphores), id) &&
+      os_world_wf(sg, before) && semaphore_context(sg.os_semaphore_stable) &&
+      !(In(sem, map(semaphore_addr, before.os_semaphores))) &&
+      dataqueue_inv(before.os_semaphores, before.os_dataqueues) *
+      task_inv(sg, before) * tick_inv(sg, before) * delay_inv(sg, before) *
+      assign_inv(sg, before) * store_prio_lookup_table *
+      store_zombie_queue(before.os_tasks.task_desc_map, sg.os_zombie_head, before.zombie_queue) *
+      data_at(sg.os_recycler_slot, int, before.os_recycle.service_id) *
+      IntArray::full(sg.os_idle_array, CORE_COUNT, map(service_id, before.os_idle)) *
+      mutex_inv(pure_suspend_sched_link(before.os_tasks.task_desc_map), sg.os_mutex_stable, before.os_mutexes) *
+      event_inv(pure_suspend_sched_link(before.os_tasks.task_desc_map), sg.os_event_stable, before.os_events) *
+      isrmanager_inv(sg.os_isr_stable, before.os_isr) * exstatus_inv(sg, before) *
+      store_idmanager(sg.os_semaphore_stable.semaphore_manager_stable, idmanager_link(sg.os_semaphore_stable.semaphore_manager_stable, idmanager_add(semaphore_manager(before.os_semaphores), id), id, &sem->id), &k_sem_id_manager) *
+      store_dll(store_semaphore(pure_suspend_sched_link(before.os_tasks.task_desc_map)), &k_sem_list, map(semaphore_link_node, before.os_semaphores)) *
+      data_at(&sem->value, unsigned short, val) * SemaphorePadding(sem) *
+      undef_data_at(&sem->pend_list.node_prev) * undef_data_at(&sem->pend_list.node_next) *
+      NodeZero(&sem->link)
+    */
+#endif
+
+    InitDoubleLinkList(&sem->pend_list)
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ where (dataqueue_ic_import) */
+#endif
+;
     /* Pack the newly initialized payload for VRTOS's complete-DLL interface. */
-    /*@ Assert exists (saved_lock : Z), lock == saved_lock &&
+    
+#if !CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ Assert exists (saved_lock : Z), lock == saved_lock &&
       val == val@pre && 0 <= val && val <= 65535 &&
       sem != 0 && addr_aligned(sem, 4) &&
       &sem->pend_list != 0 && &sem->link != 0 &&
       Crtos_RTrans(before, st_lock) &&
       safeExec(LastSeen(before), abs_semaphore_create(sg, val), X) && 0 <= id && id < 128 &&
-      idmanager_min_free_id(semaphore_manager_stable(os_semaphore_stable(sg)), semaphore_manager(os_semaphores(st_lock)), id) &&
-      os_world_wf(sg, st_lock) && semaphore_context(os_semaphore_stable(sg)) &&
-      !(In(sem, map(semaphore_addr, os_semaphores(st_lock)))) &&
+      idmanager_min_free_id(sg.os_semaphore_stable.semaphore_manager_stable, semaphore_manager(st_lock.os_semaphores), id) &&
+      os_world_wf(sg, st_lock) && semaphore_context(sg.os_semaphore_stable) &&
+      !(In(sem, map(semaphore_addr, st_lock.os_semaphores))) &&
       InsideCritical(sg, st_lock) *
       task_inv(sg, st_lock) * tick_inv(sg, st_lock) * delay_inv(sg, st_lock) *
       assign_inv(sg, st_lock) * store_prio_lookup_table *
-      store_zombie_queue(task_desc_map(os_tasks(st_lock)), os_zombie_head(sg), zombie_queue(st_lock)) *
-      data_at(os_recycler_slot(sg), int, role_id(os_recycle(st_lock))) *
-      IntArray::full(os_idle_array(sg), CORE_COUNT, map(role_id, os_idle(st_lock))) *
-      mutex_inv(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock))), os_mutex_stable(sg), os_mutexes(st_lock)) *
-      msgqueue_inv(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock))), os_msgqueue_stable(sg), os_msgqueues(st_lock)) *
-      event_inv(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock))), os_event_stable(sg), os_events(st_lock)) *
-      isrmanager_inv(os_isr_stable(sg), os_isr(st_lock)) * exstatus_inv(sg, st_lock) *
-      store_idmanager(semaphore_manager_stable(os_semaphore_stable(sg)), idmanager_link(semaphore_manager_stable(os_semaphore_stable(sg)), idmanager_add(semaphore_manager(os_semaphores(st_lock)), id), id, &sem->id), &k_sem_id_manager) *
-      store_dll(store_semaphore(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock)))), &k_sem_list, map(semaphore_link_node, os_semaphores(st_lock))) *
-      store_semaphore(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock))), &sem->link, semaphore_created(sem, id, val)) *
+      store_zombie_queue(st_lock.os_tasks.task_desc_map, sg.os_zombie_head, st_lock.zombie_queue) *
+      data_at(sg.os_recycler_slot, int, role_id(st_lock.os_recycle)) *
+      IntArray::full(sg.os_idle_array, CORE_COUNT, map(role_id, st_lock.os_idle)) *
+      mutex_inv(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), sg.os_mutex_stable, st_lock.os_mutexes) *
+      msgqueue_inv(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), os_msgqueue_stable(sg), os_msgqueues(st_lock)) *
+      event_inv(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), sg.os_event_stable, st_lock.os_events) *
+      isrmanager_inv(sg.os_isr_stable, st_lock.os_isr) * exstatus_inv(sg, st_lock) *
+      store_idmanager(sg.os_semaphore_stable.semaphore_manager_stable, idmanager_link(sg.os_semaphore_stable.semaphore_manager_stable, idmanager_add(semaphore_manager(st_lock.os_semaphores), id), id, &sem->id), &k_sem_id_manager) *
+      store_dll(store_semaphore(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map)), &k_sem_list, map(semaphore_link_node, st_lock.os_semaphores)) *
+      store_semaphore(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map), &sem->link, semaphore_created(sem, id, val)) *
       occupy_dll_node(&sem->link)
     */
+#endif
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ Assert lock == 0 && 0 <= id && id < 128 &&
+      val == val@pre &&
+      sem != 0 && addr_aligned(sem, 4) &&
+      &sem->pend_list != 0 && &sem->link != 0 &&
+      idmanager_min_free_id(sg.os_semaphore_stable.semaphore_manager_stable, semaphore_manager(before.os_semaphores), id) &&
+      os_world_wf(sg, before) && semaphore_context(sg.os_semaphore_stable) &&
+      !(In(sem, map(semaphore_addr, before.os_semaphores))) &&
+      dataqueue_inv(before.os_semaphores, before.os_dataqueues) *
+      task_inv(sg, before) * tick_inv(sg, before) * delay_inv(sg, before) *
+      assign_inv(sg, before) * store_prio_lookup_table *
+      store_zombie_queue(before.os_tasks.task_desc_map, sg.os_zombie_head, before.zombie_queue) *
+      data_at(sg.os_recycler_slot, int, before.os_recycle.service_id) *
+      IntArray::full(sg.os_idle_array, CORE_COUNT, map(service_id, before.os_idle)) *
+      mutex_inv(pure_suspend_sched_link(before.os_tasks.task_desc_map), sg.os_mutex_stable, before.os_mutexes) *
+      event_inv(pure_suspend_sched_link(before.os_tasks.task_desc_map), sg.os_event_stable, before.os_events) *
+      isrmanager_inv(sg.os_isr_stable, before.os_isr) * exstatus_inv(sg, before) *
+      store_idmanager(sg.os_semaphore_stable.semaphore_manager_stable, idmanager_link(sg.os_semaphore_stable.semaphore_manager_stable, idmanager_add(semaphore_manager(before.os_semaphores), id), id, &sem->id), &k_sem_id_manager) *
+      store_dll(store_semaphore(pure_suspend_sched_link(before.os_tasks.task_desc_map)), &k_sem_list, map(semaphore_link_node, before.os_semaphores)) *
+      store_semaphore(pure_suspend_sched_link(before.os_tasks.task_desc_map), &sem->link, semaphore_created(sem, id, val)) *
+      occupy_dll_node(&sem->link)
+    */
+#endif
+
     DoubleLinkListInsertNodeAfter(&k_sem_list, &sem->link)
-        /*@ where (dispatch_case)
-              storeA = store_semaphore(pure_suspend_sched_link(task_desc_map(os_tasks(st_lock)))),
-              nodes = map(semaphore_link_node, os_semaphores(st_lock)),
+        
+#if CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ where (dataqueue_ic_dispatch_case) {A = SemaphoreAbs}
+              storeA = store_semaphore(pure_suspend_sched_link(before.os_tasks.task_desc_map)),
+              nodes = map(semaphore_link_node, before.os_semaphores),
+              a = semaphore_created(sem, id, val), head = &k_sem_list */
+#else
+/*@ where (dispatch_case)
+              storeA = store_semaphore(pure_suspend_sched_link(st_lock.os_tasks.task_desc_map)),
+              nodes = map(semaphore_link_node, st_lock.os_semaphores),
               a = semaphore_created(sem, id, val), head = &k_sem_list;
-              A = SemaphoreAbs */;
+              A = SemaphoreAbs */
+#endif
+;
     /* Restore the complete invariant for the newly published abstract object. */
-    /*@ Assert exists (saved_lock : Z), lock == saved_lock &&
+    
+#if !CRTOS_DATAQUEUE_SEMAPHORE_IC
+/*@ Assert exists (saved_lock : Z), lock == saved_lock &&
       val == val@pre && 0 <= val && val <= 65535 &&
       sem != 0 && addr_aligned(sem, 4) &&
       &sem->pend_list != 0 && &sem->link != 0 &&
       Crtos_RTrans(before, st_lock) &&
       safeExec(LastSeen(before), abs_semaphore_create(sg, val), X) && 0 <= id && id < 128 &&
-      idmanager_min_free_id(semaphore_manager_stable(os_semaphore_stable(sg)), semaphore_manager(os_semaphores(st_lock)), id) &&
-      !(In(sem, map(semaphore_addr, os_semaphores(st_lock)))) &&
-      Crtos_GTrans(st_lock, replace_semaphores(semaphore_publish(sem, id, val, os_semaphores(st_lock)), st_lock)) &&
-      InsideCritical(sg, st_lock) * os_inv(sg, replace_semaphores(semaphore_publish(sem, id, val, os_semaphores(st_lock)), st_lock))
+      idmanager_min_free_id(sg.os_semaphore_stable.semaphore_manager_stable, semaphore_manager(st_lock.os_semaphores), id) &&
+      !(In(sem, map(semaphore_addr, st_lock.os_semaphores))) &&
+      Crtos_GTrans(st_lock, replace_semaphores(semaphore_publish(sem, id, val, st_lock.os_semaphores), st_lock)) &&
+      InsideCritical(sg, st_lock) * os_inv(sg, replace_semaphores(semaphore_publish(sem, id, val, st_lock.os_semaphores), st_lock))
     */
-    CriticalAreaUnLock(lock);
+#endif
+
+    
+#if !CRTOS_DATAQUEUE_SEMAPHORE_IC
+CriticalAreaUnLock(lock);
+#endif
+
 
     return id;
 }

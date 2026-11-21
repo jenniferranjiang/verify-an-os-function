@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "gcc",
+    "-E",
+    "-CC",
+    "-dD",
+    "-undef",
+    "-nostdinc",
+    "-ffreestanding",
+    "-m32",
+    "-Iannotated_C/src/kernel/pendlist/",
+    "-Iannotated_C/src/headers/",
+    "/home/xinra/crtos-verify/annotated_C/src/kernel/pendlist/LinklistSuspend.c",
+    "-o",
+    "/home/xinra/crtos-verify/reports/LinklistSuspendSemaphore-20261119031206/final-check/symexec-refresh/preprocessed/LinklistSuspend.c"
+  ],
+  "output": "/home/xinra/crtos-verify/reports/LinklistSuspendSemaphore-20261119031206/final-check/symexec-refresh/preprocessed/LinklistSuspend.c",
+  "source": "/home/xinra/crtos-verify/annotated_C/src/kernel/pendlist/LinklistSuspend.c",
+  "preprocessed_sha256": "7225e9353cfe0b98611b537aeed076fe46223d6eaed53a1f05745743d8785d9d",
+  "semantics": "GCC preprocessing with annotations, macro definitions and source line markers preserved"
+}

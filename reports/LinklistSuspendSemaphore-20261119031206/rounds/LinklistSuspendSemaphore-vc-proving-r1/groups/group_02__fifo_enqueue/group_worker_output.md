@@ -1,0 +1,9 @@
+# FIFO enqueue proof delivery
+
+The assigned whole entailment constructs the actual after state by updating the selected semaphore waiting sequence and removing the task from sched_owned_tasks. It does not assume an enqueue obligation. Local proved assertions split the owned-node iter_sepcon and selected manager DLL payload; spatial conflict of two Semaphore value cells excludes the selected address from the remaining prefix/suffix. These facts justify the exact semaphore map update and unchanged ID manager.
+
+The scheduler-owner list is proved a permutation moving the task from the owned list into the waiting sequence. Task-world consistency, service-slot constraints (using the existing not-service premise), global ownership coverage/NoDup, and Dataqueue ID associations are preserved. The task sched_link nonzero fact comes from its published descriptor stack_point cell and the existing task-layout ABI; it is not inferred from a bare self-loop.
+
+The proof exposes the original waiting DLL, the pure suspended-task payload, and occupy_dll_node, then constructs a wand accepting the updated FIFO DLL and rebuilding the selected payload, the full management DLL, and every os_inv frame. The second assigned entailment applies the exact returned-DLL wand after substituting the dispatch equation.
+
+Only the two assigned top-level spans and one assigned split span were edited. No helper declaration, import, case library, specification, generated file, or assumption was added. Native auto division is unchanged. Controller group-development and the latest exact group-check both exited zero with status passed. Both assigned top-level lemmas and the single assigned split are Qed. The exact check recompiled the current goal, auto, manual, and assigned-witness wrapper; this is group completion, not whole-function final-check.

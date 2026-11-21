@@ -1,0 +1,11 @@
+# semaphore_views completed
+
+All six assigned proof spans are Qed: entail_wit_4; which_implies_wit_3 and its spatial split; which_implies_wit_4; which_implies_wit_6 and its spatial split. Only these spans in the copied manual were edited. Statements, imports, generated auto, and all unassigned tokens were preserved. No case library, new assumptions, axioms, trusted functions, or helper declarations were introduced.
+
+The successful ID-manager observation selects the actual original semaphore from the appropriate bucket. Ownership supplies its nonzero address and UInt16 value bound, and the manager restoration wand reconstructs the held os_inv. The value view derives semaphore address uniqueness from exclusive ownership, extracts the actual DLL member, and constructs zero/read and positive/update restoration wands. The update preserves IDs, manager buckets, waiting task sets, all task/global well-formedness, and the full Dataqueue memory/map and associated semaphore-ID compatibility. The state restored is exactly semaphore_set_value, including preservation of all other objects.
+
+Completed canonical SemaphoreCreateIC, SemaphoreDeleteIC and LinklistSuspendSemaphore proofs were used as read-only historical references for address exclusivity, bucket membership, and DLL replacement reasoning. Their relevant constructions were adapted as local proved assertions inside assigned spans and rechecked; no current sibling proof was read or imported.
+
+Validation: group-development exited 0 with status passed (66.144307 s). After removing temporary Show output, exact group-check exited 0 with status passed (66.413509 s), checking SemaphoreObtainRuntime_group_01_semaphore_views_check.v and recompiling goal, auto, manual, and check files with 221 reused dependency .vo files. Assigned spans were additionally scanned for forbidden lemmas/tactics, Admitted/admit/Axiom and remaining Show commands; no matches. The earlier over-expanding development attempt was explicitly interrupted (exit 130), not counted as a pass. Tool diagnostics and actual successful calls are recorded in tool_calls.jsonl.
+
+No annotation gap remains in this group. This is group-level completion only; main owns merge, full verification and final-check. Worker has stopped writing before main finalization.

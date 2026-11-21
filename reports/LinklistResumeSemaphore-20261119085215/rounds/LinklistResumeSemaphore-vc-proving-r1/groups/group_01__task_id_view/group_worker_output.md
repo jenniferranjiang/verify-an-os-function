@@ -1,0 +1,9 @@
+# task_id_view completed
+
+两项顶层与一项aggressive split全部Qed。whole路线保持LLM_pre_process骨架；归还路线以Goal_apply组合对应split。
+
+从实际semaphore_pending_nodes非空头得到first在semaphore_waiters，沿os_sched_owners覆盖和task_world_wf得到同一first的管理登记；通过Task ID节点地址置换找到其IdNodeAbs。由实际idmanager的桶索引/ID范围/成员对应证明get_task_with_idnode_success，而非从裸数字ID猜任务身份。实际id.id字段由task ID manager拥有，本证明从桶DLL借出该cell并构造原值归还wand，不从descriptor重复取得该资源。真实UShort存储给出0<=id<65536。全部原始os_inv资源及纯事实归还，pending关系保持。
+
+局部ID桶/链表focus证明参考正式VC/semaphore/SemaphoreObtainRuntime_proof_manual.v中which_implies_wit_10，针对当前状态、first和pending来源改写并重新检查。未读取当前sibling，未增加库/helper declarations、假设或修改注解/规格/生成文件。
+
+controller group-development exit0/status passed，41.456775秒；exact group-check exit0/status passed，44.668274秒，4个当前目标重新编译。assigned证明禁用lemma/tactic扫描通过。已停止所有写入，待main finalize-delivery。

@@ -1,0 +1,5 @@
+# resume_result 完成
+
+1个顶层VC和1个split均已Qed，遵循aggressive顶层/LLM split路线。由实际semaphore_pending_nodes取得目标对象成员、地址和等待节点投影；对投影应用map getData，利用map_map和map_id恢复task地址列表，再结合callee提供的task_desc_map查找与wakeup_semaphore_head构造semaphore_resume_head_effect。未增加假设、helper、import或修改规格。
+
+首轮map归一化顺序错误已修正为先展开cons上的map，再组合映射。最终controller exact group-check退出0/status passed，耗时30.197238秒，四个当前target实际重编译。无历史proof可直接复用。只修改assigned两个proof span，其他tokens保持。

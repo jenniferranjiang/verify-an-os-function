@@ -1,0 +1,159 @@
+{
+  "run": {
+    "status": "completed",
+    "phase": "done",
+    "created_at": "2026-11-18T17:42:33.955970Z",
+    "finished_at": "2026-11-18T18:10:47.839543Z",
+    "elapsed_seconds": 1693.883573
+  },
+  "commands": [
+    {
+      "phase": "annotation",
+      "command": "coq-check",
+      "calls": 1,
+      "elapsed_seconds": 0.015595
+    },
+    {
+      "phase": "annotation",
+      "command": "symexec",
+      "calls": 5,
+      "elapsed_seconds": 1.211399
+    },
+    {
+      "phase": "annotation",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 0.439377
+    },
+    {
+      "phase": "vc-checking",
+      "command": "dune-build",
+      "calls": 1,
+      "elapsed_seconds": 3.255548
+    },
+    {
+      "phase": "vc-checking",
+      "command": "finalize-delivery",
+      "calls": 1,
+      "elapsed_seconds": 0.071219
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-preparing",
+      "calls": 1,
+      "elapsed_seconds": 0.098042
+    },
+    {
+      "phase": "vc-proving",
+      "command": "finalize-delivery",
+      "calls": 3,
+      "elapsed_seconds": 80.132231
+    },
+    {
+      "phase": "vc-proving",
+      "command": "vc-proving-verify",
+      "calls": 1,
+      "elapsed_seconds": 37.640593
+    },
+    {
+      "phase": "final-check",
+      "command": "final-apply",
+      "calls": 1,
+      "elapsed_seconds": 38.588946
+    },
+    {
+      "phase": "done",
+      "command": "final-check",
+      "calls": 1,
+      "elapsed_seconds": 38.331806
+    }
+  ],
+  "annotation_attempts": [
+    {
+      "attempt_id": "DataqueuePeak-annotation-r1",
+      "phase": "annotation",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "coq-check",
+          "started_at": "2026-11-18T17:43:45.769936Z",
+          "finished_at": "2026-11-18T17:43:45.794713Z",
+          "elapsed_seconds": 0.015595
+        },
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T17:47:02.067999Z",
+          "finished_at": "2026-11-18T17:47:02.517263Z",
+          "elapsed_seconds": 0.439377
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T17:42:48.398477Z",
+          "finished_at": "2026-11-18T17:47:02.083261Z",
+          "elapsed_seconds": 253.684784
+        },
+        {
+          "name": "symexec",
+          "started_at": "2026-11-18T17:43:45.969809Z",
+          "calls": 5,
+          "finished_at": "2026-11-18T17:46:23.826049Z",
+          "elapsed_seconds": 1.211398
+        }
+      ]
+    }
+  ],
+  "rounds": [
+    {
+      "attempt_id": "DataqueuePeak-vc-checking-r1",
+      "phase": "vc-checking",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T17:50:45.876279Z",
+          "finished_at": "2026-11-18T17:50:45.957962Z",
+          "elapsed_seconds": 0.071219
+        },
+        {
+          "name": "owner-work",
+          "started_at": "2026-11-18T17:47:23.979956Z",
+          "finished_at": "2026-11-18T17:50:45.892172Z",
+          "elapsed_seconds": 201.912216
+        }
+      ]
+    },
+    {
+      "attempt_id": "DataqueuePeak-vc-proving-r1",
+      "phase": "vc-proving",
+      "status": "accepted",
+      "stages": [
+        {
+          "name": "finalize-delivery",
+          "started_at": "2026-11-18T17:56:13.941546Z",
+          "calls": 3,
+          "finished_at": "2026-11-18T18:08:19.532514Z",
+          "elapsed_seconds": 80.132231
+        },
+        {
+          "name": "group-work",
+          "started_at": "2026-11-18T17:51:09.375003Z",
+          "calls": 3,
+          "finished_at": "2026-11-18T18:07:45.815514Z",
+          "elapsed_seconds": 1668.195885
+        },
+        {
+          "name": "vc-proving-preparing",
+          "started_at": "2026-11-18T17:51:02.999246Z",
+          "finished_at": "2026-11-18T17:51:03.106252Z",
+          "elapsed_seconds": 0.098042
+        },
+        {
+          "name": "vc-proving-verify",
+          "started_at": "2026-11-18T18:08:32.278960Z",
+          "finished_at": "2026-11-18T18:09:09.931498Z",
+          "elapsed_seconds": 37.640593
+        }
+      ]
+    }
+  ]
+}

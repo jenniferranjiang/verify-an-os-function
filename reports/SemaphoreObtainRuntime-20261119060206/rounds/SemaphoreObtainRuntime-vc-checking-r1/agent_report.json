@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "blocker": {
+    "failure_class": "annotation-gap",
+    "kind": "wrong-call-precondition-branch",
+    "vcs": [
+      {
+        "name": "proof_of__SemaphoreObtain_partial_solve_wit_21_pure",
+        "parent": null,
+        "annotation_location": "KTaskSetDelay finite-wait call / for_null_inactive null-delay precondition branch"
+      }
+    ],
+    "message": "Both alternatives of the current top-level partial_solve_wit_21_pure require suspended.delay_inactive_map(0) <> None although this is the branch with sd.tdDelay = 0 and the imported for_null_inactive Require permits null OR inactive. A zero-delay task with empty inactive-map resources is the permitted null case; the current call VC incorrectly demands the other disjunct. Repair call-site annotation/spec selection to establish the actual null-or-inactive precondition, without assuming an object at zero or strengthening Require.",
+    "repair_boundary": "C annotation call precondition / equivalent caller-local contract selection"
+  }
+}
