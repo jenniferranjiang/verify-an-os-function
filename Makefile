@@ -20,6 +20,7 @@ DEP_FLAG = $(COQ_FLAG)
 lib_FILES = \
 	common/CrtosConfig.v \
 	common/StructFieldOffsetAxiom.v \
+	common/AllocationAddress.v \
 	common/dll_abs.v \
 	id/idnode_abs.v \
 	event/EventState.v \

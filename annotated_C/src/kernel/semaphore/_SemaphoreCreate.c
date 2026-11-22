@@ -1,3 +1,5 @@
+/*@ Import Coq Require Import CRTOS_Verify.lib.common.AllocationAddress */
+/*@ Extern Coq (valid_malloc_addr : Z -> Z -> Prop) */
 /* Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/semaphore.c; SHA-256 dafd02bf7c6fa5a7324c6e0f824d9a1ddc1544c43f9e71aabeb902d832f30ab8.
  * Selected 32-bit non-SMP config: KERNEL_STATIC_OBJECTS and KERNEL_DEFER_IPC_SCHED undefined. */
 /* One canonical body, with selectable calling context.
@@ -116,15 +118,15 @@
  * OC contract and IC specialization remain separate design interfaces.
  */
 
-/* KERNEL_MALLOC exact macro target, trusted; byte_manage.c size==0 branch. */
+/* KERNEL_MALLOC exact macro target; basic allocation contract, no zero-size guarantee. */
 void *x_malloc(x_size_t size)
 /*@ dataqueue_ic_import
-    Require emp
-    Ensure (size == 0 && __return == 0) ||
-      (size > 0 && __return == 0) ||
-      (size > 0 && __return > 0 && __return <= UINT_MAX - size &&
-       addr_aligned(__return, 4) && CharArray::undef_full(__return, size))
-*/;
+    Require 0 <= size && size <= UINT_MAX && emp
+    Ensure exists allocated, __return == allocated &&
+      ((allocated == 0 && emp) ||
+       (valid_malloc_addr(allocated, size) &&
+        CharArray::undef_full(allocated, size)))
+ */;
 /* C standard-library model; owns all bytes, including struct padding. */
 void *memset(void *s, int c, size_t n)
 /*@ dataqueue_ic_import
@@ -285,12 +287,11 @@ void DoubleLinkListInsertNodeAfter(DoubleLinklistType *linklist, DoubleLinklistT
 
 void *x_malloc(x_size_t size)
 /*@ delay_object
-    Require 0 <= size && size <= UINT_MAX
-    Ensure (__return == 0) ||
-           (0 < __return &&
-            __return <= UINT_MAX - size &&
-            addr_aligned(__return, ALIGN_SIZE) &&
-            CharArray::undef_full(__return, size))
+    Require 0 <= size && size <= UINT_MAX && emp
+    Ensure exists allocated, __return == allocated &&
+      ((allocated == 0 && emp) ||
+       (valid_malloc_addr(allocated, size) &&
+        CharArray::undef_full(allocated, size)))
  */;
 
 void *memset(void *s, int c, size_t n)

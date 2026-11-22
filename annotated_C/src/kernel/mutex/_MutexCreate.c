@@ -1,3 +1,5 @@
+/*@ Import Coq Require Import CRTOS_Verify.lib.common.AllocationAddress */
+/*@ Extern Coq (valid_malloc_addr : Z -> Z -> Prop) */
 #include "mutex_create_types.h"
 #include "mutex_create_logic.h"
 
@@ -44,12 +46,11 @@
 /* Source: kernel/thread/mutex.c::_MutexCreate; static-to-slice-external only. */
 void *x_malloc(x_size_t size)
 /*@ delay_object
-    Require 0 <= size && size <= UINT_MAX
-    Ensure (__return == 0) ||
-           (0 < __return &&
-            __return <= UINT_MAX - size &&
-            addr_aligned(__return, ALIGN_SIZE) &&
-            CharArray::undef_full(__return, size))
+    Require 0 <= size && size <= UINT_MAX && emp
+    Ensure exists allocated, __return == allocated &&
+      ((allocated == 0 && emp) ||
+       (valid_malloc_addr(allocated, size) &&
+        CharArray::undef_full(allocated, size)))
  */
 ;
 

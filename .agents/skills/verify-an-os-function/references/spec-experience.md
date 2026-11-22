@@ -202,3 +202,52 @@ x_free(p_queue->base) /*@ where (dataqueue_free_buffer) q = q */;
 本经验适用于已授权的可信释放接口；指针仍须按分配协议指向原始分配基址。
 不能由此断言 `EventRaw` 等对象谓词不合适，也不能仅凭名称认为
 `store_event_free_ready` 比 `EventRaw` 拥有更少资源；判断应依据实际定义。
+
+7. 为调用方补充 `x_malloc` spec 时，应复用已有的公共分配契约。
+
+本项目的 `InitDataqueue.c` 和 `_SemaphoreCreate.c` 的 IC 分支原来写成：
+
+```c
+void *x_malloc(x_size_t size)
+/*@ Require emp
+    Ensure (size == 0 && __return == 0) ||
+      (size > 0 && __return == 0) ||
+      (size > 0 && __return > 0 && __return <= UINT_MAX - size &&
+       addr_aligned(__return, 4) && CharArray::undef_full(__return, size))
+*/;
+```
+
+不应在这里只为调用方另写这样的契约，原因是：
+
+- 它额外保证 `x_malloc(0)` 返回 NULL，并排除了零长度成功分支。调用方只需
+  基本分配契约时，这会引入不必要的实现细节依赖，也增加与公共接口保持一致的
+  负担。即使当前源码支持该保证，也不意味着应在各调用处自行加强契约。
+- 对齐值硬编码为 `4`，没有复用项目的 `ALIGN_SIZE`；项目对齐约定变化时，
+  这些分散的字面量容易漏改。
+- 非空、地址范围和对齐条件在各处重复展开，容易产生不同版本的 malloc 契约，
+  使调用方依赖不一致的保证。
+- `Require emp` 没有显式展示长度范围。虽然当前无符号 C 参数类型提供范围约束，
+  公共契约显式写出范围更便于阅读和审查；不能把这一点误说成原 spec 接受负的 C 参数。
+
+因此应复用 VRTOS Event、MsgQueue 的公共契约形式，并使用当前工程的
+`valid_malloc_addr`，将地址合法性与未初始化字节的所有权分开表达：
+
+```c
+void *x_malloc(x_size_t nbytes)
+/*@ Require 0 <= nbytes && nbytes <= UINT_MAX && emp
+    Ensure exists allocated, __return == allocated &&
+      ((allocated == 0 && emp) ||
+       (valid_malloc_addr(allocated, nbytes) &&
+        CharArray::undef_full(allocated, nbytes)))
+*/;
+```
+
+公共谓词只描述纯地址条件：
+
+```coq
+Record valid_malloc_addr (p size : Z) : Prop := {
+  malloc_addr_positive : 0 < p;
+  malloc_addr_bound : p <= Int.max_unsigned - size;
+  malloc_addr_aligned : addr_aligned p ALIGN_SIZE
+}.
+```

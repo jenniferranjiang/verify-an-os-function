@@ -1,3 +1,5 @@
+/*@ Import Coq Require Import CRTOS_Verify.lib.common.AllocationAddress */
+/*@ Extern Coq (valid_malloc_addr : Z -> Z -> Prop) */
 /* Source: /home/xinra/crtoslatest/Ubiquitous/XiZi_IIoT_Macro/kernel/thread/data_queue.c; SHA-256 a8b12c43c3f2061df08320f50daaabda7ada033e40670c2d37ea2d8ef774f601.
  * User-approved verification-copy defect repair; formal design draft; no VC generated.
  */
@@ -17,14 +19,15 @@ void CriticalAreaUnLock(x_base lock)
       InsideCritical(sg, held) * os_inv(sg, after)
     Ensure OutsideCritical(sg, after)
 */;
-/* KERNEL_MALLOC exact macro target, trusted; byte_manage.c size==0 branch. */
+/* KERNEL_MALLOC exact macro target; basic allocation contract, no zero-size guarantee. */
 void *x_malloc(x_size_t size)
-/*@ Require emp
-    Ensure (size == 0 && __return == 0) ||
-      (size > 0 && __return == 0) ||
-      (size > 0 && __return > 0 && __return <= UINT_MAX - size &&
-       addr_aligned(__return, 4) && CharArray::undef_full(__return, size))
-*/;
+/*@
+    Require 0 <= size && size <= UINT_MAX && emp
+    Ensure exists allocated, __return == allocated &&
+      ((allocated == 0 && emp) ||
+       (valid_malloc_addr(allocated, size) &&
+        CharArray::undef_full(allocated, size)))
+ */;
 /* C standard-library model; owns all bytes, including struct padding. */
 void *memset(void *s, int c, size_t n)
 /*@ Require 0 <= c && c <= 127 && CharArray::undef_full(s, n)
