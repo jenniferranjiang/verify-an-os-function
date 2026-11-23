@@ -1,3 +1,5 @@
+> 2026-11-23：本文的分支式 buffer 内存组织已由[连续段表示](../2026-11-23-SegmentRepresentation/design.md)替代；有效 FIFO 列表设计继续沿用，当前表示及检查结论见该说明。
+
 # Dataqueue 有效序列表示
 
 本轮按用户要求修改现有 lib 和 annotated C：`dq_slots : list DataqueueElem` 只表示从队首到队尾的有效元素，不再记录物理空闲槽。此次不恢复此前暂停的 QCP 实现流程，不修改 C 可执行语句或生成的 VC。

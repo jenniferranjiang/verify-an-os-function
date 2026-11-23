@@ -63,6 +63,7 @@ Definition abs_init_dataqueue_phase (sg : StableGlobalState) (p n : Z)
 Definition abs_init_dataqueue (sg : StableGlobalState) (p n : Z)
     : program (VarGlobalState -> Prop) Z :=
   a <- os_atomic_cmd (abs_init_dataqueue_phase sg p n) ;;
-  if dataqueue_attempt_succeeded a then ret 0
-  else abs_deinit_dataqueue sg p a.(dq_attempt_object) a.(dq_attempt_refs) ;;
-       ret (-1).
+  IF (dataqueue_attempt_succeeded a = true)
+    (ret 0)
+    (abs_deinit_dataqueue sg p a.(dq_attempt_object) a.(dq_attempt_refs) ;;
+     ret (-1)).

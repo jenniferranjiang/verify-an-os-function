@@ -267,9 +267,9 @@
    结合 map 的键、查找与更新操作以及空间谓词检查这些要求，不能只看字段名称。
    地址和 ID 在对象删除后都可能复用，不能默认它们是跨生命周期的永久身份。
 
-8. 特别地，使用 address 作为内部索引时，底层 predicate 和证明可以显式使用地址定位内存；
-   上层抽象接口应通过存在量词隐藏具体地址（`exists address`，空间断言中写作
-   `EX p : addr, ...`），不把内部地址作为上层必须传递或依赖的参数。例如示意（示例仅供参考，真实验证中命名不必一定模仿或一定使用）：
+8. 对象地址只属于内部表示、不是公开 C 接口用来指定或返回对象的值时，
+   上层抽象接口可通过存在量词隐藏它（空间断言中写作 `EX p : addr, ...`），
+   不要求 caller 额外传入这个内部地址。例如按 ID 定位对象的接口可以使用：
 
    ```coq
    Definition object_rep (id : Z) (state : ObjectState) : Assertion :=
@@ -279,6 +279,12 @@
    底层展开 `object_rep` 后取得地址 `p`，完成字段访问和证明，再封装回上层谓词。
    `store_object` 必须把该地址的真实对象与上层的 ID、抽象状态关联起来；存在量词
    只隐藏具体地址，不替代唯一性约束，也不能丢掉操作前后属于同一个对象的关系。
+
+   若真实 C 接口接收对象指针，例如 `DeleteObject(p)`，公开 predicate 和 program
+   必须按传入的 `p` 关联操作对象，不能改成“存在某个地址的对象”。若函数返回对象
+   指针，也须把返回值与对象地址关联。隐藏内部表示地址，不等于隐藏真实参数、
+   返回值与操作对象的对应关系；按指针定位对象的规则见
+   [Spec 指南第 2.1 节](spec-writing-guide.md#21-c-形参逻辑参数与-continuation)。
 
 9. QCP 能够根据 C 结构体布局自动生成 padding 资源，predicate 中不要再重复描述 padding。
 
@@ -290,76 +296,11 @@
    CharArray.full (sem + 14) 2 (repeat_Z 0 2)
    ```
 
-10. `done` 表里保存的是函数指针，而 QCP 目前不支持函数指针。处理
-    annotated C 切片时，把 `done` 指向的函数作为切片中的全局函数，直接调用
-    这个函数。这样切片不再使用 `done` 表，predicate 中也不需要定义
-    `SemaphoreDoneType` 对应的 QCP struct。所有与 `done` 相关的 formal 定义都不需要，
-    包括 stable state 中的 `done` 字段、`store_semaphore_done`、
-    `SemaphoreStableContext` 中的 `done` 约束，以及 `semaphore_outside`、
-    `semaphore_inside` 和 `store_semaphore_static_initial` 中对它的引用。
-
-    此前semaphore验证中为 `done` 写过下面这些定义。在 annotated C
-    已改为直接调用后，这些定义都不需要：
-
-    ```coq
-    Record SemaphoreDoneAbs : Type := Build_SemaphoreDoneAbs {
-      semaphore_done_create : addr;
-      semaphore_done_delete : addr;
-      semaphore_done_obtain : addr;
-      semaphore_done_abandon : addr;
-      semaphore_done_set_value : addr
-    }.
-    ```
-
-    `SemaphoreStable` 中的下面两个字段也不需要：
-
-    ```coq
-    semaphore_done_addr : addr;
-    semaphore_done_abs : SemaphoreDoneAbs
-    ```
-
-    下面这个对 `done` 表内存的 predicate 也不需要：
-
-    ```coq
-    Definition store_semaphore_done (stable : SemaphoreStable) : Assertion :=
-      let done := stable.(semaphore_done_addr) in
-      &(done # "SemaphoreDoneType" ->ₛ
-          "SemaphoreCreate") # Ptr
-        |-> stable.(semaphore_done_abs).(semaphore_done_create) **
-      &(done # "SemaphoreDoneType" ->ₛ
-          "SemaphoreDelete") # Ptr
-        |-> stable.(semaphore_done_abs).(semaphore_done_delete) **
-      &(done # "SemaphoreDoneType" ->ₛ
-          "SemaphoreObtain") # Ptr
-        |-> stable.(semaphore_done_abs).(semaphore_done_obtain) **
-      &(done # "SemaphoreDoneType" ->ₛ
-          "SemaphoreAbandon") # Ptr
-        |-> stable.(semaphore_done_abs).(semaphore_done_abandon) **
-      &(done # "SemaphoreDoneType" ->ₛ
-          "SemaphoreSetValue") # Ptr
-        |-> stable.(semaphore_done_abs).(semaphore_done_set_value).
-    ```
-
-    例如权威 C 中的：
-
-    ```c
-    static SemaphoreDoneType done = {
-        .SemaphoreCreate = _SemaphoreCreate,
-        /* ... */
-    };
-
-    return done.SemaphoreCreate(val);
-    ```
-
-    可在验证切片中归一为：
-
-    ```c
-    return _SemaphoreCreate(val);
-    ```
-
-    `done.SemaphoreCreate = _SemaphoreCreate` 只用来说明为什么可以改成直接调用，
-    不需要写进 predicate。直接调用的函数仍按普通 callee 处理。如果 `done`
-    会在运行时改变，就不能这样处理。
+10. 静态 `done` 函数表改成直接调用属于源代码处理，统一按
+    [QCP 工具适配第 1 条](源代码处理.md#1-函数指针调用转为直接调用)执行。
+    经该规则确认切片不再访问函数表后，predicate 和 state 不应继续保留
+    仅用于表示这张表的字段、内存断言及上下文约束；仍被其他验证路径访问的
+    资源不能一并删除。此处不另维护一套源码转换条件。
 
 11. 不要为了匹配或复用已有 predicate 的参数形式，把本模块语义上不需要的
     dependency state 直接加入本模块的 abstract state。Abstract-state 分量仍须由
@@ -505,36 +446,7 @@
     Predicate 和 spec 均通过审阅、经用户确认并 implement 到 `done` 后，
     按主 skill 的[全局一致性检查与收尾](../SKILL.md#全局一致性检查与收尾)执行收尾。
 
-16. 组合函数级抽象 `program` 时，使用 monad 顺序记法直接对应 C
-    控制流，不要手工嵌套多层 `MonadErr.bind`：
-
-    ```coq
-    result <- operation1 ;;
-    operation2 result ;;
-    if result then operation3 else return tt.
-    ```
-
-    `x <- c1 ;; c2`、`c1 ;; c2` 和 `return v` 分别对应 `bind`、忽略返回值的
-    `bind` 和 `MonadErr.ret`，改写记法不改变抽象语义。`assume!! P` 只过滤
-    不满足 `P` 的路径，不产生 `err`，不得用来隐去真实 C 路径。
-    返回类型和 `sg` 等参数仍按目标 C 语义决定，不机械照抄示例。
-
-    `MonadErr` 中的条件控制流优先复用 QCP 的 `if_else`。它已经把条件分支封装为
-    带互补 `test` 的 `choice`，不要再手工写
-    `choice (assume!! P ;; c1) (assume!! (~ P) ;; c2)`。CRTOS 的
-    `lib/common/CrtosRules.v` 为与 monad 状态无关的纯命题提供了
-    `IF P c1 c2` 记法，其定义就是 `if_else (fun _ => P) c1 c2`。例如：
-
-    ```coq
-    Definition abs_get_msgqueue_by_id (sg : StableGlobalState) (id : Z)
-        : program (VarGlobalState -> Prop) (option addr) :=
-      IF (id < 0)
-        (ret None)
-        (task_atomic_cmd (msgqueue_lookup_locked sg id)).
-    ```
-
-
-17. Predicate 的参数应当由它所描述的对象、状态关系或资源决定，不要仅因为某个
+16. Predicate 的参数应当由它所描述的对象、状态关系或资源决定，不要仅因为某个
     使用点需要一条附加条件，就把这条条件做成 predicate 的参数。增加参数前应检查：
     去掉这个参数后，predicate 是否仍能完整、无歧义地表达原来的对象关系和资源？
     如果可以，而该参数只用于在某些调用点打开或关闭额外约束，就没有必要把它作为
@@ -573,3 +485,72 @@
     这条经验不是禁止 predicate 使用布尔参数。若布尔值确实改变 predicate 所描述的
     抽象状态、concrete shape 或资源组成，例如分别表示未初始化与已初始化内存形态，
     它就是有语义的参数，可以保留。判断标准是参数是否属于 predicate 本身的语义。
+
+
+17. 对按固定槽宽存放元素的循环数组，先把逻辑内容表示为由小元素组成的
+    `list`，每个元素对应一个有效槽，列表顺序就是队列顺序。再按“单元素存储 →
+    连续段存储 → 两段组合成环形缓冲区”的层次定义 predicate，使有效内容与
+    剩余空闲区的资源归属直接体现在定义中。
+
+    这里的逻辑内容一般写作 `list A`，单元素类型 `A` 按实际对象选择，
+    不要求单元素本身也是列表。例如 Dataqueue 使用 `list DataqueueElem`，
+    一个元素就是一个 DataElem 的抽象值，单元素 predicate 描述它的 `data` 和
+    `length` 字段；不需要把该元素再表示成一个 `list`。
+
+    以下以 MsgQueue 举例：它的一条消息是字节序列，所以单元素类型才是
+    `list Z`，整个队列的内容为 `msgs : list (list Z)`。每条消息占一个固定宽度
+    的槽，已知消息字节之后的槽内剩余空间只保留内存权限，不要求旧值为零。
+    这是 MsgQueue 的单元素表示，不是循环数组 segment 方法对元素类型的要求。
+
+    ```coq
+    Definition store_message (p : addr) (msg : list Z) (width : Z) : Assertion :=
+      “ Zlength msg <= width ” &&
+      (UCharArray.full p (Zlength msg) msg **
+       UCharArray.undef_full (p + Zlength msg) (width - Zlength msg)).
+    ```
+
+    连续段接收起始地址、物理槽数和有效消息列表。每次递归拥有一个有效槽；
+    消息用尽后，剩余空闲槽统一表示成一块未知值内存，不再由上层另列空闲区。
+
+    ```coq
+    Fixpoint store_msgbuffer_segment (p : addr) (slots width : Z)
+        (msgs : list (list Z)) : Assertion :=
+      match msgs with
+      | [] => UCharArray.undef_full p (slots * width)
+      | msg :: rest =>
+          store_message p msg width **
+          store_msgbuffer_segment (p + width) (slots - 1) width rest
+      end.
+    ```
+
+    注意，外层 `msgs = []` 表示没有有效消息；内层 `msg = []` 仍是一条消息，
+    占用一个槽，不能把它误当作空闲槽。
+
+    整个缓冲区固定以队头 `index` 为界分成两个连续物理段。从队头到数组末端
+    最多容纳 `capacity - index` 条消息，因此用 `firstn` / `skipn` 切分逻辑列表：
+    前缀放在高地址段，回绕的后缀放在低地址段。
+
+    ```coq
+    Definition msgbuffer_split_at_end (b : MsgQueueBufferAbs) :=
+      let m := b.(mqbMeta) in
+      let cut := Z.to_nat (m.(mqMetaMaxMsgs) - m.(mqMetaIndex)) in
+      (firstn cut b.(mqbMsgs), skipn cut b.(mqbMsgs)).
+
+    Definition store_message_buffer (mb : addr) (b : MsgQueueBufferAbs) : Assertion :=
+      let m := b.(mqbMeta) in
+      let '(msgs_prefix, msgs_suffix) := msgbuffer_split_at_end b in
+      “ valid_malloc_addr mb (m.(mqMetaEachLen) * m.(mqMetaMaxMsgs)) ” &&
+      “ msgqueue_meta_range m ” &&
+      “ Zlength b.(mqbMsgs) = m.(mqMetaNumMsgs) ” &&
+      (store_msgbuffer_segment mb m.(mqMetaIndex) m.(mqMetaEachLen) msgs_suffix **
+       store_msgbuffer_segment (mb + m.(mqMetaIndex) * m.(mqMetaEachLen))
+         (m.(mqMetaMaxMsgs) - m.(mqMetaIndex)) m.(mqMetaEachLen) msgs_prefix).
+    ```
+
+    未环绕时后缀自然为空，低地址段全部为空闲区；环绕时后缀自然落在低地址段。
+    两种情形使用同一个组合定义，每段中的空闲尾部由 segment 自己拥有。
+    容量、队头下标、有效元素数量和槽宽的合法范围仍由相应纯条件约束，确保
+    每段有效元素数不超过该段槽数；不能仅靠列表切分代替这些约束。
+
+    用于 Dataqueue 等结构体元素数组时，小元素改为相应的元素抽象值，单元素
+    predicate 描述该槽的字段，segment 的空列表分支保留剩余槽的内存权限。

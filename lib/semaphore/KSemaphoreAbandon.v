@@ -41,7 +41,8 @@ Definition abs_semaphore_abandon_locked (id : Z) : program VarGlobalState (Z * b
 (** 非法ID在加锁前拒绝；成功唤醒才调用既有调度模型，其他出口不调度。 *)
 Definition abs_semaphore_abandon (sg : StableGlobalState) (id : Z)
     : program (VarGlobalState -> Prop) Z :=
-  if semaphore_id_invalid id then ret (-1)
-  else result <- task_atomic_cmd (abs_semaphore_abandon_locked id) ;;
-       (if (snd result : bool) then abs_ktask_assign else ret tt) ;;
-       ret (fst result).
+  IF (semaphore_id_invalid id = true)
+    (ret (-1))
+    (result <- task_atomic_cmd (abs_semaphore_abandon_locked id) ;;
+     IF (snd result = true) abs_ktask_assign (ret tt) ;;
+     ret (fst result)).

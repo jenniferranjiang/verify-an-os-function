@@ -40,11 +40,11 @@ Definition abs_push_dataqueue (sg : StableGlobalState) (p data length timeout : 
   assertS (dataqueue_peak_entry sg p) ;;
   obtain_id <- os_atomic_cmd (abs_dataqueue_push_id p) ;;
   status <- abs_semaphore_obtain sg obtain_id timeout ;;
-  if Z.eq_dec status 0 then
-    assertS (dataqueue_peak_entry sg p) ;;
-    abandon_id <- os_atomic_cmd (abs_dataqueue_push_ring p data length) ;;
-    abs_semaphore_abandon sg abandon_id ;; ret 0
-  else ret (-1).
+  IF (status = 0)
+    (assertS (dataqueue_peak_entry sg p) ;;
+     abandon_id <- os_atomic_cmd (abs_dataqueue_push_ring p data length) ;;
+     abs_semaphore_abandon sg abandon_id ;; ret 0)
+    (ret (-1)).
 
 (** 追加元素后恢复共享对象的待证接口：front、容量及 ID 保持；
     此Prop只记录实现阶段义务，不作为公理或已证lemma使用。 *)

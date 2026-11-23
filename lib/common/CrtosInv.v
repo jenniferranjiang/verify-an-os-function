@@ -11,7 +11,7 @@ Require Export CRTOS_Verify.lib.isr.IsrManagerInv.
 Require Export CRTOS_Verify.lib.semaphore.SemaphoreInv.
 Require Export CRTOS_Verify.lib.mutex.MutexInv.
 Require Export CRTOS_Verify.lib.event.EventInv.
-Require Export CRTOS_Verify.lib.common.DataqueueInv.
+Require Export CRTOS_Verify.lib.dataqueue.DataqueueInv.
 Require Export CRTOS_Verify.lib.list.DoubleLinkListSpec.
 Require Export CRTOS_Verify.lib.event.EventLayoutABI.
 Import ListNotations DLL IDNode.

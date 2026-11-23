@@ -77,8 +77,8 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_map  (( CRTOS_Verify.lib.common.CrtosGlobState.os_dataqueues  (observed))) (p_queue_pre)) = (Some (q))) ”
   &&  “ (dataqueue_ready q ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 ) \/
@@ -95,8 +95,8 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_map  (( CRTOS_Verify.lib.common.CrtosGlobState.os_dataqueues  (observed))) (p_queue_pre)) = (Some (q))) ”
   &&  “ (dataqueue_ready q ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 ).
@@ -117,7 +117,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((&((p_queue_pre)  # "DataQueue" ->ₛ "sem_data")) # Int  |-> p_queue_sem_data)
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
 |--
   “ ((p_queue_base + (p_queue_front * sizeof( "DataElem" ))) = (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_base  (q)) + (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q)) * sizeof( "DataElem" )))) ”
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (observed)) ( MonadErr.ret  ((Some (e)))) X ) ”
@@ -142,7 +142,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((&((p_queue_pre)  # "DataQueue" ->ₛ "sem_data")) # Int  |-> p_queue_sem_data)
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
 |--
   “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  observed observed ) ”
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (observed)) ( MonadErr.ret  ((Some (e)))) X ) ”
@@ -167,7 +167,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((&((p_queue_pre)  # "DataQueue" ->ₛ "sem_data")) # Int  |-> p_queue_sem_data)
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
 |--
   “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  observed observed ) ”
 .
@@ -187,7 +187,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((&((p_queue_pre)  # "DataQueue" ->ₛ "sem_data")) # Int  |-> p_queue_sem_data)
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
 |--
   “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (observed)) ( MonadErr.ret  ((Some (e)))) X ) ”
 .
@@ -207,7 +207,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((&((p_queue_pre)  # "DataQueue" ->ₛ "sem_data")) # Int  |-> p_queue_sem_data)
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
 |--
   ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg observed )
@@ -227,7 +227,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  (dataqueue_buffer q )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 |--
@@ -249,7 +249,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  (dataqueue_buffer q )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 |--
@@ -272,7 +272,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  (dataqueue_buffer q )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 |--
@@ -290,7 +290,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  (dataqueue_buffer q )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 |--
@@ -308,7 +308,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  (dataqueue_buffer q )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 |--
@@ -361,8 +361,8 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
 Definition DataqueuePeak_partial_solve_wit_2 :=
 forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (old_length: (@option Z)) (old_data: (@option Z)) (before:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (StartAddr_pre: Z) (size_pre: Z) (observed:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (PreH1 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_RTrans  before observed )) (PreH2 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (before)) ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.abs_dataqueue_peak  (sg) (p_queue_pre)) X )) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_map  (( CRTOS_Verify.lib.common.CrtosGlobState.os_dataqueues  (observed))) (p_queue_pre)) = (Some (q)))) (PreH4 : (dataqueue_ready q )),
   ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 |--
@@ -370,9 +370,9 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (before)) ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.abs_dataqueue_peak  (sg) (p_queue_pre)) X ) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_map  (( CRTOS_Verify.lib.common.CrtosGlobState.os_dataqueues  (observed))) (p_queue_pre)) = (Some (q))) ”
   &&  “ (dataqueue_ready q ) ”
-  &&  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  &&  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 .
@@ -392,7 +392,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((( &( "size" ) )) # Ptr  |-> size_pre)
   **  ((( &( "lock" ) )) # Int  |-> saved)
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 |--
@@ -411,7 +411,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  (dataqueue_buffer q )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 |--
@@ -439,7 +439,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((&((p_queue_pre)  # "DataQueue" ->ₛ "sem_data")) # Int  |-> p_queue_sem_data)
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 .
@@ -458,7 +458,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((&((p_queue_pre)  # "DataQueue" ->ₛ "sem_data")) # Int  |-> p_queue_sem_data)
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 |--
@@ -486,7 +486,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((&((p_queue_pre)  # "DataQueue" ->ₛ "sem_data")) # Int  |-> p_queue_sem_data)
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 .
@@ -504,7 +504,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((&((p_queue_pre)  # "DataQueue" ->ₛ "sem_data")) # Int  |-> p_queue_sem_data)
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_data_slot  StartAddr_pre old_data )
   **  ( CRTOS_Verify.lib.dataqueue.KDataqueuePeak.peak_length_slot  size_pre old_length )
 |--
@@ -535,7 +535,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((&((p_queue_pre)  # "DataQueue" ->ₛ "sem_data")) # Int  |-> p_queue_sem_data)
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
 .
 
 Definition DataqueuePeak_partial_solve_wit_6 :=
@@ -553,7 +553,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((&((p_queue_pre)  # "DataQueue" ->ₛ "sem_data")) # Int  |-> p_queue_sem_data)
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
 |--
   “ ((dataqueue_peak (q)) = (Some (e))) ”
   &&  “ (p_queue_front <> p_queue_rear) ”
@@ -582,7 +582,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((&((p_queue_pre)  # "DataQueue" ->ₛ "sem_data")) # Int  |-> p_queue_sem_data)
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
 .
 
 Definition DataqueuePeak_partial_solve_wit_7 :=
@@ -600,7 +600,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((&((p_queue_pre)  # "DataQueue" ->ₛ "sem_data")) # Int  |-> p_queue_sem_data)
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
 |--
   “ ((dataqueue_peak (q)) = (Some (e))) ”
   &&  “ (p_queue_front <> p_queue_rear) ”
@@ -629,7 +629,7 @@ forall (X: ((@option  CRTOS_Verify.lib.dataqueue.DataqueueState.DataqueueElem ) 
   **  ((&((p_queue_pre)  # "DataQueue" ->ₛ "sem_data")) # Int  |-> p_queue_sem_data)
   **  (CharArray.undef_full (p_queue_pre + (6 * sizeof(CHAR))) 2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg observed )
-  **  (wand ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
+  **  (wand ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  (p_queue_pre) (q)) ( CRTOS_Verify.lib.common.CrtosInv.os_inv  (sg) (observed)) )
 .
 
 Definition DataqueuePeak_partial_solve_wit_8_pure :=
@@ -701,7 +701,7 @@ Definition DataqueuePeak_partial_solve_wit_9 := DataqueuePeak_partial_solve_wit_
 Definition DataqueuePeak_which_implies_wit_1 :=
 (
 forall (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (p_queue: Z),
-  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue q )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue q )
 |--
   EX (p_queue_sem_data: Z) (p_queue_sem_blank: Z) (p_queue_base: Z) (p_queue_max_len: Z) (p_queue_rear: Z) (p_queue_front: Z),
   “ (p_queue <> 0) ”
@@ -723,7 +723,7 @@ forall (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (p_queue: Z
 ) \/
 (
 forall (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (p_queue: Z),
-  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue q )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue q )
 |--
   “ (addr_aligned p_queue 4 ) ”
   &&  “ (p_queue <> 0) ”
@@ -739,21 +739,21 @@ forall (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (p_queue: Z
 
 Definition DataqueuePeak_which_implies_wit_1_split_goal_1 :=
 forall (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (p_queue: Z),
-  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue q )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue q )
 |--
   “ (addr_aligned p_queue 4 ) ”
 .
 
 Definition DataqueuePeak_which_implies_wit_1_split_goal_2 :=
 forall (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (p_queue: Z),
-  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue q )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue q )
 |--
   “ (p_queue <> 0) ”
 .
 
 Definition DataqueuePeak_which_implies_wit_1_split_goal_spatial :=
 forall (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (p_queue: Z),
-  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue q )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue q )
 |--
   ((&((p_queue)  # "DataQueue" ->ₛ "front")) # UShort  |-> ( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q)))
   **  ((&((p_queue)  # "DataQueue" ->ₛ "rear")) # UShort  |-> ( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q)))

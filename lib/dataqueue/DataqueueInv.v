@@ -38,32 +38,44 @@ Definition dataqueue_empty_slot (base index : Z) : Assertion :=
   &(p # "DataElem" ->ₛ "data") # Ptr |->_ **
   &(p # "DataElem" ->ₛ "length") # UInt |->_ .
 
-(** dq_slots只包含FIFO有效元素。未环绕时只有front到rear一段；环绕时
-    tail_part在数组尾、head_part在数组头，FIFO顺序为tail_part++head_part。
-    空闲区仍拥有完整字节，但不记录旧值。Pop不清除C数组，只忘掉出队槽的值。
-    base=0只用于尚未分配或已回收的私有对象，此时没有数组且内容为空。 *)
-Definition dataqueue_buffer (q : DataQueueAbs) : Assertion :=
-  if Z.eq_dec q.(dq_base) 0 then “ q.(dq_slots) = nil ” && emp
-  else “ dataqueue_ring_shape q /\ addr_aligned q.(dq_base) 4 ” &&
-    (if Z_le_dec q.(dq_front) q.(dq_rear) then
-       store_array_rec dataqueue_slot q.(dq_base)
-         q.(dq_front) q.(dq_rear) q.(dq_slots) **
-       CharArray.undef_full q.(dq_base) (q.(dq_front)*8) **
-       CharArray.undef_full (q.(dq_base)+q.(dq_rear)*8)
-         ((q.(dq_max_len)-q.(dq_rear))*8)
-     else EX tail_part head_part : list DataqueueElem,
-       “ q.(dq_slots) = tail_part ++ head_part ” &&
-       store_array_rec dataqueue_slot q.(dq_base)
-         q.(dq_front) q.(dq_max_len) tail_part **
-       store_array_rec dataqueue_slot q.(dq_base) 0 q.(dq_rear) head_part **
-       CharArray.undef_full (q.(dq_base)+q.(dq_rear)*8)
-         ((q.(dq_front)-q.(dq_rear))*8)).
+(** 从p起的slots个连续DataElem槽：elements中的每个DataqueueElem占一个槽，
+    直接复用dataqueue_slot描述data/length字段，不把单元素转换成列表。
+    有效元素用尽后，余下槽保留全部字节的写权限，不约束旧值。
+    调用处须保证0 <= Zlength elements <= slots；步长沿用当前32位ABI的8字节。 *)
+Fixpoint store_dataqueue_segment (p : addr) (slots : Z)
+    (elements : list DataqueueElem) : Assertion :=
+  match elements with
+  | nil => CharArray.undef_full p (slots * 8)
+  | e :: rest =>
+      dataqueue_slot p 0 e **
+      store_dataqueue_segment (p + 8) (slots - 1) rest
+  end.
 
-(** 完整对象内存；既用于私有的部分初始化/退役，也用于共享ready对象。
+(** 从front到数组末端最多容纳max_len-front个元素；FIFO前缀放高地址段，
+    剩余后缀回绕到基址。firstn/skipn同时覆盖未环绕、恰到末端和已环绕。 *)
+Definition dataqueue_split_at_end (q : DataQueueAbs) :=
+  let cut := Z.to_nat (q.(dq_max_len) - q.(dq_front)) in
+  (firstn cut q.(dq_slots), skipn cut q.(dq_slots)).
+
+(** 已分配buffer的两段以内存中的front为界，分别存放FIFO后缀和前缀；
+    每段空闲尾部由store_dataqueue_segment持有。ring_shape关联front/rear与
+    有效元素数，保证分段容量并保留一个空槽；Pop只忘值，不清除C数组。
+    此谓词只描述非空基址的数组；无buffer的生命周期状态在store_dataqueue描述。 *)
+Definition dataqueue_buffer (q : DataQueueAbs) : Assertion :=
+  let '(prefix, suffix) := dataqueue_split_at_end q in
+  “ q.(dq_base) <> 0 /\ dataqueue_ring_shape q /\ addr_aligned q.(dq_base) 4 ” &&
+  (store_dataqueue_segment q.(dq_base) q.(dq_front) suffix **
+   store_dataqueue_segment (q.(dq_base) + q.(dq_front) * 8)
+     (q.(dq_max_len) - q.(dq_front)) prefix).
+
+(** 完整对象内存：本体字段始终存在；尚未分配或回收后base=0、逻辑内容为空，
+    不拥有数组；base非零时由dataqueue_buffer拥有完整数组。
+    保留私有初始化/退役及共享ready对象的统一接口，不另建buffer map。
     sem_blank/sem_data只拥有ID字段，不拥有Semaphore的任何字节。 *)
 Definition store_dataqueue (p : addr) (q : DataQueueAbs) : Assertion :=
   “ p <> 0 /\ addr_aligned p 4 ” &&
-  dataqueue_fields p q ** dataqueue_buffer q.
+  dataqueue_fields p q **
+  ((“ q.(dq_base) = 0 /\ q.(dq_slots) = nil ” && emp) || dataqueue_buffer q).
 
 (** map是已发布对象的唯一权威来源；lookup是纯事实，store_map拥有各key
     对应结构和数组。Semaphore只由原模块拥有，这里仅约束两个ID的关联。 *)

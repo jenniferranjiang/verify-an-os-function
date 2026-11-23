@@ -2,7 +2,7 @@ From MonadLib.MonadErr Require Import MonadErrBasic MonadErrHoare monadesafe_lib
 From SimpleC.SL Require Import Mem.
 Require Import Coq.ZArith.ZArith Coq.Lists.List.
 Require Export CRTOS_Verify.lib.semaphore.KSemaphoreDelete.
-Require Export CRTOS_Verify.lib.common.DataqueueInv.
+Require Export CRTOS_Verify.lib.dataqueue.DataqueueInv.
 Import ListNotations MonadErr.
 Import Monad MonadNotation.
 Local Open Scope monad.

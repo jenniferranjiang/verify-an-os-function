@@ -404,6 +404,7 @@ reflexivity.
 pose proof (highstepbind_derive _ _ _ a (LastSeen post) Hstep X PreH25) as Hnext.
 cbv beta in Hnext.
 rewrite Hsucc in Hnext.
+rewrite if_pure_cond_true in Hnext by reflexivity.
 exact Hnext.
 Qed.
 
@@ -445,6 +446,7 @@ pose proof (highstepbind_derive _ _ _ a (LastSeen observed) Hstep X PreH15) as H
 cbn [a q dataqueue_constructed dataqueue_attempt_succeeded dq_attempt_object dq_attempt_refs dq_sem_blank dq_sem_data] in Hnext.
 assert (Hfail : dataqueue_attempt_succeeded a = false) by reflexivity.
 rewrite Hfail in Hnext.
+rewrite if_pure_cond_false in Hnext by discriminate.
 unfold safeExec, safe in Hnext |- *.
 destruct Hnext as [states [Hseen Hwp]].
 exists states.
@@ -504,6 +506,7 @@ pose proof (highstepbind_derive _ _ _ a (LastSeen observed) Hstep X PreH15) as H
 cbn [a q dataqueue_constructed dataqueue_attempt_succeeded dq_attempt_object dq_attempt_refs dq_sem_blank dq_sem_data] in Hnext.
 assert (Hfail : dataqueue_attempt_succeeded a = false) by reflexivity.
 rewrite Hfail in Hnext.
+rewrite if_pure_cond_false in Hnext by discriminate.
 unfold safeExec, safe in Hnext |- *.
 destruct Hnext as [states [Hseen Hwp]].
 exists states.
@@ -683,6 +686,7 @@ cbn [dq_attempt_object dq_sem_blank dq_sem_data].
 rewrite PreH2. reflexivity.
 }
 rewrite Hfail in Hnext.
+rewrite if_pure_cond_false in Hnext by discriminate.
 unfold safeExec, safe in Hnext |- *.
 destruct Hnext as [states [Hseen Hwp]].
 exists states.
@@ -876,6 +880,7 @@ cbn [dq_attempt_object dq_sem_blank dq_sem_data].
 rewrite PreH2. apply andb_false_iff. right. reflexivity.
 }
 rewrite Hfail in Hnext.
+rewrite if_pure_cond_false in Hnext by discriminate.
 unfold safeExec, safe in Hnext |- *.
 destruct Hnext as [states [Hseen Hwp]].
 exists states.

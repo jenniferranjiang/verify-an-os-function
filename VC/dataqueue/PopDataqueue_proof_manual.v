@@ -135,9 +135,12 @@ Proof.
   assert (Hentry : dataqueue_peak_entry sg p_queue_pre (Crtos_RTrans after_get)).
   { destruct PreH3 as [states [Hstates Hsafe]].
     unfold LastSeen in Hstates.
-    unfold safe, dataqueue_pop_after_obtain in Hsafe.
-    destruct (Z.eq_dec 0 0); [|contradiction].
-    rewrite wp_bind, wp_assertS in Hsafe.
+    unfold safe in Hsafe.
+    change (weakestpre (dataqueue_pop_after_obtain sg p_queue_pre 0) X states) in Hsafe.
+    unfold dataqueue_pop_after_obtain in Hsafe.
+    rewrite if_pure_cond_true in Hsafe by reflexivity.
+    apply (proj1 (wp_bind _ _ _ states)) in Hsafe.
+    apply (proj1 (wp_assertS _ _ states)) in Hsafe.
     destruct Hsafe as [Hentry _].
     unfold dataqueue_peak_entry in Hentry |- *.
     intros obs Hobs. apply Hentry.
@@ -353,7 +356,7 @@ Proof.
   specialize (PreH5 after_4 retval PreH2).
   unfold dataqueue_pop_after_obtain in PreH5.
   prog_nf in PreH5.
-  destruct (Z.eq_dec retval 0); [lia | exact PreH5].
+  rewrite if_pure_cond_false in PreH5 by lia. exact PreH5.
 Qed.
 
 Lemma proof_of_PopDataqueue_return_wit_3 : PopDataqueue_return_wit_3.

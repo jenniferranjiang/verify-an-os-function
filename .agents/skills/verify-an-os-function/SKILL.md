@@ -103,11 +103,11 @@ owned memory、mutable fields、lifecycle states 和 unchanged resources。隐�
 
 ```text
 lib/
-├── common/                 # 共享 invariant/predicate 接口、系统组合、协议和通用引理
-│   ├── <Module>Inv.v
+├── common/                 # 全局状态与不变量组合、公共协议和通用基础库
 │   └── CrtosInv.v
-├── <module>/               # 模块状态操作、函数抽象与证明分解
+├── <module>/               # 模块状态、资源与不变量、抽象操作及证明
 │   ├── <Module>State.v
+│   ├── <Module>Inv.v
 │   ├── <Module>Ops.v
 │   └── K<Function>.v       # 函数专用抽象操作、program、引理或 proof support
 └── index.md
@@ -115,9 +115,9 @@ lib/
 
 具体职责如下：
 
-- **`common/`**：放全局状态与系统不变量组合、统一 critical/IRQ 协议、通用内存/布局基础、共享 predicate/invariant 接口和跨模块引理。沿用 VRTOS 布局，`EventInv.v`、`MutexInv.v`、`SemaphoreInv.v`、`TaskInv.v` 等模块内存 invariant 仍放在 `common/`。
-- **`<module>/`**：放该模块的状态操作、函数抽象 program、专用引理和实现证明分解。例如 `semaphore/SemaphoreState.v`、`semaphore/SemaphoreOps.v`、`semaphore/KSemaphoreCreate.v`。
-- **分层优先**：是否放入 `common/` 取决于它是否属于共享 invariant/predicate 接口层，不只看文件名或引用次数。id、list 等具有独立概念和接口的子系统仍使用 `id/`、`list/` 等独立目录。
+- **`common/`**：放全局状态与系统不变量组合、统一 critical/IRQ 协议，以及通用内存、布局和跨模块基础定义。`CrtosInv.v` 从各模块导入 invariant 并组合成系统的 `os_inv`。
+- **`<module>/`**：放该模块的状态、对象与资源 predicate、模块 invariant、抽象操作、专用引理和实现证明分解。例如 `semaphore/SemaphoreInv.v`、`dataqueue/DataqueueState.v`等。
+- **按资源与模块职责归档**：模块 invariant 被 `os_inv` 或其他模块引用，不是移入 `common/` 的理由。同类模块定义使用一致的归档方式；id、list 等独立子系统的定义也放在各自目录。已有工程采用其他统一布局时按项目约定维护，不把参考工程的另一套布局局部混入当前工程。
 - **默认布局的根目录约定**：新建的分层库不在 `lib/` 根目录新增 `.v`；已有平铺库继续平铺，已有文件保留原路径，不为适配示例搬迁。路径确需调整时同步 imports、`_CoqProject`、Makefile、QCP 与编辑器配置。
 
 文件拆分以实际职责和依赖关系为依据，不要求每个模块必须机械拥有 `State/Inv/Ops` 三个文件。系统组合文件导入各模块接口，模块文件不复制全局状态或系统协议。当全局state中模块级 state、predicate/invariant 和共享接口缺失时，补齐对应模块定义，并接入全局状态与系统不变量；已有定义直接复用。项目已有 OS 总状态和 `os_inv` 时，必须在其全局原定义中直接增加模块分量，保持同一套全局状态、系统不变量和临界区协议；不得另建包裹旧 state 的外层总状态或 `old_os_inv * module_inv` 外层不变量来替代这项集成。类型兼容或依赖调整的困难不构成绕开原定义的理由，具体要求见 [Predicate 指南第 7.4 节](references/predicate-lemma-design-guide.md#74-组合模块-predicate)。针对特定函数新增的抽象操作、program、局部 view、引理和证明辅助，统一放入该函数的 K<Function>.v，不另建函数专用的 State/Inv 文件。确属模块共享能力的增补，仍归入对应模块文件。
@@ -219,6 +219,8 @@ Rocq predicate 文件通过 compile/typecheck，annotated C 已完成人工结�
 
 开始目标证明前，按[工具就绪条件](references/implementation-and-validation-guide.md#证明前的工具就绪条件)确认环境已配置可用；同一环境复用已有成功结果，之后按 QCP workflow 推进。环境错误先修复。
 
+交接时要求按[VC 证明顺序](references/implementation-and-validation-guide.md#vc-证明顺序)从底层依赖往上证明：先完成本轮范围内的 callee 及所需 lib 引理，再推进上层 caller，由 QCP controller 安排执行。
+
 交接时落实[每个目标函数累计 100 分钟的 VC 证明预算](references/implementation-and-validation-guide.md#vc-证明时间预算)，到时保存状态并等待用户决定是否追加时间。
 
 交接时提供 TrustBase 文件路径，并明确按 spec 设计确定的本轮实现证明目标与 `reused-spec` 清单；导入复用函数不提交为 VC/函数体证明目标，也不因其证明状态自动扩大范围。复用依赖的证明状态和结论限制须随交接传递，不能将其冒称为已证或自动改标 trusted。trusted 和 reused-spec contract 均不作为本轮新完成的实现证明计数。
@@ -281,6 +283,8 @@ Predicate/spec 草案（`draft`）可以共同修改，不做中间审阅。满�
 
 ### 库与证明参考
 
+编写或修改 predicate、abstract program 和 spec 前，阅读[公共定义与记法复用指南](references/common-definition-reuse-guide.md)，按其中规则使用通用数据操作、公共模块接口及抽象程序记法。
+
 写新定义、strategy 或断言前，先查 CRTOS 全局库及当前工程的 annotated C，再查 QCP 库；需要参考设计或证明方法时，查看已配置且可用的 crtosverify、LOSVerify 和 VRTOS；未配置的参考直接跳过。查找实际定义和用法，不猜测 QCP 语法。
 
 外部根目录由配置的 `references` 提供；QCP 来自必填的 `qcp_root`。“位置”是查找提示，以实际扫描结果为准。
@@ -289,7 +293,7 @@ Predicate/spec 草案（`draft`）可以共同修改，不做中间审阅。满�
 |---|---|---|
 | 当前工程全局库 | `lib/<module>/`、`lib/common/` | 复用模块定义、predicate<br>和已证明引理。 |
 | 当前工程 annotated C | `annotated_C/src/kernel/<module>/`、<br>`annotated_C/src/kernel/common/` | 查找函数 spec、注解、断言<br>和 strategy 用法。 |
-| QCP 基础库 | QCP 仓库的 `Rocq/SeparationLogic/`、`Rocq/MonadLib/`、<br>`Rocq/StrategyLib/`、`Rocq/auxlibs/` 等 | 复用分离逻辑、抽象 program、<br>strategy、tactic 及通用引理。 |
+| QCP 基础库 | QCP 仓库的 `Rocq/SeparationLogic/`、`Rocq/MonadLib/`、<br>`Rocq/StrategyLib/`、`Rocq/auxlibs/` 等 | 复用分离逻辑、抽象 program、<br>strategy、tactic 及通用引理等。 |
 | QCP 示例 | QCP 仓库的 `Rocq/examples/`、`QCP_examples/` 及项目教程 | 参考注解、assertion、<br>`which implies` 和证明写法。 |
 | `references.crtos_verify`（可选） | `lib/`、`annotated_C/`<br>`VC/` | 参考 CRTOS 模块定义、predicate、<br>spec 和 VC 证明。 |
 | `references.los_verify`（可选） | `lib/`、`annotated_C/`<br>`VC/code_proof/` | 参考 OS 模块、spec 和证明，<br>如 `lib/sem.v`、`lib/task.v`。 |

@@ -61,7 +61,7 @@ lib/tick/TickOrder.v
 lib/mutex/MutexDeleteState.v
 lib/mutex/MutexDeleteInv.v
 lib/dataqueue/DataqueueState.v
-lib/common/DataqueueInv.v
+lib/dataqueue/DataqueueInv.v
 lib/dataqueue/KInitDataqueue.v
 lib/dataqueue/KDeInitDataqueue.v
 lib/dataqueue/KDataqueuePeak.v

@@ -3,7 +3,8 @@ From SimpleC.SL Require Import Mem SeparationLogic MapLib.
 Require Import Logic.LogicGenerator.demo932.Interface.
 Require Export CRTOS_Verify.lib.task.KTaskWakeup CRTOS_Verify.lib.semaphore.SemaphoreOps.
 Require Export CRTOS_Verify.lib.assign.KTaskOsAssign.
-Import ListNotations DLL IDNode MonadErr.
+Import ListNotations DLL IDNode MonadErr Monad MonadNotation.
+Local Open Scope monad.
 Local Open Scope string.
 Local Open Scope sac.
 Local Open Scope list.
@@ -98,9 +99,10 @@ Definition abs_semaphore_delete_locked (id : Z) : program VarGlobalState bool :=
     该模型不证明硬件调度实现；其 rely 变化和临界区交接复用全系统协议。 *)
 Definition abs_semaphore_delete (sg : StableGlobalState) (id : Z)
     : program (VarGlobalState -> Prop) unit :=
-  if semaphore_id_invalid id then MonadErr.ret tt
-  else MonadErr.bind (task_atomic_cmd (abs_semaphore_delete_locked id))
-         (fun resched => if resched then abs_ktask_assign else MonadErr.ret tt).
+  IF (semaphore_id_invalid id = true)
+    (ret tt)
+    (resched <- task_atomic_cmd (abs_semaphore_delete_locked id) ;;
+     IF (resched = true) abs_ktask_assign (ret tt)).
 
 (** ID 注销且管理 link 摘除后的完整私有对象：ID 值65535，两条外部链自环，
     等待哨兵为空，value和padding保持。此对象不再属于 semaphore_inv；其

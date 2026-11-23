@@ -211,6 +211,7 @@ Proof.
   unfold abs_semaphore_delete in PreH4 at 1.
   prog_nf in PreH4.
   rewrite Hneg in PreH4.
+  rewrite if_pure_cond_true in PreH4 by reflexivity.
   exact PreH4.
 Qed.
 

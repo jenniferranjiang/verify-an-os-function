@@ -144,22 +144,7 @@ Require mutex != 0 && exists id,
 这条经验不适用于 `KMutexDelete(int32 id)` 这类真实以 `id` 为 C 形参的外层 API；
 该外层 spec 可以直接使用其 C 形参 `id`。也不适用于`_SemaphoreDelete(int32 id)`等本身传入`id` 为 C 形参的函数。
 
-5. QCP 的断言标注和 C spec 中，Record 变量的字段引用优先使用
-    `record_name.field_name`，嵌套字段使用连续的点号，避免多层投影函数调用影响阅读。
-    例如，使用 `sg.os_msgqueue_stable.msgqueue_done_ptr`，而不是
-    `msgqueue_done_ptr(os_msgqueue_stable(sg))`。
-
-    使用点号语法前，必须在 QCP 的 C 标注中通过 `Extern Coq Record ...` 引入相关
-    Record 及所用字段；嵌套访问涉及的各层 Record 都须有相应声明，并在使用处可见。
-    只有 Rocq 中的 Record 定义或普通投影函数声明不足以支持该语法，缺少 Record
-    声明会导致 QCP 符号执行报错。声明格式参考项目已有 C spec 或逻辑 header 中的
-    `/*@ Extern Coq Record ... { ... } */`，字段名和类型须与实际 Rocq 定义一致。
-
-    编写或修改这类字段引用时，应先复用或补齐相应 Record 声明，再使用点号写法，
-    不要为了避开声明问题退回难读的嵌套投影调用。这条经验针对 QCP 的 C 标注语法，
-    不要求将 Rocq `.v` 文件中的投影语法改成 C 标注写法。
-
-6. 使用合适的谓词描述函数的操作对象。以 Dataqueue 的可信 `x_free` 接口为例，
+5. 使用合适的谓词描述函数的操作对象。以 Dataqueue 的可信 `x_free` 接口为例，
 已有 `dataqueue_buffer(q)` 描述待释放 buffer，就直接使用该谓词，不必让 caller
 先把 FIFO 有效元素和空闲区重组成整块字节数组。
 
@@ -203,7 +188,7 @@ x_free(p_queue->base) /*@ where (dataqueue_free_buffer) q = q */;
 不能由此断言 `EventRaw` 等对象谓词不合适，也不能仅凭名称认为
 `store_event_free_ready` 比 `EventRaw` 拥有更少资源；判断应依据实际定义。
 
-7. 为调用方补充 `x_malloc` spec 时，应复用已有的公共分配契约。
+6. 为调用方补充 `x_malloc` spec 时，应复用已有的公共分配契约。
 
 本项目的 `InitDataqueue.c` 和 `_SemaphoreCreate.c` 的 IC 分支原来写成：
 

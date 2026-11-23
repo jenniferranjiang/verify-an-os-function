@@ -49,11 +49,11 @@ Definition dataqueue_pop_after_ring (sg : StableGlobalState)
     执行ring临界区及其后续。保留成功Obtain后ring仍可能为空的路径。 *)
 Definition dataqueue_pop_after_obtain (sg : StableGlobalState) (p status : Z)
     : program (VarGlobalState -> Prop) DataqueuePopResult :=
-  if Z.eq_dec status 0 then
-    assertS (dataqueue_peak_entry sg p) ;;
-    r <- os_atomic_cmd (abs_dataqueue_pop_ring p) ;;
-    dataqueue_pop_after_ring sg r
-  else ret DqPopFailed.
+  IF (status = 0)
+    (assertS (dataqueue_peak_entry sg p) ;;
+     r <- os_atomic_cmd (abs_dataqueue_pop_ring p) ;;
+     dataqueue_pop_after_ring sg r)
+    (ret DqPopFailed).
 
 (** 首次短临界区取得data ID后的继续执行：原样传递timeout给Obtain，
     再按其返回值分支。缓存ID仍不提供跨解锁的对象世代稳定保证。 *)

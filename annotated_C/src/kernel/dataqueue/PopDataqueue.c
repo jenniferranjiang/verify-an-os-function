@@ -107,8 +107,8 @@ x_err_t PopDataqueue(DataQueueType *p_queue, const void **StartAddr, x_size_t *s
       peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length) *
       undef_data_at(&obtain_id) * undef_data_at(&abandon_id) */
     /*@ Given seen_id q_id saved_id */
-    /*@ store_dataqueue(p_queue, q_id)
-        which implies p_queue != 0 && addr_aligned(p_queue, 4) &&
+    /*@ dataqueue_ready(q_id) && store_dataqueue(p_queue, q_id)
+        which implies dataqueue_ready(q_id) && p_queue != 0 && addr_aligned(p_queue, 4) &&
           p_queue->front == q_id.dq_front && p_queue->rear == q_id.dq_rear &&
           p_queue->max_len == q_id.dq_max_len && p_queue->base == q_id.dq_base &&
           p_queue->sem_blank == q_id.dq_sem_blank && p_queue->sem_data == q_id.dq_sem_data &&
@@ -154,8 +154,8 @@ x_err_t PopDataqueue(DataQueueType *p_queue, const void **StartAddr, x_size_t *s
       peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length) *
       undef_data_at(&abandon_id) */
     /*@ Given seen_ring q saved_ring */
-    /*@ store_dataqueue(p_queue, q)
-        which implies p_queue != 0 && addr_aligned(p_queue, 4) &&
+    /*@ dataqueue_ready(q) && store_dataqueue(p_queue, q)
+        which implies dataqueue_ready(q) && p_queue != 0 && addr_aligned(p_queue, 4) &&
           p_queue->front == q.dq_front && p_queue->rear == q.dq_rear &&
           p_queue->max_len == q.dq_max_len && p_queue->base == q.dq_base &&
           p_queue->sem_blank == q.dq_sem_blank && p_queue->sem_data == q.dq_sem_data &&

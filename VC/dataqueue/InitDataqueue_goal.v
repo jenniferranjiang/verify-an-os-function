@@ -12,7 +12,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   ((( &( "lock" ) )) # Int  |->_)
   **  ((( &( "p_queue" ) )) # Ptr  |-> p_queue_pre)
   **  ((( &( "NodeNumber" ) )) # UShort  |-> NodeNumber_pre)
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.DataqueueStorage  p_queue_pre )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.DataqueueStorage  p_queue_pre )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg before )
 |--
   “ (0 <= INT_MAX) ”
@@ -486,7 +486,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
 
 Definition InitDataqueue_safety_wit_24 :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (saved: Z) (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (PreH1 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  (tt)) Y )) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q)) = 0)) (PreH4 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q)) = 0)) (PreH5 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q)) = (-1))) (PreH6 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q)) = (-1))) (PreH7 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y )) (PreH8 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH9 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after )),
-  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q)) )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q)) )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 )
   **  ((( &( "lock" ) )) # Int  |-> saved)
   **  ((( &( "p_queue" ) )) # Ptr  |-> p_queue_pre)
@@ -497,7 +497,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
 
 Definition InitDataqueue_safety_wit_25 :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (saved: Z) (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (PreH1 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  (tt)) Y )) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q)) = 0)) (PreH4 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q)) = 0)) (PreH5 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q)) = (-5))) (PreH6 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q)) = (-1))) (PreH7 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y )) (PreH8 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH9 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after )),
-  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q)) )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q)) )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 )
   **  ((( &( "lock" ) )) # Int  |-> saved)
   **  ((( &( "p_queue" ) )) # Ptr  |-> p_queue_pre)
@@ -508,7 +508,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
 
 Definition InitDataqueue_safety_wit_26 :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (saved: Z) (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (PreH1 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  (tt)) Y )) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q)) = 0)) (PreH4 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q)) = 0)) (PreH5 : (0 <= ( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q)))) (PreH6 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q)) = (-5))) (PreH7 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y )) (PreH8 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH9 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after )),
-  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q)) )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q)) )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 )
   **  ((( &( "lock" ) )) # Int  |-> saved)
   **  ((( &( "p_queue" ) )) # Ptr  |-> p_queue_pre)
@@ -519,7 +519,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
 
 Definition InitDataqueue_safety_wit_27 :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (saved: Z) (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (PreH1 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  (tt)) Y )) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q)) = 0)) (PreH4 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q)) = 0)) (PreH5 : (0 <= ( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q)))) (PreH6 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q)) = (-5))) (PreH7 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y )) (PreH8 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH9 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after )),
-  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q)) )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q)) )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 )
   **  ((( &( "lock" ) )) # Int  |-> saved)
   **  ((( &( "p_queue" ) )) # Ptr  |-> p_queue_pre)
@@ -531,7 +531,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
 
 Definition InitDataqueue_safety_wit_28 :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (saved: Z) (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (PreH1 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  (tt)) Y )) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q)) = 0)) (PreH4 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q)) = 0)) (PreH5 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q)) = (-5))) (PreH6 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q)) = (-1))) (PreH7 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y )) (PreH8 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH9 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after )),
-  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q)) )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q)) )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 )
   **  ((( &( "lock" ) )) # Int  |-> saved)
   **  ((( &( "p_queue" ) )) # Ptr  |-> p_queue_pre)
@@ -543,7 +543,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
 
 Definition InitDataqueue_safety_wit_29 :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (saved: Z) (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (PreH1 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  (tt)) Y )) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q)) = 0)) (PreH4 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q)) = 0)) (PreH5 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q)) = (-1))) (PreH6 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q)) = (-1))) (PreH7 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y )) (PreH8 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH9 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after )),
-  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q)) )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q)) )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 )
   **  ((( &( "lock" ) )) # Int  |-> saved)
   **  ((( &( "p_queue" ) )) # Ptr  |-> p_queue_pre)
@@ -629,7 +629,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q ))
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q ))
   ||
   (EX (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
   “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre) ”
@@ -642,7 +642,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q ))
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q ))
   ||
   (EX (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
   “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre) ”
@@ -655,7 +655,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q ))
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q ))
 .
 
 Definition InitDataqueue_entail_wit_2_2 :=
@@ -681,7 +681,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q ))
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q ))
   ||
   (EX (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
   “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre) ”
@@ -694,7 +694,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q ))
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q ))
   ||
   (EX (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
   “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre) ”
@@ -707,7 +707,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q ))
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q ))
 .
 
 Definition InitDataqueue_entail_wit_2_3 :=
@@ -734,7 +734,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q ))
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q ))
   ||
   (EX (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
   “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre) ”
@@ -747,7 +747,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q ))
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q ))
   ||
   (EX (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
   “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre) ”
@@ -760,7 +760,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q ))
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q ))
 .
 
 Definition InitDataqueue_entail_wit_2_4 :=
@@ -787,7 +787,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q ))
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q ))
   ||
   (EX (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
   “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre) ”
@@ -800,7 +800,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q ))
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q ))
   ||
   (EX (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
   “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre) ”
@@ -813,12 +813,12 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q ))
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q ))
 .
 
 Definition InitDataqueue_return_wit_1 :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after_3:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q_3:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (after_4:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (PreH1 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_4)) ( MonadErr.ret  (tt)) Y )) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q_3)) = NodeNumber_pre)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q_3)) = 0)) (PreH4 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q_3)) = 0)) (PreH5 : (0 <= ( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q_3)))) (PreH6 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q_3)) = (-5))) (PreH7 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_3)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q_3) (refs)) Y )) (PreH8 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH9 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after_3 )),
-  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q_3)) )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q_3)) )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_4 )
 |--
   (EX (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q_2:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
@@ -830,7 +830,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q_2)) = (-1)) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q_2)) = (-5)) ”
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  ((-1))) X ) ”
-  &&  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
+  &&  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 ))
   ||
   (EX (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q_2:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
@@ -842,7 +842,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q_2)) = (-5)) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q_2)) = (-1)) ”
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  ((-1))) X ) ”
-  &&  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
+  &&  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 ))
   ||
   (EX (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q_2:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
@@ -854,13 +854,13 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q_2)) = (-1)) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q_2)) = (-1)) ”
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  ((-1))) X ) ”
-  &&  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
+  &&  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 ))
 .
 
 Definition InitDataqueue_return_wit_2 :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after_3:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q_3:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (after_4:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (PreH1 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_4)) ( MonadErr.ret  (tt)) Y )) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q_3)) = NodeNumber_pre)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q_3)) = 0)) (PreH4 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q_3)) = 0)) (PreH5 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q_3)) = (-5))) (PreH6 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q_3)) = (-1))) (PreH7 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_3)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q_3) (refs)) Y )) (PreH8 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH9 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after_3 )),
-  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q_3)) )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q_3)) )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_4 )
 |--
   (EX (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q_2:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
@@ -872,7 +872,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q_2)) = (-1)) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q_2)) = (-5)) ”
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  ((-1))) X ) ”
-  &&  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
+  &&  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 ))
   ||
   (EX (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q_2:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
@@ -884,7 +884,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q_2)) = (-5)) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q_2)) = (-1)) ”
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  ((-1))) X ) ”
-  &&  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
+  &&  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 ))
   ||
   (EX (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q_2:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
@@ -896,13 +896,13 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q_2)) = (-1)) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q_2)) = (-1)) ”
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  ((-1))) X ) ”
-  &&  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
+  &&  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 ))
 .
 
 Definition InitDataqueue_return_wit_3 :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after_3:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q_3:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (after_4:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (PreH1 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_4)) ( MonadErr.ret  (tt)) Y )) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q_3)) = NodeNumber_pre)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q_3)) = 0)) (PreH4 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q_3)) = 0)) (PreH5 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q_3)) = (-1))) (PreH6 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q_3)) = (-1))) (PreH7 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_3)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q_3) (refs)) Y )) (PreH8 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH9 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after_3 )),
-  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q_3)) )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre ( CRTOS_Verify.lib.dataqueue.DataqueueState.dataqueue_retired  (q_3)) )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_4 )
 |--
   (EX (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q_2:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
@@ -914,7 +914,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q_2)) = (-1)) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q_2)) = (-5)) ”
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  ((-1))) X ) ”
-  &&  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
+  &&  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 ))
   ||
   (EX (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q_2:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
@@ -926,7 +926,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q_2)) = (-5)) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q_2)) = (-1)) ”
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  ((-1))) X ) ”
-  &&  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
+  &&  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 ))
   ||
   (EX (after_2:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q_2:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ),
@@ -938,7 +938,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q_2)) = (-1)) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q_2)) = (-1)) ”
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after_2)) ( MonadErr.ret  ((-1))) X ) ”
-  &&  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
+  &&  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q_2 )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after_2 ))
 .
 
@@ -978,11 +978,11 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
 
 Definition InitDataqueue_partial_solve_wit_1 :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (before:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (PreH1 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (before)) ( CRTOS_Verify.lib.dataqueue.KInitDataqueue.abs_init_dataqueue  (sg) (p_queue_pre) (NodeNumber_pre)) X )),
-  ( CRTOS_Verify.lib.common.DataqueueInv.DataqueueStorage  p_queue_pre )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.DataqueueStorage  p_queue_pre )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg before )
 |--
   “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (before)) ( CRTOS_Verify.lib.dataqueue.KInitDataqueue.abs_init_dataqueue  (sg) (p_queue_pre) (NodeNumber_pre)) X ) ”
-  &&  ( CRTOS_Verify.lib.common.DataqueueInv.DataqueueStorage  p_queue_pre )
+  &&  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.DataqueueStorage  p_queue_pre )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg before )
 .
 
@@ -1224,7 +1224,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   **  ((( &( "NodeNumber" ) )) # UShort  |-> NodeNumber_pre)
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 |--
   “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
 .
@@ -1233,7 +1233,7 @@ Definition InitDataqueue_partial_solve_wit_9_aux :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (PreH1 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre)) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q)) = 0)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q)) = 0)) (PreH4 : (0 <= ( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q)))) (PreH5 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q)) = (-5))) (PreH6 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y )) (PreH7 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH8 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after )),
   ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 |--
   “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre) ”
@@ -1246,7 +1246,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 .
 
 Definition InitDataqueue_partial_solve_wit_9 := InitDataqueue_partial_solve_wit_9_pure -> InitDataqueue_partial_solve_wit_9_aux.
@@ -1258,7 +1258,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   **  ((( &( "NodeNumber" ) )) # UShort  |-> NodeNumber_pre)
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 |--
   “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
 .
@@ -1267,7 +1267,7 @@ Definition InitDataqueue_partial_solve_wit_10_aux :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (PreH1 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre)) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q)) = 0)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q)) = 0)) (PreH4 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q)) = (-5))) (PreH5 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q)) = (-1))) (PreH6 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y )) (PreH7 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH8 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after )),
   ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 |--
   “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre) ”
@@ -1280,7 +1280,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 .
 
 Definition InitDataqueue_partial_solve_wit_10 := InitDataqueue_partial_solve_wit_10_pure -> InitDataqueue_partial_solve_wit_10_aux.
@@ -1292,7 +1292,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   **  ((( &( "NodeNumber" ) )) # UShort  |-> NodeNumber_pre)
   **  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 |--
   “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
 .
@@ -1301,7 +1301,7 @@ Definition InitDataqueue_partial_solve_wit_11_aux :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (PreH1 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre)) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q)) = 0)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q)) = 0)) (PreH4 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q)) = (-1))) (PreH5 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q)) = (-1))) (PreH6 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y )) (PreH7 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH8 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after )),
   ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 |--
   “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre) ”
@@ -1314,7 +1314,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
   &&  ( CRTOS_Verify.lib.common.CrtosRules.InsideCritical  sg held )
   **  ( CRTOS_Verify.lib.common.CrtosInv.os_inv  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 .
 
 Definition InitDataqueue_partial_solve_wit_11 := InitDataqueue_partial_solve_wit_11_pure -> InitDataqueue_partial_solve_wit_11_aux.
@@ -1325,7 +1325,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   **  ((( &( "lock" ) )) # Int  |-> saved)
   **  ((( &( "p_queue" ) )) # Ptr  |-> p_queue_pre)
   **  ((( &( "NodeNumber" ) )) # UShort  |-> NodeNumber_pre)
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 |--
   “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y ) ”
 .
@@ -1333,7 +1333,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
 Definition InitDataqueue_partial_solve_wit_12_aux :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (PreH1 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre)) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q)) = 0)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q)) = 0)) (PreH4 : (0 <= ( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q)))) (PreH5 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q)) = (-5))) (PreH6 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y )) (PreH7 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH8 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after )),
   ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 |--
   “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y ) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre) ”
@@ -1344,7 +1344,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y ) ”
   &&  “ forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X )) ”
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
-  &&  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  &&  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after )
 .
 
@@ -1356,7 +1356,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   **  ((( &( "lock" ) )) # Int  |-> saved)
   **  ((( &( "p_queue" ) )) # Ptr  |-> p_queue_pre)
   **  ((( &( "NodeNumber" ) )) # UShort  |-> NodeNumber_pre)
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 |--
   “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y ) ”
 .
@@ -1364,7 +1364,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
 Definition InitDataqueue_partial_solve_wit_13_aux :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (PreH1 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre)) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q)) = 0)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q)) = 0)) (PreH4 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q)) = (-5))) (PreH5 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q)) = (-1))) (PreH6 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y )) (PreH7 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH8 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after )),
   ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 |--
   “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y ) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre) ”
@@ -1375,7 +1375,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y ) ”
   &&  “ forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X )) ”
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
-  &&  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  &&  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after )
 .
 
@@ -1387,7 +1387,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   **  ((( &( "lock" ) )) # Int  |-> saved)
   **  ((( &( "p_queue" ) )) # Ptr  |-> p_queue_pre)
   **  ((( &( "NodeNumber" ) )) # UShort  |-> NodeNumber_pre)
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 |--
   “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y ) ”
 .
@@ -1395,7 +1395,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
 Definition InitDataqueue_partial_solve_wit_14_aux :=
 forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (sg:  CRTOS_Verify.lib.common.CrtosGlobState.StableGlobalState ) (p_queue_pre: Z) (NodeNumber_pre: Z) (held:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (after:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ) (q:  CRTOS_Verify.lib.dataqueue.DataqueueState.DataQueueAbs ) (refs:  CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.DataqueueSemRefs ) (Y: (unit -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Prop) -> Prop))) (PreH1 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre)) (PreH2 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_front  (q)) = 0)) (PreH3 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_rear  (q)) = 0)) (PreH4 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_blank  (q)) = (-1))) (PreH5 : (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_sem_data  (q)) = (-1))) (PreH6 : ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y )) (PreH7 : forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X ))) (PreH8 : ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after )),
   ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after )
-  **  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  **  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
 |--
   “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y ) ”
   &&  “ (( CRTOS_Verify.lib.dataqueue.DataqueueState.dq_max_len  (q)) = NodeNumber_pre) ”
@@ -1406,7 +1406,7 @@ forall (X: (Z -> (( CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState  -> Pr
   &&  “ ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (after)) ( CRTOS_Verify.lib.dataqueue.KDeInitDataqueue.abs_deinit_dataqueue  (sg) (p_queue_pre) (q) (refs)) Y ) ”
   &&  “ forall (final:  CRTOS_Verify.lib.common.CrtosGlobState.VarGlobalState ), (( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  (tt)) Y ) -> ( monadesafe_lib.safeExec  ( CRTOS_Verify.lib.common.CrtosRules.LastSeen  (final)) ( MonadErr.ret  ((-1))) X )) ”
   &&  “ ( CRTOS_Verify.lib.common.CrtosRules.Crtos_GTrans  held after ) ”
-  &&  ( CRTOS_Verify.lib.common.DataqueueInv.store_dataqueue  p_queue_pre q )
+  &&  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.store_dataqueue  p_queue_pre q )
   **  ( CRTOS_Verify.lib.common.CrtosRules.OutsideCritical  sg after )
 .
 
@@ -1415,7 +1415,7 @@ Definition InitDataqueue_partial_solve_wit_14 := InitDataqueue_partial_solve_wit
 Definition InitDataqueue_which_implies_wit_1 :=
 (
 forall (p_queue: Z),
-  ( CRTOS_Verify.lib.common.DataqueueInv.DataqueueStorage  p_queue )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.DataqueueStorage  p_queue )
 |--
   “ (p_queue <> 0) ”
   &&  “ (addr_aligned p_queue 4 ) ”
@@ -1423,7 +1423,7 @@ forall (p_queue: Z),
 ) \/
 (
 forall (p_queue: Z),
-  ( CRTOS_Verify.lib.common.DataqueueInv.DataqueueStorage  p_queue )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.DataqueueStorage  p_queue )
 |--
   “ (addr_aligned p_queue 4 ) ”
   &&  “ (p_queue <> 0) ”
@@ -1432,21 +1432,21 @@ forall (p_queue: Z),
 
 Definition InitDataqueue_which_implies_wit_1_split_goal_1 :=
 forall (p_queue: Z),
-  ( CRTOS_Verify.lib.common.DataqueueInv.DataqueueStorage  p_queue )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.DataqueueStorage  p_queue )
 |--
   “ (addr_aligned p_queue 4 ) ”
 .
 
 Definition InitDataqueue_which_implies_wit_1_split_goal_2 :=
 forall (p_queue: Z),
-  ( CRTOS_Verify.lib.common.DataqueueInv.DataqueueStorage  p_queue )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.DataqueueStorage  p_queue )
 |--
   “ (p_queue <> 0) ”
 .
 
 Definition InitDataqueue_which_implies_wit_1_split_goal_spatial :=
 forall (p_queue: Z),
-  ( CRTOS_Verify.lib.common.DataqueueInv.DataqueueStorage  p_queue )
+  ( CRTOS_Verify.lib.dataqueue.DataqueueInv.DataqueueStorage  p_queue )
 |--
   (CharArray.undef_full p_queue sizeof( "DataQueue" ) )
 .

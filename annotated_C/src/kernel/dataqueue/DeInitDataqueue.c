@@ -18,8 +18,8 @@ void EnableLocalInterrupt(x_base lock)
       InsideCritical(sg, held) * os_inv(sg, after)
     Ensure OutsideCritical(sg, after)
 */;
-/* Trusted KERNEL_FREE boundary: consume the buffer in its existing FIFO
- * representation; the queue descriptor remains with the caller. */
+/* Trusted KERNEL_FREE boundary: dataqueue_buffer owns an allocated buffer.
+ * Consume it in FIFO representation; the queue descriptor remains with caller. */
 void x_free(void *p)
 /*@ dataqueue_free_buffer
     With (q : DataQueueAbs)
@@ -69,7 +69,7 @@ void DeInitDataqueue(DataQueueType *p_queue)
           p_queue->max_len == q.dq_max_len && p_queue->base == q.dq_base &&
           p_queue->sem_blank == q.dq_sem_blank && p_queue->sem_data == q.dq_sem_data &&
           CharArray::undef_full((char *)p_queue + 6, 2) *
-          ((q.dq_base == 0 && emp) ||
+          ((q.dq_base == 0 && q.dq_slots == nil && emp) ||
            (q.dq_base != 0 && dataqueue_buffer(q))) */
 
     if (p_queue->base) {

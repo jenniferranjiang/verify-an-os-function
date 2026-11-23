@@ -96,9 +96,10 @@ Definition semaphore_obtain_after_locked (sg : StableGlobalState) (result : Z + 
 
 Definition abs_semaphore_obtain (sg : StableGlobalState) (id msec : Z)
     : program (VarGlobalState -> Prop) Z :=
-  if orb (semaphore_id_invalid id) (andb (Z.ltb msec 0) (negb (Z.eqb msec (-1))))
-  then ret (-1)
-  else let ticks := semaphore_wait_ticks msec in
-    assertS (semaphore_obtain_entry sg id ticks) ;;
-    result <- task_atomic_cmd (abs_semaphore_obtain_locked id ticks) ;;
-    semaphore_obtain_after_locked sg result.
+  IF (orb (semaphore_id_invalid id)
+        (andb (Z.ltb msec 0) (negb (Z.eqb msec (-1)))) = true)
+    (ret (-1))
+    (let ticks := semaphore_wait_ticks msec in
+     assertS (semaphore_obtain_entry sg id ticks) ;;
+     result <- task_atomic_cmd (abs_semaphore_obtain_locked id ticks) ;;
+     semaphore_obtain_after_locked sg result).

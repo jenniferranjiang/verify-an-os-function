@@ -79,7 +79,7 @@ lib_FILES = \
 	mutex/MutexDeleteState.v \
 	mutex/MutexDeleteInv.v \
 	dataqueue/DataqueueState.v \
-	common/DataqueueInv.v \
+	dataqueue/DataqueueInv.v \
 	dataqueue/KInitDataqueue.v \
 	dataqueue/KDeInitDataqueue.v \
 	dataqueue/KDataqueuePeak.v \

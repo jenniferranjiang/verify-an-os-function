@@ -4,7 +4,8 @@ From SimpleC.SL Require Import Mem SeparationLogic MapLib.
 Require Import Logic.LogicGenerator.demo932.Interface.
 Require Export CRTOS_Verify.lib.task.KTaskWakeup CRTOS_Verify.lib.assign.KTaskOsAssign.
 Require Export CRTOS_Verify.lib.event.EventInv CRTOS_Verify.lib.event.EventOps.
-Import ListNotations DLL IDNode MonadErr SetsNotation.
+Import ListNotations DLL IDNode MonadErr SetsNotation Monad MonadNotation.
+Local Open Scope monad.
 Local Open Scope string.
 Local Open Scope sac.
 Local Open Scope list.
@@ -65,8 +66,7 @@ Definition abs_find_event_locked (id : Z) : program VarGlobalState addr :=
   {| nrm := fun before p after => after = before /\ event_lookup_result id p before;
      err := fun _ => False |}.
 Definition abs_find_event (id : Z) : program (VarGlobalState -> Prop) addr :=
-  if Z.ltb id 0 then MonadErr.ret 0
-  else task_atomic_cmd (abs_find_event_locked id).
+  IF (id < 0) (ret 0) (task_atomic_cmd (abs_find_event_locked id)).
 
 (** 锁外IsDoubleLinkListEmpty共享读取按源码处理规则单独包围临界区。
     返回true表示原C的!IsDoubleLinkListEmpty分支被选中；不对后续环境
@@ -150,24 +150,17 @@ Definition abs_event_unpublish_locked (id p : Z) : program VarGlobalState unit :
     不合并临界区、不把期间环境变化说成函数自身写入。free无共享抽象
     状态改变，其完整私有资源交接单独由EventRetired及x_free规格表达。 *)
 Definition abs_event_delete_at (id p : Z) : program (VarGlobalState -> Prop) unit :=
-  MonadErr.bind
-    (event_delete_atomic_cmd id p false (abs_event_pending_nonempty_locked id p))
-    (fun nonempty =>
-       MonadErr.bind
-         (if nonempty then
-            abs_event_resume_all id p
-          else MonadErr.ret tt)
-         (fun _ =>
-            MonadErr.bind
-              (event_delete_atomic_cmd id p true (abs_event_unpublish_locked id p))
-              (fun _ => if nonempty then abs_ktask_assign else MonadErr.ret tt))).
+  nonempty <- event_delete_atomic_cmd id p false (abs_event_pending_nonempty_locked id p) ;;
+  IF (nonempty = true) (abs_event_resume_all id p) (ret tt) ;;
+  event_delete_atomic_cmd id p true (abs_event_unpublish_locked id p) ;;
+  IF (nonempty = true) abs_ktask_assign (ret tt).
 
 (** 公开API保留查询未命中直接返回；命中后按用户排除D1/D2的环境
     运行上述分段删除。C仍为int32参数，spec另列0<=id<65536。
     不承诺原入口与出口所有其他状态相等，因为期间环境可以运行。 *)
 Definition abs_event_delete (id : Z) : program (VarGlobalState -> Prop) unit :=
-  MonadErr.bind (abs_find_event id)
-    (fun p => if Z.eqb p 0 then MonadErr.ret tt else abs_event_delete_at id p).
+  p <- abs_find_event id ;;
+  IF (p = 0) (ret tt) (abs_event_delete_at id p).
 
 (** 以下均为设计阶段待证义务：Definition保存命题，不提供证明事实。
     当before满足相应guard时不变化的环境步可满足gap，排除用空关系

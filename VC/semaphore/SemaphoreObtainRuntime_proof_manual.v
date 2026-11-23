@@ -12,6 +12,15 @@ Require Import CRTOS_Verify.lib.semaphore.KSemaphoreAbandon.
 Require Import CRTOS_Verify.lib.semaphore.KSemaphoreObtain.
 Local Open Scope sac.
 
+(** Proof-side reduction of the QCP branch; both normal and error semantics
+    are preserved by the existing program equivalence rules. *)
+Local Lemma obtain_if_bool {S A} (b : bool) (c1 c2 : program S A) :
+  ProgramPO.equiv (IF (b = true) c1 c2) (if b then c1 else c2).
+Proof.
+  destruct b; [apply if_pure_cond_true; reflexivity |
+               apply if_pure_cond_false; discriminate].
+Qed.
+
 Lemma proof_of__SemaphoreObtain_entail_wit_1_1_split_goal_1 : _SemaphoreObtain_entail_wit_1_1_split_goal_1.
 Proof.
   LLM_pre_process ltac:(lia || int_auto).
@@ -126,7 +135,7 @@ Lemma proof_of__SemaphoreObtain_entail_wit_3_2_split_goal_2 : _SemaphoreObtain_e
 Proof.
 LLM_pre_process ltac:(lia || int_auto).
 dump_pre_spatial.
-unfold abs_semaphore_obtain in PreH15 at 1. prog_nf in PreH15.
+unfold abs_semaphore_obtain in PreH15 at 1. rewrite obtain_if_bool in PreH15. prog_nf in PreH15.
 assert (Hv : orb (semaphore_id_invalid id_pre) (andb (Z.ltb msec_pre 0) (negb (Z.eqb msec_pre (-1)))) = false).
 { unfold semaphore_id_invalid. apply Bool.orb_false_iff. split.
   - apply Bool.orb_false_iff. split; apply Z.ltb_ge; lia.
@@ -240,7 +249,7 @@ Lemma proof_of__SemaphoreObtain_entail_wit_5_split_goal_2 : _SemaphoreObtain_ent
 Proof.
 LLM_pre_process ltac:(lia || int_auto).
 rewrite PreH3. dump_pre_spatial.
-unfold abs_semaphore_obtain in PreH22 at 1. prog_nf in PreH22.
+unfold abs_semaphore_obtain in PreH22 at 1. rewrite obtain_if_bool in PreH22. prog_nf in PreH22.
 assert (Hv : orb (semaphore_id_invalid id_pre) (andb (Z.ltb msec_pre 0) (negb (Z.eqb msec_pre (-1)))) = false).
 { unfold semaphore_id_invalid. apply Bool.orb_false_iff. split.
   - apply Bool.orb_false_iff. split; apply Z.ltb_ge; lia.
@@ -282,7 +291,7 @@ Qed.
 Lemma proof_of__SemaphoreObtain_entail_wit_6_split_goal_2 : _SemaphoreObtain_entail_wit_6_split_goal_2.
 Proof.
 LLM_pre_process ltac:(lia || int_auto).
-unfold abs_semaphore_obtain in PreH23 at 1. prog_nf in PreH23.
+unfold abs_semaphore_obtain in PreH23 at 1. rewrite obtain_if_bool in PreH23. prog_nf in PreH23.
 assert (Hv : orb (semaphore_id_invalid id_pre) (andb (Z.ltb msec_pre 0) (negb (Z.eqb msec_pre (-1)))) = false).
 { unfold semaphore_id_invalid. apply Bool.orb_false_iff. split.
   - apply Bool.orb_false_iff. split; apply Z.ltb_ge; lia.
@@ -328,8 +337,13 @@ Proof.
   { destruct PreH24 as [states [Hstates Hsafe]].
     unfold LastSeen in Hstates.
     unfold safe, abs_semaphore_obtain in Hsafe.
+    change (weakestpre (abs_semaphore_obtain sg_semaphore_obtain_oc id_pre msec_pre)
+      X_semaphore_obtain_oc states) in Hsafe.
+    unfold abs_semaphore_obtain in Hsafe.
+    rewrite obtain_if_bool in Hsafe.
     rewrite Hvalid in Hsafe.
-    rewrite wp_bind, wp_assertS in Hsafe.
+    apply (proj1 (wp_bind _ _ _ states)) in Hsafe.
+    apply (proj1 (wp_assertS _ _ states)) in Hsafe.
     destruct Hsafe as [Hentry _].
     unfold semaphore_obtain_entry in Hentry |- *.
     intros obs Hobs. apply Hentry.
@@ -1345,7 +1359,7 @@ Proof.
     - subst msec_pre. reflexivity.
     - assert (Z.ltb msec_pre 0 = false) by (apply Z.ltb_ge; lia).
       rewrite H1. reflexivity. }
-  unfold abs_semaphore_obtain in PreH29. rewrite Hguard, <- PreH13 in PreH29.
+  unfold abs_semaphore_obtain in PreH29. rewrite obtain_if_bool in PreH29. rewrite Hguard, <- PreH13 in PreH29.
   destruct PreH29 as [states [Hseen Hwp]].
   unfold safe in Hwp. rewrite wp_bind, wp_assertS in Hwp.
   destruct Hwp as [_ Hwp].
@@ -1389,7 +1403,7 @@ Proof.
         - subst msec_pre. reflexivity.
         - assert (Hbm : Z.ltb msec_pre 0 = false) by (apply Z.ltb_ge; lia).
           rewrite Hbm. reflexivity. }
-      unfold abs_semaphore_obtain in PreH25 at 1. prog_nf in PreH25.
+      unfold abs_semaphore_obtain in PreH25 at 1. rewrite obtain_if_bool in PreH25. prog_nf in PreH25.
       rewrite Hguard, <- PreH6 in PreH25.
       destruct PreH25 as [states [Hseen Hwp]].
       unfold safe in Hwp. rewrite wp_bind, wp_assertS in Hwp.
@@ -1437,7 +1451,7 @@ Proof.
         - subst msec_pre. reflexivity.
         - assert (Hbm : Z.ltb msec_pre 0 = false) by (apply Z.ltb_ge; lia).
           rewrite Hbm. reflexivity. }
-      unfold abs_semaphore_obtain in PreH25 at 1. prog_nf in PreH25.
+      unfold abs_semaphore_obtain in PreH25 at 1. rewrite obtain_if_bool in PreH25. prog_nf in PreH25.
       rewrite Hguard, <- PreH6 in PreH25.
       destruct PreH25 as [states [Hseen Hwp]].
       unfold safe in Hwp. rewrite wp_bind, wp_assertS in Hwp.
@@ -1483,7 +1497,7 @@ Proof.
         - subst msec_pre. reflexivity.
         - assert (Hbm : Z.ltb msec_pre 0 = false) by (apply Z.ltb_ge; lia).
           rewrite Hbm. reflexivity. }
-      unfold abs_semaphore_obtain in PreH22 at 1. prog_nf in PreH22.
+      unfold abs_semaphore_obtain in PreH22 at 1. rewrite obtain_if_bool in PreH22. prog_nf in PreH22.
       rewrite Hguard, <- PreH5 in PreH22.
       destruct PreH22 as [states [Hseen Hwp]].
       unfold safe in Hwp. rewrite wp_bind, wp_assertS in Hwp.
@@ -1611,7 +1625,7 @@ Proof.
       rewrite Bool.negb_true_iff;
       repeat rewrite Z.ltb_lt;
       rewrite Z.eqb_neq; lia
-    | unfold abs_semaphore_obtain in H; prog_nf in H;
+    | unfold abs_semaphore_obtain in H; rewrite obtain_if_bool in H; prog_nf in H;
       rewrite E in H; exact H ]
   end.
 Qed.
@@ -1635,7 +1649,7 @@ Proof.
       rewrite Bool.negb_true_iff;
       repeat rewrite Z.ltb_lt;
       rewrite Z.eqb_neq; lia
-    | unfold abs_semaphore_obtain in H; prog_nf in H;
+    | unfold abs_semaphore_obtain in H; rewrite obtain_if_bool in H; prog_nf in H;
       rewrite E in H; exact H ]
   end.
 Qed.
@@ -1659,7 +1673,7 @@ Proof.
       rewrite Bool.negb_true_iff;
       repeat rewrite Z.ltb_lt;
       rewrite Z.eqb_neq; lia
-    | unfold abs_semaphore_obtain in H; prog_nf in H;
+    | unfold abs_semaphore_obtain in H; rewrite obtain_if_bool in H; prog_nf in H;
       rewrite E in H; exact H ]
   end.
 Qed.
