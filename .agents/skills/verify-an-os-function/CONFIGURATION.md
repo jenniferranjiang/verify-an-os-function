@@ -2,19 +2,27 @@
 
 ## 路径配置
 
-首次使用时，在验证工程根目录下创建 `.agents/verify-os.config.json`，内容从本 skill 的 [config.example.json](config.example.json) 复制。已有配置时直接编辑该文件，无需修改 `SKILL.md`。
+本文中的 **workspace** 指用户放置本 skill、维护验证成果的项目。直接使用当前 workspace 根目录，即使任务从其子目录启动，也无需用户配置 workspace 路径。
 
-填写 `qcp_root` 和 `source_root` 两个必填项；其他字段可以保留空字符串。JSON 不支持注释，填写时保留双引号和逗号结构。配置只影响路径选择，不会安装工具或连接 MCP 服务。
+**QCP 和 Rocq。** 读取 workspace 根目录已有的 `CONFIGURE`、`Makefile` 以及它们实际引用的工具链配置。按构建时生效的变量和路径解析两项工具的位置。例如，项目可能用 `SymExec_DIR` 和 `SL_DIR` 指向 QCP 的符号执行器和库，用 `COQBIN` 或 opam 启动器选择 Rocq。分别核对 QCP 安装目录和该构建环境中实际使用的 Rocq 编译器。如果现有配置只能确定一项或两项都缺失，提醒用户在 workspace 根目录创建或补全 `CONFIGURE`，指定缺少的工具路径。
 
-验证工程根目录默认是用户启动任务的当前目录，用户明确指定时使用指定目录；不从 skill 安装位置推断。读取根目录的 `.agents/verify-os.config.json`；首次使用复制 [config.example.json](config.example.json)，请用户填写必填项。配置为 JSON 数据，不作为 shell 执行。相对路径统一相对验证工程根目录解析；不自动展开 `~` 或环境变量。解析后检查路径可用性并记录实际绝对路径。
+**OS 原始源码。** 先检查 workspace 的 `CONFIGURE` 是否已指定源码目录。若已指定，核对该目录下的目标源码和构建配置；路径失效或指向其他源码时，请用户纠正。若未指定，由 agent 查找并记录。
+
+1. Agent 根据项目说明、构建引用或既有验证记录查找源码，优先检查 workspace 的上层目录及其下的同级项目。用目标函数的原始定义、头文件和配置核对候选，排除带注释的验证副本。
+2. 能唯一确定时，agent 将源码路径写入 workspace 的 `CONFIGURE`。找不到或仍有多个可信候选时，说明查找结果，请用户指定，再将确定的路径写入。
+3. 写入时沿用已有变量名和文件格式，保留其他配置与用户改动。若没有对应变量，可写作 `OS_SOURCE_ROOT = ../my-os`（路径仅为示例）。若 `CONFIGURE` 尚不存在，则在 workspace 根目录新建；Makefile 中已生效的工具设置无需抄入。
+
+**仅首次汇报。** 用户在该 workspace 首次使用本 skill 时，agent 在开始验证前一次列出 OS 原始源码目录、QCP 工具根目录和 Rocq 编译器的实际绝对路径，注明各自依据，请用户确认。无论路径来自现有配置、自行发现还是用户补充，均执行这次汇报。将确认结果记入已有验证上下文，后续任务复用该记录；若某项路径失效，只处理该项。
+
+**原始 OS 源码始终只读。** Agent 不得修改原始源码或在其目录生成文件。源码适配、注解和经用户批准的缺陷修复都写入 workspace 的验证副本；写入前确认副本与原文件确实分离，包括符号链接指向的实际位置。
+
+## 可选项目设置
+
+需要自定义下列设置时，可使用 workspace 下的 `.agents/verify-os.config.json`，字段见[可选设置示例](config.example.json)。所有字段均可省略。JSON 中的相对路径以 workspace 根目录为基准，按字面解析。旧 JSON 中的工具和源码路径可作为查找线索；实际采用的位置按上节规则确定。
 
 | 配置项 | 约定 |
 |---|---|
-| `qcp_root` | 必填，QCP 安装/仓库根目录，须有工具、Rocq 库与工作流说明；缺失时报告并请用户配置，不能跳过 QCP。 |
-| `source_root` | 必填，待验证的真实 C 源码根目录；从中确认源码、headers 与激活配置。 |
 | `source_processing` | 可选，用户维护的源码处理规则文件；省略或为空时只使用 skill 默认规则，填写后必须可读。与默认规则冲突的条目以用户规则为准，其余共同生效。 |
-| `coq_bin` | 可选，兼容当前 QCP 的 Rocq/Coq bin 目录；为空时检查已有工程工具链或 PATH，实际编译前必须确认可用且兼容。 |
-| `symexec_bin` | 可选，覆盖 symexec 可执行路径；为空时尝试 `qcp_root/linux-binary/symexec`，其他 QCP 安装布局填写实际位置。 |
 | `trust_base` | 可选，用户维护的信任边界文件；配置后必须可读，未配置不继承外部授权。 |
 | `review_whitelist` | 可选，用户维护的 predicate/spec 审阅补充白名单；配置后必须可读。省略或为空时只使用 skill 默认白名单；冲突条目以用户规则为准，其余共同生效。 |
 | `annotated_c_dir` | 可选，annotated C 目录；为空时扫描根 `annotatedc/`、`annotated_C/`。都有且用途不明确时询问；都没有时新建 `annotatedc/`。 |
@@ -56,23 +64,8 @@ Predicate/spec 设计与审阅前读取适用文件，只对符合适用条件�
 
 共享接口变动时同步必要imports与使用处，编译本轮目标及受影响依赖，不混用绑定旧定义的缓存；依赖一致性随当前改动处理。外部QCP基础库仍按配置直接引用。QCP的main-root/workspace都指向验证工程根目录，输入和VC输出明确限定本轮目标。
 
-- 若已有 `tools/rocq/toolchain.json`，沿用并核对与路径配置一致；其他工程不要求此包装器，使用确认后的 `coq_bin` 或 PATH。VsRocq 使用相同环境 bin 目录中的 `vsrocqtop`，路径按本机安装位置填写。
-- QCP 库直接引用配置的 `qcp_root` 下的实际目录，沿用工程已有的逻辑名与路径映射；不复制到验证工程，也不保留源码快照。
-```sh
-# Agent 解析 JSON 并检查后，通过独立环境变量传入路径：
-# OS_QCP_ROOT=qcp_root，OS_PROJECT_ROOT=验证工程根目录，
-# OS_SOURCE_ROOT=source_root，OS_COQ_BIN=确认后的编译器 bin 目录。
-# 不 source JSON，不将配置值拼接成 shell 代码。
-
-# QCP 基础库变化后
-cd "$OS_QCP_ROOT/Rocq"
-make -f Makefile core COQBIN="$OS_COQ_BIN/"
-
-# CRTOS 根库
-cd "$OS_PROJECT_ROOT"
-"$OS_COQ_BIN/coq_makefile" -f _CoqProject -o Makefile.coq
-make -f Makefile.coq COQBIN="$OS_COQ_BIN/"
-```
+- 用 workspace 已选定的 Rocq 工具链构建；使用 VsRocq 时选用同一环境的 `vsrocqtop`。
+- 直接引用项目配置中实际使用的 QCP 库和符号执行器，沿用已有逻辑名和路径映射。QCP 基础库需要重编译时使用该安装的构建入口，验证项目的库和证明使用 workspace 自己的构建入口。
 
 `makes inconsistent assumptions` 表示混用了新旧 `.vo`；`Cannot find a physical path` 可能由 `_CoqProject`/编辑器映射不一致或依赖 `.vo` 缺失导致。先核对逻辑路径与编译产物，再按依赖顺序构建所缺或失效的目标；保留结果供交互式加载，不通过无差别清缓存处理。当前 QCP 使用 `valid_object` 等新接口，不再使用 `isvalidptr_*`、`store_2byte`/`store_4byte` 和 `sizeof_front_end_type_of_ptr_size`。`rocq_mcp_cache_*.v` 是临时文件，不加入构建。
 
@@ -86,6 +79,6 @@ Coq/VsRocq 升级后实测局部项目和路径变量是否生效，再决定是
 
 ## 工具检查入口
 
-闭包检查、symbolic、VC生成与证明统一由用户批准后的QCP verification-orchestrator管理。设计/审阅阶段只做规则允许的源码、契约一致性和Rocq类型检查，不运行symbolic。工具路径来自本配置，实际调用参数和检查顺序遵循QCP工作流。
+闭包检查、symbolic、VC生成与证明统一由用户批准后的QCP verification-orchestrator管理。设计/审阅阶段只做规则允许的源码、契约一致性和Rocq类型检查，不运行symbolic。工具路径沿用 workspace 的构建配置，实际调用参数和检查顺序遵循QCP工作流。
 
 路径配置不能代替QCP与Rocq MCP的安装和连接；检查 `agents/openai.yaml` 声明的服务可用性，缺失时报告具体依赖。工具使用项目实际目录结构及统一的路径映射。

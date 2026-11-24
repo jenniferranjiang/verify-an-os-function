@@ -30,7 +30,7 @@ Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。
 
 设计、审阅和实现证明直接在验证工程的全局 `lib/`、解析后的 annotated C 目录和 `VC/` 中增量修改，沿用已有布局和逻辑前缀。写入全局目录不表示已审阅或已证明，完成状态以明确revision及检查结果为准。
 
-修改共享接口时同步必要的使用处、构建配置和受影响审阅状态，依赖一致性在当前工作中处理。保护已有定义、spec、证明及用户未提交改动，不因工作位置改变扩大本轮C函数体证明范围。`source_root`仍只读；授权修复只作用于验证工程的annotated C副本。
+修改共享接口时同步必要的使用处、构建配置和受影响审阅状态，依赖一致性在当前工作中处理。保护已有定义、spec、证明及用户未提交改动，不因工作位置改变扩大本轮C函数体证明范围。原始 OS 源码始终只读，授权修复只作用于验证工程的 annotated C 副本。
 
 接续已有工作时，先核对输入版本、授权、审阅记录及当前文件差异，再在实际所属文件中继续。
 
@@ -62,7 +62,9 @@ Predicate/spec 设计与审阅前读取[默认审阅白名单](references/Review
 
 ## 确认验证上下文
 
-优先读取用户指定或项目已有的说明。开始时按[环境与路径配置](CONFIGURATION.md)读取用户配置，再按[工程组织与维护指南](references/project-maintenance-guide.md#路径配置与目录发现)确认源码与验证工程根目录、扫描现有目录结构，然后创建本次所需文件。
+验证工程就是用户当前的 workspace，无需另配其路径。按[路径配置](CONFIGURATION.md#路径配置)从 workspace 的 `CONFIGURE` 或 Makefile 解析 QCP 和 Rocq，缺项时提醒用户创建或补全 `CONFIGURE`。OS 原始源码位置先查 `CONFIGURE`。未指定时，结合项目线索优先在 workspace 的上层目录查找，唯一确定后写入 `CONFIGURE`，找不到或有多个候选时请用户指定。
+
+首次使用时先向用户汇报 OS 源码、QCP 和 Rocq 三项实际路径，确认后开始验证。后续任务沿用已确认的上下文，按[工程组织与维护指南](references/project-maintenance-guide.md#路径配置与目录发现)使用现有目录。
 
 处理源码到验证切片的转换时，按照 [源代码处理](references/源代码处理.md) 执行，并结合当前配置与 TrustBase 核对适用条件。源码处理同时参考默认的 [源代码处理](references/源代码处理.md) 和可选配置 `source_processing` 指定的用户规则文件。两个文件分别保留，无需合并；冲突条目以用户规则为准，其余规则共同生效。未配置用户文件时使用默认文件。用户在当前任务中明确指定的规则同样优先于默认规则，具体配置见[用户源码处理规则](CONFIGURATION.md#用户源码处理规则)。本 skill 各处引用《源代码处理》时均遵循此约定。
 
@@ -72,7 +74,7 @@ Predicate/spec 设计与审阅前读取[默认审阅白名单](references/Review
 
 ### C 源码分析
 
-配置的 `source_root` 是只读源码依据。源码适配和经用户批准的缺陷修复只修改验证工程全局annotated C中的源码副本；批准修复补丁不等于批准回写 `source_root`。只有用户另行明确要求修改原仓库时，才作为独立任务处理。副本修复后的验证结论须注明针对修复版本，不能宣称原源码已修复或已获证明；具体记录与门禁见下述指南。
+Agent 对原始 OS 源码只有读权限。源码适配和经用户批准的缺陷修复只能修改 workspace 的 annotated C 副本。修复后的验证结论须注明对应的副本版本，具体记录与门禁见下述指南。
 
 Main agent 将源码分析交给 C analysis agent，按 [Predicate 指南第 1 节](references/predicate-lemma-design-guide.md#1-确认源码与范围)执行，分析结果用于后续 predicate 设计。源码问题的说明与处理见[源码错误报告](references/reporting-guide.md#源码错误报告)。
 
@@ -221,7 +223,7 @@ Rocq predicate 文件通过 compile/typecheck，annotated C 已完成人工结�
 
 交接时要求按[VC 证明顺序](references/implementation-and-validation-guide.md#vc-证明顺序)从底层依赖往上证明：先完成本轮范围内的 callee 及所需 lib 引理，再推进上层 caller，由 QCP controller 安排执行。
 
-交接时落实[每个目标函数累计 100 分钟的 VC 证明预算](references/implementation-and-validation-guide.md#vc-证明时间预算)，到时保存状态并等待用户决定是否追加时间。
+交接时落实[每个目标函数累计 150 分钟的 VC 证明预算](references/implementation-and-validation-guide.md#vc-证明时间预算)，到时保存状态并等待用户决定是否追加时间。
 
 交接时提供 TrustBase 文件路径，并明确按 spec 设计确定的本轮实现证明目标与 `reused-spec` 清单；导入复用函数不提交为 VC/函数体证明目标，也不因其证明状态自动扩大范围。复用依赖的证明状态和结论限制须随交接传递，不能将其冒称为已证或自动改标 trusted。trusted 和 reused-spec contract 均不作为本轮新完成的实现证明计数。
 
@@ -277,7 +279,7 @@ Predicate/spec 草案（`draft`）可以共同修改，不做中间审阅。满�
 
 ## 项目与参考路径
 
-验证工程根目录由用户指定或当前配置确定。根 `_CoqProject` 和Makefile统一管理全局lib、VC及外部基础库；构建、QCP和编辑器使用同一配置与已有逻辑前缀。必要依赖适配与编译随当前改动完成，见[工程维护指南](references/project-maintenance-guide.md#全局工作区与依赖维护)。
+从用户 workspace 的根目录使用项目已有的构建入口。构建、QCP 和编辑器使用同一配置与已有逻辑前缀。必要依赖适配与编译随当前改动完成，见[工程维护指南](references/project-maintenance-guide.md#全局工作区与依赖维护)。
 
 验证以当前配置下的真实 CRTOS 源码为基线；如有批准的副本修复，验证对象为记录了差异的修复版本。除按源码问题门禁批准的副本修复外，完整源码模式只修改副本中的注解；单函数切片按上述《源代码处理》规则适配，其他工具转换须保持程序行为，并在 spec review 中说明转换位置、理由及源码依据。不得超出已规定的适配范围改变算法、遗漏执行路径或副作用，也不得使用错误的数据布局。缺陷修复不得冒充等价转换。等价转换示例见 [Spec 编写指南](references/spec-writing-guide.md#单函数切片的等价转换)。
 
@@ -287,7 +289,7 @@ Predicate/spec 草案（`draft`）可以共同修改，不做中间审阅。满�
 
 写新定义、strategy 或断言前，先查 CRTOS 全局库及当前工程的 annotated C，再查 QCP 库；需要参考设计或证明方法时，查看已配置且可用的 crtosverify、LOSVerify 和 VRTOS；未配置的参考直接跳过。查找实际定义和用法，不猜测 QCP 语法。
 
-外部根目录由配置的 `references` 提供；QCP 来自必填的 `qcp_root`。“位置”是查找提示，以实际扫描结果为准。
+可选外部参考目录由 `references` 提供。QCP 使用 workspace 构建配置选定的安装。下表中的位置是查找提示，以实际扫描结果为准。
 
 | 来源 | 位置 | 用途 |
 |---|---|---|

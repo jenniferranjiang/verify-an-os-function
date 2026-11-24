@@ -28,13 +28,13 @@
 
 ## 源码工程与验证工程分离
 
-CRTOS源码可由独立的上游仓库 `https://www.gitlink.org.cn/chos/crtos` 跟踪；其他OS使用其实际源码。`source_root`与验证工程根目录分别配置，不从skill安装位置推断。记录源码URL（若有）、commit、本地差异及激活配置，不把Ubiquitous或APP_Framework整树复制进验证工程。
+CRTOS 源码可由独立的上游仓库 `https://www.gitlink.org.cn/chos/crtos` 跟踪，其他 OS 使用其实际源码。按 workspace 的[路径配置](../CONFIGURATION.md#路径配置)定位原始源码，记录源码 URL（若有）、commit、本地差异及激活配置。切片时只复制所需源码。
 
-原始源码只读。源码适配和用户批准的缺陷修复直接作用于验证工程的annotated C副本，保留原始依据、差异与授权，不回写source_root。两者在同一仓库时也必须区分权威源码路径与验证副本。
+原始源码只读。即使 workspace 和原始源码在同一仓库，源码适配和用户批准的缺陷修复也只写入独立的 annotated C 副本。保留原始依据、差异与授权。
 
 ## 路径配置与目录发现
 
-开始时按[环境与路径配置](../CONFIGURATION.md)确认工程、源码、工具根目录。扫描 `lib/`、解析后的annotated C目录、`VC/`、根 `_CoqProject`、构建文件及imports，记录实际布局和逻辑前缀。
+在用户 workspace 中扫描 `lib/`、解析后的 annotated C 目录、`VC/`、根 `_CoqProject`、构建文件及 imports，记录实际布局和逻辑前缀。首次使用时的路径确认见[环境与路径配置](../CONFIGURATION.md#路径配置)。
 
 从设计阶段起就在这些全局目录读写。已有布局优先：分模块、平铺或其他结构均沿用，不为任务重组现有文件。下文路径是新建工程的默认示例；例如已有平铺工程可直接维护 `lib/TaskInv.v` 和 `annotatedc/KTaskCreate.c`。按实际产物创建目录，不预建空模块或设计阶段不需要的VC目录。
 
@@ -55,7 +55,7 @@ CRTOS源码可由独立的上游仓库 `https://www.gitlink.org.cn/chos/crtos` �
 
 新增dataqueue等模块时，直接修改现有CrtosGlobState/CrtosInv等文件，补入模块状态与资源，使用同一套系统状态和协议。必要的共享接口和依赖一致性随本轮修改处理。
 
-构建从工程根目录执行，例如 `make lib/<module>/<File>.vo` 构建所需目标及依赖，`make lib -j2` 构建共享库。采用下述默认手写结构时，新增输入或修改映射编辑 `Makefile` 中的 `lib_FILES`、`VC_code_proof_FILES`、`COQ_FLAG`；构建自动更新 `_CoqProject` 和 `.depend`，不要再用 `coq_makefile` 覆盖手写入口。工具链沿用项目现有配置；本工程为 `tools/rocq/toolchain.json`。默认保留.vo，其他缓存按[主skill保留边界](../SKILL.md#临时产物与保留边界)处理。提交时确保所提交构建配置引用的输入一并提供，不提交指向未提供文件或任务临时目录的必需依赖。
+构建从工程根目录执行，例如 `make lib/<module>/<File>.vo` 构建所需目标及依赖，`make lib -j2` 构建共享库。采用下述默认手写结构时，新增输入或修改映射编辑 `Makefile` 中的 `lib_FILES`、`VC_code_proof_FILES`、`COQ_FLAG`；构建自动更新 `_CoqProject` 和 `.depend`，不要再用 `coq_makefile` 覆盖手写入口。工具链沿用 workspace 的构建配置。默认保留.vo，其他缓存按[主skill保留边界](../SKILL.md#临时产物与保留边界)处理。提交时确保所提交构建配置引用的输入一并提供，不提交指向未提供文件或任务临时目录的必需依赖。
 
 接续已有成果时，核对来源基线、当前文件及授权，逐文件整合有效差异，并检查受影响的结果。
 
@@ -79,7 +79,7 @@ $(FILES:%.v=%.vo): %.vo: %.v
 
 ## Implement 阶段的 QCP 路径配置
 
-Controller的 `--main-root` 与MCP调用的 `workspace` 使用验证工程根目录，目标文件路径相对于该根目录；构建、依赖解析和编辑器均使用根配置。QCP安装目录仍由qcp_root指定，不与验证工作目录混淆。
+Controller 的 `--main-root` 与 MCP 调用的 `workspace` 均使用用户 workspace 根目录，目标文件路径相对于该根目录。构建、依赖解析和编辑器均使用根配置。QCP 工作流入口从项目选定的 QCP 安装目录读取。
 
 交接明确本轮函数/文件列表、冻结revisions、复用边界及VC输出位置。全局目录中存在其他函数，不表示它们全部进入本轮workflow。工具的路径解析和目标选择应适配用户的实际布局。
 
