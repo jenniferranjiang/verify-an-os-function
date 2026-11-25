@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verification Report"
+  short_description: "整理设计与验证结果，核对全局一致性并记录证明范围、假设和剩余工作"
+  default_prompt: "使用 $verification-report 完成本阶段工作，沿用项目现有输入、配置和有效记录。"

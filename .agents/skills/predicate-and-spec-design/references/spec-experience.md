@@ -94,7 +94,7 @@ program 的适用条件和设计见 [Predicate 指南第 5 节](predicate-lemma-
 `uint16` 推出；它们仍需来自相应契约、predicate 或控制流。若 `id` 是逻辑整数，
 则须先有它与具体 C 值或 typed store 的关联，不能仅凭名字赋予类型范围。
 `by local` 的范围结论仍须证明；具体注解可在 Annotation 阶段补充，见
-[Annotation 阶段适配](implementation-and-validation-guide.md#annotation-阶段适配)。
+[Annotation 阶段适配](../../vc-proof/references/implementation-and-validation-guide.md#annotation-阶段适配)。
 
 4. 对于以对象指针等非 ID 参数直接确定操作对象、且采用 `safeExec` 与临界区
 协议的函数，优先参考下面的公开 spec：直接使用真实 C 形参，由抽象 program

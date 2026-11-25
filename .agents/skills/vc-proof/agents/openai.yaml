@@ -1,0 +1,4 @@
+interface:
+  display_name: "VC Proof"
+  short_description: "交接已批准的谓词与规格，完成注解、验证条件、手工证明和最终检查"
+  default_prompt: "使用 $vc-proof 完成本阶段工作，沿用项目现有输入、配置和有效记录。"

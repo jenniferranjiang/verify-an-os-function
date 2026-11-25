@@ -2,7 +2,7 @@
 
 本指南完成三件事：理解现有 C 实现、形成 Rocq predicate 草案，并按 predicate 自己的条件完成独立审阅。Spec 另行编写和审阅；QCP implement 在两者 review-passed 且用户确认 revisions 后统一交给 QCP verification-orchestrator。
 
-本指南按设计问题分节，不要求每一节对应一个 `.v` 文件。文件按主 skill 的 [文件组织与存放](../SKILL.md#文件组织与存放)安排：各模块维护自己的状态与内存表示，全局状态和系统不变量导入并组合模块定义；按依赖需要分离模块纯状态与 store 谓词，避免循环依赖。具体函数的抽象操作与 `program` 可放在该函数的文件中，跨模块共享内容沿用共享库。
+本指南按设计问题分节，不要求每一节对应一个 `.v` 文件。文件按对应阶段的 [文件组织与存放](../SKILL.md#文件组织与存放)安排：各模块维护自己的状态与内存表示，全局状态和系统不变量导入并组合模块定义；按依赖需要分离模块纯状态与 store 谓词，避免循环依赖。具体函数的抽象操作与 `program` 可放在该函数的文件中，跨模块共享内容沿用共享库。
 
 ## 目录
 
@@ -708,7 +708,7 @@ container predicate 和必要 lemma；仅凭类型名或习惯性实现不能构
 
 项目已有 OS 总状态和 `os_inv` 时，直接修改它们的全局原定义：在现有 state record 中增加模块分量，在现有 `os_inv` 定义体中组合模块 invariant 及必要的跨模块关系。按实际依赖识别受影响的模块、spec和证明，在全局原文件处理必要调整，不能依靠旧.vo保留不一致版本，也不无条件改造无关调用者。受影响结论失效时明确标记并复查；这不自动扩大本轮C函数体证明范围。模块自己的 `State`/`Inv` 文件可以新增，但不能另建一套系统级入口。例如 CRTOS 应修改 `CrtosGlobState.v` 中的全局状态和 `CrtosInv.v` 中的 `os_inv`，而不是新增 `CrtosDataqueue.State = { core : VarGlobalState; queues : ... }`，再用旧 token 的投影包装另一份系统不变量。文件名以实际工程为准。
 
-不得以保留旧 Assertion carrier、避免修改依赖库、减少编译工作或便于复用为由，采用上述外层包装。新增模块定义直接放入全局lib所属目录，已有共享定义及必要imports在原位置修改。无需修改的库直接引用；只需重编译的依赖不因此复制或重设计。接口调整以实际模型和使用点为依据。具体范围按[全局工作区与依赖维护](project-maintenance-guide.md#全局工作区与依赖维护)诊断，参与组合的定义须使用同一套状态及断言模型。
+不得以保留旧 Assertion carrier、避免修改依赖库、减少编译工作或便于复用为由，采用上述外层包装。新增模块定义直接放入全局lib所属目录，已有共享定义及必要imports在原位置修改。无需修改的库直接引用；只需重编译的依赖不因此复制或重设计。接口调整以实际模型和使用点为依据。具体范围按[全局工作区与依赖维护](../../os-verification-coordinator/references/project-maintenance-guide.md#全局工作区与依赖维护)诊断，参与组合的定义须使用同一套状态及断言模型。
 
 模块全局 predicate 必须覆盖当前配置下该模块拥有或管理的全部内存。开发时可以按对象或容器逐步加入并编译，但要持续修改同一个正式 definition；在模块资源和生命周期尚未闭合时，它仍是 draft。每次加入资源时，检查其唯一 owner、与现有 footprint 不重叠，并追溯到使用它的真实模块函数；发现新的逻辑状态时返回第 2 节。
 
@@ -776,7 +776,7 @@ project_initialization_resource
 
 ## 10. 正式定义注释与设计说明
 
-正式 `.v` 文件保存state、predicate、statement及其局部语义解释。跨定义和跨文件的改动原因、资源组织写入与spec共用的[设计说明](reporting-guide.md#设计说明)，链接实际定义；这份说明在实验完成后仍保留。
+正式 `.v` 文件保存state、predicate、statement及其局部语义解释。跨定义和跨文件的改动原因、资源组织写入与spec共用的[设计说明](../../verification-report/references/reporting-guide.md#设计说明)，链接实际定义；这份说明在实验完成后仍保留。
 对本次设计或修改涉及的非平凡、核心组合或对外使用的定义，不论是新建还是已有，
 都在 definition/statement 前写简短的 `(** ... *)` 中文文档注释。例如：
 
@@ -814,7 +814,7 @@ Definition 改变时必须同时更新相关注释。
 
 ## 11. 检查并审阅 Predicates
 
-审阅前按[用户审阅白名单](../CONFIGURATION.md#用户审阅白名单)读取默认及用户补充例外，
+审阅前按[用户审阅白名单](../../os-verification-coordinator/CONFIGURATION.md#用户审阅白名单)读取默认及用户补充例外，
 对白名单中情况直接通过；下列一般要求不得用于重新阻塞已被明确豁免的问题。
 
 Predicate 审阅重点检查：源码访问的内存由谁持有，操作过程中如何交接，以及这些描述是否符合实际 C 行为。按目标代码选择适用内容，不要求逐项填表；函数 Require/Ensure 的具体写法由 spec 审阅检查。
@@ -830,4 +830,4 @@ Predicate 审阅重点检查：源码访问的内存由谁持有，操作过程�
 
 正式 `.v` 定义和必要注释应一致，并通过编译或类型检查。影响正确性的假设或资源关系尚无依据时，说明缺少什么，不能把它当作已成立的事实给出通过结论。
 
-满足上述要求后，给出对应 predicate 版本的审阅结论。修复与重审按主 skill 的 [`review` 部分](../SKILL.md#review)处理，报告按 [验证记录指南](reporting-guide.md#审阅报告)组织；本阶段不启动 QCP 证明流程。
+满足上述要求后，给出对应 predicate 版本的审阅结论。修复与重审按对应阶段的 [`review` 部分](../SKILL.md#review)处理，报告按 [验证记录指南](../../verification-report/references/reporting-guide.md#审阅报告)组织；本阶段不启动 QCP 证明流程。

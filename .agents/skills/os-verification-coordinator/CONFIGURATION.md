@@ -29,7 +29,7 @@ Agent 可以为当前验证环境增量修改 workspace 内的 `CONFIGURE`、Mak
 | 配置项 | 约定 |
 |---|---|
 | `source_processing` | 可选，用户维护的源码处理规则文件；省略或为空时只使用 skill 默认规则，填写后必须可读。与默认规则冲突的条目以用户规则为准，其余共同生效。 |
-| `trust_base` | 可选，用户维护的补充信任说明；配置后必须可读，未配置不继承外部授权。原内置 TrustBase 已拆入源码处理指南的 Trusted specs、QCP 工具指南及 Spec 审阅章节；无需为这些内置内容重复配置。 |
+| `trust_base` | 可选，用户维护的补充信任说明；配置后必须可读，未配置不继承外部授权。默认信任边界见源码处理指南的 Trusted specs、QCP 工具指南及 Spec 审阅章节。 |
 | `review_whitelist` | 可选，用户维护的 predicate/spec 审阅补充白名单；配置后必须可读。省略或为空时只使用 skill 默认白名单；冲突条目以用户规则为准，其余共同生效。 |
 | `annotated_c_dir` | 可选，annotated C 目录；为空时扫描根 `annotatedc/`、`annotated_C/`。都有且用途不明确时询问；都没有时新建 `annotatedc/`。 |
 | `references.vrtos`、`references.crtos_verify`、`references.los_verify` | 可选参考根目录，未填写或不可用时说明并跳过，不阻塞验证；实际导入成为构建依赖时须确认该依赖可用。 |
@@ -38,7 +38,7 @@ Agent 可以为当前验证环境增量修改 workspace 内的 `CONFIGURE`、Mak
 
 ## 用户源码处理规则
 
-默认规则保存在 [源代码处理](references/source-processing-guide.md)。用户可自行创建规则文件，例如 `.agents/source-processing.md`，然后在 `.agents/verify-os.config.json` 中设置 `"source_processing": ".agents/source-processing.md"`，无需修改 skill。已有配置缺少该字段时仍可直接使用默认规则。
+默认规则保存在 [源代码处理](../source-processing/references/source-processing-guide.md)。用户可自行创建规则文件，例如 `.agents/source-processing.md`，然后在 `.agents/verify-os.config.json` 中设置 `"source_processing": ".agents/source-processing.md"`，无需修改 skill。已有配置缺少该字段时仍可直接使用默认规则。
 
 用户文件只需写补充的对原始源代码的处理规则即可，即如何将源代码处理为合适的验证切片代码，并说明适用对象或条件。
 
@@ -46,7 +46,7 @@ Agent 可以为当前验证环境增量修改 workspace 内的 `CONFIGURE`、Mak
 
 ## 用户审阅白名单
 
-默认白名单保存在 [review-whitelist.md](references/review-whitelist.md)，随 skill 维护。
+默认白名单保存在 [review-whitelist.md](../predicate-and-spec-design/references/review-whitelist.md)，随 skill 维护。
 用户可自行创建补充文件，例如 `.agents/review-whitelist.md`，然后在 `.agents/verify-os.config.json`
 中设置 `"review_whitelist": ".agents/review-whitelist.md"`。路径解析规则与其他配置相同。
 已有配置缺少该字段或字段为空时，只使用默认白名单。

@@ -296,7 +296,7 @@
    CharArray.full (sem + 14) 2 (repeat_Z 0 2)
    ```
 
-10. 涉及静态函数表适配时，按 [QCP 工具指南](qcp-tool-guide.md#1-函数指针调用转为直接调用)同步调整 predicate 和 state。
+10. 涉及静态函数表适配时，按 [QCP 工具指南](../../source-processing/references/qcp-tool-guide.md#1-函数指针调用转为直接调用)同步调整 predicate 和 state。
 
 11. 不要为了匹配或复用已有 predicate 的参数形式，把本模块语义上不需要的
     dependency state 直接加入本模块的 abstract state。Abstract-state 分量仍须由
@@ -440,7 +440,7 @@
     并同步semaphore及其他受影响使用处，不要为绕过这个缺口另建模块专用协议。
     按模块职责增补定义和全局组合，检查受影响的接口、审阅结论与编译结果。
     Predicate 和 spec 均通过审阅、经用户确认并 implement 到 `done` 后，
-    按主 skill 的[全局一致性检查与收尾](../SKILL.md#全局一致性检查与收尾)执行收尾。
+    按对应阶段的[全局一致性检查与收尾](../../verification-report/SKILL.md#全局一致性检查与收尾)执行收尾。
 
 16. Predicate 的参数应当由它所描述的对象、状态关系或资源决定，不要仅因为某个
     使用点需要一条附加条件，就把这条条件做成 predicate 的参数。增加参数前应检查：

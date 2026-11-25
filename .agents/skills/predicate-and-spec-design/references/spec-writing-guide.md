@@ -7,7 +7,7 @@ crtOS 临界区定义；本轮实现验证函数的 canonical contract 写在其
 分开。Predicate 和 spec 草案可以共同修改；草案期间发现 predicate 缺口时直接返回 `slice-design`
 修正。草案本身不做中间review；改动使既有通过结论不再适用时，将受影响结论标为 `invalidated` 并重新审阅。Spec review 必须引用同一份 `review-passed` predicate revision。
 
-函数规格的解释与本轮lib改动一起写入长期保留的[设计说明](reporting-guide.md#设计说明)。除说明契约表达的操作外，还要定位人需要重点审阅的入口限制、结果保证、资源交接和重要假设，解释为什么值得确认。
+函数规格的解释与本轮lib改动一起写入长期保留的[设计说明](../../verification-report/references/reporting-guide.md#设计说明)。除说明契约表达的操作外，还要定位人需要重点审阅的入口限制、结果保证、资源交接和重要假设，解释为什么值得确认。
 
 Spec 是验证前写出的正式目标，不是验证结果：它规定调用所需资源、返回或非终止路径、abstract effect、
 具体内存 ownership 与值/结构的前后态、ownership 转移以及 frame；后续 proof 才证明 C 实现满足该 spec。
@@ -36,7 +36,7 @@ QCP parser/symbolic、VC 和 proof 在用户确认 review-passed revisions 后�
 ## 1. 先固定模型和函数层次
 
 读取从目标函数递归得到的完整可达闭包、各函数的 direct callees、全部 return path、项目现有 module/function libraries、annotated C imports 和
-`Extern Coq`。Rocq 文件按主 skill 的 [文件组织与存放](../SKILL.md#文件组织与存放)安排：模块公共定义直接复用，函数专用的抽象操作与 `program` 可写在该函数的 `.v` 文件中；`With/Require/Ensure` 仍写在对应 annotated C 中，不复制到 `.v`。然后按已确认的验证上下文和项目实际
+`Extern Coq`。Rocq 文件按对应阶段的 [文件组织与存放](../SKILL.md#文件组织与存放)安排：模块公共定义直接复用，函数专用的抽象操作与 `program` 可写在该函数的 `.v` 文件中；`With/Require/Ensure` 仍写在对应 annotated C 中，不复制到 `.v`。然后按已确认的验证上下文和项目实际
 协议组织 spec。目标函数自己进入/退出临界区，或依靠临界区取得共享 invariant 时，spec 应明确写出临界区外和
 临界区内。直接引用当前 slice 的 crtOS 临界区定义；若尚未建立或 state/transition 不足，返回
 `slice-design` 在同一草案中补齐。只有修改已经批准的接口时才提交 breaking change request。Spec writer 不另写一套
@@ -46,10 +46,10 @@ QCP parser/symbolic、VC 和 proof 在用户确认 review-passed revisions 后�
 只有已批准 protocol 允许等待 lock 时环境推进状态，才区分 `old/current`；顺序或中断屏蔽语义若保证无环境并发更新，
 不应机械引入两个状态。
 
-验证闭包遵循主 `SKILL.md` 的[验证范围](../SKILL.md#验证范围)：先按当前配置和
-[源代码处理](source-processing-guide.md) 完成适配，再沿切片中保留的调用递归。文档明确规定且适用的
+验证闭包遵循设计流程的[验证范围](../SKILL.md#验证范围)：先按当前配置和
+[源代码处理](../../source-processing/references/source-processing-guide.md) 完成适配，再沿切片中保留的调用递归。文档明确规定且适用的
 模型/API 替换作为边界，无需重复批准，也不递归被替换部分的原始内部调用。
-从根 annotated_C 或其他证明工程导入复用的依赖 spec 按[工程组织与维护指南](project-maintenance-guide.md#已有-spec-的复用与特化)
+从根 annotated_C 或其他证明工程导入复用的依赖 spec 按[工程组织与维护指南](../../os-verification-coordinator/references/project-maintenance-guide.md#已有-spec-的复用与特化)
 记为 `reused-spec` 边界，只在 caller 定义前放函数声明和完整 spec，不为其新建独立 `.c` 文件，也不为该函数及其内部调用安排本轮 VC 或函数体重证；适用性和 contract 一致性仍须检查。其余非
 `trusted` 函数按本节建立 annotated C。Main agent 可以建议把复杂
 callee 作为 `trusted`，但不能代替用户决定。批准的 symbol 和 contract 记录在当前任务
@@ -64,7 +64,7 @@ callee 作为 `trusted`，但不能代替用户决定。批准的 symbol 和 con
 每个 canonical 文件先声明当前函数的 direct callees 并附完整 declaration-only
 `With/Require/Ensure`，随后保存当前函数自己的 canonical spec、真实定义和 active 函数体。
 
-写完文件后按主 skill 的闭包门禁重新从适配后的 target 扫描 body calls、dispatch 和宏处理结果。
+写完文件后按对应阶段的闭包门禁重新从适配后的 target 扫描 body calls、dispatch 和宏处理结果。
 《源代码处理》规定的替代函数按其模型/API contract 检查；其他宏展开后保留的调用继续进入闭包，
 可执行语句在 caller 中等价归一。空宏、常量、`sizeof` 和纯类型/布局宏不产生函数。
 正文中每个保留的调用都须有完整 formal API，不自行发明文档未规定的替代函数。
@@ -75,13 +75,13 @@ dependency closure。只新增特化 spec 且原 spec 与依赖未变时，不�
 LOS 文件只提供函数 spec 的写法示例。可以复用的是 QCP 的通用 `critical_STS/CriticalCSL`，不是 LOS 的
 `Los_CS_C`、`Los_Verify_State` 或 transition；crtOS 使用自己的状态和允许转换。
 
-已有 spec 的导入、等价适配与场景特化统一按 [工程组织与维护指南](project-maintenance-guide.md#已有-spec-的复用与特化)执行。
+已有 spec 的导入、等价适配与场景特化统一按 [工程组织与维护指南](../../os-verification-coordinator/references/project-maintenance-guide.md#已有-spec-的复用与特化)执行。
 
 ### 单函数切片的等价转换
 
-除按 [源码错误报告](reporting-guide.md#源码错误报告)批准并记录的副本修复外，完整源码模式下，`annotated_C/src` 只增加或修改注解。缺陷修复只作用于验证工程全局annotated C中的源码副本，验证针对修复版本，不属于等价转换。单函数切片为适配工具可进行有源码与配置依据的等价转换，例如拆分赋值或逗号表达式、展开函数式宏、解析固定函数表分派，或把原编译单元中的 static 对象以外部声明形式提供给切片。
+除按 [源码错误报告](../../verification-report/references/reporting-guide.md#源码错误报告)批准并记录的副本修复外，完整源码模式下，`annotated_C/src` 只增加或修改注解。缺陷修复只作用于验证工程全局annotated C中的源码副本，验证针对修复版本，不属于等价转换。单函数切片为适配工具可进行有源码与配置依据的等价转换，例如拆分赋值或逗号表达式、展开函数式宏、解析固定函数表分派，或把原编译单元中的 static 对象以外部声明形式提供给切片。
 
-本节的等价转换必须保留求值顺序、执行路径、返回值、副作用、对象身份和实际访问字段的布局。外部声明须对应原对象，不能创建新的对象代替它。每项转换在 spec review 中说明位置、理由及源码/config 依据；不得换算法、隐藏函数体或凭空简化数据布局。《源代码处理》明确规定的抽象适配按主 skill 的专门规则执行，不要求将其表述为逐语句等价转换。
+本节的等价转换必须保留求值顺序、执行路径、返回值、副作用、对象身份和实际访问字段的布局。外部声明须对应原对象，不能创建新的对象代替它。每项转换在 spec review 中说明位置、理由及源码/config 依据；不得换算法、隐藏函数体或凭空简化数据布局。《源代码处理》明确规定的抽象适配按对应阶段的专门规则执行，不要求将其表述为逐语句等价转换。
 
 ## 2. 确定参数和 effect
 
@@ -241,7 +241,7 @@ allocation、free 或 container membership 变化，应使用已有 object/conta
 
 ### 3.1 Spec 与注解位置
 
-本轮需要实现验证的每个C函数有明确的canonical位置和唯一active函数体，可以包含原有具名 specs 及按 [工程组织与维护指南](project-maintenance-guide.md#已有-spec-的复用与特化)新增的特化 spec。导入 spec 的 canonical 依据保留在来源文件中，当前工程只在 caller 定义前放 declaration-only spec。`Require` 写调用前必须持有的具体资源和事实，`Ensure` 按真实
+本轮需要实现验证的每个C函数有明确的canonical位置和唯一active函数体，可以包含原有具名 specs 及按 [工程组织与维护指南](../../os-verification-coordinator/references/project-maintenance-guide.md#已有-spec-的复用与特化)新增的特化 spec。导入 spec 的 canonical 依据保留在来源文件中，当前工程只在 caller 定义前放 declaration-only spec。`Require` 写调用前必须持有的具体资源和事实，`Ensure` 按真实
 成功、失败、阻塞或早返回路径写返回值、状态变化、资源转移与 frame。外层函数证明调用
 其他函数时按其已声明的完整 spec 进行模块化推理，不展开导入边界的实现。若依赖spec尚无适用的实现证明，结论须注明相对于该契约成立，不能宣称依赖函数已证，也不因此自动扩展本轮函数体证明范围。
 
@@ -397,7 +397,7 @@ spec，反之亦然；当前闭包两种调用都有时才分别处理。已有�
 
 先查当前工程解析后的 annotated C 目录，分别确认已有 IC 或 OC low-level spec 的语义适用性与证明状态；不以证明状态决定是否复制函数体。
 新增模块 high-level spec 的存放位置按 callee 是否属于本轮实现验证目标区分，遵循
-[工程组织与维护指南](project-maintenance-guide.md#新增场景特化)：
+[工程组织与维护指南](../../os-verification-coordinator/references/project-maintenance-guide.md#新增场景特化)：
 
 - 复用已有 spec 的依赖函数：将原 low-level spec 与新增的具名 high-level spec 一起写在 caller
   定义前，记录来源文件、revision 和推导义务。不因新增特化而建立 callee 文件、复制函数体或
@@ -410,7 +410,7 @@ spec，反之亦然；当前闭包两种调用都有时才分别处理。已有�
 `high_level_spec <= low_level_spec` 标注推导来源，并检查参数对应、调用点前提、前后态效果、
 ownership 与 frame 的推导；新增特化不能直接视为已由原证明覆盖，须完成相应推导证明。
 
-设计、审阅与implement均直接维护全局annotated C，按[工程维护指南](project-maintenance-guide.md#canonical-与-caller-一致性)同步canonical与caller声明。特化在对应声明或定义处增量补充，保留已有其他契约。
+设计、审阅与implement均直接维护全局annotated C，按[工程维护指南](../../os-verification-coordinator/references/project-maintenance-guide.md#canonical-与-caller-一致性)同步canonical与caller声明。特化在对应声明或定义处增量补充，保留已有其他契约。
 
 ### 4.5 临界区调用链中的五个位置
 
@@ -550,7 +550,7 @@ Ensure
 
 ## 6. Spec 审阅
 
-先按[用户审阅白名单](../CONFIGURATION.md#用户审阅白名单)读取默认及用户补充例外，
+先按[用户审阅白名单](../../os-verification-coordinator/CONFIGURATION.md#用户审阅白名单)读取默认及用户补充例外，
 冲突条目以用户规则为准，其余共同生效。对白名单中情况直接通过，
 不得将 predicate review 已按同一例外接受的问题再次作为 spec review blocker。
 
@@ -585,4 +585,4 @@ Ensure
 4. 给出审阅结论。
    适用检查通过且没有影响正确性的未解决问题时，将该 spec 版本标为 `review-passed`；需要修复时标为 `needs-fix`。
 
-审阅记录注明被审阅的文件和版本、结论，以及发现的问题和对应位置。写法见 [验证记录指南](reporting-guide.md#审阅报告)，审阅与复查规则见主 skill 的 [`review` 部分](../SKILL.md#review)。Predicate 和 spec 均通过审阅后，请用户确认对应版本。
+审阅记录注明被审阅的文件和版本、结论，以及发现的问题和对应位置。写法见 [验证记录指南](../../verification-report/references/reporting-guide.md#审阅报告)，审阅与复查规则见对应阶段的 [`review` 部分](../SKILL.md#review)。Predicate 和 spec 均通过审阅后，请用户确认对应版本。

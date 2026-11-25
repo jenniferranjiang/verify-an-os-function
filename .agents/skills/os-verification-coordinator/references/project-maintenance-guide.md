@@ -10,8 +10,8 @@
 
 ## 用户 AGENTS.md 的处理规则
 
-- 项目没有 `AGENTS.md` 时，可以新建一个，默认写明：“验证 OS 函数时使用 `verify-an-os-function` skill，沿用项目已有配置和验证成果。”
-- 项目已有 `AGENTS.md` 时，读取并遵守，直接使用本 skill，无需修改、追加或合并该文件。
+- 项目没有 `AGENTS.md` 时，可以新建一个，默认写明：“验证 OS 函数时使用 `os-verification-coordinator` skill，沿用项目已有配置和验证成果。”
+- 项目已有 `AGENTS.md` 时，读取并遵守其中选择的主编排和阶段规则；无需修改、追加或合并该文件。
 - 用户 `AGENTS.md` 与本 skill 或参考文档冲突时，以用户 `AGENTS.md` 为准，并向用户报告冲突条款和采用的规则；系统、开发者指令及用户当前明确要求仍须遵守。
 
 ## 文件组织以用户为准
@@ -55,7 +55,7 @@ CRTOS 源码可由独立的上游仓库 `https://www.gitlink.org.cn/chos/crtos` 
 
 新增dataqueue等模块时，直接修改现有CrtosGlobState/CrtosInv等文件，补入模块状态与资源，使用同一套系统状态和协议。必要的共享接口和依赖一致性随本轮修改处理。
 
-构建从工程根目录执行，例如 `make lib/<module>/<File>.vo` 构建所需目标及依赖，`make lib -j2` 构建共享库。采用下述默认手写结构时，新增输入或修改映射编辑 `Makefile` 中的 `lib_FILES`、`VC_code_proof_FILES`、`COQ_FLAG`；构建自动更新 `_CoqProject` 和 `.depend`，不要再用 `coq_makefile` 覆盖手写入口。工具链沿用 workspace 的构建配置。默认保留.vo，其他缓存按[主skill保留边界](../SKILL.md#临时产物与保留边界)处理。提交时确保所提交构建配置引用的输入一并提供，不提交指向未提供文件或任务临时目录的必需依赖。
+构建从工程根目录执行，例如 `make lib/<module>/<File>.vo` 构建所需目标及依赖，`make lib -j2` 构建共享库。采用下述默认手写结构时，新增输入或修改映射编辑 `Makefile` 中的 `lib_FILES`、`VC_code_proof_FILES`、`COQ_FLAG`；构建自动更新 `_CoqProject` 和 `.depend`，不要再用 `coq_makefile` 覆盖手写入口。工具链沿用 workspace 的构建配置。默认保留.vo，其他缓存按[产物保留边界](../../verification-report/SKILL.md#临时产物与保留边界)处理。提交时确保所提交构建配置引用的输入一并提供，不提交指向未提供文件或任务临时目录的必需依赖。
 
 接续已有成果时，核对来源基线、当前文件及授权，逐文件整合有效差异，并检查受影响的结果。
 
@@ -105,7 +105,7 @@ Controller 的 `--main-root` 与 MCP 调用的 `workspace` 均使用用户 works
 
 先查已有定义。适用的直接Require Import，需要向下游公开则Require Export。接口缺少内容时在所属原文件补充，模块不存在才新增文件；定义不符合当前源码时说明差异与影响，再增量修正。
 
-修改遵守真实源码和系统协议，直接在现有总state和os_inv中集成模块，见[Predicate指南](predicate-lemma-design-guide.md#74-组合模块-predicate)。不以保留旧Assertion carrier为由创建另一套系统协议。
+修改遵守真实源码和系统协议，直接在现有总state和os_inv中集成模块，见[Predicate指南](../../predicate-and-spec-design/references/predicate-lemma-design-guide.md#74-组合模块-predicate)。不以保留旧Assertion carrier为由创建另一套系统协议。
 
 新文件审阅完整内容，已有文件审阅修改处及受影响内容。不能通过改变共享predicate偷偷改变复用spec含义；相关契约、caller和已有证明的处理遵循下节及[全局依赖规则](#全局工作区与依赖维护)。
 
@@ -115,7 +115,7 @@ Controller 的 `--main-root` 与 MCP 调用的 `workspace` 均使用用户 works
 
 公共header沿用既有位置，默认 `annotated_C/src/headers/`，配置include沿用 `src/include/`。目录名使用解析结果，例如annotatedc，不硬编码用户布局。
 
-仅供模块分析的函数按主skill的文件组织规则处理。gen/dep等工具生成临时目录不自动成为权威输入；不自行新增scenarios来替代用户已有组织方式。
+仅供模块分析的函数按对应阶段的文件组织规则处理。gen/dep等工具生成临时目录不自动成为权威输入；不自行新增scenarios来替代用户已有组织方式。
 
 ## Annotated C 的增量维护
 
@@ -143,7 +143,7 @@ Controller 的 `--main-root` 与 MCP 调用的 `workspace` 均使用用户 works
 
 有调用场景事实时，保留原spec并新增具名特化。本轮实现目标的特化放在其全局canonical文件；复用边界的特化与原spec一起放在caller定义前，记录来源与推导义务，不复制body。
 
-同一IC/OC场景已有相似特化时复用结构与抽象操作，仅具体化真实对象、参数及资源。不能因为新增特化就删除原规格或宣称新的函数体证明已完成。维护规则见[Spec指南](spec-writing-guide.md#44-在全局文件中增量增加模块特化)。
+同一IC/OC场景已有相似特化时复用结构与抽象操作，仅具体化真实对象、参数及资源。不能因为新增特化就删除原规格或宣称新的函数体证明已完成。维护规则见[Spec指南](../../predicate-and-spec-design/references/spec-writing-guide.md#44-在全局文件中增量增加模块特化)。
 
 ### 模块 header
 
@@ -161,4 +161,4 @@ Controller 的 `--main-root` 与 MCP 调用的 `workspace` 均使用用户 works
 
 VC生成和更新由批准后的QCP workflow管理。只提交本轮目标，不能扫描全局VC后全部重生成。手工证明只改proof_manual，不手改goal/proof_auto/goal_check来绕过义务；旧有效证明和其他任务产物保留，版本冲突按workflow处理。
 
-根构建纳入实际正式文件并检查依赖到goal_check。路径/import调整不改变VC陈述或假设；已有证明受共享修改影响时标记状态并处理，不能假借旧编译缓存。完成后的[收尾](../SKILL.md#全局一致性检查与收尾)完成一致性确认、记录整理和临时产物清理。
+根构建纳入实际正式文件并检查依赖到goal_check。路径/import调整不改变VC陈述或假设；已有证明受共享修改影响时标记状态并处理，不能假借旧编译缓存。完成后的[收尾](../../verification-report/SKILL.md#全局一致性检查与收尾)完成一致性确认、记录整理和临时产物清理。

@@ -1,7 +1,7 @@
 # Implement
 
 用户确认 predicate/spec revisions 后，main agent 完整读取已配置 QCP 根目录的
-`AGENTS.md`，按[路径配置](project-maintenance-guide.md#implement-阶段的-qcp-路径配置)
+`AGENTS.md`，按[路径配置](../../os-verification-coordinator/references/project-maintenance-guide.md#implement-阶段的-qcp-路径配置)
 将验证工作目录指向验证工程根目录，沿用现有工程，从它指定的
 `verification-orchestrator` 入口启动 QCP workflow，并把批准的 predicate/spec 当作冻结输入。
 
@@ -19,7 +19,7 @@
 
 ### 沿用现有工程
 
-设计与审阅阶段直接维护的全局文件就是implement输入。沿用全局lib、annotated C、VC、根_CoqProject/Makefile与外部基础库路径，保持现有逻辑前缀。按[全局工程规则](project-maintenance-guide.md#全局工作区与依赖维护)处理必要依赖及其检查，保留其他函数的有效输入和证明。
+设计与审阅阶段直接维护的全局文件就是implement输入。沿用全局lib、annotated C、VC、根_CoqProject/Makefile与外部基础库路径，保持现有逻辑前缀。按[全局工程规则](../../os-verification-coordinator/references/project-maintenance-guide.md#全局工作区与依赖维护)处理必要依赖及其检查，保留其他函数的有效输入和证明。
 
 Controller的main-root与MCP的workspace使用验证工程根目录，交接明确本轮canonical文件、批准revision、reused-spec边界和VC输出位置。不能因根目录里存在其他函数就把它们全交给workflow。冻结输入包含本轮实际使用的共享定义版本；依赖变动须按语义影响更新状态及重新检查。
 
@@ -36,12 +36,12 @@ Main 交接 annotation 任务时须明确传达本节的 OS 适配规则。
 ## 验证范围与执行
 
 交接时分开列出按spec设计确定的本轮实现证明目标与从根 annotated_C 或其他证明工程导入的 `reused-spec` 边界，附复用来源、revision、caller-local contract位置及已知证明状态。旧证明未完成或不能移植不自动扩大本轮目标。
-按[工程组织与维护指南](project-maintenance-guide.md#已有-spec-的复用与特化)，导入 spec 只放在 caller 定义前，不为其新建独立函数文件，也不生成本轮实现 VC 或重新证明函数体；工具的闭包检查须识别这类边界，不得因缺少同名 `.c`、proof文件或发现未证依赖而补建文件。依赖契约未获实现证明时，报告caller结论相对于该契约成立，不宣称整个调用链已证，也不自动改标trusted。
+按[工程组织与维护指南](../../os-verification-coordinator/references/project-maintenance-guide.md#已有-spec-的复用与特化)，导入 spec 只放在 caller 定义前，不为其新建独立函数文件，也不生成本轮实现 VC 或重新证明函数体；工具的闭包检查须识别这类边界，不得因缺少同名 `.c`、proof文件或发现未证依赖而补建文件。依赖契约未获实现证明时，报告caller结论相对于该契约成立，不宣称整个调用链已证，也不自动改标trusted。
 之后只执行 controller 返回的 action，直到 controller 报告 `done`、明确 blocker 或达到下述时间预算；不要在本 skill
 中复制 QCP 的阶段、命令、返回状态或 final-check。
 
 
-实际产生VC和证明后，更新长期保留的[设计说明](reporting-guide.md#设计说明)：解释本轮证明目标对应的C路径与资源操作，以及关键义务如何借助lib/spec完成。Controller完成后的收尾按主skill的[全局一致性检查与收尾](../SKILL.md#全局一致性检查与收尾)执行。
+实际产生VC和证明后，更新长期保留的[设计说明](../../verification-report/references/reporting-guide.md#设计说明)：解释本轮证明目标对应的C路径与资源操作，以及关键义务如何借助lib/spec完成。Controller完成后的收尾按对应阶段的[全局一致性检查与收尾](../../verification-report/SKILL.md#全局一致性检查与收尾)执行。
 
 ## VC 证明顺序
 

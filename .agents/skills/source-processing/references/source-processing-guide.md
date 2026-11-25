@@ -1,13 +1,13 @@
 
 # 源代码处理指南
 
-本文提供 skill 的默认规则。用户可按 [配置说明](../CONFIGURATION.md#用户源码处理规则)通过 `source_processing` 指定自己的规则文件。用户规则与本文冲突时，仅冲突条目以用户规则为准；无冲突的条目共同生效。下文所述处理方式及咨询条件均受此优先级约定约束。
+本文提供 skill 的默认规则。用户可按 [配置说明](../../os-verification-coordinator/CONFIGURATION.md#用户源码处理规则)通过 `source_processing` 指定自己的规则文件。用户规则与本文冲突时，仅冲突条目以用户规则为准；无冲突的条目共同生效。下文所述处理方式及咨询条件均受此优先级约定约束。
 
 ## 从源代码到验证切片代码的处理
 
-原始 OS 源码位置按 workspace 的[路径配置](../CONFIGURATION.md#路径配置)确定。
+原始 OS 源码位置按 workspace 的[路径配置](../../os-verification-coordinator/CONFIGURATION.md#路径配置)确定。
 
-原始 OS 源码始终只读。以下适配以及经用户批准的 bug 修复都只写入 workspace 的 annotated C 副本。缺陷修复单独按[源码错误报告](reporting-guide.md#源码错误报告)记录原始基线、修复差异与副本 revision，验证结论仅覆盖该修复版本。
+原始 OS 源码始终只读。以下适配以及经用户批准的 bug 修复都只写入 workspace 的 annotated C 副本。缺陷修复单独按[源码错误报告](../../verification-report/references/reporting-guide.md#源码错误报告)记录原始基线、修复差异与副本 revision，验证结论仅覆盖该修复版本。
 
 目前，验证切片代码与原始源代码的差异如下：
 

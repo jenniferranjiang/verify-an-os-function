@@ -2,7 +2,7 @@
 
 本文件随 skill 维护，默认读取。用户可通过 `review_whitelist` 指定补充文件；
 两份文件分别保留、同时使用，冲突条目以用户规则为准，其余共同生效。
-维护与使用规则见[用户审阅白名单](../CONFIGURATION.md#用户审阅白名单)。
+维护与使用规则见[用户审阅白名单](../../os-verification-coordinator/CONFIGURATION.md#用户审阅白名单)。
 
 ## 001：assertS 描述临界区观察条件
 

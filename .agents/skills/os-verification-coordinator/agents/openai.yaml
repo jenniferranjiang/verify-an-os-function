@@ -1,0 +1,13 @@
+interface:
+  display_name: "OS Verification Coordinator"
+  short_description: "编排源码处理、谓词与规格设计审阅、实现证明和报告，复用现有验证进度"
+  default_prompt: "使用 $os-verification-coordinator 读取真实 CRTOS C 与配置，分别审阅 predicate 和 spec；我批准两份 revision 后，调用 QCP verification-orchestrator 完成 implement。"
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "qcp"
+      description: "对 annotated C 进行符号执行、诊断并导出证明目标"
+    - type: "mcp"
+      value: "rocq-mcp"
+      description: "编译、交互证明并验证 Rocq lemma 与 QCP VC"

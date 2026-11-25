@@ -1,0 +1,4 @@
+interface:
+  display_name: "Predicate and Spec Design"
+  short_description: "设计谓词与函数规格，完成 Human / AI 审阅并记录版本和结论"
+  default_prompt: "使用 $predicate-and-spec-design 完成本阶段工作，沿用项目现有输入、配置和有效记录。"

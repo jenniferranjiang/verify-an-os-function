@@ -1,0 +1,4 @@
+interface:
+  display_name: "Source Processing"
+  short_description: "按源码配置与处理规则生成验证切片，记录转换依据和调用边界"
+  default_prompt: "使用 $source-processing 完成本阶段工作，沿用项目现有输入、配置和有效记录。"
