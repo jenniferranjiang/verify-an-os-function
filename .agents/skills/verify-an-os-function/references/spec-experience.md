@@ -38,7 +38,7 @@ contract 直接看出函数完成的操作。
 模块和容器函数使用与当前函数层次匹配的 reviewed predicate、abstract state 和按动作
 命名的 transition，把相关字段组合成真实的对象或模块状态。
 
-裸 `store` 通常留在 predicate 定义和函数体局部 `which implies` 中。当函数的接口
+裸 `store` 通常留在 predicate 定义及函数体所需的局部资源断言中。可复用的资源展开和恢复优先用 strategy。当函数的接口
 语义本身就是具体 memory shape 时，canonical spec 可以暴露必要的最小 shape。若现有
 predicate 不足以表达真实的对象状态、ownership view 或生命周期中间态，应回到
 `slice-design` 补充接口，而不是继续向 spec 中堆叠字段级 `store`。

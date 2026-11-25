@@ -1,6 +1,6 @@
 # Implement
 
-用户确认 predicate/spec revisions 后，main agent 完整读取已配置 QCP 根目录的
+用户确认 Stage 1 完成并指定进入 Stage 2 后，main agent 完整读取已配置 QCP 根目录的
 `AGENTS.md`，按[路径配置](project-maintenance-guide.md#implement-阶段的-qcp-路径配置)
 将验证工作目录指向验证工程根目录，沿用现有工程，从它指定的
 `verification-orchestrator` 入口启动 QCP workflow，并把批准的 predicate/spec 当作冻结输入。
@@ -23,13 +23,13 @@
 
 Controller的main-root与MCP的workspace使用验证工程根目录，交接明确本轮canonical文件、批准revision、reused-spec边界和VC输出位置。不能因根目录里存在其他函数就把它们全交给workflow。冻结输入包含本轮实际使用的共享定义版本；依赖变动须按语义影响更新状态及重新检查。
 
-由QCP工具适配本OS全局模块目录及根构建配置。先检查实际controller能否解析这些路径；已有支持直接复用，尚不支持时完成本任务所需的工具侧适配，并实际检查输入解析和构建结果。符号执行、依赖分析、证明编译和final-check使用一致路径。
+通过验证工程自己的路径配置、构建入口和 controller 已支持的参数对接实际布局，检查输入解析及构建结果。符号执行、依赖分析、证明编译和 final-check 使用一致路径。外部 QCP 等工具的代码、控制脚本和库只读；若现有接口仍无法支持某个布局或检查，报告具体不兼容项和受阻目标。
 
 ## Annotation 阶段适配
 
 本 OS 验证流程允许在函数体中按验证需要使用 `by local`、call `where`、branch-control、普通 `Inv`、multi-inv 等 QCP 合法注解。Annotation 阶段可以新增或修正这些注解，不要求提前在 spec-writing 阶段全部填写。
 
-例如，可用 `by local` 从已有前提或存储资源推出 `value` 的范围；可用 call `where` 显式实例化契约中的 `With` 逻辑参数、类型参数或选择适用的具名 spec。范围事实及调用前置条件仍须证明；分支与循环注解须覆盖真实可达路径并保留相应证明义务。不得借此添加无依据假设、遗漏资源或改变可执行 C 的行为，冻结 predicate/spec 的语义变更仍按原审批和审阅流程处理。
+例如，可用 `by local` 从已有前提或存储资源推出 `value` 的范围；可用 call `where` 显式实例化契约中的 `With` 逻辑参数、类型参数或选择适用的具名 spec。范围事实及调用前置条件仍须证明；分支与循环注解须覆盖真实可达路径并保留相应证明义务。若修正需要改变已批准规格的语义，暂停受影响的证明，按[设计变更报告](reporting-guide.md#设计变更报告)结合 C 路径和新旧 spec 说明原因。人类专家审阅并确认新版本后，以该版本恢复证明。
 
 Main 交接 annotation 任务时须明确传达本节的 OS 适配规则。
 
