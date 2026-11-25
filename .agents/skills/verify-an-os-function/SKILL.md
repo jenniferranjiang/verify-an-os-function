@@ -38,7 +38,7 @@ Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。
 
 设计阶段可以先写引理陈述，不要求立即完成证明；未证明的内容必须明确为待证义务，不能当作已证明结论使用。
 
-Predicate/spec 设计与审阅前读取[默认审阅白名单](references/ReviewWhitelist.md)及配置的
+Predicate/spec 设计与审阅前读取[默认审阅白名单](references/review-whitelist.md)及配置的
 `review_whitelist` 用户补充文件，按[用户审阅白名单](CONFIGURATION.md#用户审阅白名单)
 应用审阅例外。两份文件分别保留，冲突条目以用户规则为准，其余共同生效；未配置用户文件时使用默认文件。
 命中的例外不作为设计审阅 blocker。Agent 不自行扩大例外，白名单不免除 VC 证明或引入新的信任假设。
@@ -64,11 +64,11 @@ Predicate/spec 设计与审阅前读取[默认审阅白名单](references/Review
 
 验证工程就是用户当前的 workspace，无需另配其路径。按[路径配置](CONFIGURATION.md#路径配置)从 workspace 的 `CONFIGURE` 或 Makefile 解析 QCP 和 Rocq，缺项时提醒用户创建或补全 `CONFIGURE`。OS 原始源码位置先查 `CONFIGURE`。未指定时，结合项目线索优先在 workspace 的上层目录查找，唯一确定后写入 `CONFIGURE`，找不到或有多个候选时请用户指定。
 
-首次使用时先向用户汇报 OS 源码、QCP 和 Rocq 三项实际路径，确认后开始验证。后续任务沿用已确认的上下文，按[工程组织与维护指南](references/project-maintenance-guide.md#路径配置与目录发现)使用现有目录。
+首次使用时先向用户汇报 OS 源码、QCP 和 Rocq 三项实际路径，确认后开始验证。首次配置或迁移机器时，按[构建入口中的本机绑定规则](CONFIGURATION.md#路径配置)核对完整启动链；允许增量修改 workspace 内的构建和启动配置，并验证所配路径实际生效。后续任务沿用已确认的上下文，按[工程组织与维护指南](references/project-maintenance-guide.md#路径配置与目录发现)使用现有目录。
 
-处理源码到验证切片的转换时，按照 [源代码处理](references/源代码处理.md) 执行，并结合当前配置与 TrustBase 核对适用条件。源码处理同时参考默认的 [源代码处理](references/源代码处理.md) 和可选配置 `source_processing` 指定的用户规则文件。两个文件分别保留，无需合并；冲突条目以用户规则为准，其余规则共同生效。未配置用户文件时使用默认文件。用户在当前任务中明确指定的规则同样优先于默认规则，具体配置见[用户源码处理规则](CONFIGURATION.md#用户源码处理规则)。本 skill 各处引用《源代码处理》时均遵循此约定。
+处理源码到验证切片的转换时，按照 [源代码处理](references/source-processing-guide.md) 执行，并结合当前配置与适用的工具适配及信任授权 核对适用条件。源码处理同时参考默认的 [源代码处理](references/source-processing-guide.md) 和可选配置 `source_processing` 指定的用户规则文件。两个文件分别保留，无需合并；冲突条目以用户规则为准，其余规则共同生效。未配置用户文件时使用默认文件。用户在当前任务中明确指定的规则同样优先于默认规则，具体配置见[用户源码处理规则](CONFIGURATION.md#用户源码处理规则)。本 skill 各处引用《源代码处理》时均遵循此约定。
 
-开始时读取配置的 `trust_base`，未配置则查看项目已有信任说明；没有说明也可继续设计。信任文件由用户维护，agent 不修改。已有授权核对适用条件后直接使用，相关一致性检查仍须执行；新增或扩大信任范围须经用户批准。信任说明可以包括工具适配假设、一致性检查要求和 trusted specs等。Main agent 可以建议将复杂函数设为 `trusted`；用户明确批准具体函数及采用的 contract 后，才能跳过其函数体的递归验证，并在设计或审阅记录中注明。
+开始时读取[源码处理指南中的 Trusted specs](references/source-processing-guide.md#trusted-specs)及[QCP 工具适配](references/qcp-tool-guide.md#c-输入与工具适配)。若配置了 `trust_base`，同时读取该用户信任说明；未配置时查看项目已有说明，未获得的外部授权不得继承。信任授权由用户维护，agent 不得自行修改或扩大；已有授权核对适用条件后使用，一致性检查仍须执行。Main agent 可以建议将复杂函数设为 `trusted`，用户明确批准具体函数及采用的 contract 后才能跳过其函数体的递归验证，并记录授权。
 
 ## `slice-design`
 
@@ -147,7 +147,7 @@ Predicate和spec的设计内容共同写入[设计说明](references/reporting-g
 
 ### 验证范围
 
-进入本模式前必须完整阅读 [spec-writing-guide.md](references/spec-writing-guide.md)。默认使用**一函数一文件切片**，直接放在全局annotated C所属模块目录，沿用已有布局。先按当前配置和 [源代码处理](references/源代码处理.md) 完成源码适配，
+进入本模式前必须完整阅读 [spec-writing-guide.md](references/spec-writing-guide.md)。默认使用**一函数一文件切片**，直接放在全局annotated C所属模块目录，沿用已有布局。先按当前配置和 [源代码处理](references/source-processing-guide.md) 完成源码适配，
 再从目标函数沿适配后切片中的直接调用、已解析的 function pointer/done-table dispatch 和宏展开后的调用
 确定验证闭包。以文档规定的模型或 API contract 为边界，不再递归其原始内部调用。
 从根 `annotated_C/` 或其他证明工程导入复用的依赖 spec 按下节作为 `reused-spec` 边界，不递归其内部调用安排实现证明。
@@ -225,7 +225,7 @@ Rocq predicate 文件通过 compile/typecheck，annotated C 已完成人工结�
 
 交接时落实[每个目标函数累计 150 分钟的 VC 证明预算](references/implementation-and-validation-guide.md#vc-证明时间预算)，到时保存状态并等待用户决定是否追加时间。
 
-交接时提供 TrustBase 文件路径，并明确按 spec 设计确定的本轮实现证明目标与 `reused-spec` 清单；导入复用函数不提交为 VC/函数体证明目标，也不因其证明状态自动扩大范围。复用依赖的证明状态和结论限制须随交接传递，不能将其冒称为已证或自动改标 trusted。trusted 和 reused-spec contract 均不作为本轮新完成的实现证明计数。
+交接时提供实际采用的 trusted specs、工具适配假设及用户信任说明的文件路径与章节，并明确按 spec 设计确定的本轮实现证明目标与 `reused-spec` 清单；导入复用函数不提交为 VC/函数体证明目标，也不因其证明状态自动扩大范围。复用依赖的证明状态和结论限制须随交接传递，不能将其冒称为已证或自动改标 trusted。trusted 和 reused-spec contract 均不作为本轮新完成的实现证明计数。
 
 已采用审阅白名单时，要求 QCP annotation owner 及后续涉及设计检查的任务直接通过白名单中描述情况，但不因此跳过任何实际 VC。
 
@@ -248,7 +248,7 @@ main agent 不再定义第二套步骤或返回状态。具体调用边界见
 
 - **最终完整性检查**：确认 QCP controller 已返回 `done`，复用其 `final-check` 结果，不重复执行证明检查。同时确认切片与原始 CRTOS 源码的一致性结论仍然有效：源码、配置及切片相关内容未变时复用 Spec 审阅结论，有变化则重新核对受影响部分。QCP 的完成状态不能替代这项源码一致性确认；还须确认[收尾流程](#全局一致性检查与收尾)中的全局编译、引用检查及记录安置已完成，才能给出最终完整性通过结论。
 
-最终结论区分已证明结论和信任假设；对基于 TrustBase 的源码适配说明适用配置及结论限制，不将其表述为无条件的源码等价。TrustBase 或实际依赖发生变化时，只复查受影响结论，不把新条目自动追认为旧证明的依据。
+最终结论区分已证明结论和信任假设；对依赖信任假设的源码适配说明适用配置及结论限制，不将其表述为无条件的源码等价。信任授权、适配假设或实际依赖发生变化时，只复查受影响结论，不把新条目自动追认为旧证明的依据。
 
 具体检查按目标代码及设计选择适用项，不要求逐项写报告；适用的编译、类型或证明检查须通过，影响正确性的未解决问题仍阻塞审阅通过。
 
@@ -285,7 +285,7 @@ Predicate/spec 草案（`draft`）可以共同修改，不做中间审阅。满�
 
 ### 库与证明参考
 
-编写或修改 predicate、abstract program 和 spec 前，阅读[公共定义与记法复用指南](references/common-definition-reuse-guide.md)，按其中规则使用通用数据操作、公共模块接口及抽象程序记法。
+编写或修改 predicate、abstract program 和 spec 前，阅读[QCP 工具指南](references/qcp-tool-guide.md#公共定义与记法复用)，按其中规则使用通用数据操作、公共模块接口及抽象程序记法。
 
 写新定义、strategy 或断言前，先查 CRTOS 全局库及当前工程的 annotated C，再查 QCP 库；需要参考设计或证明方法时，查看已配置且可用的 crtosverify、LOSVerify 和 VRTOS；未配置的参考直接跳过。查找实际定义和用法，不猜测 QCP 语法。
 

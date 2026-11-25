@@ -296,11 +296,7 @@
    CharArray.full (sem + 14) 2 (repeat_Z 0 2)
    ```
 
-10. 静态 `done` 函数表改成直接调用属于源代码处理，统一按
-    [QCP 工具适配第 1 条](源代码处理.md#1-函数指针调用转为直接调用)执行。
-    经该规则确认切片不再访问函数表后，predicate 和 state 不应继续保留
-    仅用于表示这张表的字段、内存断言及上下文约束；仍被其他验证路径访问的
-    资源不能一并删除。此处不另维护一套源码转换条件。
+10. 涉及静态函数表适配时，按 [QCP 工具指南](qcp-tool-guide.md#1-函数指针调用转为直接调用)同步调整 predicate 和 state。
 
 11. 不要为了匹配或复用已有 predicate 的参数形式，把本模块语义上不需要的
     dependency state 直接加入本模块的 abstract state。Abstract-state 分量仍须由

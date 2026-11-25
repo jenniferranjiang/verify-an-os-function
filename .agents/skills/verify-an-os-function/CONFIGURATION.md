@@ -6,6 +6,12 @@
 
 **QCP 和 Rocq。** 读取 workspace 根目录已有的 `CONFIGURE`、`Makefile` 以及它们实际引用的工具链配置。按构建时生效的变量和路径解析两项工具的位置。例如，项目可能用 `SymExec_DIR` 和 `SL_DIR` 指向 QCP 的符号执行器和库，用 `COQBIN` 或 opam 启动器选择 Rocq。分别核对 QCP 安装目录和该构建环境中实际使用的 Rocq 编译器。如果现有配置只能确定一项或两项都缺失，提醒用户在 workspace 根目录创建或补全 `CONFIGURE`，指定缺少的工具路径。
 
+**构建入口中的本机绑定。** 首次配置或迁移机器时，沿 `Makefile → 启动脚本 → 工具链配置` 检查实际调用链。`which coqc` 只说明当前 shell 的选择，不能证明构建使用了同一编译器。重点核对 `OPAM_EXEC`、`COQBIN`、`SL_DIR`、QCP 路径、opam root/switch，以及脚本重设的 `PATH`；例如 `tools/rocq/toolchain.json` 可能仍指定原机器的用户目录。
+
+Agent 可以为当前验证环境增量修改 workspace 内的 `CONFIGURE`、Makefile、启动脚本及其工具链配置，使其使用已确认的实际路径；这些文件不是只读的原始 OS 源码。优先使用已有配置入口，不要求迁移到特定文件格式。若启动脚本忽略配置或写死原机器路径，应修改对应脚本或生效配置，不能只在 `CONFIGURE` 中填写一个未被读取的值。保留其他用户配置；用户明确要求不修改的本地配置保持不动，说明仍需配置的位置。
+
+配置后，通过实际构建所用的启动入口核对 `coqc`、`coqdep` 的路径和版本，并编译本轮所需的最小目标及依赖；不能仅用 shell 中的 `which coqc` 判定配置完成。普通编译若被启动脚本中无关的 MCP 后端检查阻塞，可将工具检查按用途拆分：构建检查所需编译工具，服务启动检查对应后端，保留真实依赖检查。更换工具链后核对 QCP 库及已有 `.vo` 的兼容性，按需重编译受影响依赖，不因版本号相同就认定二进制兼容。完成后报告修改过的配置文件、实际工具路径与检查结果。
+
 **OS 原始源码。** 先检查 workspace 的 `CONFIGURE` 是否已指定源码目录。若已指定，核对该目录下的目标源码和构建配置；路径失效或指向其他源码时，请用户纠正。若未指定，由 agent 查找并记录。
 
 1. Agent 根据项目说明、构建引用或既有验证记录查找源码，优先检查 workspace 的上层目录及其下的同级项目。用目标函数的原始定义、头文件和配置核对候选，排除带注释的验证副本。
@@ -23,7 +29,7 @@
 | 配置项 | 约定 |
 |---|---|
 | `source_processing` | 可选，用户维护的源码处理规则文件；省略或为空时只使用 skill 默认规则，填写后必须可读。与默认规则冲突的条目以用户规则为准，其余共同生效。 |
-| `trust_base` | 可选，用户维护的信任边界文件；配置后必须可读，未配置不继承外部授权。 |
+| `trust_base` | 可选，用户维护的补充信任说明；配置后必须可读，未配置不继承外部授权。原内置 TrustBase 已拆入源码处理指南的 Trusted specs、QCP 工具指南及 Spec 审阅章节；无需为这些内置内容重复配置。 |
 | `review_whitelist` | 可选，用户维护的 predicate/spec 审阅补充白名单；配置后必须可读。省略或为空时只使用 skill 默认白名单；冲突条目以用户规则为准，其余共同生效。 |
 | `annotated_c_dir` | 可选，annotated C 目录；为空时扫描根 `annotatedc/`、`annotated_C/`。都有且用途不明确时询问；都没有时新建 `annotatedc/`。 |
 | `references.vrtos`、`references.crtos_verify`、`references.los_verify` | 可选参考根目录，未填写或不可用时说明并跳过，不阻塞验证；实际导入成为构建依赖时须确认该依赖可用。 |
@@ -32,7 +38,7 @@
 
 ## 用户源码处理规则
 
-默认规则保存在 [源代码处理](references/源代码处理.md)。用户可自行创建规则文件，例如 `.agents/source-processing.md`，然后在 `.agents/verify-os.config.json` 中设置 `"source_processing": ".agents/source-processing.md"`，无需修改 skill。已有配置缺少该字段时仍可直接使用默认规则。
+默认规则保存在 [源代码处理](references/source-processing-guide.md)。用户可自行创建规则文件，例如 `.agents/source-processing.md`，然后在 `.agents/verify-os.config.json` 中设置 `"source_processing": ".agents/source-processing.md"`，无需修改 skill。已有配置缺少该字段时仍可直接使用默认规则。
 
 用户文件只需写补充的对原始源代码的处理规则即可，即如何将源代码处理为合适的验证切片代码，并说明适用对象或条件。
 
@@ -40,7 +46,7 @@
 
 ## 用户审阅白名单
 
-默认白名单保存在 [ReviewWhitelist.md](references/ReviewWhitelist.md)，随 skill 维护。
+默认白名单保存在 [review-whitelist.md](references/review-whitelist.md)，随 skill 维护。
 用户可自行创建补充文件，例如 `.agents/review-whitelist.md`，然后在 `.agents/verify-os.config.json`
 中设置 `"review_whitelist": ".agents/review-whitelist.md"`。路径解析规则与其他配置相同。
 已有配置缺少该字段或字段为空时，只使用默认白名单。
