@@ -18,7 +18,7 @@ Agent 可以为当前验证环境增量修改 workspace 内的 `CONFIGURE`、Mak
 2. 能唯一确定时，agent 将源码路径写入 workspace 的 `CONFIGURE`。找不到或仍有多个可信候选时，说明查找结果，请用户指定，再将确定的路径写入。
 3. 写入时沿用已有变量名和文件格式，保留其他配置与用户改动。若没有对应变量，可写作 `OS_SOURCE_ROOT = ../my-os`（路径仅为示例）。若 `CONFIGURE` 尚不存在，则在 workspace 根目录新建；Makefile 中已生效的工具设置无需抄入。
 
-**仅首次汇报。** 用户在该 workspace 首次使用本 skill 时，agent 在开始验证前一次列出 OS 原始源码目录、QCP 工具根目录和 Rocq 编译器的实际绝对路径，注明各自依据，请用户确认。无论路径来自现有配置、自行发现还是用户补充，均执行这次汇报。将确认结果记入已有验证上下文，后续任务复用该记录；若某项路径失效，只处理该项。
+**仅首次汇报配置。** 用户在该 workspace 首次使用本 skill 时，agent 在开始验证前一次列出 OS 原始源码目录、QCP 工具根目录和 Rocq 编译器的实际绝对路径，注明各自依据，请用户确认。无论路径来自现有配置、自行发现还是用户补充，均执行这次汇报。将确认结果记入已有验证上下文，后续任务复用该记录；若某项路径失效，只处理该项。
 
 **原始 OS 源码始终只读。** Agent 不得修改原始源码或在其目录生成文件。源码适配、注解和经用户批准的缺陷修复都写入 workspace 的验证副本；写入前确认副本与原文件确实分离，包括符号链接指向的实际位置。
 
@@ -62,7 +62,7 @@ Predicate/spec 设计与审阅前读取适用文件，只对符合适用条件�
 不自动将旧 `needs-fix` 改为通过。
 
 白名单只调整设计审阅的通过条件，不新增 Rocq 公理、trusted contract 或源码适配授权，
-不免除实际生成的 VC，也不代替用户对 predicate/spec revisions 的确认。
+使用白名单后仍须证明实际生成的 VC，进入 Stage 2 仍需用户确认 Stage 1 完成并明确指定进入实现证明。
 
 ## Rocq 编译配置
 
@@ -71,7 +71,7 @@ Predicate/spec 设计与审阅前读取适用文件，只对符合适用条件�
 共享接口变动时同步必要imports与使用处，编译本轮目标及受影响依赖，不混用绑定旧定义的缓存；依赖一致性随当前改动处理。外部QCP基础库仍按配置直接引用。QCP的main-root/workspace都指向验证工程根目录，输入和VC输出明确限定本轮目标。
 
 - 用 workspace 已选定的 Rocq 工具链构建；使用 VsRocq 时选用同一环境的 `vsrocqtop`。
-- 直接引用项目配置中实际使用的 QCP 库和符号执行器，沿用已有逻辑名和路径映射。QCP 基础库需要重编译时使用该安装的构建入口，验证项目的库和证明使用 workspace 自己的构建入口。
+- 外部 QCP、Rocq 等工具的源码、脚本和库代码只读，供查阅接口和示例。使用已安装的工具，在验证工程自己的 `CONFIGURE`、Makefile 和路径映射中配置实际位置，项目库和证明使用本工程的构建入口。若当前安装与项目不兼容，报告缺失的接口或依赖以及受阻的检查。
 
 `makes inconsistent assumptions` 表示混用了新旧 `.vo`；`Cannot find a physical path` 可能由 `_CoqProject`/编辑器映射不一致或依赖 `.vo` 缺失导致。先核对逻辑路径与编译产物，再按依赖顺序构建所缺或失效的目标；保留结果供交互式加载，不通过无差别清缓存处理。当前 QCP 使用 `valid_object` 等新接口，不再使用 `isvalidptr_*`、`store_2byte`/`store_4byte` 和 `sizeof_front_end_type_of_ptr_size`。`rocq_mcp_cache_*.v` 是临时文件，不加入构建。
 
@@ -85,6 +85,6 @@ Coq/VsRocq 升级后实测局部项目和路径变量是否生效，再决定是
 
 ## 工具检查入口
 
-闭包检查、symbolic、VC生成与证明统一由用户批准后的QCP verification-orchestrator管理。设计/审阅阶段只做规则允许的源码、契约一致性和Rocq类型检查，不运行symbolic。工具路径沿用 workspace 的构建配置，实际调用参数和检查顺序遵循QCP工作流。
+Stage 1 只做源码、契约一致性和 Rocq 类型检查等设计审阅工作。用户确认 Stage 1 完成并指定进入 Stage 2 后，QCP verification-orchestrator 统一管理工具闭包检查、符号执行、VC 生成与证明。工具路径沿用 workspace 的构建配置，实际调用参数和检查顺序遵循 QCP 工作流。
 
 路径配置不能代替QCP与Rocq MCP的安装和连接；检查 `agents/openai.yaml` 声明的服务可用性，缺失时报告具体依赖。工具使用项目实际目录结构及统一的路径映射。
