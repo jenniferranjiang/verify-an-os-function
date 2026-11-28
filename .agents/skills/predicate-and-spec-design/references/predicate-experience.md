@@ -553,3 +553,52 @@
 
     用于 Dataqueue 等结构体元素数组时，小元素改为相应的元素抽象值，单元素
     predicate 描述该槽的字段，segment 的空列表分支保留剩余槽的内存权限。
+
+
+18. Abstract program 的分支条件使用命题连接词 `\/`、`/\`、`~`
+    组合逻辑判断，不用 `orb`、`andb`、`negb` 嵌套组合后再与 `true` 比较。
+    分支仍使用项目的 `IF` 或 QCP 的 `if_else`，见
+    [抽象程序记法](qcp-definition-guide.md#抽象程序记法)。
+
+    例如，`semaphore_id_invalid id` 为命题时，非法输入分支写为：
+
+    ```coq
+    IF (semaphore_id_invalid id \/
+        (msec < 0 /\ msec <> KWAIT_FOREVER))
+      (ret (-KERROR))
+      (...).
+    ```
+
+    此处省略号代表原有正常路径，常量按
+    [Spec 经验第 7 条](spec-experience.md)引入。
+
+19. Abstract program 条件中的数值比较直接使用 `<`、`<=`、`=`、`<>`
+    等命题关系，不用 `Z.ltb`、`Z.eqb` 等布尔比较再与 `true` 比较。
+    改写保持原条件含义及分支覆盖，例如将布尔比较 `Z.ltb msec 0`
+    表达为命题 `msec < 0`，将对相等判断的布尔取反表达为 `msec <> KWAIT_FOREVER`。
+
+20. 抽象程序优先使用 monad 记法直接组合操作，使主要执行顺序和结果分支
+    在函数定义中可见。不要仅按“某一步之后的剩余流程”拆出 `after_*` 等辅助程序。
+    具有独立语义的操作、需要复用的程序，以及确有必要的证明接口可以单独定义；
+    拆分应有具体用途，不按函数长度或使用次数机械决定。
+
+    例如，`abs_semaphore_obtain` 中可直接写锁内操作后的结果分支：
+
+    ```coq
+    result <- task_atomic_cmd (abs_semaphore_obtain_locked id ticks) ;;
+    match result with
+    | inl r => ret r
+    | inr task =>
+        abs_ktask_assign ;;
+        assertS (semaphore_status_entry sg task) ;;
+        task_atomic_cmd (semaphore_read_status task)
+    end
+    ```
+
+    这里不必仅为分支转发和后续串联定义 `semaphore_obtain_after_locked`
+    或 `semaphore_obtain_after_assign`。锁内获取、调度和读取状态具有各自的操作含义，
+    可以保留为独立定义。Monad 组合不使整个程序成为一个原子操作；内联或拆分时
+    保持原有临界区边界、执行顺序、错误路径和等待行为。
+
+    证明需要引用剩余程序时，先考虑直接表达 continuation 或在证明内部用
+    `let`、`set` 局部命名；反复使用或具名接口确实明显简化证明时，再提取正式定义。

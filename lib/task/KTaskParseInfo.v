@@ -12,6 +12,7 @@ Require Import Logic.LogicGenerator.demo932.Interface.
 Require Export CRTOS_Verify.lib.task.KTaskStackSetup.
 Require Import CRTOS_Verify.lib.task.KTaskStackSetupProofAux.
 Require Import CRTOS_Verify.lib.common.CrtosRules.
+Require Export CRTOS_Verify.lib.common.CrtosConstants.
 
 Import ListNotations.
 
@@ -22,17 +23,13 @@ Local Open Scope list.
 Local Open Scope sac.
 
 (**
-  [_KTaskBaseInfoParse] 当前验证切片使用的宏常量。
+  [_KTaskBaseInfoParse] 当前验证切片使用的名字长度常量。
+  返回码统一复用 CrtosConstants。
 
   这些常量对应 `annotated_C/src/xs_base.h` 与 `annotated_C/src/xsconfig.h`
   在非 SMP、非隔离配置下的取值。把它们放在 Rocq 侧，是因为 C
   预处理器不会展开 `/*@ ... */` 注解内部的宏名。
 *)
-Definition KOK : Z := 0.
-Definition KERROR : Z := 1.
-
-Definition NOMEMORY : Z := 5.
-Definition INVALID : Z := 10.
 Definition NAME_MAX_SIZE : Z := 32.
 
 (**

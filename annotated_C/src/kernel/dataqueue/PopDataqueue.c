@@ -5,6 +5,7 @@
  * This is a repaired verification copy, not an equivalence claim for original C. */
 #define CRTOS_DATAQUEUE_WITH_OPERATIONS 1
 #include "dataqueue.h"
+#include "crtos_constants.h"
 /* KPopDataqueue imports both runtime semantic modules.  Keep the caller's
  * vocabulary local: the broad runtime header also redeclares C macro names. */
 /*@ Extern Coq
@@ -62,21 +63,24 @@ x_err_t PopDataqueue(DataQueueType *p_queue, const void **StartAddr, x_size_t *s
       OutsideCritical(sg, before) *
       peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length)
     Ensure
-      (exists after,
-        __return == -1 && safeExec(LastSeen(after), return(DqPopFailed), X) &&
-        OutsideCritical(sg, after) *
-        peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length))
+      (__return == -KERROR &&
+        (exists after,
+          safeExec(LastSeen(after), return(DqPopFailed), X) &&
+          OutsideCritical(sg, after) *
+          peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length)))
       ||
-      (exists after,
-        __return == 0 && safeExec(LastSeen(after), return(DqPopEmpty), X) &&
-        OutsideCritical(sg, after) *
-        peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length))
+      (__return == KOK &&
+        (exists after,
+          safeExec(LastSeen(after), return(DqPopEmpty), X) &&
+          OutsideCritical(sg, after) *
+          peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length)))
       ||
-      (exists after (e : DataqueueElem),
-        __return == 0 && safeExec(LastSeen(after), return(DqPopItem(e)), X) &&
-        OutsideCritical(sg, after) *
-        peak_data_slot(StartAddr, Some(e.dq_data)) *
-        peak_length_slot(size, Some(e.dq_length)))
+      (__return == KOK &&
+        (exists after (e : DataqueueElem),
+          safeExec(LastSeen(after), return(DqPopItem(e)), X) &&
+          OutsideCritical(sg, after) *
+          peak_data_slot(StartAddr, Some(e.dq_data)) *
+          peak_length_slot(size, Some(e.dq_length))))
 */
 {
     x_base lock = 0;

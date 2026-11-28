@@ -18,6 +18,7 @@ COQ_FLAG = -R $(SL_DIR)Verification SimpleC.Verification -R $(SL_DIR)flocq/src F
 DEP_FLAG = $(COQ_FLAG)
 
 lib_FILES = \
+	common/CrtosConstants.v \
 	common/CrtosConfig.v \
 	common/StructFieldOffsetAxiom.v \
 	common/AllocationAddress.v \

@@ -99,7 +99,7 @@ Definition abs_semaphore_delete_locked (id : Z) : program VarGlobalState bool :=
     该模型不证明硬件调度实现；其 rely 变化和临界区交接复用全系统协议。 *)
 Definition abs_semaphore_delete (sg : StableGlobalState) (id : Z)
     : program (VarGlobalState -> Prop) unit :=
-  IF (semaphore_id_invalid id = true)
+  IF (semaphore_id_invalid id)
     (ret tt)
     (resched <- task_atomic_cmd (abs_semaphore_delete_locked id) ;;
      IF (resched = true) abs_ktask_assign (ret tt)).

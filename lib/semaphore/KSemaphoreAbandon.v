@@ -25,13 +25,13 @@ Definition semaphore_resume_head_effect (p : Z) (before after : VarGlobalState) 
 Definition semaphore_abandon_effect (id : Z) (before : VarGlobalState)
     (result : Z * bool) (after : VarGlobalState) : Prop :=
   ((forall sem, In sem before.(os_semaphores) -> sem.(semaphore_id) <> id) /\
-    result = (-1,false) /\ after = before) \/
+    result = (-KERROR,false) /\ after = before) \/
   exists sem, In sem before.(os_semaphores) /\ sem.(semaphore_id) = id /\
-    ((sem.(semaphore_pending_addrs) <> nil /\ result = (0,true) /\
+    ((sem.(semaphore_pending_addrs) <> nil /\ result = (KOK,true) /\
        semaphore_resume_head_effect sem.(semaphore_addr) before after) \/
      (sem.(semaphore_pending_addrs) = nil /\
-       ((sem.(semaphore_value) = 65535 /\ result = (-3,false) /\ after = before) \/
-        (sem.(semaphore_value) <> 65535 /\ result = (0,false) /\
+       ((sem.(semaphore_value) = 65535 /\ result = (-KFULL,false) /\ after = before) \/
+        (sem.(semaphore_value) <> 65535 /\ result = (KOK,false) /\
          after = replace_semaphores
            (semaphore_set_value sem.(semaphore_addr) (sem.(semaphore_value)+1)
              before.(os_semaphores)) before)))).
@@ -41,8 +41,8 @@ Definition abs_semaphore_abandon_locked (id : Z) : program VarGlobalState (Z * b
 (** 非法ID在加锁前拒绝；成功唤醒才调用既有调度模型，其他出口不调度。 *)
 Definition abs_semaphore_abandon (sg : StableGlobalState) (id : Z)
     : program (VarGlobalState -> Prop) Z :=
-  IF (semaphore_id_invalid id = true)
-    (ret (-1))
+  IF (semaphore_id_invalid id)
+    (ret (-KERROR))
     (result <- task_atomic_cmd (abs_semaphore_abandon_locked id) ;;
      IF (snd result = true) abs_ktask_assign (ret tt) ;;
      ret (fst result)).

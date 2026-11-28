@@ -56,11 +56,10 @@ inline struct TaskDescriptor *GetTaskWithIdnodeInfo(int32 id)
           abs_get_task_with_idnode(sg, id), X) &&
         OutsideCritical(sg, before)
     Ensure
-      (exists after,
-        __return == KNONE &&
-        safeExec(
-          LastSeen(after), return(None), X) &&
-        OutsideCritical(sg, after))
+      (__return == NULL_PTR &&
+        (exists after,
+          safeExec(LastSeen(after), return(None), X) &&
+          OutsideCritical(sg, after)))
       ||
       (exists after,
         safeExec(
@@ -106,9 +105,9 @@ x_err_t _DeleteMsgQueue(struct MsgQueue *mq)
     With (sg : StableGlobalState) (before : VarGlobalState) X
     Require safeExec(LastSeen(before), abs_msgqueue_delete(sg, mq), X) &&
       OutsideCritical(sg, before)
-    Ensure exists after,
-      __return == 0 && msgqueue_deleted(mq, after) &&
-      safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after)
+    Ensure __return == KOK &&
+      (exists after, msgqueue_deleted(mq, after) &&
+        safeExec(LastSeen(after), return(__return), X) && OutsideCritical(sg, after))
  */;
 ```
 
@@ -121,7 +120,7 @@ x_err_t _DeleteMsgQueue(struct MsgQueue *mq)
 这条入口规则不禁止 `Ensure` 中量化执行后才得到的状态或结果，例如示例中的
 `exists after`，也不禁止抽象 program 内部的存在量化。参考时应保持真实函数的
 返回类型、返回路径、资源和效果；例如返回 `void` 的删除函数使用 `return(tt)`，
-不能照搬示例的 `__return == 0`。对象有效域必须由抽象语义及适用协议实际承担，
+不能照搬示例的 `__return == KOK`。对象有效域必须由抽象语义及适用协议实际承担，
 不能仅删除入口条件而遗漏相应调用要求。
 
 `_MutexDelete(struct Mutex *mutex)` 的目标对象由 C 形参 `mutex`（逻辑地址
@@ -214,8 +213,8 @@ void *x_malloc(x_size_t size)
 - `Require emp` 没有显式展示长度范围。虽然当前无符号 C 参数类型提供范围约束，
   公共契约显式写出范围更便于阅读和审查；不能把这一点误说成原 spec 接受负的 C 参数。
 
-因此应复用 VRTOS Event、MsgQueue 的公共契约形式，并使用当前工程的
-`valid_malloc_addr`，将地址合法性与未初始化字节的所有权分开表达：
+公共分配契约使用当前工程的 `valid_malloc_addr`，将地址合法性与未初始化字节的
+所有权分开表达，并统一供各调用方复用：
 
 ```c
 void *x_malloc(x_size_t nbytes)
@@ -236,3 +235,69 @@ Record valid_malloc_addr (p size : Z) : Prop := {
   malloc_addr_aligned : addr_aligned p ALIGN_SIZE
 }.
 ```
+
+
+7. 源码用宏表示返回码、空指针或特殊等待值时，spec 和 abstract program 使用
+语义明确的公共 Rocq 常量，不把它们直接写成难以区分含义的 `-1`、`0`、`1`。
+常量名全部大写，与对应 C 宏名称不同但含义相近，避免 QCP 处理时同名冲突或宏展开。
+先核对当前源码和配置下的宏值、类型及返回时的正负号，再复用或补充当前工程的公共定义。
+
+例如，公共 Rocq 常量可以定义为：
+
+```coq
+Definition KOK : Z := 0.
+Definition KERROR : Z := 1.
+Definition NOMEMORY : Z := 5.
+Definition INVALID : Z := 10.
+Definition KWAIT_FOREVER : Z := -1.
+```
+
+示例值采用前须核对当前源码与配置。源码返回负错误码时，spec 写
+`__return == -KERROR`，抽象程序写 `ret (-KERROR)`；成功返回写 `KOK`。
+同为 `-1` 的无限等待参数使用 `KWAIT_FOREVER`，不能因数值相同而替换成 `-KERROR`。
+空指针使用相应的地址常量，例如 `NULL_PTR`，不与成功码 `KOK` 混用。
+普通计数、下标和算术中的数字不必机械改成返回码常量。
+
+沿用当前工程的公共文件组织，集中维护 Rocq 常量，不在每个函数重复定义。
+在公共注解 header 中通过 `Import Coq Require Import` 导入常量库，
+再用 `Extern Coq` 声明所需常量，使定义和声明在 spec 使用处可见。
+本文件示例中的 `KOK`、`NULL_PTR` 等名称以相应定义和声明已引入为前提。
+
+8. `Ensure` 按返回值区分结果分支时，将不依赖后态 witness 的返回值判断放在
+该分支的 `exists after` 外面：先判断返回值，再引入该路径的后态和资源。
+这样证明时可先选择返回分支，再处理后态 witness，避免先拆存在量化才能看到分支条件。
+
+以`PopDataqueue` 验证副本的三个结果分支为例：失败返回 `-KERROR`，
+队列为空和取到元素都返回 `KOK`。保留各自的抽象结果与输出槽资源，改写后的
+`Ensure` 为（常量按第 7 条引入）：
+
+```c
+Ensure
+  (__return == -KERROR &&
+    (exists after,
+      safeExec(LastSeen(after), return(DqPopFailed), X) &&
+      OutsideCritical(sg, after) *
+      peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length)))
+  ||
+  (__return == KOK &&
+    (exists after,
+      safeExec(LastSeen(after), return(DqPopEmpty), X) &&
+      OutsideCritical(sg, after) *
+      peak_data_slot(StartAddr, old_data) * peak_length_slot(size, old_length)))
+  ||
+  (__return == KOK &&
+    (exists after (e : DataqueueElem),
+      safeExec(LastSeen(after), return(DqPopItem(e)), X) &&
+      OutsideCritical(sg, after) *
+      peak_data_slot(StartAddr, Some(e.dq_data)) *
+      peak_length_slot(size, Some(e.dq_length))))
+```
+
+返回值判断提前并不保证唯一确定抽象结果：这里后两个分支都返回 `KOK`，
+仍须根据实际路径区分 `DqPopEmpty` 和 `DqPopItem(e)`，不能将它们混为一个结果。
+
+也就是把 `exists after, __return == CODE && ...` 改为
+`__return == CODE && (exists after, ...)`，用括号明确每个分支的量词作用域。
+此调整只适用于不引用被量化变量的判断；若返回值判断依赖量化的结果或后态，
+保留其必要作用域，例如 `exists allocated, __return == allocated && ...`。
+保持真实返回路径、效果、frame 和原有资源，不为套用示例增加或删除分支。

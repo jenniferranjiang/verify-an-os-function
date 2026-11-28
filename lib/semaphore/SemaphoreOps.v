@@ -1,6 +1,7 @@
 Require Import Coq.ZArith.ZArith Coq.Lists.List.
 From SimpleC.SL Require Import Mem.
 Require Export CRTOS_Verify.lib.semaphore.SemaphoreState.
+Require Export CRTOS_Verify.lib.common.CrtosConstants.
 Import ListNotations.
 Local Open Scope Z_scope.
 
@@ -11,8 +12,8 @@ Definition semaphore_query_id (id : Z) : Z := id mod 65536.
 
 (** 对应crtoslatest semaphore.c中的SemIdInvalid；检查发生在Delete加锁前。
     高于UINT16_MAX的int32输入直接返回，不能再别名到低16位的其他对象。 *)
-Definition semaphore_id_invalid (id : Z) : bool :=
-  orb (Z.ltb id 0) (Z.ltb 65535 id).
+Definition semaphore_id_invalid (id : Z) : Prop :=
+  id < 0 \/ 65535 < id.
 
 (** 只更新这个已发布对象的等待序列；基址、ID、value 和其他对象均保持。
     地址用于追踪同一个仍存活的对象；不声称跨释放后的地址永久唯一。 *)

@@ -10,13 +10,13 @@ Local Open Scope sac.
 
 (** 0和-1不经毫秒转换；有限等待使用当前源码64位乘法转换。 *)
 Definition semaphore_wait_ticks (msec : Z) : Z :=
-  if Z.eq_dec msec 0 then 0 else if Z.eq_dec msec (-1) then -1
+  if Z.eq_dec msec 0 then 0 else if Z.eq_dec msec KWAIT_FOREVER then KWAIT_FOREVER
   else tick_from_time_ms msec.
 
 (** 挂起前仅将当前任务exstatus清零。 *)
 Definition semaphore_clear_status (task : Z) (d : TaskDescriptorAbs)
     (st : VarGlobalState) : VarGlobalState :=
-  replace_task_desc_map (update_task_desc_map task (set_task_desc_exstatus d 0)
+  replace_task_desc_map (update_task_desc_map task (set_task_desc_exstatus d KOK)
     st.(os_tasks).(task_desc_map)) st.
 
 (** result为Left错误/成功立即返回，或Right保存待调度任务地址。
@@ -24,14 +24,14 @@ Definition semaphore_clear_status (task : Z) (d : TaskDescriptorAbs)
 Definition semaphore_obtain_effect (id ticks : Z) (before : VarGlobalState)
     (result : Z + Z) (after : VarGlobalState) : Prop :=
   ((forall sem, In sem before.(os_semaphores) -> sem.(semaphore_id) <> id) /\
-    result = inl (-1) /\ after = before) \/
+    result = inl (-KERROR) /\ after = before) \/
   exists sem, In sem before.(os_semaphores) /\ sem.(semaphore_id) = id /\
-    ((0 < sem.(semaphore_value) /\ result = inl 0 /\
+    ((0 < sem.(semaphore_value) /\ result = inl KOK /\
       after = replace_semaphores
         (semaphore_set_value sem.(semaphore_addr) (sem.(semaphore_value)-1)
           before.(os_semaphores)) before) \/
      (sem.(semaphore_value) = 0 /\
-      ((ticks = 0 /\ result = inl (-2) /\ after = before) \/
+      ((ticks = 0 /\ result = inl (-KTIMEOUT) /\ after = before) \/
        (ticks <> 0 /\ exists task desc suspended,
         task = before.(os_assign).(assignRunningTask) /\ task <> 0 /\
         before.(os_tasks).(task_desc_map) task = Some desc /\
@@ -41,8 +41,8 @@ Definition semaphore_obtain_effect (id ticks : Z) (before : VarGlobalState)
          (0 < ticks /\ exists sd delayed delay_ptr rc,
           suspended.(os_tasks).(task_desc_map) task = Some sd /\
           ktask_set_delay_step task sd ticks delay_ptr suspended rc delayed /\
-          ((rc = 0 /\ result = inr task /\ after = delayed) \/
-           (rc <> 0 /\ result = inl (-5) /\ exists dd,
+          ((rc = KOK /\ result = inr task /\ after = delayed) \/
+           (rc <> KOK /\ result = inl (-NOMEMORY) /\ exists dd,
              delayed.(os_tasks).(task_desc_map) task = Some dd /\
              ktask_wakeup_step task dd delayed after)))))))).
 
@@ -96,9 +96,9 @@ Definition semaphore_obtain_after_locked (sg : StableGlobalState) (result : Z + 
 
 Definition abs_semaphore_obtain (sg : StableGlobalState) (id msec : Z)
     : program (VarGlobalState -> Prop) Z :=
-  IF (orb (semaphore_id_invalid id)
-        (andb (Z.ltb msec 0) (negb (Z.eqb msec (-1)))) = true)
-    (ret (-1))
+  IF (semaphore_id_invalid id \/
+      (msec < 0 /\ msec <> KWAIT_FOREVER))
+    (ret (-KERROR))
     (let ticks := semaphore_wait_ticks msec in
      assertS (semaphore_obtain_entry sg id ticks) ;;
      result <- task_atomic_cmd (abs_semaphore_obtain_locked id ticks) ;;
