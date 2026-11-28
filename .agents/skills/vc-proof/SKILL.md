@@ -1,6 +1,6 @@
 ---
 name: vc-proof
-description: 在 OS predicate/spec revisions 已审阅并获用户批准后，交接 QCP 工作流完成 annotation、VC、manual proof 与 final-check。
+description: 在 OS predicate/spec revisions 已审阅、用户确认 Stage 1 完成并指定进入 Stage 2 后，交接 QCP 工作流完成 annotation、VC、manual proof 与 final-check。
 ---
 
 # VC Proof
@@ -11,8 +11,8 @@ description: 在 OS predicate/spec revisions 已审阅并获用户批准后，�
 
 ## `implement`
 
-只有用户明确确认 review-passed predicate/spec revisions 后才能进入。Main agent 读取
-已配置 QCP 根目录中的 `AGENTS.md`，按[路径配置](../os-verification-coordinator/references/project-maintenance-guide.md#implement-阶段的-qcp-路径配置)将验证工作目录指向验证工程根目录，按[QCP工具适配](references/implementation-and-validation-guide.md#qcp工具适配)要求由 QCP 工具适配本 OS 的全局工程格式，从其中指定的 `verification-orchestrator` 启动 QCP workflow，
+用户确认 Stage 1 完成并指定进入 Stage 2 后，main agent 读取
+已配置 QCP 根目录中的 `AGENTS.md`，从其中指定的 `verification-orchestrator` 启动 QCP workflow。按[路径配置](../os-verification-coordinator/references/project-maintenance-guide.md#implement-阶段的-qcp-路径配置)将工作目录指向验证工程，在本工程内[配置既有工具接口](references/implementation-and-validation-guide.md#qcp工具适配)。QCP 等外部工具代码只读。
 把已批准 predicate/spec 作为冻结输入，然后只执行 controller 返回的 action，直到 `done`、明确 blocker 或达到证明时间预算。
 
 开始目标证明前，按[工具就绪条件](references/implementation-and-validation-guide.md#证明前的工具就绪条件)确认环境已配置可用；同一环境复用已有成功结果，之后按 QCP workflow 推进。环境错误先修复。
@@ -27,6 +27,7 @@ description: 在 OS predicate/spec revisions 已审阅并获用户批准后，�
 
 交接给 QCP workflow 时必须明确 VC 文件修改边界：手工完成 VC 证明只修改 `*_proof_manual.v`；不得手工修改 `*_proof_auto.v`、`*_goal.v` 或 `*_goal_check.v`。
 
-Annotation、spec、predicate、VC 和 proof 的诊断、修正与重试全部由该 workflow 按自己的规则处理；
-main agent 不再定义第二套步骤或返回状态。具体调用边界见
+在获准版本和工具只读边界内，annotation、spec、predicate、VC 和 proof 的诊断、修正与重试由该 workflow 处理。涉及已批准规格的语义变化时，遵循[总流程](../os-verification-coordinator/SKILL.md#总流程)的专家复审要求。具体调用边界见
 [implementation-and-validation-guide.md](references/implementation-and-validation-guide.md)。
+
+采用本轮新增或修改的 strategy 时，按[资源展开与恢复](../predicate-and-spec-design/references/spec-writing-guide.md#34-predicate-的展开更新与恢复)核对同版本 StrategyCheck 结果及 soundness 义务的证明；Stage 1 已写好而在 Stage 2 采用的规则同样适用。

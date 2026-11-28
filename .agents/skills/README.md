@@ -26,6 +26,8 @@ os-verification-coordinator
 | [vc-proof](vc-proof/SKILL.md) | 将已批准的设计交给 QCP，完成注解、VC 和实现证明。 | 已批准的 predicate/spec → VC、证明、controller/final-check 结果或可恢复进度。 |
 | [verification-report](verification-report/SKILL.md) | 核对全局一致性、整理验证结果和保留必要记录。 | 源码、设计、审阅及证明证据 → 最终或阶段报告，以及未完成事项。 |
 
+源码处理与设计审阅组成 Stage 1；用户确认 Stage 1 完成并明确指定进入 Stage 2 后，才启动实现证明。报告可按当前进度生成，已获授权的任务沿用仍有效的授权。
+
 ## 文件用途
 
 各阶段的执行正文直接放在 `SKILL.md` 中。`references/` 保存较详细的指南、经验和示例，由所属 skill 指明何时读取。每个 skill 的 `agents/openai.yaml` 保存展示名称、调用提示及已有工具依赖声明。

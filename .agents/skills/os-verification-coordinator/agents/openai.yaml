@@ -1,7 +1,7 @@
 interface:
   display_name: "OS Verification Coordinator"
   short_description: "编排源码处理、谓词与规格设计审阅、实现证明和报告，复用现有验证进度"
-  default_prompt: "使用 $os-verification-coordinator 读取真实 CRTOS C 与配置，分别审阅 predicate 和 spec；我批准两份 revision 后，调用 QCP verification-orchestrator 完成 implement。"
+  default_prompt: "使用 $os-verification-coordinator 对照真实 CRTOS C 和配置完成 Stage 1 的谓词与规格审阅，列出版本。我确认 Stage 1 完成并指定进入 Stage 2 后，再启动实现证明。"
 
 dependencies:
   tools:

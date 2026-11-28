@@ -11,10 +11,9 @@ description: 基于 OS 验证切片设计或修改模块 Rocq predicate、抽象
 
 ### Predicate 设计
 
-Predicate design agent 使用 C analysis agent 的分析结果，按照 [Predicate 与 lemma 设计指南](references/predicate-lemma-design-guide.md)进行设计。开始新写或修改 predicate 前，先阅读该指南和 [Predicate 设计经验](references/predicate-experience.md)，经验条目只采用与当前 C 形态和控制流相符的内容。
+沿用源码分析结果，按照 [Predicate 与 lemma 设计指南](references/predicate-lemma-design-guide.md)进行设计。开始新写或修改 predicate 前，先阅读该指南和 [Predicate 设计经验](references/predicate-experience.md)，经验条目只采用与当前 C 形态和控制流相符的内容。
 
-Predicate design agent 从目标模块全部函数实际访问的 C 对象出发，确定模块的 abstract state、
-owned memory、mutable fields、lifecycle states 和 unchanged resources。隐藏不必要的实现细节；不要盲目展开大型 predicate，优先用 `which implies` 导出字段、节点、数组片段等局部 view，并保留未触达资源。
+从目标模块各函数实际访问的 C 对象出发，确定模块的 abstract state、owned memory、mutable fields、lifecycle states 和 unchanged resources。只暴露当前操作所需的字段、节点或数组片段，保留其余资源。对可复用的拆分、权限提取与恢复，优先复用或设计 QCP strategy。依赖局部控制流或难以安全匹配时使用 `which implies`，见[资源展开与恢复](references/spec-writing-guide.md#34-predicate-的展开更新与恢复)。
 
 ### 已有定义复用
 
@@ -72,7 +71,7 @@ Predicate和spec的设计内容共同写入[设计说明](../verification-report
 
 - 必须读：已确认的验证上下文、目标 C/headers/config、全局 `lib/` 中已有定义、[predicate-lemma-design-guide.md](references/predicate-lemma-design-guide.md) 和 [Predicate 设计经验](references/predicate-experience.md)。开始新写或修改 predicate 前读取经验文件，并只采用其中与当前 C 形态和控制流相符的条目。
 - 写：项目实际使用的 Rocq `.v`，把局部解释放在相关 definition/statement 前；同时更新[设计说明](../verification-report/references/reporting-guide.md#设计说明)中的改动原因、predicate含义、资源归属和系统集成关系。
-- 修改已批准接口时，按 [验证记录指南](../verification-report/references/reporting-guide.md)写简短设计变更记录；只有变更由真实源码缺陷触发时才链接源码错误报告。
+- 修改已批准接口时，按 [验证记录指南](../verification-report/references/reporting-guide.md)结合 C 路径和新旧规格记录语义变化，供人类专家审阅；新版本确认后再恢复受影响的证明；只有变更由真实源码缺陷触发时才链接源码错误报告。
 
 ## `write-spec`
 
@@ -142,7 +141,7 @@ Rocq predicate 文件通过 compile/typecheck，annotated C 已完成人工结�
 - 完整闭包：候选首次满足其他 review-ready 条件后，从目标函数重新扫描完整可达闭包并固定 revision，交由 `review` 审阅。
 - 设计阶段人工核对调用闭包；QCP闭包检查、symbolic、VC生成与实现证明由用户批准后的verification-orchestrator执行。纯文档或报告修改不产生新的设计 revision。
 - Spec review 遵循 [验证记录指南](../verification-report/references/reporting-guide.md)，不要求套用统一模板。
-- 修改已批准 predicate/spec 时，按 [验证记录指南](../verification-report/references/reporting-guide.md)写简短设计变更记录；只有变更由真实源码缺陷触发时才链接源码错误报告。
+- 修改已批准 predicate/spec 时，按 [验证记录指南](../verification-report/references/reporting-guide.md)结合 C 路径和新旧规格记录语义变化，供人类专家审阅；新版本确认后再恢复受影响的证明；只有变更由真实源码缺陷触发时才链接源码错误报告。
 
 ## `review`
 
@@ -161,7 +160,7 @@ Rocq predicate 文件通过 compile/typecheck，annotated C 已完成人工结�
 
 具体检查按目标代码及设计选择适用项，不要求逐项写报告；适用的编译、类型或证明检查须通过，影响正确性的未解决问题仍阻塞审阅通过。
 
-Spec 审阅使用明确的、已通过审阅的 predicate 版本。两者分别 `review-passed` 后，提供更新后的[设计说明](../verification-report/references/reporting-guide.md#设计说明)及注明两份revision的审阅记录。在完整验证流程中，main agent 随后请用户确认两份明确 revisions；确认前不得启动 QCP verification-orchestrator。确认后执行 implement，只有 controller 返回 `done`（含 `final-check`）后，才按[全局一致性检查与收尾](../verification-report/SKILL.md#全局一致性检查与收尾)执行收尾。
+Spec 审阅使用明确的、已通过审阅的 predicate 版本。两者分别 `review-passed` 后，提交更新后的[设计说明](../verification-report/references/reporting-guide.md#设计说明)及注明两份 revision 的审阅记录。只做设计或审阅的任务在此结束。继续实现证明时遵循[总流程](../os-verification-coordinator/SKILL.md#总流程)的 Stage 2 授权条件。Controller 返回 `done`（含 `final-check`）后，按[全局一致性检查与收尾](../verification-report/SKILL.md#全局一致性检查与收尾)执行收尾。
 
 ### 审阅与复查
 

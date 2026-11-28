@@ -7,35 +7,30 @@ description: 编排 CRTOS 等非 SMP OS 函数验证：按项目 AGENTS.md 串�
 
 本 skill 编排 OS 函数验证的各个阶段，由项目 `AGENTS.md` 指定为主入口。
 
-| 阶段 | Skill |
+| 工作环节 | Skill |
 |---|---|
 | 1. 源码处理 | [source-processing](../source-processing/SKILL.md) |
 | 2. Predicate / spec 设计与审阅 | [predicate-and-spec-design](../predicate-and-spec-design/SKILL.md) |
 | 3. Annotation → VC → manual proof | [vc-proof](../vc-proof/SKILL.md) |
 | 4. Report | [verification-report](../verification-report/SKILL.md) |
 
-按当前任务范围读取相应子 skill，不自动扩大验证范围。
+源码处理和设计审阅属于 Stage 1；实现证明及其最终收尾属于 Stage 2。阶段报告可在任一阶段生成。按当前任务范围读取相应子 skill，不自动扩大验证范围。
 
 使用 QCP、Rocq/Coq、分离逻辑、符号执行和 VC，为 CRTOS 内核 C 代码逐步建立可机器检查的功能正确性证明。默认处理当前配置实际编译的非 SMP 代码。
 
-验证记录默认保存在工程的 `.docs/Report/<module>/<YYYY-MM-DD>-<目标函数>/` 中，以用户和项目约定为准。长期保留的设计说明解释本轮新增或修改的lib/spec/VC及spec中需要人重点审阅的内容，实验完成后也保留；验证结果整理为最终报告，源码缺陷记录单独保留。存放与清理规则见 [验证记录指南](../verification-report/references/reporting-guide.md)。
+验证记录默认保存在工程的 `.docs/Report/<module>/<YYYY-MM-DD>-<目标函数>/` 中，目录沿用用户和项目约定。报告文件名使用 `YYYY-MM-DD-N-title.md`。长期保留的设计说明解释本轮新增或修改的lib/spec/VC及spec中需要人重点审阅的内容，实验完成后也保留；验证结果整理为最终报告，源码缺陷记录单独保留。存放与清理规则见 [验证记录指南](../verification-report/references/reporting-guide.md)。
 
 接入已有验证工作及处理用户 `AGENTS.md` 时，遵循[工程适配说明](references/project-maintenance-guide.md#接入已有验证工程)：复用已有成果，保留已有 `AGENTS.md`；与 skill 要求冲突时，以用户规则为准并报告。
 
 ## 总流程
 
-用户要求验证一个函数时，任务同时包括完成该函数所属模块的 `lib` 设计。模块 `lib` 应依据该模块全部函数及对象生命周期，补齐模块状态、内存 predicate/invariant、共享接口，以及按资源归属所需的 OS 总状态和 `os_inv` 集成（判断条件见 [Predicate 指南第 7.4 节](../predicate-and-spec-design/references/predicate-lemma-design-guide.md#74-组合模块-predicate)）；已有定义直接复用。函数 spec 和 C 实现证明的范围仍按目标函数的调用闭包确定，不因此自动扩展为模块全部函数的实现证明。仅设计和审阅的任务也适用这一模块 `lib` 范围，但不要求提前完成引理或 C 实现证明。
+按用户指定的目标、文件和问题范围选择增量修改或统一修正同类问题。单函数验证需结合所属模块各函数和对象生命周期理解资源归属，复用已有定义，在任务范围内补齐所需的模块状态、predicate、共享接口及 `os_inv` 集成（见 [Predicate 指南第 7.4 节](../predicate-and-spec-design/references/predicate-lemma-design-guide.md#74-组合模块-predicate)）。函数规格和实现证明按目标及其调用闭包确定。独立验证整个模块且用户未进一步限定范围时，可以检查并统一修正该模块内的同类问题。仅审阅时按指定文件和版本只读检查。
 
-Main agent 负责确定模式、安排顺序、守住审批门并汇总结果。作者与 reviewer 应分开；predicate review 和 spec review 分别明确对象、条件和结论，可写在同一份记录中。Review 次数不预设，由产物 revision、修改影响和通过条件决定。没有独立检查能力时，由 main agent 按相同条件自检并注明。
+简单任务可由同一个 agent 完成所需的分析、设计和审阅，自检时注明。复杂任务可把能独立完成的源码分析、设计或审阅交给不同角色，主 agent 核对任务范围和用户授权并汇总结果。Predicate 和 spec 分别给出审阅结论，可写在同一份记录中。复查次数取决于版本变化、影响范围和通过条件。
 
-```text
-确认验证上下文 -> C 分析 -> predicate 与 spec 草案迭代
-             -> predicate review-passed -> spec review-passed
-             -> 用户确认两份 revision
-             -> QCP verification-orchestrator implement（含 final-check）
-             -> implement done 后完成受影响依赖的一致性检查
-             -> 最终完整性审阅、整理最终报告
-```
+- **Stage 1（设计与审阅）**：确认配置和真实 C 行为，在 `slice-design`、`write-spec` 中设计谓词与规格，编译或类型检查相关 Rocq 定义，人工核对切片与调用闭包。在 `review` 中先审谓词，再基于该版本审规格，记录各自的 revision 和结论。只有设计或审阅请求时，完成所请求的工作即停在本阶段。
+- **阶段授权**：向用户提交 Stage 1 结果，列明通过审阅的 predicate/spec 版本。用户确认 Stage 1 完成并明确指定进入 Stage 2 后才能启动实现证明。两项意思可以在同一条指令中表达；仅确认设计完成时停在 Stage 1。
+- **Stage 2（实现证明）**：以获准版本为输入，由 QCP verification-orchestrator 执行预处理、符号执行、VC 生成、证明及 final-check。完成后检查受影响依赖和源码一致性，整理最终报告。已批准规格发生语义变化时，暂停受影响的证明，按[设计变更报告](../verification-report/references/reporting-guide.md#设计变更报告)提交新版本供人类专家审阅，经确认后继续。
 
 ## 维护全局工程
 

@@ -37,7 +37,7 @@
      统一接口。
    - 具名形态应能对应真实 C 路径中的局部状态转换。例如 lazy initialization 可以直接
      表达为 `uninitialized -> initialized empty -> initialized nonempty`，便于为 callee spec、
-     `which implies` 和局部 lemma 提供精确资源。
+     表示层 strategy 和局部引理提供精确资源。
 
    只有当不同形态确实会独立出现在控制流、函数接口或证明步骤中时才值得拆分。如果分支
    只是内部计算细节、不会被单独使用，保留一个简单 predicate 通常更清楚。
@@ -296,7 +296,10 @@
    CharArray.full (sem + 14) 2 (repeat_Z 0 2)
    ```
 
-10. 涉及静态函数表适配时，按 [QCP 工具指南](../../source-processing/references/qcp-tool-guide.md#1-函数指针调用转为直接调用)同步调整 predicate 和 state。
+10. 静态 `done` 函数表改成直接调用属于源代码处理，统一按
+    [QCP 工具适配第 1 条](../../source-processing/references/qcp-tool-guide.md#1-函数指针调用转为直接调用)执行。
+    即使全部调用点均已转换，也保留操作表的状态字段、内存谓词和上下文绑定。
+    来自不同 C 文件的同名表在切片中分别命名，各自的稳定地址绑定到对应符号。
 
 11. 不要为了匹配或复用已有 predicate 的参数形式，把本模块语义上不需要的
     dependency state 直接加入本模块的 abstract state。Abstract-state 分量仍须由

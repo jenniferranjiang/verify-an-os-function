@@ -14,7 +14,7 @@ Spec 是验证前写出的正式目标，不是验证结果：它规定调用所
 写完或批准 spec 都不能称为“函数已验证”。
 
 Spec review 只审查设计：验证范围、内存与 ownership、函数行为、路径和 frame。此阶段不运行 QCP；
-QCP parser/symbolic、VC 和 proof 在用户确认 review-passed revisions 后进入 `implement`。
+用户确认 Stage 1 完成并明确指定进入 Stage 2 后，才在 `implement` 中进行 QCP 解析、符号执行、VC 生成和证明。
 
 ## 目录
 
@@ -301,10 +301,11 @@ Spec 使用抽象 predicate，不妨碍函数体访问具体内存。裸 `store`
 锁 token、纯状态或成员关系本身不提供这些内存权限；资源必须来自实际持有的 predicate。
 
 展开时只借出当前操作需要的部分，其余资源由明确的 frame 或归还关系保留，不盲目展开整个
-`os_inv`。借出的资源不能同时留在完整 predicate 中重复拥有。可复用的表示层拆分、读写权限提取
-和重组，优先通过 QCP strategy 应用相应引理；依赖具体控制流、难以安全匹配的局部推理可保留
-`which implies`，状态转换及一致性推理由 Rocq 引理支撑。Strategy 是这些资源关系的自动应用机制，
-其生成的正确性义务仍须证明，不能用规则匹配成功代替证明。可以参考vrtos中strategy写法。
+`os_inv`。借出的资源不能同时留在完整 predicate 中重复拥有。
+
+对表示层的拆分、读写权限提取、重组和规范化，先查已有 QCP strategy。即使目前只有一个使用点，只要谓词与资源的关系可复用且能安全匹配，就优先设计或扩展 strategy。选择拥有该资源的最小谓词，保留其余资源作为 frame；按需用 `core` 暴露字段，用 `post` 恢复操作间的抽象表示。检查触发条件、规则间的循环及过早重组。特定分支的一次性推导或自动匹配不稳定时，保留局部 `which implies`；数学关系和抽象状态转换用 Rocq 引理证明。
+
+Stage 1 可设计策略。Stage 2 采用本轮新增或修改的策略时，核对该版本的 StrategyCheck 结果及生成的 soundness 义务的证明，包括 Stage 1 已写好、Stage 2 直接采用的规则。复用仍有效的同版本检查和证明，缺项时补做。用策略替换已有显式推理后，重新检查受影响的符号执行和 Rocq 证明。
 
 只读访问在原资源归还后通常可恢复原 predicate；写入后必须更新抽象状态，并建立与新状态对应的
 predicate。若其他模块的 predicate 引用了被更新的 task map 等共享抽象状态，即使没有写入它们的

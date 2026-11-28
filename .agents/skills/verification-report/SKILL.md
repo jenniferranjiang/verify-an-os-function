@@ -28,7 +28,7 @@ description: 整理 OS 验证的设计、审阅、源码缺陷及最终或阶段
 
 输入和证明直接维护在全局位置。用户确认revisions且controller返回 `done`（含 `final-check`）后，main agent完成以下收尾：
 
-1. 按[统计要求](references/reporting-guide.md#最终报告)记录manual/lib相对于修改前基线的增量，保留已有定义、spec、证明和其他任务内容。
+1. 按[统计要求](references/reporting-guide.md#最终报告)分别记录 `lib/`、strategy soundness 证明和函数 `*_proof_manual.v` 相对于修改前基线的有效代码行增减，剔除空行和注释。
 2. 确认根构建、imports、逻辑路径、工具及编辑器引用一致，编译受影响的库及依赖者，实现目标检查到goal_check。复用同版本成功检查，不为收尾重复整库构建或重新生成VC。旧结论因共享修改不再适用时明确标记并处理，不能借旧 `.vo` 或旧done记录宣称当前版本通过。
 3. 按[保留规则](references/reporting-guide.md#完成后保留什么)保留并更新设计说明，整理最终验证报告与源码缺陷记录，链接当前全局文件、revision、结果及剩余限制。
 4. 完成[最终完整性审阅](../predicate-and-spec-design/SKILL.md#审阅内容与通过条件)，清理已不需要的任务临时产物，保留 `.vo` 和仍在使用的workflow恢复状态。不删除全局lib、annotated C或VC。

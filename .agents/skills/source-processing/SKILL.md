@@ -21,4 +21,4 @@ description: 将 CRTOS 等非 SMP OS 原始源码按配置和用户规则处理�
 
 Agent 对原始 OS 源码只有读权限。源码适配和经用户批准的缺陷修复只能修改 workspace 的 annotated C 副本。修复后的验证结论须注明对应的副本版本，具体记录与门禁见下述指南。
 
-Main agent 将源码分析交给 C analysis agent，按 [Predicate 指南第 1 节](../predicate-and-spec-design/references/predicate-lemma-design-guide.md#1-确认源码与范围)执行，分析结果用于后续 predicate 设计。源码问题的说明与处理见[源码错误报告](../verification-report/references/reporting-guide.md#源码错误报告)。
+按 [Predicate 指南第 1 节](../predicate-and-spec-design/references/predicate-lemma-design-guide.md#1-确认源码与范围)执行，分析结果用于后续 predicate 设计。源码问题的说明与处理见[源码错误报告](../verification-report/references/reporting-guide.md#源码错误报告)。
